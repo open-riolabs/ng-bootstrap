@@ -9,6 +9,7 @@
     "test": "ng test",
     "lib:build": "ng build @rlb/ng-bootstrap",
     "lib:test": "ng test @rlb/ng-bootstrap",
+    "lib:test-ci": "ng test --karma-config=./karma.conf.js --no-watch --no-progress --browsers=ChromeHeadless @rlb/ng-bootstrap",
     "lib:lint": "ng lint @rlb/ng-bootstrap",
     "lib:pack": "ng build @rlb/ng-bootstrap && npm pack ./dist/ngx-dynamic/core"
   },
