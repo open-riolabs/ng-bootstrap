@@ -8,7 +8,7 @@ import { SidebarItemComponent } from './sidebar-item.component';
   selector: 'rlb-sidebar',
   template: `
     <ng-template #template>
-      <div class="rlb-sidebar" [class.show]="open">
+      <div class="rlb-sidebar" [style.width.px]="open?maxWidth:width" [class.show]="open">
         <nav class="nav">
           <div>
             <ng-content select="rlb-sidebar-header"></ng-content>
@@ -17,10 +17,6 @@ import { SidebarItemComponent } from './sidebar-item.component';
             </div>
           </div>
           <ng-content select="rlb-sidebar-footer"></ng-content>
-          <!-- <a href="#" class="item">
-            <i class='bx bx-log-out nav_icon'></i>
-            <span class="nav_name">SignOut</span>
-          </a> -->
         </nav>
       </div>
     </ng-template>
@@ -28,13 +24,15 @@ import { SidebarItemComponent } from './sidebar-item.component';
 })
 export class SidebarComponent implements OnInit, OnChanges {
   @Input('id') id!: string;
-  @Input('width') width: string = '250px';
+  @Input('max-width') maxWidth: number = 250;
+  @Input('width') width: number = 68;
   @Input('open') open: boolean = false;
+
 
   @ContentChild(SidebarHeaderComponent) public header!: SidebarHeaderComponent
   @ContentChild(SidebarFooterComponent) public footer!: SidebarFooterComponent
   @ContentChildren(SidebarItemComponent) public items!: QueryList<SidebarItemComponent>;
-  
+
   constructor(private viewContainerRef: ViewContainerRef) { }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
@@ -50,12 +48,16 @@ export class SidebarComponent implements OnInit, OnChanges {
         this.header.open = changes['open'].currentValue;
       if (this.footer)
         this.footer.open = changes['open'].currentValue;
+      if (this.items)
+        this.items.forEach(item => item.open = changes['open'].currentValue);
     }
-    if(changes['id']) {
+    if (changes['id']) {
       if (this.header)
         this.header.sidebarId = changes['id'].currentValue;
       if (this.footer)
         this.footer.sidebarId = changes['id'].currentValue;
+      if (this.items)
+        this.items.forEach(item => item.sidebarId = changes['id'].currentValue);
     }
   }
 }

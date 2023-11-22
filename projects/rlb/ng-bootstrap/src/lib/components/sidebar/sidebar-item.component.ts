@@ -4,9 +4,11 @@ import { Component, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef } fr
   selector: 'rlb-sidebar-item',
   template: `
     <ng-template #template>
-      <a href="#" class="item">
-        <i class='bx bx-grid-alt nav_icon'></i>
-        <span class="nav_name">{{title}}</span>
+      <a href="#" class="item" [class.active]="active">
+        <i [class]='icon'></i>
+        <span class="name">
+          <ng-content></ng-content>    
+      </span>
       </a>
     </ng-template>
     `
@@ -18,6 +20,7 @@ export class SidebarItemComponent implements OnInit {
 
   @Input('title') title!: string;
   @Input('icon') icon!: string;
+  @Input('active') active: boolean = false;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 

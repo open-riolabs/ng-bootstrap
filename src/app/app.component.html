@@ -1,36 +1,34 @@
-<rlb-navbar color="light" expand="lg">
-	<a class="d-block d-sm-none" rlb-button href="#" toggle="collapse" toggle-target="sidebar" [outline]="true">
-		<span class="navbar-toggler-icon"></span>
-	</a>
-	<a rlb-navbar-brand href="#">Navbar</a>
-	<rlb-navbar-items class="me-auto">
-		<a rlb-navbar-item [routerLink]="['/']" routerLinkActive="active">Home</a>
-		<a rlb-navbar-item [routerLink]="['/getting-started']" routerLinkActive="active">Getting started</a>
-		<a rlb-navbar-item [routerLink]="['/components']" routerLinkActive="active">Components</a>
-	</rlb-navbar-items>
-	<!-- <rlb-navbar-form>
-		<rlb-input />
-		<button rlb-button [outline]="true" color="primary" [size]="'sm'">Search</button>
-	</rlb-navbar-form>
-	<rlb-navbar-text>
-		Un testo
-	</rlb-navbar-text> -->
-</rlb-navbar>
 <div class="d-flex flex-row w-100">
-	<rlb-sidebar id="sidebar" width="300px">
-		<rlb-sidebar-header mode="logo" />
-		<rlb-sidebar-item title="pippo"></rlb-sidebar-item>
-		<rlb-sidebar-item title="pluto"></rlb-sidebar-item>
-		<rlb-sidebar-item title="paperino"></rlb-sidebar-item>
-		<rlb-sidebar-item title="topolino"></rlb-sidebar-item>
-		<rlb-sidebar-item title="minnie"></rlb-sidebar-item>
-		<rlb-sidebar-item title="paperina"></rlb-sidebar-item>
-		<rlb-sidebar-item title="qui"></rlb-sidebar-item>
+	<rlb-sidebar id="sidebar">
+		<rlb-sidebar-header mode="logo" [data]="{ image:'', text:'Title', alt:'no-logo'}" />
+		<rlb-sidebar-item icon="bi bi-box">pippo</rlb-sidebar-item>
+		<rlb-sidebar-item icon="bi bi-box">pluto</rlb-sidebar-item>
+		<rlb-sidebar-item icon="bi bi-box">paperino</rlb-sidebar-item>
+		<rlb-sidebar-item icon="bi bi-box">topolino</rlb-sidebar-item>
 		<rlb-sidebar-footer>
-			
+			<rlb-sidebar-item icon="bi bi-box">qui</rlb-sidebar-item>
+			<rlb-sidebar-item icon="bi bi-box">qui</rlb-sidebar-item>
 		</rlb-sidebar-footer>
 	</rlb-sidebar>
-	<div class="flex-grow-1 ps-2">
+	<div class="flex-grow-1">
+		<rlb-navbar color="light" expand="lg">
+			<a class="d-block d-sm-none" rlb-button href="#" toggle="collapse" toggle-target="sidebar" [outline]="true">
+				<span class="navbar-toggler-icon"></span>
+			</a>
+			<a rlb-navbar-brand href="#">Navbar</a>
+			<rlb-navbar-items class="me-auto">
+				<a rlb-navbar-item [routerLink]="['/']" routerLinkActive="active">Home</a>
+				<a rlb-navbar-item [routerLink]="['/getting-started']" routerLinkActive="active">Getting started</a>
+				<a rlb-navbar-item [routerLink]="['/components']" routerLinkActive="active">Components</a>
+			</rlb-navbar-items>
+			<!-- <rlb-navbar-form>
+				<rlb-input />
+				<button rlb-button [outline]="true" color="primary" [size]="'sm'">Search</button>
+			</rlb-navbar-form>
+			<rlb-navbar-text>
+				Un testo
+			</rlb-navbar-text> -->
+		</rlb-navbar>
 		<router-outlet />
 	</div>
 </div>

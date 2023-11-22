@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { SidebarMode } from './sidebar-mode';
+import { HeaderLogo, HeaderUser, SidebarMode } from './sidebar-mode';
 
 @Component({
   selector: 'rlb-sidebar-header',
@@ -10,8 +10,8 @@ import { SidebarMode } from './sidebar-mode';
       </ng-container>
       <ng-container *ngIf="mode==='logo'">
         <a href="#" class="logo">
-          <i class='bx bx-layer icon'></i>
-          <span class="name">BBBootstrap</span>
+          <img [src]="_dataLogo?.image" [alt]="_dataLogo?.alt">
+          <span class="name">{{_dataLogo?.text}}</span>
         </a>
       </ng-container>
       <ng-container *ngIf="mode==='custom'">
@@ -23,11 +23,25 @@ import { SidebarMode } from './sidebar-mode';
 export class SidebarHeaderComponent implements OnInit {
 
   @Input('mode') mode!: SidebarMode;
-
+  @Input('data') data!: HeaderLogo | HeaderUser;
   open: boolean = false;
   sidebarId: string = '';
 
   constructor(private viewContainerRef: ViewContainerRef) { }
+
+  get _dataLogo(): HeaderLogo | null {
+    if (this.mode === 'logo') {
+      return this.data as HeaderLogo;
+    }
+    return null
+  }
+
+  get _dataUser(): HeaderUser | null {
+    if (this.mode === 'user') {
+      return this.data as HeaderUser;
+    }
+    return null;
+  }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
