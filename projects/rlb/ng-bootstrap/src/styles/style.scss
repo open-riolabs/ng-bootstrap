@@ -1,0 +1,87 @@
+@import url("https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css");
+
+.rlb-side {
+  position: fixed;
+  top: 0;
+  left: -30%;
+  width: 68px;
+  height: 100vh;
+  background-color: #4723D9;
+  padding: .5rem 1rem 0 0;
+  transition: .5s;
+  z-index: 100;
+
+  .nav {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+
+    .nav_logo,
+    .nav_link {
+      display: grid;
+      grid-template-columns: max-content max-content;
+      align-items: center;
+      column-gap: 1rem;
+      padding: .5rem 0 .5rem 1.5rem;
+    }
+
+    .nav_logo {
+      margin-bottom: 2rem;
+
+      .nav_logo-icon {
+        font-size: 1.25rem;
+        color: #F7F6FB
+      }
+
+      .nav_logo-name {
+        color: #F7F6FB;
+        font-weight: 700
+      }
+    }
+
+    .nav_link {
+      position: relative;
+      color: #AFA5D9;
+      margin-bottom: 1.5rem;
+      transition: .3s;
+
+      &:hover {
+        color: #F7F6FB
+      }
+
+      &.active {
+        color: #F7F6FB;
+
+        &:before {
+          content: '';
+          position: absolute;
+          left: 0;
+          width: 2px;
+          height: 32px;
+          background-color: #F7F6FB;
+        }
+      }
+
+      .nav_icon {
+        font-size: 1.25rem
+      }
+    }
+  }
+}
+
+.show {
+  left: 0
+}
+
+@media screen and (min-width: 768px) {
+  .rlb-side {
+    left: 0;
+    padding: 1rem 1rem 0 0
+  }
+
+  .show {
+    width: calc(68px + 156px)
+  }
+}

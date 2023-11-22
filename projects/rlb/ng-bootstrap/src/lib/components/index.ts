@@ -48,7 +48,7 @@ import { PaginationItemComponent } from './pagination/pagination-item.component'
 import { PaginationComponent } from './pagination/pagination.component';
 import { PlaceholderDirective } from './placeholder/placeholder.directive';
 import { ScrollspyDirective } from './scrollspy/scrollspy.directive';
-import { SidebarBodyComponent } from './sidebar/sidebar-body.component';
+import { SidebarItemComponent } from './sidebar/sidebar-item.component';
 import { SidebarFooterComponent } from './sidebar/sidebar-footer.component';
 import { SidebarHeaderComponent } from './sidebar/sidebar-header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -108,7 +108,7 @@ export * from './offcanvas/offcanvas-header.component';
 export * from './offcanvas/offcanvas-title.component';
 export * from './buttons/toggle.directive';
 export * from './sidebar/sidebar.component';
-export * from './sidebar/sidebar-body.component';
+export * from './sidebar/sidebar-item.component';
 export * from './sidebar/sidebar-header.component';
 export * from './sidebar/sidebar-footer.component';
 export * from './tabs/tabs.component';
@@ -170,7 +170,7 @@ export const COMPONENTS = [
   ToggleDirective,
   SidebarComponent,
   SidebarHeaderComponent,
-  SidebarBodyComponent,
+  SidebarItemComponent,
   SidebarFooterComponent,
   NavComponent,
   NavItemComponent,

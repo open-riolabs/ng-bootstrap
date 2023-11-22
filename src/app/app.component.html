@@ -18,30 +18,16 @@
 </rlb-navbar>
 <div class="d-flex flex-row w-100">
 	<rlb-sidebar id="sidebar" width="300px">
-		<rlb-sidebar-body>
-			<rlb-nav class="px-3 pt-2" [vertical]="true">
-				<rlb-nav-item icon="fs-4 bi-house"> Home </rlb-nav-item>
-				<rlb-nav-item icon="fs-4 bi-house"> Getting started </rlb-nav-item>
-				<rlb-nav-item icon="fs-4 bi-house">
-					<span rlb-nav-title>Components</span>
-					<rlb-nav-item icon="fs-4 bi-house"> Accordions </rlb-nav-item>
-					<rlb-nav-item icon="fs-4 bi-house"> Alerts </rlb-nav-item>
-				</rlb-nav-item>
-			</rlb-nav>
-		</rlb-sidebar-body>
+		<rlb-sidebar-header mode="logo" />
+		<rlb-sidebar-item title="pippo"></rlb-sidebar-item>
+		<rlb-sidebar-item title="pluto"></rlb-sidebar-item>
+		<rlb-sidebar-item title="paperino"></rlb-sidebar-item>
+		<rlb-sidebar-item title="topolino"></rlb-sidebar-item>
+		<rlb-sidebar-item title="minnie"></rlb-sidebar-item>
+		<rlb-sidebar-item title="paperina"></rlb-sidebar-item>
+		<rlb-sidebar-item title="qui"></rlb-sidebar-item>
 		<rlb-sidebar-footer>
-			<rlb-dropdown direction="up">
-				<a rlb-dropdown class="text-white text-decoration-none">
-					<img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-					<span class="d-none d-sm-inline mx-1">Joan Simpson</span>
-				</a>
-				<ul rlb-dropdown-menu>
-					<li rlb-dropdown-item>New project...</li>
-					<li rlb-dropdown-item>Settings</li>
-					<li rlb-dropdown-item [divider]="true"></li>
-					<li rlb-dropdown-item>Settings</li>
-				</ul>
-			</rlb-dropdown>
+			
 		</rlb-sidebar-footer>
 	</rlb-sidebar>
 	<div class="flex-grow-1 ps-2">

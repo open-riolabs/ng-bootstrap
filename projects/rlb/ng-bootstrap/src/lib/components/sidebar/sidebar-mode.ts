@@ -1,0 +1,1 @@
+export type SidebarMode = 'user' | 'logo' | 'custom';
