@@ -4,7 +4,7 @@ import { Component, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef } fr
   selector: 'rlb-sidebar-item',
   template: `
     <ng-template #template>
-      <a href="#" class="nav_link">
+      <a href="#" class="item">
         <i class='bx bx-grid-alt nav_icon'></i>
         <span class="nav_name">{{title}}</span>
       </a>

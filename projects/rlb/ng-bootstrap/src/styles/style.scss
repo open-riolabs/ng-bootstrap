@@ -1,6 +1,6 @@
 @import url("https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css");
 
-.rlb-side {
+.rlb-sidebar {
   position: fixed;
   top: 0;
   left: -30%;
@@ -18,8 +18,8 @@
     justify-content: space-between;
     overflow: hidden;
 
-    .nav_logo,
-    .nav_link {
+    .logo,
+    .item {
       display: grid;
       grid-template-columns: max-content max-content;
       align-items: center;
@@ -27,21 +27,21 @@
       padding: .5rem 0 .5rem 1.5rem;
     }
 
-    .nav_logo {
+    .logo {
       margin-bottom: 2rem;
 
-      .nav_logo-icon {
+      .icon {
         font-size: 1.25rem;
         color: #F7F6FB
       }
 
-      .nav_logo-name {
+      .name {
         color: #F7F6FB;
         font-weight: 700
       }
     }
 
-    .nav_link {
+    .item {
       position: relative;
       color: #AFA5D9;
       margin-bottom: 1.5rem;
@@ -76,7 +76,7 @@
 }
 
 @media screen and (min-width: 768px) {
-  .rlb-side {
+  .rlb-sidebar {
     left: 0;
     padding: 1rem 1rem 0 0
   }

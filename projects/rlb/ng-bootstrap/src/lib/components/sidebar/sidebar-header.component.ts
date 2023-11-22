@@ -9,9 +9,9 @@ import { SidebarMode } from './sidebar-mode';
         user
       </ng-container>
       <ng-container *ngIf="mode==='logo'">
-        <a href="#" class="nav_logo">
-          <i class='bx bx-layer nav_logo-icon'></i>
-          <span class="nav_logo-name">BBBootstrap</span>
+        <a href="#" class="logo">
+          <i class='bx bx-layer icon'></i>
+          <span class="name">BBBootstrap</span>
         </a>
       </ng-container>
       <ng-container *ngIf="mode==='custom'">

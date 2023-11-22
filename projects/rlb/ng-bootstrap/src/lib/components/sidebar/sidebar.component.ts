@@ -8,7 +8,7 @@ import { SidebarItemComponent } from './sidebar-item.component';
   selector: 'rlb-sidebar',
   template: `
     <ng-template #template>
-      <div class="rlb-side" [class.show]="open">
+      <div class="rlb-sidebar" [class.show]="open">
         <nav class="nav">
           <div>
             <ng-content select="rlb-sidebar-header"></ng-content>
@@ -17,7 +17,7 @@ import { SidebarItemComponent } from './sidebar-item.component';
             </div>
           </div>
           <ng-content select="rlb-sidebar-footer"></ng-content>
-          <!-- <a href="#" class="nav_link">
+          <!-- <a href="#" class="item">
             <i class='bx bx-log-out nav_icon'></i>
             <span class="nav_name">SignOut</span>
           </a> -->
