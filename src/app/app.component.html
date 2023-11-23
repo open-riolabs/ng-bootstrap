@@ -1,6 +1,7 @@
-<div class="d-flex flex-row w-100">
+<div class="rlb-app">
 	<rlb-sidebar id="sidebar">
-		<rlb-sidebar-header mode="logo" [data]="{ image:'', text:'Title', alt:'no-logo'}" />
+		<rlb-sidebar-header mode="logo"
+			[data]="{ image:'https://www.riolabs.net/wp-content/uploads/2021/10/logo64.png', text:'Title', alt:'no-logo'}" />
 		<rlb-sidebar-item icon="bi bi-box">pippo</rlb-sidebar-item>
 		<rlb-sidebar-item icon="bi bi-box">pluto</rlb-sidebar-item>
 		<rlb-sidebar-item icon="bi bi-box">paperino</rlb-sidebar-item>
@@ -10,7 +11,7 @@
 			<rlb-sidebar-item icon="bi bi-box">qui</rlb-sidebar-item>
 		</rlb-sidebar-footer>
 	</rlb-sidebar>
-	<div class="flex-grow-1">
+	<div class="rlb-right-panel">
 		<rlb-navbar color="light" expand="lg">
 			<a class="d-block d-sm-none" rlb-button href="#" toggle="collapse" toggle-target="sidebar" [outline]="true">
 				<span class="navbar-toggler-icon"></span>
@@ -29,9 +30,10 @@
 				Un testo
 			</rlb-navbar-text> -->
 		</rlb-navbar>
-		<router-outlet />
+		<div class="rlb-content">
+			<router-outlet />
+		</div>
 	</div>
 </div>
-
 <rlb-modal-container id="modal-c-1" />
 <rlb-toast-container class="position-fixed bottom-0 end-0 p-3" id="toast-c-1" />

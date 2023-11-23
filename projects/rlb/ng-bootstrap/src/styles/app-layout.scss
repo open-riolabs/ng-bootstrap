@@ -1,0 +1,11 @@
+.rlb-app {
+  @extend .d-flex, .flex-row, .w-100;
+
+  .rlb-right-panel {
+    @extend .d-flex, .flex-column, .flex-grow-1, .vh-100, .overflow-hidden;
+
+    .rlb-content {
+      @extend .flex-grow-1, .overflow-auto
+    }
+  }
+}
