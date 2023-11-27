@@ -1,4 +1,4 @@
-import { Component, ContentChild, ContentChildren, DoCheck, Input, OnChanges, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ContentChild, ContentChildren, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { SidebarHeaderComponent } from './sidebar-header.component';
 import { SidebarFooterComponent } from './sidebar-footer.component';
 import { SidebarItemComponent } from './sidebar-item.component';
@@ -30,6 +30,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Input('max-width') maxWidth: number = 250;
   @Input('width') width: number = 68;
   @Input('open') open: boolean = false;
+  @Output('openChange') openChange: EventEmitter<boolean> = new EventEmitter();
   @Input('hide-close-btn') hideCloseBtn: boolean = false;
 
 
