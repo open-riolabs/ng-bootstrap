@@ -2,10 +2,42 @@
   position: sticky;
   top: 0;
   height: 100vh;
-  background-color: #4723D9;
+  background-color: $primary;
   transition: .5s;
   z-index: 100;
-  padding: 1rem 1rem 0 0;
+  padding: 3rem 1rem 0 0;
+
+  .open-btn {
+    position: absolute;
+    top: 1rem;
+    right: -1rem;
+    border: 1px solid $primary;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+
+    i::before {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      font-size: 2rem;
+      transition: .3s;
+      color: $primary;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &.open {
+    .open-btn {
+      i::before {
+        transform: scaleX(-1);
+      }
+    }
+  }
 
   .nav {
     height: 100%;
@@ -19,36 +51,42 @@
       display: grid;
       grid-template-columns: max-content max-content;
       align-items: center;
+      text-decoration: none;
       column-gap: 1rem;
       padding: .5rem 0 .5rem 1.5rem;
     }
 
     .logo {
-      margin-bottom: 2rem;
+      padding: 1rem;
+
+      img {
+        height: 35px;
+        width: 35px;
+      }
 
       .icon {
         font-size: 1.25rem;
-        color: #F7F6FB
+        color: $gray-300;
       }
 
       .name {
-        color: #F7F6FB;
-        font-weight: 700
+        color: $gray-300;
+        font-weight: 700;
       }
     }
 
     .item {
       position: relative;
-      color: #AFA5D9;
-      margin-bottom: 1.5rem;
+      color: $gray-300;
+      margin-bottom: 0.1rem;
       transition: .3s;
 
       &:hover {
-        color: #F7F6FB
+        color: $white
       }
 
       &.active {
-        color: #F7F6FB;
+        color: $white;
 
         &:before {
           content: '';
@@ -56,7 +94,7 @@
           left: 0;
           width: 2px;
           height: 32px;
-          background-color: #F7F6FB;
+          background-color: $white;
         }
       }
 
@@ -70,6 +108,11 @@
 
 @media screen and (max-width: 575px) {
   .rlb-sidebar {
+    padding: 3rem 0rem 0 0;
     width: 0 !important;
+
+    .open-btn {
+      display: none;
+    }
   }
 }

@@ -7,7 +7,7 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
   selector: 'rlb-navbar',
   template: `
     <ng-template #template>
-      <nav class="navbar bg-{{color}} {{placement}} {{_navExpand}}" [attr.data-bs-theme]="dark">
+      <nav class="navbar px-2 bg-{{color}} {{placement}} {{_navExpand}}" [attr.data-bs-theme]="dark">
         <div class="container-fluid">
           <ng-content select="[rlb-navbar-brand], [rlb-button][toggle]"/>
           <button

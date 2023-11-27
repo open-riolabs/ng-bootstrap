@@ -1,107 +1,117 @@
-<rlb-tabs>
-  <rlb-tab target="pippo">Pippo</rlb-tab>
-  <rlb-tab target="pluto">Pluto</rlb-tab>
-  <rlb-tab target="paperino">Paperino</rlb-tab>
-</rlb-tabs>
-<rlb-tab-content>
-  <rlb-tab-pane id="pippo">Pippo</rlb-tab-pane>
-  <rlb-tab-pane id="pluto">Pluto</rlb-tab-pane>
-  <rlb-tab-pane id="paperino">Paperino</rlb-tab-pane>
-</rlb-tab-content>
-
-<button rlb-button toggle="collapse" toggle-target="collapse-id" class="me-2">Collapse</button>
-<button rlb-button (click)="modal()" class="me-2">Open Modal</button>
-<button rlb-button (click)="toast()" class="me-2">Open Toast</button>
-<button rlb-button toggle="offcanvas" toggle-target="off-1" class="me-2">Offcanvas</button>
-<rlb-collapse id="collapse-id">
-  <rlb-card style="width: 300px;" [overlay]="false">
-    <rlb-card-body>
-      <h5 rlb-card-title>Card title</h5>
-      <p rlb-card-text>
-        Some quick example text to build on the card title and make up the bulk of the card's content.
-      </p>
-    </rlb-card-body>
-  </rlb-card>
-</rlb-collapse>
-<rlb-offcanvas id="off-1">
-  <rlb-offcanvas-header>
-    <h5 rlb-offcanvas-title>Offcanvas</h5>
-  </rlb-offcanvas-header>
-  <rlb-offcanvas-body>
-    pippo
-  </rlb-offcanvas-body>
-</rlb-offcanvas>
-
-<div class="p-3">
-  <rlb-accordion>
-    <div rlb-accordion-item [expanded]="true">
-      <h2 rlb-accordion-header>
-        Titolo 1
-      </h2>
-      <div rlb-accordion-body>
-        body 1
-      </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1>Home</h1>
     </div>
-    <div rlb-accordion-item>
-      <h2 rlb-accordion-header>
-        Titolo 2
-      </h2>
-      <div rlb-accordion-body>
-        body 2
+  </div>
+  <div class="py-3">
+    <rlb-tabs>
+      <rlb-tab target="pippo">Pippo</rlb-tab>
+      <rlb-tab target="pluto">Pluto</rlb-tab>
+      <rlb-tab target="paperino">Paperino</rlb-tab>
+    </rlb-tabs>
+    <rlb-tab-content>
+      <rlb-tab-pane id="pippo">Pippo</rlb-tab-pane>
+      <rlb-tab-pane id="pluto">Pluto</rlb-tab-pane>
+      <rlb-tab-pane id="paperino">Paperino</rlb-tab-pane>
+    </rlb-tab-content>
+  </div>
+  <div class="py-3">
+    <button rlb-button toggle="collapse" toggle-target="collapse-id" class="me-2">Collapse</button>
+    <button rlb-button (click)="modal()" class="me-2">Open Modal</button>
+    <button rlb-button (click)="toast()" class="me-2">Open Toast</button>
+    <button rlb-button toggle="offcanvas" toggle-target="off-1" class="me-2">Offcanvas</button>
+  </div>
+  <div class="py-3">
+    <rlb-collapse id="collapse-id">
+      <rlb-card style="width: 300px;" [overlay]="false">
+        <rlb-card-body>
+          <h5 rlb-card-title>Card title</h5>
+          <p rlb-card-text>
+            Some quick example text to build on the card title and make up the bulk of the card's content.
+          </p>
+        </rlb-card-body>
+      </rlb-card>
+    </rlb-collapse>
+  </div>
+
+  <div class="py-3">
+    <rlb-accordion>
+      <div rlb-accordion-item [expanded]="true">
+        <h2 rlb-accordion-header>
+          Titolo 1
+        </h2>
+        <div rlb-accordion-body>
+          body 1
+        </div>
       </div>
-    </div>
-    <div rlb-accordion-item>
-      <h2 rlb-accordion-header>
-        Titolo 3
-      </h2>
-      <div rlb-accordion-body>
-        body 3
+      <div rlb-accordion-item>
+        <h2 rlb-accordion-header>
+          Titolo 2
+        </h2>
+        <div rlb-accordion-body>
+          body 2
+        </div>
       </div>
-    </div>
-  </rlb-accordion>
+      <div rlb-accordion-item>
+        <h2 rlb-accordion-header>
+          Titolo 3
+        </h2>
+        <div rlb-accordion-body>
+          body 3
+        </div>
+      </div>
+    </rlb-accordion>
 
-</div>
+  </div>
 
-<div class="p-3">
-  <button rlb-button class="position-relative" [color]="'danger'" [outline]="true" size="lg" badge="pippo"
-    [badge-start]="100" [badge-top]="0" [badge-color]="'info'" [badge-pill]="true" [tooltip]="'Ciao'"
-    [tooltip-placement]="'right'">Toggle</button>
-</div>
+  <div class="py-3">
+    <button rlb-button class="position-relative" [color]="'danger'" [outline]="true" size="lg" badge="pippo"
+      [badge-start]="100" [badge-top]="0" [badge-color]="'info'" [badge-pill]="true" [tooltip]="'Ciao'"
+      [tooltip-placement]="'right'">Toggle</button>
+  </div>
 
-<div class="p-3">
-  <span rlb-badge [pill]="true">ppp</span>
-</div>
+  <div class="py-3">
+    <span rlb-badge [pill]="true">ppp</span>
+  </div>
 
-<div class="p-3">
-  <rlb-card style="width: 300px;" [overlay]="false">
-    <rlb-card-header>Header</rlb-card-header>
-    <img rlb-card-image src="https://via.placeholder.com/150" alt="Card image cap">
-    <rlb-card-body>
-      <h5 rlb-card-title>Card title</h5>
-      <h6 rlb-card-subtitle>Card subtitle</h6>
-      <p rlb-card-text>Some quick example text to build on the card title and make up the bulk of the card's
-        content.</p>
-      <a href="#" rlb-card-link>Card link</a>
-      <a href="#" rlb-card-link>Another link</a>
-    </rlb-card-body>
-    <rlb-card-footer>Footer</rlb-card-footer>
-  </rlb-card>
-</div>
+  <div class="py-3">
+    <rlb-card style="width: 300px;" [overlay]="false">
+      <rlb-card-header>Header</rlb-card-header>
+      <img rlb-card-image src="https://via.placeholder.com/150" alt="Card image cap">
+      <rlb-card-body>
+        <h5 rlb-card-title>Card title</h5>
+        <h6 rlb-card-subtitle>Card subtitle</h6>
+        <p rlb-card-text>Some quick example text to build on the card title and make up the bulk of the card's
+          content.</p>
+        <a href="#" rlb-card-link>Card link</a>
+        <a href="#" rlb-card-link>Another link</a>
+      </rlb-card-body>
+      <rlb-card-footer>Footer</rlb-card-footer>
+    </rlb-card>
+  </div>
 
-<div class="p-3">
-  <rlb-progress class="mb-2" [value]="22" [animated]="true" [height]="5"></rlb-progress>
-  <rlb-progress class="mb-2" [value]="44" [animated]="true" [height]="10" color="danger"></rlb-progress>
-  <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"></rlb-progress>
-  <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"
-    [striped]="true"></rlb-progress>
-  <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"
-    [showValue]="true">pippo</rlb-progress>
-</div>
+  <div class="py-3">
+    <rlb-progress class="mb-2" [value]="22" [animated]="true" [height]="5"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="44" [animated]="true" [height]="10" color="danger"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"
+      [striped]="true"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"
+      [showValue]="true">pippo</rlb-progress>
+  </div>
 
-<div class="p-3">
-  <rlb-spinner [color]="'primary'" [size]="'lg'"></rlb-spinner>
-</div>
+  <div class="py-3">
+    <rlb-spinner [color]="'primary'" [size]="'lg'"></rlb-spinner>
+  </div>
 
-<div class="p-3">
 
+  <rlb-offcanvas id="off-1">
+    <rlb-offcanvas-header>
+      <h5 rlb-offcanvas-title>Offcanvas</h5>
+    </rlb-offcanvas-header>
+    <rlb-offcanvas-body>
+      pippo
+    </rlb-offcanvas-body>
+  </rlb-offcanvas>
 </div>

@@ -8,7 +8,10 @@ import { SidebarItemComponent } from './sidebar-item.component';
   selector: 'rlb-sidebar',
   template: `
     <ng-template #template>
-      <div class="rlb-sidebar" [style.width.px]="open?maxWidth:width" [class.show]="open">
+      <div class="rlb-sidebar" [style.width.px]="open?maxWidth:width" [class.open]="open">
+      <button *ngIf="!hideCloseBtn" class="open-btn" (click)="open=!open" >
+        <i class="bi bi-arrow-right-short"></i>
+      </button>
         <nav class="nav">
           <div>
             <ng-content select="rlb-sidebar-header"></ng-content>
@@ -27,6 +30,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Input('max-width') maxWidth: number = 250;
   @Input('width') width: number = 68;
   @Input('open') open: boolean = false;
+  @Input('hide-close-btn') hideCloseBtn: boolean = false;
 
 
   @ContentChild(SidebarHeaderComponent) public header!: SidebarHeaderComponent
