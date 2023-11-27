@@ -2,7 +2,7 @@ mode: ContinuousDeployment
 major-version-bump-message: (^|\s+)(breaking|major)(:?\s+)?
 minor-version-bump-message: (^|\s+)(feature|minor)(:?\s+)?
 patch-version-bump-message: (^|\s+)(fix|patch)(:?\s+)?
-next-version: 1.0
+next-version: 1.1
 assembly-versioning-scheme: MajorMinorPatch
 assembly-file-versioning-scheme: MajorMinorPatch
 assembly-informational-format: '{InformationalVersion}'
