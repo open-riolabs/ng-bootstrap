@@ -9,3 +9,4 @@ export * from './lib/forms/inputs';
 export * from './lib/forms/rlb-form-fields/rlb-form-fields.component';
 
 export * from './lib/shared/types';
+export * from './lib/interfaces';
