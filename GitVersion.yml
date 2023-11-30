@@ -3,13 +3,9 @@ major-version-bump-message: .*?(\s|^)(major|breaking)(\s|:|$).+
 minor-version-bump-message: .*?(\s|^)(feature|minor)(\s|:|$).+
 patch-version-bump-message: .*?(\s|^)(fix|patch)(\s|:|$).+
 no-bump-message: .*?(\s|^)(none|skip)(\s|:|$).+
-assembly-versioning-scheme: MajorMinorPatch
-assembly-file-versioning-scheme: MajorMinorPatch
 increment: Patch
 tag-prefix: '[vV]'
 commit-message-incrementing: Enabled
-ignore:
-  sha: []
 merge-message-formats: {}
 update-build-number: true
 branches:
@@ -19,6 +15,7 @@ branches:
   develop:
     regex: ^dev(elop)?(ment)?$
     tag: alpha
+    increment: Patch
   release:
     regex: ^releases?[/-]
     tag: beta
