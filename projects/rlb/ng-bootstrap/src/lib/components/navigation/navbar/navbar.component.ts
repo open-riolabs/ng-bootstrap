@@ -43,6 +43,7 @@ export class NavbarComponent {
     this.viewContainerRef.createEmbeddedView(this.template);
     this.viewContainerRef.element.nativeElement.remove()
   }
+  
   get _navExpand(): string | undefined {
     if (!this.expand) return undefined
     else if (this.expand === 'always') return 'navbar-expand'
