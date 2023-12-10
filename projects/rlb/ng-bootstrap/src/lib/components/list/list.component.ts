@@ -6,7 +6,7 @@ import { ListItemComponent } from "./list-item.component";
   template: `
   <ng-template #template>
     <ul class="list-group" [class.list-group-numbered]="numbered" [class.list-group-flush]="flush" [class.list-group-horizontal]="horizontal">
-      <ng-content select="[rlb-list-item]"></ng-content>
+      <ng-content select="rlb-list-item"></ng-content>
     </ul>
   </ng-template>`,
   host: {
@@ -14,7 +14,6 @@ import { ListItemComponent } from "./list-item.component";
   },
 })
 export class ListComponent implements DoCheck {
-  @Input() active!: boolean
   @Input() disabled!: boolean
   @Input('numbered') numbered!: boolean
   @Input('flush') flush!: boolean
@@ -31,8 +30,7 @@ export class ListComponent implements DoCheck {
   }
 
   ngDoCheck() {
-    this.children.forEach(child => {
-      child.active = this.active
+    this.children?.forEach(child => {
       child.disabled = this.disabled
     })
   }
