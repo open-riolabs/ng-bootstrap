@@ -1,0 +1,39 @@
+import { Component, ContentChildren, DoCheck, Input, QueryList, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { ListItemComponent } from "./list-item.component";
+
+@Component({
+  selector: 'rlb-list',
+  template: `
+  <ng-template #template>
+    <ul class="list-group" [class.list-group-numbered]="numbered" [class.list-group-flush]="flush" [class.list-group-horizontal]="horizontal">
+      <ng-content select="[rlb-list-item]"></ng-content>
+    </ul>
+  </ng-template>`,
+  host: {
+
+  },
+})
+export class ListComponent implements DoCheck {
+  @Input() active!: boolean
+  @Input() disabled!: boolean
+  @Input('numbered') numbered!: boolean
+  @Input('flush') flush!: boolean
+  @Input('horizontal') horizontal!: boolean
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @ContentChildren(ListItemComponent) children!: QueryList<ListItemComponent>;
+
+  constructor(private viewContainerRef: ViewContainerRef) {
+  }
+
+  ngOnInit() {
+    this.viewContainerRef.createEmbeddedView(this.template);
+  }
+
+  ngDoCheck() {
+    this.children.forEach(child => {
+      child.active = this.active
+      child.disabled = this.disabled
+    })
+  }
+}

@@ -60,6 +60,8 @@ import { TOASTS } from './toast';
 import { PopoverDirective } from './tooltips/popover.directive';
 import { TooltipDirective } from './tooltips/tooltip.directive';
 import { NavbarTextComponent } from './navigation/navbar/navbar-text.component';
+import { ListComponent } from './list/list.component';
+import { ListItemComponent } from './list/list-item.component';
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -93,6 +95,8 @@ export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown-container.component';
 export * from './dropdown/dropdown-menu-item.component';
 export * from './dropdown/dropdown.directive';
+export * from './list/list.component';
+export * from './list/list-item.component';
 export * from './navigation/navbar/navbar.component';
 export * from './navigation/navbar/navbar-form.component';
 export * from './navigation/navbar/navbar-text.component';
@@ -184,6 +188,8 @@ export const COMPONENTS = [
   CarouselComponent,
   CarouselCaptionComponent,
   CarouselSlideComponent,
+  ListComponent,
+  ListItemComponent,
   ...[MODALS],
   ...[TOASTS]
 ]
