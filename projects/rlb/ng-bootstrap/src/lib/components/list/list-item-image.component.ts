@@ -9,16 +9,16 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@ang
       [class.list-group-item-action]="disabled !== true" 
       [class.active]="active"
       [attr.aria-current]="active">
-      <div>
-        <rlb-avatar [src]="profilePicture" [size]="avatarSize"></rlb-avatar>
-      </div>
-      <div class="ps-2 flex-grow-1">
-        <div class="fw-bold">{{username}}</div>
-        <span *ngIf="line1" class="d-block">{{line1}}</span>
-        <span *ngIf="line2" class="d-block">{{line2}}</span>
-      </div>
-      <div *ngIf="unread">
-        <span rlb-badge [pill]="true">{{unread}}</span>
+      <div class="d-flex">
+        <rlb-avatar [src]="profilePicture" [size]="avatarSize" />
+        <div class="ps-2 flex-grow-1">
+          <div class="fw-bold">{{username}}</div>
+          <span *ngIf="line1" class="d-block">{{line1}}</span>
+          <span *ngIf="line2" class="d-block">{{line2}}</span>
+        </div>
+        <div *ngIf="unread">
+          <span rlb-badge [pill]="true">{{unread}}</span>
+        </div>
       </div>
     </li>
   </ng-template>`,
@@ -38,7 +38,7 @@ export class ListItemImageComponent {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
-  
+
   ngOnInit() {
     this.viewContainerRef.createEmbeddedView(this.template);
     this.viewContainerRef.element.nativeElement.remove()
