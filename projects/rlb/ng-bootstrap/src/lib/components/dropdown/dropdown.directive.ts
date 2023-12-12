@@ -1,14 +1,14 @@
 import { Directive, ElementRef, Renderer2, Input, DoCheck } from "@angular/core";
 
 @Directive({
-  selector: 'a[rlb-dropdown], button[rlb-dropdown], span[rlb-badge]',
+  selector: 'a[rlb-dropdown], button[rlb-dropdown], span[rlb-badge][rlb-dropdown]',
 })
 export class DropdownDirective implements DoCheck {
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
 
   @Input() offset!: string;
-  @Input() autoClose!: 'default' | 'inside' | 'outside' | 'maual';
+  @Input() autoClose!: 'default' | 'inside' | 'outside' | 'manual';
 
   ngDoCheck() {
     this.renderer.addClass(this.elementRef.nativeElement, 'dropdown-toggle');
@@ -29,7 +29,7 @@ export class DropdownDirective implements DoCheck {
     if (this.autoClose === 'outside') {
       this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-auto-close', 'outside');
     }
-    if (this.autoClose === 'maual') {
+    if (this.autoClose === 'manual') {
       this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-auto-close', 'false');
     }
   }

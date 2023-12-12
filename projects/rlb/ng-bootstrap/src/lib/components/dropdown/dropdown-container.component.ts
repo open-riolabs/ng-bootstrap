@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'ul[rlb-dropdown-menu],rlb-dropdown-container',
@@ -31,9 +31,13 @@ export class DropdownContainerComponent {
 
   isList: boolean = false
 
-  constructor(private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef, renderer: Renderer2) {
     if (this.elementRef.nativeElement.nodeName.toLowerCase() === 'ul') {
       this.isList = true
+    }
+    else {
+      renderer.setStyle(this.elementRef.nativeElement, 'border', 'none')
+      renderer.setStyle(this.elementRef.nativeElement, 'padding', '0px')
     }
   }
 }

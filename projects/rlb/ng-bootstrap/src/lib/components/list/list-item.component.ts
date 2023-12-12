@@ -4,7 +4,11 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@ang
   selector: 'rlb-list-item',
   template: `
   <ng-template #template>
-    <li class="list-group-item" [class.disabled]="disabled" [class.list-group-item-action]="action" [class.active]="active"  [attr.aria-current]="active">
+    <li class="list-group-item"
+      [class.disabled]="disabled" 
+      [class.list-group-item-action]="action" 
+      [class.active]="active"
+      [attr.aria-current]="active">
       <ng-content></ng-content>
     </li>
   </ng-template>`,
@@ -23,5 +27,6 @@ export class ListItemComponent {
   }
   ngOnInit() {
     this.viewContainerRef.createEmbeddedView(this.template);
+    this.viewContainerRef.element.nativeElement.remove()
   }
 }

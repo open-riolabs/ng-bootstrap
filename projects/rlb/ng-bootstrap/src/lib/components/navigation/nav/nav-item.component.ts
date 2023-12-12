@@ -64,5 +64,6 @@ export class NavItemComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.viewContainerRef.createEmbeddedView(this.template);
+    this.viewContainerRef.element.nativeElement.remove()
   }
 }

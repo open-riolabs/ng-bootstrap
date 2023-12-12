@@ -62,6 +62,8 @@ import { TooltipDirective } from './tooltips/tooltip.directive';
 import { NavbarTextComponent } from './navigation/navbar/navbar-text.component';
 import { ListComponent } from './list/list.component';
 import { ListItemComponent } from './list/list-item.component';
+import { AvatarComponent } from './avatar/avatar.component';
+import { ListItemImageComponent } from './list/list-item-image.component';
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -97,6 +99,7 @@ export * from './dropdown/dropdown-menu-item.component';
 export * from './dropdown/dropdown.directive';
 export * from './list/list.component';
 export * from './list/list-item.component';
+export * from './list/list-item-image.component';
 export * from './navigation/navbar/navbar.component';
 export * from './navigation/navbar/navbar-form.component';
 export * from './navigation/navbar/navbar-text.component';
@@ -127,6 +130,7 @@ export * from './scrollspy/scrollspy.directive';
 export * from './carousel/carousel.component';
 export * from './carousel/carousel-slide.component';
 export * from './carousel/carousel-caption.component';
+export * from './avatar/avatar.component';
 
 export const COMPONENTS = [
   AlertComponent,
@@ -190,6 +194,8 @@ export const COMPONENTS = [
   CarouselSlideComponent,
   ListComponent,
   ListItemComponent,
+  ListItemImageComponent,
+  AvatarComponent,
   ...[MODALS],
   ...[TOASTS]
 ]

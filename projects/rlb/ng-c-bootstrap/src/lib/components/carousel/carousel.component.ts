@@ -33,6 +33,7 @@ export class CarouselComponent implements OnInit {
 
   ngOnInit() {
     this.viewContainerRef.createEmbeddedView(this.template);
+    this.viewContainerRef.element.nativeElement.remove()
   }
 
 }
