@@ -6,7 +6,7 @@ import { ListItemComponent } from "./list-item.component";
   template: `
   <ng-template #template>
     <ul class="list-group" [class.list-group-numbered]="numbered" [class.list-group-flush]="flush" [class.list-group-horizontal]="horizontal">
-      <ng-content select="rlb-list-item"></ng-content>
+      <ng-content select="rlb-list-item, rlb-list-item-image"></ng-content>
     </ul>
   </ng-template>`,
   host: {
