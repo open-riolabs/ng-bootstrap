@@ -5,8 +5,8 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from '@ang
   host: { 'class': 'pb-3 px-3' },
   template: `
     <ng-template #template>
-      <div>
-        <hr class="text-white ms-3" />
+      <div class="mb-2">
+        <hr class="text-white ms-3 my-2" />
         <ng-content></ng-content> 
       </div>
     </ng-template>

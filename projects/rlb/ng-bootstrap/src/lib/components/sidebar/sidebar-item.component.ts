@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -30,12 +30,15 @@ export class SidebarItemComponent implements OnInit {
   @Input('disabled') disabled: boolean = false;
   @Input('action') action!: (() => void | Promise<void> | Observable<void>) | null | undefined;
 
+  element!: HTMLElement;
+
   constructor(private viewContainerRef: ViewContainerRef) { }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }
