@@ -27,7 +27,8 @@ export abstract class AbstractRegistryService<T extends Function> {
   }
 
   protected dasherizeName(type: Function) {
-    const name: string = type?.prototype?.constructor?.name;
+    let name: string = type?.prototype?.constructor?.name;
+    name = name.startsWith("_") ? name.slice(1) : name;
     return this.dasherizeString(name);
   };
 
