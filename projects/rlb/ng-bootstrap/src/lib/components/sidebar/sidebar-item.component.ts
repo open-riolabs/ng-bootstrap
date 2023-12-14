@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
          [class.active]="active" 
          routerLinkActive="active" 
          [class.disabled]="disabled"
-         (click)="!disabled && action ? action():undefined" >
+         (click)="!disabled && isAction? emitAction($event): undefined"
+          >
         <i *ngIf="icon" [class]='icon'></i>
         <span class="name">
           <ng-content></ng-content>    
@@ -23,12 +24,16 @@ export class SidebarItemComponent implements OnInit {
   open: boolean = false;
   sidebarId: string = '';
 
+  get isAction() {
+    return this.onAction.observers.length > 0;
+  }
+
   @Input('label') label!: string;
   @Input('icon') icon?: string;
   @Input('url') url?: string;
   @Input('active') active: boolean = false;
   @Input('disabled') disabled: boolean = false;
-  @Input('action') action!: (() => void | Promise<void> | Observable<void>) | null | undefined;
+  @Output('action') onAction = new EventEmitter<void>();
 
   element!: HTMLElement;
 
@@ -40,5 +45,11 @@ export class SidebarItemComponent implements OnInit {
     const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = (templateView.rootNodes[0]);
     this.viewContainerRef.element.nativeElement.remove();
+  }
+
+  emitAction(event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.onAction.emit();
   }
 }
