@@ -45,6 +45,7 @@ export class NavItemComponent implements OnInit, DoCheck {
   @Input() icon?: string = '';
   isContainer!: boolean;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
   @ContentChildren(NavItemComponent) children!: QueryList<NavItemComponent>;
 
   public view: 'shrink' | 'expand' | 'responsive' = 'responsive';
@@ -62,8 +63,8 @@ export class NavItemComponent implements OnInit, DoCheck {
     this.isContainer = this.children?.length > 0;
   }
 
-  ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

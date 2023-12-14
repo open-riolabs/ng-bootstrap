@@ -36,11 +36,13 @@ export class ListItemImageComponent {
   @Input('profile-picture') profilePicture?: string;
   @Input('unread') unread?: number | string;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

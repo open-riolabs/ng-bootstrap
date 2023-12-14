@@ -7,7 +7,7 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from '@ang
     <ng-template #template>
       <div class="mb-2">
         <hr class="text-white ms-3 my-2" />
-        <ng-content></ng-content> 
+        <ng-content select="rlb-sidebar-item"></ng-content>
       </div>
     </ng-template>
     `
@@ -20,9 +20,10 @@ export class SidebarFooterComponent {
   constructor(private viewContainerRef: ViewContainerRef) { }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
 
-  ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

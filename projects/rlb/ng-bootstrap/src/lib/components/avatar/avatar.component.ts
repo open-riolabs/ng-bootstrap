@@ -24,6 +24,7 @@ export class AvatarComponent {
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   constructor(private viewContainerRef: ViewContainerRef) { }
+  element!: HTMLElement;
 
   get _borderRadius() {
     switch (this.style) {
@@ -35,7 +36,8 @@ export class AvatarComponent {
   }
 
   ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

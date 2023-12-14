@@ -32,13 +32,14 @@ export class NavComponent {
   @Input() class?: string;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
 
   constructor(private viewContainerRef: ViewContainerRef, private elementRef: ElementRef<HTMLElement>) {
     elementRef.nativeElement.remove();
   }
 
-  ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

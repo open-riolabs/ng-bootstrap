@@ -17,6 +17,8 @@ versioning:
   artifacts:
     reports:
       dotenv: gitversion.properties
+  tags:
+    - riolabs
   only:
     - master
 
@@ -33,6 +35,8 @@ build:
   artifacts:
     paths:
       - dist/
+  tags:
+    - riolabs
   only:
     - master
 
@@ -48,6 +52,8 @@ test:
     - apt-get update
     - apt-get install -y google-chrome-stable xvfb
     - npm run lib:test-ci
+  tags:
+    - riolabs
   only:
     - master
 
@@ -63,5 +69,7 @@ deploy:
     - echo "//gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
     - npm version ${GitVersion_SemVer}
     - npm publish
+  tags:
+    - riolabs
   only:
     - master

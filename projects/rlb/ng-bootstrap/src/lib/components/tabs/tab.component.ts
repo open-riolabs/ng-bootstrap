@@ -28,14 +28,15 @@ export class TabComponent {
   @Input() active!: boolean
   @Input() disabled!: boolean
   @Input({ alias: 'target', required: true }) target!: string
-
+  element!: HTMLElement;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) {
   }
   ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

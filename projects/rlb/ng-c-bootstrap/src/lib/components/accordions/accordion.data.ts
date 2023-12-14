@@ -1,5 +1,3 @@
-import { Color } from "@rlb/ng-bootstrap";
-
 export interface AccordionItem {
   title: string;
   content: string;

@@ -20,14 +20,16 @@ export class ListComponent implements DoCheck {
   @Input('horizontal') horizontal!: boolean
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
   @ContentChildren(ListItemComponent) children!: QueryList<ListItemComponent>;
 
   constructor(private viewContainerRef: ViewContainerRef) {
   }
 
   ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 
   ngDoCheck() {

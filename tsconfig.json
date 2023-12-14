@@ -4,7 +4,7 @@
   "compilerOptions": {
     "paths": {
       "@rlb/ng-bootstrap": [
-        "dist/rlb/ng-bootstrap"
+        "./projects/rlb/ng-bootstrap/src/public-api.ts"
       ],
       "@rlb/ng-c-bootstrap": [
         "dist/rlb/ng-c-bootstrap"

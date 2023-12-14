@@ -20,6 +20,7 @@ import { Component, Input, ViewContainerRef, OnInit, ViewChild, TemplateRef } fr
 })
 export class PaginationItemComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
 
   @Input() isIcon: boolean = false;
   @Input() disabled: boolean = false;
@@ -29,8 +30,8 @@ export class PaginationItemComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

@@ -26,12 +26,13 @@ import { Card } from './card.data';
 export class CardComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @Input() data!: Card | undefined;
+  element!: HTMLElement;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
-  ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 
 }

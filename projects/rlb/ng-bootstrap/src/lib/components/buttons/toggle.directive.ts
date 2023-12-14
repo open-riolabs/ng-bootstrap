@@ -15,33 +15,35 @@ export class ToggleDirective implements DoCheck {
   @Input({ alias: 'toggle-target', required: true }) target!: string;
   @Input() collapsed: boolean = false;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2, 
-    @Host() @Self() @Optional() public hostCheckboxComponent : SidebarItemComponent,
-    
-    ) { }
+  constructor(private elementRef: ElementRef, private renderer: Renderer2,
+    @Host() @Self() @Optional() public sidebarItem: SidebarItemComponent,
+    @Host() @Self() @Optional() public buttonToolbar: ButtonToolbarComponent,
+  ) { }
 
   ngDoCheck() {
-    let o = null;
-    o = (this.hostCheckboxComponent?.element ) ;
-    // o = (this.elementRef as ElementRef<HTMLAnchorElement>)?.nativeElement;
-    // o = (this.elementRef as ElementRef<HTMLButtonElement>)?.nativeElement;
-    // o = (this.elementRef as ElementRef<ButtonToolbarComponent>)?.nativeElement;
-
-    console.log('ToggleDirective.ngDoCheck', o, this.toggle, this.target, this.collapsed);
-    this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-toggle', this.toggle);
-    if (this.elementRef.nativeElement.nodeName.toLowerCase() === 'a') {
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'href', `#${this.target}`);
+    let element: HTMLElement | undefined = undefined;
+    if (this.sidebarItem) {
+      element = this.sidebarItem.element;
+    } else if (this.buttonToolbar) {
+      element = this.elementRef.nativeElement;
     } else {
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-target', `#${this.target}`);
+      element = this.elementRef.nativeElement;
+    }
+
+    this.renderer.setAttribute(element, 'data-bs-toggle', this.toggle);
+    if (element?.nodeName.toLowerCase() === 'a') {
+      this.renderer.setAttribute(element, 'href', `#${this.target}`);
+    } else {
+      this.renderer.setAttribute(element, 'data-bs-target', `#${this.target}`);
     }
     if (this.collapsed) {
-      this.renderer.addClass(this.elementRef.nativeElement, 'collapsed');
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-expanded', 'true');
+      this.renderer.addClass(element, 'collapsed');
+      this.renderer.setAttribute(element, 'aria-expanded', 'true');
     } else {
-      this.renderer.removeClass(this.elementRef.nativeElement, 'collapsed');
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-expanded', 'false');
+      this.renderer.removeClass(element, 'collapsed');
+      this.renderer.setAttribute(element, 'aria-expanded', 'false');
     }
-    this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-controls', this.target);
-    this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-expanded', 'false');
+    this.renderer.setAttribute(element, 'aria-controls', this.target);
+    this.renderer.setAttribute(element, 'aria-expanded', 'false');
   }
 }

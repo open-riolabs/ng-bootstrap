@@ -11,12 +11,13 @@ import { Badge } from './badge.data';
 export class BadgeComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @Input() data!: Badge | undefined;
+  element!: HTMLElement;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
-  ngOnInit() {
-    this.viewContainerRef.createEmbeddedView(this.template);
-    this.viewContainerRef.element.nativeElement.remove()
+  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 
 }
