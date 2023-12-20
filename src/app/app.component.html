@@ -18,8 +18,8 @@
 			<rlb-navbar-items class="me-auto">
 				<a rlb-navbar-item [routerLink]="['/']" routerLinkActive="active">Home</a>
 				<a rlb-navbar-item [routerLink]="['/getting-started']" routerLinkActive="active">Getting started</a>
-				<rlb-navbar-separator />
-				<a rlb-navbar-item dropdown toggle="dropdown" toggle-target="#"  autoClose="manual" >Components
+				<span rlb-navbar-separator></span>
+				<a rlb-navbar-item dropdown toggle="dropdown" toggle-target="#" autoClose="manual">Components
 					<rlb-dropdown-container>
 						<rlb-card>
 							<rlb-card-body>
@@ -43,7 +43,7 @@
 		</rlb-navbar>
 		<div class="rlb-content">
 			<!-- <router-outlet /> -->
-		</div>
+		</div> 
 	</div>
 </div>
 <rlb-modal-container id="modal-c-1" />
