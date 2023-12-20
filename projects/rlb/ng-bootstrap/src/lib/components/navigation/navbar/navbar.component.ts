@@ -29,7 +29,7 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
 export class NavbarComponent {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
-  
+
   @Input() dark?: boolean = false
   @Input() color?: Color = 'primary'
   @Input() placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom'
@@ -41,11 +41,12 @@ export class NavbarComponent {
     this._navId = `nav${this.idService.id}`
   }
 
-  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = (templateView.rootNodes[0]);
     this.viewContainerRef.element.nativeElement.remove();
   }
-  
+
   get _navExpand(): string | undefined {
     if (!this.expand) return undefined
     else if (this.expand === 'always') return 'navbar-expand'

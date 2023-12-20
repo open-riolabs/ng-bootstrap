@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
 
 @Component({
-  selector: 'ul[rlb-dropdown-menu],rlb-dropdown-container',
+  selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
   template: `
     <ng-content *ngIf="isList" select="li[rlb-dropdown-item]" />
     <ng-content *ngIf="!isList" />`,

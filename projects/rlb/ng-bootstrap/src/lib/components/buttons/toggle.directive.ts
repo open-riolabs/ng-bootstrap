@@ -29,13 +29,7 @@ export class ToggleDirective implements DoCheck {
     } else {
       element = this.elementRef.nativeElement;
     }
-
     this.renderer.setAttribute(element, 'data-bs-toggle', this.toggle);
-    if (element?.nodeName.toLowerCase() === 'a') {
-      this.renderer.setAttribute(element, 'href', `#${this.target}`);
-    } else {
-      this.renderer.setAttribute(element, 'data-bs-target', `#${this.target}`);
-    }
     if (this.collapsed) {
       this.renderer.addClass(element, 'collapsed');
       this.renderer.setAttribute(element, 'aria-expanded', 'true');
@@ -45,5 +39,14 @@ export class ToggleDirective implements DoCheck {
     }
     this.renderer.setAttribute(element, 'aria-controls', this.target);
     this.renderer.setAttribute(element, 'aria-expanded', 'false');
+
+    if (this.toggle === 'dropdown' && this.target === '#') {
+      this.renderer.setAttribute(element, 'href', '#');
+    }
+    else if (element?.nodeName.toLowerCase() === 'a') {
+      this.renderer.setAttribute(element, 'href', `#${this.target}`);
+    } else {
+      this.renderer.setAttribute(element, 'data-bs-target', `#${this.target}`);
+    }
   }
 }

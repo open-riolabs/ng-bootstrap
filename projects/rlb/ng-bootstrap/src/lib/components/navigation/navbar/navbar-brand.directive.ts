@@ -7,8 +7,5 @@ export class NavbarBrandDirective {
 
   constructor(elementRef: ElementRef, renderer: Renderer2) {
     renderer.addClass(elementRef.nativeElement, 'navbar-brand');
-    if (elementRef.nativeElement.nodeName.toLowerCase() === 'a') {
-      renderer.setAttribute(elementRef.nativeElement, 'href', `#`);
-    }
   }
 }
