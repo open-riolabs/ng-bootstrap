@@ -1,7 +1,6 @@
 <div class="rlb-app">
 	<rlb-sidebar id="sidebar">
-		<rlb-sidebar-header mode="logo"
-			[data]="{ image:'assets/logo.svg', text:'Title', alt:'no-logo'}" />
+		<rlb-sidebar-header mode="logo" [data]="{ image:'assets/logo.svg', text:'Title', alt:'no-logo'}" />
 		<rlb-sidebar-item icon="bi bi-box">pippo</rlb-sidebar-item>
 		<rlb-sidebar-item icon="bi bi-box" [active]="true">pluto</rlb-sidebar-item>
 		<rlb-sidebar-item icon="bi bi-box">paperino</rlb-sidebar-item>
@@ -19,7 +18,19 @@
 			<rlb-navbar-items class="me-auto">
 				<a rlb-navbar-item [routerLink]="['/']" routerLinkActive="active">Home</a>
 				<a rlb-navbar-item [routerLink]="['/getting-started']" routerLinkActive="active">Getting started</a>
-				<a rlb-navbar-item [routerLink]="['/components']" routerLinkActive="active">Components</a>
+				<a rlb-navbar-item dropdown toggle="dropdown" toggle-target="#"  autoClose="manual" >Components
+					<rlb-dropdown-container>
+						<rlb-card>
+							<rlb-card-body>
+								<h5 rlb-card-title>Card title</h5>
+								<p rlb-card-text>
+									Some quick example text to build on the card title and make up the bulk of the card's content.
+								</p>
+							</rlb-card-body>
+						</rlb-card>
+					</rlb-dropdown-container>
+				</a>
+
 			</rlb-navbar-items>
 			<!-- <rlb-navbar-form>
 				<rlb-input />

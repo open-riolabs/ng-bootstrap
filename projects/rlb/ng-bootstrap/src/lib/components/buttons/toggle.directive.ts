@@ -14,6 +14,7 @@ export class ToggleDirective implements DoCheck {
   @Input('toggle') toggle!: 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group'
   @Input({ alias: 'toggle-target', required: true }) target!: string;
   @Input() collapsed: boolean = false;
+  @Input() autoClose!: 'default' | 'inside' | 'outside' | 'manual';
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2,
     @Host() @Self() @Optional() public sidebarItem: SidebarItemComponent,
@@ -30,6 +31,18 @@ export class ToggleDirective implements DoCheck {
       element = this.elementRef.nativeElement;
     }
     this.renderer.setAttribute(element, 'data-bs-toggle', this.toggle);
+    if (this.autoClose === 'default') {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-auto-close', 'true');
+    }
+    if (this.autoClose === 'inside') {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-auto-close', 'inside');
+    }
+    if (this.autoClose === 'outside') {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-auto-close', 'outside');
+    }
+    if (this.autoClose === 'manual') {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-auto-close', 'false');
+    }
     if (this.collapsed) {
       this.renderer.addClass(element, 'collapsed');
       this.renderer.setAttribute(element, 'aria-expanded', 'true');
