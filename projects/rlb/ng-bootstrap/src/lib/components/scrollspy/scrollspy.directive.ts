@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Renderer2, Input, DoCheck, OnInit, AfterViewInit, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from "@angular/core";
+import { Directive, ElementRef, Input, AfterViewInit, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter, booleanAttribute } from "@angular/core";
 import { ScrollSpy } from "bootstrap"
 
 @Directive({
@@ -14,7 +14,7 @@ import { ScrollSpy } from "bootstrap"
 export class ScrollspyDirective implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input({ alias: 'rlb-scrollspy', required: true }) target!: string;
-  @Input({ alias: 'scroll-smooth' }) smooth!: boolean;
+  @Input({ transform: booleanAttribute, alias: 'scroll-smooth' }) smooth!: boolean;
   @Input({ alias: 'scroll-root-margin' }) rootMargin!: string;
   @Input({ alias: 'scroll-threshold' }) threshold!: Array<number>;
   @Output('scroll-change') scroll: EventEmitter<void> = new EventEmitter<void>();

@@ -1,4 +1,4 @@
-import { Component, ContentChild, ContentChildren, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ContentChild, ContentChildren, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from '@angular/core';
 import { SidebarHeaderComponent } from './sidebar-header.component';
 import { SidebarFooterComponent } from './sidebar-footer.component';
 import { SidebarItemComponent } from './sidebar-item.component';
@@ -29,9 +29,9 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Input('id') id!: string;
   @Input('max-width') maxWidth: number = 250;
   @Input('width') width: number = 68;
-  @Input('open') open: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'open' }) open: boolean = false;
   @Output('openChange') openChange: EventEmitter<boolean> = new EventEmitter();
-  @Input('hide-close-btn') hideCloseBtn: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'hide-close-btn' }) hideCloseBtn: boolean = false;
 
 
   @ContentChild(SidebarHeaderComponent) public header!: SidebarHeaderComponent
@@ -43,7 +43,8 @@ export class SidebarComponent implements OnInit, OnChanges {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
-  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = (templateView.rootNodes[0]);
     this.viewContainerRef.element.nativeElement.remove();
   }

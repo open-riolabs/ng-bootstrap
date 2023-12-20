@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from "@angular/core";
 
 @Component({
   selector: 'rlb-list-item-image',
@@ -27,8 +27,8 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@ang
   },
 })
 export class ListItemImageComponent {
-  @Input('active') active!: boolean
-  @Input('disabled') disabled!: boolean
+  @Input({ transform: booleanAttribute, alias: 'active' }) active!: boolean
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled!: boolean
   @Input('avatar-size') avatarSize?: number = 50;
   @Input('username') username?: string;
   @Input('line-1') line1?: string;

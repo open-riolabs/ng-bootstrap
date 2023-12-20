@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, booleanAttribute } from "@angular/core";
 import { Offcanvas } from 'bootstrap'
 import { VisibilityEvent } from "../../shared/types";
 import { ToggleAbstractComponent } from "../abstract/toggle-abstract.component";
@@ -27,9 +27,9 @@ import { ToggleAbstractComponent } from "../abstract/toggle-abstract.component";
 export class OffcanvasComponent extends ToggleAbstractComponent<Offcanvas> implements OnInit, OnDestroy {
 
   @Input({ alias: `id`, required: true }) id!: string;
-  @Input('body-scroll') bodyScroll: boolean = false;
-  @Input('scroll-backup') scrollBackup: boolean = false;
-  @Input('close-manual') closeManual: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'body-scroll'})  bodyScroll: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'scroll-backup'})  scrollBackup: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'close-manual'})  closeManual: boolean = false;
   @Input('placement') placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
   @Input('responsive') responsive!: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   @Output() openChange = new EventEmitter<VisibilityEvent>();

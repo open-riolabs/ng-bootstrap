@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -31,8 +31,8 @@ export class SidebarItemComponent implements OnInit {
   @Input('label') label!: string;
   @Input('icon') icon?: string;
   @Input('url') url?: string;
-  @Input('active') active: boolean = false;
-  @Input('disabled') disabled: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'active' }) active: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled: boolean = false;
   @Output('action') onAction = new EventEmitter<void>();
 
   element!: HTMLElement;

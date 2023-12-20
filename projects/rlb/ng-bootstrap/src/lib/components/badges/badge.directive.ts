@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Renderer2, Input, DoCheck } from "@angular/core";
+import { Directive, ElementRef, Renderer2, Input, DoCheck, booleanAttribute } from "@angular/core";
 import { Color } from "../../shared/types";
 
 @Directive({
@@ -8,7 +8,7 @@ import { Color } from "../../shared/types";
 export class BadgeDirective implements DoCheck {
 
   @Input('badge') badge!: string | undefined;
-  @Input('badge-pill') pill!: boolean;
+  @Input({ transform: booleanAttribute, alias: 'badge-pill'})  pill!: boolean;
   @Input('badge-top') top!: number;
   @Input('badge-start') start!: number;
   @Input('badge-color') color: Color = 'danger'

@@ -1,4 +1,4 @@
-import { Component, ContentChildren, DoCheck, Input, QueryList, OnInit, OnDestroy, ElementRef, Output, EventEmitter } from "@angular/core";
+import { Component, ContentChildren, DoCheck, Input, QueryList, OnInit, OnDestroy, ElementRef, Output, EventEmitter, booleanAttribute } from "@angular/core";
 import { UniqueIdService } from "../../shared/unique-id.service";
 import { CarouselSlideComponent } from "./carousel-slide.component";
 import { Carousel } from "bootstrap";
@@ -40,15 +40,15 @@ import { Carousel } from "bootstrap";
 export class CarouselComponent implements DoCheck, OnInit, OnDestroy {
   @ContentChildren(CarouselSlideComponent) public items!: QueryList<CarouselSlideComponent>;
   @Input() id!: string;
-  @Input('show-indicators') showIndicators?: boolean = true;
-  @Input('show-controls') showControls?: boolean = true;
-  @Input('cross-fade') crossFade?: boolean = true;
+  @Input({ transform: booleanAttribute, alias: 'show-indicators' }) showIndicators?: boolean = true;
+  @Input({ transform: booleanAttribute, alias: 'show-controls' }) showControls?: boolean = true;
+  @Input({ transform: booleanAttribute, alias: 'cross-fade' }) crossFade?: boolean = true;
   @Input('autoplay') autoplay?: 'auto' | 'manual' | 'none' = 'none';
   @Input('interval') interval?: number = 5000;
   @Input('pause') pauseProp?: false | 'hover' = 'hover';
-  @Input('wrap') wrap?: boolean = true;
-  @Input('no-touch') noTouch?: boolean = false;
-  @Input('keyboard') keyboard?: boolean = true;
+  @Input({ transform: booleanAttribute, alias: 'wrap' }) wrap?: boolean = true;
+  @Input({ transform: booleanAttribute, alias: 'no-touch' }) noTouch?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'keyboard' }) keyboard?: boolean = true;
   @Output('slid') slid?: EventEmitter<Carousel.Event> = new EventEmitter<Carousel.Event>();
   @Output('slide') slide?: EventEmitter<Carousel.Event> = new EventEmitter<Carousel.Event>();
 

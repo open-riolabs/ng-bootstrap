@@ -1,4 +1,4 @@
-import { Component, Renderer2, Input, ViewChild, ViewContainerRef, TemplateRef } from "@angular/core";
+import { Component, Renderer2, Input, ViewChild, ViewContainerRef, TemplateRef, booleanAttribute } from "@angular/core";
 import { Color } from "../../shared/types";
 
 @Component({
@@ -13,7 +13,7 @@ import { Color } from "../../shared/types";
 })
 export class BadgeComponent {
 
-  @Input('pill') pill!: boolean | undefined;
+  @Input({ transform: booleanAttribute, alias: 'pill' }) pill!: boolean | undefined;
   @Input('color') color: Color | undefined = 'primary'
   @Input('hidden-text') hiddenText!: string | undefined;
 

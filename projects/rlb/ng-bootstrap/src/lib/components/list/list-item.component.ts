@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from "@angular/core";
 
 @Component({
   selector: 'rlb-list-item',
@@ -19,7 +19,7 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@ang
 export class ListItemComponent {
   @Input() active!: boolean
   @Input() disabled!: boolean
-  @Input('action') action!: boolean
+  @Input({ transform: booleanAttribute, alias: 'action'})  action!: boolean
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;

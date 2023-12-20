@@ -1,4 +1,4 @@
-import { Component, ContentChildren, DoCheck, Input, QueryList, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ContentChildren, DoCheck, Input, QueryList, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from "@angular/core";
 import { ListItemComponent } from "./list-item.component";
 
 @Component({
@@ -15,9 +15,9 @@ import { ListItemComponent } from "./list-item.component";
 })
 export class ListComponent implements DoCheck {
   @Input() disabled!: boolean
-  @Input('numbered') numbered!: boolean
-  @Input('flush') flush!: boolean
-  @Input('horizontal') horizontal!: boolean
+  @Input({ transform: booleanAttribute, alias: 'numbered' }) numbered!: boolean
+  @Input({ transform: booleanAttribute, alias: 'flush' }) flush!: boolean
+  @Input({ transform: booleanAttribute, alias: 'horizontal' }) horizontal!: boolean
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
