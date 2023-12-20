@@ -1,5 +1,5 @@
-import { Component, Host, Input, Optional } from '@angular/core';
-import { NavbarItemsComponent } from 'dist/rlb/ng-bootstrap';
+import { Component, Input } from '@angular/core';
+
 
 @Component({
   selector: 'rlb-dropdown',
