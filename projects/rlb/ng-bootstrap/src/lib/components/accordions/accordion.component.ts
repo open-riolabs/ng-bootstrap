@@ -1,4 +1,4 @@
-import { Component, Input, ContentChildren, QueryList, DoCheck } from '@angular/core';
+import { Component, Input, ContentChildren, QueryList, DoCheck, booleanAttribute } from '@angular/core';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AccordionItemComponent } from './accordion-item.component';
 
@@ -12,8 +12,8 @@ import { AccordionItemComponent } from './accordion-item.component';
   },
 })
 export class AccordionComponent implements DoCheck {
-  @Input() flush?: boolean = false;
-  @Input() alwaysOpen?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'flush?' }) flush?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'always-open?' }) alwaysOpen?: boolean = false;
   @Input() id!: string;
   @ContentChildren(AccordionItemComponent) public items!: QueryList<AccordionItemComponent>;
   constructor(private idService: UniqueIdService) { }

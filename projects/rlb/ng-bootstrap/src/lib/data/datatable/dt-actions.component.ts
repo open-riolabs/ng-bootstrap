@@ -1,4 +1,4 @@
-import { Component, ContentChildren, DoCheck, Injector, Input, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChildren, DoCheck, Injector, Input, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation, booleanAttribute } from '@angular/core';
 import { DataTableActionComponent } from './dt-action.component';
 import { HostWrapper } from '../../shared/host-wrapper';
 import { WrappedComponent } from '../../shared/wrapped.component';
@@ -19,7 +19,7 @@ export class DataTableActionsComponent implements DoCheck {
 
   @ContentChildren(DataTableActionComponent) actions!: QueryList<DataTableActionComponent>;
   @ViewChild('projectedActions', { read: ViewContainerRef }) _projectedActions!: ViewContainerRef;
-  @Input() disabled: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false
 
   private wrappedInjector!: Injector;
 

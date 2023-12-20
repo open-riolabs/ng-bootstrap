@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, booleanAttribute } from '@angular/core';
 
 @Component({
   selector: 'rlb-tab-pane',
@@ -15,6 +15,6 @@ import { Component, Input } from '@angular/core';
 })
 export class TabPaneComponent {
   @Input({ alias: 'id', required: true }) id!: string;
-  @Input() active!: boolean;
-  @Input() fade!: boolean;
+  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean;
+  @Input({ transform: booleanAttribute, alias: 'fade' }) fade?: boolean;
 }

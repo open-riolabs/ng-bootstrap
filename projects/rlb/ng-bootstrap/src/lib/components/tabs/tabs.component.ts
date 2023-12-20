@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, ElementRef } from "@angular/core";
+import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, ElementRef, booleanAttribute } from "@angular/core";
 
 @Component({
   selector: 'rlb-tabs',
@@ -27,7 +27,7 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, ElementRef 
 export class TabsComponent {
   @Input('horizontal-alignment') horizontalAlignment?: 'center' | 'end'
   @Input() view?: 'tab' | 'pills' | 'underline' | 'none' = 'tab';
-  @Input() vertical?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'vertical' }) vertical?: boolean = false;
   @Input() fill?: 'fill' | 'justified'
   @Input() id?: string;
   @Input() class?: string;

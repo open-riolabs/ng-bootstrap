@@ -14,10 +14,10 @@ import { ListItemComponent } from "./list-item.component";
   },
 })
 export class ListComponent implements DoCheck {
-  @Input() disabled!: boolean
-  @Input({ transform: booleanAttribute, alias: 'numbered' }) numbered!: boolean
-  @Input({ transform: booleanAttribute, alias: 'flush' }) flush!: boolean
-  @Input({ transform: booleanAttribute, alias: 'horizontal' }) horizontal!: boolean
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean
+  @Input({ transform: booleanAttribute, alias: 'numbered' }) numbered?: boolean
+  @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean
+  @Input({ transform: booleanAttribute, alias: 'horizontal' }) horizontal?: boolean
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;

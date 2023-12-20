@@ -17,9 +17,9 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, booleanAttr
   },
 })
 export class ListItemComponent {
-  @Input() active!: boolean
-  @Input() disabled!: boolean
-  @Input({ transform: booleanAttribute, alias: 'action'})  action!: boolean
+  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean
+  @Input({ transform: booleanAttribute, alias: 'action' }) action?: boolean
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ElementRef, Input, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from "@angular/core";
 
 @Component({
   selector: 'rlb-nav',
@@ -25,7 +25,7 @@ import { Component, ElementRef, Input, TemplateRef, ViewChild, ViewContainerRef 
 })
 export class NavComponent {
   @Input() horizontalAlignment?: 'center' | 'end'
-  @Input() vertical?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'vertical' }) vertical?: boolean = false;
   @Input() view?: 'tab' | 'pills' | 'underline' | 'none';
   @Input() fill?: 'fill' | 'justified'
   @Input() id!: string;
@@ -38,7 +38,8 @@ export class NavComponent {
     elementRef.nativeElement.remove();
   }
 
-  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = (templateView.rootNodes[0]);
     this.viewContainerRef.element.nativeElement.remove();
   }

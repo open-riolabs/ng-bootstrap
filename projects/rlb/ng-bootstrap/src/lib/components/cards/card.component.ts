@@ -1,4 +1,4 @@
-import { Component, Input, ContentChild, DoCheck } from '@angular/core';
+import { Component, Input, ContentChild, DoCheck, booleanAttribute } from '@angular/core';
 import { Color, TextAlignment } from '../../shared/types';
 import { CardBodyComponent } from './card-body.component';
 import { CardImageComponent } from './card-image.component';
@@ -34,7 +34,7 @@ import { CardImageComponent } from './card-image.component';
 })
 export class CardComponent implements DoCheck {
   @Input() align?: TextAlignment = 'left';
-  @Input() overlay?: boolean;
+  @Input({ transform: booleanAttribute, alias: 'overlay' }) overlay?: boolean;
   @Input() background?: Color;
   @Input() border?: Color;
 

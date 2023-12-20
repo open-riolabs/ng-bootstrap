@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, booleanAttribute } from "@angular/core";
 
 @Component({
   selector: 'li[rlb-dropdown-item]',
@@ -17,8 +17,8 @@ import { Component, Input } from "@angular/core";
     <ng-template #content><ng-content /></ng-template>`
 })
 export class DropdownMenuItemComponent {
-  @Input() active: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() header: boolean = false;
-  @Input() divider: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'header' }) header?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'divider' }) divider?: boolean = false;
 }

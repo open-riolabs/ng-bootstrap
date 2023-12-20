@@ -1,4 +1,4 @@
-import { Component, Input, ViewContainerRef, OnInit, ViewChild, TemplateRef } from '@angular/core'
+import { Component, Input, ViewContainerRef, OnInit, ViewChild, TemplateRef, booleanAttribute } from '@angular/core'
 
 @Component({
   selector: 'rlb-pagination-item',
@@ -22,15 +22,16 @@ export class PaginationItemComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
-  @Input() isIcon: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() active: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'isIcon' }) isIcon?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean = false;
 
   constructor(private viewContainerRef: ViewContainerRef) {
 
   }
 
-  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = (templateView.rootNodes[0]);
     this.viewContainerRef.element.nativeElement.remove();
   }

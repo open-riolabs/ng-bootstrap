@@ -1,4 +1,4 @@
-import { Component, ContentChild, DoCheck, Input } from '@angular/core';
+import { Component, ContentChild, DoCheck, Input, booleanAttribute } from '@angular/core';
 import { AccordionHeaderComponent } from './accordion-header.component';
 import { AccordionBodyComponent } from './accordion-body.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -12,9 +12,9 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 })
 export class AccordionItemComponent implements DoCheck {
   public parentId!: string
-  @Input() public name!: string
   public alwaysOpen?: boolean = false
-  @Input() public expanded: boolean = false
+  @Input() public name?: string
+  @Input({ transform: booleanAttribute, alias: 'expanded' }) expanded: boolean = false
 
   @ContentChild(AccordionHeaderComponent) public header!: AccordionHeaderComponent
   @ContentChild(AccordionBodyComponent) public body!: AccordionBodyComponent

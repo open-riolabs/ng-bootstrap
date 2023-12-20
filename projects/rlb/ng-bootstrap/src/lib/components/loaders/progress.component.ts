@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, booleanAttribute } from '@angular/core';
 import { Color } from '../../shared/types';
 
 @Component({
@@ -33,10 +33,10 @@ export class ProgressComponent {
   @Input() min: number = 0;
   @Input({ required: true }) value = 0;
   @Input() height!: number;
-  @Input() animated: boolean = false;
-  @Input() striped: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'animated' }) animated?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'striped' }) striped?: boolean = false;
   @Input() ariaLabel!: string;
-  @Input() showValue: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'showValue' }) showValue?: boolean = false;
   @Input() color: Color = 'primary';
   @Input() textColor!: Color
 

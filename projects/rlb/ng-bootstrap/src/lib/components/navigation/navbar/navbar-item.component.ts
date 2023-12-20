@@ -10,8 +10,8 @@ import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribut
 })
 export class NavbarItemComponent implements AfterViewInit {
 
-  @Input() disabled: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'dropdown' }) dropdown: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'dropdown' }) dropdown?: boolean = false;
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
 

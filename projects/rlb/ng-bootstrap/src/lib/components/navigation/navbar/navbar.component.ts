@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from '@angular/core';
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 
@@ -30,7 +30,7 @@ export class NavbarComponent {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
-  @Input() dark?: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'dark' }) dark?: boolean = false
   @Input() color?: Color = 'primary'
   @Input() placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom'
   @Input() expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always'

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Optional, Self, ViewChild, ViewRef } from '@angular/core';
+import { Component, ElementRef, Input, Optional, Self, ViewChild, ViewRef, booleanAttribute } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from "../../shared/unique-id.service";
@@ -25,11 +25,11 @@ import { UniqueIdService } from "../../shared/unique-id.service";
   </div>`
 })
 export class CheckboxComponent extends AbstractComponent<boolean | undefined> implements ControlValueAccessor {
-  @Input() disabled = false;
-  @Input() readonly = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled = false;
+  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly = false;
   @Input() label: string = '';
-  @Input() beforeText: boolean = false
-  @Input() indeterminate: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText?: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'indeterminate' }) indeterminate?: boolean = false
   @ViewChild('input', { read: ElementRef }) input!: ElementRef<HTMLInputElement>;
 
   constructor(idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {

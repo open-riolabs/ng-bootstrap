@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from "@angular/core";
 
 @Component({
   selector: 'rlb-tab',
@@ -25,8 +25,8 @@ import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from "@ang
   },
 })
 export class TabComponent {
-  @Input() active!: boolean
-  @Input() disabled!: boolean
+  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean
   @Input({ alias: 'target', required: true }) target!: string
   element!: HTMLElement;
 

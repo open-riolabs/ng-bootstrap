@@ -1,4 +1,4 @@
-import { Component, Injector, ViewContainerRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Injector, ViewContainerRef, EventEmitter, Input, Output, booleanAttribute } from '@angular/core';
 import { WrappedComponent } from '../../shared/wrapped.component';
 import { HostWrapper } from '../../shared/host-wrapper';
 
@@ -13,7 +13,7 @@ import { HostWrapper } from '../../shared/host-wrapper';
 })
 export class DataTableActionComponent {
   private wrappedInjector!: Injector;
-  @Input() public disabled: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) public disabled?: boolean = false
 
   constructor(private vcr: ViewContainerRef) { }
 

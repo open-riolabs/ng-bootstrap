@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, booleanAttribute } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { FormFieldsDefinition, FormField, IForm } from './form-fields';
 
@@ -11,8 +11,8 @@ export class FormFieldsComponent implements IForm, OnChanges {
   public filterForm!: FormGroup;
   @Input() public title!: string
   @Input() public subTitle!: string
-  @Input() public noSubmit: boolean = false
-  @Input() public noCard: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'public noSubmit' }) public noSubmit: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'public noCard' }) public noCard: boolean = false
   @Input() public fields?: FormFieldsDefinition
   @Output() public submit: EventEmitter<any> = new EventEmitter()
   @ViewChild('ngForm') form!: NgForm;

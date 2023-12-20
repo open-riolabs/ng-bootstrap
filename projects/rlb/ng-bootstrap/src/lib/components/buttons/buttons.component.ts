@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, booleanAttribute } from '@angular/core';
 import { Color, Size } from '../../shared/types';
 
 @Component({
@@ -12,9 +12,9 @@ import { Color, Size } from '../../shared/types';
 export class ButtonComponent {
   @Input() color: Color = 'primary';
   @Input() size: Size = 'md';
-  @Input() disabled: boolean = false;
-  @Input() outline: boolean = false;
-  @Input() isLink: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'outline' }) outline?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'isLink' }) isLink?: boolean = false;
 
   get mainClass() {
     let style = '';

@@ -1,4 +1,4 @@
-import { Component, Injector, Input, ViewContainerRef } from '@angular/core';
+import { Component, Injector, Input, ViewContainerRef, booleanAttribute } from '@angular/core';
 import { HostWrapper } from '../../shared/host-wrapper';
 import { WrappedComponent } from '../../shared/wrapped.component';
 
@@ -11,8 +11,8 @@ export class DataTableHeaderComponent {
   private wrappedInjector!: Injector;
   @Input() field!: string
   @Input() type!: 'number' | 'string'
-  @Input() sortable!: boolean
-  @Input() filtrable!: boolean
+  @Input({ transform: booleanAttribute, alias: 'sortable'}) sortable?: boolean
+  @Input({ transform: booleanAttribute, alias: 'filtrable'}) filtrable?: boolean
 
   constructor(private vcr: ViewContainerRef) { }
 

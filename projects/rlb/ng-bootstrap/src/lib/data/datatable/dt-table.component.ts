@@ -1,4 +1,4 @@
-import { DoCheck, Component, ContentChildren, EventEmitter, Input, Output, QueryList, ViewChild, ViewContainerRef } from '@angular/core';
+import { DoCheck, Component, ContentChildren, EventEmitter, Input, Output, QueryList, ViewChild, ViewContainerRef, booleanAttribute } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
 
@@ -13,13 +13,13 @@ export interface TableDataQuery {
   templateUrl: './dt-table.component.html'
 })
 export class DataTableComponent implements DoCheck {
-  @Input() title!: string
+  @Input() title?: string
   @Input() creationStrategy: 'none' | 'modal' | 'page' = 'none'
   @Input() creationUrl!: any[] | string | null | undefined
   @Input() items!: any[]
-  @Input() showPagination: boolean = false
-  @Input() loading: boolean = false
-  @Input() showRefresh: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'showPagination' }) showPagination?: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'showRefresh' }) showRefresh?: boolean = false
   @Input() showActions: 'row' | 'head' = 'row'
   @Output() createItem: EventEmitter<void> = new EventEmitter()
   @Output() refreshItem: EventEmitter<void> = new EventEmitter()

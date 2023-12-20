@@ -1,4 +1,4 @@
-import { Component, Input, Optional, Self } from '@angular/core';
+import { Component, Input, Optional, Self, booleanAttribute } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -29,10 +29,10 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       </div>`
 })
 export class TextAreaComponent extends AbstractComponent<string> implements ControlValueAccessor {
-  @Input() disabled = false;
-  @Input() readonly = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled = false;
+  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly = false;
   @Input() label: string = '';
-  @Input() beforeText: boolean = false
+  @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText: boolean = false
   @Input() placeholder!: string
   @Input() size: "small" | "large" | undefined = undefined
 
