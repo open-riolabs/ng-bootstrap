@@ -64,6 +64,7 @@ import { ListComponent } from './list/list.component';
 import { ListItemComponent } from './list/list-item.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { ListItemImageComponent } from './list/list-item-image.component';
+import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -106,6 +107,7 @@ export * from './navigation/navbar/navbar-text.component';
 export * from './navigation/navbar/navbar-item.component';
 export * from './navigation/navbar/navbar-items.component';
 export * from './navigation/navbar/navbar-brand.directive';
+export * from './navigation/navbar/navbar-separator.component';
 export * from './navigation/nav/nav.component';
 export * from './navigation/nav/nav.component';
 export * from './navigation/nav/nav-item.component';
@@ -171,6 +173,7 @@ export const COMPONENTS = [
   NavbarTextComponent,
   NavbarItemsComponent,
   NavbarItemComponent,
+  NavbarSeparatorComponent,
   OffcanvasComponent,
   OffcanvasHeaderComponent,
   OffcanvasTitleComponent,
