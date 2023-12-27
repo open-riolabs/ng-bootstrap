@@ -63,7 +63,8 @@ export class NavItemComponent implements OnInit, DoCheck {
     this.isContainer = this.children?.length > 0;
   }
 
-  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = (templateView.rootNodes[0]);
     this.viewContainerRef.element.nativeElement.remove();
   }

@@ -35,9 +35,9 @@ import { OptionComponent } from './options.component';
     </div>`
 })
 export class RadioComponent extends AbstractComponent<string> implements DoCheck, ControlValueAccessor {
-  @Input() disabled = false;
-  @Input() readonly = false;
-  @Input() label: string = '';
+  @Input() disabled? = false;
+  @Input() readonly? = false;
+  @Input() label?: string = '';
 
   @ContentChildren(OptionComponent) options!: QueryList<OptionComponent>;
   @ViewChildren('content', { read: ViewContainerRef }) contents!: QueryList<ViewContainerRef>;

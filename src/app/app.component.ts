@@ -9,5 +9,8 @@ import { ModalService, ToastService } from 'projects/rlb/ng-bootstrap/src/public
 export class AppComponent {
   title = 'ng-bootstrap';
 
+  onSearch(text: string | null) {
+    console.log(text);
+  }
 
 }

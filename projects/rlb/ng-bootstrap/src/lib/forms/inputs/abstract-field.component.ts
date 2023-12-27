@@ -4,8 +4,7 @@ import { UniqueIdService } from "../../shared/unique-id.service";
 
 @Injectable()
 export abstract class AbstractComponent<T = any> implements ControlValueAccessor {
-  public abstract disabled: boolean;
-  public abstract label: string;
+  public abstract disabled?: boolean;
   protected onTouched: Function = () => { };
   protected onChanged: Function = (s: string) => { };
   public value!: T

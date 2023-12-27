@@ -28,9 +28,9 @@ import { UniqueIdService } from "../../shared/unique-id.service";
   </div>`
 })
 export class RangeComponent extends AbstractComponent<string> implements ControlValueAccessor {
-  @Input() disabled = false;
-  @Input() readonly = false;
-  @Input() label: string = '';
+  @Input() disabled? = false;
+  @Input() readonly? = false;
+  @Input() label?: string = '';
   @Input() min?: number | undefined = undefined
   @Input() max?: number | undefined = undefined
   @Input() step?: number | undefined = undefined

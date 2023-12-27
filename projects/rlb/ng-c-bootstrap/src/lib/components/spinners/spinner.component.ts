@@ -15,7 +15,8 @@ export class SpinnerComponent implements OnInit {
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
-  ngOnInit() {    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = (templateView.rootNodes[0]);
     this.viewContainerRef.element.nativeElement.remove();
   }

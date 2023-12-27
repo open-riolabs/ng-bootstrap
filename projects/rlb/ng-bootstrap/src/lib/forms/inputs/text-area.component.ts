@@ -29,12 +29,12 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       </div>`
 })
 export class TextAreaComponent extends AbstractComponent<string> implements ControlValueAccessor {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly = false;
-  @Input() label: string = '';
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
+  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
+  @Input() label?: string = '';
   @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText: boolean = false
-  @Input() placeholder!: string
-  @Input() size: "small" | "large" | undefined = undefined
+  @Input() placeholder?: string
+  @Input() size?: "small" | "large" | undefined = undefined
 
   constructor(idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {
     super(idService, control)

@@ -65,6 +65,7 @@ import { ListItemComponent } from './list/list-item.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { ListItemImageComponent } from './list/list-item-image.component';
 import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
+import { SidebarSearchComponent } from './sidebar/sidebar-search.component';
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -120,6 +121,7 @@ export * from './sidebar/sidebar.component';
 export * from './sidebar/sidebar-item.component';
 export * from './sidebar/sidebar-header.component';
 export * from './sidebar/sidebar-footer.component';
+export * from './sidebar/sidebar-search.component';
 export * from './tabs/tabs.component';
 export * from './tabs/tab.component';
 export * from './tabs/tab-content.component';
@@ -183,6 +185,7 @@ export const COMPONENTS = [
   SidebarHeaderComponent,
   SidebarItemComponent,
   SidebarFooterComponent,
+  SidebarSearchComponent,
   NavComponent,
   NavItemComponent,
   TabsComponent,

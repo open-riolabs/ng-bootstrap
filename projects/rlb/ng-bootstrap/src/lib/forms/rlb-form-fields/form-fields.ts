@@ -7,6 +7,7 @@ export interface FormFieldsDefinition {
 
 interface _FormField {
   name: string;
+  label?: string;
   type: "text" | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | 'checkbox' | 'switch' | 'textarea' | string;
   cols?: string,
   validators?: ValidatorFn | ValidatorFn[]

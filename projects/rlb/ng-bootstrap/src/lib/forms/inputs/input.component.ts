@@ -6,11 +6,11 @@ import { UniqueIdService } from "../../shared/unique-id.service";
 @Component({
   selector: 'rlb-input',
   host: {
-    class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto'
+    class: ''
   },
   template: `
-    <label *ngIf="label" [for]="id" class="form-label">{{ label }}</label>
     <div class="input-group has-validation">
+      <ng-content select="[before]"></ng-content>
       <input #input
              [id]="id"
              class="form-control" 
@@ -25,19 +25,19 @@ import { UniqueIdService } from "../../shared/unique-id.service";
              [ngClass]="{'is-invalid': control?.touched && control?.invalid}"
              (input)="update($event.target);"
              >
+        <ng-content select="[after]"></ng-content>
         <div class="invalid-feedback">
           {{errors | json }}
         </div>
       </div>`
 })
 export class InputComponent extends AbstractComponent<string> implements ControlValueAccessor {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly = false;
-  @Input() label: string = '';
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
+  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
+  @Input() placeholder?: string = '';
   @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText?: boolean = false
-  @Input() type: "text" | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text'
-  @Input() placeholder!: string
-  @Input() size: "small" | "large" | undefined = undefined
+  @Input() type?: "text" | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text'
+  @Input() size?: "small" | "large" | undefined = undefined
 
   constructor(idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {
     super(idService, control)

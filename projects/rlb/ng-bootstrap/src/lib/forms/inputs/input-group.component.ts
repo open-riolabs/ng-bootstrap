@@ -1,7 +1,4 @@
-import { Component, Input, Optional, Self } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { AbstractComponent } from './abstract-field.component';
-import { UniqueIdService } from "../../shared/unique-id.service";
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'rlb-input-group',

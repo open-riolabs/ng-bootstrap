@@ -25,9 +25,9 @@ import { UniqueIdService } from "../../shared/unique-id.service";
   </div>`
 })
 export class CheckboxComponent extends AbstractComponent<boolean | undefined> implements ControlValueAccessor {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly = false;
-  @Input() label: string = '';
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
+  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
+  @Input() label?: string = '';
   @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText?: boolean = false
   @Input({ transform: booleanAttribute, alias: 'indeterminate' }) indeterminate?: boolean = false
   @ViewChild('input', { read: ElementRef }) input!: ElementRef<HTMLInputElement>;

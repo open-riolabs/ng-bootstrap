@@ -16,6 +16,7 @@ import { modalRegistryProvider } from './components/modals/providers/modal-regis
 import { ModalRegistry } from './components/modals/options/modal-registry';
 import { ToastRegistryOptions } from './components/toast/options/toast-registry.options';
 import { toastRegistryProvider } from './components/toast/providers/modal-registry.provider';
+import { SearchModalComponent } from './modals/search-modal.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { toastRegistryProvider } from './components/toast/providers/modal-regist
     ...COMPONENTS,
     ...COMPONENT_BUILDER,
     FormFieldsComponent,
+    SearchModalComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { toastRegistryProvider } from './components/toast/providers/modal-regist
     ...TABLE,
     ...INPUTS,
     ...COMPONENTS,
-    FormFieldsComponent
+    FormFieldsComponent,
+    SearchModalComponent
   ]
 })
 export class RlbBootstrapModule {

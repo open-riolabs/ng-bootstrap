@@ -1,6 +1,7 @@
 <div class="rlb-app">
 	<rlb-sidebar id="sidebar">
 		<rlb-sidebar-header mode="logo" [data]="{ image:'assets/logo.svg', text:'Title', alt:'no-logo'}" />
+		<rlb-sidebar-search search-title="Search..." search-text="Search in app" search-placeholder="Type here" (on-search)="onSearch($event)" />
 		<rlb-sidebar-item icon="bi bi-box">pippo</rlb-sidebar-item>
 		<rlb-sidebar-item icon="bi bi-box" [active]="true">pluto</rlb-sidebar-item>
 		<rlb-sidebar-item icon="bi bi-box">paperino</rlb-sidebar-item>
@@ -43,7 +44,7 @@
 		</rlb-navbar>
 		<div class="rlb-content">
 			<!-- <router-outlet /> -->
-		</div> 
+		</div>
 	</div>
 </div>
 <rlb-modal-container id="modal-c-1" />

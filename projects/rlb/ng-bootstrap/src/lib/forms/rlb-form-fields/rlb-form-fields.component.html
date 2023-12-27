@@ -19,8 +19,11 @@
       <div class="col" [ngClass]="input.cols" *ngFor="let input of _fields;trackBy:identify">
         <div class="mb-3">
           <ng-container *ngIf="isText(input.type)">
-            <rlb-input [formControlName]="input.property" [type]="input.type" [label]="input.name | translate"
-              [placeholder]="input.name | translate" />
+            <rlb-input [formControlName]="input.property" [type]="input.type" [placeholder]="input.name | translate">
+              <ng-container *ngIf="input.label" before>
+                <span #after [innerHTML]=""> {{ input.label | translate }} </span>
+              </ng-container>
+            </rlb-input>
           </ng-container>
           <ng-container *ngIf="isSwitch(input.type)">
             <rlb-switch [formControlName]="input.property" [label]="input.name | translate" />

@@ -28,10 +28,10 @@ import { OptionComponent } from './options.component';
   </div>`
 })
 export class SelectComponent extends AbstractComponent<string> implements DoCheck, ControlValueAccessor {
-  @Input() disabled = false;
-  @Input() label: string = '';
-  @Input() placeholder!: string
-  @Input() size: "small" | "large" | undefined = undefined
+  @Input() disabled? = false;
+  @Input() label?: string = '';
+  @Input() placeholder?: string
+  @Input() size?: "small" | "large" | undefined = undefined
   @Input() display?: number = undefined
 
   constructor(idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {

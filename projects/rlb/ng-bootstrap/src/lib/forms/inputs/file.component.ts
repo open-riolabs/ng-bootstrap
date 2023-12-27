@@ -29,12 +29,12 @@ import { UniqueIdService } from "../../shared/unique-id.service";
     </div>`
 })
 export class FileComponent extends AbstractComponent<string> implements ControlValueAccessor {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly = false;
-  @Input() label: string = '';
-  @Input() size: "small" | "large" | undefined = undefined
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
+  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
+  @Input() label?: string = '';
+  @Input() size?: "small" | "large" | undefined = undefined
   @Input({ transform: booleanAttribute, alias: 'multiple' }) multiple?: boolean | undefined
-  @Input() accept!: string | undefined
+  @Input() accept?: string | undefined
 
   constructor(idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {
     super(idService, control)

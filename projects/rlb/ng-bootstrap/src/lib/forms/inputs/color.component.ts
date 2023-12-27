@@ -27,10 +27,10 @@ import { UniqueIdService } from "../../shared/unique-id.service";
   </div>`
 })
 export class ColorComponent extends AbstractComponent<string> implements ControlValueAccessor {
-  @Input() disabled = false;
-  @Input() readonly = false;
-  @Input() label: string = '';
-  @Input() size: "small" | "large" | undefined = undefined
+  @Input() disabled? = false;
+  @Input() readonly? = false;
+  @Input() label?: string = '';
+  @Input() size?: "small" | "large" | undefined = undefined
 
   constructor(idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {
     super(idService, control)
