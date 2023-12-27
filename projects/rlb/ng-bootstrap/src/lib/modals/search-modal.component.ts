@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { IModal, ModalData, ModalDirective, ModalService } from "@rlb/ng-bootstrap";
+import { IModal, ModalData, ModalDirective } from "../components";
 import { SearchModalInput } from "./search-modal.data";
 
 @Component({
@@ -19,7 +19,7 @@ import { SearchModalInput } from "./search-modal.data";
     </div>`,
   hostDirectives: [{ directive: ModalDirective, inputs: ['id', 'data-instance', 'data-options'] }],
 })
-export class SearchModalComponent implements IModal<SearchModalInput, any>, OnInit {
+export class SearchModalComponent implements IModal<SearchModalInput, string>, OnInit {
   @ViewChild('btn') btn!: ElementRef<HTMLElement>;
 
   data!: ModalData<SearchModalInput>;
