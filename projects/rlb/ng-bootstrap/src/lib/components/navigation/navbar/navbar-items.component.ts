@@ -5,7 +5,7 @@ import { Component, ViewContainerRef, Input, TemplateRef, ViewChild, OnInit } fr
   template: `
     <ng-template #template>
       <ul [class]="'navbar-nav '+ classList" [class.navbar-nav-scroll]="scroll" [style.--bs-scroll-height]="scroll" >
-        <ng-content select="rlb-navbar-item, rlb-navbar-separator" />
+        <ng-content select="rlb-navbar-item, rlb-navbar-separator, ng-container" />
       </ul>
     </ng-template>`,
 })
