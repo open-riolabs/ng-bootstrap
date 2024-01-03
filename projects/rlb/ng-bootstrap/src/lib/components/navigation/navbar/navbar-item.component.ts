@@ -1,25 +1,34 @@
-import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribute } from "@angular/core";
+import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribute, ViewChild, TemplateRef, ViewContainerRef } from "@angular/core";
 
 @Component({
-  selector: 'a[rlb-navbar-item]',
-  template: `<ng-content></ng-content>`,
-  host: {
-    'class': 'nav-link',
-    '[class.dropdown]': 'dropdown',
-  }
+  selector: 'rlb-navbar-item',
+  template: `
+    <ng-template #template>
+      <li class="nav-item" [class.dropdown]="dropdown">
+        <a class="nav-link" 
+          [class.dropdown-toggle]="dropdown" 
+          [attr.role]="dropdown ? 'button' : undefined"
+          [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"
+          [attr.aria-expanded]="dropdown ? 'false' : undefined"
+          [href]="dropdown?'#':undefined">
+          <ng-content></ng-content>
+        </a>
+      </li>
+    </ng-template>`
 })
-export class NavbarItemComponent implements AfterViewInit {
+export class NavbarItemComponent {
 
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'dropdown' }) dropdown?: boolean = false;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
 
-  ngAfterViewInit(): void {
-    const cont = this.elementRef.nativeElement.parentNode;
-    const li = this.renderer.createElement('li');
-    this.renderer.addClass(li, 'nav-item');
-    this.renderer.appendChild(li, this.elementRef.nativeElement);
-    this.renderer.appendChild(cont, li);
+  constructor(private viewContainerRef: ViewContainerRef) { }
+
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

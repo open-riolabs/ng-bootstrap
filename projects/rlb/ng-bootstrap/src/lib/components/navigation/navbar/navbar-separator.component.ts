@@ -1,8 +1,13 @@
 import { Component, AfterViewInit, ElementRef, Renderer2 } from "@angular/core";
 
 @Component({
-  selector: 'span[rlb-navbar-separator]',
-  template: `<ng-content></ng-content>`,
+  selector: 'rlb-navbar-separator',
+  template: `
+    <ng-template #template>
+        <li class="nav-item separator">
+          
+        </li>
+      </ng-template>`,
 })
 export class NavbarSeparatorComponent implements AfterViewInit {
 
