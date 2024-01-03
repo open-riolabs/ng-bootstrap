@@ -1,24 +1,22 @@
-import { Component, AfterViewInit, ElementRef, Renderer2 } from "@angular/core";
+import { Component, ViewChild, TemplateRef, ViewContainerRef, OnInit } from "@angular/core";
 
 @Component({
   selector: 'rlb-navbar-separator',
   template: `
     <ng-template #template>
-        <li class="nav-item separator">
-          
-        </li>
-      </ng-template>`,
+      <li class="nav-item separator"></li>
+    </ng-template>`,
 })
-export class NavbarSeparatorComponent implements AfterViewInit {
+export class NavbarSeparatorComponent implements OnInit {
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  element!: HTMLElement;
 
-  ngAfterViewInit(): void {
-    const cont = this.elementRef.nativeElement.parentNode;
-    const li = this.renderer.createElement('li');
-    this.renderer.addClass(li, 'nav-item');
-    this.renderer.addClass(li, 'separator');
-    this.renderer.appendChild(li, this.elementRef.nativeElement);
-    this.renderer.appendChild(cont, li);
+  constructor(private viewContainerRef: ViewContainerRef) { }
+
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    this.element = (templateView.rootNodes[0]);
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

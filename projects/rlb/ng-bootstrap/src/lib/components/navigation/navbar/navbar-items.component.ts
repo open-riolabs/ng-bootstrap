@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, Input, TemplateRef, ViewChild } from "@angular/core";
+import { Component, ViewContainerRef, Input, TemplateRef, ViewChild, OnInit } from "@angular/core";
 
 @Component({
   selector: 'rlb-navbar-items',
@@ -9,7 +9,7 @@ import { Component, ViewContainerRef, Input, TemplateRef, ViewChild } from "@ang
       </ul>
     </ng-template>`,
 })
-export class NavbarItemsComponent {
+export class NavbarItemsComponent implements OnInit {
   @Input() scroll!: string;
   @Input('class') classList!: string;
 

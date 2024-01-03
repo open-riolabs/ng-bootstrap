@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribute, ViewChild, TemplateRef, ViewContainerRef } from "@angular/core";
+import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribute, ViewChild, TemplateRef, ViewContainerRef, OnInit } from "@angular/core";
 
 @Component({
   selector: 'rlb-navbar-item',
@@ -10,17 +10,18 @@ import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribut
           [attr.role]="dropdown ? 'button' : undefined"
           [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"
           [attr.aria-expanded]="dropdown ? 'false' : undefined"
-          [href]="dropdown?'#':undefined">
+          [href]="dropdown?'#':href">
           <ng-content></ng-content>
         </a>
       </li>
     </ng-template>`
 })
-export class NavbarItemComponent {
+export class NavbarItemComponent implements OnInit {
 
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'dropdown' }) dropdown?: boolean = false;
-
+  @Input({ alias: 'href' }) href?: string;
+  
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
