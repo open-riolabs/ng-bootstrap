@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribute, ViewChild, TemplateRef, ViewContainerRef, OnInit } from "@angular/core";
+import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribute, ViewChild, TemplateRef, ViewContainerRef, OnInit, Output, EventEmitter } from "@angular/core";
 
 @Component({
   selector: 'rlb-navbar-item',
@@ -10,7 +10,8 @@ import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribut
           [attr.role]="dropdown ? 'button' : undefined"
           [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"
           [attr.aria-expanded]="dropdown ? 'false' : undefined"
-          [href]="dropdown?'#':href">
+          [href]="dropdown?'#':href"
+          (click)="click.emit($event)">
           <ng-content></ng-content>
         </a>
       </li>
@@ -21,7 +22,8 @@ export class NavbarItemComponent implements OnInit {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'dropdown' }) dropdown?: boolean = false;
   @Input({ alias: 'href' }) href?: string;
-  
+  @Output() click = new EventEmitter<MouseEvent>();
+
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
