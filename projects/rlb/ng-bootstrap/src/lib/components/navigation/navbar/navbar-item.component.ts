@@ -5,7 +5,7 @@ import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribut
   template: `
     <ng-template #template>
       <li class="nav-item" [class.dropdown]="dropdown">
-        <a class="nav-link" 
+        <a [class]="'nav-link '"+ classList 
           [class.dropdown-toggle]="dropdown" 
           [attr.role]="dropdown ? 'button' : undefined"
           [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"
@@ -22,6 +22,7 @@ export class NavbarItemComponent implements OnInit {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'dropdown' }) dropdown?: boolean = false;
   @Input({ alias: 'href' }) href?: string;
+  @Input('class') classList!: string;
   @Output() click = new EventEmitter<MouseEvent>();
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
