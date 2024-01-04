@@ -5,7 +5,7 @@ import { Component, ElementRef, Input, Renderer2, AfterViewInit, booleanAttribut
   template: `
     <ng-template #template>
       <li class="nav-item" [class.dropdown]="dropdown">
-        <a [class]="'nav-link '"+ classList 
+        <a [class]="'nav-link '+ classList" 
           [class.dropdown-toggle]="dropdown" 
           [attr.role]="dropdown ? 'button' : undefined"
           [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"
