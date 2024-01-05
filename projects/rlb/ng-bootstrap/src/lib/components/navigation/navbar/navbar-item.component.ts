@@ -22,10 +22,10 @@ import {
         [attr.aria-expanded]="dropdown ? 'false' : undefined"
         [attr.data-bs-auto-close]="_autoClose"
         [href]="dropdown ? '#' : href"
-        (click)="click.emit($event)"
-      >
-        <ng-content></ng-content>
+        (click)="click.emit($event)">
+        <ng-content select=":not(rlb-dropdown-container)"></ng-content>
       </a>
+      <ng-content select="rlb-dropdown-container"></ng-content>
     </li>
   </ng-template>`,
 })
