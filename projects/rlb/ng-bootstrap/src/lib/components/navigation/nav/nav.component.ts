@@ -6,15 +6,12 @@ import { Component, ElementRef, Input, TemplateRef, ViewChild, ViewContainerRef,
   <ng-template #template>
     <ul 
       [attr.id]="id?id:undefined" 
-      [class]="'nav w-100 ' + class"
+      [class]="'nav nav-underline' + classList"
       [class.justify-content-center]="horizontalAlignment === 'center'"
       [class.justify-content-end]="horizontalAlignment === 'end'"
       [class.flex-column]="vertical"
-      [class.nav-pills]="view === 'pills'"
-      [class.nav-underline]="view === 'underline'"
-      [class.nav-tabs]="view === 'tab'"
-      [class.nav-fill]="fill === 'fill'"
-      [class.nav-justified]="fill === 'justified'">
+      [class.nav-pills]="pills"
+      [class.nav-fill]="fill">
       <ng-content select="rlb-nav-item" />
     </ul>
   </ng-template>`,
@@ -26,10 +23,10 @@ import { Component, ElementRef, Input, TemplateRef, ViewChild, ViewContainerRef,
 export class NavComponent {
   @Input() horizontalAlignment?: 'center' | 'end'
   @Input({ transform: booleanAttribute, alias: 'vertical' }) vertical?: boolean = false;
-  @Input() view?: 'tab' | 'pills' | 'underline' | 'none';
-  @Input() fill?: 'fill' | 'justified'
+  @Input({ alias: 'fill', transform: booleanAttribute }) fill?: boolean = false;
+  @Input({ alias: 'pills', transform: booleanAttribute }) pills?: boolean = false;
   @Input() id!: string;
-  @Input() class?: string;
+  @Input('class') classList?: string;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
