@@ -25,7 +25,6 @@ export class NavItemComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
-
   constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
