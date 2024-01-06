@@ -13,7 +13,6 @@ versioning:
     - |
       dotnet tool install --global GitVersion.Tool --version 5.*
       export PATH="\$PATH:/root/.dotnet/tools"
-      git remote rm tag-origin
       dotnet-gitversion /config ./GitVersion.yml /nocache /verbosity Diagnostic /output buildserver
   artifacts:
     reports:
