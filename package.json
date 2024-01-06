@@ -11,7 +11,8 @@
     "lib:test": "ng test @rlb/ng-bootstrap",
     "lib:test-ci": "ng test --karma-config=./karma.conf.js --no-watch --no-progress --browsers=ChromeHeadless @rlb/ng-bootstrap",
     "lib:lint": "ng lint @rlb/ng-bootstrap",
-    "lib:pack": "ng build @rlb/ng-bootstrap && npm pack ./dist/ngx-dynamic/core"
+    "lib:pack": "ng build @rlb/ng-bootstrap && npm pack ./dist/ngx-dynamic/core",
+    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,html}\""
   },
   "private": true,
   "author": {
@@ -54,6 +55,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^16.0.0",
+    "prettier": "^3.1.1",
     "typescript": "~5.1.3"
   }
 }

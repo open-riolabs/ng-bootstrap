@@ -1,4 +1,4 @@
-import { Color } from "../../../shared/types";
+import { Color } from '../../../shared/types';
 
 export interface ToastOptions {
   animation?: boolean;

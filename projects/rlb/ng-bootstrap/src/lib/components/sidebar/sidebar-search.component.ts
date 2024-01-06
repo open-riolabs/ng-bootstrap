@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { HeaderLogo, HeaderUser, SidebarMode } from './sidebar-mode';
 import { ModalService } from '../modals';
 import { SearchModalInput } from '../../modals/search-modal.data';
@@ -9,24 +18,31 @@ import { SearchModalInput } from '../../modals/search-modal.data';
     <ng-template #template>
       <ng-container *ngIf="open">
         <div class="search">
-          <rlb-input class="search-input" [placeholder]="searchPlaceholder" [(ngModel)]="text" (keyup.enter)="onEnter()">
+          <rlb-input
+            class="search-input"
+            [placeholder]="searchPlaceholder"
+            [(ngModel)]="text"
+            (keyup.enter)="onEnter()"
+          >
             <button color="light" after rlb-button outline (click)="onEnter()">
-              <i class='bi bi-search'></i>
+              <i class="bi bi-search"></i>
             </button>
           </rlb-input>
         </div>
       </ng-container>
       <ng-container *ngIf="!open">
         <a class="item" (click)="openSearch()">
-          <i class='bi bi-search'></i>
+          <i class="bi bi-search"></i>
         </a>
       </ng-container>
     </ng-template>
-  `
+  `,
 })
 export class SidebarSearchComponent implements OnInit {
-
-  constructor(private viewContainerRef: ViewContainerRef, private modalService: ModalService) { }
+  constructor(
+    private viewContainerRef: ViewContainerRef,
+    private modalService: ModalService,
+  ) {}
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
@@ -34,32 +50,39 @@ export class SidebarSearchComponent implements OnInit {
   sidebarId: string = '';
   text?: string;
 
-  @Input({ alias: 'search-title', required: true }) searchTitle: string = "Search"
+  @Input({ alias: 'search-title', required: true }) searchTitle: string =
+    'Search';
   @Input({ alias: 'search-placeholder' }) searchPlaceholder?: string;
   @Input({ alias: 'search-text' }) searchText?: string;
-  @Output('on-search') search: EventEmitter<string | null> = new EventEmitter<string | null>();
+  @Output('on-search') search: EventEmitter<string | null> = new EventEmitter<
+    string | null
+  >();
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
-    this.element = (templateView.rootNodes[0]);
+    const templateView = this.viewContainerRef.createEmbeddedView(
+      this.template,
+    );
+    this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
 
   openSearch() {
     console.log('openSearch');
-    this.modalService.openModal<SearchModalInput, string>('search-modal-component', {
-      title: this.searchTitle,
-      content: {
-        placeholder: this.searchPlaceholder,
-        searchText: this.searchText
-      },
-      ok: 'OK',
-      type: 'info'
-    }).subscribe((o) => {
-      if (o?.reason === 'ok') {
-        this.search.emit(o.result || null);
-      }
-    });
+    this.modalService
+      .openModal<SearchModalInput, string>('search-modal-component', {
+        title: this.searchTitle,
+        content: {
+          placeholder: this.searchPlaceholder,
+          searchText: this.searchText,
+        },
+        ok: 'OK',
+        type: 'info',
+      })
+      .subscribe((o) => {
+        if (o?.reason === 'ok') {
+          this.search.emit(o.result || null);
+        }
+      });
   }
 
   onEnter() {

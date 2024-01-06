@@ -22,19 +22,19 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     GettingStartedComponent,
     AccordionsComponent,
     AlertsComponent,
-    NotFoundComponent
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RlbBootstrapModule.forRoot({
       modals: [DemoComponent],
-      toasts: [ToastComponent]
+      toasts: [ToastComponent],
     }),
     FormsModule,
-    RoutingModule
+    RoutingModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

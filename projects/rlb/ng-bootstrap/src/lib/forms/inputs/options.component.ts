@@ -3,23 +3,22 @@ import { WrappedComponent } from '../../shared/wrapped.component';
 import { HostWrapper } from '../../shared/host-wrapper';
 
 @Component({
-    selector: 'rlb-option',
-    template: `<ng-content></ng-content>`
+  selector: 'rlb-option',
+  template: `<ng-content></ng-content>`,
 })
 export class OptionComponent {
+  @Input() disabled = false;
+  @Input() value!: string;
 
-    @Input() disabled = false;
-    @Input() value!: string;
+  private wrappedInjector!: Injector;
 
-    private wrappedInjector!: Injector;
+  constructor(private vcr: ViewContainerRef) {}
 
-    constructor(private vcr: ViewContainerRef) { }
+  get _view() {
+    return this.wrappedInjector.get(WrappedComponent, this.vcr).componentView;
+  }
 
-    get _view() {
-        return this.wrappedInjector.get(WrappedComponent, this.vcr).componentView;
-    }
-
-    ngOnInit() {
-        this.wrappedInjector = new HostWrapper(WrappedComponent, this.vcr);
-    }
+  ngOnInit() {
+    this.wrappedInjector = new HostWrapper(WrappedComponent, this.vcr);
+  }
 }

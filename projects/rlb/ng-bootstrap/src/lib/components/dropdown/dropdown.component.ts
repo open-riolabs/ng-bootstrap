@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 
-
 @Component({
   selector: 'rlb-dropdown',
   template: `
@@ -14,8 +13,14 @@ import { Component, Input } from '@angular/core';
     '[class.dropup-center]': 'direction === "up-center"',
     '[class.dropstart]': 'direction === "left"',
     '[class.dropend]': 'direction === "right"',
-  }
+  },
 })
 export class DropdownComponent {
-  @Input() direction: 'up' | 'down' | 'left' | 'right' | 'up-center' | 'down-center' = 'down'
+  @Input() direction:
+    | 'up'
+    | 'down'
+    | 'left'
+    | 'right'
+    | 'up-center'
+    | 'down-center' = 'down';
 }

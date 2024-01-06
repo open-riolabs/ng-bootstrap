@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AlertsComponent } from './alerts/alerts.component';
 
-
-
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'accordions', component: AlertsComponent },
@@ -13,6 +11,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class RoutingComponentsModule { }
+export class RoutingComponentsModule {}

@@ -1,15 +1,29 @@
-import { Component, EventEmitter, Input, Output, ViewChild, ViewContainerRef, TemplateRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+  TemplateRef,
+} from '@angular/core';
 import { Color } from '../../shared/types';
 
 @Component({
   selector: 'rlb-alert',
-  template: `
-  <ng-template #template>
-    <div class="alert alert-{{color}}" role="alert">
+  template: ` <ng-template #template>
+    <div class="alert alert-{{ color }}" role="alert">
       <ng-content></ng-content>
-      <button *ngIf="dismissible" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="dismissed.emit()"></button>
+      <button
+        *ngIf="dismissible"
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+        (click)="dismissed.emit()"
+      ></button>
     </div>
-  </ng-template>`
+  </ng-template>`,
 })
 export class AlertComponent {
   @Input() color: Color = 'primary';
@@ -17,11 +31,13 @@ export class AlertComponent {
   @Output() dismissed: EventEmitter<void> = new EventEmitter<void>();
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  constructor(private viewContainerRef: ViewContainerRef) {}
   element!: HTMLElement;
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
-    this.element = (templateView.rootNodes[0]);
+    const templateView = this.viewContainerRef.createEmbeddedView(
+      this.template,
+    );
+    this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
 }

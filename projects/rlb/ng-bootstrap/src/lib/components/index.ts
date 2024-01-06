@@ -203,5 +203,5 @@ export const COMPONENTS = [
   ListItemImageComponent,
   AvatarComponent,
   ...[MODALS],
-  ...[TOASTS]
-]
+  ...[TOASTS],
+];

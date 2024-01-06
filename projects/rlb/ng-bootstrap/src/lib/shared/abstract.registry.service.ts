@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export abstract class AbstractRegistryService<T extends Function> {
-
   protected registry: Map<string, T> = new Map();
 
   public get(name: string | null | undefined) {
@@ -18,8 +17,7 @@ export abstract class AbstractRegistryService<T extends Function> {
     let _name;
     if (name) {
       _name = this.dasherizeString(name);
-    }
-    else {
+    } else {
       _name = this.dasherizeName(type);
     }
     if (!_name) return;
@@ -28,12 +26,15 @@ export abstract class AbstractRegistryService<T extends Function> {
 
   protected dasherizeName(type: Function) {
     let name: string = type?.prototype?.constructor?.name;
-    name = name.startsWith("_") ? name.slice(1) : name;
+    name = name.startsWith('_') ? name.slice(1) : name;
     return this.dasherizeString(name);
-  };
+  }
 
   protected dasherizeString(val: string) {
     if (!val) return;
-    return val.replace(/[A-Z]/g, (char, index) => (index !== 0 ? '-' : '') + char.toLowerCase());
-  };
+    return val.replace(
+      /[A-Z]/g,
+      (char, index) => (index !== 0 ? '-' : '') + char.toLowerCase(),
+    );
+  }
 }

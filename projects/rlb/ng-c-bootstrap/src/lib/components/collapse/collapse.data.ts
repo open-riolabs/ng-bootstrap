@@ -1,4 +1,4 @@
-import { Color } from "@rlb/ng-bootstrap";
+import { Color } from '@rlb/ng-bootstrap';
 
 export interface Collapse {
   id: string;

@@ -11,9 +11,9 @@ import { Color } from '../../shared/types';
     '[class.spinner-grow-sm]': 'size === "sm" && style === "grow"',
     '[class.spinner-border-lg]': 'size === "lg" && style === "border"',
     '[class.spinner-grow-lg]': 'size === "lg" && style === "grow"',
-    'role': 'status',
-    '[class]':"'text-'+color",
-  }
+    role: 'status',
+    '[class]': "'text-'+color",
+  },
 })
 export class SpinnerComponent {
   @Input() style?: 'grow' | 'border' = 'border';

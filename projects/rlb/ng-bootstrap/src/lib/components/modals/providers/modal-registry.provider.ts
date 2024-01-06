@@ -1,8 +1,7 @@
-
-import { SearchModalComponent } from "../../../modals/search-modal.component";
-import { RlbBootstrapOptions } from "../../../rlb-bootstrap";
-import { ModalRegistry } from "../options/modal-registry";
-import { ModalRegistryOptions } from "../options/modal-registry.options";
+import { SearchModalComponent } from '../../../modals/search-modal.component';
+import { RlbBootstrapOptions } from '../../../rlb-bootstrap';
+import { ModalRegistry } from '../options/modal-registry';
+import { ModalRegistryOptions } from '../options/modal-registry.options';
 
 export function modalRegistryProvider(options?: ModalRegistry) {
   return (rootOptions?: RlbBootstrapOptions): ModalRegistryOptions => {
@@ -14,11 +13,11 @@ export function modalRegistryProvider(options?: ModalRegistry) {
     }
     if (options && options.modals) {
       registryOptions.modals = options.modals;
-      return addLocal(registryOptions)
+      return addLocal(registryOptions);
     }
     registryOptions.modals = [];
     return addLocal(registryOptions);
-  }
+  };
 }
 
 function addLocal(data: ModalRegistryOptions): ModalRegistryOptions {

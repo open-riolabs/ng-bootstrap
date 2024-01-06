@@ -4,9 +4,9 @@ import { Component, Input } from '@angular/core';
   selector: 'button[rlb-button-close], a[rlb-button-close]',
   template: `<ng-content></ng-content>`,
   host: {
-    'class': 'btn-close',
+    class: 'btn-close',
     'attr.type': 'button',
-    'attr.aria-label': 'Close'
-  }
+    'attr.aria-label': 'Close',
+  },
 })
-export class ButtonCloseComponent { }
+export class ButtonCloseComponent {}

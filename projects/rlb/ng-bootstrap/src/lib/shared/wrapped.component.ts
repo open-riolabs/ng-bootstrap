@@ -1,4 +1,11 @@
-import { DoCheck, Component, EmbeddedViewRef, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import {
+  DoCheck,
+  Component,
+  EmbeddedViewRef,
+  OnDestroy,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { DynamicWrapper } from './dynamic-wrapper';
 
 @Component({

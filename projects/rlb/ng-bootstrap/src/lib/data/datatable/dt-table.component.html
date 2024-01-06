@@ -1,19 +1,31 @@
-<div class="row" *ngIf="creationStrategy !=='none' || title || showRefresh">
+<div class="row" *ngIf="creationStrategy !== 'none' || title || showRefresh">
   <div class="col">
-    <h3 *ngIf="title" class="float-start"> {{ title }}</h3>
+    <h3 *ngIf="title" class="float-start">{{ title }}</h3>
     <ng-container *ngIf="showRefresh">
-      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="refreshItem.emit()"
-        [disabled]="loading">
+      <button
+        type="button"
+        class="btn btn-outline-primary float-end mb-2 me-3"
+        (click)="refreshItem.emit()"
+        [disabled]="loading"
+      >
         <i class="fa-solid fa-arrows-rotate"></i>
       </button>
     </ng-container>
     <ng-container *ngIf="creationStrategy === 'page'">
-      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl">
+      <button
+        type="button"
+        class="btn btn-outline-primary float-end mb-2 me-3"
+        [routerLink]="creationUrl"
+      >
         <i class="fa-solid fa-plus"></i>
       </button>
     </ng-container>
     <ng-container *ngIf="creationStrategy === 'modal'">
-      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()">
+      <button
+        type="button"
+        class="btn btn-outline-primary float-end mb-2 me-3"
+        (click)="createItem.emit()"
+      >
         <i class="fa-solid fa-plus"></i>
       </button>
     </ng-container>
@@ -30,23 +42,31 @@
       </thead>
       <tbody>
         <ng-content select="tr[rlb-dt-row]" />
-        <tr rlb-dt-row *ngIf="!loading && items.length === 0" class="text-center">
-          <td rlb-dt-cell [colSpan]="cols" style="border: 0;">
+        <tr
+          rlb-dt-row
+          *ngIf="!loading && items.length === 0"
+          class="text-center"
+        >
+          <td rlb-dt-cell [colSpan]="cols" style="border: 0">
             <ng-content select="[rlb-dt-no-item]" />
           </td>
         </tr>
         <tr rlb-dt-row *ngIf="loading" class="text-center">
-          <td rlb-dt-cell [colSpan]="cols" style="border: 0;">
+          <td rlb-dt-cell [colSpan]="cols" style="border: 0">
             <ng-content select="[rlb-dt-loading]" />
           </td>
         </tr>
       </tbody>
       <tfoot *ngIf="showPagination">
         <tr rlb-dt-row>
-          <td rlb-dt-cell [colSpan]="cols" style="border: 0;">
-            <button type="button" class="btn btn-primary float-end btn-sm mt-2" [disabled]="loading"
-              (click)="loadMore.emit()">
-              {{ 'common.lmore' | translate }}
+          <td rlb-dt-cell [colSpan]="cols" style="border: 0">
+            <button
+              type="button"
+              class="btn btn-primary float-end btn-sm mt-2"
+              [disabled]="loading"
+              (click)="loadMore.emit()"
+            >
+              {{ "common.lmore" | translate }}
             </button>
           </td>
         </tr>

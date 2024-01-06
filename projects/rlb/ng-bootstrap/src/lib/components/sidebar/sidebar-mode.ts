@@ -7,7 +7,7 @@ export interface HeaderLogo {
 }
 
 export interface HeaderUser {
-  image: string;  
+  image: string;
   username: string;
   role: string;
   logo: string;

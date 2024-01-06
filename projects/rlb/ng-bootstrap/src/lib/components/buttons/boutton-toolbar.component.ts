@@ -4,9 +4,9 @@ import { Component, Input } from '@angular/core';
   selector: 'rlb-button-toolbar',
   template: `<ng-content></ng-content>`,
   host: {
-    'class': 'btn-toolbar',
+    class: 'btn-toolbar',
     'attr.role': 'toolbar',
-  }
+  },
 })
 export class ButtonToolbarComponent {
   @Input() orientation: 'horizontal' | 'vertical' = 'horizontal';

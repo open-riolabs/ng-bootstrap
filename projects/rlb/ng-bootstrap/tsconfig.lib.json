@@ -8,18 +8,10 @@
     "inlineSources": true,
     "types": [],
     "paths": {
-      "@shared/*": [
-        "./src/lib/shared/*"
-      ],
-      "@/*": [
-        "./src/lib/*"
-      ],
-      "~/*": [
-        "./src/*"
-      ]
-    },
+      "@shared/*": ["./src/lib/shared/*"],
+      "@/*": ["./src/lib/*"],
+      "~/*": ["./src/*"]
+    }
   },
-  "exclude": [
-    "**/*.spec.ts"
-  ]
+  "exclude": ["**/*.spec.ts"]
 }

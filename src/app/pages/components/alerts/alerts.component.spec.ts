@@ -8,7 +8,7 @@ describe('AlertsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AlertsComponent]
+      declarations: [AlertsComponent],
     });
     fixture = TestBed.createComponent(AlertsComponent);
     component = fixture.componentInstance;

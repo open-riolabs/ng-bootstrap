@@ -1,25 +1,48 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { IModal, ModalData, ModalDirective } from "../components";
-import { SearchModalInput } from "./search-modal.data";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { IModal, ModalData, ModalDirective } from '../components';
+import { SearchModalInput } from './search-modal.data';
 
 @Component({
   selector: 'rlb-modal-search',
-  template: `
-    <div class="modal-header">
+  template: ` <div class="modal-header">
       <h5 class="modal-title">{{ data.title }}</h5>
-      <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        data-modal-reason="close"
+      ></button>
     </div>
     <div class="modal-body">
-      <h6>{{data.content?.searchText}}</h6>
-      <rlb-input class="search-input" [placeholder]="data.content?.placeholder" [(ngModel)]="searchText" (keyup.enter)="onEnter()" >
-        <button #btn after rlb-button outline data-modal-reason="ok" (click)="textSel()">
-          <i class='bi bi-search'></i>
+      <h6>{{ data.content?.searchText }}</h6>
+      <rlb-input
+        class="search-input"
+        [placeholder]="data.content?.placeholder"
+        [(ngModel)]="searchText"
+        (keyup.enter)="onEnter()"
+      >
+        <button
+          #btn
+          after
+          rlb-button
+          outline
+          data-modal-reason="ok"
+          (click)="textSel()"
+        >
+          <i class="bi bi-search"></i>
         </button>
       </rlb-input>
     </div>`,
-  hostDirectives: [{ directive: ModalDirective, inputs: ['id', 'data-instance', 'data-options'] }],
+  hostDirectives: [
+    {
+      directive: ModalDirective,
+      inputs: ['id', 'data-instance', 'data-options'],
+    },
+  ],
 })
-export class SearchModalComponent implements IModal<SearchModalInput, string>, OnInit {
+export class SearchModalComponent
+  implements IModal<SearchModalInput, string>, OnInit
+{
   @ViewChild('btn') btn!: ElementRef<HTMLElement>;
 
   data!: ModalData<SearchModalInput>;
@@ -31,11 +54,7 @@ export class SearchModalComponent implements IModal<SearchModalInput, string>, O
     this.result = this.searchText;
   }
 
-  onEnter() {
-    
-  }
+  onEnter() {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 }

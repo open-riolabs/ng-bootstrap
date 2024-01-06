@@ -1,6 +1,6 @@
-import {ToastCloseReason } from "../../../shared/types";
+import { ToastCloseReason } from '../../../shared/types';
 
 export interface ToastResult<T = void> {
-  reason: ToastCloseReason
-  result: T | null,
+  reason: ToastCloseReason;
+  result: T | null;
 }

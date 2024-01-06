@@ -1,53 +1,78 @@
 <div class="rlb-app">
-	<rlb-sidebar id="sidebar">
-		<rlb-sidebar-header mode="logo" [data]="{ image:'assets/logo.svg', text:'Title', alt:'no-logo'}" />
-		<rlb-sidebar-search search-title="Search..." search-text="Search in app" search-placeholder="Type here"
-			(on-search)="onSearch($event)" />
-		<rlb-sidebar-item icon="bi bi-box">pippo</rlb-sidebar-item>
-		<rlb-sidebar-item icon="bi bi-box" [active]="true">pluto</rlb-sidebar-item>
-		<rlb-sidebar-item icon="bi bi-box">paperino</rlb-sidebar-item>
-		<rlb-sidebar-item icon="bi bi-box">topolino</rlb-sidebar-item>
-		<rlb-sidebar-footer>
-			<rlb-sidebar-item icon="bi bi-box">qui</rlb-sidebar-item>
-		</rlb-sidebar-footer>
-	</rlb-sidebar>
-	<div class="rlb-right-panel">
-		<rlb-navbar color="light" expand="lg">
-			<a class="d-block d-sm-none" rlb-button href="#" toggle="collapse" toggle-target="sidebar" [outline]="true">
-				<span class="navbar-toggler-icon"></span>
-			</a>
-			<a rlb-navbar-brand href="#">Navbar</a>
-			<rlb-navbar-items class="me-auto">
-				<rlb-navbar-item [routerLink]="['/']" routerLinkActive="active">Home</rlb-navbar-item>
-				<rlb-navbar-item rlb-navbar-item [routerLink]="['/getting-started']" routerLinkActive="active">Getting
-					started</rlb-navbar-item>
-				<rlb-navbar-separator />
-				<rlb-navbar-item dropdown toggle="dropdown" toggle-target="#" autoClose="manual">Components
-					<rlb-dropdown-container>
-						<rlb-card>
-							<rlb-card-body>
-								<h5 rlb-card-title>Card title</h5>
-								<p rlb-card-text>
-									Some quick example text to build on the card title and make up the bulk of the card's content.
-								</p>
-							</rlb-card-body>
-						</rlb-card>
-					</rlb-dropdown-container>
-				</rlb-navbar-item>
-
-			</rlb-navbar-items>
-			<!-- <rlb-navbar-form>
+  <rlb-sidebar id="sidebar">
+    <rlb-sidebar-header
+      mode="logo"
+      [data]="{ image: 'assets/logo.svg', text: 'Title', alt: 'no-logo' }"
+    />
+    <rlb-sidebar-search
+      search-title="Search..."
+      search-text="Search in app"
+      search-placeholder="Type here"
+      (on-search)="onSearch($event)"
+    />
+    <rlb-sidebar-item icon="bi bi-box">pippo</rlb-sidebar-item>
+    <rlb-sidebar-item icon="bi bi-box" [active]="true">pluto</rlb-sidebar-item>
+    <rlb-sidebar-item icon="bi bi-box">paperino</rlb-sidebar-item>
+    <rlb-sidebar-item icon="bi bi-box">topolino</rlb-sidebar-item>
+    <rlb-sidebar-footer>
+      <rlb-sidebar-item icon="bi bi-box">qui</rlb-sidebar-item>
+    </rlb-sidebar-footer>
+  </rlb-sidebar>
+  <div class="rlb-right-panel">
+    <rlb-navbar color="light" expand="lg">
+      <a
+        class="d-block d-sm-none"
+        rlb-button
+        href="#"
+        toggle="collapse"
+        toggle-target="sidebar"
+        [outline]="true"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </a>
+      <a rlb-navbar-brand href="#">Navbar</a>
+      <rlb-navbar-items class="me-auto">
+        <rlb-navbar-item [routerLink]="['/']" routerLinkActive="active"
+          >Home</rlb-navbar-item
+        >
+        <rlb-navbar-item
+          rlb-navbar-item
+          [routerLink]="['/getting-started']"
+          routerLinkActive="active"
+          >Getting started</rlb-navbar-item
+        >
+        <rlb-navbar-separator />
+        <rlb-navbar-item
+          dropdown
+          toggle="dropdown"
+          toggle-target="#"
+          autoClose="manual"
+          >Components
+          <rlb-dropdown-container>
+            <rlb-card>
+              <rlb-card-body>
+                <h5 rlb-card-title>Card title</h5>
+                <p rlb-card-text>
+                  Some quick example text to build on the card title and make up
+                  the bulk of the card's content.
+                </p>
+              </rlb-card-body>
+            </rlb-card>
+          </rlb-dropdown-container>
+        </rlb-navbar-item>
+      </rlb-navbar-items>
+      <!-- <rlb-navbar-form>
 				<rlb-input />
 				<button rlb-button [outline]="true" color="primary" [size]="'sm'">Search</button>
 			</rlb-navbar-form>
 			<rlb-navbar-text>
 				Un testo
 			</rlb-navbar-text> -->
-		</rlb-navbar>
-		<div class="rlb-content">
-			<!-- <router-outlet /> -->
-		</div>
-	</div>
+    </rlb-navbar>
+    <div class="rlb-content">
+      <!-- <router-outlet /> -->
+    </div>
+  </div>
 </div>
 <rlb-modal-container id="modal-c-1" />
 <rlb-toast-container class="position-fixed bottom-0 end-0 p-3" id="toast-c-1" />

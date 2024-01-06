@@ -1,5 +1,13 @@
-import { Directive, ElementRef, Renderer2, Input, OnDestroy, DoCheck, AfterViewInit } from '@angular/core';
-import { Modal } from 'bootstrap'
+import {
+  Directive,
+  ElementRef,
+  Renderer2,
+  Input,
+  OnDestroy,
+  DoCheck,
+  AfterViewInit,
+} from '@angular/core';
+import { Modal } from 'bootstrap';
 import { InnerModalService } from './inner-modal.service';
 import { ModalCloseReason } from '../../shared/types';
 import { IModal } from './data/modal';
@@ -7,13 +15,12 @@ import { ModalOptions } from './data/modal-options';
 
 @Directive({
   selector: '[rlb-modal]',
-  standalone: true
+  standalone: true,
 })
 export class ModalDirective implements OnDestroy, AfterViewInit {
-
   @Input('id') id!: string;
-  @Input('data-instance') instance!: IModal
-  @Input('data-options') options!: ModalOptions
+  @Input('data-instance') instance!: IModal;
+  @Input('data-options') options!: ModalOptions;
 
   private bsModal!: Modal;
   private modalElement!: HTMLElement;
@@ -26,7 +33,7 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
     private el: ElementRef,
     private renderer: Renderer2,
     private innerModalService: InnerModalService,
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     const cont = this.el.nativeElement.parentNode;
@@ -43,10 +50,18 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
     this.renderer.addClass(this.dialogElement, 'modal-dialog');
     this.renderer.addClass(this.contentElement, 'modal-content');
     if (this.options?.backdrop) {
-      this.renderer.setAttribute(this.modalElement, 'data-bs-backdrop', `${this.options.backdrop}`);
+      this.renderer.setAttribute(
+        this.modalElement,
+        'data-bs-backdrop',
+        `${this.options.backdrop}`,
+      );
     }
     if (this.options?.keyboard) {
-      this.renderer.setAttribute(this.modalElement, 'data-bs-keyboard', `${this.options.keyboard}`);
+      this.renderer.setAttribute(
+        this.modalElement,
+        'data-bs-keyboard',
+        `${this.options.keyboard}`,
+      );
     }
     if (this.options?.animation === false) {
       this.renderer.removeClass(this.modalElement, 'fade');
@@ -63,14 +78,23 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
     if (this.options?.fullscreen === true) {
       this.renderer.addClass(this.dialogElement, `modal-fullscreen`);
     }
-    if (typeof this.options?.fullscreen === 'string' && this.options?.fullscreen) {
-      this.renderer.addClass(this.dialogElement, `modal-fullscreen-${this.options.fullscreen}`);
+    if (
+      typeof this.options?.fullscreen === 'string' &&
+      this.options?.fullscreen
+    ) {
+      this.renderer.addClass(
+        this.dialogElement,
+        `modal-fullscreen-${this.options.fullscreen}`,
+      );
     }
-    this.modalElement.addEventListener(`hide.bs.modal`, this._openChange_f)
-    this.modalElement.addEventListener(`hidden.bs.modal`, this._openChange_f)
-    this.modalElement.addEventListener(`hidePrevented.bs.modal`, this._openChange_f)
-    this.modalElement.addEventListener(`show.bs.modal`, this._openChange_f)
-    this.modalElement.addEventListener(`shown.bs.modal`, this._openChange_f)
+    this.modalElement.addEventListener(`hide.bs.modal`, this._openChange_f);
+    this.modalElement.addEventListener(`hidden.bs.modal`, this._openChange_f);
+    this.modalElement.addEventListener(
+      `hidePrevented.bs.modal`,
+      this._openChange_f,
+    );
+    this.modalElement.addEventListener(`show.bs.modal`, this._openChange_f);
+    this.modalElement.addEventListener(`shown.bs.modal`, this._openChange_f);
     this.initButtons();
     this.bsModal = Modal.getOrCreateInstance(this.modalElement, {
       backdrop: this.options?.backdrop || true,
@@ -81,11 +105,17 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.modalElement.removeEventListener(`hide.bs.modal`, this._openChange_f)
-    this.modalElement.removeEventListener(`hidden.bs.modal`, this._openChange_f)
-    this.modalElement.removeEventListener(`hidePrevented.bs.modal`, this._openChange_f)
-    this.modalElement.removeEventListener(`show.bs.modal`, this._openChange_f)
-    this.modalElement.removeEventListener(`shown.bs.modal`, this._openChange_f)
+    this.modalElement.removeEventListener(`hide.bs.modal`, this._openChange_f);
+    this.modalElement.removeEventListener(
+      `hidden.bs.modal`,
+      this._openChange_f,
+    );
+    this.modalElement.removeEventListener(
+      `hidePrevented.bs.modal`,
+      this._openChange_f,
+    );
+    this.modalElement.removeEventListener(`show.bs.modal`, this._openChange_f);
+    this.modalElement.removeEventListener(`shown.bs.modal`, this._openChange_f);
     // this._reasonButtons?.forEach((btn) => {
     //   btn.removeEventListener('click', null);
     // });
@@ -94,15 +124,24 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
   }
 
   private _openChange_f = (e: Event) => {
-    this.innerModalService.eventModal(e.type.replace('.bs.modal', ''), this._modalReason, this.id, this.instance?.result);
-  }
+    this.innerModalService.eventModal(
+      e.type.replace('.bs.modal', ''),
+      this._modalReason,
+      this.id,
+      this.instance?.result,
+    );
+  };
 
   initButtons(): void {
-    this._reasonButtons = this.contentElement.querySelectorAll('[data-modal-reason]');
+    this._reasonButtons = this.contentElement.querySelectorAll(
+      '[data-modal-reason]',
+    );
     if (this._reasonButtons && this._reasonButtons.length > 0) {
       this._reasonButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-          this._modalReason = btn.getAttribute('data-modal-reason') as ModalCloseReason;
+          this._modalReason = btn.getAttribute(
+            'data-modal-reason',
+          ) as ModalCloseReason;
           if (this._modalReason === 'cancel' || this._modalReason === 'close') {
             this.bsModal?.hide();
           }
@@ -116,4 +155,3 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
     }
   }
 }
-

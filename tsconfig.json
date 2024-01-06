@@ -3,12 +3,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "@rlb/ng-bootstrap": [
-        "./projects/rlb/ng-bootstrap/src/public-api.ts"
-      ],
-      "@rlb/ng-c-bootstrap": [
-        "dist/rlb/ng-c-bootstrap"
-      ]
+      "@rlb/ng-bootstrap": ["./projects/rlb/ng-bootstrap/src/public-api.ts"],
+      "@rlb/ng-c-bootstrap": ["dist/rlb/ng-c-bootstrap"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -27,10 +23,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

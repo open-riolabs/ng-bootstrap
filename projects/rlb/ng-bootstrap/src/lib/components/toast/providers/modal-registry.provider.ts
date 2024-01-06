@@ -1,7 +1,6 @@
-
-import { RlbBootstrapOptions } from "../../../rlb-bootstrap";
-import { ToastRegistry } from "../options/toast-registry";
-import { ToastRegistryOptions } from "../options/toast-registry.options";
+import { RlbBootstrapOptions } from '../../../rlb-bootstrap';
+import { ToastRegistry } from '../options/toast-registry';
+import { ToastRegistryOptions } from '../options/toast-registry.options';
 
 export function toastRegistryProvider(options?: ToastRegistry) {
   return (rootOptions?: RlbBootstrapOptions): ToastRegistryOptions => {
@@ -13,9 +12,9 @@ export function toastRegistryProvider(options?: ToastRegistry) {
     }
     if (options && options.toasts) {
       registryOptions.toasts = options.toasts;
-      return registryOptions
+      return registryOptions;
     }
     registryOptions.toasts = [];
-    return (registryOptions);
-  }
+    return registryOptions;
+  };
 }

@@ -1,5 +1,13 @@
-import { Directive, ElementRef, Renderer2, Input, OnDestroy, DoCheck, AfterViewInit } from '@angular/core';
-import { Toast } from 'bootstrap'
+import {
+  Directive,
+  ElementRef,
+  Renderer2,
+  Input,
+  OnDestroy,
+  DoCheck,
+  AfterViewInit,
+} from '@angular/core';
+import { Toast } from 'bootstrap';
 import { InnerToastService } from './inner-toast.service';
 import { ToastCloseReason } from '../../shared/types';
 import { IToast } from './data/toast';
@@ -7,13 +15,12 @@ import { ToastOptions } from './data/toast-options';
 
 @Directive({
   selector: '[rlb-toast]',
-  standalone: true
+  standalone: true,
 })
 export class ToastDirective implements OnDestroy, AfterViewInit {
-
   @Input('id') id!: string;
-  @Input('data-instance') instance!: IToast
-  @Input('data-options') options!: ToastOptions
+  @Input('data-instance') instance!: IToast;
+  @Input('data-options') options!: ToastOptions;
 
   private bsToast!: Toast;
   private contentElement!: HTMLElement;
@@ -24,7 +31,7 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     private el: ElementRef,
     private renderer: Renderer2,
     private innerToastService: InnerToastService,
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     const cont = this.el.nativeElement.parentNode;
@@ -35,7 +42,10 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     this.renderer.setAttribute(this.contentElement, 'aria-live', 'assertive');
     this.renderer.setAttribute(this.contentElement, 'aria-atomic', 'true');
     if (this.options?.color) {
-      this.renderer.addClass(this.contentElement, `text-bg-${this.options.color}`);
+      this.renderer.addClass(
+        this.contentElement,
+        `text-bg-${this.options.color}`,
+      );
     }
     if (this.options?.classes) {
       for (const c of this.options.classes) {
@@ -43,14 +53,17 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
       }
     }
     while (this.el.nativeElement.children.length > 0) {
-      this.renderer.appendChild(this.contentElement, this.el.nativeElement.children[0]);
+      this.renderer.appendChild(
+        this.contentElement,
+        this.el.nativeElement.children[0],
+      );
     }
     this.renderer.appendChild(cont, this.contentElement);
     this.el.nativeElement.remove();
-    this.contentElement.addEventListener(`hide.bs.toast`, this._openChange_f)
-    this.contentElement.addEventListener(`hidden.bs.toast`, this._openChange_f)
-    this.contentElement.addEventListener(`show.bs.toast`, this._openChange_f)
-    this.contentElement.addEventListener(`shown.bs.toast`, this._openChange_f)
+    this.contentElement.addEventListener(`hide.bs.toast`, this._openChange_f);
+    this.contentElement.addEventListener(`hidden.bs.toast`, this._openChange_f);
+    this.contentElement.addEventListener(`show.bs.toast`, this._openChange_f);
+    this.contentElement.addEventListener(`shown.bs.toast`, this._openChange_f);
     this.initButtons();
     this.bsToast = Toast.getOrCreateInstance(this.contentElement, {
       animation: this.options?.animation || true,
@@ -61,10 +74,22 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.contentElement.removeEventListener(`hide.bs.toast`, this._openChange_f)
-    this.contentElement.removeEventListener(`hidden.bs.toast`, this._openChange_f)
-    this.contentElement.removeEventListener(`show.bs.toast`, this._openChange_f)
-    this.contentElement.removeEventListener(`shown.bs.toast`, this._openChange_f)
+    this.contentElement.removeEventListener(
+      `hide.bs.toast`,
+      this._openChange_f,
+    );
+    this.contentElement.removeEventListener(
+      `hidden.bs.toast`,
+      this._openChange_f,
+    );
+    this.contentElement.removeEventListener(
+      `show.bs.toast`,
+      this._openChange_f,
+    );
+    this.contentElement.removeEventListener(
+      `shown.bs.toast`,
+      this._openChange_f,
+    );
     // this._reasonButtons?.forEach((btn) => {
     //   btn.removeEventListener('click', null);
     // });
@@ -72,15 +97,24 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
   }
 
   private _openChange_f = (e: Event) => {
-    this.innerToastService.eventToast(e.type.replace('.bs.toast', ''), this._toastReason, this.id, this.instance?.result);
-  }
+    this.innerToastService.eventToast(
+      e.type.replace('.bs.toast', ''),
+      this._toastReason,
+      this.id,
+      this.instance?.result,
+    );
+  };
 
   initButtons(): void {
-    this._reasonButtons = this.contentElement.querySelectorAll('[data-toast-reason]');
+    this._reasonButtons = this.contentElement.querySelectorAll(
+      '[data-toast-reason]',
+    );
     if (this._reasonButtons && this._reasonButtons.length > 0) {
       this._reasonButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-          this._toastReason = btn.getAttribute('data-toast-reason') as ToastCloseReason;
+          this._toastReason = btn.getAttribute(
+            'data-toast-reason',
+          ) as ToastCloseReason;
           if (this._toastReason === 'cancel' || this._toastReason === 'close') {
             this.bsToast?.hide();
           }
@@ -94,4 +128,3 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     }
   }
 }
-

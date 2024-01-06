@@ -1,6 +1,6 @@
-import { ModalCloseReason } from "../../../shared/types";
+import { ModalCloseReason } from '../../../shared/types';
 
 export interface ModalResult<T = void> {
-  reason: ModalCloseReason
-  result: T | null,
+  reason: ModalCloseReason;
+  result: T | null;
 }

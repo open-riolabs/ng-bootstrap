@@ -8,7 +8,7 @@ describe('GettingStartedComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GettingStartedComponent]
+      declarations: [GettingStartedComponent],
     });
     fixture = TestBed.createComponent(GettingStartedComponent);
     component = fixture.componentInstance;

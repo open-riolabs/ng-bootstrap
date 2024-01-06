@@ -37,7 +37,7 @@ export class ListItemComponent {
   constructor(private viewContainerRef: ViewContainerRef) {}
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template
+      this.template,
     );
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();

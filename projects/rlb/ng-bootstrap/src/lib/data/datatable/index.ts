@@ -18,5 +18,5 @@ export const TABLE = [
   DataTableCellComponent,
   DataTableHeaderComponent,
   DataTableRowComponent,
-  DataTableComponent
-]
+  DataTableComponent,
+];

@@ -23,31 +23,33 @@ import { SearchModalComponent } from './modals/search-modal.component';
     ...COMPONENTS,
     ...COMPONENT_BUILDER,
     FormFieldsComponent,
-    SearchModalComponent
+    SearchModalComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
     ...TABLE,
     ...INPUTS,
     ...COMPONENTS,
     FormFieldsComponent,
-    SearchModalComponent
-  ]
+    SearchModalComponent,
+  ],
 })
 export class RlbBootstrapModule {
-  static forRoot(options?: RlbBootstrapOptions): ModuleWithProviders<RlbBootstrapModule> {
-    return ({
+  static forRoot(
+    options?: RlbBootstrapOptions,
+  ): ModuleWithProviders<RlbBootstrapModule> {
+    return {
       ngModule: RlbBootstrapModule,
       providers: [
         {
           provide: FOR_ROOT_OPTIONS_TOKEN,
-          useValue: options
+          useValue: options,
         },
         {
           provide: ModalRegistryOptions,
@@ -59,19 +61,21 @@ export class RlbBootstrapModule {
           provide: ToastRegistryOptions,
           useFactory: toastRegistryProvider(),
           deps: [FOR_ROOT_OPTIONS_TOKEN],
-          multi: true
-        }
-      ]
-    });
+          multi: true,
+        },
+      ],
+    };
   }
 
-  static forChild(options?: ModalRegistry): ModuleWithProviders<RlbBootstrapModule> {
-    return ({
+  static forChild(
+    options?: ModalRegistry,
+  ): ModuleWithProviders<RlbBootstrapModule> {
+    return {
       ngModule: RlbBootstrapModule,
       providers: [
         {
           provide: FOR_ROOT_OPTIONS_TOKEN,
-          useExisting: FOR_ROOT_OPTIONS_TOKEN
+          useExisting: FOR_ROOT_OPTIONS_TOKEN,
         },
         {
           provide: ModalRegistryOptions,
@@ -83,9 +87,9 @@ export class RlbBootstrapModule {
           provide: ToastRegistryOptions,
           useFactory: toastRegistryProvider(),
           deps: [FOR_ROOT_OPTIONS_TOKEN],
-          multi: true
-        }
-      ]
-    });
+          multi: true,
+        },
+      ],
+    };
   }
 }

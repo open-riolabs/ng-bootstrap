@@ -1,4 +1,4 @@
-import { BreadcrumbItem } from "@rlb/ng-bootstrap";
+import { BreadcrumbItem } from '@rlb/ng-bootstrap';
 
 export interface Breadcrumb {
   divider: string;

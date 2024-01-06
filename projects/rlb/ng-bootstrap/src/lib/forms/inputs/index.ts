@@ -12,19 +12,22 @@ export * from './switch.component';
 export * from './text-area.component';
 export * from './help-text.directive';
 
-import { CheckboxComponent } from "./checkbox.component";
-import { ColorComponent } from "./color.component";
-import { DatalistComponent } from "./datalist.component";
-import { FileComponent } from "./file.component";
-import { HelpText } from "./help-text.directive";
-import { InputGroupComponent, InputTextGroupComponent } from "./input-group.component";
-import { InputComponent } from "./input.component";
-import { OptionComponent } from "./options.component";
-import { RadioComponent } from "./radio.component";
-import { RangeComponent } from "./range.component";
-import { SelectComponent } from "./select.component";
-import { SwitchComponent } from "./switch.component";
-import { TextAreaComponent } from "./text-area.component";
+import { CheckboxComponent } from './checkbox.component';
+import { ColorComponent } from './color.component';
+import { DatalistComponent } from './datalist.component';
+import { FileComponent } from './file.component';
+import { HelpText } from './help-text.directive';
+import {
+  InputGroupComponent,
+  InputTextGroupComponent,
+} from './input-group.component';
+import { InputComponent } from './input.component';
+import { OptionComponent } from './options.component';
+import { RadioComponent } from './radio.component';
+import { RangeComponent } from './range.component';
+import { SelectComponent } from './select.component';
+import { SwitchComponent } from './switch.component';
+import { TextAreaComponent } from './text-area.component';
 
 export const INPUTS = [
   CheckboxComponent,

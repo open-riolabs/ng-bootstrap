@@ -1,8 +1,8 @@
-import { ModalType } from "../../../shared/types";
+import { ModalType } from '../../../shared/types';
 
 export interface ToastData<T = any> {
-  title: string,
-  type?: ModalType,
-  content: T | undefined,
-  ok?: string,
+  title: string;
+  type?: ModalType;
+  content: T | undefined;
+  ok?: string;
 }

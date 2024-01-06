@@ -1,20 +1,28 @@
-import { Directive, ElementRef, Renderer2, Input, DoCheck, booleanAttribute } from "@angular/core";
-import { Color } from "../../shared/types";
+import {
+  Directive,
+  ElementRef,
+  Renderer2,
+  Input,
+  DoCheck,
+  booleanAttribute,
+} from '@angular/core';
+import { Color } from '../../shared/types';
 
 @Directive({
-  selector: "[badge]"
+  selector: '[badge]',
 })
-
 export class BadgeDirective implements DoCheck {
-
   @Input('badge') badge!: string | undefined;
-  @Input({ transform: booleanAttribute, alias: 'badge-pill'})  pill!: boolean;
+  @Input({ transform: booleanAttribute, alias: 'badge-pill' }) pill!: boolean;
   @Input('badge-top') top!: number;
   @Input('badge-start') start!: number;
-  @Input('badge-color') color: Color = 'danger'
+  @Input('badge-color') color: Color = 'danger';
   @Input('hidden-text') hiddenText!: string;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
+  constructor(
+    private elementRef: ElementRef,
+    private renderer: Renderer2,
+  ) {}
 
   ngDoCheck() {
     const badge = this.renderer.createElement('span');
@@ -41,8 +49,7 @@ export class BadgeDirective implements DoCheck {
     } else {
       if (this.top || this.start || this.top === 0 || this.start === 0) {
         this.renderer.addClass(badge, `p-2`);
-      }
-      else {
+      } else {
         this.renderer.addClass(badge, `ps-0`);
         this.renderer.addClass(badge, `ms-2`);
       }
@@ -58,7 +65,10 @@ export class BadgeDirective implements DoCheck {
     if (this.hiddenText) {
       const text = this.renderer.createElement('span');
       this.renderer.addClass(text, 'visually-hidden');
-      this.renderer.appendChild(text, this.renderer.createText(this.hiddenText));
+      this.renderer.appendChild(
+        text,
+        this.renderer.createText(this.hiddenText),
+      );
       this.renderer.appendChild(badge, text);
     }
     this.renderer.appendChild(this.elementRef.nativeElement, badge);

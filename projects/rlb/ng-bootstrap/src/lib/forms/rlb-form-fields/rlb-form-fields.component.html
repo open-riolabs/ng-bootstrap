@@ -1,11 +1,11 @@
-<ng-container *ngIf="noCard;else card">
+<ng-container *ngIf="noCard; else card">
   <ng-container [ngTemplateOutlet]="form"></ng-container>
 </ng-container>
 
 <ng-template #card>
   <div class="card mb-3">
     <div class="card-body">
-      <h5 class="card-title" *ngIf="title">{{ title | translate}}</h5>
+      <h5 class="card-title" *ngIf="title">{{ title | translate }}</h5>
       <p class="card-text" *ngIf="subTitle">{{ subTitle | translate }}</p>
       <ng-container [ngTemplateOutlet]="form"></ng-container>
     </div>
@@ -13,20 +13,39 @@
 </ng-template>
 
 <ng-template #form>
-  <form *ngIf="filterForm" [formGroup]="filterForm" [class.was-validated]="ngForm.submitted" class="needs-validation"
-    #ngForm="ngForm" (ngSubmit)="onFilterSubmit()">
+  <form
+    *ngIf="filterForm"
+    [formGroup]="filterForm"
+    [class.was-validated]="ngForm.submitted"
+    class="needs-validation"
+    #ngForm="ngForm"
+    (ngSubmit)="onFilterSubmit()"
+  >
     <div class="row">
-      <div class="col" [ngClass]="input.cols" *ngFor="let input of _fields;trackBy:identify">
+      <div
+        class="col"
+        [ngClass]="input.cols"
+        *ngFor="let input of _fields; trackBy: identify"
+      >
         <div class="mb-3">
           <ng-container *ngIf="isText(input.type)">
-            <rlb-input [formControlName]="input.property" [type]="input.type" [placeholder]="input.name | translate">
+            <rlb-input
+              [formControlName]="input.property"
+              [type]="input.type"
+              [placeholder]="input.name | translate"
+            >
               <ng-container *ngIf="input.label" before>
-                <span #after [innerHTML]=""> {{ input.label | translate }} </span>
+                <span #after [innerHTML]="">
+                  {{ input.label | translate }}
+                </span>
               </ng-container>
             </rlb-input>
           </ng-container>
           <ng-container *ngIf="isSwitch(input.type)">
-            <rlb-switch [formControlName]="input.property" [label]="input.name | translate" />
+            <rlb-switch
+              [formControlName]="input.property"
+              [label]="input.name | translate"
+            />
           </ng-container>
         </div>
       </div>
@@ -34,7 +53,10 @@
     <ng-container *ngIf="!noSubmit">
       <div class="row">
         <div class="col">
-          <button class="btn btn-primary float-end" [disabled]="!filterForm.valid">
+          <button
+            class="btn btn-primary float-end"
+            [disabled]="!filterForm.valid"
+          >
             {{ "common.filter" | translate }}
           </button>
         </div>

@@ -6,15 +6,18 @@ import { Color, Size } from '../../shared/types';
   template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'mainClass',
-    '[attr.disabled]': "disabled?true:undefined"
-  }
+    '[attr.disabled]': 'disabled?true:undefined',
+  },
 })
 export class ButtonComponent {
   @Input() color: Color = 'primary';
   @Input() size: Size = 'md';
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'outline' }) outline?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'isLink' }) isLink?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' })
+  disabled?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'outline' }) outline?: boolean =
+    false;
+  @Input({ transform: booleanAttribute, alias: 'isLink' }) isLink?: boolean =
+    false;
 
   get mainClass() {
     let style = '';

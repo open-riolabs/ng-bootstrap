@@ -23,7 +23,8 @@ export class HostWrapper<W extends DynamicWrapper> implements Injector {
 
       // We need a new anchor, since we're projecting the current one.
       vcr.createComponent(cfr.resolveComponentFactory(EmptyAnchor));
-      const factory: ComponentFactory<W> = cfr.resolveComponentFactory(containerType);
+      const factory: ComponentFactory<W> =
+        cfr.resolveComponentFactory(containerType);
       // Craft the element array based on what slot to use. Angular only uses the index to determine
       // which ng-content to project into, so if you have more than one ng-content you'll need to set
       // the index in the constructor appropriately
@@ -31,7 +32,12 @@ export class HostWrapper<W extends DynamicWrapper> implements Injector {
       element[index] = [el.nativeElement];
       // We're assuming only one projection slot, but in more complex cases we might want to provide
       // a different array of projected elements.
-      const containerRef = vcr.createComponent(factory, undefined, undefined, element);
+      const containerRef = vcr.createComponent(
+        factory,
+        undefined,
+        undefined,
+        element,
+      );
       // We can now remove the useless anchor
       vcr.remove(0);
 

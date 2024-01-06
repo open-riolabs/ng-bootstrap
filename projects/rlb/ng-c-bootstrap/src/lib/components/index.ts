@@ -1,15 +1,15 @@
-import { AccordionComponent } from "./accordions/accordion.component";
-import { AlertComponent } from "./alerts/alert.component";
-import { BadgeComponent } from "./badges/badge.component";
-import { BreadcrumbComponent } from "./breadcrumb/breadcrumb.component";
-import { CardComponent } from "./cards/card.component";
-import { CarouselComponent } from "./carousel/carousel.component";
-import { CollapseComponent } from "./collapse/collapse.component";
-import { NavComponent } from "./nav/nav.component";
-import { NavbarComponent } from "./navbar/navbar.component";
-import { ProgressComponent } from "./progress/progress.component";
-import { SpinnerComponent } from "./spinners/spinner.component";
-import { TabComponent } from "./tabs/tab.component";
+import { AccordionComponent } from './accordions/accordion.component';
+import { AlertComponent } from './alerts/alert.component';
+import { BadgeComponent } from './badges/badge.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { CardComponent } from './cards/card.component';
+import { CarouselComponent } from './carousel/carousel.component';
+import { CollapseComponent } from './collapse/collapse.component';
+import { NavComponent } from './nav/nav.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { ProgressComponent } from './progress/progress.component';
+import { SpinnerComponent } from './spinners/spinner.component';
+import { TabComponent } from './tabs/tab.component';
 
 export * from './accordions/accordion.data';
 export * from './accordions/accordion.component';
@@ -50,5 +50,5 @@ export const COMPONENTS = [
   NavbarComponent,
   ProgressComponent,
   SpinnerComponent,
-  TabComponent
+  TabComponent,
 ];

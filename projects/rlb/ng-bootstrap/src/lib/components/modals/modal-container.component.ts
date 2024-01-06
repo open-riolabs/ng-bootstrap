@@ -6,8 +6,12 @@ import { ComponentHostDirective } from '../../shared/component-builder/component
   selector: 'rlb-modal-container',
   template: `<ng-template component-host></ng-template>`,
 })
-export class ModalContainerComponent extends BuilderComponent<InnerModalService> implements OnDestroy {
-  @ViewChild(ComponentHostDirective, { static: true }) component!: ComponentHostDirective;
+export class ModalContainerComponent
+  extends BuilderComponent<InnerModalService>
+  implements OnDestroy
+{
+  @ViewChild(ComponentHostDirective, { static: true })
+  component!: ComponentHostDirective;
   @Input('id') builderId!: string;
 
   constructor(private modalService: InnerModalService) {

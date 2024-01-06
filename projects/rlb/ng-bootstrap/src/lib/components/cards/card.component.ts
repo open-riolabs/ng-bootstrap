@@ -1,4 +1,10 @@
-import { Component, Input, ContentChild, DoCheck, booleanAttribute } from '@angular/core';
+import {
+  Component,
+  Input,
+  ContentChild,
+  DoCheck,
+  booleanAttribute,
+} from '@angular/core';
 import { Color, TextAlignment } from '../../shared/types';
 import { CardBodyComponent } from './card-body.component';
 import { CardImageComponent } from './card-image.component';
@@ -6,12 +12,14 @@ import { CardImageComponent } from './card-image.component';
 @Component({
   selector: 'rlb-card',
   template: `
-  <ng-content select="rlb-card-header,[rlb-card-image]:not([position='bottom'])" />
-  <ng-content select="rlb-card-body, ul[rlb-list]"/>
-  <ng-content select="rlb-card-footer,[rlb-card-image][position='bottom']" />
- `,
+    <ng-content
+      select="rlb-card-header,[rlb-card-image]:not([position='bottom'])"
+    />
+    <ng-content select="rlb-card-body, ul[rlb-list]" />
+    <ng-content select="rlb-card-footer,[rlb-card-image][position='bottom']" />
+  `,
   host: {
-    'class': 'card',
+    class: 'card',
     '[class.text-center]': 'align === "center"',
     '[class.text-end]': 'align === "right"',
     '[class.text-bg-primary]': 'background === "primary"',
@@ -29,8 +37,8 @@ import { CardImageComponent } from './card-image.component';
     '[class.border-warning]': 'border === "warning"',
     '[class.border-info]': 'border === "info"',
     '[class.border-light]': 'border === "light"',
-    '[class.border-dark]': 'border === "dark"'
-  }
+    '[class.border-dark]': 'border === "dark"',
+  },
 })
 export class CardComponent implements DoCheck {
   @Input() align?: TextAlignment = 'left';
@@ -38,8 +46,8 @@ export class CardComponent implements DoCheck {
   @Input() background?: Color;
   @Input() border?: Color;
 
-  @ContentChild(CardBodyComponent) public body!: CardBodyComponent
-  @ContentChild(CardImageComponent) public image!: CardImageComponent
+  @ContentChild(CardBodyComponent) public body!: CardBodyComponent;
+  @ContentChild(CardImageComponent) public image!: CardImageComponent;
 
   ngDoCheck(): void {
     if (this.body) {
@@ -50,4 +58,3 @@ export class CardComponent implements DoCheck {
     }
   }
 }
-

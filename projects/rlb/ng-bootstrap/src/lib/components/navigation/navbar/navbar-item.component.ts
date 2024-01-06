@@ -22,7 +22,8 @@ import {
         [attr.aria-expanded]="dropdown ? 'false' : undefined"
         [attr.data-bs-auto-close]="_autoClose"
         [href]="dropdown ? '#' : href"
-        (click)="click.emit($event)">
+        (click)="click.emit($event)"
+      >
         <ng-content select=":not(rlb-dropdown-container)"></ng-content>
       </a>
       <ng-content select="rlb-dropdown-container"></ng-content>
@@ -59,7 +60,7 @@ export class NavbarItemComponent implements OnInit {
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template
+      this.template,
     );
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();

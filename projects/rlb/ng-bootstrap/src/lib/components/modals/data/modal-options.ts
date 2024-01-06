@@ -4,7 +4,13 @@ export interface ModalOptions {
   verticalcentered?: boolean;
   animation?: boolean;
   size?: 'sm' | 'lg' | 'xl';
-  fullscreen?: boolean | 'sm-down' | 'md-down' | 'lg-down' | 'xl-down' | 'xxl-down';
+  fullscreen?:
+    | boolean
+    | 'sm-down'
+    | 'md-down'
+    | 'lg-down'
+    | 'xl-down'
+    | 'xxl-down';
   focus?: boolean;
   keyboard?: boolean;
 }

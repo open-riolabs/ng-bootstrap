@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'h*[rlb-offcanvas-title]',
   template: `<ng-content></ng-content>`,
-  host: { 'class': 'offcanvas-title' }
+  host: { class: 'offcanvas-title' },
 })
-export class OffcanvasTitleComponent { }
+export class OffcanvasTitleComponent {}

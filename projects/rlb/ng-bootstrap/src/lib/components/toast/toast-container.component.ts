@@ -7,10 +7,14 @@ import { ToastData } from './data/toast-data';
 @Component({
   selector: 'rlb-toast-container',
   template: `<ng-template component-host></ng-template>`,
-  host: { 'class': 'toast-container' },
+  host: { class: 'toast-container' },
 })
-export class ToastContainerComponent extends BuilderComponent<InnerToastService> implements OnDestroy {
-  @ViewChild(ComponentHostDirective, { static: true }) component!: ComponentHostDirective;
+export class ToastContainerComponent
+  extends BuilderComponent<InnerToastService>
+  implements OnDestroy
+{
+  @ViewChild(ComponentHostDirective, { static: true })
+  component!: ComponentHostDirective;
   @Input({ alias: 'id', required: true }) builderId!: string;
 
   constructor(private toastService: InnerToastService) {

@@ -1,4 +1,11 @@
-import { Component, Input, ContentChildren, QueryList, DoCheck, booleanAttribute } from '@angular/core';
+import {
+  Component,
+  Input,
+  ContentChildren,
+  QueryList,
+  DoCheck,
+  booleanAttribute,
+} from '@angular/core';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AccordionItemComponent } from './accordion-item.component';
 
@@ -12,11 +19,14 @@ import { AccordionItemComponent } from './accordion-item.component';
   },
 })
 export class AccordionComponent implements DoCheck {
-  @Input({ transform: booleanAttribute, alias: 'flush?' }) flush?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'always-open?' }) alwaysOpen?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'flush?' }) flush?: boolean =
+    false;
+  @Input({ transform: booleanAttribute, alias: 'always-open?' })
+  alwaysOpen?: boolean = false;
   @Input() id!: string;
-  @ContentChildren(AccordionItemComponent) public items!: QueryList<AccordionItemComponent>;
-  constructor(private idService: UniqueIdService) { }
+  @ContentChildren(AccordionItemComponent)
+  public items!: QueryList<AccordionItemComponent>;
+  constructor(private idService: UniqueIdService) {}
 
   ngDoCheck(): void {
     if (!this.id) {
@@ -24,7 +34,7 @@ export class AccordionComponent implements DoCheck {
     }
 
     if (this.items) {
-      this.items.forEach(item => {
+      this.items.forEach((item) => {
         item.parentId = this.id;
         item.alwaysOpen = this.alwaysOpen;
       });
