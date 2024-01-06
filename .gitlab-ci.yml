@@ -13,6 +13,7 @@ versioning:
     - |
       dotnet tool install --global GitVersion.Tool --version 5.*
       export PATH="\$PATH:/root/.dotnet/tools"
+      git remote rm tag-origin
       dotnet-gitversion /config ./GitVersion.yml /nocache /verbosity Diagnostic /output buildserver
   artifacts:
     reports:
@@ -67,8 +68,8 @@ deploy:
     - cd dist/rlb/ng-bootstrap
     - echo "@rlb:registry=https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
     - echo "//gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
-    - git remote add tag-origin https://oauth2:${CI_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
     - git tag ${GitVersion_SemVer}
+    - git remote add tag-origin https://oauth2:${CI_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
     - git push tag-origin ${GitVersion_SemVer}
     - npm version ${GitVersion_SemVer}
     - npm publish
