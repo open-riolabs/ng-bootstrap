@@ -1,12 +1,6 @@
-import { Breakpoints, MediaMatcher } from '@angular/cdk/layout';
-import {
-  ComponentRef,
-  ElementRef,
-  EventEmitter,
-  Injectable,
-  Type,
-} from '@angular/core';
-import { Observable, BehaviorSubject, filter, map, Subject } from 'rxjs';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { ComponentRef, Injectable, Type } from '@angular/core';
+import { Observable, filter, map, Subject } from 'rxjs';
 import { ModalData } from './data/modal-data';
 import { AbstractRegistryService } from '../../shared/abstract.registry.service';
 import { ModalRegistryOptions } from './options/modal-registry.options';

@@ -3,14 +3,14 @@ export interface ModalOptions {
   scrollable?: boolean;
   verticalcentered?: boolean;
   animation?: boolean;
-  size?: 'sm' | 'lg' | 'xl';
+  size?: 'sm' | 'lg' | 'xl' | 'md';
   fullscreen?:
-    | boolean
-    | 'sm-down'
-    | 'md-down'
-    | 'lg-down'
-    | 'xl-down'
-    | 'xxl-down';
+  | boolean
+  | 'sm-down'
+  | 'md-down'
+  | 'lg-down'
+  | 'xl-down'
+  | 'xxl-down';
   focus?: boolean;
   keyboard?: boolean;
 }
