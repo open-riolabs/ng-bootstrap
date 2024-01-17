@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { RlbBootstrapModule } from 'projects/rlb/ng-bootstrap/src/public-api';
+import { ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions } from 'projects/rlb/ng-bootstrap/src/public-api';
 import { FormsModule } from '@angular/forms';
 import { DemoComponent } from './demo/demo.component';
 import { ToastComponent } from './toast/toast.component';
@@ -12,6 +12,7 @@ import { GettingStartedComponent } from './pages/getting-started/getting-started
 import { AccordionsComponent } from './pages/components/accordions/accordions.component';
 import { AlertsComponent } from './pages/components/alerts/alerts.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+
 
 @NgModule({
   declarations: [
@@ -27,14 +28,22 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RlbBootstrapModule.forRoot({
-      modals: [DemoComponent],
-      toasts: [ToastComponent],
-    }),
+    RlbBootstrapModule,
     FormsModule,
     RoutingModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
+  providers: [
+    {
+      provide: ModalRegistryOptions,
+      useValue: { modals: [DemoComponent] },
+      multi: true,
+    },
+    {
+      provide: ToastRegistryOptions,
+      useValue: { toasts: [ToastComponent] },
+      multi: true,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule { }
