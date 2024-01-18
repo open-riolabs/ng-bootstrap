@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, ApplicationConfig } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,8 +33,6 @@ import { SearchModalComponent } from './modals/search-modal.component';
     FormFieldsComponent,
     SearchModalComponent,
   ],
-  providers: [{
-    provide: ModalRegistryOptions, useValue: { modals: [SearchModalComponent] }, multi: true
-  }],
+  providers: [],
 })
 export class RlbBootstrapModule { }
