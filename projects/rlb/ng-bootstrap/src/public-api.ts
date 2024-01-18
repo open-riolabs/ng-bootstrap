@@ -2,7 +2,7 @@
  * Public API Surface of ng-bootstrap
  */
 
-import { ApplicationConfig } from '@angular/core';
+import { EnvironmentProviders, Provider } from '@angular/core';
 import { SearchModalComponent } from './public-api';
 import { RlbBootstrapModule } from './public-api';
 import { ModalRegistryOptions } from './public-api';
@@ -17,11 +17,9 @@ export * from './lib/shared/types';
 export * from './lib/interfaces';
 export * from './lib/modals';
 
-export function provideRlbBootstrap(): ApplicationConfig {
-  return {
-    providers: [
-      RlbBootstrapModule,
-      { provide: ModalRegistryOptions, useValue: { modals: [SearchModalComponent] }, multi: true }
-    ]
-  }
+export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
+  return [
+    RlbBootstrapModule,
+    { provide: ModalRegistryOptions, useValue: { modals: [SearchModalComponent] }, multi: true }
+  ]
 }
