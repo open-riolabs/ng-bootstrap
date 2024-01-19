@@ -34,7 +34,8 @@ export class HomeComponent {
         title: 'Demo',
         content: 'This is a demo toast',
         ok: 'OK',
-        type: 'info',
+        subtitle: 'This is a subtitle',
+        type: 'error',
       })
       .subscribe((o) => {
         console.log('closed sub', o);
