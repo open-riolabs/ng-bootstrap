@@ -15,13 +15,13 @@ import {
   template: ` <ng-template #template>
     <li class="nav-item" [class.dropdown]="dropdown">
       <a
-        [class]="'nav-link ' + classList"
+        [class]="'nav-link ' + classList||''"
         [class.dropdown-toggle]="dropdown"
-        [attr.role]="dropdown ? 'button' : undefined"
+        [attr.role]="(dropdown || toggle) ? 'button' : undefined"
         [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"
-        [attr.aria-expanded]="dropdown ? 'false' : undefined"
+        [attr.aria-expanded]="(dropdown || toggle) ? 'false' : undefined"
         [attr.data-bs-auto-close]="_autoClose"
-        [href]="dropdown ? '#' : href"
+        [href]="(dropdown || toggle) ? '#' : href"
         (click)="click.emit($event)"
       >
         <ng-content select=":not(rlb-dropdown-container)"></ng-content>
@@ -37,6 +37,7 @@ export class NavbarItemComponent implements OnInit {
   dropdown?: boolean = false;
   @Input({ alias: 'href' }) href?: string;
   @Input('class') classList!: string;
+  @Input('toggle') toggle?: | 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'buttons-group';
   @Input() autoClose!: 'default' | 'inside' | 'outside' | 'manual';
   @Output() click = new EventEmitter<MouseEvent>();
 
@@ -56,7 +57,7 @@ export class NavbarItemComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
