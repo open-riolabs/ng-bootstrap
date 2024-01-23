@@ -18,6 +18,7 @@ import { SidebarItemComponent } from '../sidebar/sidebar-item.component';
   selector: `
     button[toggle],
     a[toggle],
+    rlb-navbar-item[toggle],
     rlb-sidebar-item[toggle],
     rlb-button-toolbar[toogle]`,
 })
