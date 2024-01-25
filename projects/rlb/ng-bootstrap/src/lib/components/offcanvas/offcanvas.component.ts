@@ -35,8 +35,7 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
 })
 export class OffcanvasComponent
   extends ToggleAbstractComponent<Offcanvas>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   @Input({ alias: `id`, required: true }) id!: string;
   @Input({ transform: booleanAttribute, alias: 'body-scroll' })
   bodyScroll: boolean = false;
@@ -46,7 +45,7 @@ export class OffcanvasComponent
   closeManual: boolean = false;
   @Input('placement') placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
   @Input('responsive') responsive!: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
-  @Output() openChange = new EventEmitter<VisibilityEvent>();
+  @Output() override statusChange = new EventEmitter<VisibilityEvent>();
 
   constructor(elementRef: ElementRef<HTMLElement>) {
     super(elementRef);

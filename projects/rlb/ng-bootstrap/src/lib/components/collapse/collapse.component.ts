@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Collapse } from 'bootstrap';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
+import { VisibilityEvent } from '../../shared/types';
 
 @Component({
   selector: 'rlb-collapse',
@@ -15,11 +16,10 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
 })
 export class CollapseComponent
   extends ToggleAbstractComponent<Collapse>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   @Input({ alias: `id`, required: true }) id!: string;
   @Input() orientation?: 'horizontal' | 'vertical' = 'vertical';
-
+  @Output() override statusChange = new EventEmitter<VisibilityEvent>();
   constructor(elementRef: ElementRef<HTMLElement>) {
     super(elementRef);
   }

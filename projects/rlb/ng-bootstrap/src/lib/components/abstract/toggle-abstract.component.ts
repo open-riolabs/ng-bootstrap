@@ -19,13 +19,12 @@ abstract class _bs_component {
 
 @Injectable()
 export abstract class ToggleAbstractComponent<T extends _bs_component>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   private _status!: VisibilityEvent;
   protected _component!: T | undefined;
   abstract get eventPrefix(): string;
 
-  @Output() statusChange = new EventEmitter<VisibilityEvent>();
+  abstract statusChange: EventEmitter<VisibilityEvent>;
 
   get status() {
     return this._status;
@@ -40,7 +39,7 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
     }
   }
 
-  constructor(private elementRef: ElementRef<HTMLElement>) {}
+  constructor(private elementRef: ElementRef<HTMLElement>) { }
 
   abstract getOrCreateInstance(element: HTMLElement): T;
 
