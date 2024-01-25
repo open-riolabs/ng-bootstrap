@@ -15,7 +15,7 @@ import { PaginationItemComponent } from './pagination-item.component';
   template: ` <ng-template #template>
     <nav>
       <ul
-        class="pagination {{cssClass}}"
+        class="pagination {{ cssClass }}"
         [class.pagination-sm]="size === 'sm'"
         [class.pagination-lg]="size === 'lg'"
         [class.justify-content-start]="alignment === 'start'"

@@ -9,7 +9,7 @@ import {
 @Component({
   selector: 'rlb-navbar-text',
   template: ` <ng-template #template>
-    <span class="navbar-text {{cssClass}}">
+    <span class="navbar-text {{ cssClass }}">
       <ng-content />
     </span>
   </ng-template>`,

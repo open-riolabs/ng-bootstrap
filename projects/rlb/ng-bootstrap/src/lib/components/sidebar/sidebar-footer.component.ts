@@ -11,7 +11,7 @@ import {
   host: { class: 'pb-3 px-3' },
   template: `
     <ng-template #template>
-      <div class="mb-2 {{cssClass}}">
+      <div class="mb-2 {{ cssClass }}">
         <hr class="text-white ms-3 my-2" />
         <ng-content select="rlb-sidebar-item"></ng-content>
       </div>

@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
     <ng-template #template>
       <a
         [routerLink]="!disabled ? url : undefined"
-        class="item {{cssClass}}"
+        class="item {{ cssClass }}"
         [class.active]="active"
         routerLinkActive="active"
         [class.disabled]="disabled"

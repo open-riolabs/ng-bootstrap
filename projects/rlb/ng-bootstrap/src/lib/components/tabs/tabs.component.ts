@@ -14,7 +14,7 @@ import {
     <ul
       role="tablist"
       [attr.id]="id ? id : undefined"
-      [class]="'nav {{cssClass}}'"
+      [class]="'nav {{ cssClass }}'"
       [class.justify-content-center]="horizontalAlignment === 'center'"
       [class.justify-content-end]="horizontalAlignment === 'end'"
       [class.flex-column]="vertical"

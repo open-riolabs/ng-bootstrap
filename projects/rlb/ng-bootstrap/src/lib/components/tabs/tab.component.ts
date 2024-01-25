@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'rlb-tab',
   template: ` <ng-template #template>
-    <li class="nav-item {{cssClass}}" role="presentation">
+    <li class="nav-item {{ cssClass }}" role="presentation">
       <button
         class="nav-link"
         type="button"

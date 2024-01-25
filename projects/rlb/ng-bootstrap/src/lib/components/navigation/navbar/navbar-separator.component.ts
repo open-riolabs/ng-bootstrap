@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'rlb-navbar-separator',
   template: ` <ng-template #template>
-    <li class="nav-item separator {{cssClass}}"></li>
+    <li class="nav-item separator {{ cssClass }}"></li>
   </ng-template>`,
 })
 export class NavbarSeparatorComponent implements OnInit {

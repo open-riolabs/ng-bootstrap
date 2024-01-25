@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'rlb-nav-item',
   template: ` <ng-template #template>
-    <li class="nav-item {{cssClass}}">
+    <li class="nav-item {{ cssClass }}">
       <a
         class="nav-link"
         [class.active]="active"

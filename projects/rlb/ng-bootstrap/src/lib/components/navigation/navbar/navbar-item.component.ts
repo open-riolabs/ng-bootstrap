@@ -15,7 +15,7 @@ import {
   template: ` <ng-template #template>
     <li class="nav-item" [class.dropdown]="dropdown">
       <a
-        [class]="'nav-link {{classList}}'"
+        class="nav-link {{ cssClass }}"
         [class.dropdown-toggle]="dropdown"
         [attr.role]="(dropdown || toggle) ? 'button' : undefined"
         [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"
@@ -36,7 +36,7 @@ export class NavbarItemComponent implements OnInit {
   @Input({ transform: booleanAttribute, alias: 'dropdown' })
   dropdown?: boolean = false;
   @Input({ alias: 'href' }) href?: string;
-  @Input('class') classList!: string;
+  @Input('class') cssClass: string = '';
   @Input('toggle') toggle?: | 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'buttons-group';
   @Input() autoClose!: 'default' | 'inside' | 'outside' | 'manual';
   @Output() click = new EventEmitter<MouseEvent>();

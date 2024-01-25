@@ -25,7 +25,7 @@ import { SidebarSearchComponent } from './sidebar-search.component';
   template: `
     <ng-template #template>
       <div
-        class="rlb-sidebar {{cssClass}}"
+        class="rlb-sidebar {{ cssClass }}"
         [style.width.px]="open ? maxWidth : width"
         [class.open]="open"
       >

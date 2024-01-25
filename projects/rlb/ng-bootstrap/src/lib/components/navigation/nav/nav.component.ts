@@ -13,7 +13,7 @@ import {
   template: ` <ng-template #template>
     <ul
       [attr.id]="id ? id : undefined"
-      [class]="'nav nav-underline {{classList}}'"
+      class="nav nav-underline {{ cssClass }}"
       [class.justify-content-center]="horizontalAlignment === 'center'"
       [class.justify-content-end]="horizontalAlignment === 'end'"
       [class.flex-column]="vertical"
@@ -36,7 +36,7 @@ export class NavComponent {
   @Input({ alias: 'pills', transform: booleanAttribute }) pills?: boolean =
     false;
   @Input() id!: string;
-  @Input('class') classList?: string;
+  @Input('class') cssClass?: string = '';
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;

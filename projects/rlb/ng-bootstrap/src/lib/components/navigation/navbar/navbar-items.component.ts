@@ -11,7 +11,7 @@ import {
   selector: 'rlb-navbar-items',
   template: ` <ng-template #template>
     <ul
-      [class]="'navbar-nav {{classList}}'"
+      class="navbar-nav {{ cssClass }}"
       [class.navbar-nav-scroll]="scroll"
       [style.--bs-scroll-height]="scroll"
     >
@@ -23,11 +23,11 @@ import {
 })
 export class NavbarItemsComponent implements OnInit {
   @Input() scroll!: string;
-  @Input('class') classList!: string;
+  @Input('class') cssClass: string = '';
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
