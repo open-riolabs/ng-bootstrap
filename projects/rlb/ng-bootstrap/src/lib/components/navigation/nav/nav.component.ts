@@ -13,7 +13,7 @@ import {
   template: ` <ng-template #template>
     <ul
       [attr.id]="id ? id : undefined"
-      [class]="'nav nav-underline' + classList"
+      [class]="'nav nav-underline {{classList}}'"
       [class.justify-content-center]="horizontalAlignment === 'center'"
       [class.justify-content-end]="horizontalAlignment === 'end'"
       [class.flex-column]="vertical"

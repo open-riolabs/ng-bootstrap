@@ -12,7 +12,7 @@ import {
   selector: 'rlb-pagination-item',
   template: `
     <ng-template #template>
-      <li class="page-item" [class.disabled]="disabled" [class.active]="active">
+      <li class="page-item {{cssClass}}" [class.disabled]="disabled" [class.active]="active">
         <a class="page-link" *ngIf="isIcon; else e" [attr.disabled]="disabled">
           <ng-container *ngTemplateOutlet="content"></ng-container>
         </a>
@@ -34,8 +34,8 @@ export class PaginationItemComponent implements OnInit {
   disabled?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean =
     false;
-
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  @Input({ alias: 'class' }) cssClass?: string = '';
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

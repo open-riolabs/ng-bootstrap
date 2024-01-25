@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'rlb-tab',
   template: ` <ng-template #template>
-    <li class="nav-item" role="presentation">
+    <li class="nav-item {{cssClass}}" role="presentation">
       <button
         class="nav-link"
         type="button"
@@ -35,11 +35,12 @@ export class TabComponent {
   @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean;
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
   @Input({ alias: 'target', required: true }) target!: string;
+  @Input({ alias: 'class' }) cssClass?: string = '';
   element!: HTMLElement;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
       this.template,

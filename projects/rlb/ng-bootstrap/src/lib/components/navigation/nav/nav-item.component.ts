@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'rlb-nav-item',
   template: ` <ng-template #template>
-    <li class="nav-item">
+    <li class="nav-item {{cssClass}}">
       <a
         class="nav-link"
         [class.active]="active"
@@ -30,11 +30,11 @@ export class NavItemComponent implements OnInit {
     false;
   @Input({ alias: 'disabled', transform: booleanAttribute })
   disabled?: boolean = false;
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

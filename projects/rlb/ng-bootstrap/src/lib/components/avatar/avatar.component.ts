@@ -15,6 +15,7 @@ import {
         *ngIf="src"
         [src]="src"
         alt="Avatar"
+        [class]="cssClass"
         [style.vertical-align]="'middle'"
         [style.width.px]="size"
         [style.width.px]="size"
@@ -29,7 +30,7 @@ export class AvatarComponent {
   @Input() size?: number = 50;
   @Input() style?: 'circle' | 'round' | 'square' = 'circle';
   @Input() src?: string;
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   constructor(private viewContainerRef: ViewContainerRef) {}
   element!: HTMLElement;

@@ -13,7 +13,7 @@ import {
   selector: 'rlb-list-item-image',
   template: ` <ng-template #template>
     <li
-      class="list-group-item"
+      class="list-group-item {{ cssClass }}"
       [class.disabled]="disabled"
       [class.list-group-item-action]="disabled !== true"
       [class.active]="active"
@@ -44,6 +44,7 @@ export class ListItemImageComponent {
   @Input('line-2') line2?: string;
   @Input('profile-picture') profilePicture?: string;
   @Input('unread') unread?: number | string;
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @Output() click = new EventEmitter<MouseEvent>();
   element!: HTMLElement;

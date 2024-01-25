@@ -25,7 +25,7 @@ import { SidebarSearchComponent } from './sidebar-search.component';
   template: `
     <ng-template #template>
       <div
-        class="rlb-sidebar"
+        class="rlb-sidebar {{cssClass}}"
         [style.width.px]="open ? maxWidth : width"
         [class.open]="open"
       >
@@ -53,6 +53,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Input({ transform: booleanAttribute, alias: 'open' }) open: boolean = false;
   @Output('openChange') openChange: EventEmitter<boolean> = new EventEmitter();
   @Input({ transform: booleanAttribute, alias: 'hide-close-btn' })
+  @Input({ alias: 'class' }) cssClass?: string = '';
   hideCloseBtn: boolean = false;
 
   @ContentChild(SidebarHeaderComponent) public header!: SidebarHeaderComponent;

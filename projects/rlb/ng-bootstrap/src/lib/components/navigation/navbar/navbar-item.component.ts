@@ -15,7 +15,7 @@ import {
   template: ` <ng-template #template>
     <li class="nav-item" [class.dropdown]="dropdown">
       <a
-        [class]="'nav-link ' + classList||''"
+        [class]="'nav-link {{classList}}'"
         [class.dropdown-toggle]="dropdown"
         [attr.role]="(dropdown || toggle) ? 'button' : undefined"
         [attr.data-bs-toggle]="dropdown ? 'dropdown' : undefined"

@@ -13,7 +13,7 @@ import {
   selector: 'rlb-list-item',
   template: ` <ng-template #template>
     <li
-      class="list-group-item"
+      class="list-group-item {{ cssClass }}"
       [class.disabled]="disabled"
       [class.list-group-item-action]="action"
       [class.active]="active"
@@ -30,7 +30,7 @@ export class ListItemComponent {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
   @Input({ transform: booleanAttribute, alias: 'action' }) action?: boolean;
   @Output() click = new EventEmitter<MouseEvent>();
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 

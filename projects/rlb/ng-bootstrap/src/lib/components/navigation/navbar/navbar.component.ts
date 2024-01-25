@@ -13,7 +13,7 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
   selector: 'rlb-navbar',
   template: ` <ng-template #template>
     <nav
-      class="navbar px-2 bg-{{ color }} {{ placement }} {{ _navExpand }}"
+      class="navbar px-2 bg-{{ color }} {{ placement }} {{ _navExpand }} {{ cssClass }}"
       [attr.data-bs-theme]="dark"
     >
       <div class="container-fluid">
@@ -51,7 +51,7 @@ export class NavbarComponent {
     | 'sticky-top'
     | 'sticky-bottom';
   @Input() expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   private _navId: string;
   public get navId(): string {
     return this._navId;

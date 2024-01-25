@@ -15,7 +15,7 @@ import { PaginationItemComponent } from './pagination-item.component';
   template: ` <ng-template #template>
     <nav>
       <ul
-        class="pagination"
+        class="pagination {{cssClass}}"
         [class.pagination-sm]="size === 'sm'"
         [class.pagination-lg]="size === 'lg'"
         [class.justify-content-start]="alignment === 'start'"
@@ -30,7 +30,7 @@ import { PaginationItemComponent } from './pagination-item.component';
 export class PaginationComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ContentChildren(PaginationItemComponent)
   children!: QueryList<PaginationItemComponent>;
 

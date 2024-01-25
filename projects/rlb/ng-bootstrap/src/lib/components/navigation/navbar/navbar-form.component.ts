@@ -9,7 +9,7 @@ import {
 @Component({
   selector: 'rlb-navbar-form',
   template: ` <ng-template #template>
-    <form [attr.role]="role" class="d-flex">
+    <form [attr.role]="role" class="d-flex {{cssClass}}">
       <ng-content />
     </form>
   </ng-template>`,
@@ -19,7 +19,7 @@ export class NavbarFormComponent {
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   constructor(private viewContainerRef: ViewContainerRef) {}
 
   ngOnInit() {

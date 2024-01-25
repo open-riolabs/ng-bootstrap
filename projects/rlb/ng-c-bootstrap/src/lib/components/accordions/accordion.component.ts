@@ -11,7 +11,7 @@ import { Accordion } from './accordion.data';
 @Component({
   selector: 'rlb-c-accordion',
   template: ` <ng-template #template>
-    <rlb-accordion [flush]="data?.flush" [alwaysOpen]="data?.alwaysOpen">
+    <rlb-accordion [flush]="data?.flush" [always-open]="data?.alwaysOpen">
       <div rlb-accordion-item *ngFor="let item of data?.items">
         <h2 rlb-accordion-header>
           {{ item.title }}
@@ -27,7 +27,7 @@ export class AccordionComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @Input() data!: Accordion | undefined;
   element!: HTMLElement;
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   constructor(private viewContainerRef: ViewContainerRef) {}
 
   ngOnInit() {

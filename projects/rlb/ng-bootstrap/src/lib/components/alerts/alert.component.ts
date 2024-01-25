@@ -12,7 +12,7 @@ import { Color } from '../../shared/types';
 @Component({
   selector: 'rlb-alert',
   template: ` <ng-template #template>
-    <div class="alert alert-{{ color }}" role="alert">
+    <div class="alert alert-{{ color }} {{ cssClass }}" role="alert">
       <ng-content></ng-content>
       <button
         *ngIf="dismissible"
@@ -29,9 +29,9 @@ export class AlertComponent {
   @Input() color: Color = 'primary';
   @Input() dismissible = false;
   @Output() dismissed: EventEmitter<void> = new EventEmitter<void>();
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
   element!: HTMLElement;
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
     <ng-template #template>
       <a
         [routerLink]="!disabled ? url : undefined"
-        class="item"
+        class="item {{cssClass}}"
         [class.active]="active"
         routerLinkActive="active"
         [class.disabled]="disabled"
@@ -48,7 +48,7 @@ export class SidebarItemComponent implements OnInit {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled: boolean =
     false;
   @Output('action') onAction = new EventEmitter<void>();
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   element!: HTMLElement;
 
   constructor(private viewContainerRef: ViewContainerRef) {}

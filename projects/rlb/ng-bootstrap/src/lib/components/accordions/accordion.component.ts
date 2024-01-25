@@ -19,9 +19,9 @@ import { AccordionItemComponent } from './accordion-item.component';
   },
 })
 export class AccordionComponent implements DoCheck {
-  @Input({ transform: booleanAttribute, alias: 'flush?' }) flush?: boolean =
+  @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean =
     false;
-  @Input({ transform: booleanAttribute, alias: 'always-open?' })
+  @Input({ transform: booleanAttribute, alias: 'always-open' })
   alwaysOpen?: boolean = false;
   @Input() id!: string;
   @ContentChildren(AccordionItemComponent)

@@ -11,7 +11,7 @@ import {
   selector: 'rlb-navbar-items',
   template: ` <ng-template #template>
     <ul
-      [class]="'navbar-nav ' + classList"
+      [class]="'navbar-nav {{classList}}'"
       [class.navbar-nav-scroll]="scroll"
       [style.--bs-scroll-height]="scroll"
     >

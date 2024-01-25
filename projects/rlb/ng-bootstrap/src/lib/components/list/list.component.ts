@@ -13,9 +13,10 @@ import { ListItemComponent } from './list-item.component';
 
 @Component({
   selector: 'rlb-list',
-  template: ` <ng-template #template>
+  template: `
+  <ng-template #template>
     <ul
-      class="list-group"
+      class="list-group {{ cssClass }}"
       [class.list-group-numbered]="numbered"
       [class.list-group-flush]="flush"
       [class.list-group-horizontal]="horizontal"
@@ -30,13 +31,14 @@ export class ListComponent implements DoCheck {
   @Input({ transform: booleanAttribute, alias: 'numbered' }) numbered?: boolean;
   @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean;
   @Input({ transform: booleanAttribute, alias: 'horizontal' })
+  @Input({ alias: 'class' }) cssClass?: string = '';
   horizontal?: boolean;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
   @ContentChildren(ListItemComponent) children!: QueryList<ListItemComponent>;
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

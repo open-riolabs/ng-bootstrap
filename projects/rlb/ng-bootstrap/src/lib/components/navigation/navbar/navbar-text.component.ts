@@ -9,13 +9,14 @@ import {
 @Component({
   selector: 'rlb-navbar-text',
   template: ` <ng-template #template>
-    <span class="navbar-text">
+    <span class="navbar-text {{cssClass}}">
       <ng-content />
     </span>
   </ng-template>`,
 })
 export class NavbarTextComponent {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @Input({ alias: 'class' }) cssClass?: string = '';
   element!: HTMLElement;
   constructor(private viewContainerRef: ViewContainerRef) {}
 
