@@ -42,8 +42,7 @@ import { OptionComponent } from './options.component';
 })
 export class SelectComponent
   extends AbstractComponent<string>
-  implements DoCheck, ControlValueAccessor
-{
+  implements DoCheck, ControlValueAccessor {
   @Input() disabled? = false;
   @Input() label?: string = '';
   @Input() placeholder?: string;
@@ -69,11 +68,13 @@ export class SelectComponent
   _projectedDisplayOptions!: ViewContainerRef;
 
   ngDoCheck() {
-    for (let i = this._projectedDisplayOptions.length; i > 0; i--) {
-      this._projectedDisplayOptions.detach();
+    if (this._projectedDisplayOptions && this.options) {
+      for (let i = this._projectedDisplayOptions.length; i > 0; i--) {
+        this._projectedDisplayOptions.detach();
+      }
+      this.options.forEach((option) => {
+        this._projectedDisplayOptions.insert(option._view);
+      });
     }
-    this.options.forEach((option) => {
-      this._projectedDisplayOptions.insert(option._view);
-    });
   }
 }
