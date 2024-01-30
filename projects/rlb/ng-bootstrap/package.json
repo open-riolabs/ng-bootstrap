@@ -2,10 +2,10 @@
   "name": "@rlb/ng-bootstrap",
   "version": "0.0.0",
   "peerDependencies": {
-    "@angular/router": "^17.0.0",
-    "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0",
-    "@angular/cdk": "^17.0.0",
+    "@angular/router": "~17.0.0",
+    "@angular/common": "~17.0.0",
+    "@angular/core": "~17.0.0",
+    "@angular/cdk": "~17.0.0",
     "bootstrap": ">=5.3.0",
     "@types/bootstrap": ">5.2.0"
   },
