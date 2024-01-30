@@ -4,5 +4,5 @@ import { Injectable, Type } from '@angular/core';
   providedIn: 'root',
 })
 export class ModalRegistryOptions {
-  public modals!: Type<any>[];
+  public modals!: { [name: string]: Type<any> };
 }

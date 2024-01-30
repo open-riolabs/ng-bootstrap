@@ -36,12 +36,20 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
   providers: [
     {
       provide: ModalRegistryOptions,
-      useValue: { modals: [DemoComponent] },
+      useValue: {
+        modals: {
+          "demo-component": DemoComponent
+        }
+      },
       multi: true,
     },
     {
       provide: ToastRegistryOptions,
-      useValue: { toasts: [ToastComponent] },
+      useValue: {
+        toasts: {
+          "toast-component": ToastComponent
+        }
+      },
       multi: true,
     },
   ],

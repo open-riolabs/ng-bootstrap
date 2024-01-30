@@ -49,18 +49,16 @@ export class InnerToastService extends AbstractRegistryService<Type<any>> {
   ) {
     super();
     if (Array.isArray(options)) {
-      const modals = (options as ToastRegistryOptions[])
+      const toasts = (options as ToastRegistryOptions[])
         .reverse()
         .map((o) => o.toasts)
         .flat();
-      for (const modal of modals) {
-        this.add(modal);
+      for (const toast of toasts) {
+        Object.keys(toast).forEach((k) => this.add(k, toast[k]))
       }
     } else {
-      if (options && options.toasts && options.toasts.length > 0) {
-        for (const modal of options.toasts) {
-          this.add(modal);
-        }
+      if (options && options.toasts) {
+        Object.keys(options.toasts).forEach((k) => this.add(k, options.toasts[k]))
       }
     }
   }

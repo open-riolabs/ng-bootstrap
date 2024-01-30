@@ -13,14 +13,10 @@ export abstract class AbstractRegistryService<T extends Function> {
     return type;
   }
 
-  protected add(type: T, name?: string) {
-    let _name;
-    if (name) {
-      _name = this.dasherizeString(name);
-    } else {
-      _name = this.dasherizeName(type);
-    }
-    if (!_name) return;
+  protected add(name: string, type: T,) {
+    if (!type) throw new Error('Component type is required');
+    if (!name) throw new Error('Component name is required');
+    let _name: string = this.dasherizeString(name);
     this.registry.set(_name, type);
   }
 
@@ -30,8 +26,8 @@ export abstract class AbstractRegistryService<T extends Function> {
     return this.dasherizeString(name);
   }
 
-  protected dasherizeString(val: string) {
-    if (!val) return;
+  protected dasherizeString(val: string): string {
+    if (!val) '';
     return val.replace(
       /[A-Z]/g,
       (char, index) => (index !== 0 ? '-' : '') + char.toLowerCase(),

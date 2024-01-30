@@ -54,13 +54,11 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
         .map((o) => o.modals)
         .flat();
       for (const modal of modals) {
-        this.add(modal);
+        Object.keys(modal).forEach((k) => this.add(k, modal[k]))
       }
     } else {
-      if (options && options.modals && options.modals.length > 0) {
-        for (const modal of options.modals) {
-          this.add(modal);
-        }
+      if (options && options.modals) {
+        Object.keys(options.modals).forEach((k) => this.add(k, options.modals[k]))
       }
     }
   }

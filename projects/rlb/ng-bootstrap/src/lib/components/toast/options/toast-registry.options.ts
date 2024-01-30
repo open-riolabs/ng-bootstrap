@@ -4,5 +4,5 @@ import { Injectable, Type } from '@angular/core';
   providedIn: 'root',
 })
 export class ToastRegistryOptions {
-  public toasts!: Type<any>[];
+  public toasts!: { [name: string]: Type<any> };
 }
