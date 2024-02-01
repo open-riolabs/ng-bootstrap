@@ -2,6 +2,7 @@ import {
   Component,
   ContentChildren,
   DoCheck,
+  HostBinding,
   Input,
   QueryList,
   TemplateRef,
@@ -30,9 +31,9 @@ export class ListComponent implements DoCheck {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
   @Input({ transform: booleanAttribute, alias: 'numbered' }) numbered?: boolean;
   @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'horizontal' })
+  @Input({ transform: booleanAttribute, alias: 'horizontal' }) horizontal?: boolean;
   @Input({ alias: 'class' }) cssClass?: string = '';
-  horizontal?: boolean;
+
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
