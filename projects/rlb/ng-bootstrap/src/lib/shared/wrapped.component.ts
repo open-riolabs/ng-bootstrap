@@ -24,7 +24,7 @@ export class WrappedComponent implements DynamicWrapper, DoCheck, OnDestroy {
 
   ngDoCheck() {
     // Create the inner components in memory, not the DOM.
-    this.componentView = this.templateRef.createEmbeddedView();
+    this.componentView = this.templateRef?.createEmbeddedView();
   }
 
   ngOnDestroy() {

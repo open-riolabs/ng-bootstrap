@@ -5,6 +5,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef,
+  numberAttribute,
 } from '@angular/core';
 
 @Component({
@@ -27,12 +28,12 @@ import {
   `,
 })
 export class AvatarComponent {
-  @Input() size?: number = 50;
+  @Input({ alias: 'size', transform: numberAttribute }) size?: number = 50;
   @Input() style?: 'circle' | 'round' | 'square' = 'circle';
   @Input() src?: string;
   @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
   element!: HTMLElement;
 
   get _borderRadius() {

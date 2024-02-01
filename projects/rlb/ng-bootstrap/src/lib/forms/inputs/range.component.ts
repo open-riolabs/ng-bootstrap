@@ -4,6 +4,7 @@ import {
   Input,
   Optional,
   Self,
+  numberAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -38,14 +39,13 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 })
 export class RangeComponent
   extends AbstractComponent<string>
-  implements ControlValueAccessor
-{
+  implements ControlValueAccessor {
   @Input() disabled? = false;
   @Input() readonly? = false;
   @Input() label?: string = '';
-  @Input() min?: number | undefined = undefined;
-  @Input() max?: number | undefined = undefined;
-  @Input() step?: number | undefined = undefined;
+  @Input({ alias: 'min', transform: numberAttribute }) min?: number | undefined = undefined;
+  @Input({ alias: 'max', transform: numberAttribute }) max?: number | undefined = undefined;
+  @Input({ alias: 'step', transform: numberAttribute }) step?: number | undefined = undefined;
 
   constructor(
     idService: UniqueIdService,

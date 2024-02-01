@@ -1,0 +1,41 @@
+.rlb-file-dnd {
+  padding: 2rem;
+  text-align: center;
+  border: dashed 1px #979797;
+
+
+  input {
+    display: none;
+  }
+}
+
+.rlb-file-dnd-list {
+  margin-top: 1.5rem;
+
+  .single-file {
+    padding: 0.5rem;
+    border: dashed 1px #979797;
+    margin-bottom: 1rem;
+    display: flex;
+
+    .name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #353f4a;
+      margin: 0;
+    }
+
+    .size {
+      font-size: 12px;
+      font-weight: 500;
+      color: #a4a4a4;
+      margin: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    .info {
+      width: 100%
+    }
+  }
+}
+

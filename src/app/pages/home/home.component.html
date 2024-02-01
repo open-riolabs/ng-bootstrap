@@ -17,12 +17,7 @@
     </rlb-tab-content>
   </div>
   <div class="py-3">
-    <button
-      rlb-button
-      toggle="collapse"
-      toggle-target="collapse-id"
-      class="me-2"
-    >
+    <button rlb-button toggle="collapse" toggle-target="collapse-id" class="me-2">
       Collapse
     </button>
     <button rlb-button (click)="modal()" class="me-2">Open Modal</button>
@@ -63,20 +58,9 @@
   </div>
 
   <div class="py-3">
-    <button
-      rlb-button
-      class="position-relative"
-      [color]="'danger'"
-      [outline]="true"
-      size="lg"
-      badge="pippo"
-      [badge-start]="100"
-      [badge-top]="0"
-      [badge-color]="'info'"
-      [badge-pill]="true"
-      [tooltip]="'Ciao'"
-      [tooltip-placement]="'right'"
-    >
+    <button rlb-button class="position-relative" [color]="'danger'" [outline]="true" size="lg" badge="pippo"
+      [badge-start]="100" [badge-top]="0" [badge-color]="'info'" [badge-pill]="true" [tooltip]="'Ciao'"
+      [tooltip-placement]="'right'">
       Toggle
     </button>
   </div>
@@ -88,11 +72,7 @@
   <div class="py-3">
     <rlb-card style="width: 300px" [overlay]="false">
       <rlb-card-header>Header</rlb-card-header>
-      <img
-        rlb-card-image
-        src="https://via.placeholder.com/150"
-        alt="Card image cap"
-      />
+      <img rlb-card-image src="https://via.placeholder.com/150" alt="Card image cap" />
       <rlb-card-body>
         <h5 rlb-card-title>Card title</h5>
         <h6 rlb-card-subtitle>Card subtitle</h6>
@@ -108,43 +88,13 @@
   </div>
 
   <div class="py-3">
-    <rlb-progress
-      class="mb-2"
-      [value]="22"
-      [animated]="true"
-      [height]="5"
-    ></rlb-progress>
-    <rlb-progress
-      class="mb-2"
-      [value]="44"
-      [animated]="true"
-      [height]="10"
-      color="danger"
-    ></rlb-progress>
-    <rlb-progress
-      class="mb-2"
-      [value]="66"
-      [animated]="true"
-      [height]="15"
-      color="success"
-    ></rlb-progress>
-    <rlb-progress
-      class="mb-2"
-      [value]="66"
-      [animated]="true"
-      [height]="15"
-      color="success"
-      [striped]="true"
-    ></rlb-progress>
-    <rlb-progress
-      class="mb-2"
-      [value]="66"
-      [animated]="true"
-      [height]="15"
-      color="success"
-      [showValue]="true"
-      >pippo</rlb-progress
-    >
+    <rlb-progress class="mb-2" [value]="22" [animated]="true" [height]="5"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="44" [animated]="true" [height]="10" color="danger"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"
+      [striped]="true"></rlb-progress>
+    <rlb-progress class="mb-2" [value]="66" [animated]="true" [height]="15" color="success"
+      [showValue]="true">pippo</rlb-progress>
   </div>
 
   <div class="py-3">
@@ -157,6 +107,14 @@
       <rlb-list-item [active]="true">pluto</rlb-list-item>
       <rlb-list-item [active]="true">paperino</rlb-list-item>
     </rlb-list>
+  </div>
+
+  <div class="py-3">
+    <rlb-select placeholder="placeholder">
+      <rlb-option value="1">pippo</rlb-option>
+      <rlb-option value="2">pluto</rlb-option>
+      <rlb-option value="3">paperino</rlb-option>
+    </rlb-select>
   </div>
 
   <div class="py-3">

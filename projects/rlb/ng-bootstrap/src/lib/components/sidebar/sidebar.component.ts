@@ -14,6 +14,7 @@ import {
   ViewChild,
   ViewContainerRef,
   booleanAttribute,
+  numberAttribute,
 } from '@angular/core';
 import { SidebarHeaderComponent } from './sidebar-header.component';
 import { SidebarFooterComponent } from './sidebar-footer.component';
@@ -48,8 +49,8 @@ import { SidebarSearchComponent } from './sidebar-search.component';
 })
 export class SidebarComponent implements OnInit, OnChanges {
   @Input('id') id!: string;
-  @Input('max-width') maxWidth: number = 250;
-  @Input('width') width: number = 68;
+  @Input({ alias: 'max-width', transform: numberAttribute }) maxWidth: number = 250;
+  @Input({ alias: 'width', transform: numberAttribute }) width: number = 68;
   @Input({ transform: booleanAttribute, alias: 'open' }) open: boolean = false;
   @Output('openChange') openChange: EventEmitter<boolean> = new EventEmitter();
   @Input({ transform: booleanAttribute, alias: 'hide-close-btn' })
@@ -62,7 +63,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @ContentChildren(SidebarItemComponent)
   public items!: QueryList<SidebarItemComponent>;
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;

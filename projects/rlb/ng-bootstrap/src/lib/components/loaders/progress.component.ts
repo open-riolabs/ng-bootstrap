@@ -1,4 +1,4 @@
-import { Component, Input, booleanAttribute } from '@angular/core';
+import { Component, Input, booleanAttribute, numberAttribute } from '@angular/core';
 import { Color } from '../../shared/types';
 
 @Component({
@@ -30,8 +30,8 @@ import { Color } from '../../shared/types';
   },
 })
 export class ProgressComponent {
-  @Input() max: number = 100;
-  @Input() min: number = 0;
+  @Input({ alias: 'max', transform: numberAttribute }) max: number = 100;
+  @Input({ alias: 'min', transform: numberAttribute }) min: number = 0;
   @Input({ required: true }) value = 0;
   @Input() height!: number;
   @Input({ transform: booleanAttribute, alias: 'animated' })

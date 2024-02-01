@@ -11,10 +11,14 @@ export * from './select.component';
 export * from './switch.component';
 export * from './text-area.component';
 export * from './help-text.directive';
+export * from './dnd.directive';
+export * from './dnd-file.component';
 
 import { CheckboxComponent } from './checkbox.component';
 import { ColorComponent } from './color.component';
 import { DatalistComponent } from './datalist.component';
+import { FileDndComponent } from './dnd-file.component';
+import { DndDirective } from './dnd.directive';
 import { FileComponent } from './file.component';
 import { HelpText } from './help-text.directive';
 import {
@@ -44,4 +48,6 @@ export const INPUTS = [
   InputGroupComponent,
   InputTextGroupComponent,
   HelpText,
+  DndDirective,
+  FileDndComponent,
 ];

@@ -9,6 +9,7 @@ import {
   ViewChild,
   QueryList,
   DoCheck,
+  numberAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -47,7 +48,7 @@ export class SelectComponent
   @Input() label?: string = '';
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
-  @Input() display?: number = undefined;
+  @Input({ alias: 'display', transform: numberAttribute }) display?: number = undefined;
 
   constructor(
     idService: UniqueIdService,
@@ -69,11 +70,11 @@ export class SelectComponent
 
   ngDoCheck() {
     if (this._projectedDisplayOptions && this.options) {
-      for (let i = this._projectedDisplayOptions.length; i > 0; i--) {
+      for (let i = this._projectedDisplayOptions?.length; i > 0; i--) {
         this._projectedDisplayOptions.detach();
       }
       this.options.forEach((option) => {
-        this._projectedDisplayOptions.insert(option._view);
+        this._projectedDisplayOptions?.insert(option._view);
       });
     }
   }
