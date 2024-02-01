@@ -10,6 +10,7 @@ import {
   QueryList,
   DoCheck,
   numberAttribute,
+  booleanAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -29,10 +30,15 @@ import { OptionComponent } from './options.component';
       [attr.aria-label]="label"
       [id]="id"
       [attr.disabled]="disabled ? true : undefined"
+      [attr.readonly]="readonly ? true : undefined"
       [class.form-select-lg]="size === 'large'"
       [class.form-select-sm]="size === 'small'"
       [attr.placeholder]="placeholder"
       [attr.size]="display"
+      [value]="value"
+      (blur)="touch()"
+      [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+      (change)="update($event.target)"
     >
       <option *ngIf="placeholder" selected disabled>{{ placeholder }}</option>
       <ng-container #projectedDisplayOptions></ng-container>
@@ -48,6 +54,7 @@ export class SelectComponent
   @Input() label?: string = '';
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
   @Input({ alias: 'display', transform: numberAttribute }) display?: number = undefined;
 
   constructor(
@@ -59,7 +66,7 @@ export class SelectComponent
 
   update(ev: EventTarget | null) {
     if (!this.disabled) {
-      const t = ev as HTMLInputElement;
+      const t = ev as HTMLSelectElement;
       this.setValue(t?.value);
     }
   }

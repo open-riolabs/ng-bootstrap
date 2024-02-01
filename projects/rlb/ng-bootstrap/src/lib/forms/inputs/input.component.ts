@@ -27,7 +27,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       [attr.placeholder]="placeholder"
       [class.form-control-lg]="size === 'large'"
       [class.form-control-sm]="size === 'small'"
-      [value]="value"
+      [value]="value || ''"
       (blur)="touch()"
       [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
       (input)="update($event.target)"

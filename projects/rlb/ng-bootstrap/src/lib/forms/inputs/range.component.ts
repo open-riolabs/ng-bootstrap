@@ -28,7 +28,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       [attr.min]="min"
       [attr.max]="max"
       [attr.step]="step"
-      [value]="value"
+      [value]="value || ''"
       (blur)="touch()"
       [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
       (input)="update($event.target)"
