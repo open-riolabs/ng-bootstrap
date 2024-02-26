@@ -13,7 +13,7 @@ export class HomeComponent {
   constructor(
     private modals: ModalService,
     private toasts: ToastService,
-  ) {}
+  ) { }
 
   modal(): void {
     this.modals
@@ -40,5 +40,16 @@ export class HomeComponent {
       .subscribe((o) => {
         console.log('closed sub', o);
       });
+  }
+
+  public pippo: boolean = false;
+  public pippos: any[] = [
+    { name: 'pippo', value: 1 },
+    { name: 'pluto', value: 2 },
+    { name: 'paperino', value: 3 },
+  ];
+
+  get pipposFiltered(): any[] {
+    return this.pippos.filter((p) => this.pippo || p.value > 1);
   }
 }

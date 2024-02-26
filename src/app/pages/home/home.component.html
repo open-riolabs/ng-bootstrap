@@ -4,7 +4,15 @@
       <h1>Home</h1>
     </div>
   </div>
-  <div class="py-3">
+
+
+  <rlb-switch label="pippo" [(ngModel)]="pippo"></rlb-switch>
+  <rlb-list>
+    <rlb-list-item-image *ngFor="let p of pipposFiltered" [line-1]="p.name" [line-2]="p.value" />
+  </rlb-list>
+
+
+  <!-- <div class="py-3">
     <rlb-tabs>
       <rlb-tab target="pippo">Pippo</rlb-tab>
       <rlb-tab target="pluto">Pluto</rlb-tab>
@@ -139,5 +147,5 @@
       <h5 rlb-offcanvas-title>Offcanvas</h5>
     </rlb-offcanvas-header>
     <rlb-offcanvas-body> pippo </rlb-offcanvas-body>
-  </rlb-offcanvas>
+  </rlb-offcanvas> -->
 </div>
