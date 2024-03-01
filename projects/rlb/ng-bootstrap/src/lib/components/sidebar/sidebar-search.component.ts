@@ -69,7 +69,7 @@ export class SidebarSearchComponent implements OnInit {
   openSearch() {
     console.log('openSearch');
     this.modalService
-      .openModal<SearchModalInput, string>('search-modal-component', {
+      .openModal<SearchModalInput, string>('rlb-search', {
         title: this.searchTitle,
         content: {
           placeholder: this.searchPlaceholder,

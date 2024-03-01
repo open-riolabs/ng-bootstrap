@@ -3,7 +3,7 @@
  */
 
 import { EnvironmentProviders, Provider } from '@angular/core';
-import { SearchModalComponent } from './public-api';
+import { SearchModalComponent, CommonModalComponent } from './public-api';
 import { RlbBootstrapModule } from './public-api';
 import { ModalRegistryOptions } from './public-api';
 
@@ -20,6 +20,13 @@ export * from './lib/modals';
 export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
   return [
     RlbBootstrapModule,
-    { provide: ModalRegistryOptions, useValue: { modals: [SearchModalComponent] }, multi: true }
+    {
+      provide: ModalRegistryOptions, useValue: {
+        modals: {
+          'rlb-search': SearchModalComponent,
+          'rlb-common': CommonModalComponent
+        }
+      } as ModalRegistryOptions, multi: true
+    }
   ]
 }

@@ -8,7 +8,6 @@ import { INPUTS } from './forms/inputs';
 import { COMPONENTS, ModalRegistryOptions } from './components';
 import { FormFieldsComponent } from './forms/rlb-form-fields/rlb-form-fields.component';
 import { COMPONENT_BUILDER } from './shared/component-builder';
-import { SearchModalComponent } from './modals/search-modal.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +15,7 @@ import { SearchModalComponent } from './modals/search-modal.component';
     ...INPUTS,
     ...COMPONENTS,
     ...COMPONENT_BUILDER,
-    FormFieldsComponent,
-    SearchModalComponent,
+    FormFieldsComponent
   ],
   imports: [
     CommonModule,
@@ -30,8 +28,7 @@ import { SearchModalComponent } from './modals/search-modal.component';
     ...TABLE,
     ...INPUTS,
     ...COMPONENTS,
-    FormFieldsComponent,
-    SearchModalComponent,
+    FormFieldsComponent
   ],
   providers: [],
 })

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions } from 'projects/rlb/ng-bootstrap/src/public-api';
+import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions, SearchModalComponent } from 'projects/rlb/ng-bootstrap/src/public-api';
 import { FormsModule } from '@angular/forms';
 import { DemoComponent } from './demo/demo.component';
 import { ToastComponent } from './toast/toast.component';
@@ -12,7 +12,6 @@ import { GettingStartedComponent } from './pages/getting-started/getting-started
 import { AccordionsComponent } from './pages/components/accordions/accordions.component';
 import { AlertsComponent } from './pages/components/alerts/alerts.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-
 
 @NgModule({
   declarations: [
@@ -38,7 +37,9 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
       provide: ModalRegistryOptions,
       useValue: {
         modals: {
-          "demo-component": DemoComponent
+          "demo-component": DemoComponent,
+          'rlb-search': SearchModalComponent,
+          'rlb-common': CommonModalComponent
         }
       },
       multi: true,

@@ -21,11 +21,14 @@ export class HomeComponent {
         title: 'Demo',
         content: 'This is a demo component',
         ok: 'OK',
-        type: 'info',
+        type: 'success',
       })
       .subscribe((o) => {
         console.log('closed sub', o);
       });
+
+
+    this.modals.openSimpleModal('Demo', 'This is a demo simple modal')
   }
 
   toast(): void {

@@ -18,4 +18,9 @@ export class DemoComponent implements IModal<any, any> {
   data!: ModalData<any>;
   valid?: boolean = true;
   result?: any;
+
+  get headerColor() {
+    return this.data.type ? ` bg-${this.data.type}` : '';
+  }
+
 }

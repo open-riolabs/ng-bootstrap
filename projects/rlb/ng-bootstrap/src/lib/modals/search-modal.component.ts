@@ -1,9 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IModal, ModalData, ModalDirective } from '../components';
 import { SearchModalInput } from './search-modal.data';
+import { RlbBootstrapModule } from '../rlb-bootstrap.module';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'rlb-modal-search',
+  standalone: true,
+  imports: [ModalDirective, RlbBootstrapModule, FormsModule, CommonModule],
   template: ` <div class="modal-header">
       <h5 class="modal-title">{{ data.title }}</h5>
       <button

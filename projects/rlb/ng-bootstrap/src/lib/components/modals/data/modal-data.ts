@@ -5,4 +5,5 @@ export interface ModalData<T = any> {
   type?: ModalType;
   content: T | undefined;
   ok?: string;
+  cancel?: string;
 }
