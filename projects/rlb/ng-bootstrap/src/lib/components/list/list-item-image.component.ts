@@ -5,12 +5,14 @@ import {
   ViewChild,
   booleanAttribute,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'rlb-list-item-image',
   template: `
     <div class="d-flex">
       <rlb-avatar *ngIf="avatar" [src]="avatar" [size]="avatarSize" />
+      <i *ngIf="!avatar && icon" [class]="icon" style="font-size: {{avatarSize}}px;"></i>
       <div class="ps-2 flex-grow-1">
         <div class="fw-bold">{{ username }}</div>
         <span *ngIf="line1" class="d-block">{{ line1 }}</span>
@@ -27,7 +29,7 @@ import {
     '[class.list-group-item-action]': 'disabled !== true',
     '[class.active]': 'active',
     '[attr.aria-current]': 'active',
-  },
+  }
 })
 export class ListItemImageComponent {
   @Input({ transform: booleanAttribute, alias: 'active' }) active!: boolean;
@@ -38,6 +40,7 @@ export class ListItemImageComponent {
   @Input('line-2') line2?: string;
   @Input('avatar') avatar?: string;
   @Input('pill') pill?: number | string;
+  @Input('icon') icon?: string;
 
   constructor() { }
 }
