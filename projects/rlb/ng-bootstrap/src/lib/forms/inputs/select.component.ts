@@ -22,9 +22,7 @@ import { OptionComponent } from './options.component';
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
   },
-  template: ` <label *ngIf="label" [for]="id" class="form-label">{{
-      label
-    }}</label>
+  template: `<ng-content select="[before]"></ng-content>
     <select
       class="form-select"
       [attr.aria-label]="label"
@@ -44,6 +42,7 @@ import { OptionComponent } from './options.component';
       <option *ngIf="placeholder" selected disabled>{{ placeholder }}</option>
       <ng-container #projectedDisplayOptions></ng-container>
     </select>
+    <ng-content select="[after]"></ng-content>
     <div class="invalid-feedback">
       {{ errors | json }}
     </div>`,
@@ -51,7 +50,6 @@ import { OptionComponent } from './options.component';
 export class SelectComponent
   extends AbstractComponent<string>
   implements DoCheck, ControlValueAccessor {
-  @Input() label?: string = '';
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
