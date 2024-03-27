@@ -25,7 +25,6 @@ import { OptionComponent } from './options.component';
   template: `<ng-content select="[before]"></ng-content>
     <select
       class="form-select"
-      [attr.aria-label]="label"
       [id]="id"
       [attr.disabled]="disabled ? true : undefined"
       [attr.readonly]="readonly ? true : undefined"
