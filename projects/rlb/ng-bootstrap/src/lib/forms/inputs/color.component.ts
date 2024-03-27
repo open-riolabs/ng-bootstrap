@@ -4,6 +4,7 @@ import {
   Input,
   Optional,
   Self,
+  booleanAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -39,8 +40,8 @@ export class ColorComponent
   extends AbstractComponent<string>
   implements ControlValueAccessor
 {
-  @Input() disabled? = false;
-  @Input() readonly? = false;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
+  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
   @Input() label?: string = '';
   @Input() size?: 'small' | 'large' | undefined = undefined;
 

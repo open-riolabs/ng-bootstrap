@@ -31,6 +31,7 @@ import { OptionComponent } from './options.component';
       [id]="id"
       [attr.disabled]="disabled ? true : undefined"
       [attr.readonly]="readonly ? true : undefined"
+      [attr.multiple]="multiple ? true : undefined"
       [class.form-select-lg]="size === 'large'"
       [class.form-select-sm]="size === 'small'"
       [attr.placeholder]="placeholder"
@@ -50,11 +51,12 @@ import { OptionComponent } from './options.component';
 export class SelectComponent
   extends AbstractComponent<string>
   implements DoCheck, ControlValueAccessor {
-  @Input() disabled? = false;
   @Input() label?: string = '';
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
+  @Input({ alias: 'multiple', transform: booleanAttribute }) multiple?: boolean = false;
   @Input({ alias: 'display', transform: numberAttribute }) display?: number = undefined;
 
   constructor(

@@ -4,6 +4,7 @@ import {
   Input,
   Optional,
   Self,
+  booleanAttribute,
   numberAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -40,8 +41,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 export class RangeComponent
   extends AbstractComponent<string>
   implements ControlValueAccessor {
-  @Input() disabled? = false;
-  @Input() readonly? = false;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
+  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
   @Input() label?: string = '';
   @Input({ alias: 'min', transform: numberAttribute }) min?: number | undefined = undefined;
   @Input({ alias: 'max', transform: numberAttribute }) max?: number | undefined = undefined;

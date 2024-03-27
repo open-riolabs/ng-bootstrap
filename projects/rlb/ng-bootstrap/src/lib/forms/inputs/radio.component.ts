@@ -7,6 +7,7 @@ import {
   ViewChildren,
   ElementRef,
   DoCheck,
+  booleanAttribute,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { ControlValueAccessor } from '@angular/forms';
@@ -49,8 +50,8 @@ export class RadioComponent
   extends AbstractComponent<string>
   implements DoCheck, ControlValueAccessor
 {
-  @Input() disabled? = false;
-  @Input() readonly? = false;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
+  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
   @Input() label?: string = '';
 
   @ContentChildren(OptionComponent) options!: QueryList<OptionComponent>;
