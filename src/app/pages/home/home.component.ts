@@ -15,6 +15,8 @@ export class HomeComponent {
     private toasts: ToastService,
   ) { }
 
+  coso: any
+
   modal(): void {
     this.modals
       .openModal('demo-component', {
@@ -55,4 +57,9 @@ export class HomeComponent {
   get pipposFiltered(): any[] {
     return this.pippos.filter((p) => this.pippo || p.value > 1);
   }
+
+  setCoso() {
+    this.coso = ['1', '2']
+  }
 }
+

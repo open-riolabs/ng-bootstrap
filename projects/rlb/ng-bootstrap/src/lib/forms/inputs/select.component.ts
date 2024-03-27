@@ -11,6 +11,7 @@ import {
   DoCheck,
   numberAttribute,
   booleanAttribute,
+  ElementRef,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -26,6 +27,7 @@ import { OptionComponent } from './options.component';
   <div class="input-group has-validation">
     <ng-content select="[before]"></ng-content>
     <select
+      #select
       class="form-select"
       [id]="id"
       [attr.disabled]="disabled ? true : undefined"
@@ -35,7 +37,7 @@ import { OptionComponent } from './options.component';
       [class.form-select-sm]="size === 'small'"
       [attr.placeholder]="placeholder"
       [attr.size]="display"
-      [value]="value"
+      [value]="multiple ? undefined : value"
       (blur)="touch()"
       [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
       (change)="update($event.target)"
@@ -50,7 +52,7 @@ import { OptionComponent } from './options.component';
   </div>`,
 })
 export class SelectComponent
-  extends AbstractComponent<string>
+  extends AbstractComponent<string | string[]>
   implements DoCheck, ControlValueAccessor {
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
@@ -58,6 +60,7 @@ export class SelectComponent
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
   @Input({ alias: 'multiple', transform: booleanAttribute }) multiple?: boolean = false;
   @Input({ alias: 'display', transform: numberAttribute }) display?: number = undefined;
+  @ViewChild('select') el!: ElementRef<HTMLSelectElement>;
 
   constructor(
     idService: UniqueIdService,
@@ -69,7 +72,23 @@ export class SelectComponent
   update(ev: EventTarget | null) {
     if (!this.disabled) {
       const t = ev as HTMLSelectElement;
-      this.setValue(t?.value);
+      if (this.multiple) {
+        const selected = Array.from(t.selectedOptions)
+          .filter((o) => o.selected)
+          .map((o) => o.value);
+        this.setValue(selected);
+      } else {
+        this.setValue(t?.value);
+      }
+    }
+  }
+
+  override onWrite(data: string | string[]): void {
+    if (Array.isArray(data)) {
+      const opt =  Array.from(this.el.nativeElement.options);
+      opt.forEach((o) => {
+        o.selected = data.includes(o.value);
+      });
     }
   }
 

@@ -118,13 +118,18 @@
   </div>
 
   <div class="py-3">
-    <rlb-select placeholder="placeholder">
+    <rlb-select multiple placeholder="placeholder" [(ngModel)]="coso">
       <label before>Label</label>
       <rlb-option value="1">pippo</rlb-option>
       <rlb-option value="2">pluto</rlb-option>
       <rlb-option value="3">paperino</rlb-option>
     </rlb-select>
   </div>
+  <pre>
+  {{coso}}
+</pre>
+<button (click)="setCoso()">fegfe</button>
+
 
   <div class="py-3">
     <rlb-dropdown [direction]="'right'">

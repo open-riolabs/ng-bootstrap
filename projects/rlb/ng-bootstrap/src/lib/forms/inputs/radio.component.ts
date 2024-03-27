@@ -69,7 +69,6 @@ export class RadioComponent
   update(ev: EventTarget | null) {
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
-      console.log(t?.value);
       this.setValue(t?.value);
     }
   }

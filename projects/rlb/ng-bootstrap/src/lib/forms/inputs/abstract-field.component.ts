@@ -8,11 +8,10 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
 export abstract class AbstractComponent<T = any>
-  implements ControlValueAccessor
-{
+  implements ControlValueAccessor {
   public abstract disabled?: boolean;
-  protected onTouched: Function = () => {};
-  protected onChanged: Function = (s: string) => {};
+  protected onTouched: Function = () => { };
+  protected onChanged: Function = (s: string) => { };
   public value!: T;
   private _id: string;
 
@@ -41,6 +40,7 @@ export abstract class AbstractComponent<T = any>
 
   writeValue(val: T): void {
     this.value = val;
+    this.onWrite(val);
   }
 
   registerOnChange(fn: (v: string) => void): void {
@@ -68,4 +68,6 @@ export abstract class AbstractComponent<T = any>
   get errors(): ValidationErrors | null {
     return this.control?.errors || null;
   }
+
+  onWrite(data: T) { };
 }
