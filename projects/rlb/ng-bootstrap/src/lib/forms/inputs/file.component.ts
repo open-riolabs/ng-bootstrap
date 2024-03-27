@@ -14,9 +14,9 @@ import { UniqueIdService } from '../../shared/unique-id.service';
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
   },
-  template: ` <label *ngIf="label" [for]="id" class="form-label">{{
-      label
-    }}</label>
+  template: `
+  <div class="input-group has-validation">
+    <ng-content select="[before]"></ng-content>
     <input
       #input
       [id]="id"
@@ -33,9 +33,11 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       (change)="update($event.target)"
       [value]="value"
     />
+    <ng-content select="[after]"></ng-content>
     <div class="invalid-feedback">
       {{ errors | json }}
-    </div>`,
+    </div>
+  </div>`,
 })
 export class FileComponent
   extends AbstractComponent<string>

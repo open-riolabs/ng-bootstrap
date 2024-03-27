@@ -17,31 +17,30 @@ import { UniqueIdService } from '../../shared/unique-id.service';
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
   },
-  template: ` <div class="form-check">
-    <label *ngIf="label && !beforeText" [for]="id" class="form-label">{{
-      label
-    }}</label>
-    <input
-      #input
-      class="form-check-input"
-      type="checkbox"
-      [id]="id"
-      [attr.disabled]="disabled ? true : undefined"
-      [attr.readonly]="readonly ? true : undefined"
-      [value]="value"
-      (blur)="touch()"
-      [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-      (input)="update($event.target)"
-    />
-    <label *ngIf="label && beforeText" [for]="id" class="form-label">{{
-      label
-    }}</label>
+  template: `
+    <div class="input-group has-validation">
+      <ng-content select="[before]"></ng-content>
+      <input
+        #input
+        class="form-check-input"
+        type="checkbox"
+        [id]="id"
+        [attr.disabled]="disabled ? true : undefined"
+        [attr.readonly]="readonly ? true : undefined"
+        [value]="value"
+        (blur)="touch()"
+        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        (input)="update($event.target)"
+      />
+      <ng-content select="[after]"></ng-content>
+      <div class="invalid-feedback">
+        {{ errors | json }}
+      </div>
   </div>`,
 })
 export class CheckboxComponent
   extends AbstractComponent<boolean | undefined>
-  implements ControlValueAccessor
-{
+  implements ControlValueAccessor {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
   @Input() label?: string = '';

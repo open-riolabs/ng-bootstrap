@@ -22,7 +22,9 @@ import { OptionComponent } from './options.component';
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
   },
-  template: `<ng-content select="[before]"></ng-content>
+  template: `
+  <div class="input-group has-validation">
+    <ng-content select="[before]"></ng-content>
     <select
       class="form-select"
       [id]="id"
@@ -44,7 +46,8 @@ import { OptionComponent } from './options.component';
     <ng-content select="[after]"></ng-content>
     <div class="invalid-feedback">
       {{ errors | json }}
-    </div>`,
+    </div>
+  </div>`,
 })
 export class SelectComponent
   extends AbstractComponent<string>

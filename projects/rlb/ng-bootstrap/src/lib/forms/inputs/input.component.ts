@@ -15,28 +15,29 @@ import { UniqueIdService } from '../../shared/unique-id.service';
   host: {
     class: '',
   },
-  template: ` <div class="input-group has-validation">
-    <ng-content select="[before]"></ng-content>
-    <input
-      #input
-      [id]="id"
-      class="form-control"
-      [type]="type"
-      [attr.disabled]="disabled ? true : undefined"
-      [attr.readonly]="readonly ? true : undefined"
-      [attr.placeholder]="placeholder"
-      [class.form-control-lg]="size === 'large'"
-      [class.form-control-sm]="size === 'small'"
-      [value]="value || ''"
-      (blur)="touch()"
-      [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-      (input)="update($event.target)"
-    />
-    <ng-content select="[after]"></ng-content>
-    <div class="invalid-feedback">
-      {{ errors | json }}
-    </div>
-  </div>`,
+  template: `
+    <div class="input-group has-validation">
+      <ng-content select="[before]"></ng-content>
+      <input
+        #input
+        [id]="id"
+        class="form-control"
+        [type]="type"
+        [attr.disabled]="disabled ? true : undefined"
+        [attr.readonly]="readonly ? true : undefined"
+        [attr.placeholder]="placeholder"
+        [class.form-control-lg]="size === 'large'"
+        [class.form-control-sm]="size === 'small'"
+        [value]="value || ''"
+        (blur)="touch()"
+        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        (input)="update($event.target)"
+      />
+      <ng-content select="[after]"></ng-content>
+      <div class="invalid-feedback">
+        {{ errors | json }}
+      </div>
+    </div>`,
 })
 export class InputComponent
   extends AbstractComponent<string>

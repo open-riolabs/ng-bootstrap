@@ -18,32 +18,31 @@ import { OptionComponent } from './options.component';
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
   },
-  template: ` <label *ngIf="label" [for]="id" class="form-label">{{
-      label
-    }}</label>
-    <ng-container *ngFor="let option of options; index as i">
-      <div class="form-check">
-        <input
-          #input
-          [attr.disabled]="disabled ? true : undefined"
-          [attr.readonly]="readonly ? true : undefined"
-          class="form-check-input"
-          type="radio"
-          [name]="id + '-radio'"
-          [id]="id + '-radio-' + i"
-          [value]="option.value"
-          [checked]="value === option.value"
-          (blur)="touch()"
-          [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-          (change)="update($event.target)"
-        />
-        <label class="form-check-label" [for]="id + '-radio-' + i">
-          <ng-container #content />
-        </label>
+  template: `
+    <div class="input-group has-validation">
+      <ng-content select="[before]"></ng-content>
+      <ng-container *ngFor="let option of options; index as i">
+        <div class="form-check">
+          <input
+            #input
+            [attr.disabled]="disabled ? true : undefined"
+            [attr.readonly]="readonly ? true : undefined"
+            class="form-check-input"
+            type="radio"
+            [name]="id + '-radio'"
+            [id]="id + '-radio-' + i"
+            [value]="option.value"
+            [checked]="value === option.value"
+            (blur)="touch()"
+            [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+            (change)="update($event.target)"
+          />
+          <ng-content select="[after]"></ng-content>
+        </div>
+      </ng-container>
+      <div class="invalid-feedback">
+        {{ errors | json }}
       </div>
-    </ng-container>
-    <div class="invalid-feedback">
-      {{ errors | json }}
     </div>`,
 })
 export class RadioComponent
