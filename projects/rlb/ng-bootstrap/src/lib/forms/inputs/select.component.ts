@@ -83,11 +83,20 @@ export class SelectComponent
   }
 
   override onWrite(data: string | string[]): void {
-    if (Array.isArray(data)) {
-      const opt =  Array.from(this.el.nativeElement.options);
-      opt.forEach((o) => {
-        o.selected = data.includes(o.value);
-      });
+    if (this.el && this.el.nativeElement) {
+      if (this.multiple) {
+        if (!Array.isArray(data)) data = [data];
+        const opt = Array.from(this.el.nativeElement.options);
+        opt.forEach((o) => {
+          o.selected = data.includes(o.value);
+        });
+      }
+      else {
+        if (data === undefined || data === null) return;
+        const opt = Array.from(this.el.nativeElement.options);
+        const val = opt.find((o) => o.value === data);
+        if (val) val.selected = true;
+      }
     }
   }
 
