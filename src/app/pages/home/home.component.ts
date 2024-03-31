@@ -59,7 +59,7 @@ export class HomeComponent {
   }
 
   setCoso() {
-    this.coso = ['1', '2']
+    this.coso = '2'
   }
 }
 

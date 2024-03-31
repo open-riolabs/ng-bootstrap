@@ -92,9 +92,12 @@ export class SelectComponent
         });
       }
       else {
+        console.log(data);
         if (data === undefined || data === null) return;
+        if (Array.isArray(data) && data.length) data = data[0];
         const opt = Array.from(this.el.nativeElement.options);
         const val = opt.find((o) => o.value === data);
+        this.el.nativeElement.value = data as string;
         if (val) val.selected = true;
       }
     }
