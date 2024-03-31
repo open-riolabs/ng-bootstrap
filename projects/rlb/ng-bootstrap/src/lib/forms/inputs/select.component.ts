@@ -12,6 +12,8 @@ import {
   numberAttribute,
   booleanAttribute,
   ElementRef,
+  AfterViewInit,
+  AfterContentChecked,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -52,7 +54,7 @@ import { OptionComponent } from './options.component';
 })
 export class SelectComponent
   extends AbstractComponent<string | string[]>
-  implements DoCheck, ControlValueAccessor {
+  implements DoCheck, ControlValueAccessor, AfterContentChecked {
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
@@ -82,6 +84,10 @@ export class SelectComponent
     }
   }
 
+  ngAfterContentChecked(): void {
+    this.onWrite(this.value);
+  }
+
   override onWrite(data: string | string[]): void {
     if (this.el && this.el.nativeElement) {
       if (this.multiple) {
@@ -92,12 +98,10 @@ export class SelectComponent
         });
       }
       else {
-        console.log(data);
         if (data === undefined || data === null) return;
         if (Array.isArray(data) && data.length) data = data[0];
         const opt = Array.from(this.el.nativeElement.options);
         const val = opt.find((o) => o.value === data);
-        this.el.nativeElement.value = data as string;
         if (val) val.selected = true;
       }
     }

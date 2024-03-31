@@ -15,7 +15,7 @@ export class HomeComponent {
     private toasts: ToastService,
   ) { }
 
-  coso: any
+  coso: any = '3'
 
   modal(): void {
     this.modals
