@@ -62,10 +62,16 @@ export class CheckboxComponent
 
   override onWrite(data: boolean | undefined): void {
     if (this.el && this.el.nativeElement) {
-      if (this.indeterminate && typeof data === 'undefined' || data === null) {
+      if (this.indeterminate && (typeof data === 'undefined' || data === null)) {
         this.el.nativeElement.indeterminate = true;
       } else {
-        this.el.nativeElement.checked = data || false;
+        if (data === undefined || data === null) return;
+        if (typeof data === 'string') {
+          this.el.nativeElement.checked = /^true$/i.test(data);
+        }
+        else {
+          this.el.nativeElement.checked = data;
+        }
       }
     }
   }

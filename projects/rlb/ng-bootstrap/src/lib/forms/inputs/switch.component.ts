@@ -61,8 +61,14 @@ export class SwitchComponent
   }
 
   override onWrite(data: boolean): void {
-    if(this.el && this.el.nativeElement){
-      this.el.nativeElement.checked = data;
+    if (this.el && this.el.nativeElement) {
+      if(data === undefined || data === null) return;
+      if(typeof data === 'string'){
+        this.el.nativeElement.checked = /^true$/i.test(data);
+      }
+      else {
+        this.el.nativeElement.checked = data;
+      }
     }
   }
 }

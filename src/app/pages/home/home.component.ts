@@ -47,7 +47,7 @@ export class HomeComponent {
       });
   }
 
-  public pippo: boolean = true;
+  public pippo: boolean = false;
   public pippos: any[] = [
     { name: 'pippo', value: 1 },
     { name: 'pluto', value: 2 },
