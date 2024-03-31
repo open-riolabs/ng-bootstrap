@@ -8,6 +8,7 @@ import {
   ElementRef,
   DoCheck,
   booleanAttribute,
+  ViewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { ControlValueAccessor } from '@angular/forms';
@@ -24,7 +25,7 @@ import { OptionComponent } from './options.component';
       <ng-container *ngFor="let option of options; index as i">
         <div class="form-check">
           <input
-            #input
+            #field
             [attr.disabled]="disabled ? true : undefined"
             [attr.readonly]="readonly ? true : undefined"
             class="form-check-input"
@@ -47,15 +48,12 @@ import { OptionComponent } from './options.component';
 })
 export class RadioComponent
   extends AbstractComponent<string>
-  implements DoCheck, ControlValueAccessor
-{
+  implements DoCheck, ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
-  @Input() label?: string = '';
-
   @ContentChildren(OptionComponent) options!: QueryList<OptionComponent>;
-  @ViewChildren('content', { read: ViewContainerRef })
-  contents!: QueryList<ViewContainerRef>;
+  @ViewChildren('content', { read: ViewContainerRef }) contents!: QueryList<ViewContainerRef>;
+  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   ngDoCheck() {
     for (const content of this.contents) {
@@ -70,6 +68,12 @@ export class RadioComponent
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.value);
+    }
+  }
+
+  override onWrite(data: string): void {
+    if (this.el && this.el.nativeElement) {
+      this.el.nativeElement.value = data;
     }
   }
 }

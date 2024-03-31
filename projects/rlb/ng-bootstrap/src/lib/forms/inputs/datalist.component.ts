@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   Input,
   Optional,
   Self,
+  ViewChild,
   booleanAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -19,7 +21,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
     <div class="input-group has-validation">
       <ng-content select="[before]"></ng-content>
       <input
-        #input
+        #field
         [id]="id"
         class="form-control"
         [attr.disabled]="disabled ? true : undefined"
@@ -44,13 +46,12 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 })
 export class DatalistComponent
   extends AbstractComponent<string>
-  implements ControlValueAccessor
-{
+  implements ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
-  @Input() label?: string = '';
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
+  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(
     idService: UniqueIdService,
@@ -63,6 +64,12 @@ export class DatalistComponent
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.value);
+    }
+  }
+
+  override onWrite(data: string): void {
+    if (this.el && this.el.nativeElement) {
+      this.el.nativeElement.value = data;
     }
   }
 }

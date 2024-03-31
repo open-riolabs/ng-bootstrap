@@ -37,7 +37,6 @@ import { OptionComponent } from './options.component';
       [class.form-select-sm]="size === 'small'"
       [attr.placeholder]="placeholder"
       [attr.size]="display"
-      [value]="multiple ? undefined : value"
       (blur)="touch()"
       [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
       (change)="update($event.target)"

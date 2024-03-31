@@ -1,8 +1,10 @@
 import {
   Component,
+  ElementRef,
   Input,
   Optional,
   Self,
+  ViewChild,
   booleanAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -14,11 +16,12 @@ import { UniqueIdService } from '../../shared/unique-id.service';
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
   },
-  template: ` <label *ngIf="label" [for]="id" class="form-label">{{
-      label
-    }}</label>
+  template: `
+
     <div class="input-group has-validation">
+      <ng-content select="[before]"></ng-content>
       <textarea
+        #field
         [id]="id"
         class="form-control"
         [attr.disabled]="disabled ? true : undefined"
@@ -26,11 +29,11 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [attr.placeholder]="placeholder"
         [class.form-select-lg]="size === 'large'"
         [class.form-select-sm]="size === 'small'"
-        [value]="value || ''"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       ></textarea>
+      <ng-content select="[after]"></ng-content>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
@@ -38,15 +41,12 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 })
 export class TextAreaComponent
   extends AbstractComponent<string>
-  implements ControlValueAccessor
-{
+  implements ControlValueAccessor {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input() label?: string = '';
-  @Input({ transform: booleanAttribute, alias: 'before-text' })
-  beforeText: boolean = false;
   @Input() placeholder?: string;
   @Input() size?: 'small' | 'large' | undefined = undefined;
+  @ViewChild('field', { read: ElementRef }) el!: ElementRef<HTMLTextAreaElement>;
 
   constructor(
     idService: UniqueIdService,
@@ -59,6 +59,12 @@ export class TextAreaComponent
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.value);
+    }
+  }
+
+  override onWrite(data: string): void {
+    if (this.el && this.el.nativeElement) {
+      this.el.nativeElement.value = data;
     }
   }
 }

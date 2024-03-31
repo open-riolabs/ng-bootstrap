@@ -1,8 +1,10 @@
 import {
   Component,
+  ElementRef,
   Input,
   Optional,
   Self,
+  ViewChild,
   booleanAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -18,6 +20,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
     <div class="form-check form-switch">
       <ng-content select="[before]"></ng-content>
       <input
+        #field
         class="form-check-input"
         type="checkbox"
         [id]="id"
@@ -25,7 +28,6 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [attr.readonly]="readonly ? true : undefined"
         [class.form-select-lg]="size === 'large'"
         [class.form-select-sm]="size === 'small'"
-        [value]="value"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
@@ -41,9 +43,7 @@ export class SwitchComponent
   implements ControlValueAccessor {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input() label?: string = '';
-  @Input({ transform: booleanAttribute, alias: 'before-text' })
-  beforeText?: boolean = false;
+  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @Input() size?: 'small' | 'large' | undefined = undefined;
 
   constructor(
@@ -57,6 +57,12 @@ export class SwitchComponent
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.checked);
+    }
+  }
+
+  override onWrite(data: boolean): void {
+    if(this.el && this.el.nativeElement){
+      this.el.nativeElement.checked = data;
     }
   }
 }

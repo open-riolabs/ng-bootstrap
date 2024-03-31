@@ -21,7 +21,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
     <div class="input-group has-validation">
       <ng-content select="[before]"></ng-content>
       <input
-        #input
+        #field
         class="form-check-input"
         type="checkbox"
         [id]="id"
@@ -43,13 +43,8 @@ export class CheckboxComponent
   implements ControlValueAccessor {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input() label?: string = '';
-  @Input({ transform: booleanAttribute, alias: 'before-text' })
-  beforeText?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'indeterminate' })
-  indeterminate?: boolean = false;
-  @ViewChild('input', { read: ElementRef })
-  input!: ElementRef<HTMLInputElement>;
+  @Input({ transform: booleanAttribute, alias: 'indeterminate' }) indeterminate?: boolean = false;
+  @ViewChild('field', { read: ElementRef }) el!: ElementRef<HTMLInputElement>;
 
   constructor(
     idService: UniqueIdService,
@@ -65,12 +60,22 @@ export class CheckboxComponent
     }
   }
 
-  override writeValue(val: boolean | undefined): void {
-    if (this.indeterminate && this.input) {
-      if (typeof val === 'undefined' || val === null) {
-        this.input.nativeElement.indeterminate = true;
+  override onWrite(data: boolean | undefined): void {
+    if (this.el && this.el.nativeElement) {
+      if (this.indeterminate && typeof data === 'undefined' || data === null) {
+        this.el.nativeElement.indeterminate = true;
       } else {
-        this.input.nativeElement.indeterminate = false;
+        this.el.nativeElement.checked = data || false;
+      }
+    }
+  }
+
+  override writeValue(val: boolean | undefined): void {
+    if (this.indeterminate && this.el) {
+      if (typeof val === 'undefined' || val === null) {
+        this.el.nativeElement.indeterminate = true;
+      } else {
+        this.el.nativeElement.indeterminate = false;
       }
     }
     if (!this.indeterminate) {

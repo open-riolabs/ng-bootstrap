@@ -1,8 +1,10 @@
 import {
   Component,
+  ElementRef,
   Input,
   Optional,
   Self,
+  ViewChild,
   booleanAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -18,7 +20,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
   <div class="input-group has-validation">
     <ng-content select="[before]"></ng-content>
     <input
-      #input
+      #field
       [id]="id"
       type="file"
       class="form-control"
@@ -45,12 +47,12 @@ export class FileComponent
 {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input() label?: string = '';
   @Input() size?: 'small' | 'large' | undefined = undefined;
   @Input({ transform: booleanAttribute, alias: 'multiple' }) multiple?:
     | boolean
     | undefined;
   @Input() accept?: string | undefined;
+  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(
     idService: UniqueIdService,
@@ -63,6 +65,12 @@ export class FileComponent
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.value);
+    }
+  }
+
+  override onWrite(data: string): void {
+    if (this.el && this.el.nativeElement) {
+      this.el.nativeElement.value = data;
     }
   }
 }

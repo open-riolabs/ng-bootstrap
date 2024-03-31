@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   Input,
   Optional,
   Self,
+  ViewChild,
   booleanAttribute,
   numberAttribute,
 } from '@angular/core';
@@ -20,7 +22,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
     <div class="input-group has-validation">
       <ng-content select="[before]"></ng-content>
       <input
-        #input
+        #field
         [id]="id"
         class="form-range"
         type="range"
@@ -29,7 +31,6 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [attr.min]="min"
         [attr.max]="max"
         [attr.step]="step"
-        [value]="value || ''"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
@@ -45,10 +46,10 @@ export class RangeComponent
   implements ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
-  @Input() label?: string = '';
   @Input({ alias: 'min', transform: numberAttribute }) min?: number | undefined = undefined;
   @Input({ alias: 'max', transform: numberAttribute }) max?: number | undefined = undefined;
   @Input({ alias: 'step', transform: numberAttribute }) step?: number | undefined = undefined;
+  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(
     idService: UniqueIdService,
@@ -61,6 +62,12 @@ export class RangeComponent
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.value);
+    }
+  }
+
+  override onWrite(data: string): void {
+    if (this.el && this.el.nativeElement) {
+      this.el.nativeElement.value = data;
     }
   }
 }
