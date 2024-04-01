@@ -6,6 +6,7 @@ import {
   booleanAttribute,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Color } from '../../shared/types';
 
 @Component({
   selector: 'rlb-list-item-image',
@@ -18,8 +19,9 @@ import { RouterLink } from '@angular/router';
         <span *ngIf="line1" class="d-block">{{ line1 }}</span>
         <span *ngIf="line2" class="d-block">{{ line2 }}</span>
       </div>
-      <div *ngIf="pill">
-        <span rlb-badge [pill]="true">{{ pill }}</span>
+      <div *ngIf="counter || counterEmpty">
+        <span *ngIf="counterEmpty" rlb-badge [pill]="counterPill" [color]="counterColor">&nbsp;</span>
+        <span *ngIf="!counterEmpty"rlb-badge [pill]="counterPill" [color]="counterColor">{{ counter }}</span>
       </div>
     </div>
   `,
@@ -34,13 +36,14 @@ import { RouterLink } from '@angular/router';
 export class ListItemImageComponent {
   @Input({ transform: booleanAttribute, alias: 'active' }) active!: boolean;
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled!: boolean;
+  @Input({ transform: booleanAttribute, alias: 'counter-empty' }) counterEmpty?: string;
+  @Input({ transform: booleanAttribute, alias: 'counter-pill' }) counterPill?: boolean;
   @Input('avatar-size') avatarSize?: number = 50;
   @Input('username') username?: string;
   @Input('line-1') line1?: string;
   @Input('line-2') line2?: string;
   @Input('avatar') avatar?: string;
-  @Input('pill') pill?: number | string;
+  @Input('counter') counter?: number | string;
+  @Input('counter-color') counterColor?: Color | undefined;
   @Input('icon') icon?: string;
-
-  constructor() { }
 }
