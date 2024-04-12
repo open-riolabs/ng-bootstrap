@@ -20,6 +20,7 @@ export class CollapseComponent
   @Input({ alias: `id`, required: true }) id!: string;
   @Input() orientation?: 'horizontal' | 'vertical' = 'vertical';
   @Output() override statusChange = new EventEmitter<VisibilityEvent>();
+  @Input() override status?: VisibilityEvent;
   constructor(elementRef: ElementRef<HTMLElement>) {
     super(elementRef);
   }

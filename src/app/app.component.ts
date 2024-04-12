@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  ModalService,
-  ToastService,
-} from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
   selector: 'app-root',

@@ -61,5 +61,9 @@ export class HomeComponent {
   setCoso() {
     this.coso = '2'
   }
+
+  log(e: any) {
+    console.log('log', e)
+  }
 }
 

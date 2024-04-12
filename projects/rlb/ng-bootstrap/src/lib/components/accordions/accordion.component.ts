@@ -11,7 +11,7 @@ import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({
   selector: 'rlb-accordion',
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content select="rlb-accordion-item"></ng-content>`,
   host: {
     class: 'accordion',
     '[class.accordion-flush]': 'flush',
@@ -19,14 +19,12 @@ import { AccordionItemComponent } from './accordion-item.component';
   },
 })
 export class AccordionComponent implements DoCheck {
-  @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean =
-    false;
-  @Input({ transform: booleanAttribute, alias: 'always-open' })
-  alwaysOpen?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'always-open' }) alwaysOpen?: boolean = false;
   @Input() id!: string;
   @ContentChildren(AccordionItemComponent)
   public items!: QueryList<AccordionItemComponent>;
-  constructor(private idService: UniqueIdService) {}
+  constructor(private idService: UniqueIdService) { }
 
   ngDoCheck(): void {
     if (!this.id) {

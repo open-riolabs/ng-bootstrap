@@ -67,7 +67,6 @@ export class SidebarSearchComponent implements OnInit {
   }
 
   openSearch() {
-    console.log('openSearch');
     this.modalService
       .openModal<SearchModalInput, string>('rlb-search', {
         title: this.searchTitle,

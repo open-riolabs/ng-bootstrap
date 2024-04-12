@@ -50,18 +50,18 @@
 
   <div class="py-3">
     <rlb-accordion>
-      <div rlb-accordion-item [expanded]="true">
-        <h2 rlb-accordion-header>Titolo 1</h2>
+      <rlb-accordion-item [status]="'shown'" (statusChange)="log($event)">
+        <rlb-accordion-header>Titolo 1</rlb-accordion-header>
         <div rlb-accordion-body>body 1</div>
-      </div>
-      <div rlb-accordion-item>
-        <h2 rlb-accordion-header>Titolo 2</h2>
+      </rlb-accordion-item>
+      <rlb-accordion-item>
+        <rlb-accordion-header>Titolo 2</rlb-accordion-header>
         <div rlb-accordion-body>body 2</div>
-      </div>
-      <div rlb-accordion-item>
-        <h2 rlb-accordion-header>Titolo 3</h2>
+      </rlb-accordion-item>
+      <rlb-accordion-item>
+        <rlb-accordion-header>Titolo 3</rlb-accordion-header>
         <div rlb-accordion-body>body 3</div>
-      </div>
+      </rlb-accordion-item>
     </rlb-accordion>
   </div>
 

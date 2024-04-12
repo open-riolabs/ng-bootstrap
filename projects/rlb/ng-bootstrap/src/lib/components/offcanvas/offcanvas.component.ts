@@ -46,6 +46,7 @@ export class OffcanvasComponent
   @Input('placement') placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
   @Input('responsive') responsive!: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   @Output() override statusChange = new EventEmitter<VisibilityEvent>();
+  @Input() override status?: VisibilityEvent;
 
   constructor(elementRef: ElementRef<HTMLElement>) {
     super(elementRef);
