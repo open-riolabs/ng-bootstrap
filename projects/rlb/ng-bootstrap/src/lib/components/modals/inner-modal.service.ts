@@ -67,7 +67,7 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
     name: string,
     data: ModalData<Input>,
     options?: ModalOptions,
-  ): Observable<ModalResult<Output> | null> {
+  ): Observable<ModalResult<Output>> {
     const modalId = `rlb-modal${this.uniqueIdService.id}`;
     const modal = this.getBuilder().buildComponent<
       ModalData<Input>,

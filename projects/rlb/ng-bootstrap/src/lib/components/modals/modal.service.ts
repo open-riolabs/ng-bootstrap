@@ -17,7 +17,7 @@ export class ModalService {
     name: string,
     data: ModalData<Input>,
     options?: ModalOptions,
-  ): Observable<ModalResult<Output> | null> {
+  ): Observable<ModalResult<Output>> {
     return this.modalService.openModal<Input, Output>(name, data, options);
   }
 
