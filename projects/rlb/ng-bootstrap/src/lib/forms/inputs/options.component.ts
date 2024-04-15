@@ -1,4 +1,4 @@
-import { Component, Input, ViewContainerRef, Injector, TemplateRef, ViewChild, OnInit, EmbeddedViewRef } from '@angular/core';
+import { Component, Input, ViewContainerRef, Injector, TemplateRef, ViewChild, OnInit, EmbeddedViewRef, booleanAttribute } from '@angular/core';
 import { WrappedComponent } from '../../shared/wrapped.component';
 import { HostWrapper } from '../../shared/host-wrapper';
 
@@ -16,8 +16,8 @@ import { HostWrapper } from '../../shared/host-wrapper';
   <ng-content></ng-content>`,
 })
 export class OptionComponent implements OnInit {
-  @Input() disabled = false;
-  @Input() value!: string;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled = false;
+  @Input() value!: string | number | null | undefined;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   constructor(private viewContainerRef: ViewContainerRef) { }
