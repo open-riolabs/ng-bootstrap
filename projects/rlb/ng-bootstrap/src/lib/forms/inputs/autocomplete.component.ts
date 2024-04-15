@@ -1,6 +1,4 @@
-import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -14,8 +12,9 @@ import {
   numberAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { AbstractComponent, RlbBootstrapModule, UniqueIdService } from '@rlb/ng-bootstrap';
 import { Observable, lastValueFrom } from 'rxjs';
+import { AbstractComponent } from './abstract-field.component';
+import { UniqueIdService } from '../../shared/unique-id.service';
 
 export type AutocompleteItem = string | { text: string, value: string }
 export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>
