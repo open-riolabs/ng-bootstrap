@@ -38,6 +38,7 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
+        (keyup.enter)="onEnter($event.target)"
       />
       <rlb-progress class="w-100" [height]="2" [infinite]="loading || acLoading" color="primary" />
       <ng-content select="[after]"></ng-content>
@@ -158,6 +159,14 @@ export class AutocompleteComponent
       this.renderer.setAttribute(el, 'disabled', 'true')
       this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
       this.renderer.appendChild(this.dropdown.nativeElement, el);
+    }
+  }
+
+  onEnter(ev: EventTarget | null) {
+    const t = ev as HTMLInputElement;
+    if (!this.disabled && t && t.value) {
+      this.setValue(t?.value);
+      this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
   }
 
