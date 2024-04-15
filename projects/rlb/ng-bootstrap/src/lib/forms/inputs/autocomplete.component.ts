@@ -98,7 +98,7 @@ export class AutocompleteComponent
       if (typeof data === 'string') {
         this.el.nativeElement.value = data;
       } else {
-        this.el.nativeElement.value = data.text;
+        this.el.nativeElement.value = data?.text;
       }
     }
   }
