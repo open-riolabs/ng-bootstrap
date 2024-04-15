@@ -4,13 +4,13 @@ import { Color } from '../../shared/types';
 @Component({
   selector: 'rlb-progress',
   template: ` <div
-    class="progress-bar{{
-      color ? (textColor ? ' bg-' + color : ' text-bg-' + color) : ''
-    }}{{ textColor ? ' text-' + textColor : '' }}"
+    class="progress-bar {{ color && !infinite? 'bg-' + color : '' }} {{ textColor? 'text-' + textColor : '' }}"
     [class.progress-bar-animated]="animated"
     [class.progress-bar-striped]="striped"
-    [style.width.%]="getPercentValue()"
+    [class.infinite-progress]="infinite"
+    [style.width.%]="infinite? max :getPercentValue()"
   >
+    <div *ngIf="infinite" class="inner bg-primary"></div>
     <span *ngIf="showValue; else e">
       {{ getPercentValue() }}
     </span>
@@ -32,12 +32,11 @@ import { Color } from '../../shared/types';
 export class ProgressComponent {
   @Input({ alias: 'max', transform: numberAttribute }) max: number = 100;
   @Input({ alias: 'min', transform: numberAttribute }) min: number = 0;
-  @Input({ required: true }) value = 0;
-  @Input() height!: number;
-  @Input({ transform: booleanAttribute, alias: 'animated' })
-  animated?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'striped' }) striped?: boolean =
-    false;
+  @Input({ alias: 'value', transform: numberAttribute }) value = 0;
+  @Input({ alias: 'height', transform: numberAttribute }) height!: number;
+  @Input({ transform: booleanAttribute, alias: 'animated' }) animated?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'striped' }) striped?: boolean = false;
+  @Input({ transform: booleanAttribute }) infinite?: boolean = false;
   @Input() ariaLabel!: string;
   @Input({ transform: booleanAttribute, alias: 'showValue' })
   showValue?: boolean = false;
