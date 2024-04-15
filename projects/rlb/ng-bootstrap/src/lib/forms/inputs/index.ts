@@ -1,5 +1,6 @@
 export * from './abstract-field.component';
 
+export * from './autocomplete.component';
 export * from './checkbox.component';
 export * from './color.component';
 export * from './datalist.component';
@@ -16,6 +17,7 @@ export * from './help-text.directive';
 export * from './dnd.directive';
 export * from './dnd-file.component';
 
+import { AutocompleteComponent } from './autocomplete.component';
 import { CheckboxComponent } from './checkbox.component';
 import { ColorComponent } from './color.component';
 import { DatalistComponent } from './datalist.component';
@@ -36,6 +38,7 @@ import { SwitchComponent } from './switch.component';
 import { TextAreaComponent } from './text-area.component';
 
 export const INPUTS = [
+  AutocompleteComponent,
   CheckboxComponent,
   InputComponent,
   SwitchComponent,
