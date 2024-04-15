@@ -1,3 +1,5 @@
+export * from './abstract-field.component';
+
 export * from './checkbox.component';
 export * from './color.component';
 export * from './datalist.component';
