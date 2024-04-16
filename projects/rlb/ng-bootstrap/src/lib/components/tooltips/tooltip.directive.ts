@@ -5,6 +5,7 @@ import {
   Input,
   DoCheck,
   AfterViewInit,
+  booleanAttribute,
 } from '@angular/core';
 import { Tooltip } from 'bootstrap';
 
@@ -17,6 +18,7 @@ export class TooltipDirective implements DoCheck, AfterViewInit {
   @Input({ alias: 'tooltip', required: true }) tooltip!: string | undefined;
   @Input({ alias: 'tooltip-placement' }) placement!: 'top' | 'bottom' | 'left' | 'right';
   @Input({ alias: 'tooltip-class' }) customClass!: string;
+  @Input({ alias: 'tooltip-html', transform: booleanAttribute }) html?: boolean;
 
   constructor(
     private elementRef: ElementRef,
@@ -48,6 +50,13 @@ export class TooltipDirective implements DoCheck, AfterViewInit {
         this.elementRef.nativeElement,
         'data-bs-title',
         this.tooltip,
+      );
+    }
+    if (this.html) {
+      this.renderer.setAttribute(
+        this.elementRef.nativeElement,
+        'data-bs-html',
+        'true',
       );
     }
   }
