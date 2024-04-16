@@ -22,9 +22,6 @@ import { OptionComponent } from './options.component';
 
 @Component({
   selector: 'rlb-select',
-  host: {
-    class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
-  },
   template: `
   <div class="input-group has-validation">
     <ng-content select="[before]"></ng-content>

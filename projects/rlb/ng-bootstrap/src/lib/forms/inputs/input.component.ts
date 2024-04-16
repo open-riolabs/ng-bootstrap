@@ -14,9 +14,6 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Component({
   selector: 'rlb-input',
-  host: {
-    class: '',
-  },
   template: `
     <div class="input-group has-validation">
       <ng-content select="[before]"></ng-content>

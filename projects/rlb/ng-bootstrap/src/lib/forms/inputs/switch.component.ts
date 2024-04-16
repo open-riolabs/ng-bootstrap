@@ -13,9 +13,6 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Component({
   selector: 'rlb-switch',
-  host: {
-    class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
-  },
   template: `
     <div class="form-check form-switch">
       <ng-content select="[before]"></ng-content>
