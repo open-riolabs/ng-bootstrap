@@ -25,14 +25,14 @@ import {
   </ng-template>`,
 })
 export class NavItemComponent implements OnInit {
-  @Input() href?: string | any[] | null | undefined = '#';
-  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean =
-    false;
-  @Input({ alias: 'disabled', transform: booleanAttribute })
-  disabled?: boolean = false;
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
+
+  @Input({ alias: 'href' }) href?: string | any[] | null | undefined = '#';
+  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'class' }) cssClass?: string = '';
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 

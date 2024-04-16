@@ -55,12 +55,13 @@ import { OptionComponent } from './options.component';
 export class SelectComponent
   extends AbstractComponent<string | string[]>
   implements DoCheck, ControlValueAccessor, AfterContentChecked {
-  @Input() placeholder?: string;
-  @Input() size?: 'small' | 'large' | undefined = undefined;
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
-  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
-  @Input({ alias: 'multiple', transform: booleanAttribute }) multiple?: boolean = false;
-  @Input({ alias: 'display', transform: numberAttribute }) display?: number = undefined;
+  @Input({ alias: 'placeholder' }) placeholder?: string;
+  @Input({ alias: 'size' }) size?: 'small' | 'large';
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean;
+  @Input({ alias: 'multiple', transform: booleanAttribute }) multiple?: boolean;
+  @Input({ alias: 'display', transform: numberAttribute }) display?: number;
+
   @ViewChild('select') el!: ElementRef<HTMLSelectElement>;
 
   constructor(

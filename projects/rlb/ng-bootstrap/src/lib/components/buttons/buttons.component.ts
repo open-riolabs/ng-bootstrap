@@ -10,14 +10,11 @@ import { Color, Size } from '../../shared/types';
   },
 })
 export class ButtonComponent {
-  @Input() color: Color = 'primary';
-  @Input() size: Size = 'md';
-  @Input({ transform: booleanAttribute, alias: 'disabled' })
-  disabled?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'outline' }) outline?: boolean =
-    false;
-  @Input({ transform: booleanAttribute, alias: 'isLink' }) isLink?: boolean =
-    false;
+  @Input({ alias: 'color' }) color?: Color = 'primary';
+  @Input({ alias: 'size' }) size?: Size = 'md';
+  @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled?: boolean;
+  @Input({ alias: 'outline', transform: booleanAttribute, }) outline?: boolean;
+  @Input({ alias: 'isLink', transform: booleanAttribute, }) isLink?: boolean;
 
   get mainClass() {
     let style = '';

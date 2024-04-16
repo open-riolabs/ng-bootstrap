@@ -15,13 +15,13 @@ export class TooltipDirective implements DoCheck, AfterViewInit {
   static bsInit = false;
 
   @Input({ alias: 'tooltip', required: true }) tooltip!: string | undefined;
-  @Input('tooltip-placement') placement!: 'top' | 'bottom' | 'left' | 'right';
-  @Input('tooltip-class') customClass!: string;
+  @Input({ alias: 'tooltip-placement' }) placement!: 'top' | 'bottom' | 'left' | 'right';
+  @Input({ alias: 'tooltip-class' }) customClass!: string;
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-  ) {}
+  ) { }
 
   ngDoCheck() {
     this.renderer.setAttribute(

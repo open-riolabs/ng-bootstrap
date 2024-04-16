@@ -29,17 +29,16 @@ import {
   },
 })
 export class NavComponent {
-  @Input() horizontalAlignment?: 'center' | 'end';
-  @Input({ transform: booleanAttribute, alias: 'vertical' })
-  vertical?: boolean = false;
-  @Input({ alias: 'fill', transform: booleanAttribute }) fill?: boolean = false;
-  @Input({ alias: 'pills', transform: booleanAttribute }) pills?: boolean =
-    false;
-  @Input() id!: string;
-  @Input('class') cssClass?: string = '';
+  element!: HTMLElement;
+
+  @Input({ alias: 'horizontal-alignment' }) horizontalAlignment?: 'center' | 'end';
+  @Input({ alias: 'vertical', transform: booleanAttribute }) vertical?: boolean;
+  @Input({ alias: 'fill', transform: booleanAttribute }) fill?: boolean;
+  @Input({ alias: 'pills', transform: booleanAttribute }) pills?: boolean;
+  @Input({ alias: 'id' }) id!: string;
+  @Input({ alias: 'class' }) cssClass?: string = '';
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
 
   constructor(
     private viewContainerRef: ViewContainerRef,

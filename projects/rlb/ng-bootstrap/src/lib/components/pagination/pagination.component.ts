@@ -28,14 +28,15 @@ import { PaginationItemComponent } from './pagination-item.component';
   </ng-template>`,
 })
 export class PaginationComponent implements OnInit {
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  @ContentChildren(PaginationItemComponent)
-  children!: QueryList<PaginationItemComponent>;
 
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @Input() size?: 'sm' | 'md' | 'lg';
   @Input() alignment?: 'start' | 'center' | 'end';
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @ContentChildren(PaginationItemComponent)
+  children!: QueryList<PaginationItemComponent>;
 
   constructor(private viewContainerRef: ViewContainerRef) {}
 

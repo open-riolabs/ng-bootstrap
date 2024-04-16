@@ -51,6 +51,7 @@ export class RadioComponent
   implements DoCheck, ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
+
   @ContentChildren(OptionComponent) options!: QueryList<OptionComponent>;
   @ViewChildren('content', { read: ViewContainerRef }) contents!: QueryList<ViewContainerRef>;
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;

@@ -1,17 +1,4 @@
-import {
-  Component,
-  ContentChild,
-  DoCheck,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-  booleanAttribute,
-} from '@angular/core';
+import { Component, ContentChild, DoCheck, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from '@angular/core';
 import { AccordionHeaderComponent } from './accordion-header.component';
 import { AccordionBodyComponent } from './accordion-body.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -33,8 +20,22 @@ import { VisibilityEvent } from '../../shared/types';
 export class AccordionItemComponent
   extends ToggleAbstractComponent<Collapse>
   implements DoCheck, OnInit {
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
   element!: HTMLElement;
+  public parentId!: string;
+  public alwaysOpen?: boolean = false;
+
+  @Input({ alias: 'name' }) public name?: string;
+  @Input({ transform: booleanAttribute, alias: 'expanded' }) expanded: boolean = false;
+  @Input({ alias: 'class' }) cssClass?: string = '';
+  @Input({ alias: 'style' }) style?: string;
+  @Input({ alias: 'status' }) override status: VisibilityEvent = 'hidden';
+
+  @Output('statusChange') override statusChange = new EventEmitter<VisibilityEvent>();
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @ContentChild(AccordionHeaderComponent) public header!: AccordionHeaderComponent;
+  @ContentChild(AccordionBodyComponent) public body!: AccordionBodyComponent;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,
@@ -43,17 +44,6 @@ export class AccordionItemComponent
   ) {
     super(elementRef);
   }
-
-  public parentId!: string;
-  public alwaysOpen?: boolean = false;
-  @Input() public name?: string;
-  @Input({ transform: booleanAttribute, alias: 'expanded' }) expanded: boolean = false;
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  @Input({ alias: 'style' }) style?: string;
-  @ContentChild(AccordionHeaderComponent) public header!: AccordionHeaderComponent;
-  @ContentChild(AccordionBodyComponent) public body!: AccordionBodyComponent;
-  @Output() override statusChange = new EventEmitter<VisibilityEvent>();
-  @Input() override status: VisibilityEvent = 'hidden';
 
   override ngOnInit(): void {
     const templateView = this.viewContainerRef.createEmbeddedView(

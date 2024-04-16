@@ -43,15 +43,13 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 })
 export class FileComponent
   extends AbstractComponent<string>
-  implements ControlValueAccessor
-{
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input() size?: 'small' | 'large' | undefined = undefined;
-  @Input({ transform: booleanAttribute, alias: 'multiple' }) multiple?:
-    | boolean
-    | undefined;
-  @Input() accept?: string | undefined;
+  implements ControlValueAccessor {
+  @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled? = false;
+  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly? = false;
+  @Input({ alias: 'multiple', transform: booleanAttribute, }) multiple?: boolean;
+  @Input({ alias: 'size' }) size?: 'small' | 'large';
+  @Input({ alias: 'accept' }) accept?: string | undefined;
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(

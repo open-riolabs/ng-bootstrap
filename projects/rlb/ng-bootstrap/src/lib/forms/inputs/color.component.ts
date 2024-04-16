@@ -43,9 +43,10 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 export class ColorComponent
   extends AbstractComponent<string>
   implements ControlValueAccessor {
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
-  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
-  @Input() size?: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean;
+  @Input({ alias: 'size' }) size?: 'small' | 'large';
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(

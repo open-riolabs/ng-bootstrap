@@ -6,6 +6,7 @@ import {
   ViewChild,
   ViewContainerRef,
   TemplateRef,
+  booleanAttribute,
 } from '@angular/core';
 import { Color } from '../../shared/types';
 
@@ -26,13 +27,18 @@ import { Color } from '../../shared/types';
   </ng-template>`,
 })
 export class AlertComponent {
-  @Input() color: Color = 'primary';
-  @Input() dismissible = false;
-  @Output() dismissed: EventEmitter<void> = new EventEmitter<void>();
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  constructor(private viewContainerRef: ViewContainerRef) { }
   element!: HTMLElement;
+
+  @Input({ alias: 'color' }) color: Color = 'primary';
+  @Input({alias: 'dismissible', transform: booleanAttribute}) dismissible?: boolean;
+  @Input({ alias: 'class' }) cssClass?: string = '';
+
+  @Output() dismissed: EventEmitter<void> = new EventEmitter<void>();
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
+
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
       this.template,

@@ -17,10 +17,13 @@ import { VisibilityEvent } from '../../shared/types';
 export class CollapseComponent
   extends ToggleAbstractComponent<Collapse>
   implements OnInit, OnDestroy {
+
   @Input({ alias: `id`, required: true }) id!: string;
-  @Input() orientation?: 'horizontal' | 'vertical' = 'vertical';
-  @Output() override statusChange = new EventEmitter<VisibilityEvent>();
-  @Input() override status?: VisibilityEvent;
+  @Input({ alias: 'orientation' }) orientation?: 'horizontal' | 'vertical' = 'vertical';
+  @Input({ alias: 'status' }) override status?: VisibilityEvent;
+
+  @Output('statusChange') override statusChange = new EventEmitter<VisibilityEvent>();
+
   constructor(elementRef: ElementRef<HTMLElement>) {
     super(elementRef);
   }

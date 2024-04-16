@@ -12,10 +12,11 @@ import {
   selector: '[rlb-dnd]'
 })
 export class DndDirective {
-  @HostBinding('class.fileover') fileOver!: boolean;
   @Input({ alias: 'multiple', transform: booleanAttribute }) multi: boolean = false;
+
   @Output() fileDropped = new EventEmitter<File[]>();
 
+  @HostBinding('class.fileover') fileOver!: boolean;
   @HostListener('dragover', ['$event']) onDragOver(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();

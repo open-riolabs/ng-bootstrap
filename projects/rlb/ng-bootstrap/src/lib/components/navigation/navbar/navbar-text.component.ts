@@ -15,10 +15,13 @@ import {
   </ng-template>`,
 })
 export class NavbarTextComponent {
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  @Input({ alias: 'class' }) cssClass?: string = '';
   element!: HTMLElement;
-  constructor(private viewContainerRef: ViewContainerRef) {}
+
+  @Input({ alias: 'class' }) cssClass?: string = '';
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

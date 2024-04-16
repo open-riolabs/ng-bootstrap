@@ -1,16 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Renderer2,
-  Input,
-  DoCheck,
-  ViewContainerRef,
-  Host,
-  Self,
-  Optional,
-  booleanAttribute,
-} from '@angular/core';
-
+import { Directive, ElementRef, Renderer2, Input, DoCheck, Host, Self, Optional, booleanAttribute } from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
 import { SidebarItemComponent } from '../sidebar/sidebar-item.component';
 
@@ -23,24 +11,17 @@ import { SidebarItemComponent } from '../sidebar/sidebar-item.component';
     rlb-button-toolbar[toogle]`,
 })
 export class ToggleDirective implements DoCheck {
-  @Input('toggle') toggle!:
-    | 'offcanvas'
-    | 'collapse'
-    | 'tab'
-    | 'pill'
-    | 'dropdown'
-    | 'buttons-group';
+  @Input({ alias: 'toggle', required: true }) toggle?: 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group';
   @Input({ alias: 'toggle-target', required: true }) target!: string;
-  @Input({ transform: booleanAttribute, alias: 'collapsed' })
-  collapsed?: boolean = false;
-  @Input() autoClose!: 'default' | 'inside' | 'outside' | 'manual';
+  @Input({ transform: booleanAttribute, alias: 'collapsed' }) collapsed?: boolean;
+  @Input({ alias: 'auto-close' }) autoClose!: 'default' | 'inside' | 'outside' | 'manual';
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
     @Host() @Self() @Optional() public sidebarItem: SidebarItemComponent,
     @Host() @Self() @Optional() public buttonToolbar: ButtonToolbarComponent,
-  ) {}
+  ) { }
 
   ngDoCheck() {
     let element: HTMLElement | undefined = undefined;
@@ -51,7 +32,8 @@ export class ToggleDirective implements DoCheck {
     } else {
       element = this.elementRef.nativeElement;
     }
-    this.renderer.setAttribute(element, 'data-bs-toggle', this.toggle);
+    if (this.toggle)
+      this.renderer.setAttribute(element, 'data-bs-toggle', this.toggle);
     if (this.autoClose === 'default') {
       this.renderer.setAttribute(
         this.elementRef.nativeElement,

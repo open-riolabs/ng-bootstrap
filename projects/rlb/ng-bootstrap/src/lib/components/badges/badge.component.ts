@@ -19,13 +19,15 @@ import { Color } from '../../shared/types';
   </ng-template>`,
 })
 export class BadgeComponent {
-  @Input({ transform: booleanAttribute, alias: 'pill' }) pill!:
-    | boolean
-    | undefined;
-  @Input('color') color: Color | undefined = 'primary';
-  @Input('hidden-text') hiddenText!: string | undefined;
+  element!: HTMLElement;
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  @Input({ alias: 'pill', transform: booleanAttribute }) pill!: | boolean;
+  @Input({ alias: 'color' }) color?: Color = 'primary';
+  @Input({ alias: 'hidden-text' }) hiddenText?: string;
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   get style() {
     let style = 'badge';
@@ -37,9 +39,6 @@ export class BadgeComponent {
     }
     return style;
   }
-
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

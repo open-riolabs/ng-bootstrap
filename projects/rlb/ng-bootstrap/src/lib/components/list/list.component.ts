@@ -20,10 +20,10 @@ import { ListItemComponent } from './list-item.component';
   },
 })
 export class ListComponent implements DoCheck {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'numbered' }) numbered?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'horizontal' }) horizontal?: boolean;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'numbered', transform: booleanAttribute }) numbered?: boolean;
+  @Input({ alias: 'flush', transform: booleanAttribute }) flush?: boolean;
+  @Input({ alias: 'horizontal', transform: booleanAttribute }) horizontal?: boolean;
 
   @ContentChildren(ListItemComponent) children!: QueryList<ListItemComponent>;
 

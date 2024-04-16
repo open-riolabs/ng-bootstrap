@@ -48,25 +48,24 @@ import { SidebarSearchComponent } from './sidebar-search.component';
   `,
 })
 export class SidebarComponent implements OnInit, OnChanges {
-  @Input('id') id!: string;
+  element!: HTMLElement;
+
+  @Input({ alias: 'id' }) id!: string;
   @Input({ alias: 'max-width', transform: numberAttribute }) maxWidth: number = 250;
   @Input({ alias: 'width', transform: numberAttribute }) width: number = 68;
-  @Input({ transform: booleanAttribute, alias: 'open' }) open: boolean = false;
-  @Output('openChange') openChange: EventEmitter<boolean> = new EventEmitter();
-  @Input({ transform: booleanAttribute, alias: 'hide-close-btn' })
+  @Input({ alias: 'open', transform: booleanAttribute }) open: boolean = false;
+  @Input({ alias: 'hide-close-btn', transform: booleanAttribute }) hideCloseBtn?: boolean;
   @Input({ alias: 'class' }) cssClass?: string = '';
-  hideCloseBtn: boolean = false;
+
+  @Output('openChange') openChange: EventEmitter<boolean> = new EventEmitter();
 
   @ContentChild(SidebarHeaderComponent) public header!: SidebarHeaderComponent;
   @ContentChild(SidebarFooterComponent) public footer!: SidebarFooterComponent;
   @ContentChild(SidebarSearchComponent) public search!: SidebarSearchComponent;
-  @ContentChildren(SidebarItemComponent)
-  public items!: QueryList<SidebarItemComponent>;
+  @ContentChildren(SidebarItemComponent) public items!: QueryList<SidebarItemComponent>;
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
-
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

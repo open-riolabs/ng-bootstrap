@@ -14,10 +14,10 @@ export class DropdownDirective implements DoCheck {
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-  ) {}
+  ) { }
 
-  @Input() offset!: string;
-  @Input() autoClose!: 'default' | 'inside' | 'outside' | 'manual';
+  @Input({ alias: 'offset' }) offset!: string;
+  @Input({ alias: 'auto-close' }) autoClose!: 'default' | 'inside' | 'outside' | 'manual';
 
   ngDoCheck() {
     this.renderer.addClass(this.elementRef.nativeElement, 'dropdown-toggle');

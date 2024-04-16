@@ -41,10 +41,10 @@ import { CardImageComponent } from './card-image.component';
   },
 })
 export class CardComponent implements DoCheck {
-  @Input() align?: TextAlignment = 'left';
-  @Input({ transform: booleanAttribute, alias: 'overlay' }) overlay?: boolean;
-  @Input() background?: Color;
-  @Input() border?: Color;
+  @Input({ alias: 'align' }) align?: TextAlignment = 'left';
+  @Input({ alias: 'overlay', transform: booleanAttribute }) overlay?: boolean;
+  @Input({ alias: 'background' }) background?: Color;
+  @Input({ alias: 'border' }) border?: Color;
 
   @ContentChild(CardBodyComponent) public body!: CardBodyComponent;
   @ContentChild(CardImageComponent) public image!: CardImageComponent;

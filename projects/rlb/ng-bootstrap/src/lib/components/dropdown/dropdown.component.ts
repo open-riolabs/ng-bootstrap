@@ -16,11 +16,5 @@ import { Component, Input } from '@angular/core';
   },
 })
 export class DropdownComponent {
-  @Input() direction:
-    | 'up'
-    | 'down'
-    | 'left'
-    | 'right'
-    | 'up-center'
-    | 'down-center' = 'down';
+  @Input({ alias: 'direction' }) direction: 'up' | 'down' | 'left' | 'right' | 'up-center' | 'down-center' = 'down';
 }

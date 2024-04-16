@@ -40,22 +40,26 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
   </ng-template>`,
 })
 export class NavbarComponent {
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
-
-  @Input({ transform: booleanAttribute, alias: 'dark' }) dark?: boolean = false;
-  @Input() color?: Color = 'primary';
-  @Input() placement?:
-    | 'fixed-top'
-    | 'fixed-bottom'
-    | 'sticky-top'
-    | 'sticky-bottom';
-  @Input() expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
-  @Input({ alias: 'class' }) cssClass?: string = '';
   private _navId: string;
+
   public get navId(): string {
     return this._navId;
   }
+  get _navExpand(): string | undefined {
+    if (!this.expand) return undefined;
+    else if (this.expand === 'always') return 'navbar-expand';
+    else return `navbar-expand-${this.expand}`;
+  }
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  @Input({ alias: 'dark', transform: booleanAttribute }) dark?: boolean;
+  @Input({ alias: 'color' }) color?: Color = 'primary';
+  @Input({ alias: 'placement' }) placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom';
+  @Input({ alias: 'expand' }) expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
+  @Input({ alias: 'class' }) cssClass?: string = '';
+
   constructor(
     private idService: UniqueIdService,
     private viewContainerRef: ViewContainerRef,
@@ -69,11 +73,5 @@ export class NavbarComponent {
     );
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
-  }
-
-  get _navExpand(): string | undefined {
-    if (!this.expand) return undefined;
-    else if (this.expand === 'always') return 'navbar-expand';
-    else return `navbar-expand-${this.expand}`;
   }
 }

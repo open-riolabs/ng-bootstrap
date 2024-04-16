@@ -44,21 +44,13 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 export class InputComponent
   extends AbstractComponent<string>
   implements ControlValueAccessor {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input() placeholder?: string = '';
-  @Input({ transform: booleanAttribute, alias: 'before-text' })
-  beforeText?: boolean = false;
-  @Input() type?:
-    | 'text'
-    | 'email'
-    | 'number'
-    | 'password'
-    | 'search'
-    | 'tel'
-    | 'url'
-    | string = 'text';
-  @Input() size?: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled?: boolean;
+  @Input({ alias: 'readonly', transform: booleanAttribute, }) readonly?: boolean;
+  @Input({ alias: 'before-text', transform: booleanAttribute, }) beforeText?: boolean;
+  @Input({ alias: 'placeholder' }) placeholder?: string;
+  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
+  @Input({ alias: 'size' }) size?: 'small' | 'large';
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(

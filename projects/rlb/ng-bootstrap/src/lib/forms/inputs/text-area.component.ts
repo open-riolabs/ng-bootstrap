@@ -44,8 +44,9 @@ export class TextAreaComponent
   implements ControlValueAccessor {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input() placeholder?: string;
-  @Input() size?: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'placeholder' }) placeholder?: string;
+  @Input({ alias: 'size' }) size?: 'small' | 'large';
+
   @ViewChild('field', { read: ElementRef }) el!: ElementRef<HTMLTextAreaElement>;
 
   constructor(

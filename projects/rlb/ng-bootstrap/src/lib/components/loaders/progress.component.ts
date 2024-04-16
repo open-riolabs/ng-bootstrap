@@ -3,21 +3,22 @@ import { Color } from '../../shared/types';
 
 @Component({
   selector: 'rlb-progress',
-  template: ` <div
-    class="progress-bar {{ color && !infinite? 'bg-' + color : '' }} {{ textColor? 'text-' + textColor : '' }}"
-    [class.progress-bar-animated]="animated"
-    [class.progress-bar-striped]="striped"
-    [class.infinite-progress]="infinite"
-    [style.width.%]="infinite? max :getPercentValue()"
-  >
-    <div *ngIf="infinite" class="inner bg-primary"></div>
-    <span *ngIf="showValue; else e">
-      {{ getPercentValue() }}
-    </span>
-    <ng-template #e>
-      <ng-content></ng-content>
-    </ng-template>
-  </div>`,
+  template: `
+    <div
+      class="progress-bar {{ color && !infinite? 'bg-' + color : '' }} {{ textColor? 'text-' + textColor : '' }}"
+      [class.progress-bar-animated]="animated"
+      [class.progress-bar-striped]="striped"
+      [class.infinite-progress]="infinite"
+      [style.background-color]="infinite? 'unset' : null"
+      [style.width.%]="infinite? max :getPercentValue()">
+      <div *ngIf="infinite" class="inner bg-{{color}}"></div>
+      <span *ngIf="showValue; else e">
+        {{ getPercentValue() }}
+      </span>
+      <ng-template #e>
+        <ng-content></ng-content>
+      </ng-template>
+    </div>`,
   host: {
     class: 'progress',
     'attr.role': 'progressbar',
@@ -30,18 +31,19 @@ import { Color } from '../../shared/types';
   },
 })
 export class ProgressComponent {
+  showValue?: boolean = false;
+
   @Input({ alias: 'max', transform: numberAttribute }) max: number = 100;
   @Input({ alias: 'min', transform: numberAttribute }) min: number = 0;
   @Input({ alias: 'value', transform: numberAttribute }) value = 0;
   @Input({ alias: 'height', transform: numberAttribute }) height!: number;
-  @Input({ transform: booleanAttribute, alias: 'animated' }) animated?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'striped' }) striped?: boolean = false;
-  @Input({ transform: booleanAttribute }) infinite?: boolean = false;
-  @Input() ariaLabel!: string;
-  @Input({ transform: booleanAttribute, alias: 'showValue' })
-  showValue?: boolean = false;
-  @Input() color: Color = 'primary';
-  @Input() textColor!: Color;
+  @Input({ alias: 'animated', transform: booleanAttribute }) animated?: boolean = false;
+  @Input({ alias: 'striped', transform: booleanAttribute }) striped?: boolean = false;
+  @Input({ alias: 'infinite', transform: booleanAttribute }) infinite?: boolean = false;
+  @Input({ alias: 'aria-label' }) ariaLabel!: string;
+  @Input({ alias: 'showValue', transform: booleanAttribute })
+  @Input({ alias: 'color' }) color: Color = 'primary';
+  @Input({ alias: 'text-color' }) textColor!: Color;
 
   getPercentValue() {
     return ((this.value - this.min) / (this.max - this.min)) * 100;

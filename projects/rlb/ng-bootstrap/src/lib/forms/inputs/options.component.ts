@@ -16,12 +16,13 @@ import { HostWrapper } from '../../shared/host-wrapper';
   <ng-content></ng-content>`,
 })
 export class OptionComponent implements OnInit {
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled = false;
-  @Input() value!: string | number | null | undefined;
+  private temp!: EmbeddedViewRef<any>;
+
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'value' }) value?: string | number | null;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   constructor(private viewContainerRef: ViewContainerRef) { }
-  private temp!: EmbeddedViewRef<any>;
 
   get _view() {
     return this.temp

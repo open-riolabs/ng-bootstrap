@@ -19,13 +19,14 @@ import {
   `,
 })
 export class SidebarFooterComponent {
+  element!: HTMLElement;
   open: boolean = false;
   sidebarId: string = '';
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  constructor(private viewContainerRef: ViewContainerRef) {}
 
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

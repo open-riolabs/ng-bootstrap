@@ -1,35 +1,40 @@
-import {
-  Component,
-  Injector,
-  ViewContainerRef,
-  EventEmitter,
-  Input,
-  Output,
-  booleanAttribute,
-} from '@angular/core';
-import { WrappedComponent } from '../../shared/wrapped.component';
-import { HostWrapper } from '../../shared/host-wrapper';
+import { Component, ViewContainerRef, Input, booleanAttribute, ViewChild, EmbeddedViewRef, TemplateRef, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'rlb-dt-action',
-  template: ` <li>
-    <button class="dropdown-item" type="button" [disabled]="disabled">
-      <ng-content />
-    </button>
-  </li>`,
+  template: `
+    <ng-template #template>
+      <li (click)="onClick($event)" [routerLink]="routerLink">
+        <button class="dropdown-item" type="button" [disabled]="disabled">
+          <ng-content />
+        </button>
+      </li>
+    </ng-template>`,
 })
 export class DataTableActionComponent {
-  private wrappedInjector!: Injector;
-  @Input({ transform: booleanAttribute, alias: 'disabled' })
-  public disabled?: boolean = false;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
+  @Input() routerLink?: any[] | string | null | undefined
+  @Output() click: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
 
-  constructor(private vcr: ViewContainerRef) {}
+  element!: HTMLElement;
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  constructor(private viewContainerRef: ViewContainerRef) { }
+  private temp!: EmbeddedViewRef<any>;
 
   get _view() {
-    return this.wrappedInjector.get(WrappedComponent, this.vcr).columnView;
+    return this.temp
   }
 
   ngOnInit() {
-    this.wrappedInjector = new HostWrapper(WrappedComponent, this.vcr);
+    this.temp = this.viewContainerRef.createEmbeddedView(
+      this.template,
+    );
+    this.element = this.temp.rootNodes[0];
+    this.viewContainerRef.element.nativeElement.remove();
+  }
+
+  onClick(e: MouseEvent) {
+    e?.preventDefault();
+    this.click.emit(e);
   }
 }

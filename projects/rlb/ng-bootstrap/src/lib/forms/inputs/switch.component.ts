@@ -41,10 +41,11 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 export class SwitchComponent
   extends AbstractComponent<boolean>
   implements ControlValueAccessor {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
+  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly?: boolean;
+  @Input({ alias: 'size' }) size?: 'small' | 'large';
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
-  @Input() size?: 'small' | 'large' | undefined = undefined;
 
   constructor(
     idService: UniqueIdService,
@@ -62,8 +63,8 @@ export class SwitchComponent
 
   override onWrite(data: boolean): void {
     if (this.el && this.el.nativeElement) {
-      if(data === undefined || data === null) return;
-      if(typeof data === 'string'){
+      if (data === undefined || data === null) return;
+      if (typeof data === 'string') {
         this.el.nativeElement.checked = /^true$/i.test(data);
       }
       else {

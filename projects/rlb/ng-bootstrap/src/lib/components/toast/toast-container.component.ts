@@ -11,11 +11,10 @@ import { ToastData } from './data/toast-data';
 })
 export class ToastContainerComponent
   extends BuilderComponent<InnerToastService>
-  implements OnDestroy
-{
-  @ViewChild(ComponentHostDirective, { static: true })
-  component!: ComponentHostDirective;
+  implements OnDestroy {
   @Input({ alias: 'id', required: true }) builderId!: string;
+
+  @ViewChild(ComponentHostDirective, { static: true }) component!: ComponentHostDirective;
 
   constructor(private toastService: InnerToastService) {
     super(toastService);

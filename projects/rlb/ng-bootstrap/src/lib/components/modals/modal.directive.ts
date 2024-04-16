@@ -18,10 +18,6 @@ import { ModalOptions } from './data/modal-options';
   standalone: true,
 })
 export class ModalDirective implements OnDestroy, AfterViewInit {
-  @Input('id') id!: string;
-  @Input('data-instance') instance!: IModal;
-  @Input('data-options') options!: ModalOptions;
-
   private bsModal!: Modal;
   private modalElement!: HTMLElement;
   private dialogElement!: HTMLElement;
@@ -29,11 +25,15 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
   private _reasonButtons!: NodeListOf<HTMLButtonElement> | null;
   private _modalReason!: ModalCloseReason;
 
+  @Input({ alias: 'id' }) id!: string;
+  @Input({ alias: 'data-instance' }) instance!: IModal;
+  @Input({ alias: 'data-options' }) options!: ModalOptions;
+
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
     private innerModalService: InnerModalService,
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     const cont = this.el.nativeElement.parentNode;

@@ -42,7 +42,7 @@ export class SidebarSearchComponent implements OnInit {
   constructor(
     private viewContainerRef: ViewContainerRef,
     private modalService: ModalService,
-  ) {}
+  ) { }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
@@ -50,13 +50,10 @@ export class SidebarSearchComponent implements OnInit {
   sidebarId: string = '';
   text?: string;
 
-  @Input({ alias: 'search-title', required: true }) searchTitle: string =
-    'Search';
+  @Input({ alias: 'search-title', required: true }) searchTitle: string = 'Search';
   @Input({ alias: 'search-placeholder' }) searchPlaceholder?: string;
   @Input({ alias: 'search-text' }) searchText?: string;
-  @Output('on-search') search: EventEmitter<string | null> = new EventEmitter<
-    string | null
-  >();
+  @Output('on-search') search: EventEmitter<string | null> = new EventEmitter<string | null>();
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

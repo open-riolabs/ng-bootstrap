@@ -18,14 +18,15 @@ import { FormFieldsDefinition, FormField, IForm } from './form-fields';
 })
 export class FormFieldsComponent implements IForm, OnChanges {
   public filterForm!: FormGroup;
-  @Input() public title!: string;
-  @Input() public subTitle!: string;
-  @Input({ transform: booleanAttribute, alias: 'public noSubmit' })
-  public noSubmit: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'public noCard' })
-  public noCard: boolean = false;
-  @Input() public fields?: FormFieldsDefinition;
+
+  @Input({ alias: 'title' }) public title!: string;
+  @Input({ alias: 'sub-title' }) public subTitle!: string;
+  @Input({ alias: 'no-submit', transform: booleanAttribute }) public noSubmit?: boolean;
+  @Input({ alias: 'no-card', transform: booleanAttribute }) public noCard?: boolean;
+  @Input({ alias: 'fields' }) public fields?: FormFieldsDefinition;
+
   @Output() public submit: EventEmitter<any> = new EventEmitter();
+
   @ViewChild('ngForm') form!: NgForm;
 
   get _fields() {

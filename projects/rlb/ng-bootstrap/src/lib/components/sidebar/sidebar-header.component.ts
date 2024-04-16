@@ -26,12 +26,9 @@ import { HeaderLogo, HeaderUser, SidebarMode } from './sidebar-mode';
   `,
 })
 export class SidebarHeaderComponent implements OnInit {
-  @Input('mode') mode!: SidebarMode;
-  @Input('data') data!: HeaderLogo | HeaderUser;
+  element!: HTMLElement;
   open: boolean = false;
   sidebarId: string = '';
-
-  constructor(private viewContainerRef: ViewContainerRef) {}
 
   get _dataLogo(): HeaderLogo | null {
     if (this.mode === 'logo') {
@@ -47,8 +44,11 @@ export class SidebarHeaderComponent implements OnInit {
     return null;
   }
 
+  @Input({ alias: 'mode' }) mode!: SidebarMode;
+  @Input({ alias: 'data' }) data!: HeaderLogo | HeaderUser;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

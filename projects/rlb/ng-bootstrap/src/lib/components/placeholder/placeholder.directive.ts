@@ -11,14 +11,14 @@ import { Color } from '../../shared/types';
   selector: '[rlb-placeholder]',
 })
 export class PlaceholderDirective implements DoCheck {
-  @Input('placeholder-color') color!: Color;
-  @Input('placeholder-size') size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
-  @Input('placeholder-animation') animation: 'glow' | 'fade' | 'none' = 'none';
+  @Input({ alias: 'placeholder-color' }) color?: Color;
+  @Input({ alias: 'placeholder-size' }) size?: 'xs' | 'sm' | 'md' | 'lg' = 'md';
+  @Input({ alias: 'placeholder-animation' }) animation?: 'glow' | 'fade' | 'none' = 'none';
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-  ) {}
+  ) { }
 
   ngDoCheck() {
     this.renderer.addClass(this.elementRef.nativeElement, 'placeholder');

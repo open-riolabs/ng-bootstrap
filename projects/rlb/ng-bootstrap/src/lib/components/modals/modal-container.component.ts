@@ -8,11 +8,11 @@ import { ComponentHostDirective } from '../../shared/component-builder/component
 })
 export class ModalContainerComponent
   extends BuilderComponent<InnerModalService>
-  implements OnDestroy
-{
-  @ViewChild(ComponentHostDirective, { static: true })
-  component!: ComponentHostDirective;
-  @Input('id') builderId!: string;
+  implements OnDestroy {
+
+  @Input({ alias: 'id' }) builderId!: string;
+
+  @ViewChild(ComponentHostDirective, { static: true }) component!: ComponentHostDirective;
 
   constructor(private modalService: InnerModalService) {
     super(modalService);

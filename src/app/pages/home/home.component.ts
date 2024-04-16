@@ -65,5 +65,19 @@ export class HomeComponent {
   log(e: any) {
     console.log('log', e)
   }
+
+  items: {
+    prop1: string,
+    prop2: string,
+    prop3: string,
+  }[] = [
+      { prop1: 'value1-1', prop2: 'value2-1', prop3: 'value3-1' },
+      { prop1: 'value1-2', prop2: 'value2-2', prop3: 'value3-2' },
+      { prop1: 'value1-3', prop2: 'value2-3', prop3: 'value3-3' },
+    ]
+
+  actionClick(item: any) {
+    console.log('actionClick', item)
+  }
 }
 

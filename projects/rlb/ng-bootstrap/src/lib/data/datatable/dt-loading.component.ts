@@ -1,19 +1,14 @@
 import { Component, EmbeddedViewRef, Input, TemplateRef, ViewChild, ViewContainerRef, numberAttribute } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-cell',
+  selector: 'rlb-dt-loading',
   template: `
     <ng-template #template>
-      <td [colSpan]="colSpan" [class]="cssClass" [style]="cssStyle">
-        <ng-content></ng-content>
-      </td>
+      <ng-content></ng-content>
     </ng-template>`,
 })
-export class DataTableCellComponent {
+export class DataTableLoadingComponent {
 
-  @Input({ alias: 'col-span', transform: numberAttribute }) colSpan?: string;
-  @Input({ alias: 'class' }) cssClass?: string
-  @Input({ alias: 'style' }) cssStyle?: string;
   element!: HTMLElement;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   constructor(private viewContainerRef: ViewContainerRef) { }

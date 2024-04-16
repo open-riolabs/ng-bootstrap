@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  TemplateRef,
-  ViewChild,
-  booleanAttribute,
-} from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, Input, booleanAttribute, numberAttribute } from '@angular/core';
 import { Color } from '../../shared/types';
 
 @Component({
@@ -34,16 +27,16 @@ import { Color } from '../../shared/types';
   }
 })
 export class ListItemImageComponent {
-  @Input({ transform: booleanAttribute, alias: 'active' }) active!: boolean;
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled!: boolean;
-  @Input({ transform: booleanAttribute, alias: 'counter-empty' }) counterEmpty?: string;
-  @Input({ transform: booleanAttribute, alias: 'counter-pill' }) counterPill?: boolean;
-  @Input('avatar-size') avatarSize?: number = 50;
-  @Input('username') username?: string;
-  @Input('line-1') line1?: string;
-  @Input('line-2') line2?: string;
-  @Input('avatar') avatar?: string;
-  @Input('counter') counter?: number | string;
-  @Input('counter-color') counterColor?: Color | undefined;
-  @Input('icon') icon?: string;
+  @Input({ transform: booleanAttribute, alias: 'active', }) active!: boolean;
+  @Input({ transform: booleanAttribute, alias: 'disabled', }) disabled!: boolean;
+  @Input({ transform: booleanAttribute, alias: 'counter-empty', }) counterEmpty?: string;
+  @Input({ transform: booleanAttribute, alias: 'counter-pill', }) counterPill?: boolean;
+  @Input({ transform: numberAttribute, alias: 'avatar-size', }) avatarSize?: number = 50;
+  @Input({ alias: 'username' }) username?: string;
+  @Input({ alias: 'line-1' }) line1?: string;
+  @Input({ alias: 'line-2' }) line2?: string;
+  @Input({ alias: 'avatar' }) avatar?: string;
+  @Input({ alias: 'counter' }) counter?: number | string;
+  @Input({ alias: 'counter-color' }) counterColor?: Color | undefined;
+  @Input({ alias: 'icon' }) icon?: string;
 }

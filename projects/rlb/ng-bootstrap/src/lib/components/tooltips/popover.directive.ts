@@ -15,14 +15,14 @@ export class PopoverDirective implements DoCheck, AfterViewInit {
   static bsInit = false;
 
   @Input({ alias: 'popover', required: true }) popover!: string | undefined;
-  @Input('popover-placement') placement!: 'top' | 'bottom' | 'left' | 'right';
-  @Input('popover-class') customClass!: string;
-  @Input('popover-title') title!: string;
+  @Input({ alias: 'popover-placement' }) placement!: 'top' | 'bottom' | 'left' | 'right';
+  @Input({ alias: 'popover-class' }) customClass!: string;
+  @Input({ alias: 'popover-title' }) title!: string;
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-  ) {}
+  ) { }
 
   ngDoCheck() {
     this.renderer.setAttribute(

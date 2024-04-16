@@ -20,12 +20,8 @@ import { Component, Input, booleanAttribute } from '@angular/core';
     <ng-template #content><ng-content /></ng-template>`,
 })
 export class DropdownMenuItemComponent {
-  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean =
-    false;
-  @Input({ transform: booleanAttribute, alias: 'disabled' })
-  disabled?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'header' }) header?: boolean =
-    false;
-  @Input({ transform: booleanAttribute, alias: 'divider' }) divider?: boolean =
-    false;
+  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'header', transform: booleanAttribute }) header?: boolean;
+  @Input({ alias: 'divider', transform: booleanAttribute }) divider?: boolean;
 }

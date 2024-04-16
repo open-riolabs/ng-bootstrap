@@ -12,6 +12,6 @@ import { Component, Input } from '@angular/core';
   },
 })
 export class ButtonGroupComponent {
-  @Input() orientation: 'horizontal' | 'vertical' = 'horizontal';
-  @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input({ alias: 'orientation' }) orientation: 'horizontal' | 'vertical' = 'horizontal';
+  @Input({ alias: 'size' }) size: 'sm' | 'md' | 'lg' = 'md';
 }

@@ -19,11 +19,11 @@ import { AccordionItemComponent } from './accordion-item.component';
   },
 })
 export class AccordionComponent implements DoCheck {
-  @Input({ transform: booleanAttribute, alias: 'flush' }) flush?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'always-open' }) alwaysOpen?: boolean = false;
-  @Input() id!: string;
-  @ContentChildren(AccordionItemComponent)
-  public items!: QueryList<AccordionItemComponent>;
+  @Input({ alias: 'flush', transform: booleanAttribute }) flush?: boolean = false;
+  @Input({ alias: 'always-open', transform: booleanAttribute }) alwaysOpen?: boolean = false;
+  @Input({ alias: 'id' }) id!: string;
+
+  @ContentChildren(AccordionItemComponent) public items!: QueryList<AccordionItemComponent>;
   constructor(private idService: UniqueIdService) { }
 
   ngDoCheck(): void {

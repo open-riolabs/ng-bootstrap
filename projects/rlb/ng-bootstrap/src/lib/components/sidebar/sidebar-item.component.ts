@@ -1,16 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-  booleanAttribute,
-} from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute, } from '@angular/core';
 
 @Component({
   selector: 'rlb-sidebar-item',
@@ -33,6 +21,7 @@ import { Observable } from 'rxjs';
   `,
 })
 export class SidebarItemComponent implements OnInit {
+  element!: HTMLElement;
   open: boolean = false;
   sidebarId: string = '';
 
@@ -40,20 +29,17 @@ export class SidebarItemComponent implements OnInit {
     return this.onAction.observers.length > 0;
   }
 
-  @Input('label') label!: string;
-  @Input('icon') icon?: string;
-  @Input('url') url?: string;
-  @Input({ transform: booleanAttribute, alias: 'active' }) active: boolean =
-    false;
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled: boolean =
-    false;
-  @Output('action') onAction = new EventEmitter<void>();
+  @Input({ alias: 'label' }) label?: string;
+  @Input({ alias: 'icon' }) icon?: string;
+  @Input({ alias: 'url' }) url?: string;
+  @Input({ alias: 'active', transform: booleanAttribute, }) active?: boolean;
+  @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled?: boolean;
   @Input({ alias: 'class' }) cssClass?: string = '';
-  element!: HTMLElement;
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
-
+  @Output('action') onAction = new EventEmitter<void>();
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

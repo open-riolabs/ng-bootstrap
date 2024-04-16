@@ -2,9 +2,11 @@ import {
   Component,
   ContentChildren,
   DoCheck,
+  EmbeddedViewRef,
   Injector,
   Input,
   QueryList,
+  TemplateRef,
   ViewChild,
   ViewContainerRef,
   ViewEncapsulation,
@@ -16,33 +18,36 @@ import { WrappedComponent } from '../../shared/wrapped.component';
 
 @Component({
   selector: 'rlb-dt-actions',
-  template: ` <div class="dropdown">
-    <button
-      class="btn btn-outline py-0"
-      style="padding: 10px; margin: 0px 16px;"
-      [disabled]="_disabled"
-      type="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
-      <i class="fa-solid fa-ellipsis-vertical"></i>
-    </button>
-    <ul class="dropdown-menu">
-      <ng-container #projectedActions></ng-container>
-    </ul>
-  </div>`,
+  template: `
+    <ng-template #template>
+      <div class="dropdown">
+        <button
+            class="btn btn-outline py-0 pe-2 float-end"
+            [disabled]="_disabled"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+          <i class="bi bi-three-dots"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <ng-container #projectedActions></ng-container>
+        </ul>
+      </div>
+
+    </ng-template>
+  `,
 })
 export class DataTableActionsComponent implements DoCheck {
-  @ContentChildren(DataTableActionComponent)
-  actions!: QueryList<DataTableActionComponent>;
-  @ViewChild('projectedActions', { read: ViewContainerRef })
-  _projectedActions!: ViewContainerRef;
-  @Input({ transform: booleanAttribute, alias: 'disabled' })
-  disabled?: boolean = false;
+  element!: HTMLElement;
+  private temp!: EmbeddedViewRef<any>;
 
-  private wrappedInjector!: Injector;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
 
-  constructor(private vcr: ViewContainerRef) {}
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @ContentChildren(DataTableActionComponent) actions!: QueryList<DataTableActionComponent>;
+  @ViewChild('projectedActions', { read: ViewContainerRef }) _projectedActions!: ViewContainerRef;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   get _disabled() {
     if (this.disabled) return true;
@@ -50,20 +55,24 @@ export class DataTableActionsComponent implements DoCheck {
     return !this.actions.toArray().some((o) => !o.disabled);
   }
 
-  ngDoCheck() {
-    for (let i = this._projectedActions.length; i > 0; i--) {
-      this._projectedActions.detach();
-    }
-    this.actions.forEach((action) => {
-      this._projectedActions.insert(action._view);
-    });
-  }
-
   get _view() {
-    return this.wrappedInjector.get(WrappedComponent, this.vcr).columnView;
+    return this.temp
   }
 
   ngOnInit() {
-    this.wrappedInjector = new HostWrapper(WrappedComponent, this.vcr);
+    this.temp = this.viewContainerRef.createEmbeddedView(
+      this.template,
+    );
+    this.element = this.temp.rootNodes[0];
+    this.viewContainerRef.element.nativeElement.remove();
+  }
+
+  ngDoCheck() {
+    for (let i = this._projectedActions?.length; i > 0; i--) {
+      this._projectedActions.detach();
+    }
+    this.actions?.forEach((action) => {
+      this._projectedActions.insert(action._view);
+    });
   }
 }

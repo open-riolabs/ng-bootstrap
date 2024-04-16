@@ -1,32 +1,44 @@
 import {
   Component,
-  Injector,
+  EmbeddedViewRef,
   Input,
+  TemplateRef,
+  ViewChild,
   ViewContainerRef,
   booleanAttribute,
 } from '@angular/core';
-import { HostWrapper } from '../../shared/host-wrapper';
-import { WrappedComponent } from '../../shared/wrapped.component';
 
 @Component({
-  selector: 'th[rlb-dt-header]',
-  template: `<ng-content></ng-content>`,
+  selector: 'rlb-dt-header',
+  template: `
+    <ng-template #template>
+      <th [class]="cssClass" [style]="cssStyle">
+        <ng-content></ng-content>
+      </th>
+    </ng-template>`,
 })
 export class DataTableHeaderComponent {
-  private wrappedInjector!: Injector;
   @Input() field!: string;
   @Input() type!: 'number' | 'string';
-  @Input({ transform: booleanAttribute, alias: 'sortable' }) sortable?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'filtrable' })
-  filtrable?: boolean;
+  @Input({ alias: 'sortable', transform: booleanAttribute }) sortable?: boolean;
+  @Input({ alias: 'filtrable', transform: booleanAttribute }) filtrable?: boolean;
+  @Input({ alias: 'class' }) cssClass?: string
+  @Input({ alias: 'style' }) cssStyle?: string;
 
-  constructor(private vcr: ViewContainerRef) {}
+  element!: HTMLElement;
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  constructor(private viewContainerRef: ViewContainerRef) { }
+  private temp!: EmbeddedViewRef<any>;
 
   get _view() {
-    return this.wrappedInjector.get(WrappedComponent, this.vcr).columnView;
+    return this.temp
   }
 
   ngOnInit() {
-    this.wrappedInjector = new HostWrapper(WrappedComponent, this.vcr);
+    this.temp = this.viewContainerRef.createEmbeddedView(
+      this.template,
+    );
+    this.element = this.temp.rootNodes[0];
+    this.viewContainerRef.element.nativeElement.remove();
   }
 }

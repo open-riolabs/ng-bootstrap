@@ -25,16 +25,14 @@ import {
   `,
 })
 export class PaginationItemComponent implements OnInit {
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
-  @Input({ transform: booleanAttribute, alias: 'isIcon' }) isIcon?: boolean =
-    false;
-  @Input({ transform: booleanAttribute, alias: 'disabled' })
-  disabled?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean =
-    false;
+  @Input({ alias: 'isIcon', transform: booleanAttribute }) isIcon?: boolean;
+  @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled?: boolean;
+  @Input({ alias: 'active', transform: booleanAttribute, }) active?: boolean;
   @Input({ alias: 'class' }) cssClass?: string = '';
+
   constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {

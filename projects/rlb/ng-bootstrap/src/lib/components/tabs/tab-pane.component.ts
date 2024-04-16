@@ -15,6 +15,6 @@ import { Component, Input, booleanAttribute } from '@angular/core';
 })
 export class TabPaneComponent {
   @Input({ alias: 'id', required: true }) id!: string;
-  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'fade' }) fade?: boolean;
+  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;
+  @Input({ alias: 'fade', transform: booleanAttribute }) fade?: boolean;
 }

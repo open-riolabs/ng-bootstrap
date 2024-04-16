@@ -49,6 +49,7 @@ export class RangeComponent
   @Input({ alias: 'min', transform: numberAttribute }) min?: number | undefined = undefined;
   @Input({ alias: 'max', transform: numberAttribute }) max?: number | undefined = undefined;
   @Input({ alias: 'step', transform: numberAttribute }) step?: number | undefined = undefined;
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(

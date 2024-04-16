@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
   template: `<ng-content></ng-content>`,
 })
 export class InputGroupComponent {
-  @Input() size: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'size' }) size: 'small' | 'large' | undefined = undefined;
 }
 
 @Component({
@@ -18,4 +18,4 @@ export class InputGroupComponent {
   host: { class: 'input-group-text' },
   template: `<ng-content></ng-content>`,
 })
-export class InputTextGroupComponent {}
+export class InputTextGroupComponent { }

@@ -1,4 +1,26 @@
-<div class="container-fluid">
+<rlb-dt-table [items]="items">
+  <rlb-dt-header field="prop1">Col 1</rlb-dt-header>
+  <rlb-dt-header field="prop2">Col 2</rlb-dt-header>
+  <rlb-dt-header field="prop3">Col 3</rlb-dt-header>
+  <rlb-dt-row *ngFor="let item of items">
+    <rlb-dt-cell>{{item.prop1}}</rlb-dt-cell>
+    <rlb-dt-cell>{{item.prop2}}</rlb-dt-cell>
+    <rlb-dt-cell>{{item.prop3}}</rlb-dt-cell>
+    <rlb-dt-actions>
+      <rlb-dt-action (click)="actionClick(item)">Click</rlb-dt-action>
+      <rlb-dt-action [routerLink]="['/getting-started']">Router</rlb-dt-action>
+    </rlb-dt-actions>
+  </rlb-dt-row>
+  <rlb-dt-loading>
+    <rlb-progress class="w-100" color="danger" height="2" infinite></rlb-progress>
+  </rlb-dt-loading>
+  <rlb-dt-noitems>
+    No items
+  </rlb-dt-noitems>
+</rlb-dt-table>
+
+
+<!-- <div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <h1>Home</h1>
@@ -155,4 +177,4 @@
     </rlb-offcanvas-header>
     <rlb-offcanvas-body> pippo </rlb-offcanvas-body>
   </rlb-offcanvas>
-</div>
+</div> -->

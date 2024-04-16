@@ -5,6 +5,7 @@ import {
   Input,
   DoCheck,
   booleanAttribute,
+  numberAttribute,
 } from '@angular/core';
 import { Color } from '../../shared/types';
 
@@ -12,17 +13,17 @@ import { Color } from '../../shared/types';
   selector: '[badge]',
 })
 export class BadgeDirective implements DoCheck {
-  @Input('badge') badge!: string | undefined;
-  @Input({ transform: booleanAttribute, alias: 'badge-pill' }) pill!: boolean;
-  @Input('badge-top') top!: number;
-  @Input('badge-start') start!: number;
-  @Input('badge-color') color: Color = 'danger';
-  @Input('hidden-text') hiddenText!: string;
+  @Input({ alias: 'badge' }) badge?: string;
+  @Input({ alias: 'badge-pill', transform: booleanAttribute }) pill!: boolean;
+  @Input({ alias: 'badge-top', transform: numberAttribute }) top!: number;
+  @Input({ alias: 'badge-start', transform: numberAttribute }) start!: number;
+  @Input({ alias: 'badge-color' }) color: Color = 'danger';
+  @Input({ alias: 'hidden-text' }) hiddenText!: string;
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-  ) {}
+  ) { }
 
   ngDoCheck() {
     const badge = this.renderer.createElement('span');

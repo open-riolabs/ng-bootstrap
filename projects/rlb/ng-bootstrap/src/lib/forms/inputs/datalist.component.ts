@@ -49,8 +49,8 @@ export class DatalistComponent
   implements ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
-  @Input() placeholder?: string;
-  @Input() size?: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'placeholder' }) placeholder?: string;
+  @Input({ alias: 'size' }) size?: 'small' | 'large' | undefined = undefined;
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(

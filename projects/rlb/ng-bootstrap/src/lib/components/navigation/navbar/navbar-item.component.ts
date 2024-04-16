@@ -31,14 +31,15 @@ import {
   </ng-template>`,
 })
 export class NavbarItemComponent implements OnInit {
-  @Input({ transform: booleanAttribute, alias: 'disabled' })
-  disabled?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'dropdown' })
-  dropdown?: boolean = false;
+  element!: HTMLElement;
+
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'dropdown', transform: booleanAttribute }) dropdown?: boolean;
   @Input({ alias: 'href' }) href?: string;
-  @Input('class') cssClass: string = '';
-  @Input('toggle') toggle?: | 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'buttons-group';
-  @Input() autoClose!: 'default' | 'inside' | 'outside' | 'manual';
+  @Input({ alias: 'class' }) cssClass?: string;
+  @Input({ alias: 'toggle' }) toggle?: | 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'buttons-group';
+  @Input({ alias: 'auto-close' }) autoClose!: 'default' | 'inside' | 'outside' | 'manual';
+
   @Output() click = new EventEmitter<MouseEvent>();
 
   get _autoClose() {
@@ -55,7 +56,6 @@ export class NavbarItemComponent implements OnInit {
   }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 

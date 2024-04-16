@@ -16,9 +16,9 @@ import {
   },
 })
 export class ListItemComponent {
-  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'action' }) action?: boolean;
+  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;
+  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
+  @Input({ alias: 'action', transform: booleanAttribute }) action?: boolean;
 
   constructor() { }
 }

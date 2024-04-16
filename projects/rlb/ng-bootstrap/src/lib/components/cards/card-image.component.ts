@@ -10,6 +10,6 @@ import { Component, Input } from '@angular/core';
   },
 })
 export class CardImageComponent {
-  @Input() position: 'top' | 'bottom' = 'top';
+  @Input({ alias: 'position' }) position: 'top' | 'bottom' = 'top';
   overlay?: boolean = false;
 }

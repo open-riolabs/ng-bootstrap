@@ -32,15 +32,17 @@ import {
   },
 })
 export class TabComponent {
-  @Input({ transform: booleanAttribute, alias: 'active' }) active?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
+  element!: HTMLElement;
+
+  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;
+  @Input({ transform: booleanAttribute }) disabled?: boolean;
   @Input({ alias: 'target', required: true }) target!: string;
   @Input({ alias: 'class' }) cssClass?: string = '';
-  element!: HTMLElement;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
+
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
       this.template,

@@ -21,19 +21,14 @@ import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
   },
 })
 export class DropdownContainerComponent {
-  @Input('placement') public placement: 'bottom' | 'left' | 'right' = 'bottom';
-  @Input('placement-sm') public placementSm: 'bottom' | 'left' | 'right' =
-    'bottom';
-  @Input('placement-md') public placementMd: 'bottom' | 'left' | 'right' =
-    'bottom';
-  @Input('placement-lg') public placementLg: 'bottom' | 'left' | 'right' =
-    'bottom';
-  @Input('placement-xl') public placementXl: 'bottom' | 'left' | 'right' =
-    'bottom';
-  @Input('placement-xxl') public placementXxl: 'bottom' | 'left' | 'right' =
-    'bottom';
-
   isList: boolean = false;
+
+  @Input({ alias: 'placement' }) public placement: 'bottom' | 'left' | 'right' = 'bottom';
+  @Input({ alias: 'placement-sm' }) public placementSm: 'bottom' | 'left' | 'right' = 'bottom';
+  @Input({ alias: 'placement-md' }) public placementMd: 'bottom' | 'left' | 'right' = 'bottom';
+  @Input({ alias: 'placement-lg' }) public placementLg: 'bottom' | 'left' | 'right' = 'bottom';
+  @Input({ alias: 'placement-xl' }) public placementXl: 'bottom' | 'left' | 'right' = 'bottom';
+  @Input({ alias: 'placement-xxl' }) public placementXxl: 'bottom' | 'left' | 'right' = 'bottom';
 
   constructor(
     private elementRef: ElementRef,

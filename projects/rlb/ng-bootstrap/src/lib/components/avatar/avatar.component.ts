@@ -28,16 +28,19 @@ import {
   `,
 })
 export class AvatarComponent {
-  @Input({ alias: 'size', transform: numberAttribute }) size?: number = 50;
-  @Input() style?: 'circle' | 'round' | 'square' = 'circle';
-  @Input() src?: string;
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  constructor(private viewContainerRef: ViewContainerRef) { }
   element!: HTMLElement;
 
+  @Input({ alias: 'size', transform: numberAttribute }) size?: number = 50;
+  @Input({ alias: 'shape' }) shape?: 'circle' | 'round' | 'square' = 'circle';
+  @Input({ alias: 'src' }) src?: string;
+  @Input({ alias: 'class' }) cssClass?: string = '';
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
+
   get _borderRadius() {
-    switch (this.style) {
+    switch (this.shape) {
       case 'circle':
         return '50%';
       case 'round':

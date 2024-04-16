@@ -16,7 +16,7 @@ import { Color } from '../../shared/types';
   },
 })
 export class SpinnerComponent {
-  @Input() style?: 'grow' | 'border' = 'border';
-  @Input() color?: Color = 'primary';
-  @Input() size?: 'sm' | 'md' | 'lg' = 'md';
+  @Input({ alias: 'style' }) style?: 'grow' | 'border' = 'border';
+  @Input({ alias: 'color' }) color?: Color = 'primary';
+  @Input({ alias: 'size' }) size?: 'sm' | 'md' | 'lg' = 'md';
 }

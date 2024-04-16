@@ -25,12 +25,15 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, booleanA
     </div>`,
 })
 export class FileDndComponent {
-  @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
+  files: File[] = [];
+
   @Input({ alias: 'multiple', transform: booleanAttribute }) multiple: boolean = false;
-  @Input() data: any = {};
+  @Input({ alias: 'data' }) data: any = {};
 
   @Output('files') filesChange = new EventEmitter<File[]>();
-  files: File[] = [];
+
+  @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
+
 
   onFileDropped(files: File[]) {
     if (this.multiple) {
@@ -73,5 +76,4 @@ export class FileDndComponent {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   }
-
 }

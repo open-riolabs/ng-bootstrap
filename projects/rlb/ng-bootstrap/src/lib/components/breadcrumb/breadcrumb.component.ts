@@ -22,6 +22,6 @@ export interface BreadcrumbItem {
   </nav>`,
 })
 export class BreadcrumbComponent {
-  @Input() divider?: string = '>';
-  @Input() items?: BreadcrumbItem[] = [];
+  @Input({ alias: 'divider' }) divider?: string = '>';
+  @Input({ alias: 'items' }) items?: BreadcrumbItem[] = [];
 }

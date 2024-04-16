@@ -22,8 +22,8 @@ import {
   </ng-template>`,
 })
 export class NavbarItemsComponent implements OnInit {
-  @Input() scroll!: string;
-  @Input('class') cssClass: string = '';
+  @Input({ alias: 'scroll' }) scroll?: string;
+  @Input({ alias: 'class' }) cssClass?: string;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;

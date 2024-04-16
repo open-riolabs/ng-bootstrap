@@ -18,9 +18,9 @@ import { ToastOptions } from './data/toast-options';
   standalone: true,
 })
 export class ToastDirective implements OnDestroy, AfterViewInit {
-  @Input('id') id!: string;
-  @Input('data-instance') instance!: IToast;
-  @Input('data-options') options!: ToastOptions;
+  @Input({ alias: 'id' }) id!: string;
+  @Input({ alias: 'data-instance' }) instance!: IToast;
+  @Input({ alias: 'data-options' }) options!: ToastOptions;
 
   private bsToast!: Toast;
   private contentElement!: HTMLElement;
@@ -31,7 +31,7 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     private el: ElementRef,
     private renderer: Renderer2,
     private innerToastService: InnerToastService,
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     const cont = this.el.nativeElement.parentNode;

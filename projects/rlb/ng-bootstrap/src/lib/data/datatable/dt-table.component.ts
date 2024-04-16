@@ -1,15 +1,4 @@
-import {
-  DoCheck,
-  Component,
-  ContentChildren,
-  EventEmitter,
-  Input,
-  Output,
-  QueryList,
-  ViewChild,
-  ViewContainerRef,
-  booleanAttribute,
-} from '@angular/core';
+import { DoCheck, Component, ContentChildren, EventEmitter, Input, Output, QueryList, ViewChild, ViewContainerRef, booleanAttribute } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
 
@@ -24,26 +13,22 @@ export interface TableDataQuery {
   templateUrl: './dt-table.component.html',
 })
 export class DataTableComponent implements DoCheck {
-  @Input() title?: string;
-  @Input() creationStrategy: 'none' | 'modal' | 'page' = 'none';
-  @Input() creationUrl!: any[] | string | null | undefined;
-  @Input() items!: any[];
-  @Input({ transform: booleanAttribute, alias: 'showPagination' })
-  showPagination?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean =
-    false;
-  @Input({ transform: booleanAttribute, alias: 'showRefresh' })
-  showRefresh?: boolean = false;
+  @Input({ alias: 'title' }) title?: string;
+  @Input({ alias: 'creation-strategy' }) creationStrategy: 'none' | 'modal' | 'page' = 'none';
+  @Input({ alias: 'creation-url' }) creationUrl!: any[] | string | null | undefined;
+  @Input({ alias: 'items' }) items!: any[];
+  @Input({ alias: 'show-pagination', transform: booleanAttribute }) showPagination?: boolean;
+  @Input({ alias: 'loading', transform: booleanAttribute }) loading?: boolean;
+  @Input({ alias: 'show-refresh', transform: booleanAttribute }) showRefresh?: boolean;
   @Input() showActions: 'row' | 'head' = 'row';
-  @Output() createItem: EventEmitter<void> = new EventEmitter();
-  @Output() refreshItem: EventEmitter<void> = new EventEmitter();
-  @Output() loadMore: EventEmitter<void> = new EventEmitter();
-  @ContentChildren(DataTableRowComponent)
-  public rows!: QueryList<DataTableRowComponent>;
-  @ContentChildren(DataTableHeaderComponent)
-  columns!: QueryList<DataTableHeaderComponent>;
-  @ViewChild('projectedDisplayColumns', { read: ViewContainerRef })
-  _projectedDisplayColumns!: ViewContainerRef;
+
+  @Output('create-item') createItem: EventEmitter<void> = new EventEmitter();
+  @Output('refresh-item') refreshItem: EventEmitter<void> = new EventEmitter();
+  @Output('load-more') loadMore: EventEmitter<void> = new EventEmitter();
+
+  @ViewChild('projectedDisplayColumns', { read: ViewContainerRef }) _projectedDisplayColumns!: ViewContainerRef;
+  @ContentChildren(DataTableRowComponent) public rows!: QueryList<DataTableRowComponent>;
+  @ContentChildren(DataTableHeaderComponent) columns!: QueryList<DataTableHeaderComponent>;
 
   get hasActions() {
     return (
@@ -53,12 +38,14 @@ export class DataTableComponent implements DoCheck {
   }
 
   ngDoCheck() {
-    for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
-      this._projectedDisplayColumns.detach();
+    if (this._projectedDisplayColumns) {
+      for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
+        this._projectedDisplayColumns.detach();
+      }
+      this.columns.forEach((column) => {
+        this._projectedDisplayColumns.insert(column._view);
+      });
     }
-    this.columns.forEach((column) => {
-      this._projectedDisplayColumns.insert(column._view);
-    });
   }
 
   get cols() {

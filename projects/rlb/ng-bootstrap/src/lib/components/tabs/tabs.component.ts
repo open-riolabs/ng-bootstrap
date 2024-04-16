@@ -29,16 +29,16 @@ import {
   </ng-template>`,
 })
 export class TabsComponent {
-  @Input('horizontal-alignment') horizontalAlignment?: 'center' | 'end';
-  @Input() view?: 'tab' | 'pills' | 'underline' | 'none' = 'tab';
-  @Input({ transform: booleanAttribute, alias: 'vertical' })
-  vertical?: boolean = false;
-  @Input() fill?: 'fill' | 'justified';
-  @Input() id?: string;
+  element!: HTMLElement;
+
+  @Input({ alias: 'horizontal-alignment' }) horizontalAlignment?: 'center' | 'end';
+  @Input({ alias: 'view' }) view?: 'tab' | 'pills' | 'underline' | 'none' = 'tab';
+  @Input({ alias: 'vertical', transform: booleanAttribute }) vertical?: boolean;
+  @Input({ alias: 'fill' }) fill?: 'fill' | 'justified';
+  @Input({ alias: 'id' }) id?: string;
   @Input({ alias: 'class' }) cssClass?: string = '';
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
 
   constructor(
     private viewContainerRef: ViewContainerRef,

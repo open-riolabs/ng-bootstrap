@@ -36,17 +36,16 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
 export class OffcanvasComponent
   extends ToggleAbstractComponent<Offcanvas>
   implements OnInit, OnDestroy {
+
   @Input({ alias: `id`, required: true }) id!: string;
-  @Input({ transform: booleanAttribute, alias: 'body-scroll' })
-  bodyScroll: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'scroll-backup' })
-  scrollBackup: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'close-manual' })
-  closeManual: boolean = false;
-  @Input('placement') placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
-  @Input('responsive') responsive!: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
-  @Output() override statusChange = new EventEmitter<VisibilityEvent>();
+  @Input({ alias: 'body-scroll', transform: booleanAttribute }) bodyScroll?: boolean;
+  @Input({ alias: 'scroll-backup', transform: booleanAttribute }) scrollBackup?: boolean;
+  @Input({ alias: 'close-manual', transform: booleanAttribute }) closeManual?: boolean;
+  @Input({ alias: 'placement' }) placement?: 'start' | 'end' | 'top' | 'bottom' = 'start';
+  @Input({ alias: 'responsive' }) responsive?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   @Input() override status?: VisibilityEvent;
+
+  @Output() override statusChange = new EventEmitter<VisibilityEvent>();
 
   constructor(elementRef: ElementRef<HTMLElement>) {
     super(elementRef);

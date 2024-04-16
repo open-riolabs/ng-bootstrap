@@ -56,27 +56,21 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
 export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
   implements ControlValueAccessor {
+  acLoading: boolean = false;
+
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
   @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
   @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
-  @Input() placeholder?: string = '';
+  @Input({ alias: 'placeholder' }) placeholder?: string = '';
   @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => { return [] };
-  @Input() type?:
-    | 'text'
-    | 'email'
-    | 'number'
-    | 'password'
-    | 'search'
-    | 'tel'
-    | 'url'
-    | string = 'text';
-  @Input() size?: 'small' | 'large' | undefined = undefined;
+  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
+  @Input() size?: 'small' | 'large' | undefined;
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
   @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
-  acLoading: boolean = false;
 
   constructor(
     idService: UniqueIdService,

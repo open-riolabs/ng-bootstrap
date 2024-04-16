@@ -11,8 +11,9 @@ import { UniqueIdService } from '../../shared/unique-id.service';
   selector: '[helpText]',
 })
 export class HelpText implements DoCheck {
-  @Input('helpText') helpText!: string;
   private uniqueId: string;
+
+  @Input({ alias: 'helpText' }) helpText!: string;
 
   constructor(
     private elementRef: ElementRef,

@@ -15,12 +15,13 @@ import {
   </ng-template>`,
 })
 export class NavbarFormComponent {
-  @Input() role!: string;
+  element!: HTMLElement;
+
+  @Input({ alias: 'role' }) role!: string;
+  @Input({ alias: 'class' }) cssClass?: string = '';
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  element!: HTMLElement;
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

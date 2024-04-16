@@ -14,10 +14,13 @@ import {
   </ng-template>`,
 })
 export class NavbarSeparatorComponent implements OnInit {
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
+
   @Input({ alias: 'class' }) cssClass?: string = '';
-  constructor(private viewContainerRef: ViewContainerRef) {}
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
