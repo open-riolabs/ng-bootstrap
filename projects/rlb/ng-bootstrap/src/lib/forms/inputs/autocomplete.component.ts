@@ -22,8 +22,8 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
 @Component({
   selector: 'rlb-autocomplete',
   template: `
+    <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
-      <ng-content select="[before]"></ng-content>
       <input
         #field
         [id]="id"
@@ -40,18 +40,20 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
       />
-      <rlb-progress class="w-100" [height]="2" [infinite]="loading || acLoading" color="primary" />
-      <ng-content select="[after]"></ng-content>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
-      <div
-        #autocomplete
-        [id]="id+'-ac'"
-        class="dropdown-menu overflow-y-auto w-100 position-relative"
-        aria-labelledby="dropdownMenu"
-        [style.max-height.px]="maxHeight"></div>
-    </div>`,
+    </div>
+    <rlb-progress class="w-100" [height]="2" [infinite]="loading || acLoading" color="primary" />
+    <ng-content select="[after]"></ng-content>
+    <div
+      #autocomplete
+      [id]="id+'-ac'"
+      class="dropdown-menu overflow-y-auto w-100 position-relative"
+      aria-labelledby="dropdownMenu"
+      [style.max-height.px]="maxHeight">
+    </div>
+   `,
 })
 export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>

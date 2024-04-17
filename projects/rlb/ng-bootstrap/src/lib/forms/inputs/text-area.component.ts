@@ -14,8 +14,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 @Component({
   selector: 'rlb-textarea',
   template: `
+    <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
-      <ng-content select="[before]"></ng-content>
       <textarea
         #field
         [id]="id"
@@ -29,11 +29,11 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       ></textarea>
-      <ng-content select="[after]"></ng-content>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
-    </div>`,
+    </div>
+    <ng-content select="[after]"></ng-content>`,
 })
 export class TextAreaComponent
   extends AbstractComponent<string>

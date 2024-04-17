@@ -23,31 +23,31 @@ import { OptionComponent } from './options.component';
 @Component({
   selector: 'rlb-select',
   template: `
-  <div class="input-group has-validation">
     <ng-content select="[before]"></ng-content>
-    <select
-      #select
-      class="form-select"
-      [id]="id"
-      [attr.disabled]="disabled ? true : undefined"
-      [attr.readonly]="readonly ? true : undefined"
-      [attr.multiple]="multiple ? true : undefined"
-      [class.form-select-lg]="size === 'large'"
-      [class.form-select-sm]="size === 'small'"
-      [attr.placeholder]="placeholder"
-      [attr.size]="display"
-      (blur)="touch()"
-      [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-      (change)="update($event.target)"
-    >
-      <option *ngIf="placeholder" selected disabled>{{ placeholder }}</option>
-      <ng-container #projectedDisplayOptions></ng-container>
-    </select>
-    <ng-content select="[after]"></ng-content>
-    <div class="invalid-feedback">
-      {{ errors | json }}
+    <div class="input-group has-validation">
+      <select
+        #select
+        class="form-select"
+        [id]="id"
+        [attr.disabled]="disabled ? true : undefined"
+        [attr.readonly]="readonly ? true : undefined"
+        [attr.multiple]="multiple ? true : undefined"
+        [class.form-select-lg]="size === 'large'"
+        [class.form-select-sm]="size === 'small'"
+        [attr.placeholder]="placeholder"
+        [attr.size]="display"
+        (blur)="touch()"
+        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        (change)="update($event.target)"
+      >
+        <option *ngIf="placeholder" selected disabled>{{ placeholder }}</option>
+        <ng-container #projectedDisplayOptions></ng-container>
+      </select>
+      <div class="invalid-feedback">
+        {{ errors | json }}
+      </div>
     </div>
-  </div>`,
+    <ng-content select="[after]"></ng-content>`,
 })
 export class SelectComponent
   extends AbstractComponent<string | string[]>

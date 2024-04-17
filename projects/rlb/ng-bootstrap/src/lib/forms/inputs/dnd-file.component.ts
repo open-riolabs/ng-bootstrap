@@ -21,7 +21,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, booleanA
         <button rlb-button outline class="p-0 mb-auto border-0">
           <i class="bi bi-trash" (click)="deleteFile(file)"></i>
         </button>
-        </div>
+      </div>
     </div>`,
 })
 export class FileDndComponent {

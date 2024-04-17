@@ -15,8 +15,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 @Component({
   selector: 'rlb-datalist',
   template: `
+    <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
-      <ng-content select="[before]"></ng-content>
       <input
         #field
         [id]="id"
@@ -35,11 +35,11 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       <datalist [id]="'list-' + id">
         <ng-content></ng-content>
       </datalist>
-      <ng-content select="[after]"></ng-content>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
-    </div>`,
+    </div>
+    <ng-content select="[after]"></ng-content>`,
 })
 export class DatalistComponent
   extends AbstractComponent<string>

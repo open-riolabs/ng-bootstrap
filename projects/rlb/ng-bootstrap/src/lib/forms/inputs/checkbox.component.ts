@@ -15,8 +15,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 @Component({
   selector: 'rlb-checkbox',
   template: `
+    <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
-      <ng-content select="[before]"></ng-content>
       <input
         #field
         class="form-check-input"
@@ -29,11 +29,11 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       />
-      <ng-content select="[after]"></ng-content>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
-  </div>`,
+      <ng-content select="[after]"></ng-content>
+    </div>`,
 })
 export class CheckboxComponent
   extends AbstractComponent<boolean | undefined>

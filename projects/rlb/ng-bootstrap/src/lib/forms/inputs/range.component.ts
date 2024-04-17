@@ -19,8 +19,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
   },
   template: `
+    <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
-      <ng-content select="[before]"></ng-content>
       <input
         #field
         [id]="id"
@@ -35,11 +35,11 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       />
-      <ng-content select="[after]"></ng-content>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
-    </div>`,
+    </div>
+    <ng-content select="[after]"></ng-content>`,
 })
 export class RangeComponent
   extends AbstractComponent<string>
