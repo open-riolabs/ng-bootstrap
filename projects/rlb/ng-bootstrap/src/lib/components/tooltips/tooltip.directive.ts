@@ -6,15 +6,18 @@ import {
   DoCheck,
   AfterViewInit,
   booleanAttribute,
+  OnChanges,
+  SimpleChanges,
+  OnInit,
 } from '@angular/core';
 import { Tooltip } from 'bootstrap';
 
 @Directive({
   selector: '[tooltip]',
 })
-export class TooltipDirective implements DoCheck, AfterViewInit {
+export class TooltipDirective implements OnInit, OnChanges {
   static bsInit = false;
-
+  private _tooltip: Tooltip | undefined;
   @Input({ alias: 'tooltip', required: true }) tooltip!: string | undefined;
   @Input({ alias: 'tooltip-placement' }) placement!: 'top' | 'bottom' | 'left' | 'right';
   @Input({ alias: 'tooltip-class' }) customClass!: string;
@@ -25,43 +28,49 @@ export class TooltipDirective implements DoCheck, AfterViewInit {
     private renderer: Renderer2,
   ) { }
 
-  ngDoCheck() {
-    this.renderer.setAttribute(
-      this.elementRef.nativeElement,
-      'data-bs-toggle',
-      'tooltip',
-    );
-    if (this.placement) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-placement',
-        this.placement,
-      );
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tooltip']) {
+      if (this.tooltip) {
+        this._tooltip?.enable();
+        this._tooltip?.setContent({ '.tooltip-inner': this.tooltip || '' });
+      } else {
+        this._tooltip?.disable();
+      }
     }
-    if (this.customClass) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-custom-class',
-        this.customClass,
-      );
+    if (changes['placement']) {
+      if (this.placement) {
+        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-placement', this.placement);
+        this._tooltip?.update();
+      }
     }
-    if (this.tooltip) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-title',
-        this.tooltip,
-      );
+    if (changes['customClass']) {
+      if (this.customClass) {
+        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-custom-class', this.customClass);
+        this._tooltip?.update();
+      }
     }
-    if (this.html) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-html',
-        'true',
-      );
+    if (changes['html']) {
+      if (this.html) {
+        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-html', 'true');
+        this._tooltip?.update();
+      }
     }
   }
 
-  ngAfterViewInit() {
-    new Tooltip(this.elementRef.nativeElement);
+  ngOnInit() {
+    this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-toggle', 'tooltip',);
+    if (this.placement) {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-placement', this.placement);
+    }
+    if (this.customClass) {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-custom-class', this.customClass);
+    }
+    if (this.tooltip) {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-title', this.tooltip);
+    }
+    if (this.html) {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-html', 'true');
+    }
+    this._tooltip = new Tooltip(this.elementRef.nativeElement);
   }
 }
