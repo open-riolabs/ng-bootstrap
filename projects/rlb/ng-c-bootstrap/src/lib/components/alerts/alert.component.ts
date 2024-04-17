@@ -16,7 +16,7 @@ import { Alert } from './alert.data';
 })
 export class AlertComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  @Input() data!: Alert | undefined;
+  @Input() data?: Alert;
   element!: HTMLElement;
 
   constructor(private viewContainerRef: ViewContainerRef) {}

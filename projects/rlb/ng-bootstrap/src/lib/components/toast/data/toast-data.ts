@@ -4,6 +4,6 @@ export interface ToastData<T = any> {
   title: string;
   subtitle?: string;
   type?: ModalType;
-  content: T | undefined;
+  content: T;
   ok?: string;
 }

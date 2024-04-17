@@ -18,10 +18,10 @@ import { CommonModule } from '@angular/common';
       ></button>
     </div>
     <div class="modal-body">
-      <h6>{{ data.content?.searchText }}</h6>
+      <h6>{{ data.content.searchText }}</h6>
       <rlb-input
         class="search-input"
-        [placeholder]="data.content?.placeholder"
+        [placeholder]="data.content.placeholder"
         [(ngModel)]="searchText"
         (keyup.enter)="onEnter()"
       >

@@ -24,7 +24,7 @@ export class ToggleDirective implements DoCheck {
   ) { }
 
   ngDoCheck() {
-    let element: HTMLElement | undefined = undefined;
+    let element: HTMLElement;
     if (this.sidebarItem) {
       element = this.sidebarItem.element;
     } else if (this.buttonToolbar) {

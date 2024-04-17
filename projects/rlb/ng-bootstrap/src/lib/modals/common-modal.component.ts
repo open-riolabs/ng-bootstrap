@@ -16,10 +16,10 @@ import { CommonModalData } from './common-modal.data';
     </div>
     <div class="modal-body">
       <h6 *ngIf="data.content?.header">
-        {{ data.content?.header }}
+        {{ data.content.header }}
       </h6>
       <span>
-      {{ data.content?.body }}
+      {{ data.content.body }}
       </span>
     </div>
     <div class="modal-footer">
