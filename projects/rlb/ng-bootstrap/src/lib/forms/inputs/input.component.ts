@@ -5,7 +5,9 @@ import {
   Input,
   Optional,
   Self,
+  TemplateRef,
   ViewChild,
+  ViewContainerRef,
   booleanAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -15,13 +17,14 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 @Component({
   selector: 'rlb-input',
   template: `
+  <ng-template #template>
     <ng-content select="[before]"></ng-content>
-    <div class="input-group has-validation">
       <input
         #field
         [id]="id"
         class="form-control"
         [type]="type"
+        [name]="name"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
@@ -32,11 +35,9 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       />
-      <div class="invalid-feedback">
-        {{ errors | json }}
-      </div>
-    </div>
-    <ng-content select="[after]"></ng-content>`,
+      <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
+    <ng-content select="[after]"></ng-content>
+  </ng-template>`,
 })
 export class InputComponent
   extends AbstractComponent<string>
@@ -47,10 +48,14 @@ export class InputComponent
   @Input({ alias: 'placeholder' }) placeholder?: string;
   @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
   @Input({ alias: 'size' }) size?: 'small' | 'large';
+  @Input({ alias: 'name' }) name?: string;
+
+  public extValidation: boolean = false;
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(
+    private viewContainerRef: ViewContainerRef,
     idService: UniqueIdService,
     @Self() @Optional() override control?: NgControl,
   ) {
@@ -60,13 +65,24 @@ export class InputComponent
   update(ev: EventTarget | null) {
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
-      this.setValue(t?.value);
+      this.setValue(t?.value || '');
     }
   }
 
   override onWrite(data: string): void {
     if (this.el && this.el.nativeElement) {
-      this.el.nativeElement.value = data;
+      this.el.nativeElement.value = data || '';
     }
+  }
+
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(
+      this.template,
+    );
+    //this.element = templateView.rootNodes[0];
+    this.viewContainerRef.element.nativeElement.remove();
+
   }
 }

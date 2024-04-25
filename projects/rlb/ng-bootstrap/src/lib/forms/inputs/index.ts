@@ -16,6 +16,7 @@ export * from './text-area.component';
 export * from './help-text.directive';
 export * from './dnd.directive';
 export * from './dnd-file.component';
+export * from './input-validation.component';
 
 import { AutocompleteComponent } from './autocomplete.component';
 import { CheckboxComponent } from './checkbox.component';
@@ -25,10 +26,8 @@ import { FileDndComponent } from './dnd-file.component';
 import { DndDirective } from './dnd.directive';
 import { FileComponent } from './file.component';
 import { HelpText } from './help-text.directive';
-import {
-  InputGroupComponent,
-  InputTextGroupComponent,
-} from './input-group.component';
+import { InputGroupComponent } from './input-group.component';
+import { InputValidationComponent } from './input-validation.component';
 import { InputComponent } from './input.component';
 import { OptionComponent } from './options.component';
 import { RadioComponent } from './radio.component';
@@ -51,8 +50,8 @@ export const INPUTS = [
   OptionComponent,
   FileComponent,
   InputGroupComponent,
-  InputTextGroupComponent,
   HelpText,
   DndDirective,
   FileDndComponent,
+  InputValidationComponent
 ];

@@ -1,21 +1,40 @@
-import { Component, Input } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, ContentChildren, Input, QueryList, booleanAttribute } from '@angular/core';
+import { InputComponent } from './input.component';
+import { ValidationErrors } from '@angular/forms';
+import { InputValidationComponent } from './input-validation.component';
 
 @Component({
   selector: 'rlb-input-group',
   host: {
-    class: 'input-group has-validation',
+    '[class.has-validation]': 'validate',
+    '[class.input-group]': '!text',
+    '[class.input-group-text]': 'text',
     '[class.input-group-sm]': 'size === "small"',
     '[class.input-group-lg]': 'size === "large"',
   },
   template: `<ng-content></ng-content>`,
 })
-export class InputGroupComponent {
-  @Input({ alias: 'size' }) size: 'small' | 'large' | undefined = undefined;
-}
+export class InputGroupComponent implements AfterContentInit {
 
-@Component({
-  selector: 'rlb-input-text-group',
-  host: { class: 'input-group-text' },
-  template: `<ng-content></ng-content>`,
-})
-export class InputTextGroupComponent { }
+  @Input({ alias: 'text', transform: booleanAttribute }) text?: boolean
+  @Input({ alias: 'validate', transform: booleanAttribute }) validate?: boolean
+  @Input({ alias: 'size' }) size?: 'small' | 'large'
+
+  validations: ValidationErrors = {};
+
+  @ContentChildren(InputComponent) inputs!: QueryList<InputComponent>;
+  @ContentChild(InputValidationComponent) validation!: InputValidationComponent;
+  ngAfterContentInit(): void {
+    if (this.validate) {
+      for (const input of this.inputs.toArray()) {
+        input.extValidation = true;
+        if (input.errors && input.name) {
+          this.validations[input.name] = input.errors;
+        }
+      }
+      if (this.validation) {
+        this.validation.errors = this.validations;
+      }
+    }
+  }
+}

@@ -65,8 +65,8 @@ export abstract class AbstractComponent<T = any>
     return this.invalid ? dirty || touched || false : false;
   }
 
-  get errors(): ValidationErrors | null {
-    return this.control?.errors || null;
+  get errors(): ValidationErrors {
+    return this.control?.errors || {};
   }
 
   onWrite(data: T) { };

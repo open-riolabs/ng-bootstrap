@@ -18,16 +18,21 @@ import { SearchModalInput } from '../../modals/search-modal.data';
     <ng-template #template>
       <ng-container *ngIf="open">
         <div class="search">
-          <rlb-input
-            class="search-input"
-            [placeholder]="searchPlaceholder"
-            [(ngModel)]="text"
-            (keyup.enter)="onEnter()"
-          >
+          <rlb-input-group validate>
+            <rlb-input
+              name="search"
+              required
+              class="search-input"
+              [placeholder]="searchPlaceholder"
+              [(ngModel)]="text"
+              (keyup.enter)="onEnter()"
+            >
+            </rlb-input>
             <button color="light" after rlb-button outline (click)="onEnter()">
               <i class="bi bi-search"></i>
             </button>
-          </rlb-input>
+            <rlb-input-validation />
+          </rlb-input-group>
         </div>
       </ng-container>
       <ng-container *ngIf="!open">
