@@ -53,10 +53,12 @@ export class DataTableRowComponent implements DoCheck {
 
   ngDoCheck() {
     if (this.hasActions) {
-      for (let i = this._projectedActions.length; i > 0; i--) {
-        this._projectedActions.detach();
+      if (this._projectedActions) {
+        for (let i = this._projectedActions.length; i > 0; i--) {
+          this._projectedActions.detach();
+        }
+        this._projectedActions.insert(this.actionsBlock.first._view);
       }
-      this._projectedActions.insert(this.actionsBlock.first._view);
     }
   }
 }

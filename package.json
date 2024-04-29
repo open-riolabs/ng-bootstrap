@@ -12,7 +12,8 @@
     "lib:test-ci": "ng test --karma-config=./karma.conf.js --no-watch --no-progress --browsers=ChromeHeadless @rlb/ng-bootstrap",
     "lib:lint": "ng lint @rlb/ng-bootstrap",
     "lib:pack": "ng build @rlb/ng-bootstrap && npm pack ./dist/ngx-dynamic/core",
-    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,html}\""
+    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,html}\"",
+    "http": "http-server ./dist/ng-bootstrap -p 4001 -c-1 --cors -U --log-ip"
   },
   "private": true,
   "author": {
@@ -48,6 +49,7 @@
     "@angular/localize": "^17.3.6",
     "@types/bootstrap": "^5.2.10",
     "@types/jasmine": "~5.1.4",
+    "http-server": "^14.1.1",
     "jasmine-core": "~5.1.2",
     "karma": "~6.4.3",
     "karma-chrome-launcher": "~3.2.0",

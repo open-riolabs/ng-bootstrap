@@ -1,7 +1,6 @@
 import {
   ContentChildren,
   Component,
-  Injector,
   Input,
   Optional,
   Self,
@@ -12,7 +11,6 @@ import {
   numberAttribute,
   booleanAttribute,
   ElementRef,
-  AfterViewInit,
   AfterContentChecked,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
