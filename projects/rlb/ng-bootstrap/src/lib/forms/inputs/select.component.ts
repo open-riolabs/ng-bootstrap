@@ -97,7 +97,7 @@ export class SelectComponent
         if (data === undefined || data === null) return;
         if (Array.isArray(data) && data.length) data = data[0];
         const opt = Array.from(this.el.nativeElement.options);
-        const val = opt.find((o) => o.value === data);
+        const val = opt.find((o) => o.value == data);
         if (val) val.selected = true;
       }
     }

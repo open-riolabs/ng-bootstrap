@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {
   ModalService,
+  PaginationEvent,
   ToastService,
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
@@ -78,6 +79,10 @@ export class HomeComponent {
 
   actionClick(item: any) {
     console.log('actionClick', item)
+  }
+
+  pagination(e: PaginationEvent) {
+    console.log('pagination', e)
   }
 }
 
