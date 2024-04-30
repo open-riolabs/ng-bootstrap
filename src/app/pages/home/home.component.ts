@@ -84,5 +84,7 @@ export class HomeComponent {
   pagination(e: PaginationEvent) {
     console.log('pagination', e)
   }
+
+  pagesize: number = 2;
 }
 

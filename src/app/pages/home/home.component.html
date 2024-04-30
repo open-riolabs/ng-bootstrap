@@ -1,8 +1,8 @@
-<rlb-dt-table [items]="items" pagination-mode="pages" total-items="100" (pagination)="pagination($event)">
+<rlb-dt-table [items]="items" pagination-mode="pages" total-items="100" [(page-size)]="pagesize" (pagination)="pagination($event)">
   <rlb-dt-header field="prop1">Col 1</rlb-dt-header>
   <rlb-dt-header field="prop2">Col 2</rlb-dt-header>
   <rlb-dt-header field="prop3">Col 3</rlb-dt-header>
-  <rlb-dt-row *ngFor="let item of items" >
+  <rlb-dt-row *ngFor="let item of items">
     <rlb-dt-cell>{{item.prop1}}</rlb-dt-cell>
     <rlb-dt-cell>{{item.prop2}}</rlb-dt-cell>
     <rlb-dt-cell>{{item.prop3}}</rlb-dt-cell>
@@ -19,7 +19,7 @@
   </rlb-dt-noitems>
 </rlb-dt-table>
 
-
+{{pagesize}}
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">

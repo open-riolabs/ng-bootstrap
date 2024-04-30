@@ -70,7 +70,7 @@
               </li>
             </ul>
             <ul class="ps-0 float-end me-3">
-              <rlb-select size="small" [(ngModel)]="pageSize" (ngModelChange)="selectPage(1)">
+              <rlb-select size="small" [(ngModel)]="pageSize" (ngModelChange)="selectSize()">
                 <rlb-option [value]="10">10</rlb-option>
                 <rlb-option [value]="20">20</rlb-option>
                 <rlb-option [value]="50">50</rlb-option>

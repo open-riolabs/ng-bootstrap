@@ -72,8 +72,15 @@ export class DataTableComponent implements OnInit, DoCheck {
     return this.columns.length + (this.showActions !== 'row' ? 1 : 0);
   }
 
+  selectSize() {
+    this.currentPageChange.emit(1);
+    this.pageSizeChange.emit(parseInt(this.pageSize as any));
+    this.pagination.emit({ page: 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
+  }
+
+
   selectPage(page: number) {
-    if(page === this.currentPage) return;
+    if (page === this.currentPage) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({ page, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
