@@ -46,7 +46,6 @@ body {
   line-height: 1.5;
   font-weight: 400;
   font-style: normal;
-  font-size: 16px;
   box-shadow: none;
   background: var(--bs-gray-200);
   padding: 8px 42px 8px 16px;
@@ -88,7 +87,6 @@ body {
   line-height: 1.5;
   font-weight: 400;
   font-style: normal;
-  font-size: 16px;
   color: var(--positive);
   background: var(--bs-white);
   padding: 16px;
@@ -109,12 +107,10 @@ body {
     line-height: 1.5;
     font-weight: 400;
     font-style: normal;
-    font-size: 12px;
   }
 
   i.icon-alert {
     margin-right: 12px;
-    font-size: 16px;
     line-height: 16px;
   }
 
@@ -189,7 +185,6 @@ body {
 .card-alert-title {
   font-family: "Roboto Flex", sans-serif;
   font-weight: 700;
-  font-size: 16px;
   line-height: 1.5;
   margin-bottom: 12px;
 }
@@ -268,7 +263,6 @@ body[data-bs-theme=dark] .avatar {
 
 .breadcrumb {
   font-family: "Roboto Flex", sans-serif;
-  font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
 }
@@ -341,7 +335,6 @@ body[data-bs-theme=dark] .avatar {
 
   font-family: "Roboto Flex",
   sans-serif;
-  font-size: 16px;
   font-weight: 600;
   line-height: 1.5;
 
@@ -501,7 +494,6 @@ body[data-bs-theme=dark] .avatar {
 }
 
 .bi-chevron-down::before {
-  font-size: 24px;
 }
 
 .btn.dropdown-toggle i {
@@ -530,11 +522,9 @@ body[data-bs-theme=dark] .avatar {
   }
 
   i {
-    font-size: 24px;
     line-height: 24px;
 
     &::before {
-      font-size: 24px;
       line-height: 24px;
     }
   }
@@ -601,14 +591,12 @@ body[data-bs-theme=dark] .avatar {
 .card-text {
   margin-bottom: 1.5rem;
   font-family: "Roboto Flex", sans-serif;
-  font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
 }
 
 .card-title {
   font-family: "Roboto Flex", sans-serif;
-  font-size: 28px;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -703,13 +691,11 @@ body[data-bs-theme=dark] .avatar {
     font-family: "Roboto Flex", sans-serif;
     font-weight: 400;
     line-height: 1.5;
-    font-size: 12px;
     color: var(--bs-gray-600);
     margin-top: 2px;
   }
 
   span {
-    font-size: 16px;
     color: var(--bs-black);
   }
 }
@@ -746,7 +732,6 @@ body[data-bs-theme=dark] .avatar {
   padding: 0;
 
   i {
-    font-size: 24px;
 
     &::before {
       transform: scaleX(-1);
@@ -785,13 +770,11 @@ body[data-bs-theme=dark] .avatar {
 
 .chat-bubble-item__text p {
   margin-bottom: 0;
-  font-size: 16px;
   color: var(--bs-black);
 }
 
 .chat-bubble-item__time {
   color: var(--positive);
-  font-size: 12px;
 }
 
 /*Chat bubble replied*/
@@ -808,7 +791,6 @@ body[data-bs-theme=dark] .avatar {
   font-family: "Roboto Flex", sans-serif;
   font-weight: 700;
   line-height: 1.5;
-  font-size: 17px;
   color: var(--primary);
 }
 
@@ -823,7 +805,6 @@ body[data-bs-theme=dark] .avatar {
 
 .chat-bubble__right {
   i {
-    font-size: 20px;
     line-height: 24px;
   }
 
@@ -873,12 +854,10 @@ body[data-bs-theme=dark] .avatar {
 }
 
 .list-group-item {
-  font-weight: 400;
   line-height: 1.5;
-  font-size: 16px;
   color: var(--positive);
   border: none;
-  padding: 8px 16px;
+
 }
 
 .list-group .list-group-item:not(:last-child) {
@@ -887,17 +866,10 @@ body[data-bs-theme=dark] .avatar {
 
 .list-group-item i {
   color: var(--positive);
-  width: 16px;
-  height: 16px;
   display: flex;
 }
 
-.list-item__plus-left {
-  margin-right: 10px;
-}
-
 /*MODAL*/
-
 
 .modal-content {
   border-color: var(--border-positive);
@@ -918,7 +890,6 @@ body[data-bs-theme=dark] .avatar {
     font-family: "Roboto Flex", sans-serif;
     font-weight: 700;
     line-height: 1.5;
-    font-size: 16px;
     color: var(--positive);
   }
 }
@@ -937,7 +908,6 @@ body[data-bs-theme=dark] .avatar {
   font-family: "Roboto Flex", sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  font-size: 16px;
   color: var(--positive);
   margin-bottom: 0;
 }
@@ -963,7 +933,6 @@ body[data-bs-theme=dark] .avatar {
   font-family: "Roboto Flex", sans-serif;
   font-weight: 600;
   line-height: 1.17;
-  font-size: 20px;
 }
 
 [data-bs-theme=dark] .navbar-brand:hover {
@@ -974,7 +943,6 @@ body[data-bs-theme=dark] .avatar {
   font-family: "Roboto Flex", sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  font-size: 16px;
   color: var(--positive);
 
   &.active {
@@ -1035,7 +1003,6 @@ body[data-bs-theme=dark] .avatar {
   font-family: "Roboto Flex", sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  font-size: 16px;
 
   &:hover {
     color: var(--primary-dark);
@@ -1129,7 +1096,6 @@ body[data-bs-theme=dark] .avatar {
   font-family: "Roboto Flex", sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  font-size: 16px;
 }
 
 [data-bs-theme=dark] .form-input-text {
@@ -1350,7 +1316,6 @@ button.input-icon__bg i {
 
   td,
   th {
-    font-size: 16px;
     line-height: 1.5;
   }
 
@@ -1378,7 +1343,6 @@ button.input-icon__bg i {
     border-radius: 0;
     padding: 10px 16px;
     font-weight: 500;
-    font-size: 14px;
     line-height: 1.5;
     border-left: none;
     background: var(--bs-white);
@@ -1442,7 +1406,6 @@ button.input-icon__bg i {
 
   .tab-pane {
     color: #68717A;
-    font-size: 16px;
     line-height: 1.5;
     font-weight: 400;
   }
@@ -1466,7 +1429,6 @@ button.input-icon__bg i {
 }
 
 .toast-body {
-  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -1484,7 +1446,6 @@ button.input-icon__bg i {
 .toast-header {
   .bi-square-fill {
     color: var(--primary);
-    font-size: 24px;
     line-height: 24px;
     margin-right: 10px;
   }
@@ -1495,7 +1456,6 @@ button.input-icon__bg i {
 
   small {
     color: rgba(52, 52, 52, 0.5);
-    font-size: 12px;
     line-height: 1.5;
     font-weight: 400;
     opacity: 1;
@@ -1550,7 +1510,6 @@ button.input-icon__bg i {
   --bs-tooltip-border-radius:4px;
   font-family: "Roboto Flex",
   sans-serif;
-  font-size: 16px;
 }
 
 /*POPOVER*/
@@ -1574,7 +1533,6 @@ button.input-icon__bg i {
   --bs-popover-border-width: 0px;
   border: none;
   font-family: "Roboto Flex", sans-serif;
-  font-size: 16px;
   font-weight: 400;
 }
 
