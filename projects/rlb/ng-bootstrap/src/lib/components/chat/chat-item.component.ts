@@ -7,8 +7,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     <div class="avatar small" *ngIf="position === 'left'">
         <img [src]="avatar" alt="avatar">
     </div>
-    <div class="chat-bubble-item__text" *ngIf="replayText">
-      <div class="chat-bubble__replied-message">
+    <div class="chat-bubble-item__text">
+      <div class="chat-bubble__replied-message" *ngIf="replayText">
         <span class="replied-message__name">{{replaySubject}}</span>
         <p>{{replayText}}</p>
       </div>
