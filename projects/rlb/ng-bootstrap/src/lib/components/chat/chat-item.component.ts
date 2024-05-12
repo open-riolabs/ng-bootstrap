@@ -33,7 +33,7 @@ export class ChatItemComponent {
   @Input({ alias: 'id' }) id: string = '';
   @Input({ alias: 'avatar' }) avatar: string = '';
   @Input({ alias: 'text' }) text: string = '';
-  @Input({ alias: 'date-time' }) dateTime: Date = new Date();
+  @Input({ alias: 'date-time' }) dateTime: Date | number = new Date();
 
   @Input({ alias: 'replay-text' }) replayText?: string;
   @Input({ alias: 'replay-subject' }) replaySubject?: string;
