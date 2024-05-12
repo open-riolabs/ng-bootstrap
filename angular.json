@@ -25,10 +25,8 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "node_modules/bootstrap/scss/bootstrap.scss",
               "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
-              "projects/rlb/ng-bootstrap/src/styles/style.scss",
-              "src/styles.scss"
+              "projects/rlb/ng-bootstrap/src/styles/style.scss"
             ],
             "scripts": []
           },
