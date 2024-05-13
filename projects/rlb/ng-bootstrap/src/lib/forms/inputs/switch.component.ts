@@ -15,7 +15,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
   selector: 'rlb-switch',
   template: `
     <ng-content select="[before]"></ng-content>
-    <div class="form-check form-switch">
+    <div class="form-check form-switch d-inline-block">
       <input
         #field
         class="form-check-input"
