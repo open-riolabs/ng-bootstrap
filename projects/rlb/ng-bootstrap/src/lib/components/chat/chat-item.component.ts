@@ -13,8 +13,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         <p>{{replayText}}</p>
       </div>
        <ng-content/>
-      <span class="chat-bubble-item__time">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
-      <i class="bi bi-check-all"></i>
+       <i class="bi bi-check-all float-end"></i>
+     <span class="chat-bubble-item__time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
     </div>
     <div class="avatar small" *ngIf="position === 'right'">
         <img [src]="avatar" alt="avatar">
