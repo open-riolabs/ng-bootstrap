@@ -30,9 +30,6 @@ body {
   }
 }
 
-
-
-
 /*CHAT*/
 /*User list*/
 
@@ -95,7 +92,6 @@ body {
 .chat-bubble__wrap {
   display: flex;
   flex-direction: column;
-  row-gap: 43px;
 }
 
 .chat-bubble-item {
@@ -107,6 +103,7 @@ body {
   align-items: center;
   word-wrap: normal;
   word-break: break-word;
+  padding: 11px 0px;
 
   .avatar {
     margin-top: auto;
