@@ -1,8 +1,9 @@
-$primary: #005DAC;
-
+@import "rlb/vars";
+@import "rlb/bp";
 @import "bootstrap/scss/bootstrap";
 @import "rlb/chat";
-//@import "rlb/style";
+
+
 @import "sidebar";
 @import "navbar";
 @import "app-layout";

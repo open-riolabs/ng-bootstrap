@@ -1,0 +1,281 @@
+// Customize the light and dark text colors for use in our color contrast function.
+$color-contrast-dark: #343434;
+$color-contrast-light: #fafafa;
+
+// scss-docs-start theme-color-variables
+$primary: #005DAC;
+$success:#28A745;
+$info:#17A2B8;
+$warning:#DEA700;
+// scss-docs-start theme-text-variables
+$primary-text-emphasis: #290661;
+$success-text-emphasis: #0a3622;
+$warning-text-emphasis: #664D03;
+$danger-text-emphasis: #58151C;
+// scss-docs-start theme-bg-subtle-variables
+$primary-bg-subtle: #C2DFF8;
+$success-bg-subtle: #CAEAD1;
+$warning-bg-subtle: #FFEEB9;
+$danger-bg-subtle: #FBEBEC;
+// scss-docs-start theme-border-subtle-variables
+$primary-border-subtle: #005DAC;
+$success-border-subtle: #28A745;
+$warning-border-subtle: #DEA700;
+$danger-border-subtle: #DC3545;
+// Body
+$body-color: #343434;
+$font-family-base: "Roboto Flex",
+sans-serif;
+$body-bg: #F8F9FA;
+$border-color: #CED4DA;
+$border-radius: .25rem;
+$box-shadow: 0 .0625rem 0.25rem 0 rgba(#000, .1);
+$box-shadow-sm: 0 .25rem .625rem 0 rgba(#000, .012);
+$box-shadow-lg: 0 0.5rem 2.18rem rgba(#000, .16);
+
+// Accordion
+$accordion-padding-y: 1rem;
+$accordion-padding-x: 1rem;
+$accordion-button-padding-y: 0.5rem;
+$accordion-button-bg: #e9ecef;
+$accordion-button-active-bg: #e9ecef;
+$accordion-button-active-color: #343434;
+$accordion-button-focus-border-color: none;
+$accordion-button-focus-box-shadow: none;
+$accordion-icon-width: 1rem;
+$accordion-icon-transform: translateY(-50%);
+$accordion-button-icon: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' fill=\'%23343434\' class=\'bi bi-plus\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4\'/%3E%3C/svg%3E');
+$accordion-button-active-icon: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' fill=\'%23343434\' class=\'bi bi-dash\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8\'/%3E%3C/svg%3E');
+$accordion-color: #343434;
+//Accordion Dark theme
+$accordion-icon-color-dark: #343434;
+$accordion-icon-active-color-dark: #343434;
+$accordion-button-icon-dark: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' fill=\'%23343434\' class=\'bi bi-plus\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4\'/%3E%3C/svg%3E');
+$accordion-button-active-icon-dark: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' fill=\'%23343434\' class=\'bi bi-dash\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8\'/%3E%3C/svg%3E');
+
+// Alerts
+$alert-border-radius: 0.375rem;
+$alert-link-font-weight: 400;
+$alert-border-width: 0.0625rem;
+
+//Close button
+$btn-close-color: #343434;
+$btn-close-bg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23343434' viewBox='0 0 24 24'%3E%3Cpath d='M6.646 6.646a.5.5 0 0 1 .708 0L12 11.293l4.646-4.647a.5.5 0 0 1 .708.708L12.707 12l4.647 4.646a.5.5 0 0 1-.708.708L12 12.707l-4.646 4.647a.5.5 0 0 1-.708-.708L11.293 12 6.646 7.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+$btn-close-padding-x: 0;
+$btn-close-focus-shadow: none;
+$btn-close-opacity: 1;
+
+// Badges
+$badge-font-size: .75em !default;
+$badge-font-weight: 600;
+
+// Breadcrumbs
+$breadcrumb-font-size: 1rem;
+$breadcrumb-divider-color: #CED4DA;
+$breadcrumb-active-color: #343434;
+
+// Links
+$link-decoration: none;
+$link-hover-color: #00457F;
+
+// Buttons
+$btn-padding-y: 0.56rem;
+$btn-padding-x: 1.56rem;
+$btn-font-size: 1rem;
+$btn-padding-y-sm: 0.187rem;
+$btn-padding-x-sm: 1.06rem;
+$btn-font-size-sm: 1rem;
+$btn-padding-y-lg: 0.94rem;
+$btn-padding-x-lg: 2.06rem;
+$btn-font-size-lg: 1rem;
+$btn-font-weight: 600;
+$btn-box-shadow: none;
+$btn-focus-box-shadow: none;
+$btn-disabled-opacity: 1;
+$btn-active-box-shadow: none;
+$btn-link-color: #FAFAFA;
+$btn-link-hover-color: #FAFAFA;
+$btn-link-disabled-color: #CED4DA;
+$btn-link-focus-shadow-rgb: none;
+$btn-border-radius-sm: 0.25rem;
+$btn-border-radius-lg: 0.25rem;
+
+// scss-docs-start dropdown-variables
+$dropdown-bg: #ffffff;
+$dropdown-border-width: none;
+$dropdown-link-hover-bg: #005DAC;
+$dropdown-link-hover-color: #ffffff;
+$dropdown-link-active-bg: #005DAC;
+$dropdown-link-active-color: #ffffff;
+
+// Cards
+$card-border-radius: 0.5rem;
+$card-bg: #ffffff;
+// Carousel
+
+// scss-docs-start carousel-variables
+$carousel-control-color: #343434;
+$carousel-indicator-width: 2rem;
+$carousel-indicator-opacity: 0.4;
+$carousel-indicator-active-opacity: 0.5;
+// scss-docs-start carousel-dark-variables
+$carousel-dark-indicator-active-bg: #FFFFFF;
+
+$carousel-dark-control-icon-filter: none;
+
+// List group
+$list-group-bg: #FFFFFF;
+$list-group-border-width: 0;
+$list-group-item-padding-y: 0.5rem;
+$list-group-item-padding-x: 1rem;
+
+// Modals
+$modal-content-color: #343434;
+$modal-content-bg: #FFFFFF;
+$modal-content-border-color: #CED4DA;
+$modal-content-border-width: 0.0625rem;
+$modal-header-padding-y: 0.625rem;
+$modal-header-padding-x: 1rem;
+$modal-header-padding: 0.625rem 1rem;
+$modal-footer-margin-between: 1rem;
+
+// Navs
+$nav-link-padding-y: 0.625rem;
+$nav-link-color: #343434;
+$nav-link-font-size: 1rem;
+$nav-link-font-weight: 400;
+$nav-link-hover-color: #00457F;
+$nav-link-disabled-color: rgba(52, 52, 52, 0.3);
+$nav-link-focus-box-shadow: none;
+$nav-tabs-border-width: 0.0625rem;
+$nav-tabs-link-hover-border-color: #00457F;
+$nav-tabs-link-active-color: #FFFFFF;
+$nav-tabs-link-active-bg: #005DAC;
+$nav-tabs-link-active-border-color: #005DAC;
+$nav-tabs-border-radius: 0rem;
+
+// Navbar
+$navbar-padding-y: 0;
+$navbar-nav-link-padding-x: 1.625rem;
+$navbar-brand-padding-y: 0.625rem;
+$nav-link-font-size: 1rem;
+$nav-link-font-weight: 400;
+$navbar-light-color: #343434;
+$navbar-light-hover-color: #00457F;
+$navbar-light-active-color: #005DAC;
+$navbar-light-disabled-color: rgba(52, 52, 52, 0.3);
+$navbar-light-icon-color: #343434;
+
+// scss-docs-start navbar-dark-variables
+$navbar-dark-disabled-color: #6c757d;
+$navbar-dark-toggler-icon-bg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23343434' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+
+
+// Pagination
+$pagination-padding-y: 1rem;
+$pagination-padding-x: 1rem;
+$pagination-color: #6c757d;
+$pagination-bg: #FFFFFF;
+$pagination-border-color: #e9ecef;
+$pagination-focus-color: #C2DFF8;
+$pagination-focus-bg: transparent;
+$pagination-focus-box-shadow: none;
+$pagination-hover-bg: transparent;
+$pagination-active-color: #005DAC;
+$pagination-active-bg: transparent;
+$pagination-disabled-color: rgba(52, 52, 52, 0.3);
+$pagination-disabled-bg: transparent;
+
+// Popovers
+$popover-font-size: 1rem;
+$popover-bg: #343a40;
+$popover-border-width: 0rem;
+$popover-box-shadow: none;
+$popover-header-bg: #212529;
+$popover-header-color: #FAFAFA;
+$popover-body-color: #FAFAFA;
+$popover-body-padding-y: 0.625rem;
+$popover-body-padding-x: 1rem;
+$popover-arrow-width: 1.375rem;
+$popover-arrow-height: .625rem;
+$popover-arrow-color: #343a40;
+
+// Progress bars
+$progress-bg: #3434341A;
+$progress-border-radius: 0.625rem;
+
+// Spinners
+$spinner-width: 3rem;
+
+// Tables
+$table-cell-padding-y: .75rem;
+$table-cell-padding-x: 1rem;
+$table-color: #fff;
+$table-bg: #343a40;
+$table-th-font-weight: 700;
+$table-striped-color: #FAFAFA;
+$table-striped-bg: #495057;
+$table-border-width: 0.0625rem;
+$table-border-color: #6c757d;
+
+// Toasts
+$toast-max-width: 443px;
+$toast-padding-x: 1rem;
+$toast-padding-y: .625rem;
+$toast-font-size: 1rem;
+$toast-color: #343434;
+$toast-background-color: #FFFFFF;
+$toast-border-width: 0.0625rem;
+$toast-border-color: #CED4DA;
+$toast-border-radius: 0.5rem;
+$toast-box-shadow: none;
+$toast-header-color: #343434;
+$toast-header-background-color: #FFFFFF;
+$toast-header-border-color: #CED4DA;
+
+// Tooltips
+$tooltip-font-size: 1rem;
+$tooltip-bg: #343a40;
+$tooltip-padding-y: 0.75rem;
+$tooltip-padding-x: 1rem;
+$tooltip-arrow-width: 1.25rem;
+$tooltip-arrow-height: 0.56rem;
+$tooltip-opacity: 1;
+
+// Inputs
+$form-text-font-size: 1rem;
+$form-text-font-weight: 400;
+$form-text-color: #343434;
+
+// scss-docs-start input-group-variables
+$input-group-addon-border-color: transparent;
+
+// scss-docs-start form-input-variables
+$input-padding-y: 0.625rem;
+$input-padding-x: 0.625rem;
+$input-bg: #FFFFFF;
+$input-disabled-color: rgba(52, 52, 52, 0.5);
+$input-disabled-bg: rgba(52, 52, 52, 0.05);
+$input-border-color: transparent;
+$input-border-width: 0.0625rem;
+$input-box-shadow: none;
+$input-focus-box-shadow: none;
+$input-placeholder-color: rgba(52, 52, 52, 0.8);
+// scss-docs-start form-check-variables
+$form-check-input-focus-box-shadow: none;
+$form-check-input-checked-bg-color: #005DAC;
+$form-check-input-checked-border-color: #005DAC;
+$form-check-input-disabled-opacity: 1;
+$form-check-label-disabled-opacity: 0.3;
+$form-check-btn-check-disabled-opacity: 1;
+// scss-docs-start form-switch-variables
+$form-switch-width: 2.3em;
+$form-switch-border-radius: 2em;
+$form-switch-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(222, 226, 230, 1)'/%3e%3c/svg%3e");
+$form-switch-checked-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(0, 93, 172, 1)'/%3e%3c/svg%3e");
+
+// Dark color mode variables
+// Global colors
+$body-color-dark: #343434;
+$body-bg-dark: #FFFFFF;
+$border-color-translucent-dark: rgba(0, 0, 0, 0.175);
