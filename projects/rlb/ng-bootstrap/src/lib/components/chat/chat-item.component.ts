@@ -12,7 +12,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         <span class="replied-message__name">{{replaySubject}}</span>
         <p>{{replayText}}</p>
       </div>
-       <ng-content/>
+      <div>
+        <ng-content/>
+      </div>
        <i class="bi bi-check-all float-end"></i>
      <span class="chat-bubble-item__time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
     </div>
