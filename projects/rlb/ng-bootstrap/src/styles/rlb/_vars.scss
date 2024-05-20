@@ -411,13 +411,11 @@ $nav-tabs-link-active-border-color: $body-bg;
 
 // Navbar
 $navbar-padding-y: 0;
-$navbar-nav-link-padding-x: 1.625rem;
-$navbar-brand-padding-y: 0.625rem;
 $nav-link-font-size: 1rem;
 $nav-link-font-weight: 400;
 $navbar-light-color: #343434;
 $navbar-light-hover-color: #00457F;
-$navbar-light-active-color: #005DAC;
+$navbar-light-active-color: $primary;
 $navbar-light-disabled-color: rgba(52, 52, 52, 0.3);
 $navbar-light-icon-color: #343434;
 
