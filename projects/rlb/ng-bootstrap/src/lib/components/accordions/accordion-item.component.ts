@@ -33,7 +33,7 @@ export class AccordionItemComponent
 
   @Output('statusChange') override statusChange = new EventEmitter<VisibilityEvent>();
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @ViewChild('template', { static: true }) template?: TemplateRef<any>;
   @ContentChild(AccordionHeaderComponent) public header!: AccordionHeaderComponent;
   @ContentChild(AccordionBodyComponent) public body!: AccordionBodyComponent;
 
@@ -46,12 +46,14 @@ export class AccordionItemComponent
   }
 
   override ngOnInit(): void {
-    const templateView = this.viewContainerRef?.createEmbeddedView(
-      this.template,
-    );
-    this.element = templateView?.rootNodes[0];
-    this.viewContainerRef.element.nativeElement.remove();
-    super.ngOnInit(this.element?.getElementsByClassName('accordion-collapse')[0]);
+    if (this.template) {
+      const templateView = this.viewContainerRef?.createEmbeddedView(
+        this.template,
+      );
+      this.element = templateView?.rootNodes[0];
+      this.viewContainerRef.element.nativeElement.remove();
+      super.ngOnInit(this.element?.getElementsByClassName('accordion-collapse')[0]);
+    }
   }
 
   ngDoCheck(): void {
