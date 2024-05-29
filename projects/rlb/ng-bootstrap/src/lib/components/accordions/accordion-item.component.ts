@@ -7,15 +7,12 @@ import { Collapse } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 
 @Component({
-  selector: 'rlb-accordion-item',
+  selector: 'div[rlb-accordion-item]',
   template: `
-    <ng-template #template>
-      <div class="accordion-item {{cssClass}}" [style]="style">
-        <ng-content select="rlb-accordion-header"></ng-content>
-        <ng-content select="[rlb-accordion-body]"></ng-content>
-      </div>
-    </ng-template>
+    <ng-content select="rlb-accordion-header"></ng-content>
+    <ng-content select="[rlb-accordion-body]"></ng-content>
   `,
+  host: { class: 'accordion-item' },
 })
 export class AccordionItemComponent
   extends ToggleAbstractComponent<Collapse>
@@ -33,7 +30,7 @@ export class AccordionItemComponent
 
   @Output('statusChange') override statusChange = new EventEmitter<VisibilityEvent>();
 
-  @ViewChild('template', { static: true }) template?: TemplateRef<any>;
+
   @ContentChild(AccordionHeaderComponent) public header!: AccordionHeaderComponent;
   @ContentChild(AccordionBodyComponent) public body!: AccordionBodyComponent;
 
@@ -46,14 +43,7 @@ export class AccordionItemComponent
   }
 
   override ngOnInit(): void {
-    if (this.template) {
-      const templateView = this.viewContainerRef?.createEmbeddedView(
-        this.template,
-      );
-      this.element = templateView?.rootNodes[0];
-      this.viewContainerRef.element.nativeElement.remove();
-      super.ngOnInit(this.element?.getElementsByClassName('accordion-collapse')[0]);
-    }
+    super.ngOnInit(this.element?.getElementsByClassName('accordion-collapse')[0]);
   }
 
   ngDoCheck(): void {

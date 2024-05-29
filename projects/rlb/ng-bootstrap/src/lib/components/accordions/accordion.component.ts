@@ -11,7 +11,7 @@ import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({
   selector: 'rlb-accordion',
-  template: `<ng-content select="rlb-accordion-item"></ng-content>`,
+  template: `<ng-content select="[rlb-accordion-item]"></ng-content>`,
   host: {
     class: 'accordion',
     '[class.accordion-flush]': 'flush',
