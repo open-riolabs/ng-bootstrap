@@ -46,12 +46,12 @@ export class AccordionItemComponent
   }
 
   override ngOnInit(): void {
-    const templateView = this.viewContainerRef.createEmbeddedView(
+    const templateView = this.viewContainerRef?.createEmbeddedView(
       this.template,
     );
-    this.element = templateView.rootNodes[0];
+    this.element = templateView?.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
-    super.ngOnInit(this.element.getElementsByClassName('accordion-collapse')[0]);
+    super.ngOnInit(this.element?.getElementsByClassName('accordion-collapse')[0]);
   }
 
   ngDoCheck(): void {
