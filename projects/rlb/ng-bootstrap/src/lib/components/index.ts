@@ -66,6 +66,8 @@ import { AvatarComponent } from './avatar/avatar.component';
 import { ListItemImageComponent } from './list/list-item-image.component';
 import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
 import { SidebarSearchComponent } from './sidebar/sidebar-search.component';
+import { ChatContainerComponent } from './chat/chat-container.component';
+import { ChatItemComponent } from './chat/chat-item.component';
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -135,6 +137,8 @@ export * from './carousel/carousel.component';
 export * from './carousel/carousel-slide.component';
 export * from './carousel/carousel-caption.component';
 export * from './avatar/avatar.component';
+export * from './chat/chat-container.component';
+export * from './chat/chat-item.component';
 
 export const COMPONENTS = [
   AlertComponent,
@@ -202,6 +206,8 @@ export const COMPONENTS = [
   ListItemComponent,
   ListItemImageComponent,
   AvatarComponent,
+  ChatContainerComponent,
+  ChatItemComponent,
   ...[MODALS],
   ...[TOASTS],
 ];

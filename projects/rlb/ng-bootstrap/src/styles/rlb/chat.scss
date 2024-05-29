@@ -1,0 +1,136 @@
+/*Chat bubble */
+
+.chat-bubble__wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-bubble-item {
+  min-width: 210px;
+  max-width: 700px;
+  padding-right: 1rem !important;
+  padding-left: 1rem !important;
+  display: flex;
+  align-items: center;
+  word-wrap: normal;
+  word-break: break-word;
+  padding: 11px 0px;
+
+  .avatar {
+    margin-top: auto;
+  }
+}
+
+.reply-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+
+  i {
+
+    &::before {
+      transform: scaleX(-1);
+    }
+  }
+}
+
+.chat-bubble-item__text {
+  border-radius: $border-radius;
+  padding: 8px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.chat-bubble__left {
+  .chat-bubble-item__text {
+    background: $white;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 14.29px;
+      left: -6px;
+      bottom: -0.5px;
+      border-top: 11px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-right: 17px solid $white;
+      transform: rotate(87deg);
+      z-index: -1;
+    }
+  }
+}
+
+.chat-bubble-item__text {
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.chat-bubble-item__text i {
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.chat-bubble-item__time {
+  color: #343434;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/*Chat bubble replied*/
+
+.chat-bubble__replied-message {
+  background: var(--bs-gray-200);
+  border-left: 3px solid $primary;
+  border-radius: 0;
+  padding: 8px;
+}
+
+.replied-message__name {
+  font-weight: 700;
+  line-height: 1.5;
+  color: $primary;
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+/*Chat bubble right*/
+
+.chat-bubble-item__details {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.chat-bubble__right {
+  i {
+    line-height: 24px;
+  }
+
+  &.already-read i {
+    color: $primary;
+  }
+
+  .chat-bubble-item__text {
+    background: #C2DFF8;
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 14.29px;
+      right: -6px;
+      bottom: -0.5px;
+      border-top: 8px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-right: 14px solid #C2DFF8;
+      transform: rotate(93deg);
+      z-index: -1;
+    }
+  }
+}

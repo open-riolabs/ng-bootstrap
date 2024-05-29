@@ -25,7 +25,7 @@ import { OptionComponent } from './options.component';
     <div class="input-group has-validation">
       <select
         #select
-        class="form-select"
+        class="form-select d-inline-block"
         [id]="id"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
