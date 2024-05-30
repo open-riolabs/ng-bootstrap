@@ -26,6 +26,9 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         class="form-control"
         [type]="type"
         [name]="name"
+        [attr.max]="type === 'number' && max ? max : undefined"
+        [attr.min]="type === 'number' && min ? min : undefined"
+        [attr.step]="type === 'number' && step ? step : undefined"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
@@ -52,6 +55,7 @@ export class InputComponent
   @Input({ alias: 'name' }) name?: string;
   @Input({ alias: 'max', transform: numberAttribute }) max?: number;
   @Input({ alias: 'min', transform: numberAttribute }) min?: number;
+  @Input({ alias: 'step', transform: numberAttribute }) step?: number;
 
   public extValidation: boolean = false;
 
