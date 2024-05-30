@@ -9,6 +9,7 @@ import {
   ViewChild,
   ViewContainerRef,
   booleanAttribute,
+  numberAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -49,6 +50,8 @@ export class InputComponent
   @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
   @Input({ alias: 'size' }) size?: 'small' | 'large';
   @Input({ alias: 'name' }) name?: string;
+  @Input({ alias: 'max', transform: numberAttribute }) max?: number;
+  @Input({ alias: 'min', transform: numberAttribute }) min?: number;
 
   public extValidation: boolean = false;
 
@@ -64,6 +67,18 @@ export class InputComponent
 
   update(ev: EventTarget | null) {
     if (!this.disabled) {
+      if (this.type === 'number') {
+        const t = ev as HTMLInputElement;
+        let v = parseFloat(t?.value || '');
+        if (this.max && v > this.max) {
+          v = this.max;
+        }
+        if (this.min && v < this.min) {
+          v = this.min;
+        }
+        this.setValue(v.toString());
+        return;
+      }
       const t = ev as HTMLInputElement;
       this.setValue(t?.value || '');
     }
@@ -71,6 +86,17 @@ export class InputComponent
 
   override onWrite(data: string): void {
     if (this.el && this.el.nativeElement) {
+      if (this.type === 'number') {
+        let val = parseFloat(data);
+        if (this.max && val > this.max) {
+          val = this.max;
+        }
+        if (this.min && val < this.min) {
+          val = this.min;
+        }
+        this.el.nativeElement.value = val.toString();
+        return
+      }
       this.el.nativeElement.value = data || '';
     }
   }
@@ -83,6 +109,5 @@ export class InputComponent
     );
     //this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
-
   }
 }
