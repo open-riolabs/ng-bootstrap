@@ -28,7 +28,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [name]="name"
         [attr.max]="type === 'number' && max !== null && max !== undefined ? max : undefined"
         [attr.min]="type === 'number' && min !== null && min !== undefined ? min : undefined"
-        [attr.step]="type === 'number' && step !== null && step !== undefined ? step : undefined"
+        [attr.step]="step"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
