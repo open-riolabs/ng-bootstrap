@@ -36,10 +36,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [class.form-control-sm]="size === 'small'"
         [value]="value || ''"
         (blur)="touch()"
-        (keydown)="keyup($event)"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
-        (paste)="paste($event)"
       />
       <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
     <ng-content select="[after]"></ng-content>
