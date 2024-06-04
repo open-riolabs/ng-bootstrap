@@ -28,7 +28,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [name]="name"
         [attr.max]="type === 'number' && max !== null && max !== undefined ? max : undefined"
         [attr.min]="type === 'number' && min !== null && min !== undefined ? min : undefined"
-        [attr.step]="step"
+        [attr.step]="type === 'number' && step !== null && step !== undefined ? step : undefined"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
@@ -36,6 +36,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [class.form-control-sm]="size === 'small'"
         [value]="value || ''"
         (blur)="touch()"
+        (keyup)="keyup($event)"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       />
@@ -113,5 +114,13 @@ export class InputComponent
     );
     //this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
+  }
+
+  keyup(ev: KeyboardEvent) {
+    const comma = ev.key === ',';
+    const dot = ev.key === '.';
+    // if (ev.key === 'Enter') {
+    //   this.touch();
+    // }
   }
 }
