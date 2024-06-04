@@ -11,7 +11,7 @@ import {
   booleanAttribute,
   numberAttribute,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
@@ -36,9 +36,10 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [class.form-control-sm]="size === 'small'"
         [value]="value || ''"
         (blur)="touch()"
-        (keyup)="keyup($event)"
+        (keydown)="keyup($event)"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
+        (paste)="paste($event)"
       />
       <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
     <ng-content select="[after]"></ng-content>
@@ -57,6 +58,7 @@ export class InputComponent
   @Input({ alias: 'max', transform: numberAttribute }) max?: number;
   @Input({ alias: 'min', transform: numberAttribute }) min?: number;
   @Input({ alias: 'step', transform: numberAttribute }) step?: number;
+  @Input({ alias: 'cd-en', transform: booleanAttribute }) commaDotEnabled?: boolean
 
   public extValidation: boolean = false;
 
@@ -116,11 +118,67 @@ export class InputComponent
     this.viewContainerRef.element.nativeElement.remove();
   }
 
+  decimal: boolean = false
   keyup(ev: KeyboardEvent) {
-    const comma = ev.key === ',';
-    const dot = ev.key === '.';
-    // if (ev.key === 'Enter') {
-    //   this.touch();
-    // }
+    if (this.commaDotEnabled && this.type === 'number') {
+      const target = ev.target as HTMLInputElement
+      const val = target.value
+      if (ev.key === ',' || ev.key === '.') {
+        const sep = this.getNumberSeparator()
+        if (ev.key === sep) {
+          return;
+        }
+        if (!(val.includes(',') && val.includes(','))) {
+          this.decimal = true
+          return
+        }
+      }
+      if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(ev.key)) {
+        if (this.decimal) {
+          setTimeout(() => {
+            let f = parseFloat(`${val}${this.getNumberSeparator()}${ev.key}`) as any
+            this.decimal = false
+            if (this.max !== undefined && f > this.max) {
+              f = this.max
+            }
+            if (this.min !== undefined && f < this.min) {
+              f = this.min
+            }
+            target.value = f as any
+          }, 1)
+          return
+        } else {
+          setTimeout(() => {
+            let f = parseFloat(`${val}${ev.key}`)
+            if (this.max !== undefined && f > this.max) {
+              f = this.max
+            }
+            if (this.min !== undefined && f < this.min) {
+              f = this.min
+            }
+            target.value = f as any
+          }, 1)
+        }
+      }
+    }
+  }
+
+  paste(event: ClipboardEvent) {
+    if (this.commaDotEnabled && this.type === 'number') {
+      event.stopPropagation();
+      event.preventDefault();
+      let clipboardData = event.clipboardData
+      let pastedData = clipboardData?.getData('Text');
+      pastedData = pastedData?.replaceAll(/\.|,/g, this.getNumberSeparator())
+      const num = parseFloat(pastedData || '')
+      if (!isNaN(num)) {
+        const t = event.target as HTMLInputElement
+        t.value = num as any
+      }
+    }
+  }
+
+  private getNumberSeparator() {
+    return (1.1).toLocaleString().substring(1, 2);
   }
 }
