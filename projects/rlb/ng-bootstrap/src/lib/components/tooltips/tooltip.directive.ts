@@ -18,7 +18,7 @@ import { Tooltip } from 'bootstrap';
 export class TooltipDirective implements OnInit, OnChanges {
   static bsInit = false;
   private _tooltip: Tooltip | undefined;
-  @Input({ alias: 'tooltip', required: true }) tooltip!: string | undefined;
+  @Input({ alias: 'tooltip', required: true }) tooltip!: string | null | undefined;
   @Input({ alias: 'tooltip-placement' }) placement!: 'top' | 'bottom' | 'left' | 'right';
   @Input({ alias: 'tooltip-class' }) customClass!: string;
   @Input({ alias: 'tooltip-html', transform: booleanAttribute }) html?: boolean;
