@@ -21,7 +21,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     <div class="avatar small" *ngIf="position === 'right'">
         <img [src]="avatar" alt="avatar">
     </div>
-    <button class="reply-button" *ngIf="position === 'left'">
+    <button class="reply-button" *ngIf="position === 'left'" (click)="replyClick($event)">
       <i class="bi bi-reply-fill"></i>
     </button>
   </div>
@@ -42,4 +42,10 @@ export class ChatItemComponent {
   @Input({ alias: 'position' }) position?: 'left' | 'right' = 'left';
 
   @Output() reply = new EventEmitter();
+
+  replyClick(event: MouseEvent) {
+    event?.stopPropagation();
+    event?.preventDefault();
+    this.reply.emit(this.replayId);
+  }
 }
