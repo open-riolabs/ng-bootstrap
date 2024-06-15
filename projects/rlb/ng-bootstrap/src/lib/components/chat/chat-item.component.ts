@@ -45,7 +45,7 @@ export class ChatItemComponent {
   @Input({ alias: 'position' }) position?: 'left' | 'right' = 'left';
 
   @Output() reply = new EventEmitter();
-  @Input({ alias: 'can-reply' }) canReply?: string;
+  @Input({ alias: 'can-reply' }) canReply?: boolean = false;
 
   replyClick(event: MouseEvent) {
     event?.stopPropagation();
