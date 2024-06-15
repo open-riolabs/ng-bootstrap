@@ -4,6 +4,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'rlb-chat-item',
   template: `
   <div [id]="id" class="chat-bubble-item" [class.chat-bubble__left]="position==='left'" [class.chat-bubble__right]="position==='right'">
+    <button *ngIf="canReply && position === 'right'" class="reply-button" (click)="replyClick($event)">
+      <i class="bi bi-reply-fill"></i>
+    </button>
     <div class="avatar small" *ngIf="position === 'left'">
         <img [src]="avatar" alt="avatar">
     </div>
@@ -21,7 +24,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     <div class="avatar small" *ngIf="position === 'right'">
         <img [src]="avatar" alt="avatar">
     </div>
-    <button class="reply-button" *ngIf="position === 'left'" (click)="replyClick($event)">
+    <button *ngIf="canReply && position === 'left'" class="reply-button" (click)="replyClick($event)">
       <i class="bi bi-reply-fill"></i>
     </button>
   </div>
@@ -42,6 +45,7 @@ export class ChatItemComponent {
   @Input({ alias: 'position' }) position?: 'left' | 'right' = 'left';
 
   @Output() reply = new EventEmitter();
+  @Input({ alias: 'can-reply' }) canReply?: string;
 
   replyClick(event: MouseEvent) {
     event?.stopPropagation();
