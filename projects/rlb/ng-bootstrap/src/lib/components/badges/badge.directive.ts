@@ -15,6 +15,7 @@ import { Color } from '../../shared/types';
 export class BadgeDirective implements DoCheck {
   @Input({ alias: 'badge' }) badge?: string;
   @Input({ alias: 'badge-pill', transform: booleanAttribute }) pill!: boolean;
+  @Input({ alias: 'badge-border', transform: booleanAttribute }) border!: boolean
   @Input({ alias: 'badge-top', transform: numberAttribute }) top!: number;
   @Input({ alias: 'badge-start', transform: numberAttribute }) start!: number;
   @Input({ alias: 'badge-color' }) color: Color = 'danger';
@@ -41,6 +42,9 @@ export class BadgeDirective implements DoCheck {
     this.renderer.addClass(badge, 'badge');
     if (this.pill) {
       this.renderer.addClass(badge, 'rounded-pill');
+    }
+    if (this.border) {
+      this.renderer.addClass(badge, 'rounded-border');
     }
     if (this.color) {
       this.renderer.addClass(badge, `bg-${this.color}`);
