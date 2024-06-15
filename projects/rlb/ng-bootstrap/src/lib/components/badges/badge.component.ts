@@ -24,7 +24,7 @@ export class BadgeComponent {
   @Input({ alias: 'pill', transform: booleanAttribute }) pill!: | boolean;
   @Input({ alias: 'color' }) color?: Color = 'primary';
   @Input({ alias: 'hidden-text' }) hiddenText?: string;
-  @Input({ alias: 'border' }) border?: boolean;
+  @Input({ alias: 'border', transform: booleanAttribute }) border?: boolean;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 

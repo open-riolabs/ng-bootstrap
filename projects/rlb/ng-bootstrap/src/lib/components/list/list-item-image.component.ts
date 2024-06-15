@@ -13,8 +13,8 @@ import { Color } from '../../shared/types';
         <span *ngIf="line2" class="d-block">{{ line2 }}</span>
       </div>
       <div *ngIf="counter || counterEmpty">
-        <span *ngIf="counterEmpty" rlb-badge [pill]="counterPill" [color]="counterColor">&nbsp;</span>
-        <span *ngIf="!counterEmpty"rlb-badge [pill]="counterPill" [color]="counterColor">{{ counter }}</span>
+        <span *ngIf="counterEmpty" rlb-badge [pill]="counterPill" [color]="counterColor" [border]="counterBorder">&nbsp;</span>
+        <span *ngIf="!counterEmpty"rlb-badge [pill]="counterPill" [color]="counterColor" [border]="counterBorder">{{ counter }}</span>
       </div>
     </div>
   `,
@@ -31,6 +31,7 @@ export class ListItemImageComponent {
   @Input({ transform: booleanAttribute, alias: 'disabled', }) disabled!: boolean;
   @Input({ transform: booleanAttribute, alias: 'counter-empty', }) counterEmpty?: string;
   @Input({ transform: booleanAttribute, alias: 'counter-pill', }) counterPill?: boolean;
+  @Input({ transform: booleanAttribute, alias: 'counter-border', }) counterBorder?: boolean;
   @Input({ transform: numberAttribute, alias: 'avatar-size', }) avatarSize?: number = 50;
   @Input({ alias: 'username' }) username?: string;
   @Input({ alias: 'line-1' }) line1?: string;
