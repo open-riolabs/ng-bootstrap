@@ -3,23 +3,24 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'rlb-chat-item',
   template: `
-  <div [id]="id" class="chat-bubble-item" [class.chat-bubble__left]="position==='left'" [class.chat-bubble__right]="position==='right'">
+  <div [id]="id" class="chat-bubble-item" [class.left]="position==='left'" [class.right]="position==='right'">
     <button *ngIf="canReply && position === 'right'" class="reply-button" (click)="replyClick($event)">
       <i class="bi bi-reply-fill"></i>
     </button>
     <div class="avatar small" *ngIf="position === 'left'">
         <img [src]="avatar" alt="avatar">
     </div>
-    <div class="chat-bubble-item__text">
-      <div class="chat-bubble__replied-message" *ngIf="replayText">
-        <span class="replied-message__name">{{replaySubject}}</span>
+    <div class="text">
+      <div class="replied-message" *ngIf="replayText">
+        <span class="name">{{replaySubject}}</span>
         <p>{{replayText}}</p>
       </div>
       <div>
         <ng-content/>
       </div>
        <i class="bi bi-check-all float-end"></i>
-     <span class="chat-bubble-item__time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
+     <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
+     <span class="reaction" *ngIf="reaction" [class.right]="position==='right'" [class.left]="position==='left'">{{reaction}}</span>
     </div>
     <div class="avatar small" *ngIf="position === 'right'">
         <img [src]="avatar" alt="avatar">
@@ -43,6 +44,7 @@ export class ChatItemComponent {
   @Input({ alias: 'replay-id' }) replayId?: string;
 
   @Input({ alias: 'position' }) position?: 'left' | 'right' = 'left';
+  @Input({ alias: 'reaction' }) reaction?: string;
 
   @Output() reply = new EventEmitter();
   @Input({ alias: 'can-reply' }) canReply?: boolean = false;
