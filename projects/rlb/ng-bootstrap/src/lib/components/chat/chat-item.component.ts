@@ -22,7 +22,7 @@ import { ChatReactionEvent } from '../../shared/types';
        <i class="bi bi-check-all float-end"></i>
      <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
      <span class="reaction" *ngIf="reaction" [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('remove')">{{reaction}}</span>
-     <span class="reaction add"  [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('add')">
+     <span class="reaction add" *ngIf="!reaction" [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('add')">
       <i class="bi bi-plus ms-0"></i>
      </span>
     </div>
