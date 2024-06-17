@@ -18,3 +18,4 @@ export type VisibilityEvent =
 export type ModalCloseReason = 'ok' | 'cancel' | 'close';
 export type ToastCloseReason = 'ok' | 'cancel' | 'close';
 export type ModalType = 'success' | 'info' | 'warning' | 'error';
+export type ChatReactionEvent = 'add' | 'remove';

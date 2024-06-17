@@ -72,6 +72,14 @@
   }
 
   .text {
+    &:hover {
+      .reaction.add {
+        opacity: 1;
+        transition-duration: 150ms;
+        transition-property: opacity;
+      }
+    }
+
     border-radius: $border-radius;
     padding: 8px;
     font-weight: 400;
@@ -125,6 +133,13 @@
 
       &.left {
         left: 15px;
+      }
+
+      &.add {
+        //visibility: hidden;
+        opacity: 0;
+        transition-duration: 150ms;
+        transition-property: opacity;
       }
     }
   }

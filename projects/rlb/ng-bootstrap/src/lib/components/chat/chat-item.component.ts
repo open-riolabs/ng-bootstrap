@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChatReactionEvent } from '../../shared/types';
 
 @Component({
   selector: 'rlb-chat-item',
@@ -20,7 +21,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       </div>
        <i class="bi bi-check-all float-end"></i>
      <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
-     <span class="reaction" *ngIf="reaction" [class.right]="position==='right'" [class.left]="position==='left'">{{reaction}}</span>
+     <span class="reaction" *ngIf="reaction" [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('remove')">{{reaction}}</span>
+     <span class="reaction add"  [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('add')">
+      <i class="bi bi-plus ms-0"></i>
+     </span>
     </div>
     <div class="avatar small" *ngIf="position === 'right'">
         <img [src]="avatar" alt="avatar">
@@ -46,7 +50,8 @@ export class ChatItemComponent {
   @Input({ alias: 'position' }) position?: 'left' | 'right' = 'left';
   @Input({ alias: 'reaction' }) reaction?: string;
 
-  @Output() reply = new EventEmitter();
+  @Output('reply') reply = new EventEmitter();
+  @Output('reaction-click') reactionClick = new EventEmitter<ChatReactionEvent>();
   @Input({ alias: 'can-reply' }) canReply?: boolean = false;
 
   replyClick(event: MouseEvent) {
