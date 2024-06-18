@@ -177,7 +177,7 @@
     color: $body-color;
 
     .replied-message {
-      background: var(--bs-gray-200);
+      background: $gray-200;
       border-left: 3px solid $primary;
 
       .name {
@@ -224,10 +224,11 @@
     }
 
     .text {
-      color: $body-color;
+      color: $body-color-dark ;
 
       .replied-message {
-        background: var(--bs-gray-200);
+        color: $body-color;
+        background: $gray-200;
         border-left: 3px solid $primary;
 
         .name {
