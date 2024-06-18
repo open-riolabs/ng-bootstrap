@@ -137,9 +137,14 @@
 
       &.add {
         //visibility: hidden;
-        opacity: 0;
+        //opacity: 0;
+        position: absolute;
+        bottom: 0px;
+        left: 7px;
         transition-duration: 150ms;
         transition-property: opacity;
+        &::after{
+          display: none;       }
       }
     }
   }
