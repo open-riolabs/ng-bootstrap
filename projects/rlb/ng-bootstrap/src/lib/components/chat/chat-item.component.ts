@@ -20,9 +20,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       </div>
       <i class="bi bi-check-all float-end"></i>
       <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
-      <rlb-dropdown  direction="up" class="reaction">
+      <rlb-dropdown direction="up" class="reaction">
         <a rlb-button *ngIf="!reaction" rlb-dropdown autoClose="manual" class="reaction add p-1" [class.right]="position==='right'" [class.left]="position==='left'">
-          <i class="bi bi-plus m-0"></i>
+          <i class="bi bi-plus m-0 p-0"></i>
         </a>
         <rlb-dropdown-container>
           <ng-content select="[reaction-picker]" />
