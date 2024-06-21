@@ -9,6 +9,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Dropdown } from 'bootstrap';
+import { VisibilityEventBase } from '../../shared/types';
 
 @Directive({
   selector:
@@ -22,7 +23,7 @@ export class DropdownDirective implements DoCheck, OnInit {
   private _dropdown: Dropdown | undefined;
   @Input({ alias: 'offset' }) offset!: string;
   @Input({ alias: 'auto-close' }) autoClose!: 'default' | 'inside' | 'outside' | 'manual';
-  @Output('status-changed') statusChanged = new EventEmitter();
+  @Output('status-changed') statusChanged = new EventEmitter<VisibilityEventBase>();
 
   ngOnInit(): void {
     this._dropdown = Dropdown.getOrCreateInstance(this.elementRef.nativeElement);

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { VisibilityEventBase } from '../../shared/types';
 
 @Component({
   selector: 'rlb-chat-item',
@@ -21,7 +22,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       <i class="bi bi-check-all float-end"></i>
       <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
       <rlb-dropdown direction="up" class="reaction">
-        <a rlb-button *ngIf="!reaction" rlb-dropdown autoClose="manual" class="reaction add p-1" [class.right]="position==='right'" [class.left]="position==='left'">
+        <a rlb-button  rlb-dropdown *ngIf="!reaction"
+            autoClose="manual" class="reaction add p-1"
+            [class.right]="position==='right'" [class.left]="position==='left'"
+            (status-changed)="this.reactionSelector.emit($event)">
           <i class="bi bi-plus m-0 p-0"></i>
         </a>
         <rlb-dropdown-container>
@@ -57,6 +61,7 @@ export class ChatItemComponent {
   @Output('reply') reply = new EventEmitter();
   @Output('reaction-click') reactionClick = new EventEmitter();
   @Input({ alias: 'can-reply' }) canReply?: boolean = false;
+  @Output('reaction-selector') reactionSelector = new EventEmitter<VisibilityEventBase>();
 
   replyClick(event: MouseEvent) {
     event?.stopPropagation();
