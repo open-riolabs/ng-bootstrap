@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       <i class="bi bi-reply-fill"></i>
     </button>
     <div class="avatar small" *ngIf="position === 'left'">
-        <img [src]="avatar" alt="avatar">
+      <img [src]="avatar" alt="avatar">
     </div>
     <div class="text">
       <div class="replied-message" *ngIf="replayText">
@@ -18,8 +18,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       <div>
         <ng-content/>
       </div>
-       <i class="bi bi-check-all float-end"></i>
-     <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
+      <i class="bi bi-check-all float-end"></i>
+      <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
       <rlb-dropdown  direction="up" class="reaction">
         <a rlb-button *ngIf="!reaction" rlb-dropdown autoClose="manual" class="reaction add p-1" [class.right]="position==='right'" [class.left]="position==='left'">
           <i class="bi bi-plus m-0"></i>
@@ -31,7 +31,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       <span class="reaction" *ngIf="reaction" [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('remove')">{{reaction}}</span>
     </div>
     <div class="avatar small" *ngIf="position === 'right'">
-        <img [src]="avatar" alt="avatar">
+      <img [src]="avatar" alt="avatar">
     </div>
     <button *ngIf="canReply && position === 'left'" class="reply-button" (click)="replyClick($event)">
       <i class="bi bi-reply-fill"></i>
