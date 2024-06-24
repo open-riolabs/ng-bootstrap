@@ -56,6 +56,22 @@ $code-color-dark:                   tint-color($code-color, 40%) !default;
 $mark-color-dark:                   $body-color-dark !default;
 $mark-bg-dark:                      $yellow-800 !default;
 
+// Nav
+$nav-link-color: $body-color-dark;
+$nav-link-hover-color: #0068bc;
+$nav-link-disabled-color: rgba(52, 52, 52, 0.3);
+$nav-tabs-link-hover-border-color: #0068bc;
+$nav-tabs-link-active-color: $white;
+$nav-tabs-link-active-bg: $primary;
+$nav-tabs-link-active-border-color: $body-bg-dark;
+$navbar-light-color: $body-color-dark;
+$navbar-light-hover-color: #0068bc;
+$navbar-light-active-color: $primary;
+$navbar-light-disabled-color: rgba(52, 52, 52, 0.3);
+$navbar-light-icon-color: $body-color-dark;
+
+// scss-docs-start navbar-dark-variables
+$navbar-dark-disabled-color: #6c757d;
 
 //
 // Forms

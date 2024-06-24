@@ -3,6 +3,7 @@ import {
   ModalService,
   PaginationEvent,
   ToastService,
+  VisibilityEventBase,
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
@@ -17,7 +18,7 @@ export class HomeComponent {
   ) { }
 
   coso: any = '3'
-
+  pippo3!: VisibilityEventBase
   modal(): void {
     this.modals
       .openModal('demo-component', {

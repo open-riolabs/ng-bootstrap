@@ -1,12 +1,12 @@
 <rlb-chat-container>
   <rlb-chat-item avatar="https://www.w3schools.com/w3images/avatar5.png" replay-text="egfewgfrew g"
-    replay-subject="fegewgwrg" reaction="😂">
+    replay-subject="fegewgwrg" reaction="😂" >
     puippvvrwvgwbv grw vgrwgvw
   </rlb-chat-item>
   <rlb-chat-item avatar="https://www.w3schools.com/w3images/avatar5.png" replay-text="egfewgfrew g"
-    replay-subject="fegewgwrg" position="right" >
+    replay-subject="fegewgwrg" position="right" (reaction-selector)="pippo3 = $event">
     puippvvrwvgwbv grw vgrwgvw puippvvrwvgwbv grw vgrwgvw puippvvrwvgwbv grw vgrwgvw
-    <rlb-card reaction-picker>
+    <rlb-card reaction-picker *ngIf="pippo3 === 'hide'">
       <rlb-card-body>
         <h5 rlb-card-title>Card title</h5>
         <p rlb-card-text>
