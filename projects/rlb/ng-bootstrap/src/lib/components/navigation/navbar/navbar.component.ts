@@ -55,7 +55,7 @@ export class NavbarComponent {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   @Input({ alias: 'dark', transform: booleanAttribute }) dark?: boolean;
-  @Input({ alias: 'color' }) color?: Color = 'primary';
+  @Input({ alias: 'color' }) color?: Color;
   @Input({ alias: 'placement' }) placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom';
   @Input({ alias: 'expand' }) expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
   @Input({ alias: 'class' }) cssClass?: string = '';

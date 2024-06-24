@@ -1,10 +1,15 @@
+
+@import "bootstrap/scss/functions";
 @import "rlb/vars";
-@import "rlb/dark";
-@import "bootstrap/scss/root";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
 @import "bootstrap/scss/bootstrap";
 @import "rlb/avatar";
 @import "rlb/chat";
-
 
 @import "sidebar";
 @import "navbar";
@@ -19,7 +24,6 @@ $grid-breakpoints: (
   lg: 992px,
   xl: 1280px,
   xxl: 1590px
-
 );
 
 $container-max-widths: (
