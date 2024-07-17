@@ -79,19 +79,25 @@ export class DataTableComponent implements OnInit, DoCheck {
   }
 
 
-  selectPage(page: number) {
+  selectPage(ev: MouseEvent, page: number) {
+    ev?.preventDefault();
+    ev?.stopPropagation();
     if (page === this.currentPage) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({ page, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
 
-  next() {
+  next(ev: MouseEvent) {
+    ev?.preventDefault();
+    ev?.stopPropagation();
     if (this.currentPage === this.pages) return;
     this.currentPageChange.emit((this.currentPage || 1) + 1);
     this.pagination.emit({ page: this.currentPage || 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
 
-  prev() {
+  prev(ev: MouseEvent) {
+    ev?.preventDefault();
+    ev?.stopPropagation();
     if (this.currentPage === 1) return;
     this.currentPageChange.emit((this.currentPage || 1) - 1);
     this.pagination.emit({ page: this.currentPage || 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });

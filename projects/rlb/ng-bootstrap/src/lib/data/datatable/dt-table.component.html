@@ -54,17 +54,19 @@
           <nav aria-label="Page navigation example">
             <ul class="pagination float-end pagination-sm">
               <li class="page-item">
-                <a class="page-link" [class.disabled]="currentPage === 1" href="#" aria-label="Previous" (click)="prev()">
+                <a class="page-link" [class.disabled]="currentPage === 1" href="#" aria-label="Previous"
+                  (click)="prev($event)">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
               <ng-container *ngFor="let page of [].constructor(pages); let i = index">
                 <li class="page-item" [class.active]="currentPage === i+1">
-                  <a class="page-link" href="#" (click)="selectPage(i+1)">{{i+1}}</a>
+                  <a class="page-link" href="#" (click)="selectPage($event, i+1)">{{i+1}}</a>
                 </li>
               </ng-container>
               <li class="page-item">
-                <a class="page-link" [class.disabled]="currentPage === pages" href="#" aria-label="Next" (click)="next()">
+                <a class="page-link" [class.disabled]="currentPage === pages" href="#" aria-label="Next"
+                  (click)="next($event)">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>
