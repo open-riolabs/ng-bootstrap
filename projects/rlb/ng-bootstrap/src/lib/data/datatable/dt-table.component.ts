@@ -15,7 +15,7 @@ export interface PaginationEvent {
 
 @Component({
   selector: 'rlb-dt-table',
-  templateUrl: './dt-table.component.html',
+  templateUrl: './dt-table.component.html'
 })
 export class DataTableComponent implements OnInit, DoCheck {
   @Input({ alias: 'title' }) title?: string;
@@ -101,5 +101,12 @@ export class DataTableComponent implements OnInit, DoCheck {
     if (this.currentPage === 1) return;
     this.currentPageChange.emit((this.currentPage || 1) - 1);
     this.pagination.emit({ page: this.currentPage || 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
+  }
+
+  onPgWeel(ev: WheelEvent) {
+    ev.preventDefault();
+    const t = ev.target as HTMLElement;
+    const c = t.parentElement?.parentElement
+    c?.scrollBy({ left: ev.deltaY < 0 ? -15 : 15 });
   }
 }
