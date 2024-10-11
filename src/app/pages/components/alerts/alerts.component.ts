@@ -5,4 +5,9 @@ import { Component } from '@angular/core';
   templateUrl: './alerts.component.html',
   styleUrls: ['./alerts.component.scss'],
 })
-export class AlertsComponent {}
+export class AlertsComponent {
+
+  onDismiss() {
+    console.log('dismissed');
+  }
+}

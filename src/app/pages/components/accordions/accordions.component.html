@@ -1,1 +1,22 @@
-<p>accordions works!</p>
+<div class="container mt-3">
+  <rlb-accordion>
+    <div rlb-accordion-item (statusChange)="onStatusChenged($event, 1)">
+      <rlb-accordion-header>Header</rlb-accordion-header>
+      <div rlb-accordion-body>
+        Body
+      </div>
+    </div>
+    <div rlb-accordion-item (statusChange)="onStatusChenged($event, 2)">
+      <rlb-accordion-header>Header</rlb-accordion-header>
+      <div rlb-accordion-body>
+        Body
+      </div>
+    </div>
+    <div rlb-accordion-item (statusChange)="onStatusChenged($event, 3)">
+      <rlb-accordion-header>Header</rlb-accordion-header>
+      <div rlb-accordion-body>
+        Body
+      </div>
+    </div>
+  </rlb-accordion>
+</div>
