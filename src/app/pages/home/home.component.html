@@ -39,6 +39,29 @@
     No items
   </rlb-dt-noitems>
 </rlb-dt-table>
+<rlb-alert dismissible="true">Questo è un alert</rlb-alert>
+<rlb-card>
+  <rlb-card-body>
+    <h5>questo è un card body</h5>
+    <p>questo è un paragrafo nel card body</p>
+    <rlb-dt-action [routerLink]="['/getting-started']">Naviga</rlb-dt-action>
+  </rlb-card-body>
+  <rlb-card-footer>
+    <img
+      src="https://www.laleggepertutti.it/cl_resize/wIR5vslCLAY_Jd5bxJ15RJzBwtN5gxKGrcOD0g9Jlxs/rs:fill:500:0/g:ce/q:70/aHR0cHM6Ly93d3cubGFsZWdnZXBlcnR1dHRpLml0L3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIwLzEwL2ltbWFnaW5pLW1hZ2xpZXR0ZS1kaXJpdHRvLWF1dG9yZS1lMTYwMjY2ODU5MjIxMy5qcGc"
+      alt="immagine nel card footer">
+    <p>questo è un card footer</p>
+  </rlb-card-footer>
+</rlb-card>
+<rlb-dropdown after direction="up">
+  <button rlb-button rlb-dropdown after outline
+    autoClose="outside">
+    <i class="bi bi-emoji-smile"></i>
+  </button>
+  <rlb-dropdown-container>
+    <h1>asdfa</h1>
+  </rlb-dropdown-container>
+</rlb-dropdown>
 <!--
 {{pagesize}}
 <div class="container-fluid">
@@ -199,5 +222,3 @@
     <rlb-offcanvas-body> pippo </rlb-offcanvas-body>
   </rlb-offcanvas>
 </div> -->
-
-<rlb-input type="number" [(ngModel)]="pippo" min="0" max="10" step="2,0"></rlb-input>

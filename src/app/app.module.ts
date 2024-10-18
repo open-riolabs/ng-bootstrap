@@ -12,6 +12,9 @@ import { GettingStartedComponent } from './pages/getting-started/getting-started
 import { AccordionsComponent } from './pages/components/accordions/accordions.component';
 import { AlertsComponent } from './pages/components/alerts/alerts.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { HighlightModule, provideHighlightOptions } from 'ngx-highlightjs';
+import { ModalsComponent } from './pages/components/modals/modals.component';
+import { ModalSampleComponent } from './pages/components/modals/modal-sample.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     GettingStartedComponent,
     AccordionsComponent,
     AlertsComponent,
+    ModalsComponent,
     NotFoundComponent,
   ],
   imports: [
@@ -30,6 +34,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     RlbBootstrapModule,
     FormsModule,
     RoutingModule,
+    HighlightModule
   ],
   bootstrap: [AppComponent],
   providers: [
@@ -37,6 +42,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
       provide: ModalRegistryOptions,
       useValue: {
         modals: {
+          "sample-dialog": ModalSampleComponent,
           "demo-component": DemoComponent,
           'rlb-search': SearchModalComponent,
           'rlb-common': CommonModalComponent
@@ -53,6 +59,9 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
       },
       multi: true,
     },
+    provideHighlightOptions({
+      fullLibraryLoader: () => import('highlight.js')
+    })
   ],
 })
 export class AppModule { }
