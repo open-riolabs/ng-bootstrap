@@ -1,0 +1,33 @@
+<div class="container mt-3">
+  
+  <rlb-accordion>
+    <div rlb-accordion-item >
+      <rlb-accordion-header>Code</rlb-accordion-header>
+      <div rlb-accordion-body>
+        <rlb-tabs >
+          <rlb-tab target="ex-1-html">HTML</rlb-tab>
+          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
+        </rlb-tabs>
+        <rlb-tab-content>
+          <rlb-tab-pane id="ex-1-html">
+            <pre><code [highlight]="html" language="html"></code></pre>
+          </rlb-tab-pane>
+          <rlb-tab-pane id="ex-1-ts">
+            <pre><code [highlight]="ts" language="ts"></code></pre>
+          </rlb-tab-pane>
+        </rlb-tab-content>
+      </div>
+    </div>
+    <div rlb-accordion-item>
+      <rlb-accordion-header>Example</rlb-accordion-header>
+      <div rlb-accordion-body>
+        <rlb-tabs>
+          <rlb-tab target="pippo">Pippo</rlb-tab>
+          <rlb-tab target="pluto">Pluto</rlb-tab>
+          <rlb-tab target="paperino">Paperino</rlb-tab>
+        </rlb-tabs>
+      </div>
+    </div>
+  </rlb-accordion>
+
+</div>
