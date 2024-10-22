@@ -6,7 +6,10 @@ import { Component } from '@angular/core';
 })
 export class ScrollspysComponent {
 
-  html: string = ``;
+  html: string = `<button rlb-button rlb-scrollspy="1">
+  text
+</button>
+<h1 id="1">header</h1>`;
 
   ts: string = `@Component({
   selector: 'app-modal',
