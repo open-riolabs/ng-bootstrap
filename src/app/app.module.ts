@@ -30,6 +30,8 @@ import { PlaceholdersComponent } from './pages/components/placeholders/placehold
 import { ScrollspysComponent } from './pages/components/scrollspys/scrollspy.component';
 import { TabssComponent } from './pages/components/tabs/tab.component';
 import { TooltipssComponent } from './pages/components/tooltipss/tooltips.component';
+import { NavsComponent } from './pages/components/navigations/navs/nav.component';
+import { NavbarsComponent } from './pages/components/navigations/navbars/navbar.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { TooltipssComponent } from './pages/components/tooltipss/tooltips.compon
     ScrollspysComponent,
     TabssComponent,
     TooltipssComponent,
+    NavsComponent,
+    NavbarsComponent,
     NotFoundComponent,
   ],
   imports: [
