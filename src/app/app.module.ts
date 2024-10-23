@@ -32,6 +32,7 @@ import { TabssComponent } from './pages/components/tabs/tab.component';
 import { TooltipssComponent } from './pages/components/tooltipss/tooltips.component';
 import { NavsComponent } from './pages/components/navigations/navs/nav.component';
 import { NavbarsComponent } from './pages/components/navigations/navbars/navbar.component';
+import { InputsComponent } from './pages/inputs/input/inputs.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { NavbarsComponent } from './pages/components/navigations/navbars/navbar.
     TooltipssComponent,
     NavsComponent,
     NavbarsComponent,
+    InputsComponent,
     NotFoundComponent,
   ],
   imports: [

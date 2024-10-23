@@ -22,6 +22,7 @@ import { TabssComponent } from './tabs/tab.component';
 import { TooltipssComponent } from './tooltipss/tooltips.component';
 import { NavsComponent } from './navigations/navs/nav.component';
 import { NavbarsComponent } from './navigations/navbars/navbar.component';
+import { InputsComponent } from '../inputs/input/inputs.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -45,7 +46,7 @@ const routes: Routes = [
   { path: 'tabs', component: TabssComponent },
   { path: 'tooltips', component: TooltipssComponent },
   { path: 'navigation/navs', component: NavsComponent },
-  { path: 'navigation/navbars', component: NavbarsComponent },
+  { path: 'navigation/navbars', component: NavbarsComponent }
 ];
 
 @NgModule({

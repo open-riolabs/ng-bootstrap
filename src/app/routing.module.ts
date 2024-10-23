@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'home', redirectTo: '' },
   { path: 'getting-started', component: GettingStartedComponent },
   { path: 'components', loadChildren: () => RoutingComponentsModule },
-  { path: '**', component: NotFoundComponent },
+  { path: 'inputs', loadChildren: () => RoutingComponentsModule },
+  { path: '**', component: NotFoundComponent }, 
 ];
 
 @NgModule({
