@@ -2,7 +2,7 @@ import { input, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions, SearchModalComponent, TabsComponent } from 'projects/rlb/ng-bootstrap/src/public-api';
+import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions, SearchModalComponent, TabsComponent, AutocompleteComponent, InputValidationComponent } from 'projects/rlb/ng-bootstrap/src/public-api';
 import { FormsModule } from '@angular/forms';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 import { RoutingModule } from './routing.module';
@@ -34,6 +34,20 @@ import { NavsComponent } from './pages/components/navigations/navs/nav.component
 import { NavbarsComponent } from './pages/components/navigations/navbars/navbar.component';
 import { InputsComponent } from './pages/inputs/input/inputs.component';
 import { InputsHomeComponent } from './pages/inputs/inputs-home/inputs-home.component';
+import { AutocompletesComponent } from './pages/inputs/autocomplete/autocomplete.component';
+import { CheckboxsComponent } from './pages/inputs/checkbox/checkbox.component';
+import { ColorsComponent } from './pages/inputs/color/color.component';
+import { DatalistsComponent } from './pages/inputs/datalist/datalist.component';
+import { FilesComponent } from './pages/inputs/file/file.component';
+import { FileDndsComponent } from './pages/inputs/file-dnd/filednd.component';
+import { InputGroupsComponent } from './pages/inputs/input-group/input-group.component';
+import { OptionsComponent } from './pages/inputs/option/option.component';
+import { RangesComponent } from './pages/inputs/range/range.component';
+import { SelectsComponent } from './pages/inputs/select/select.component';
+import { SwitchsComponent } from './pages/inputs/switch/switch.component';
+import { TextareasComponent } from './pages/inputs/textarea/textarea.component';
+import { RadiosComponent } from './pages/inputs/radio/radio.component';
+import { InputValidationsComponent } from './pages/inputs/input-validation/input-validation.component';
 
 @NgModule({
   declarations: [
@@ -64,8 +78,22 @@ import { InputsHomeComponent } from './pages/inputs/inputs-home/inputs-home.comp
     NavbarsComponent,
     NotFoundComponent,
     // inputs
-    InputsComponent,
     InputsHomeComponent,
+    AutocompletesComponent,
+    CheckboxsComponent,
+    ColorsComponent,
+    DatalistsComponent,
+    FilesComponent,
+    FileDndsComponent,
+    InputsComponent,
+    InputGroupsComponent,
+    InputValidationsComponent,
+    OptionsComponent,
+    RadiosComponent,
+    RangesComponent,
+    SelectsComponent,
+    SwitchsComponent,
+    TextareasComponent
   ],
   imports: [
     BrowserModule,
