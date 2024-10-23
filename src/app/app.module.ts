@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import { input, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions, SearchModalComponent, TabsComponent } from 'projects/rlb/ng-bootstrap/src/public-api';
 import { FormsModule } from '@angular/forms';
-import {  ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
+import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 import { RoutingModule } from './routing.module';
 import { HomeComponent } from './pages/home/home.component';
 import { GettingStartedComponent } from './pages/getting-started/getting-started.component';
@@ -33,12 +33,14 @@ import { TooltipssComponent } from './pages/components/tooltipss/tooltips.compon
 import { NavsComponent } from './pages/components/navigations/navs/nav.component';
 import { NavbarsComponent } from './pages/components/navigations/navbars/navbar.component';
 import { InputsComponent } from './pages/inputs/input/inputs.component';
+import { InputsHomeComponent } from './pages/inputs/inputs-home/inputs-home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     GettingStartedComponent,
+    // components
     AccordionsComponent,
     AlertsComponent,
     ModalsComponent,
@@ -60,8 +62,10 @@ import { InputsComponent } from './pages/inputs/input/inputs.component';
     TooltipssComponent,
     NavsComponent,
     NavbarsComponent,
-    InputsComponent,
     NotFoundComponent,
+    // inputs
+    InputsComponent,
+    InputsHomeComponent,
   ],
   imports: [
     BrowserModule,
