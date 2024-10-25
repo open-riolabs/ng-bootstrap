@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
 })
 export class RadiosComponent {
 
+  value: string = '1';
+
   html: string = `<rlb-radio></rlb-radio>`;
 }

@@ -35,9 +35,10 @@ import { OptionComponent } from './options.component';
             [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
             (change)="update($event.target)"
           />
-          <ng-content select="[after]"></ng-content>
+          <span #content></span>
         </div>
-      </ng-container>
+      </ng-container> 
+      <ng-content select="[after]"></ng-content>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
@@ -54,10 +55,11 @@ export class RadioComponent
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   ngDoCheck() {
-    for (const content of this.contents) {
+    for (const content of (this.contents || [])) {
+      console.log('content', content);  
       content?.detach();
     }
-    this.options.forEach((option, i) => {
+    this.options?.forEach((option, i) => {
       this.contents.get(i)?.insert(option._view);
     });
   }
