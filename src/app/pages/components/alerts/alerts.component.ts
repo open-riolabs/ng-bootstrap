@@ -10,4 +10,14 @@ export class AlertsComponent {
   onDismiss() {
     console.log('dismissed');
   }
+
+  html: string = `<div class="container mt-3">
+  <rlb-alert [color]="'success'" dismissible (dismissed)="onDismiss()">Ciao!</rlb-alert>
+</div>`;
+
+  ts: string = `@Component({
+  selector: 'app-modal',
+  templateUrl: './alerts.component.html',
+})
+export class AlertsComponent {}`;
 }
