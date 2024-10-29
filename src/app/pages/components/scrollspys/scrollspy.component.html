@@ -1,5 +1,52 @@
 <div class="container mt-3">
   
+  <h3>Scrollspy</h3>
+  <p>
+    Lo Scrollspy è un componente che traccia la posizione di scorrimento dell'utente nella pagina e aggiorna automaticamente i link di navigazione per evidenziare la sezione corrente.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>rlb-scrollspy</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>scroll-smooth</rlb-dt-cell>
+      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>scroll-root-margin</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>scroll-threshold</rlb-dt-cell>
+      <rlb-dt-cell>Array&lt;number&gt;</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>scroll-change</rlb-dt-cell>
+      <rlb-dt-cell>EventEmitter&lt;void&gt;</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
@@ -28,24 +75,4 @@
       </div>
     </div>
   </rlb-accordion>
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>rlb-scrollspy (string)</rlb-dt-cell>
-      <rlb-dt-cell>scrollspy target</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>scroll-smooth (boolean)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>scroll-root-margin (string)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>scroll-threshold (number[])</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
 </div>

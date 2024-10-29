@@ -8,7 +8,7 @@ export class TooltipssComponent {
 
   html: string = `<button rlb-button color="primary" [tooltip]="'Ciao'">Show Tooltips</button>
 <br><br>
-<button rlb-button color="primary" [popover]="'Ciao'">Show Tooltips</button>`;
+<button rlb-button color="primary" [popover]="'Ciao'">Show Popover</button>`;
 
   ts: string = `@Component({
   selector: 'app-modal',

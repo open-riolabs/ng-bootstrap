@@ -1,5 +1,97 @@
 <div class="container mt-3">
   
+  <h3>Tabs</h3>
+  <p>Il Tab è un componente che consente di organizzare il contenuto in pannelli separati, rendendo visibile una sezione alla volta.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>horizontal-alignment</rlb-dt-cell>
+      <rlb-dt-cell>'center' | 'end'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>view</rlb-dt-cell>
+      <rlb-dt-cell>'tab' | 'pills' | 'underline' | 'none'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>vertical</rlb-dt-cell>
+      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>fill</rlb-dt-cell>
+      <rlb-dt-cell>'fill' | 'justified'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>id</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>class</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+  <h4>Tab</h4>
+  <p>Inserisci un Tab all'interno di Tabs per popolarlo con varie sezioni</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>active</rlb-dt-cell>
+      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>disabled</rlb-dt-cell>
+      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>target</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>class</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
@@ -29,24 +121,6 @@
       </div>
     </div>
   </rlb-accordion>
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>active (boolean)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>disabled (boolean)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>target (string)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>class (string)</rlb-dt-cell>
-      <rlb-dt-cell>Css Class</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <br>
+  <br>
 </div>

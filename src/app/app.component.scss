@@ -1,0 +1,12 @@
+.scrollable-content {
+  max-height: 200px; /* Imposta l'altezza massima desiderata */
+  overflow-y: auto;  /* Abilita lo scorrimento verticale */
+}
+
+.scrollable-content::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollable-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}

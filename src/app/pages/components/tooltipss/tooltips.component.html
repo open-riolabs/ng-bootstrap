@@ -1,5 +1,83 @@
 <div class="container mt-3">
   
+  <h3>Tooltip</h3>
+  <p>Il Tooltip è un piccolo riquadro informativo che appare quando l'utente passa il cursore o si sofferma su un elemento, fornendo dettagli aggiuntivi o suggerimenti contestuali.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>tooltip</rlb-dt-cell>
+      <rlb-dt-cell>string | null | undefined</rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>tooltip-placement</rlb-dt-cell>
+      <rlb-dt-cell>'top' | 'bottom' | 'left' | 'right'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>tooltip-class</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>tootltip-html</rlb-dt-cell>
+      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+  <h3>Popover</h3>
+  <p>Il Popover è un elemento di interfaccia simile al Tooltip, ma più ampio e configurabile, che appare sopra un elemento quando l'utente ci clicca o passa il mouse.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>popover</rlb-dt-cell>
+      <rlb-dt-cell>string | undefined</rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>popover-placement</rlb-dt-cell>
+      <rlb-dt-cell>'top' | 'bottom' | 'left' | 'right'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>popover-class</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>popover-title</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
@@ -23,29 +101,8 @@
       <div rlb-accordion-body>
         <button rlb-button color="primary" [tooltip]="'Ciao'">Show Tooltips</button>
         <br><br>
-        <button rlb-button color="primary" [popover]="'Ciao'">Show Tooltips</button>
+        <button rlb-button color="primary" [popover]="'Ciao'">Show Popover</button>
       </div>
     </div>
   </rlb-accordion>
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>tooltip (string | null | undefined)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>tooltip-placement</rlb-dt-cell>
-      <rlb-dt-cell>it can be: 'top' | 'bottom' | 'left' | 'right'</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>tooltip-class (string)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>tootltip-html (boolean)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
-
 </div>

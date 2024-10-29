@@ -1,70 +1,80 @@
 <div class="rlb-app">
   <rlb-sidebar id="sidebar">
-    <rlb-sidebar-header
-      mode="logo"
-      [data]="{ image: 'assets/logo.svg', text: 'Title', alt: 'no-logo' }"
-    />
-    <rlb-sidebar-search
-      search-title="Search..."
-      search-text="Search in app"
-      search-placeholder="Type here"
-      (on-search)="onSearch($event)"
-    />
-    <rlb-sidebar-item icon="bi bi-box" url="/components/alerts">Alert</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/accordions">Accordions</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/modals">Modals</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/toasts">Toasts</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/dropdowns">Dropdowns</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/collapses">Collapses</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/avatars">Avatars</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/badges">Badge</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/breadcrumbs">Breadcrumb</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/buttons">Button</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/cards">Card</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/lists">List</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/loaders">Loader</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/offcanvass">Offcanvas</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/paginations">Pagination</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/placeholders">Placeholder</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/scrollspys">Scrollspy</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/tabs">Tab</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/tooltips">Tooltips</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/nagivation/navs">Nav</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/components/nagivation/navbars">Navbar</rlb-sidebar-item>
-    <rlb-sidebar-item icon="bi bi-box" url="/inputs/input">Input</rlb-sidebar-item>
+    <rlb-sidebar-header mode="logo" [data]="{ image: 'assets/logo.svg', text: 'Title', alt: 'no-logo' }" />
+    <rlb-sidebar-search search-title="Search..." search-text="Search in app" search-placeholder="Type here"
+      (on-search)="onSearch($event)" />
+
+    <rlb-sidebar-item>
+      <rlb-dropdown>
+        <button rlb-button rlb-dropdown [color]="'secondary'">Components</button>
+        <rlb-dropdown-container>
+          <div class="scrollable-content">
+            <rlb-sidebar-item icon="bi bi-box" url="/components/alerts">Alerts</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/accordions">Accordions</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/modals">Modals</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/toasts">Toasts</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/dropdowns">Dropdowns</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/collapses">Collapses</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/avatars">Avatars</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/badges">Badge</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/breadcrumbs">Breadcrumb</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/buttons">Button</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/cards">Card</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/lists">List</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/loaders">Loader</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/offcanvass">Offcanvas</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/paginations">Pagination</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/placeholders">Placeholder</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/scrollspys">Scrollspy</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/tabs">Tab</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/tooltips">Tooltips</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/navigation/navs">Nav</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/components/navigation/navbars">Navbar</rlb-sidebar-item>
+          </div>
+        </rlb-dropdown-container>
+      </rlb-dropdown>
+    </rlb-sidebar-item>
+    <rlb-sidebar-item>
+      <rlb-dropdown>
+        <button rlb-button rlb-dropdown [color]="'secondary'">Inputs</button>
+        <rlb-dropdown-container>
+          <div class="scrollable-content">
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/autocomplete">Autocomplete</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/checkbox">Checkbox</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/color">Color</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/datalist">Datalist</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/file">File</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/file-dnd">File Dnd</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/input">Input</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/input-group">Input Group</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/input-validation">Input Validation</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/option">Option</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/radio">Radio</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/range">Range</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/select">Select</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/switch">Switch</rlb-sidebar-item>
+            <rlb-sidebar-item icon="bi bi-box" url="/inputs/textarea">Textarea</rlb-sidebar-item>
+          </div>
+        </rlb-dropdown-container>
+      </rlb-dropdown>
+    </rlb-sidebar-item>
+
     <rlb-sidebar-footer>
       <rlb-sidebar-item icon="bi bi-box">qui</rlb-sidebar-item>
     </rlb-sidebar-footer>
   </rlb-sidebar>
   <div class="rlb-right-panel">
     <rlb-navbar expand="lg">
-      <a
-        class="d-block d-sm-none"
-        rlb-button
-        href="#"
-        toggle="collapse"
-        toggle-target="sidebar"
-        [outline]="true"
-      >
+      <a class="d-block d-sm-none" rlb-button href="#" toggle="collapse" toggle-target="sidebar" [outline]="true">
         <span class="navbar-toggler-icon"></span>
       </a>
       <a rlb-navbar-brand href="#">Navbar</a>
       <rlb-navbar-items class="me-auto">
-        <rlb-navbar-item [routerLink]="['/']" routerLinkActive="active"
-          >Home</rlb-navbar-item
-        >
-        <rlb-navbar-item
-          rlb-navbar-item
-          [routerLink]="['/getting-started']"
-          routerLinkActive="active"
-          >Getting started</rlb-navbar-item
-        >
+        <rlb-navbar-item [routerLink]="['/']" routerLinkActive="active">Home</rlb-navbar-item>
+        <rlb-navbar-item rlb-navbar-item [routerLink]="['/getting-started']" routerLinkActive="active">Getting
+          started</rlb-navbar-item>
         <rlb-navbar-separator />
-        <rlb-navbar-item
-          dropdown
-          toggle-target="#"
-          autoClose="manual"
-          >Components
+        <rlb-navbar-item dropdown toggle-target="#" autoClose="manual">Components
           <rlb-dropdown-container>
             <rlb-card>
               <rlb-card-body>
