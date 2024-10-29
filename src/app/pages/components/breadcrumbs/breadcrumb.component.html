@@ -1,5 +1,52 @@
 <div class="container mt-3">
 
+  <h3>Breadcrumb</h3>
+  <p>Un Breadcrumb è un componente di navigazione che mostra il percorso di navigazione dell'utente all'interno di un'applicazione o sito web.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>divider</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Add to define the breadcrumb divider. Default: '&gt;'</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>items</rlb-dt-cell>
+      <rlb-dt-cell>Array&lt;BreadcrumbItem&gt;</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Add an array of BreadcrumbItem to define the path</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+  <h4>BreadcrumbItem</h4>
+  <p>Definisci un BreadcrumbItem per definire un nodo del tuo path</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Variable</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>label</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell>Label del nodo BreadcrumbItem</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>link</rlb-dt-cell>
+      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Link di reindirizzamento</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
   <rlb-accordion>
     <div rlb-accordion-item>
       <rlb-accordion-header>Code</rlb-accordion-header>
@@ -25,16 +72,4 @@
       </div>
     </div>
   </rlb-accordion>
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>divider (string)</rlb-dt-cell>
-      <rlb-dt-cell>item divider default: ></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>item (BreadcrumbItem[])</rlb-dt-cell>
-      <rlb-dt-cell>Breadcrumb item</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
 </div>

@@ -1,4 +1,97 @@
 <div class="container mt-3">
+
+  <h3>Card</h3>
+  <p>Una Card è un contenitore flessibile e versatile usato per raggruppare contenuti e informazioni, come testi, immagini, link e pulsanti, in un formato visivamente strutturato</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>align</rlb-dt-cell>
+      <rlb-dt-cell>TextAlignment</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Add to apply text alignment. Default: 'left'</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>overlay</rlb-dt-cell>
+      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Add to Transform an image into the background of a card and overlay the text of your card.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>background</rlb-dt-cell>
+      <rlb-dt-cell>Color</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Add to apply a color to the background.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>border</rlb-dt-cell>
+      <rlb-dt-cell>Color</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Add to apply a color to the border.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+  <h4>Card Body</h4>
+  <p>Inserisci un Card Body all'interno della tua Card per definire il corpo principale del componente.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>Nessun Parametro</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell> 
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+  <h4>Card Image</h4>
+  <p>Inserisci una Card Image all'interno della tua Card per definire il corpo principale del componente che avrà un immagine principale come background e testo sovrapposto.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>position</rlb-dt-cell>
+      <rlb-dt-cell>'top' | 'bottom'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Add to define the position of the image. Default: 'top'</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell> 
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+  <h4>Card Footer</h4>
+  <p>Inserisci un Card Footer all'interno della tua Card per definire un footer.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>Nessun Parametro</rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell>
+      <rlb-dt-cell></rlb-dt-cell> 
+    </rlb-dt-row>
+  </rlb-dt-table>
   
   <rlb-accordion>
     <div rlb-accordion-item >
@@ -33,24 +126,6 @@
       </div>
     </div>
   </rlb-accordion>
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>align (TextAlignment)</rlb-dt-cell>
-      <rlb-dt-cell>text align</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>overlay (boolean)</rlb-dt-cell>
-      <rlb-dt-cell>overlay</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>background (Color)</rlb-dt-cell>
-      <rlb-dt-cell>background color</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>border (Color)</rlb-dt-cell>
-      <rlb-dt-cell>border color</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <br>
+  <br>
 </div>
