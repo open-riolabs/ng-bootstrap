@@ -81,7 +81,10 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Dropdown Sample</h4>
+            <pre><code [highlight]="sample" language="html"></code></pre>
+            <h4>Direction</h4>
+            <pre><code [highlight]="direction" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -92,13 +95,20 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
+
+        <h4>Dropdown Sample</h4>
         <rlb-dropdown>
-          <button rlb-button rlb-dropdown after outline
-            autoClose="outside">
-            this is a dropdown
-          </button>
+          <button rlb-button rlb-dropdown>Dropdown Button</button>
           <rlb-dropdown-container>
-            <p>This is the content</p>
+            <p>Dropdown Container</p>
+          </rlb-dropdown-container>
+        </rlb-dropdown>
+
+        <h4>Direction</h4>
+        <rlb-dropdown [direction]="'right'">
+          <button rlb-button rlb-dropdown>Dropdown Button</button>
+          <rlb-dropdown-container>
+            <p>Dropdown Container</p>
           </rlb-dropdown-container>
         </rlb-dropdown>
       </div>

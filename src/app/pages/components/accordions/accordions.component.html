@@ -17,7 +17,7 @@
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
-      <rlb-dt-cell>alwaysOpen</rlb-dt-cell>
+      <rlb-dt-cell>always-open</rlb-dt-cell>
       <rlb-dt-cell>boolean</rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell>Add to make accordion elements stay open when another element is opened.</rlb-dt-cell>
@@ -131,7 +131,16 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Sample Accordion</h4>
+            <pre><code [highlight]="sample" language="html"></code></pre>
+            <h4>Flush</h4>
+            <pre><code [highlight]="flush" language="html"></code></pre>
+            <h4>Always Open</h4>
+            <pre><code [highlight]="ao" language="html"></code></pre>
+            <h4>Expanded</h4>
+            <pre><code [highlight]="expanded" language="html"></code></pre>
+            <h4>Status Change</h4>
+            <pre><code [highlight]="sc" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -143,26 +152,93 @@
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
 
+        <h4>Sample Accordion</h4>
+
         <rlb-accordion>
-          <div rlb-accordion-item (statusChange)="onStatusChenged($event, 1)">
-            <rlb-accordion-header>Header</rlb-accordion-header>
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
             <div rlb-accordion-body>
-              Body
+              <span>Accordion Body</span>
             </div>
           </div>
-          <div rlb-accordion-item (statusChange)="onStatusChenged($event, 2)">
-            <rlb-accordion-header>Header</rlb-accordion-header>
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
             <div rlb-accordion-body>
-              Body
-            </div>
-          </div>
-          <div rlb-accordion-item (statusChange)="onStatusChenged($event, 3)">
-            <rlb-accordion-header>Header</rlb-accordion-header>
-            <div rlb-accordion-body>
-              Body
+              <span>Accordion Body</span>
             </div>
           </div>
         </rlb-accordion>
+
+        <h4>Flush</h4>
+
+        <rlb-accordion [flush]="true">
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+        </rlb-accordion>
+
+        <h4>Always Open</h4>
+
+        <rlb-accordion [always-open]="false">
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+        </rlb-accordion>
+
+        <h4>Expanded</h4>
+
+        <rlb-accordion>
+          <div rlb-accordion-item [expanded]="true">
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+        </rlb-accordion>
+
+        <h4>Status Change</h4>
+
+        <p>{{message}}</p>
+        <rlb-accordion>
+          <div rlb-accordion-item (statusChange)="onStatusChenged($event, 0)">
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+          <div rlb-accordion-item>
+            <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+            <div rlb-accordion-body>
+              <span>Accordion Body</span>
+            </div>
+          </div>
+        </rlb-accordion>
+
+
       </div>
     </div>
   </rlb-accordion>

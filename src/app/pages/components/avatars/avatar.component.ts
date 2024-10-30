@@ -6,7 +6,11 @@ import { Component } from '@angular/core';
 })
 export class AvatarsComponent {
 
-  html: string = `<rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" [size]="35" />`;
+  sample: string = `<rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png"/>`;
+
+  size: string = `<rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" [size]="30"/>`;
+
+  shape: string = `<rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" [shape]="'square'"/>`;
 
   ts: string = `@Component({
   selector: 'app-modal',

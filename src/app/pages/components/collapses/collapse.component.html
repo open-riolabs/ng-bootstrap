@@ -49,7 +49,12 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Collapse Sample</h4>
+            <pre><code [highlight]="sample" language="html"></code></pre>
+            <h4>Orientation</h4>
+            <pre><code [highlight]="orientation" language="html"></code></pre>
+            <h4>Status Change</h4>
+            <pre><code [highlight]="sc" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -60,24 +65,22 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
-        <div class="py-3">
-          <button rlb-button toggle="collapse" toggle-target="collapse-id" class="me-2">
-            Collapse
-          </button>
-        </div>
-        <div>
-          <rlb-collapse id="collapse-id">
-            <rlb-card style="width: 300px" [overlay]="false">
-              <rlb-card-body>
-                <h5 rlb-card-title>Card title</h5>
-                <p rlb-card-text>
-                  Some quick example text to build on the card title and make up the
-                  bulk of the card's content.
-                </p>
-              </rlb-card-body>
-            </rlb-card>
-          </rlb-collapse>
-        </div>
+        <h4>Collapse Sample</h4>
+        <button rlb-button toggle="collapse" toggle-target="collapse-id">Collapse</button>
+        <rlb-collapse id="collapse-id">
+          <span>Collapse Content</span>
+        </rlb-collapse>
+        <h4>Orientation</h4>
+        <button rlb-button toggle="collapse" toggle-target="collapse-id2">Collapse</button>
+        <rlb-collapse id="collapse-id2" [orientation]="'horizontal'">
+          <span>Collapse Content</span>
+        </rlb-collapse>
+        <h4>Status Change</h4>
+        <p>{{message}}</p>
+        <button rlb-button toggle="collapse" toggle-target="collapse-id3">Collapse</button>
+        <rlb-collapse id="collapse-id3" (statusChange)="onStatusChange($event, 0)">
+          <span>Collapse Content</span>
+        </rlb-collapse>
       </div>
     </div>
   </rlb-accordion>

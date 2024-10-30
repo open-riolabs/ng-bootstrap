@@ -8,30 +8,81 @@ import { Component } from '@angular/core';
 })
 export class AccordionsComponent {
 
+  message: number = 0;
+
   onStatusChenged(event: any, i: number) {
-     
+     this.message++;
   }
 
-  html: string = `<rlb-accordion>
-    <div rlb-accordion-item (statusChange)="onStatusChenged($event, 1)">
-      <rlb-accordion-header>Header</rlb-accordion-header>
-      <div rlb-accordion-body>
-        Body
-      </div>
+  sample: string = `<rlb-accordion>
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
     </div>
-    <div rlb-accordion-item (statusChange)="onStatusChenged($event, 2)">
-      <rlb-accordion-header>Header</rlb-accordion-header>
-      <div rlb-accordion-body>
-        Body
-      </div>
+  </div>
+</rlb-accordion>`;
+
+flush: string = `<rlb-accordion [flush]="true">
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
     </div>
-    <div rlb-accordion-item (statusChange)="onStatusChenged($event, 3)">
-      <rlb-accordion-header>Header</rlb-accordion-header>
-      <div rlb-accordion-body>
-        Body
-      </div>
+  </div>
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
     </div>
-  </rlb-accordion>`;
+  </div>
+</rlb-accordion>`;
+
+ao: string = `<rlb-accordion [always-open]="false">
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
+    </div>
+  </div>
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
+    </div>
+  </div>
+</rlb-accordion`;
+
+expanded: string = `<rlb-accordion>
+  <div rlb-accordion-item [expanded]="true">
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
+    </div>
+  </div>
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
+    </div>
+  </div>
+</rlb-accordion>`;
+
+  sc: string = `<p>{{message}}</p>
+<rlb-accordion>
+  <div rlb-accordion-item (statusChange)="onStatusChenged($event, 0)">
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
+    </div>
+  </div>
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Accordion Body</span>
+    </div>
+  </div>
+</rlb-accordion>`;
 
   ts: string = `@Component({
   selector: 'app-accordions',
@@ -40,8 +91,10 @@ export class AccordionsComponent {
 })
 export class AccordionsComponent {
 
+  message: number = 0;
+
   onStatusChenged(event: any, i: number) {
-    console.log(event + ' ' + i); 
+    this.message++;
   }
 }`;
 }

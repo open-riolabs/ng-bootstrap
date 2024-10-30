@@ -7,17 +7,35 @@ import { Component } from '@angular/core';
 })
 export class AlertsComponent {
 
+  
+  message: string = '';
   onDismiss() {
-    console.log('dismissed');
+    this.message = 'Alert dismissed';
   }
 
-  html: string = `<div class="container mt-3">
-  <rlb-alert [color]="'success'" dismissible (dismissed)="onDismiss()">Ciao!</rlb-alert>
-</div>`;
+  color: string = `<rlb-alert [color]="'primary'">Ciao!</rlb-alert>
+<rlb-alert [color]="'secondary'">Ciao!</rlb-alert>
+<rlb-alert [color]="'success'">Ciao!</rlb-alert>
+<rlb-alert [color]="'danger'">Ciao!</rlb-alert>
+<rlb-alert [color]="'warning'">Ciao!</rlb-alert>
+<rlb-alert [color]="'info'">Ciao!</rlb-alert>
+<rlb-alert [color]="'light'">Ciao!</rlb-alert>
+<rlb-alert [color]="'dark'">Ciao!</rlb-alert>`;
+
+  dismissable: string = `<rlb-alert [dismissible]="true">Ciao!</rlb-alert>`;
+
+  dismissed: string = `<p>{{message}}</p>
+<rlb-alert [dismissible]="true" (dismissed)="onDismiss()">Ciao!</rlb-alert>`;
 
   ts: string = `@Component({
-  selector: 'app-modal',
+  selector: 'app-alerts',
   templateUrl: './alerts.component.html',
+  styleUrls: ['./alerts.component.scss'],
 })
-export class AlertsComponent {}`;
+export class AlertsComponent {
+  message: string = '';
+  onDismiss() {
+    this.message = 'Alert dismissed';
+  }
+}`;
 }

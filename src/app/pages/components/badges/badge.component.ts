@@ -6,7 +6,15 @@ import { Component } from '@angular/core';
 })
 export class BadgesComponent {
 
-  html: string = `<button rlb-button class="position-relative" badge="pippo" [badge-start]="100" [badge-top]="0" [badge-color]="'info'" [badge-pill]="true">Toggle</button>`;
+  sample: string = `<button rlb-button class="position-relative" badge="pippo">Toggle</button>`;
+
+  pill: string = `<button rlb-button class="position-relative" badge="pippo" [badge-pill]="true">Toggle</button>`;
+  
+  start: string = `<button rlb-button class="position-relative" badge="pippo" [badge-start]="100">Toggle</button>`;
+  
+  top: string = `<button rlb-button class="position-relative" badge="pippo" [badge-top]="100">Toggle</button>`;
+  
+  border: string = `<button rlb-button class="position-relative" badge="pippo" [badge-border]="true">Toggle</button>`;
 
   ts: string = `@Component({
   selector: 'app-modal',
