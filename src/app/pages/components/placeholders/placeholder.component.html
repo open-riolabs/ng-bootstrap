@@ -42,7 +42,14 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Placeholder Sample</h4>
+            <pre><code [highlight]="sample" language="html"></code></pre>
+            <h4>Placeholder Color</h4>
+            <pre><code [highlight]="color" language="html"></code></pre>
+            <h4>Placeholder Size</h4>
+            <pre><code [highlight]="size" language="html"></code></pre>
+            <h4>Placeholder Animation</h4>
+            <pre><code [highlight]="animation" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -53,9 +60,58 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
+        <h4>Placeholder Sample</h4>
         <div rlb-placeholder>
           <span>Testo</span>
         </div>  
+        <h4>Placeholder Color</h4>
+        <div rlb-placeholder [placeholder-color]="'primary'">
+          <span>Testo</span>
+        </div>
+        <div rlb-placeholder [placeholder-color]="'secondary'">
+          <span>Testo</span>
+        </div>  
+        <div rlb-placeholder [placeholder-color]="'success'">
+          <span>Testo</span>
+        </div> 
+        <div rlb-placeholder [placeholder-color]="'danger'">
+          <span>Testo</span>
+        </div> 
+        <div rlb-placeholder [placeholder-color]="'warning'">
+          <span>Testo</span>
+        </div> 
+        <div rlb-placeholder [placeholder-color]="'info'">
+          <span>Testo</span>
+        </div> 
+        <div rlb-placeholder [placeholder-color]="'light'">
+          <span>Testo</span>
+        </div> 
+        <div rlb-placeholder [placeholder-color]="'dark'">
+          <span>Testo</span>
+        </div>
+        <h4>Placeholder Size</h4>
+        <div rlb-placeholder [placeholder-size]="'xs'">
+          <span>Testo</span>
+        </div><br>
+        <div rlb-placeholder [placeholder-size]="'sm'">
+          <span>Testo</span>
+        </div><br>
+        <div rlb-placeholder [placeholder-size]="'md'">
+          <span>Testo</span>
+        </div><br>
+        <div rlb-placeholder [placeholder-size]="'lg'">
+          <span>Testo</span>
+        </div>
+        <h4>Placeholder Animation</h4>
+        <div rlb-placeholder [placeholder-animation]="'fade'">
+          <span>Testo</span>
+        </div><br>
+        <div rlb-placeholder [placeholder-animation]="'glow'">
+          <span>Testo</span>
+        </div><br>
+        <div rlb-placeholder [placeholder-animation]="'none'">
+          <span>Testo</span>
+        </div>
       </div>
     </div>
   </rlb-accordion>

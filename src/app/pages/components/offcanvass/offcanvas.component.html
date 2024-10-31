@@ -131,7 +131,16 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Offcanvas Sample</h4>
+            <pre><code [highlight]="sample" language="html"></code></pre>
+            <h4>Placement</h4>
+            <pre><code [highlight]="placement" language="html"></code></pre>
+            <h4>Responsive</h4>
+            <pre><code [highlight]="responsive" language="html"></code></pre>
+            <h4>Close Manual</h4>
+            <pre><code [highlight]="cm" language="html"></code></pre>
+            <h4>Status Change</h4>
+            <pre><code [highlight]="sc" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -142,12 +151,35 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
+        <h4>Offcanvas Sample</h4>
         <button rlb-button toggle="offcanvas" toggle-target="off-1" class="me-2">Offcanvas</button>
         <rlb-offcanvas id="off-1">
-          <rlb-offcanvas-header>
-            <h5 rlb-offcanvas-title>Offcanvas</h5>
-          </rlb-offcanvas-header>
-          <rlb-offcanvas-body> pippo </rlb-offcanvas-body>
+          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+          <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
+        </rlb-offcanvas>
+        <h4>Placement</h4>
+        <button rlb-button toggle="offcanvas" toggle-target="off-2" class="me-2">Offcanvas</button>
+        <rlb-offcanvas id="off-2" [placement]="'end'">
+          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+          <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
+        </rlb-offcanvas>
+        <h4>Responsive</h4>
+        <button rlb-button toggle="offcanvas" toggle-target="off-3" class="me-2">Offcanvas</button>
+        <rlb-offcanvas id="off-3" [responsive]="'sm'">
+          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+          <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
+        </rlb-offcanvas>
+        <h4>Close Manual</h4>
+        <button rlb-button toggle="offcanvas" toggle-target="off-4" class="me-2">Offcanvas</button>
+        <rlb-offcanvas id="off-4" [close-manual]="false">
+          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+          <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
+        </rlb-offcanvas>
+        <h4>Status Change</h4>
+        <button rlb-button toggle="offcanvas" toggle-target="off-5" class="me-2">Offcanvas</button>
+        <rlb-offcanvas id="off-5" (statusChange)="onStatusChenged($event, 0)">
+          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+          <rlb-offcanvas-body>Offcanvas Body {{message}}</rlb-offcanvas-body>
         </rlb-offcanvas>
       </div>
     </div>

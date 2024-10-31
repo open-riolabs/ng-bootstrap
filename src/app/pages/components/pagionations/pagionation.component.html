@@ -81,7 +81,16 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Alignment</h4>
+            <pre><code [highlight]="align" language="html"></code></pre>
+            <h4>Size</h4>
+            <pre><code [highlight]="size" language="html"></code></pre>
+            <h4>IsIcon</h4>
+            <pre><code [highlight]="isIcon" language="html"></code></pre>
+            <h4>Disabled</h4>
+            <pre><code [highlight]="disabled" language="html"></code></pre>
+            <h4>Active</h4>
+            <pre><code [highlight]="active" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -92,17 +101,67 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
+        <h4>Alignment</h4>
         <rlb-pagination [alignment]="'center'">
-          <rlb-pagination-item isIcon [active]="true">
+          <rlb-pagination-item isIcon>
             <span>&laquo;</span>
           </rlb-pagination-item>
           <rlb-pagination-item isIcon>1</rlb-pagination-item>
           <rlb-pagination-item isIcon>2</rlb-pagination-item>
           <rlb-pagination-item isIcon>3</rlb-pagination-item>
           <rlb-pagination-item isIcon>4</rlb-pagination-item>
-          <rlb-pagination-item isIcon [active]="true">
+          <rlb-pagination-item isIcon>
             <span>&raquo;</span>
           </rlb-pagination-item>
+        </rlb-pagination>
+        <h4>Size</h4>
+        <rlb-pagination [size]="'sm'">
+          <rlb-pagination-item isIcon>
+            <span>&laquo;</span>
+          </rlb-pagination-item>
+          <rlb-pagination-item isIcon>1</rlb-pagination-item>
+          <rlb-pagination-item isIcon>2</rlb-pagination-item>
+          <rlb-pagination-item isIcon>3</rlb-pagination-item>
+          <rlb-pagination-item isIcon>4</rlb-pagination-item>
+          <rlb-pagination-item isIcon>
+            <span>&raquo;</span>
+          </rlb-pagination-item>
+        </rlb-pagination>
+        <rlb-pagination [size]="'md'">
+          <rlb-pagination-item isIcon>
+            <span>&laquo;</span>
+          </rlb-pagination-item>
+          <rlb-pagination-item isIcon>1</rlb-pagination-item>
+          <rlb-pagination-item isIcon>2</rlb-pagination-item>
+          <rlb-pagination-item isIcon>3</rlb-pagination-item>
+          <rlb-pagination-item isIcon>4</rlb-pagination-item>
+          <rlb-pagination-item isIcon>
+            <span>&raquo;</span>
+          </rlb-pagination-item>
+        </rlb-pagination>
+        <rlb-pagination [size]="'lg'">
+          <rlb-pagination-item isIcon>
+            <span>&laquo;</span>
+          </rlb-pagination-item>
+          <rlb-pagination-item isIcon>1</rlb-pagination-item>
+          <rlb-pagination-item isIcon>2</rlb-pagination-item>
+          <rlb-pagination-item isIcon>3</rlb-pagination-item>
+          <rlb-pagination-item isIcon>4</rlb-pagination-item>
+          <rlb-pagination-item isIcon>
+            <span>&raquo;</span>
+          </rlb-pagination-item>
+        </rlb-pagination>
+        <h4>Pagination Item isIcon</h4>
+        <rlb-pagination>
+          <rlb-pagination-item isIcon>1</rlb-pagination-item> 
+        </rlb-pagination>
+        <h4>Pagination Item disabled</h4>
+        <rlb-pagination>
+          <rlb-pagination-item isIcon [disabled]="true">1</rlb-pagination-item> 
+        </rlb-pagination>
+        <h4>Pagination Item active</h4>
+        <rlb-pagination>
+          <rlb-pagination-item isIcon [active]="true">1</rlb-pagination-item> 
         </rlb-pagination>
       </div>
     </div>
