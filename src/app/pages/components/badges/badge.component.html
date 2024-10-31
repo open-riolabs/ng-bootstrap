@@ -11,35 +11,35 @@
     <rlb-dt-header>I/O</rlb-dt-header>
     <rlb-dt-row>
       <rlb-dt-cell>badge</rlb-dt-cell>
-      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell>Add to define the badge text</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
       <rlb-dt-cell>badge-pill</rlb-dt-cell>
-      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell>Set badge-pill true to make badges more rounded</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
       <rlb-dt-cell>badge-border</rlb-dt-cell>
-      <rlb-dt-cell>boolean</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell>Set badge-border true to add a border to the badge</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
       <rlb-dt-cell>badge-top</rlb-dt-cell>
-      <rlb-dt-cell>number</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell>Add to define the top position of the badge</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
       <rlb-dt-cell>badge-start</rlb-dt-cell>
-      <rlb-dt-cell>number</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell>Add to define the left position of the badge</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
@@ -53,7 +53,7 @@
     </rlb-dt-row>
     <rlb-dt-row>
       <rlb-dt-cell>hidden-text</rlb-dt-cell>
-      <rlb-dt-cell>string</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
@@ -93,13 +93,13 @@
         <h4>Badge Sample</h4>
         <button rlb-button class="position-relative" badge="pippo">Toggle</button>
         <h4>Pill</h4>
-        <button rlb-button class="position-relative" badge="pippo" [badge-pill]="true">Toggle</button>
+        <button rlb-button class="position-relative" badge="pippo" badge-pill>Toggle</button>
         <h4>Start</h4>
-        <button rlb-button class="position-relative" badge="pippo" [badge-start]="100">Toggle</button>
+        <button rlb-button class="position-relative" badge="pippo" badge-start="100">Toggle</button>
         <h4>Top</h4>
-        <button rlb-button class="position-relative" badge="pippo" [badge-top]="100">Toggle</button>
+        <button rlb-button class="position-relative" badge="pippo" badge-top="100">Toggle</button>
         <h4>Border</h4>
-        <button rlb-button class="position-relative" badge="pippo" [badge-border]="true">Toggle</button>
+        <button rlb-button class="position-relative" badge="pippo" badge-border>Toggle</button>
       </div>
     </div>
   </rlb-accordion>
