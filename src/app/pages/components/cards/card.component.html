@@ -103,7 +103,16 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Card Sample</h4>
+            <pre><code [highlight]="sample" language="html"></code></pre>
+            <h4>Align</h4>
+            <pre><code [highlight]="align" language="html"></code></pre>
+            <h4>Overlay</h4>
+            <pre><code [highlight]="overlay" language="html"></code></pre>
+            <h4>Background</h4>
+            <pre><code [highlight]="background" language="html"></code></pre>
+            <h4>Border</h4>
+            <pre><code [highlight]="border" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -114,13 +123,161 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
+        <h4>Card Sample</h4>
         <rlb-card>
           <rlb-card-body>
-            <h5>questo è un card body</h5>
-            <p>questo è un paragrafo nel card body</p>
+            <h5>Card Body</h5>
           </rlb-card-body>
           <rlb-card-footer>
-            <p>questo è un card footer</p>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <h4>Align</h4>
+        <rlb-card [align]="'right'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <h4>Overlay</h4>
+        <rlb-card [overlay]="true">
+          <div rlb-card-image>
+            <h5>Card Image</h5>
+          </div>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <h4>Background</h4>
+        <rlb-card [background]="'primary'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [background]="'secondary'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [background]="'success'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [background]="'danger'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [background]="'warning'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [background]="'info'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [background]="'light'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [background]="'dark'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <h4>Border</h4>
+        <rlb-card [border]="'primary'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [border]="'secondary'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [border]="'success'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [border]="'danger'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [border]="'warning'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [border]="'info'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [border]="'light'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
+          </rlb-card-footer>
+        </rlb-card>
+        <rlb-card [border]="'dark'">
+          <rlb-card-body>
+            <h5>Card Body</h5>
+          </rlb-card-body>
+          <rlb-card-footer>
+            <p>Card Footer</p>
           </rlb-card-footer>
         </rlb-card>
       </div>

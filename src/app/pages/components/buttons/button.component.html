@@ -56,7 +56,16 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>Color</h4>
+            <pre><code [highlight]="color" language="html"></code></pre>
+            <h4>Size</h4>
+            <pre><code [highlight]="size" language="html"></code></pre>
+            <h4>Disabled</h4>
+            <pre><code [highlight]="disabled" language="html"></code></pre>
+            <h4>Outline</h4>
+            <pre><code [highlight]="outline" language="html"></code></pre>
+            <h4>IsLink</h4>
+            <pre><code [highlight]="isLink" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -67,7 +76,25 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
-        <button rlb-button color="primary" [size]="'sm'">Search</button>
+        <h4>Color</h4>
+        <button rlb-button [color]="'primary'">Search</button>
+        <button rlb-button [color]="'secondary'">Search</button>
+        <button rlb-button [color]="'success'">Search</button>
+        <button rlb-button [color]="'danger'">Search</button>
+        <button rlb-button [color]="'warning'">Search</button>
+        <button rlb-button [color]="'info'">Search</button>
+        <button rlb-button [color]="'light'">Search</button>
+        <button rlb-button [color]="'dark'">Search</button>
+        <h4>Size</h4>
+        <button rlb-button [size]="'sm'">Search</button>
+        <button rlb-button [size]="'md'">Search</button>
+        <button rlb-button [size]="'lg'">Search</button>
+        <h4>Disabled</h4>
+        <button rlb-button [disabled]="true">Search</button>
+        <h4>Outline</h4>
+        <button rlb-button [outline]="true">Search</button>
+        <h4>IsLink</h4>
+        <button rlb-button [isLink]="true">Search</button>
       </div>
     </div>
   </rlb-accordion>

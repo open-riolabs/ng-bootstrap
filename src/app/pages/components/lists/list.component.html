@@ -81,7 +81,22 @@
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
+            <h4>List Sample</h4>
+            <pre><code [highlight]="sample" language="html"></code></pre>
+            <h4>Disabled</h4>
+            <pre><code [highlight]="disabled" language="html"></code></pre>
+            <h4>Numbered</h4>
+            <pre><code [highlight]="numbered" language="html"></code></pre>
+            <h4>Flush</h4>
+            <pre><code [highlight]="flush" language="html"></code></pre>
+            <h4>Horizontal</h4>
+            <pre><code [highlight]="horizontal" language="html"></code></pre>
+            <h4>Item Active</h4>
+            <pre><code [highlight]="active" language="html"></code></pre>
+            <h4>Item Disabled</h4>
+            <pre><code [highlight]="disabled2" language="html"></code></pre>
+            <h4>Item Action</h4>
+            <pre><code [highlight]="action" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -92,10 +107,53 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
+        <h4>Sample List</h4>
+        <rlb-list>
+          <rlb-list-item>pippo</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
+        </rlb-list>
+        <h4>Disabled</h4>
+        <rlb-list [disabled]="true">
+          <rlb-list-item>pippo</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
+        </rlb-list>
+        <h4>Numbered</h4>
+        <rlb-list [numbered]="true">
+          <rlb-list-item>pippo</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
+        </rlb-list>
+        <h4>Flush</h4>
+        <rlb-list [flush]="true">
+          <rlb-list-item>pippo</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
+        </rlb-list>
+        <h4>Horizontal</h4>
+        <rlb-list [horizontal]="true">
+          <rlb-list-item>pippo</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
+        </rlb-list>
+        <h4>Item Active</h4>
         <rlb-list>
           <rlb-list-item [active]="true">pippo</rlb-list-item>
-          <rlb-list-item [active]="true">pluto</rlb-list-item>
-          <rlb-list-item [active]="true">paperino</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
+        </rlb-list>
+        <h4>Item Disabled</h4>
+        <rlb-list>
+          <rlb-list-item [disabled]="true">pippo</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
+        </rlb-list>
+        <h4>Item Action</h4>
+        <rlb-list>
+          <rlb-list-item [action]="true">pippo</rlb-list-item>
+          <rlb-list-item>pluto</rlb-list-item>
+          <rlb-list-item>paperino</rlb-list-item>
         </rlb-list>
       </div>
     </div>

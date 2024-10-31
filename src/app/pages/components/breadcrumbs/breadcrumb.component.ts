@@ -6,7 +6,9 @@ import { Component } from '@angular/core';
 })
 export class BreadcrumbsComponent {
 
-  html: string = `<rlb-breadcrumb [divider]="'/'" [items]="[{ label: 'Home', link: '/home' },{ label: 'Breadcrumb' }]"></rlb-breadcrumb>`;
+  sample: string = `<rlb-breadcrumb [items]="[{ label: 'Home', link: '/home' },{ label: 'Breadcrumb' }]"></rlb-breadcrumb>`;
+
+  divider: string = `<rlb-breadcrumb [divider]="'-'" [items]="[{ label: 'Home', link: '/home' },{ label: 'Breadcrumb' }]"></rlb-breadcrumb>`;
 
   ts: string = `@Component({
   selector: 'app-modal',
