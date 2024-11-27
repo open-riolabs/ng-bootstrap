@@ -6,8 +6,8 @@
   },
   "assets": [
     {
-      "input": "src/styles",
-      "output": "styles",
+      "input": "src/assets",
+      "output": "assets",
       "glob": "**/*"
     }
   ]
