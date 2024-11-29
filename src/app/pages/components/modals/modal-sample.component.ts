@@ -6,8 +6,9 @@ import { ModalData } from 'projects/rlb/ng-bootstrap/src/lib/components/modals/d
 import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
-    imports: [CommonModule, FormsModule],
-    template: `<div [class]="'modal-header' + headerColor">
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `<div [class]="'modal-header' + headerColor">
   <h5 class="modal-title">Modal title</h5>
   <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
 </div>
@@ -26,12 +27,12 @@ import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
     Save changes
   </button>
 </div>`,
-    hostDirectives: [
-        {
-            directive: ModalDirective,
-            inputs: ['id', 'data-instance', 'data-options'],
-        },
-    ]
+  hostDirectives: [
+    {
+      directive: ModalDirective,
+      inputs: ['id', 'data-instance', 'data-options'],
+    },
+  ]
 })
 export class ModalSampleComponent implements IModal<any, any> {
   data!: ModalData<any>;
