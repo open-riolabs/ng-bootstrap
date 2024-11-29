@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
     imports: [ModalDirective, RlbBootstrapModule, FormsModule, CommonModule],
+    standalone: true,
     template: ` <div class="modal-header">
       <h5 class="modal-title">{{ data.title }}</h5>
       <button
