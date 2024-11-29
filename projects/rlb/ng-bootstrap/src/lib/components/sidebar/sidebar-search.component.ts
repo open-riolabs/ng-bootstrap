@@ -13,8 +13,8 @@ import { ModalService } from '../modals';
 import { SearchModalInput } from '../../modals/search-modal.data';
 
 @Component({
-  selector: 'rlb-sidebar-search',
-  template: `
+    selector: 'rlb-sidebar-search',
+    template: `
     <ng-template #template>
       <ng-container *ngIf="open">
         <div class="search">
@@ -42,6 +42,7 @@ import { SearchModalInput } from '../../modals/search-modal.data';
       </ng-container>
     </ng-template>
   `,
+    standalone: false
 })
 export class SidebarSearchComponent implements OnInit {
   constructor(

@@ -5,15 +5,16 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-list-item',
-  template: `<ng-content></ng-content>`,
-  host: {
-    class: 'list-group-item',
-    '[class.disabled]': 'disabled',
-    '[class.list-group-item-action]': 'action',
-    '[class.active]': 'active',
-    '[attr.aria-current]': 'active',
-  },
+    selector: 'rlb-list-item',
+    template: `<ng-content></ng-content>`,
+    host: {
+        class: 'list-group-item',
+        '[class.disabled]': 'disabled',
+        '[class.list-group-item-action]': 'action',
+        '[class.active]': 'active',
+        '[attr.aria-current]': 'active',
+    },
+    standalone: false
 })
 export class ListItemComponent {
   @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;

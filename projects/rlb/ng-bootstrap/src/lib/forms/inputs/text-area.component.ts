@@ -12,8 +12,8 @@ import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Component({
-  selector: 'rlb-textarea',
-  template: `
+    selector: 'rlb-textarea',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <textarea
@@ -34,6 +34,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       </div>
     </div>
     <ng-content select="[after]"></ng-content>`,
+    standalone: false
 })
 export class TextAreaComponent
   extends AbstractComponent<string>

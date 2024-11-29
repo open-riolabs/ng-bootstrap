@@ -9,10 +9,11 @@ import {
 import { Breadcrumb } from './breadcrumb.data';
 
 @Component({
-  selector: 'rlb-c-breadcrumb',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-breadcrumb',
+    template: ` <ng-template #template>
     <rlb-breadcrumb [divider]="data?.divider" [items]="data?.items" />
   </ng-template>`,
+    standalone: false
 })
 export class BreadcrumbComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

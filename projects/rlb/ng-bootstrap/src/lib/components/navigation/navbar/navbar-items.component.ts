@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-navbar-items',
-  template: ` <ng-template #template>
+    selector: 'rlb-navbar-items',
+    template: ` <ng-template #template>
     <ul
       class="navbar-nav {{ cssClass }}"
       [class.navbar-nav-scroll]="scroll"
@@ -20,6 +20,7 @@ import {
       />
     </ul>
   </ng-template>`,
+    standalone: false
 })
 export class NavbarItemsComponent implements OnInit {
   @Input({ alias: 'scroll' }) scroll?: string;

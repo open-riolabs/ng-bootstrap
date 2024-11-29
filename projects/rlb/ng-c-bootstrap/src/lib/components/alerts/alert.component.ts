@@ -9,10 +9,11 @@ import {
 import { Alert } from './alert.data';
 
 @Component({
-  selector: 'rlb-c-alert',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-alert',
+    template: ` <ng-template #template>
     <rlb-alert [color]="data?.color || 'primary'"> {{ data?.text }}</rlb-alert>
   </ng-template>`,
+    standalone: false
 })
 export class AlertComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

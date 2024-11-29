@@ -6,9 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  standalone: true,
-  imports: [ModalDirective, RlbBootstrapModule, FormsModule, CommonModule],
-  template: ` <div class="modal-header">
+    imports: [ModalDirective, RlbBootstrapModule, FormsModule, CommonModule],
+    template: ` <div class="modal-header">
       <h5 class="modal-title">{{ data.title }}</h5>
       <button
         type="button"
@@ -37,12 +36,12 @@ import { CommonModule } from '@angular/common';
         </button>
       </rlb-input>
     </div>`,
-  hostDirectives: [
-    {
-      directive: ModalDirective,
-      inputs: ['id', 'data-instance', 'data-options'],
-    },
-  ],
+    hostDirectives: [
+        {
+            directive: ModalDirective,
+            inputs: ['id', 'data-instance', 'data-options'],
+        },
+    ]
 })
 export class SearchModalComponent
   implements IModal<SearchModalInput, string>, OnInit

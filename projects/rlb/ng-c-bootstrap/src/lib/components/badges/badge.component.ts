@@ -9,8 +9,8 @@ import {
 import { Badge } from './badge.data';
 
 @Component({
-  selector: 'rlb-c-badge',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-badge',
+    template: ` <ng-template #template>
     <span
       rlb-badge
       [color]="data?.color || 'primary'"
@@ -21,6 +21,7 @@ import { Badge } from './badge.data';
       {{ data?.text }}</span
     >
   </ng-template>`,
+    standalone: false
 })
 export class BadgeComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

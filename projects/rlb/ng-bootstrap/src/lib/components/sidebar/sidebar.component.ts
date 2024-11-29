@@ -22,8 +22,8 @@ import { SidebarItemComponent } from './sidebar-item.component';
 import { SidebarSearchComponent } from './sidebar-search.component';
 
 @Component({
-  selector: 'rlb-sidebar',
-  template: `
+    selector: 'rlb-sidebar',
+    template: `
     <ng-template #template>
       <div
         class="border-end rlb-sidebar {{ cssClass }}"
@@ -46,6 +46,7 @@ import { SidebarSearchComponent } from './sidebar-search.component';
       </div>
     </ng-template>
   `,
+    standalone: false
 })
 export class SidebarComponent implements OnInit, OnChanges {
   element!: HTMLElement;

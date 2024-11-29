@@ -1,24 +1,25 @@
 import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
 
 @Component({
-  selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
-  template: ` <ng-content *ngIf="isList" select="li[rlb-dropdown-item]" />
+    selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
+    template: ` <ng-content *ngIf="isList" select="li[rlb-dropdown-item]" />
     <ng-content *ngIf="!isList" />`,
-  host: {
-    class: 'dropdown-menu',
-    '[class.dropdown-menu-end]': 'placement === "right"',
-    '[class.dropdown-menu-start]': 'placement === "left"',
-    '[class.dropdown-menu-sm-end]': 'placementSm === "right"',
-    '[class.dropdown-menu-sm-start]': 'placementSm === "left"',
-    '[class.dropdown-menu-md-end]': 'placementMd === "right"',
-    '[class.dropdown-menu-md-start]': 'placementMd === "left"',
-    '[class.dropdown-menu-lg-end]': 'placementLg === "right"',
-    '[class.dropdown-menu-lg-start]': 'placementLg === "left"',
-    '[class.dropdown-menu-xl-end]': 'placementXl === "right"',
-    '[class.dropdown-menu-xl-start]': 'placementXl === "left"',
-    '[class.dropdown-menu-xxl-end]': 'placementXxl === "right"',
-    '[class.dropdown-menu-xxl-start]': 'placementXxl === "left"',
-  },
+    host: {
+        class: 'dropdown-menu',
+        '[class.dropdown-menu-end]': 'placement === "right"',
+        '[class.dropdown-menu-start]': 'placement === "left"',
+        '[class.dropdown-menu-sm-end]': 'placementSm === "right"',
+        '[class.dropdown-menu-sm-start]': 'placementSm === "left"',
+        '[class.dropdown-menu-md-end]': 'placementMd === "right"',
+        '[class.dropdown-menu-md-start]': 'placementMd === "left"',
+        '[class.dropdown-menu-lg-end]': 'placementLg === "right"',
+        '[class.dropdown-menu-lg-start]': 'placementLg === "left"',
+        '[class.dropdown-menu-xl-end]': 'placementXl === "right"',
+        '[class.dropdown-menu-xl-start]': 'placementXl === "left"',
+        '[class.dropdown-menu-xxl-end]': 'placementXxl === "right"',
+        '[class.dropdown-menu-xxl-start]': 'placementXxl === "left"',
+    },
+    standalone: false
 })
 export class DropdownContainerComponent {
   isList: boolean = false;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'rlb-offcanvas-header',
-  template: `
+    selector: 'rlb-offcanvas-header',
+    template: `
     <ng-content select="h*[rlb-offcanvas-title]"></ng-content>
     <button
       type="button"
@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
     ></button>
     <ng-content select=":not([rlb-offcanvas-title])"></ng-content>
   `,
-  host: { class: 'offcanvas-header' },
+    host: { class: 'offcanvas-header' },
+    standalone: false
 })
 export class OffcanvasHeaderComponent {}

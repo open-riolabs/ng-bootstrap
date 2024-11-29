@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-navbar-item',
-  template: ` <ng-template #template>
+    selector: 'rlb-navbar-item',
+    template: ` <ng-template #template>
     <li class="nav-item" [class.dropdown]="dropdown">
       <a
         class="nav-link {{ cssClass }}"
@@ -29,6 +29,7 @@ import {
       <ng-content select="rlb-dropdown-container"></ng-content>
     </li>
   </ng-template>`,
+    standalone: false
 })
 export class NavbarItemComponent implements OnInit {
   element!: HTMLElement;

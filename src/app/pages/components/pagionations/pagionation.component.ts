@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './pagionation.component.html',
+    selector: 'app-modal',
+    templateUrl: './pagionation.component.html',
+    standalone: false
 })
 export class PaginationsComponent {
 

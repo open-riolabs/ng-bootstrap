@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-tabs',
-  template: ` <ng-template #template>
+    selector: 'rlb-tabs',
+    template: ` <ng-template #template>
     <ul
       role="tablist"
       [attr.id]="id ? id : undefined"
@@ -27,6 +27,7 @@ import {
       <ng-content select="rlb-tab" />
     </ul>
   </ng-template>`,
+    standalone: false
 })
 export class TabsComponent {
   element!: HTMLElement;

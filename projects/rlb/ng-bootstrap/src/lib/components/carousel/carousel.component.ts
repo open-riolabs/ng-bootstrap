@@ -16,8 +16,8 @@ import { CarouselSlideComponent } from './carousel-slide.component';
 import { Carousel } from 'bootstrap';
 
 @Component({
-  selector: 'rlb-carousel',
-  template: `
+    selector: 'rlb-carousel',
+    template: `
     <div class="carousel-indicators">
       <ng-container *ngIf="showIndicators">
         <ng-container *ngFor="let item of items; let i = index">
@@ -54,18 +54,18 @@ import { Carousel } from 'bootstrap';
       <span class="visually-hidden">Next</span>
     </button>
   `,
-  host: {
-    class: 'carousel slide',
-    '[class.carousel-fade]': 'crossFade',
-    '[id]': 'id',
-    '[attr.data-bs-ride]':
-      'autoplay === "auto" ? "carousel" : autoplay === "manual" ? "true": undefined',
-    '[attr.data-bs-touch]': 'noTouch ? "false" : undefined',
-    '[attr.data-bs-interval]': 'interval',
-    '[attr.data-bs-keyboard]': '!keyboard ? "false" : undefined',
-    '[attr.data-bs-wrap]': '!wrap ? "false" : undefined',
-    '[attr.data-bs-pause]': 'pause === false ? "false" : undefined',
-  },
+    host: {
+        class: 'carousel slide',
+        '[class.carousel-fade]': 'crossFade',
+        '[id]': 'id',
+        '[attr.data-bs-ride]': 'autoplay === "auto" ? "carousel" : autoplay === "manual" ? "true": undefined',
+        '[attr.data-bs-touch]': 'noTouch ? "false" : undefined',
+        '[attr.data-bs-interval]': 'interval',
+        '[attr.data-bs-keyboard]': '!keyboard ? "false" : undefined',
+        '[attr.data-bs-wrap]': '!wrap ? "false" : undefined',
+        '[attr.data-bs-pause]': 'pause === false ? "false" : undefined',
+    },
+    standalone: false
 })
 export class CarouselComponent implements DoCheck, OnInit, OnDestroy {
   @ContentChildren(CarouselSlideComponent)

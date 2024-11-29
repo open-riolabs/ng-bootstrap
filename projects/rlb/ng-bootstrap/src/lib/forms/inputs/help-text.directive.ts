@@ -8,7 +8,8 @@ import {
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Directive({
-  selector: '[helpText]',
+    selector: '[helpText]',
+    standalone: false
 })
 export class HelpText implements DoCheck {
   private uniqueId: string;

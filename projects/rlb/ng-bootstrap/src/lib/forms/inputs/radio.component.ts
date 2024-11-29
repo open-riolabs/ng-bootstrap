@@ -15,8 +15,8 @@ import { ControlValueAccessor } from '@angular/forms';
 import { OptionComponent } from './options.component';
 
 @Component({
-  selector: 'rlb-radio',
-  template: `
+    selector: 'rlb-radio',
+    template: `
     <div class="input-group has-validation">
       <ng-content select="[before]"></ng-content>
       <ng-container *ngFor="let option of options; index as i">
@@ -43,6 +43,7 @@ import { OptionComponent } from './options.component';
         {{ errors | json }}
       </div>
     </div>`,
+    standalone: false
 })
 export class RadioComponent
   extends AbstractComponent<string>

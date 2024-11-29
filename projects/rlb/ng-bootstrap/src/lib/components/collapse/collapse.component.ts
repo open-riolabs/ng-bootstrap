@@ -4,15 +4,16 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
 import { VisibilityEvent } from '../../shared/types';
 
 @Component({
-  selector: 'rlb-collapse',
-  template: ` <div
+    selector: 'rlb-collapse',
+    template: ` <div
     class="collapse"
     [id]="id"
     [class.collapse-horizontal]="orientation === 'horizontal'"
   >
     <ng-content></ng-content>
   </div>`,
-  host: { '[attr.id]': 'undefined' },
+    host: { '[attr.id]': 'undefined' },
+    standalone: false
 })
 export class CollapseComponent
   extends ToggleAbstractComponent<Collapse>

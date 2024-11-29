@@ -14,11 +14,11 @@ import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Component({
-  selector: 'rlb-range',
-  host: {
-    class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
-  },
-  template: `
+    selector: 'rlb-range',
+    host: {
+        class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
+    },
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -40,6 +40,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       </div>
     </div>
     <ng-content select="[after]"></ng-content>`,
+    standalone: false
 })
 export class RangeComponent
   extends AbstractComponent<string>

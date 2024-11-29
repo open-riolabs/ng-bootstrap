@@ -14,8 +14,9 @@ export interface PaginationEvent {
 }
 
 @Component({
-  selector: 'rlb-dt-table',
-  templateUrl: './dt-table.component.html'
+    selector: 'rlb-dt-table',
+    templateUrl: './dt-table.component.html',
+    standalone: false
 })
 export class DataTableComponent implements OnInit, DoCheck {
   @Input({ alias: 'title' }) title?: string;

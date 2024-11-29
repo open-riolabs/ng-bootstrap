@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './color.component.html',
+    selector: 'app-modal',
+    templateUrl: './color.component.html',
+    standalone: false
 })
 export class ColorsComponent {
 

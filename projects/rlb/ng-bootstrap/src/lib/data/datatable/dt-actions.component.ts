@@ -17,8 +17,8 @@ import { HostWrapper } from '../../shared/host-wrapper';
 import { WrappedComponent } from '../../shared/wrapped.component';
 
 @Component({
-  selector: 'rlb-dt-actions',
-  template: `
+    selector: 'rlb-dt-actions',
+    template: `
     <ng-template #template>
       <div class="dropdown">
         <button
@@ -36,6 +36,7 @@ import { WrappedComponent } from '../../shared/wrapped.component';
 
     </ng-template>
   `,
+    standalone: false
 })
 export class DataTableActionsComponent implements DoCheck {
   element!: HTMLElement;

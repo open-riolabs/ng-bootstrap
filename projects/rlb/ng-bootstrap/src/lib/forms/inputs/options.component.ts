@@ -3,8 +3,8 @@ import { WrappedComponent } from '../../shared/wrapped.component';
 import { HostWrapper } from '../../shared/host-wrapper';
 
 @Component({
-  selector: 'rlb-option',
-  template: `
+    selector: 'rlb-option',
+    template: `
     <ng-template #template>
       <option
         [attr.disabled]="disabled ? true : undefined"
@@ -14,6 +14,7 @@ import { HostWrapper } from '../../shared/host-wrapper';
       </option>
     </ng-template>
   <ng-content></ng-content>`,
+    standalone: false
 })
 export class OptionComponent implements OnInit {
   private temp!: EmbeddedViewRef<any>;

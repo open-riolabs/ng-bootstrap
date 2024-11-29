@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, booleanAttribute } from '@angular/core';
 
 @Component({
-  selector: 'rlb-file-dnd',
-  template: `
+    selector: 'rlb-file-dnd',
+    template: `
     <div class="rlb-file-dnd" rlb-dnd [multiple]="multiple" (fileDropped)="onFileDropped($event)">
       <input type="file" #fileDropRef id="fileDropRef" [attr.multiple]="multiple?'':undefined" (change)="fileBrowseHandler($event)" />
       <i class="bi bi-upload"></i>
@@ -23,6 +23,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, booleanA
         </button>
       </div>
     </div>`,
+    standalone: false
 })
 export class FileDndComponent {
   files: File[] = [];

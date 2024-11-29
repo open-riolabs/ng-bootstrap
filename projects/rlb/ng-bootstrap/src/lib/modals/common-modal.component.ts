@@ -7,9 +7,8 @@ import { CommonModule } from '@angular/common';
 import { CommonModalData } from './common-modal.data';
 
 @Component({
-  standalone: true,
-  imports: [ModalDirective, RlbBootstrapModule, FormsModule, CommonModule],
-  template: `
+    imports: [ModalDirective, RlbBootstrapModule, FormsModule, CommonModule],
+    template: `
     <div [class]="'modal-header' + headerColor">
       <h5 class="modal-title">{{ data.title }}</h5>
       <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
@@ -31,12 +30,12 @@ import { CommonModalData } from './common-modal.data';
       </button>
     </div>
     `,
-  hostDirectives: [
-    {
-      directive: ModalDirective,
-      inputs: ['id', 'data-instance', 'data-options'],
-    },
-  ],
+    hostDirectives: [
+        {
+            directive: ModalDirective,
+            inputs: ['id', 'data-instance', 'data-options'],
+        },
+    ]
 })
 export class CommonModalComponent
   implements IModal<CommonModalData, void>, OnInit {

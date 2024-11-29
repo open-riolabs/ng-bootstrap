@@ -9,8 +9,8 @@ import {
 import { Progress } from './progress.data';
 
 @Component({
-  selector: 'rlb-c-progress',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-progress',
+    template: ` <ng-template #template>
     <rlb-progress
       [min]="data?.min || 0"
       [max]="data?.max || 100"
@@ -25,6 +25,7 @@ import { Progress } from './progress.data';
       >{{ data?.text }}</rlb-progress
     >
   </ng-template>`,
+    standalone: false
 })
 export class ProgressComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

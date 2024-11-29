@@ -1,12 +1,13 @@
 import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
 
 @Component({
-  selector: 'rlb-accordion-header',
-  template: `
+    selector: 'rlb-accordion-header',
+    template: `
     <button class="accordion-button" rlb-button toggle="collapse" [toggle-target]="itemId" [collapsed]="!expanded">
       <ng-content></ng-content>
     </button>`,
-  host: { class: 'accordion-header' },
+    host: { class: 'accordion-header' },
+    standalone: false
 })
 export class AccordionHeaderComponent {
   public parentId!: string;

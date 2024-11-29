@@ -9,11 +9,12 @@ import {
 import { Collapse } from './collapse.data';
 
 @Component({
-  selector: 'rlb-c-navbar',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-navbar',
+    template: ` <ng-template #template>
     <rlb-collapse [id]="data?.id || ''" [orientation]="data?.orientation" ]>
     </rlb-collapse>
   </ng-template>`,
+    standalone: false
 })
 export class CollapseComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

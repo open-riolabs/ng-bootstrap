@@ -3,8 +3,9 @@ import { BuilderComponent } from '../../shared/component-builder/builder.compone
 import { InnerModalService } from './inner-modal.service';
 import { ComponentHostDirective } from '../../shared/component-builder/component-host.directive';
 @Component({
-  selector: 'rlb-modal-container',
-  template: `<ng-template component-host></ng-template>`,
+    selector: 'rlb-modal-container',
+    template: `<ng-template component-host></ng-template>`,
+    standalone: false
 })
 export class ModalContainerComponent
   extends BuilderComponent<InnerModalService>

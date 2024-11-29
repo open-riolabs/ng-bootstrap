@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute, } from '@angular/core';
 
 @Component({
-  selector: 'rlb-sidebar-item',
-  template: `
+    selector: 'rlb-sidebar-item',
+    template: `
     <ng-template #template>
       <a
         [routerLink]="!disabled ? url : undefined"
@@ -19,6 +19,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild,
       </a>
     </ng-template>
   `,
+    standalone: false
 })
 export class SidebarItemComponent implements OnInit {
   element!: HTMLElement;

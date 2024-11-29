@@ -19,8 +19,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 import { OptionComponent } from './options.component';
 
 @Component({
-  selector: 'rlb-select',
-  template: `
+    selector: 'rlb-select',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <select
@@ -46,6 +46,7 @@ import { OptionComponent } from './options.component';
       </div>
     </div>
     <ng-content select="[after]"></ng-content>`,
+    standalone: false
 })
 export class SelectComponent
   extends AbstractComponent<string | string[]>

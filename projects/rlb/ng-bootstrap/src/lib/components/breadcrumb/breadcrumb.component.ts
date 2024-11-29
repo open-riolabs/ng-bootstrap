@@ -6,8 +6,8 @@ export interface BreadcrumbItem {
 }
 
 @Component({
-  selector: 'rlb-breadcrumb',
-  template: ` <nav
+    selector: 'rlb-breadcrumb',
+    template: ` <nav
     aria-label="breadcrumb"
     style="--bs-breadcrumb-divider: '{{ divider }}';"
   >
@@ -20,6 +20,7 @@ export interface BreadcrumbItem {
       </ng-container>
     </ol>
   </nav>`,
+    standalone: false
 })
 export class BreadcrumbComponent {
   @Input({ alias: 'divider' }) divider?: string = '>';

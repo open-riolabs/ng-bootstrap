@@ -11,8 +11,8 @@ import {
 import { Color } from '../../shared/types';
 
 @Component({
-  selector: 'rlb-alert',
-  template: ` <ng-template #template>
+    selector: 'rlb-alert',
+    template: ` <ng-template #template>
     <div class="alert alert-{{ color }} {{ cssClass }}" role="alert">
       <ng-content></ng-content>
       <button
@@ -25,6 +25,7 @@ import { Color } from '../../shared/types';
       ></button>
     </div>
   </ng-template>`,
+    standalone: false
 })
 export class AlertComponent {
   element!: HTMLElement;

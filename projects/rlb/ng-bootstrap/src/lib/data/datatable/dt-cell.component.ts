@@ -1,13 +1,14 @@
 import { Component, EmbeddedViewRef, Input, TemplateRef, ViewChild, ViewContainerRef, numberAttribute } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-cell',
-  template: `
+    selector: 'rlb-dt-cell',
+    template: `
     <ng-template #template>
       <td [colSpan]="colSpan" [class]="cssClass" [style]="cssStyle">
         <ng-content></ng-content>
       </td>
     </ng-template>`,
+    standalone: false
 })
 export class DataTableCellComponent {
 

@@ -2,8 +2,8 @@ import { Component, Input, booleanAttribute, numberAttribute } from '@angular/co
 import { Color } from '../../shared/types';
 
 @Component({
-  selector: 'rlb-progress',
-  template: `
+    selector: 'rlb-progress',
+    template: `
     <div
       class="progress-bar {{ color && !infinite? 'bg-' + color : '' }} {{ textColor? 'text-' + textColor : '' }}"
       [class.progress-bar-animated]="animated"
@@ -19,16 +19,17 @@ import { Color } from '../../shared/types';
         <ng-content></ng-content>
       </ng-template>
     </div>`,
-  host: {
-    class: 'progress',
-    'attr.role': 'progressbar',
-    '[attr.aria-valuenow]': 'getPercentValue()',
-    'aria-valuemin': '0',
-    '[attr.aria-valuemax]': 'max',
-    '[attr.aria-valuemin]': 'min',
-    '[attr.aria-label]': 'ariaLabel',
-    '[style.height.px]': 'height',
-  },
+    host: {
+        class: 'progress',
+        'attr.role': 'progressbar',
+        '[attr.aria-valuenow]': 'getPercentValue()',
+        'aria-valuemin': '0',
+        '[attr.aria-valuemax]': 'max',
+        '[attr.aria-valuemin]': 'min',
+        '[attr.aria-label]': 'ariaLabel',
+        '[style.height.px]': 'height',
+    },
+    standalone: false
 })
 export class ProgressComponent {
   showValue?: boolean = false;

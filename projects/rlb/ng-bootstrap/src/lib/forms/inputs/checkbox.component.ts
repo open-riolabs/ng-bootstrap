@@ -13,8 +13,8 @@ import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Component({
-  selector: 'rlb-checkbox',
-  template: `
+    selector: 'rlb-checkbox',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -34,6 +34,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       </div>
       <ng-content select="[after]"></ng-content>
     </div>`,
+    standalone: false
 })
 export class CheckboxComponent
   extends AbstractComponent<boolean | undefined>

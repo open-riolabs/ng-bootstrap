@@ -12,8 +12,8 @@ import { Dropdown } from 'bootstrap';
 import { VisibilityEventBase } from '../../shared/types';
 
 @Directive({
-  selector:
-    'a[rlb-dropdown], button[rlb-dropdown], span[rlb-badge][rlb-dropdown]',
+    selector: 'a[rlb-dropdown], button[rlb-dropdown], span[rlb-badge][rlb-dropdown]',
+    standalone: false
 })
 export class DropdownDirective implements DoCheck, OnInit {
   constructor(

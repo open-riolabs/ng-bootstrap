@@ -9,8 +9,8 @@ import {
 import { Accordion } from './accordion.data';
 
 @Component({
-  selector: 'rlb-c-accordion',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-accordion',
+    template: ` <ng-template #template>
     <rlb-accordion [flush]="data?.flush" [always-open]="data?.alwaysOpen">
       <div rlb-accordion-item *ngFor="let item of data?.items">
         <h2 rlb-accordion-header>
@@ -22,6 +22,7 @@ import { Accordion } from './accordion.data';
       </div>
     </rlb-accordion>
   </ng-template>`,
+    standalone: false
 })
 export class AccordionComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

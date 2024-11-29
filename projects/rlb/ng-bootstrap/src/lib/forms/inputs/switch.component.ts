@@ -12,8 +12,8 @@ import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Component({
-  selector: 'rlb-switch',
-  template: `
+    selector: 'rlb-switch',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="form-check form-switch d-inline-block">
       <input
@@ -34,6 +34,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       </div>
     </div>
     <ng-content select="[after]"></ng-content>`,
+    standalone: false
 })
 export class SwitchComponent
   extends AbstractComponent<boolean>

@@ -7,12 +7,13 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-navbar-form',
-  template: ` <ng-template #template>
+    selector: 'rlb-navbar-form',
+    template: ` <ng-template #template>
     <form [attr.role]="role" class="d-flex {{ cssClass }}">
       <ng-content />
     </form>
   </ng-template>`,
+    standalone: false
 })
 export class NavbarFormComponent {
   element!: HTMLElement;

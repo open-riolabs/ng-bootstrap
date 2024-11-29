@@ -9,8 +9,8 @@ import {
 import { Nav } from './nav.data';
 
 @Component({
-  selector: 'rlb-c-navbar',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-navbar',
+    template: ` <ng-template #template>
     <rlb-nav
       [horizontalAlignment]="data?.horizontalAlignment"
       [vertical]="data?.vertical"
@@ -26,6 +26,7 @@ import { Nav } from './nav.data';
       </rlb-nav-item>
     </rlb-nav>
   </ng-template>`,
+    standalone: false
 })
 export class NavComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

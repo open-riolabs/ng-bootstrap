@@ -10,13 +10,14 @@ import {
 import { Color } from '../../shared/types';
 
 @Component({
-  selector: 'span[rlb-badge]',
-  template: ` <ng-template #template>
+    selector: 'span[rlb-badge]',
+    template: ` <ng-template #template>
     <span [class]="style">
       <ng-content></ng-content>
       <span *ngIf="hiddenText" class="visually-hidden">{{ hiddenText }}</span>
     </span>
   </ng-template>`,
+    standalone: false
 })
 export class BadgeComponent {
   element!: HTMLElement;

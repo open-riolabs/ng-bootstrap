@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-nav',
-  template: ` <ng-template #template>
+    selector: 'rlb-nav',
+    template: ` <ng-template #template>
     <ul
       [attr.id]="id ? id : undefined"
       class="nav nav-underline {{ cssClass }}"
@@ -23,10 +23,11 @@ import {
       <ng-content select="rlb-nav-item" />
     </ul>
   </ng-template>`,
-  host: {
-    '[attr.class]': 'undefined',
-    '[attr.id]': 'undefined',
-  },
+    host: {
+        '[attr.class]': 'undefined',
+        '[attr.id]': 'undefined',
+    },
+    standalone: false
 })
 export class NavComponent {
   element!: HTMLElement;

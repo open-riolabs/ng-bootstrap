@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-sidebar-footer',
-  host: { class: 'pb-3 px-3' },
-  template: `
+    selector: 'rlb-sidebar-footer',
+    host: { class: 'pb-3 px-3' },
+    template: `
     <ng-template #template>
       <div class="mb-2 {{ cssClass }}">
         <hr class="text-white ms-3 my-2" />
@@ -17,6 +17,7 @@ import {
       </div>
     </ng-template>
   `,
+    standalone: false
 })
 export class SidebarFooterComponent {
   element!: HTMLElement;

@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-pagination-item',
-  template: `
+    selector: 'rlb-pagination-item',
+    template: `
     <ng-template #template>
       <li class="page-item {{ cssClass }}" [class.disabled]="disabled" [class.active]="active">
         <a class="page-link" *ngIf="isIcon; else e" [attr.disabled]="disabled">
@@ -23,6 +23,7 @@ import {
     </ng-template>
     <ng-template #content><ng-content /></ng-template>
   `,
+    standalone: false
 })
 export class PaginationItemComponent implements OnInit {
   element!: HTMLElement;

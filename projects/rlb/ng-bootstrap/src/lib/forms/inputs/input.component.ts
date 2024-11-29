@@ -16,8 +16,8 @@ import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Component({
-  selector: 'rlb-input',
-  template: `
+    selector: 'rlb-input',
+    template: `
   <ng-template #template>
     <ng-content select="[before]"></ng-content>
       <input
@@ -42,6 +42,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
     <ng-content select="[after]"></ng-content>
   </ng-template>`,
+    standalone: false
 })
 export class InputComponent
   extends AbstractComponent<string>

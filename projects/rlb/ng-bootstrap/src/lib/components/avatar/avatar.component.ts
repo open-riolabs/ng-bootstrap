@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-avatar',
-  template: `
+    selector: 'rlb-avatar',
+    template: `
     <ng-template #template>
       <img
         *ngIf="src"
@@ -26,6 +26,7 @@ import {
       />
     </ng-template>
   `,
+    standalone: false
 })
 export class AvatarComponent {
   element!: HTMLElement;

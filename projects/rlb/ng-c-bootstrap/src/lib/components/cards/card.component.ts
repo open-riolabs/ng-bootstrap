@@ -9,8 +9,8 @@ import {
 import { Card } from './card.data';
 
 @Component({
-  selector: 'rlb-c-card',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-card',
+    template: ` <ng-template #template>
     <rlb-card
       [style.width.px]="data?.width || 300"
       [overlay]="false"
@@ -44,6 +44,7 @@ import { Card } from './card.data';
       </rlb-card-footer>
     </rlb-card>
   </ng-template>`,
+    standalone: false
 })
 export class CardComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

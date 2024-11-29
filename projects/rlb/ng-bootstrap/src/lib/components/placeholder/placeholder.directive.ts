@@ -8,7 +8,8 @@ import {
 import { Color } from '../../shared/types';
 
 @Directive({
-  selector: '[rlb-placeholder]',
+    selector: '[rlb-placeholder]',
+    standalone: false
 })
 export class PlaceholderDirective implements DoCheck {
   @Input({ alias: 'placeholder-color' }) color?: Color;

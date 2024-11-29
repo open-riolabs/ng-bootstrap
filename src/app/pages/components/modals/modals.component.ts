@@ -3,8 +3,9 @@ import { ModalService } from '@rlb/ng-bootstrap';
 
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './modals.component.html',
+    selector: 'app-modal',
+    templateUrl: './modals.component.html',
+    standalone: false
 })
 export class ModalsComponent {
   constructor(private modals: ModalService) {

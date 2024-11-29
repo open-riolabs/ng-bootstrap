@@ -9,8 +9,8 @@ import {
 import { Carousel } from './carousel.data';
 
 @Component({
-  selector: 'rlb-c-accordion',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-accordion',
+    template: ` <ng-template #template>
     <rlb-carousel
       [show-indicators]="data?.showIndicators"
       [show-controls]="data?.showControls"
@@ -31,6 +31,7 @@ import { Carousel } from './carousel.data';
       </rlb-carousel-slide>
     </rlb-carousel>
   </ng-template>`,
+    standalone: false
 })
 export class CarouselComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

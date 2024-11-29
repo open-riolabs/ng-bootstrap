@@ -20,8 +20,8 @@ export type AutocompleteItem = string | { text: string, value: string }
 export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>
 
 @Component({
-  selector: 'rlb-autocomplete',
-  template: `
+    selector: 'rlb-autocomplete',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -54,6 +54,7 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
       [style.max-height.px]="maxHeight">
     </div>
    `,
+    standalone: false
 })
 export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>

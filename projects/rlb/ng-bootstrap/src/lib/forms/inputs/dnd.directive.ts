@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[rlb-dnd]'
+    selector: '[rlb-dnd]',
+    standalone: false
 })
 export class DndDirective {
   @Input({ alias: 'multiple', transform: booleanAttribute }) multi: boolean = false;

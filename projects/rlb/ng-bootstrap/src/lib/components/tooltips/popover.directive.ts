@@ -9,7 +9,8 @@ import {
 import { Popover } from 'bootstrap';
 
 @Directive({
-  selector: '[popover]',
+    selector: '[popover]',
+    standalone: false
 })
 export class PopoverDirective implements DoCheck, AfterViewInit {
   static bsInit = false;

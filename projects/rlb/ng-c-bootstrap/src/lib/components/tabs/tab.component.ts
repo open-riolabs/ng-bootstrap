@@ -9,8 +9,8 @@ import {
 import { Tab } from './tab.data';
 
 @Component({
-  selector: 'rlb-c-tab',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-tab',
+    template: ` <ng-template #template>
     <rlb-tabs
       [horizontal-alignment]="data?.horizontalAlignment"
       [view]="data?.view"
@@ -28,6 +28,7 @@ import { Tab } from './tab.data';
       }}</rlb-tab-pane>
     </rlb-tab-content>
   </ng-template>`,
+    standalone: false
 })
 export class TabComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

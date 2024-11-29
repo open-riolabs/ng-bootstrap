@@ -9,13 +9,14 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-header',
-  template: `
+    selector: 'rlb-dt-header',
+    template: `
     <ng-template #template>
       <th [class]="cssClass" [style]="cssStyle">
         <ng-content></ng-content>
       </th>
     </ng-template>`,
+    standalone: false
 })
 export class DataTableHeaderComponent {
   @Input() field!: string;

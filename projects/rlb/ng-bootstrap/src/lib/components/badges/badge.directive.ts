@@ -12,7 +12,8 @@ import {
 import { Color } from '../../shared/types';
 
 @Directive({
-  selector: '[badge]',
+    selector: '[badge]',
+    standalone: false
 })
 export class BadgeDirective implements AfterViewInit, DoCheck {
   @Input({ alias: 'badge' }) badge?: string;

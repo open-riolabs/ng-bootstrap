@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-tab',
-  template: ` <ng-template #template>
+    selector: 'rlb-tab',
+    template: ` <ng-template #template>
     <li class="nav-item {{ cssClass }}" role="presentation">
       <button
         class="nav-link"
@@ -26,10 +26,11 @@ import {
       </button>
     </li>
   </ng-template>`,
-  host: {
-    '[attr.class]': 'undefined',
-    '[attr.id]': 'undefined',
-  },
+    host: {
+        '[attr.class]': 'undefined',
+        '[attr.id]': 'undefined',
+    },
+    standalone: false
 })
 export class TabComponent {
   element!: HTMLElement;

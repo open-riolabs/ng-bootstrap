@@ -9,8 +9,8 @@ import {
 import { Navbar } from './navbar.data';
 
 @Component({
-  selector: 'rlb-c-navbar',
-  template: ` <ng-template #template>
+    selector: 'rlb-c-navbar',
+    template: ` <ng-template #template>
     <rlb-navbar
       [color]="data?.color"
       [placement]="data?.placement"
@@ -51,6 +51,7 @@ import { Navbar } from './navbar.data';
       </rlb-navbar-text>
     </rlb-navbar>
   </ng-template>`,
+    standalone: false
 })
 export class NavbarComponent implements OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

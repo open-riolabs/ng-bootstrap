@@ -12,9 +12,10 @@ import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { FormFieldsDefinition, FormField, IForm } from './form-fields';
 
 @Component({
-  selector: 'rlb-form-fields',
-  templateUrl: './rlb-form-fields.component.html',
-  styleUrls: ['./rlb-form-fields.component.scss'],
+    selector: 'rlb-form-fields',
+    templateUrl: './rlb-form-fields.component.html',
+    styleUrls: ['./rlb-form-fields.component.scss'],
+    standalone: false
 })
 export class FormFieldsComponent implements IForm, OnChanges {
   public filterForm!: FormGroup;

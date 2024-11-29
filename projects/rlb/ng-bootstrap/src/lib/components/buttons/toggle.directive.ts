@@ -3,12 +3,13 @@ import { ButtonToolbarComponent } from './boutton-toolbar.component';
 import { SidebarItemComponent } from '../sidebar/sidebar-item.component';
 
 @Directive({
-  selector: `
+    selector: `
     button[toggle],
     a[toggle],
     rlb-navbar-item[toggle],
     rlb-sidebar-item[toggle],
     rlb-button-toolbar[toogle]`,
+    standalone: false
 })
 export class ToggleDirective implements DoCheck {
   @Input({ alias: 'toggle', required: true }) toggle?: 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group';

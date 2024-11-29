@@ -13,7 +13,8 @@ import {
 import { Tooltip } from 'bootstrap';
 
 @Directive({
-  selector: '[tooltip]',
+    selector: '[tooltip]',
+    standalone: false
 })
 export class TooltipDirective implements OnInit, OnChanges {
   static bsInit = false;

@@ -1,8 +1,8 @@
 import { Component, ViewContainerRef, Input, booleanAttribute, ViewChild, EmbeddedViewRef, TemplateRef, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-action',
-  template: `
+    selector: 'rlb-dt-action',
+    template: `
     <ng-template #template>
       <li (click)="onClick($event)" [routerLink]="routerLink">
         <button class="dropdown-item" type="button" [disabled]="disabled">
@@ -10,6 +10,7 @@ import { Component, ViewContainerRef, Input, booleanAttribute, ViewChild, Embedd
         </button>
       </li>
     </ng-template>`,
+    standalone: false
 })
 export class DataTableActionComponent {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;

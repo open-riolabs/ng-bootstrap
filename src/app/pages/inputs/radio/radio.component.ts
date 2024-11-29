@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './radio.component.html',
+    selector: 'app-modal',
+    templateUrl: './radio.component.html',
+    standalone: false
 })
 export class RadiosComponent {
 

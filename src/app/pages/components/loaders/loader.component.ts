@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './loader.component.html',
+    selector: 'app-modal',
+    templateUrl: './loader.component.html',
+    standalone: false
 })
 export class LoadersComponent {
 

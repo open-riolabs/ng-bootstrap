@@ -12,8 +12,8 @@ import {
 import { DataTableActionsComponent } from './dt-actions.component';
 
 @Component({
-  selector: 'rlb-dt-row',
-  template: `
+    selector: 'rlb-dt-row',
+    template: `
     <ng-template #template>
       <tr [class]="cssClass" [style]="cssStyle">
         <ng-content select="rlb-dt-cell"></ng-content>
@@ -22,6 +22,7 @@ import { DataTableActionsComponent } from './dt-actions.component';
         </rlb-dt-cell>
       </tr>
     </ng-template>`,
+    standalone: false
 })
 export class DataTableRowComponent implements DoCheck {
   @Input({ alias: 'class' }) cssClass?: string

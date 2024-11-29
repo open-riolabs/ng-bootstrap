@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './placeholder.component.html',
+    selector: 'app-modal',
+    templateUrl: './placeholder.component.html',
+    standalone: false
 })
 export class PlaceholdersComponent {
 

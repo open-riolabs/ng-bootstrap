@@ -10,8 +10,8 @@ import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 
 @Component({
-  selector: 'rlb-navbar',
-  template: ` <ng-template #template>
+    selector: 'rlb-navbar',
+    template: ` <ng-template #template>
     <nav
       class="navbar px-2 bg-{{ color }} {{ placement }} {{ _navExpand }} {{ cssClass }}"
       [attr.data-bs-theme]="dark"
@@ -38,6 +38,7 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
       </div>
     </nav>
   </ng-template>`,
+    standalone: false
 })
 export class NavbarComponent {
   element!: HTMLElement;

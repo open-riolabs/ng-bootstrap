@@ -1,11 +1,12 @@
 import { Component, EmbeddedViewRef, Input, TemplateRef, ViewChild, ViewContainerRef, numberAttribute } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-loading',
-  template: `
+    selector: 'rlb-dt-loading',
+    template: `
     <ng-template #template>
       <ng-content></ng-content>
     </ng-template>`,
+    standalone: false
 })
 export class DataTableLoadingComponent {
 

@@ -9,8 +9,8 @@ import {
 import { HeaderLogo, HeaderUser, SidebarMode } from './sidebar-mode';
 
 @Component({
-  selector: 'rlb-sidebar-header',
-  template: `
+    selector: 'rlb-sidebar-header',
+    template: `
     <ng-template #template>
       <ng-container *ngIf="mode === 'user'"> user </ng-container>
       <ng-container *ngIf="mode === 'logo'">
@@ -24,6 +24,7 @@ import { HeaderLogo, HeaderUser, SidebarMode } from './sidebar-mode';
       </ng-container>
     </ng-template>
   `,
+    standalone: false
 })
 export class SidebarHeaderComponent implements OnInit {
   element!: HTMLElement;

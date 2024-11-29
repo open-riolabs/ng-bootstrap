@@ -11,8 +11,8 @@ import {
 import { PaginationItemComponent } from './pagination-item.component';
 
 @Component({
-  selector: 'rlb-pagination',
-  template: ` <ng-template #template>
+    selector: 'rlb-pagination',
+    template: ` <ng-template #template>
     <nav>
       <ul
         class="pagination {{ cssClass }}"
@@ -26,6 +26,7 @@ import { PaginationItemComponent } from './pagination-item.component';
       </ul>
     </nav>
   </ng-template>`,
+    standalone: false
 })
 export class PaginationComponent implements OnInit {
   element!: HTMLElement;

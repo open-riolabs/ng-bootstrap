@@ -7,12 +7,13 @@ import { Collapse } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 
 @Component({
-  selector: 'div[rlb-accordion-item]',
-  template: `
+    selector: 'div[rlb-accordion-item]',
+    template: `
     <ng-content select="rlb-accordion-header"></ng-content>
     <ng-content select="[rlb-accordion-body]"></ng-content>
   `,
-  host: { class: 'accordion-item' },
+    host: { class: 'accordion-item' },
+    standalone: false
 })
 export class AccordionItemComponent
   extends ToggleAbstractComponent<Collapse>

@@ -1,8 +1,8 @@
 import { Component, Input, booleanAttribute } from '@angular/core';
 
 @Component({
-  selector: 'li[rlb-dropdown-item]',
-  template: ` <a
+    selector: 'li[rlb-dropdown-item]',
+    template: ` <a
       *ngIf="!header && !divider"
       class="dropdown-item"
       href="#"
@@ -18,6 +18,7 @@ import { Component, Input, booleanAttribute } from '@angular/core';
     </h6>
     <hr *ngIf="divider" class="dropdown-divider" />
     <ng-template #content><ng-content /></ng-template>`,
+    standalone: false
 })
 export class DropdownMenuItemComponent {
   @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;

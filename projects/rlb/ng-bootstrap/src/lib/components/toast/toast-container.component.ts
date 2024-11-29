@@ -5,9 +5,10 @@ import { ComponentHostDirective } from '../../shared/component-builder/component
 import { ToastData } from './data/toast-data';
 
 @Component({
-  selector: 'rlb-toast-container',
-  template: `<ng-template component-host></ng-template>`,
-  host: { class: 'toast-container' },
+    selector: 'rlb-toast-container',
+    template: `<ng-template component-host></ng-template>`,
+    host: { class: 'toast-container' },
+    standalone: false
 })
 export class ToastContainerComponent
   extends BuilderComponent<InnerToastService>

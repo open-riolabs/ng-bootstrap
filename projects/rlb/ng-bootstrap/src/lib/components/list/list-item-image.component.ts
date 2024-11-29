@@ -2,8 +2,8 @@ import { Component, Input, booleanAttribute, numberAttribute } from '@angular/co
 import { Color } from '../../shared/types';
 
 @Component({
-  selector: 'rlb-list-item-image',
-  template: `
+    selector: 'rlb-list-item-image',
+    template: `
     <div class="d-flex">
       <rlb-avatar *ngIf="avatar" [src]="avatar" [size]="avatarSize" />
       <i *ngIf="!avatar && icon" [class]="icon" style="font-size: {{avatarSize}}px;"></i>
@@ -18,13 +18,14 @@ import { Color } from '../../shared/types';
       </div>
     </div>
   `,
-  host: {
-    class: 'list-group-item',
-    '[class.disabled]': 'disabled',
-    '[class.list-group-item-action]': 'disabled !== true',
-    '[class.active]': 'active',
-    '[attr.aria-current]': 'active',
-  }
+    host: {
+        class: 'list-group-item',
+        '[class.disabled]': 'disabled',
+        '[class.list-group-item-action]': 'disabled !== true',
+        '[class.active]': 'active',
+        '[attr.aria-current]': 'active',
+    },
+    standalone: false
 })
 export class ListItemImageComponent {
   @Input({ transform: booleanAttribute, alias: 'active', }) active!: boolean;

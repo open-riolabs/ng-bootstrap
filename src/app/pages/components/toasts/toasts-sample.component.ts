@@ -7,10 +7,9 @@ import {
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule],
-  selector: 'app-toast',
-  template: `
+    imports: [CommonModule],
+    selector: 'app-toast',
+    template: `
   <div class="toast-header">
   <strong class="me-auto">{{data.title}}</strong>
   <small *ngIf="data.subtitle"> {{data.subtitle }}</small>
@@ -18,12 +17,12 @@ import {
 </div>
 <div class="toast-body">{{data.content}}</div>
 `,
-  hostDirectives: [
-    {
-      directive: ToastDirective,
-      inputs: ['id', 'data-instance', 'data-options'],
-    },
-  ],
+    hostDirectives: [
+        {
+            directive: ToastDirective,
+            inputs: ['id', 'data-instance', 'data-options'],
+        },
+    ]
 })
 export class ToastSampleComponent implements IToast<any, any> {
   data!: ToastData<any>;
