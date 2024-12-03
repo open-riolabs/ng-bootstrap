@@ -13,7 +13,7 @@ import {
     template: `
     <ng-template #template>
       <li class="page-item {{ cssClass }}" [class.disabled]="disabled" [class.active]="active">
-        <a class="page-link" *ngIf="isIcon; else e" [attr.disabled]="disabled">
+        <a class="page-link d-block" *ngIf="isIcon; else e" [attr.disabled]="disabled">
           <ng-container *ngTemplateOutlet="content"></ng-container>
         </a>
         <ng-template #e>

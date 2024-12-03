@@ -54,7 +54,7 @@
           <nav aria-label="Page navigation example">
             <ul class="pagination float-end pagination-sm">
               <li class="page-item">
-                <a class="page-link" [class.disabled]="currentPage === 1" href="#" aria-label="Previous"
+                <a class="page-link d-block" [class.disabled]="currentPage === 1" href="#" aria-label="Previous"
                   (click)="prev($event)">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -62,12 +62,12 @@
               <span class="d-flex overflow-x-hidden overflow-y-hidden" (wheel)="onPgWeel($event)" style="max-width: 200px;">
                 <ng-container *ngFor="let page of [].constructor(pages); let i = index">
                   <li class="page-item" [class.active]="currentPage === i+1">
-                    <a class="page-link" href="#" (click)="selectPage($event, i+1)">{{i+1}}</a>
+                    <a class="page-link d-block" href="#" (click)="selectPage($event, i+1)">{{i+1}}</a>
                   </li>
                 </ng-container>
               </span>
               <li class="page-item">
-                <a class="page-link" [class.disabled]="currentPage === pages" href="#" aria-label="Next"
+                <a class="page-link d-block" [class.disabled]="currentPage === pages" href="#" aria-label="Next"
                   (click)="next($event)">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
