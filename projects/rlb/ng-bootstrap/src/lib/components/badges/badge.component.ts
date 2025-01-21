@@ -10,14 +10,15 @@ import {
 import { Color } from '../../shared/types';
 
 @Component({
-    selector: 'span[rlb-badge]',
-    template: ` <ng-template #template>
+  selector: 'span[rlb-badge], img[rlb-badge]',
+  template: `
+  <ng-template #template>
     <span [class]="style">
       <ng-content></ng-content>
       <span *ngIf="hiddenText" class="visually-hidden">{{ hiddenText }}</span>
     </span>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
 export class BadgeComponent {
   element!: HTMLElement;
@@ -26,7 +27,7 @@ export class BadgeComponent {
   @Input({ alias: 'color' }) color?: Color = 'primary';
   @Input({ alias: 'hidden-text' }) hiddenText?: string;
   @Input({ alias: 'border', transform: booleanAttribute }) border?: boolean;
-
+  @Input({ alias: 'class' }) cssClass?: string = '';
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
@@ -42,7 +43,7 @@ export class BadgeComponent {
     if (this.border) {
       style += ` border`;
     }
-    return style;
+    return style + this.cssClass ? ` ${this.cssClass}` : '';
   }
 
   ngOnInit() {
