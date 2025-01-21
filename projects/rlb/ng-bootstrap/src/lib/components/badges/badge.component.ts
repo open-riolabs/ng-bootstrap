@@ -43,7 +43,7 @@ export class BadgeComponent {
     if (this.border) {
       style += ` border`;
     }
-    return style + this.cssClass ? ` ${this.cssClass}` : '';
+    return style += (this.cssClass ? ` ${this.cssClass}` : '');
   }
 
   ngOnInit() {
