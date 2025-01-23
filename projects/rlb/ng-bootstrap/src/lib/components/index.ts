@@ -49,8 +49,6 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { PlaceholderDirective } from './placeholder/placeholder.directive';
 import { ScrollspyDirective } from './scrollspy/scrollspy.directive';
 import { SidebarItemComponent } from './sidebar/sidebar-item.component';
-import { SidebarFooterComponent } from './sidebar/sidebar-footer.component';
-import { SidebarHeaderComponent } from './sidebar/sidebar-header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TabContentComponent } from './tabs/tab-content.component';
 import { TabPaneComponent } from './tabs/tab-pane.component';
@@ -65,7 +63,6 @@ import { ListItemComponent } from './list/list-item.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { ListItemImageComponent } from './list/list-item-image.component';
 import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
-import { SidebarSearchComponent } from './sidebar/sidebar-search.component';
 import { ChatContainerComponent } from './chat/chat-container.component';
 import { ChatItemComponent } from './chat/chat-item.component';
 
@@ -121,9 +118,6 @@ export * from './offcanvas/offcanvas-title.component';
 export * from './buttons/toggle.directive';
 export * from './sidebar/sidebar.component';
 export * from './sidebar/sidebar-item.component';
-export * from './sidebar/sidebar-header.component';
-export * from './sidebar/sidebar-footer.component';
-export * from './sidebar/sidebar-search.component';
 export * from './tabs/tabs.component';
 export * from './tabs/tab.component';
 export * from './tabs/tab-content.component';
@@ -186,10 +180,7 @@ export const COMPONENTS = [
   OffcanvasBodyComponent,
   ToggleDirective,
   SidebarComponent,
-  SidebarHeaderComponent,
   SidebarItemComponent,
-  SidebarFooterComponent,
-  SidebarSearchComponent,
   NavComponent,
   NavItemComponent,
   TabsComponent,
