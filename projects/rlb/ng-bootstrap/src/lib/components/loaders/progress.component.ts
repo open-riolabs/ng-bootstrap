@@ -32,7 +32,6 @@ import { Color } from '../../shared/types';
     standalone: false
 })
 export class ProgressComponent {
-  showValue?: boolean = false;
 
   @Input({ alias: 'max', transform: numberAttribute }) max: number = 100;
   @Input({ alias: 'min', transform: numberAttribute }) min: number = 0;
@@ -42,7 +41,7 @@ export class ProgressComponent {
   @Input({ alias: 'striped', transform: booleanAttribute }) striped?: boolean = false;
   @Input({ alias: 'infinite', transform: booleanAttribute }) infinite?: boolean = false;
   @Input({ alias: 'aria-label' }) ariaLabel!: string;
-  @Input({ alias: 'showValue', transform: booleanAttribute })
+  @Input({ alias: 'showValue', transform: booleanAttribute }) showValue?: boolean = false;
   @Input({ alias: 'color' }) color: Color = 'primary';
   @Input({ alias: 'text-color' }) textColor!: Color;
 
