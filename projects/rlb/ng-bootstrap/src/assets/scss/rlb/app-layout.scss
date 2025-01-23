@@ -4,8 +4,6 @@
   left: 0;
   width: 100%;
   height: $header-height;
-  background-color: #333;
-  color: white;
   display: flex;
   align-items: center;
   z-index: 1000;
@@ -17,8 +15,6 @@
   left: 0;
   width: $sidebar-width;
   height: calc(100% - $header-height);
-  background-color: #444;
-  color: white;
   box-sizing: border-box;
 }
 
