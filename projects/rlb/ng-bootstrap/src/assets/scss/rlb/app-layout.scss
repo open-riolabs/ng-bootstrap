@@ -1,11 +1,29 @@
-.rlb-app {
-  @extend .d-flex, .flex-row, .w-100;
+.rlb-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $header-height;
+  background-color: #333;
+  color: white;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .rlb-right-panel {
-    @extend .d-flex, .flex-column, .flex-grow-1, .vh-100, .overflow-hidden;
+.rlb-sidebar {
+  position: fixed;
+  top: $header-height;
+  left: 0;
+  width: $sidebar-width;
+  height: calc(100% - $header-height);
+  background-color: #444;
+  color: white;
+  box-sizing: border-box;
+}
 
-    .rlb-content {
-      @extend .flex-grow-1, .overflow-auto
-    }
-  }
+.rlb-content {
+  margin-top: $header-height;
+  margin-left: $sidebar-width;
+  box-sizing: border-box;
 }
