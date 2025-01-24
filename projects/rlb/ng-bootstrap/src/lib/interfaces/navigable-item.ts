@@ -3,7 +3,7 @@ export interface NavigableItem {
   icon?: string;
   active?: boolean;
   disabled?: boolean;
-  url: any[] | string | null | undefined;
+  url?: any[] | string | null | undefined;
 }
 
 export interface SidebarNavigableItem extends NavigableItem {
