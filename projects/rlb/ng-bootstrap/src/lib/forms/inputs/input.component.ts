@@ -26,7 +26,7 @@ const decimalChar = (0.1).toLocaleString().charAt(1);
         #field
         [id]="id"
         class="form-control"
-        [type]="type"
+        pattern="[0-9,.]"
         [name]="name"
         [attr.max]="type === 'number' && max !== null && max !== undefined ? max : undefined"
         [attr.min]="type === 'number' && min !== null && min !== undefined ? min : undefined"
@@ -69,30 +69,40 @@ export class InputComponent
   }
 
   update(ev: EventTarget | null) {
-    console.log('update', ev);
     if (!this.disabled) {
       if (this.type === 'number') {
         const t = ev as HTMLInputElement;
-        let v = parseFloat(t?.value || '');
-        if (this.max && v > this.max) {
-          v = this.max;
+        const val = this.removeNonDigits(t?.value);
+        if (!val) t.value = '';
+        const comma = val.includes('.');
+        let v = parseFloat(val);
+        if (!isNaN(v)) {
+          if (this.max && v > this.max) {
+            v = this.max;
+          }
+          if (this.min && v < this.min) {
+            v = this.min;
+          }
+          let text = v.toString() + (comma ? '.' : '');
+          const firstDotIndex = text.indexOf('.');
+          if (firstDotIndex !== -1) {
+            text = (text.match(/\./g) || [])?.length > 1 ? text.slice(0, firstDotIndex + 1) + text.slice(firstDotIndex + 1).replace(/\./g, '') : text;
+          }
+          this.onChanged?.(parseFloat(text));
+          t.value = text;
+          return;
         }
-        if (this.min && v < this.min) {
-          v = this.min;
-        }
-        this.setValue(v.toString());
-        return;
+      } else {
+        const t = ev as HTMLInputElement;
+        this.setValue(t?.value || '');
       }
-      const t = ev as HTMLInputElement;
-      this.setValue(t?.value || '');
     }
   }
 
   override onWrite(data: string): void {
-    console.log('onWrite', data);
     if (this.el && this.el.nativeElement) {
       if (this.type === 'number') {
-        let val = parseFloat(data);
+        let val = parseFloat(this.removeNonDigits(data));
         if (this.max && val > this.max) {
           val = this.max;
         }
@@ -114,5 +124,13 @@ export class InputComponent
     );
     //this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
+  }
+
+  removeNonDigits(value: string): string {
+    const filtered = value.toString().match(/[0-9,.]/g)?.join('') || '';
+    const standardized = filtered.replace(/,/g, '.');
+    const [integerPart, ...fractionalParts] = standardized.split('.');
+    const result = fractionalParts.length > 0 ? `${integerPart}.${fractionalParts.join('')}` : integerPart;
+    return result;
   }
 }
