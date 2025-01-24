@@ -15,9 +15,11 @@ import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/form
 import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
+const decimalChar = (0.1).toLocaleString().charAt(1);
+
 @Component({
-    selector: 'rlb-input',
-    template: `
+  selector: 'rlb-input',
+  template: `
   <ng-template #template>
     <ng-content select="[before]"></ng-content>
       <input
@@ -42,7 +44,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
       <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
     <ng-content select="[after]"></ng-content>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
 export class InputComponent
   extends AbstractComponent<string>
@@ -62,15 +64,12 @@ export class InputComponent
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
-  constructor(
-    private viewContainerRef: ViewContainerRef,
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
+  constructor(private viewContainerRef: ViewContainerRef, idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {
     super(idService, control);
   }
 
   update(ev: EventTarget | null) {
+    console.log('update', ev);
     if (!this.disabled) {
       if (this.type === 'number') {
         const t = ev as HTMLInputElement;
@@ -90,6 +89,7 @@ export class InputComponent
   }
 
   override onWrite(data: string): void {
+    console.log('onWrite', data);
     if (this.el && this.el.nativeElement) {
       if (this.type === 'number') {
         let val = parseFloat(data);
@@ -100,7 +100,7 @@ export class InputComponent
           val = this.min;
         }
         this.el.nativeElement.value = val.toString();
-        return
+        return;
       }
       this.el.nativeElement.value = data || '';
     }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-offcanvas',
     templateUrl: './offcanvas.component.html',
     standalone: false
 })

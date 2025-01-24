@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-file-dnd',
     templateUrl: './filednd.component.html',
     standalone: false
 })

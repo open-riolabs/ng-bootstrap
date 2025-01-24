@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'rlb-switch',
     templateUrl: './switch.component.html',
     standalone: false
 })

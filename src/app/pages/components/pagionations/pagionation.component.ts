@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-pagionations',
     templateUrl: './pagionation.component.html',
     standalone: false
 })

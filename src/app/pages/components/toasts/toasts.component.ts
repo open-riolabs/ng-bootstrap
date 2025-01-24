@@ -3,7 +3,7 @@ import { ToastService } from '@rlb/ng-bootstrap';
 
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-toasts',
     templateUrl: './toasts.component.html',
     standalone: false
 })

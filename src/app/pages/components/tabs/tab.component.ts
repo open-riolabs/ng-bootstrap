@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-tab',
     templateUrl: './tab.component.html',
     standalone: false
 })

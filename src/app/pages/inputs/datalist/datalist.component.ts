@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-datalist',
     templateUrl: './datalist.component.html',
     standalone: false
 })

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-breadcrumb',
     templateUrl: './breadcrumb.component.html',
     standalone: false
 })

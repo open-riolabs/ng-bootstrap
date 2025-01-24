@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-checkbox',
     templateUrl: './checkbox.component.html',
     standalone: false
 })

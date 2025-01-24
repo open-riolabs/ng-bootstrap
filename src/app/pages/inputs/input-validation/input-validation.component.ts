@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-input-validation', 
     templateUrl: './input-validation.component.html',
     standalone: false
 })

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-avatar',
     templateUrl: './avatar.component.html',
     standalone: false
 })

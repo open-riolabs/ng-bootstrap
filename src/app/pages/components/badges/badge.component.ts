@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-badge',
     templateUrl: './badge.component.html',
     standalone: false
 })

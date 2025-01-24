@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-scrollspy',
     templateUrl: './scrollspy.component.html',
     standalone: false
 })

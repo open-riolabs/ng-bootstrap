@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-button',
     templateUrl: './button.component.html',
     standalone: false
 })

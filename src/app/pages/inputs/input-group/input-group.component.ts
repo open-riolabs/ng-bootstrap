@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'app-input-group',
     templateUrl: './input-group.component.html',
     standalone: false
 })

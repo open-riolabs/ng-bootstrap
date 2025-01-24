@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-modal',
+    selector: 'rlb-textarea',
     templateUrl: './textarea.component.html',
     standalone: false
 })
