@@ -20,6 +20,8 @@
 
 .rlb-content {
   margin-top: $header-height;
-  margin-left: $sidebar-width;
   box-sizing: border-box;
+  &.side-bar {
+    margin-left: $sidebar-width;
+  }
 }
