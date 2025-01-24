@@ -23,15 +23,13 @@ import { booleanAttribute, Component, ContentChildren, Input, OnInit, QueryList,
   standalone: false
 })
 export class SidebarItemComponent implements OnInit {
-
-  @Input() title: string = '';
-  @Input() icon: string = '';
-  @Input() label: string = '';
-  @Input() link: any[] | string | null | undefined;
-  @Input({ alias: 'container', transform: booleanAttribute }) container: boolean = false;
-  @ContentChildren(SidebarItemComponent) children!: QueryList<SidebarItemComponent>;
-
   element!: HTMLElement;
+  @Input() title?: string | undefined;
+  @Input() icon?: string | undefined;
+  @Input() label?: string | undefined;
+  @Input() link?: any[] | string | null | undefined;
+
+  @ContentChildren(SidebarItemComponent) children!: QueryList<SidebarItemComponent>;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
