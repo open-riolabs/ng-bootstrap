@@ -21,6 +21,7 @@ export class OptionComponent implements OnInit {
 
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
   @Input({ alias: 'value' }) value?: string | number | null;
+  @Input({ alias: 'class' }) cssValue?: string | number | null;
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   constructor(private viewContainerRef: ViewContainerRef) { }

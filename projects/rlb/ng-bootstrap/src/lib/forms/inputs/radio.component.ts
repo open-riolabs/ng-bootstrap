@@ -25,7 +25,7 @@ import { OptionComponent } from './options.component';
             #field
             [attr.disabled]="disabled ? true : undefined"
             [attr.readonly]="readonly ? true : undefined"
-            class="form-check-input"
+            class="form-check-input {{option.cssValue}}"
             type="radio"
             [name]="id + '-radio'"
             [id]="id + '-radio-' + i"
