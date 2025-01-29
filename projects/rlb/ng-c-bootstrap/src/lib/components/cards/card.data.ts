@@ -1,4 +1,4 @@
-import { Color, TextAlignment } from '@rlb/ng-bootstrap';
+import { Color, TextAlignment } from '@sicilyaction/lib-ng-bootstrap';
 
 export interface CardAction {
   text: string;
@@ -25,3 +25,4 @@ export interface Image {
   src: string;
   alt?: string;
 }
+

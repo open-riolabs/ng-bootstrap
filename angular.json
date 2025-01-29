@@ -102,7 +102,7 @@
         }
       }
     },
-    "@rlb/ng-bootstrap": {
+    "@sicilyaction/lib-ng-bootstrap": {
       "projectType": "library",
       "root": "projects/rlb/ng-bootstrap",
       "sourceRoot": "projects/rlb/ng-bootstrap/src",
@@ -135,7 +135,7 @@
         }
       }
     },
-    "@rlb/ng-c-bootstrap": {
+    "@sicilyaction/lib-ng-c-bootstrap": {
       "projectType": "library",
       "root": "projects/rlb/ng-c-bootstrap",
       "sourceRoot": "projects/rlb/ng-c-bootstrap/src",

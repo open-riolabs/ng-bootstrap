@@ -7,11 +7,11 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lib:build": "ng build @rlb/ng-bootstrap",
-    "lib:test": "ng test @rlb/ng-bootstrap",
-    "lib:test-ci": "ng test --karma-config=./karma.conf.js --no-watch --no-progress --browsers=ChromeHeadless @rlb/ng-bootstrap",
-    "lib:lint": "ng lint @rlb/ng-bootstrap",
-    "lib:pack": "ng build @rlb/ng-bootstrap && npm pack ./dist/ngx-dynamic/core",
+    "lib:build": "ng build @sicilyaction/lib-ng-bootstrap",
+    "lib:test": "ng test @sicilyaction/lib-ng-bootstrap",
+    "lib:test-ci": "ng test --karma-config=./karma.conf.js --no-watch --no-progress --browsers=ChromeHeadless @sicilyaction/lib-ng-bootstrap",
+    "lib:lint": "ng lint @sicilyaction/lib-ng-bootstrap",
+    "lib:pack": "ng build @sicilyaction/lib-ng-bootstrap && npm pack ./dist/ngx-dynamic/core",
     "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,html}\"",
     "http": "http-server ./dist/ng-bootstrap -p 4001 -c-1 --cors -U --log-ip"
   },
@@ -62,3 +62,4 @@
     "typescript": "~5.6.3"
   }
 }
+

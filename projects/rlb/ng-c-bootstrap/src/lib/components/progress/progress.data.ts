@@ -1,4 +1,4 @@
-import { Color } from '@rlb/ng-bootstrap';
+import { Color } from '@sicilyaction/lib-ng-bootstrap';
 
 export interface Progress {
   max: number;
@@ -13,3 +13,4 @@ export interface Progress {
   textColor: Color;
   text?: string;
 }
+

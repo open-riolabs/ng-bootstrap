@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { COMPONENTS } from './components';
 import { CommonModule } from '@angular/common';
-import { RlbBootstrapModule } from '@rlb/ng-bootstrap';
+import { RlbBootstrapModule } from '@sicilyaction/lib-ng-bootstrap';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -10,3 +10,4 @@ import { RouterModule } from '@angular/router';
   exports: [...COMPONENTS],
 })
 export class RlbCBootstrapModule {}
+
