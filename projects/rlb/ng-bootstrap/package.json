@@ -1,5 +1,5 @@
 {
-  "name": "@rlb/ng-bootstrap",
+  "name": "@rlb-core/lib-ng-bootstrap",
   "version": "0.0.0",
   "peerDependencies": {
     "bootstrap": ">=5.3.0",
@@ -10,3 +10,4 @@
   },
   "sideEffects": false
 }
+

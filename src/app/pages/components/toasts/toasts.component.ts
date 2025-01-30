@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToastService } from '@rlb/ng-bootstrap';
+import { ToastService } from '@rlb-core/lib-ng-bootstrap';
 
 
 @Component({
@@ -89,3 +89,4 @@ export class ToastSampleComponent implements IToast<any, any> {
 
 
 }
+

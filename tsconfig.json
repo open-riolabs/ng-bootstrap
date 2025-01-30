@@ -3,8 +3,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "@rlb/ng-bootstrap": ["./projects/rlb/ng-bootstrap/src/public-api.ts"],
-      "@rlb/ng-c-bootstrap": ["dist/rlb/ng-c-bootstrap"]
+      "@rlb-core/lib-ng-bootstrap": ["./projects/rlb/ng-bootstrap/src/public-api.ts"],
+      "@rlb-core/lib-ng-c-bootstrap": ["dist/rlb/ng-c-bootstrap"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -32,3 +32,4 @@
     "strictTemplates": true
   }
 }
+

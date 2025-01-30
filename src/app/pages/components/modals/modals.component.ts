@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalService } from '@rlb/ng-bootstrap';
+import { ModalService } from '@rlb-core/lib-ng-bootstrap';
 
 
 @Component({
@@ -102,3 +102,4 @@ init: string = ` providers: [
   }
 
 }
+
