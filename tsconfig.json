@@ -4,7 +4,7 @@
   "compilerOptions": {
     "paths": {
       "@sicilyaction/lib-ng-bootstrap": ["./projects/rlb/ng-bootstrap/src/public-api.ts"],
-      "@sicilyaction/lib-ng-c-bootstrap": ["dist/rlb/ng-c-bootstrap"]
+      "@sicilyaction/lib-ng-c-bootstrap": ["./projects/rlb/ng-c-bootstrap/src/public-api.ts"],
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",

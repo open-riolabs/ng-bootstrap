@@ -2,9 +2,9 @@
   "name": "@sicilyaction/lib-ng-c-bootstrap",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": ">16.1.0",
-    "@angular/core": ">16.1.0",
-    "@sicilyaction/lib-ng-bootstrap": ">0.0.1"
+    "@angular/common": ">19.0.0",
+    "@angular/core": ">19.0.0",
+    "@sicilyaction/lib-ng-bootstrap": ">2.2.10"
   },
   "dependencies": {
     "tslib": ">2.3.0"
