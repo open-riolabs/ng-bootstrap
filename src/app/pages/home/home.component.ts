@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import {
+  DateTz,
+  IDateTz,
   ModalService,
-  PaginationEvent,
   ToastService,
-  VisibilityEventBase,
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class HomeComponent {
   constructor(
@@ -19,6 +19,6 @@ export class HomeComponent {
   ) { }
 
   number: number = 0;
- 
+  dtz?: IDateTz =  DateTz.now();
 }
 
