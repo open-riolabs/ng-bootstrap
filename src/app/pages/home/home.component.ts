@@ -20,5 +20,6 @@ export class HomeComponent {
 
   number: number = 0;
   dtz?: IDateTz =  DateTz.now();
+  str: string = 'Hello World!';
 }
 

@@ -159,10 +159,10 @@ export class InputComponent
           this.value = `${d.toString?.("YYYY-MM-DDTHH:mm")}`;
           this.el.nativeElement.value = this.value;
         }
-        else {
-          this.value = data;
-          this.el.nativeElement.value = data || '';
-        }
+      }
+      else {
+        this.value = data;
+        this.el.nativeElement.value = data || '';
       }
     }
   }
