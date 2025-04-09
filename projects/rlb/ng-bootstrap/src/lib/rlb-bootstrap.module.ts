@@ -5,9 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TABLE } from './data/datatable';
 import { INPUTS } from './forms/inputs';
-import { COMPONENTS, ModalRegistryOptions } from './components';
+import { COMPONENTS } from './components';
 import { FormFieldsComponent } from './forms/rlb-form-fields/rlb-form-fields.component';
 import { COMPONENT_BUILDER } from './shared/component-builder';
+import { PIPES } from './pipes';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { COMPONENT_BUILDER } from './shared/component-builder';
     ...INPUTS,
     ...COMPONENTS,
     ...COMPONENT_BUILDER,
+    ...PIPES,
     FormFieldsComponent
   ],
   imports: [
@@ -28,6 +30,7 @@ import { COMPONENT_BUILDER } from './shared/component-builder';
     ...TABLE,
     ...INPUTS,
     ...COMPONENTS,
+    ...PIPES,
     FormFieldsComponent
   ],
   providers: [],

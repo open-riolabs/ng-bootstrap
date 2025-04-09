@@ -3,7 +3,7 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "@sicilyaction/lib-ng-bootstrap": ["../ng-bootstrap/src/public-api"],
+      "@rlb-core/lib-ng-bootstrap": ["../ng-bootstrap/src/public-api"],
     },
     "outDir": "../../../out-tsc/lib",
     "declaration": true,

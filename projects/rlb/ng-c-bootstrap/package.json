@@ -4,7 +4,7 @@
   "peerDependencies": {
     "@angular/common": ">19.0.0",
     "@angular/core": ">19.0.0",
-    "@sicilyaction/lib-ng-bootstrap": ">2.2.10"
+    "@rlb-core/lib-ng-bootstrap": ">2.2.10"
   },
   "dependencies": {
     "tslib": ">2.3.0"

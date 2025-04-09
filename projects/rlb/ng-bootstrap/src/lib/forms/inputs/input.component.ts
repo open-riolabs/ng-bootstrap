@@ -14,8 +14,7 @@ import {
 import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
-
-const decimalChar = (0.1).toLocaleString().charAt(1);
+import { IDateTz, DateTz } from '../../shared/i-date-tz';
 
 @Component({
   selector: 'rlb-input',
@@ -26,7 +25,7 @@ const decimalChar = (0.1).toLocaleString().charAt(1);
         #field
         [id]="id"
         class="form-control"
-        pattern="[0-9,.]"
+        [type]="_type"
         [name]="name"
         [attr.max]="type === 'number' && max !== null && max !== undefined ? max : undefined"
         [attr.min]="type === 'number' && min !== null && min !== undefined ? min : undefined"
@@ -47,7 +46,7 @@ const decimalChar = (0.1).toLocaleString().charAt(1);
   standalone: false
 })
 export class InputComponent
-  extends AbstractComponent<string>
+  extends AbstractComponent<any>
   implements ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled?: boolean;
   @Input({ alias: 'readonly', transform: booleanAttribute, }) readonly?: boolean;
@@ -59,8 +58,15 @@ export class InputComponent
   @Input({ alias: 'max', transform: numberAttribute }) max?: number;
   @Input({ alias: 'min', transform: numberAttribute }) min?: number;
   @Input({ alias: 'step', transform: numberAttribute }) step?: number;
+  @Input({ alias: 'date-type' }) dateType?: 'date' | 'string' | 'number' | 'date-tz' = 'string';
+  @Input({ alias: 'timezone' }) timezone?: string = 'UTC';
 
   public extValidation: boolean = false;
+
+  get _type(): string {
+    if (this.type === 'number') return 'text';
+    return this.type || 'text';
+  }
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
@@ -92,11 +98,32 @@ export class InputComponent
           t.value = text;
           return;
         }
-      } else {
+      } if (this.type === 'datetime-local') {
+        if (this.dateType === 'string') {
+          const t = ev as HTMLInputElement;
+          this.onChanged?.(t?.value || '');
+        } else if (this.dateType === 'number') {
+          const t = ev as HTMLInputElement;
+          this.onChanged?.(Date.parse(t?.value + ':00'));
+        } else if (this.dateType === 'date') {
+          const t = ev as HTMLInputElement;
+          this.onChanged?.(new Date(Date.parse(t?.value + ':00')));
+        } else if (this.dateType === 'date-tz') {
+          const t = ev as HTMLInputElement;
+          const d = DateTz.parse(t?.value, 'YYYY-MM-DDTHH:mm', this.timezone);
+          this.onChanged?.(d);
+        }
+      }
+      else {
         const t = ev as HTMLInputElement;
         this.setValue(t?.value || '');
       }
     }
+  }
+
+
+  override writeValue(val: string): void {
+    this.onWrite(val);
   }
 
   override onWrite(data: string): void {
@@ -109,10 +136,34 @@ export class InputComponent
         if (this.min && val < this.min) {
           val = this.min;
         }
+        this.value = data;
         this.el.nativeElement.value = val.toString();
         return;
+      } if (this.type === 'datetime-local') {
+        if (this.dateType === 'string') {
+          this.value = data;
+          this.el.nativeElement.value = data || '';
+        } else if (this.dateType === 'date') {
+          const d: Date = data as any;
+          this.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+          this.el.nativeElement.value = this.value;
+        } else if (this.dateType === 'number') {
+          const d: Date = new Date(data);
+          this.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+          this.el.nativeElement.value = this.value;
+        } else if (this.dateType === 'date-tz') {
+          let d: IDateTz = data as any;
+          if (!d?.timestamp) return;
+          if (!d?.timezone) d.timezone = this.timezone;
+          d = new DateTz(d);
+          this.value = `${d.toString?.("YYYY-MM-DDTHH:mm")}`;
+          this.el.nativeElement.value = this.value;
+        }
       }
-      this.el.nativeElement.value = data || '';
+      else {
+        this.value = data;
+        this.el.nativeElement.value = data || '';
+      }
     }
   }
 
@@ -127,10 +178,12 @@ export class InputComponent
   }
 
   removeNonDigits(value: string): string {
-    const filtered = value.toString().match(/[0-9,.]/g)?.join('') || '';
-    const standardized = filtered.replace(/,/g, '.');
-    const [integerPart, ...fractionalParts] = standardized.split('.');
-    const result = fractionalParts.length > 0 ? `${integerPart}.${fractionalParts.join('')}` : integerPart;
+    if(!value) return '';
+    const filtered = value?.toString()?.match(/[0-9,.]/g)?.join('') || '';
+    const standardized = filtered?.replace(/,/g, '.');
+    const [integerPart, ...fractionalParts] = standardized?.split('.');
+    const result = fractionalParts.length > 0 ? `${integerPart}.${fractionalParts?.join('')}` : integerPart;
     return result;
   }
+
 }
