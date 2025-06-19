@@ -12,20 +12,21 @@ export interface IDateTz {
   timestamp: number;
   timezone?: string;
   readonly timezoneOffset?: TimezoneOffset;
-  compare?(other: DateTz): number;
-  isComparable?(other: DateTz): boolean;
+  compare?(other: IDateTz): number;
+  isComparable?(other: IDateTz): boolean;
   toString?(): string;
   toString?(pattern: string): string;
   add?(value: number, unit: 'minute' | 'hour' | 'day' | 'month' | 'year'): DateTz;
   set?(value: number, unit: 'year' | 'month' | 'day' | 'hour' | 'minute'): DateTz;
   convertToTimezone?(tz: string): DateTz;
   cloneToTimezone?(tz: string): DateTz;
+  readonly isDst?: boolean;
   readonly year?: number;
   readonly month?: number;
   readonly day?: number;
   readonly hour?: number;
   readonly minute?: number;
-  readonly dayOfWeek?: number;
+  readonly dayOfWeek?: number
 }
 
 /**
@@ -111,7 +112,8 @@ export class DateTz implements IDateTz {
     if (!pattern) pattern = 'YYYY-MM-DD HH:mm:ss';
 
     // Calculate year, month, day, hours, minutes, seconds
-    let remainingMs = this.timestamp;
+    const offset = (this.isDst ? timezones[this.timezone].dst : timezones[this.timezone].sdt) * 1000;
+    let remainingMs = this.timestamp + offset;
     let year = epochYear;
 
     // Calculate year
@@ -156,18 +158,28 @@ export class DateTz implements IDateTz {
     // Calculate second
     const second = Math.floor(remainingMs / 1000);
 
+    const pm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12; // Convert to 12-hour format
+
     // Map components to pattern tokens
-    const tokens: any = {
+    const tokens: Record<string, any> = {
       YYYY: year,
+      YY: String(year).slice(-2),
+      yyyy: year.toString(),
+      yy: String(year).slice(-2),
       MM: String(month + 1).padStart(2, '0'),
       DD: String(day).padStart(2, '0'),
       HH: String(hour).padStart(2, '0'),
       mm: String(minute).padStart(2, '0'),
       ss: String(second).padStart(2, '0'),
+      aa: pm.toLowerCase(),
+      AA: pm,
+      hh: hour12.toString().padStart(2, '0'),
+      tz: this.timezone,
     };
 
     // Replace pattern tokens with actual values
-    return pattern.replace(/YYYY|MM|DD|HH|mm|ss/g, (match) => tokens[match]);
+    return pattern.replace(/YYYY|yyyy|YY|yy|MM|DD|HH|hh|mm|ss|aa|AA|tz/g, (match) => tokens[match]);
   }
 
   /**
@@ -278,11 +290,10 @@ export class DateTz implements IDateTz {
     return this;
   }
 
-  /**
- * Gets the year component of the date.
- */
-  get year() {
-    let remainingMs = this.timestamp;
+
+  private _year(considerDst = false) {
+    const offset = considerDst ? (timezones[this.timezone].dst * 1000) : (timezones[this.timezone].sdt * 1000);
+    let remainingMs = this.timestamp + offset;
     let year = 1970;
     let days = Math.floor(remainingMs / MS_PER_DAY);
 
@@ -294,11 +305,9 @@ export class DateTz implements IDateTz {
     return year;
   }
 
-  /**
-   * Gets the month component of the date.
-   */
-  get month() {
-    let remainingMs = this.timestamp;
+  private _month(considerDst = false) {
+    const offset = considerDst ? (timezones[this.timezone].dst * 1000) : (timezones[this.timezone].sdt * 1000);
+    let remainingMs = this.timestamp + offset;
     let year = 1970;
     let days = Math.floor(remainingMs / MS_PER_DAY);
 
@@ -316,11 +325,9 @@ export class DateTz implements IDateTz {
     return month;
   }
 
-  /**
-   * Gets the day component of the date.
-   */
-  get day() {
-    let remainingMs = this.timestamp;
+  private _day(considerDst = false) {
+    const offset = considerDst ? (timezones[this.timezone].dst * 1000) : (timezones[this.timezone].sdt * 1000);
+    let remainingMs = this.timestamp + offset;
     let year = 1970;
     let days = Math.floor(remainingMs / MS_PER_DAY);
 
@@ -338,32 +345,26 @@ export class DateTz implements IDateTz {
     return days + 1;
   }
 
-  /**
-* Gets the hour component of the time.
-*/
-  get hour() {
-    let remainingMs = this.timestamp;
+  private _hour(considerDst = false) {
+    const offset = considerDst ? (timezones[this.timezone].dst * 1000) : (timezones[this.timezone].sdt * 1000);
+    let remainingMs = this.timestamp + offset;
     remainingMs %= MS_PER_DAY;
     let hour = Math.floor(remainingMs / MS_PER_HOUR);
     return hour;
   }
 
-  /**
-   * Gets the minute component of the time.
-   */
-  get minute() {
-    let remainingMs = this.timestamp;
+  private _minute(considerDst = false) {
+    const offset = considerDst ? (timezones[this.timezone].dst * 1000) : (timezones[this.timezone].sdt * 1000);
+    let remainingMs = this.timestamp + offset;
     remainingMs %= MS_PER_HOUR;
     let minute = Math.floor(remainingMs / MS_PER_MINUTE);
     return minute;
   }
 
-  /**
-   * Gets the day of the week.
-   */
-  get dayOfWeek(): number {
-    const utc = this.convertToTimezone('UTC');
-    const date = new Date(utc.timestamp);
+  private _dayOfWeek(considerDst = false) {
+    const offset = considerDst ? (timezones[this.timezone].dst * 1000) : (timezones[this.timezone].sdt * 1000);
+    let remainingMs = this.timestamp + offset;
+    const date = new Date(remainingMs);
     return date.getDay();
   }
 
@@ -377,9 +378,6 @@ export class DateTz implements IDateTz {
     if (!timezones[tz]) {
       throw new Error(`Invalid timezone: ${tz}`);
     }
-
-    const offset = (timezones[tz].sdt - timezones[this.timezone].sdt) / 60;
-    this.add(offset, 'minute');
     this.timezone = tz;
     return this;
   }
@@ -394,10 +392,7 @@ export class DateTz implements IDateTz {
     if (!timezones[tz]) {
       throw new Error(`Invalid timezone: ${tz}`);
     }
-
-    const offset = (timezones[tz].sdt - timezones[this.timezone].sdt) / 60;
     const clone = new DateTz(this);
-    clone.add(offset, 'minute');
     clone.timezone = tz;
     return clone;
   }
@@ -545,14 +540,25 @@ export class DateTz implements IDateTz {
  * @returns A new DateTz instance.
  */
   static parse(dateString: string, pattern?: string, tz?: string): DateTz {
-    if (!tz) tz = 'UTC';
     if (!pattern) pattern = DateTz.defaultFormat;
-    const regex = /YYYY|MM|DD|HH|mm|ss/g;
-    const dateComponents: { [key: string]: number; } = {
+    if (!tz) tz = 'UTC';
+    if (!timezones[tz]) {
+      throw new Error(`Invalid timezone: ${tz}`);
+    }
+    if (pattern.includes('hh') && (!pattern.includes('aa') || !pattern.includes('AA'))) {
+      throw new Error('AM/PM marker (aa or AA) is required when using 12-hour format (hh)');
+    }
+
+    const regex = /YYYY|yyyy|MM|DD|HH|hh|mm|ss|aa|AA/g;
+    const dateComponents: { [key: string]: number | string; } = {
       YYYY: 1970,
+      yyyy: 1970,
       MM: 0,
       DD: 0,
       HH: 0,
+      hh: 0,
+      aa: 'am',
+      AA: "AM",
       mm: 0,
       ss: 0,
     };
@@ -566,12 +572,18 @@ export class DateTz implements IDateTz {
       index += token.length + 1;
     }
 
-    const year = dateComponents["YYYY"];
-    const month = dateComponents["MM"] - 1; // Months are zero-based
-    const day = dateComponents["DD"];
-    const hour = dateComponents["HH"];
-    const minute = dateComponents["mm"];
-    const second = dateComponents["ss"];
+    const year = (dateComponents["YYYY"] as number) || (dateComponents["yyyy"] as number);
+    const month = (dateComponents["MM"] as number) - 1; // Months are zero-based
+    const day = dateComponents["DD"] as number;
+    let hour = 0;
+    const ampm = (dateComponents["a"] || dateComponents["A"]) as string;
+    if (ampm) {
+      hour = ampm.toUpperCase() === 'AM' ? (dateComponents["hh"] as number) : (dateComponents["hh"] as number) + 12;
+    } else {
+      hour = dateComponents["HH"] as number;
+    }
+    const minute = dateComponents["mm"] as number;
+    const second = dateComponents["ss"] as number;
 
     const daysInYear = (year: number) => (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0) ? 366 : 365;
     const daysInMonth = (year: number, month: number) => month === 1 && daysInYear(year) === 366 ? 29 : daysPerMonth[month];
@@ -593,7 +605,11 @@ export class DateTz implements IDateTz {
     timestamp += minute * MS_PER_MINUTE;
     timestamp += second * 1000;
 
-    return new DateTz(timestamp, tz);
+    const offset = (timezones[tz].sdt) * 1000;
+    let remainingMs = timestamp - offset;
+    const date = new DateTz(remainingMs, tz);
+    date.timestamp -= date.isDst ? (timezones[tz].dst - timezones[tz].sdt) * 1000 : 0;
+    return date;
   }
 
   /**
@@ -602,11 +618,79 @@ export class DateTz implements IDateTz {
    * @returns A new DateTz instance representing the current date and time.
    */
   static now(tz?: string): DateTz {
-    const date = new DateTz(Date.now(), 'UTC');
-    if (!tz) return date;
-    if (!timezones[tz]) {
+    if (!tz) tz = 'UTC';
+    const timezone = timezones[tz];
+    if (!timezone) {
       throw new Error(`Invalid timezone: ${tz}`);
     }
-    return date.convertToTimezone(tz);
+    const date = new DateTz(Date.now(), tz);
+    return date;
   }
+
+  get isDst(): boolean {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: this.timezone,
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    const janD = Date.UTC(this._year(), 0, 1, this._hour() - timezones[this.timezone].sdt / 3600, this._minute(), 0);
+    const jan = formatter.format(+janD);
+    const now = formatter.format(this.timestamp);
+    const janMinutes = this.hhmmToMinutes(jan);
+    const nowMinutes = this.hhmmToMinutes(now);
+    return nowMinutes !== janMinutes;
+  }
+
+  private hhmmToMinutes(hhmm: string): number {
+    const [hours, minutes] = hhmm.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+
+
+
+  /**
+ * Gets the year component of the date.
+ */
+  get year() {
+    return this._year(true);
+  }
+
+  /**
+   * Gets the month component of the date.
+   */
+  get month() {
+    return this._month(true);
+  }
+
+  /**
+   * Gets the day component of the date.
+   */
+  get day() {
+    return this._day(true);
+  }
+
+  /**
+* Gets the hour component of the time.
+*/
+  get hour() {
+    return this._hour(true);
+  }
+
+  /**
+   * Gets the minute component of the time.
+   */
+  get minute() {
+    return this._minute(true);
+  }
+
+  /**
+   * Gets the day of the week.
+   */
+  get dayOfWeek(): number {
+    return this._dayOfWeek(true);
+  }
+
 }
