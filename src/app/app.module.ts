@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions, SearchModalComponent, TabsComponent, AutocompleteComponent, InputValidationComponent } from 'projects/rlb/ng-bootstrap/src/public-api';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 import { RoutingModule } from './routing.module';
 import { HomeComponent } from './pages/home/home.component';
@@ -101,7 +101,8 @@ import { InputValidationsComponent } from './pages/inputs/input-validation/input
     RlbBootstrapModule,
     FormsModule,
     RoutingModule,
-    HighlightModule
+    HighlightModule,
+    ReactiveFormsModule
   ],
   bootstrap: [AppComponent],
   providers: [

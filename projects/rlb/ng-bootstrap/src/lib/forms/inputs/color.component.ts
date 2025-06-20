@@ -44,6 +44,7 @@ export class ColorComponent
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean;
   @Input({ alias: 'size' }) size?: 'small' | 'large';
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 

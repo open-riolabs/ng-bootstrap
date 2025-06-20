@@ -49,6 +49,7 @@ export class FileComponent
   @Input({ alias: 'multiple', transform: booleanAttribute, }) multiple?: boolean;
   @Input({ alias: 'size' }) size?: 'small' | 'large';
   @Input({ alias: 'accept' }) accept?: string | undefined;
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 

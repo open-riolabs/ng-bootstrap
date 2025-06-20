@@ -6,6 +6,7 @@ import {
   Self,
   ViewChild,
   booleanAttribute,
+  numberAttribute,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -20,6 +21,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         #field
         [id]="id"
         class="form-control"
+        [rows]="rows"
+        [attr.rows]="rows"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
@@ -43,6 +46,8 @@ export class TextAreaComponent
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
   @Input({ alias: 'placeholder' }) placeholder?: string;
   @Input({ alias: 'size' }) size?: 'small' | 'large';
+  @Input({ alias: 'rows', transform: numberAttribute }) rows: number = 3;
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';  
 
   @ViewChild('field', { read: ElementRef }) el!: ElementRef<HTMLTextAreaElement>;
 

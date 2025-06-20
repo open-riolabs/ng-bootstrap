@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   DateTz,
   IDateTz,
@@ -19,7 +20,14 @@ export class HomeComponent {
   ) { }
 
   number: number = 0;
-  dtz?: IDateTz =  DateTz.now();
+  dtz?: IDateTz = DateTz.now();
   str: string = 'Hello World!';
+
+  profileForm = new FormGroup({
+    firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),
+
+  });
+  
+  updateProfile() { }
 }
 

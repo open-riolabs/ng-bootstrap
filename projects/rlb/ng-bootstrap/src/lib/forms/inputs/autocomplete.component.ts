@@ -70,7 +70,8 @@ export class AutocompleteComponent
   @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => { return [] };
   @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
   @Input() size?: 'small' | 'large' | undefined;
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
   @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();

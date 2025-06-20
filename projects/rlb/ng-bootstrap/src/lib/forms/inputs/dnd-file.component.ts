@@ -30,7 +30,8 @@ export class FileDndComponent {
 
   @Input({ alias: 'multiple', transform: booleanAttribute }) multiple: boolean = false;
   @Input({ alias: 'data' }) data: any = {};
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   @Output('files') filesChange = new EventEmitter<File[]>();
 
   @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;

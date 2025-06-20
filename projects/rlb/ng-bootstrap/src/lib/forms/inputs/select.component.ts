@@ -57,7 +57,8 @@ export class SelectComponent
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean;
   @Input({ alias: 'multiple', transform: booleanAttribute }) multiple?: boolean;
   @Input({ alias: 'display', transform: numberAttribute }) display?: number;
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   @ViewChild('select') el!: ElementRef<HTMLSelectElement>;
 
   constructor(

@@ -43,7 +43,8 @@ export class CheckboxComponent
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly? = false;
   @Input({ alias: 'indeterminate', transform: booleanAttribute }) indeterminate?: boolean = false;
   @ViewChild('field', { read: ElementRef }) el!: ElementRef<HTMLInputElement>;
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   constructor(
     idService: UniqueIdService,
     @Self() @Optional() override control?: NgControl,
