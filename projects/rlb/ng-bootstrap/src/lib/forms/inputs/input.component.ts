@@ -1,8 +1,10 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
+  OnInit,
   Optional,
   Self,
   TemplateRef,
@@ -47,7 +49,7 @@ import { IDateTz, DateTz } from '../../shared/i-date-tz';
 })
 export class InputComponent
   extends AbstractComponent<any>
-  implements ControlValueAccessor {
+  implements OnInit, AfterViewInit {
   @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled?: boolean;
   @Input({ alias: 'readonly', transform: booleanAttribute, }) readonly?: boolean;
   @Input({ alias: 'before-text', transform: booleanAttribute, }) beforeText?: boolean;
@@ -116,15 +118,10 @@ export class InputComponent
         }
       }
       else {
-        const t = ev as HTMLInputElement;
+        const t = ev as HTMLInputElement; 
         this.setValue(t?.value || '');
       }
     }
-  }
-
-
-  override writeValue(val: string): void {
-    this.onWrite(val);
   }
 
   override onWrite(data: string): void {
@@ -176,6 +173,10 @@ export class InputComponent
     );
     //this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
+  }
+
+  ngAfterViewInit() {
+    this.onWrite(this.value || '');
   }
 
   removeNonDigits(value: string): string {

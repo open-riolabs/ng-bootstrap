@@ -58,7 +58,6 @@ export class RadioComponent
 
   ngDoCheck() {
     for (const content of (this.contents || [])) {
-      console.log('content', content);  
       content?.detach();
     }
     this.options?.forEach((option, i) => {

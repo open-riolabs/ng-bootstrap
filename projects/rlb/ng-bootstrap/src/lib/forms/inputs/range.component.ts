@@ -16,7 +16,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 @Component({
     selector: 'rlb-range',
     host: {
-        class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
+      class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
     },
     template: `
     <ng-content select="[before]"></ng-content>

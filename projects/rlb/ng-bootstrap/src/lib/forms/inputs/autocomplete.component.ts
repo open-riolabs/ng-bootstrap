@@ -60,6 +60,7 @@ export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
   implements ControlValueAccessor {
   acLoading: boolean = false;
+  private typingTimeout: any;
 
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
@@ -85,6 +86,15 @@ export class AutocompleteComponent
   }
 
   update(ev: EventTarget | null) {
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
+    }
+    this.typingTimeout = setTimeout(() => {
+      if (!this.disabled) {
+        const t = ev as HTMLInputElement;
+        this.manageSuggestions(t?.value);
+      }
+    }, 500);
     if (!this.disabled) {
       const t = ev as HTMLInputElement;
       this.manageSuggestions(t?.value);
