@@ -1,6 +1,6 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ComponentRef, Injectable, Type } from '@angular/core';
-import { Observable, filter, map, Subject } from 'rxjs';
+import { ComponentRef, Injectable, model, Type } from '@angular/core';
+import { Observable, filter, map, Subject, of } from 'rxjs';
 import { ModalData } from './data/modal-data';
 import { AbstractRegistryService } from '../../shared/abstract.registry.service';
 import { ModalRegistryOptions } from './options/modal-registry.options';
@@ -15,11 +15,8 @@ import { BuilderComponent } from '../../shared/component-builder';
   providedIn: 'root',
 })
 export class InnerModalService extends AbstractRegistryService<Type<any>> {
-  public modalClose: Subject<ModalResult<any> & { id: string }> = new Subject<
-    ModalResult<any> & { id: string }
-  >();
-  private allModals: { id: string; modal: ComponentRef<GenericComponent> }[] =
-    [];
+
+  private allModals: { id: string; modal: ComponentRef<GenericComponent>, subject: Subject<ModalResult<any>> }[] = [];
   private builders: BuilderComponent<InnerModalService>[] = [];
 
   registerBuilder(builder: BuilderComponent<InnerModalService>) {
@@ -83,13 +80,12 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
       },
       options,
     );
-    this.allModals.push({ id: modalId, modal: modal! });
-    return this.modalClose.asObservable().pipe(
-      filter((o) => o?.id === modalId),
-      map(({ reason, result }) => {
-        return { reason, result };
-      }),
-    );
+    this.allModals.push({ id: modalId, modal: modal!, subject: new Subject<ModalResult<Output>>() });
+    const subject = this.allModals.find((d) => d.id === modalId)?.subject;
+    if (!subject) {
+      return of({ reason: 'cancel', result: undefined } as ModalResult<Output>);
+    }
+    return subject.asObservable();
   }
 
   public eventModal(
@@ -104,7 +100,8 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
         modal.modal.destroy();
         this.allModals = this.allModals.filter((d) => d.id !== id);
       }
-      this.modalClose.next({ reason, result, id });
+      modal?.subject.next({ reason, result });
+      modal?.subject.complete();
     }
   }
 }

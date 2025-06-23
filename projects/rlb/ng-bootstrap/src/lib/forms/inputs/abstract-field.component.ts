@@ -29,7 +29,6 @@ export abstract class AbstractComponent<T = any>
   }
 
   protected setValue(val: T) {
-    console.debug('Setting value:', val);
     this.value = val;
     this.onChanged?.(val);
   }

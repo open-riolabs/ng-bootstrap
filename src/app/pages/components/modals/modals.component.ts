@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { ModalService } from '@sicilyaction/lib-ng-bootstrap';
+import { lastValueFrom } from 'rxjs';
 
 
 @Component({
-    selector: 'app-modal',
-    templateUrl: './modals.component.html',
-    standalone: false
+  selector: 'app-modal',
+  templateUrl: './modals.component.html',
+  standalone: false
 })
 export class ModalsComponent {
   constructor(private modals: ModalService) {
@@ -74,7 +75,7 @@ export class ModalsComponent {
   }
 }`;
 
-init: string = ` providers: [
+  init: string = ` providers: [
     {
       provide: ModalRegistryOptions,
       useValue: {
@@ -88,17 +89,16 @@ init: string = ` providers: [
   ]`;
 
 
-  modal(): void {
-    this.modals
+  async modal() {
+    
+    const o = await lastValueFrom(this.modals
       .openModal('sample-dialog', {
         title: 'Demo',
         content: 'This is a demo component',
         ok: 'OK',
         type: 'success',
-      })
-      .subscribe((o) => {
-        console.log('closed sub', o);
-      });
+      }));
+    console.log('closed sub', o);
   }
 
 }
