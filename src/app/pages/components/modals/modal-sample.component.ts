@@ -8,25 +8,26 @@ import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `<div [class]="'modal-header' + headerColor">
-  <h5 class="modal-title">Modal title</h5>
-  <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
-</div>
-<div class="modal-body">
-  <p>Modal body text goes here.</p>
-  <pre> {{ data | json }}</pre>
-  <button (click)="valid = !valid">Change data</button>
-  {{ valid }}
-  <input [(ngModel)]="result" />
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-modal-reason="cancel">
-    Close
-  </button>
-  <button type="button" class="btn btn-primary" data-modal-reason="ok">
-    Save changes
-  </button>
-</div>`,
+  template: `
+  <div [class]="'modal-header' + headerColor">
+    <h5 class="modal-title">Modal title</h5>
+    <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
+  </div>
+  <div class="modal-body">
+    <p>Modal body text goes here.</p>
+    <pre> {{ data | json }}</pre>
+    <button (click)="valid = !valid">Change data</button>
+      {{ valid }}
+    <input [(ngModel)]="result" />
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-modal-reason="cancel">
+      Close
+    </button>
+    <button type="button" class="btn btn-primary" data-modal-reason="ok">
+      Save changes
+    </button>
+  </div>`,
   hostDirectives: [
     {
       directive: ModalDirective,

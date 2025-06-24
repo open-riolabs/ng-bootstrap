@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-  DateTz,
-  IDateTz,
-  ModalService,
-  ToastService,
-} from 'projects/rlb/ng-bootstrap/src/public-api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
+import { ModalService, ToastService } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +23,7 @@ export class HomeComponent {
     firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),
 
   });
-  
+
   updateProfile() { }
 }
 

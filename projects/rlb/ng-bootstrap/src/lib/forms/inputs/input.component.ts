@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -11,12 +10,12 @@ import {
   ViewChild,
   ViewContainerRef,
   booleanAttribute,
-  numberAttribute,
+  numberAttribute
 } from '@angular/core';
-import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/forms';
-import { AbstractComponent } from './abstract-field.component';
+import { NgControl } from '@angular/forms';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import { UniqueIdService } from '../../shared/unique-id.service';
-import { IDateTz, DateTz } from '../../shared/i-date-tz';
+import { AbstractComponent } from './abstract-field.component';
 
 @Component({
   selector: 'rlb-input',
@@ -118,7 +117,7 @@ export class InputComponent
         }
       }
       else {
-        const t = ev as HTMLInputElement; 
+        const t = ev as HTMLInputElement;
         this.setValue(t?.value || '');
       }
     }
