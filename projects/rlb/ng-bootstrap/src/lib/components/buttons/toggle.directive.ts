@@ -1,15 +1,13 @@
-import { Directive, ElementRef, Renderer2, Input, DoCheck, Host, Self, Optional, booleanAttribute } from '@angular/core';
+import { Directive, DoCheck, ElementRef, Host, Input, Optional, Renderer2, Self, booleanAttribute } from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
-import { SidebarItemComponent } from '../sidebar/sidebar-item.component';
 
 @Directive({
-    selector: `
+  selector: `
     button[toggle],
     a[toggle],
     rlb-navbar-item[toggle],
-    rlb-sidebar-item[toggle],
     rlb-button-toolbar[toogle]`,
-    standalone: false
+  standalone: false
 })
 export class ToggleDirective implements DoCheck {
   @Input({ alias: 'toggle', required: true }) toggle?: 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group';
@@ -20,15 +18,12 @@ export class ToggleDirective implements DoCheck {
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    @Host() @Self() @Optional() public sidebarItem: SidebarItemComponent,
     @Host() @Self() @Optional() public buttonToolbar: ButtonToolbarComponent,
   ) { }
 
   ngDoCheck() {
     let element: HTMLElement;
-    if (this.sidebarItem) {
-      element = this.sidebarItem.element;
-    } else if (this.buttonToolbar) {
+    if (this.buttonToolbar) {
       element = this.elementRef.nativeElement;
     } else {
       element = this.elementRef.nativeElement;
