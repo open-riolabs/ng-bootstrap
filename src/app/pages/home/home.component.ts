@@ -18,6 +18,7 @@ export class HomeComponent {
   number: number = 0;
   dtz?: IDateTz = DateTz.now();
   str: string = 'Hello World!';
+  timezone: string = '';
 
   profileForm = new FormGroup({
     firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),

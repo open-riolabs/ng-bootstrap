@@ -28,4 +28,5 @@
 <br>
 <rlb-autocomplete-country></rlb-autocomplete-country>
 <br>
-<rlb-autocomplete-timezones></rlb-autocomplete-timezones>
+<rlb-autocomplete-timezones [(ngModel)]="timezone"></rlb-autocomplete-timezones>
+{{ timezone | json }}

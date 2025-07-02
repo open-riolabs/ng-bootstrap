@@ -32,7 +32,7 @@ import { AutocompleteItem } from './autocomplete.component';
         [attr.placeholder]="placeholder"
         [class.form-control-lg]="size === 'large'"
         [class.form-control-sm]="size === 'small'"
-        [value]="getText(value)"
+        [value]="value || ''"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
@@ -55,7 +55,7 @@ import { AutocompleteItem } from './autocomplete.component';
   standalone: false
 })
 export class AutocompleteTimezonesComponent
-  extends AbstractComponent<AutocompleteItem>
+  extends AbstractComponent<string>
   implements ControlValueAccessor {
   acLoading: boolean = false;
   private typingTimeout: any;
@@ -97,12 +97,10 @@ export class AutocompleteTimezonesComponent
     }
   }
 
-  override onWrite(data: AutocompleteItem): void {
+  override onWrite(data: string): void {
     if (this.el && this.el.nativeElement) {
       if (typeof data === 'string') {
         this.el.nativeElement.value = data;
-      } else {
-        this.el.nativeElement.value = data?.text;
       }
     }
   }
@@ -115,9 +113,8 @@ export class AutocompleteTimezonesComponent
       }
     }
     if (data && data.length > 0) {
-      const suggestions = Object.keys(timezones).map(key => ({ text: key, value: key })).filter(o => {
-        const _c = o as { text: string, value: string; };
-        return _c.text.toLowerCase().startsWith(data.toLowerCase());
+      const suggestions = Object.keys(timezones).filter(o => {
+        return o.toLowerCase().startsWith(data.toLowerCase());
       });
       this.renderAc(suggestions);
     } else {
@@ -125,12 +122,12 @@ export class AutocompleteTimezonesComponent
     }
   }
 
-  renderAc(suggestions: AutocompleteItem[]) {
+  renderAc(suggestions: string[]) {
     if (suggestions.length > 0) {
       for (const suggestion of suggestions) {
         const el = this.renderer.createElement('a');
         this.renderer.addClass(el, 'dropdown-item');
-        this.renderer.appendChild(el, this.renderer.createText(typeof suggestion === 'string' ? suggestion : suggestion.text));
+        this.renderer.appendChild(el, this.renderer.createText(suggestion));
         this.renderer.listen(el, 'click', () => {
           this.selected.emit(suggestion);
           this.setValue(suggestion);
@@ -155,9 +152,5 @@ export class AutocompleteTimezonesComponent
       this.setValue(t?.value);
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
-  }
-
-  getText(d: AutocompleteItem) {
-    return typeof d === 'string' ? d : d?.text || '';
   }
 }
