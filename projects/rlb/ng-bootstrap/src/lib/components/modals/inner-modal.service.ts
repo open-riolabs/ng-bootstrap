@@ -1,22 +1,22 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ComponentRef, Injectable, model, Type } from '@angular/core';
-import { Observable, filter, map, Subject, of } from 'rxjs';
-import { ModalData } from './data/modal-data';
+import { ComponentRef, Injectable, Type } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
 import { AbstractRegistryService } from '../../shared/abstract.registry.service';
-import { ModalRegistryOptions } from './options/modal-registry.options';
-import { GenericComponent } from '../../shared/component-builder/generic.component';
-import { UniqueIdService } from '../../shared/unique-id.service';
-import { ModalCloseReason } from '../../shared/types';
-import { ModalResult } from './data/modal-resutl';
-import { ModalOptions } from './data/modal-options';
 import { BuilderComponent } from '../../shared/component-builder';
+import { GenericComponent } from '../../shared/component-builder/generic.component';
+import { ModalCloseReason } from '../../shared/types';
+import { UniqueIdService } from '../../shared/unique-id.service';
+import { ModalData } from './data/modal-data';
+import { ModalOptions } from './data/modal-options';
+import { ModalResult } from './data/modal-resutl';
+import { ModalRegistryOptions } from './options/modal-registry.options';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InnerModalService extends AbstractRegistryService<Type<any>> {
 
-  private allModals: { id: string; modal: ComponentRef<GenericComponent>, subject: Subject<ModalResult<any>> }[] = [];
+  private allModals: { id: string; modal: ComponentRef<GenericComponent>, subject: Subject<ModalResult<any>>; }[] = [];
   private builders: BuilderComponent<InnerModalService>[] = [];
 
   registerBuilder(builder: BuilderComponent<InnerModalService>) {
@@ -51,11 +51,11 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
         .map((o) => o.modals)
         .flat();
       for (const modal of modals) {
-        Object.keys(modal).forEach((k) => this.add(k, modal[k]))
+        Object.keys(modal).forEach((k) => this.add(k, modal[k]));
       }
     } else {
       if (options && options.modals) {
-        Object.keys(options.modals).forEach((k) => this.add(k, options.modals[k]))
+        Object.keys(options.modals).forEach((k) => this.add(k, options.modals[k]));
       }
     }
   }
