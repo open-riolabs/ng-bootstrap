@@ -1,5 +1,7 @@
 export * from './abstract-field.component';
 
+export * from './autocomplete-country.component';
+export * from './autocomplete-timezones.component';
 export * from './autocomplete.component';
 export * from './checkbox.component';
 export * from './color.component';
