@@ -169,6 +169,7 @@ export class AutocompleteCountryComponent
     { "text": "Antigua and Barbuda", "value": "AG" },
     { "text": "Argentina", "value": "AR" },
     { "text": "Armenia", "value": "AM" },
+    { "text": "Aruba", "value": "AW" },
     { "text": "Australia", "value": "AU" },
     { "text": "Austria", "value": "AT" },
     { "text": "Azerbaijan", "value": "AZ" },

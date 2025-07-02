@@ -1,9 +1,5 @@
-import { Injectable, OnInit, Optional, Self } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NgControl,
-  ValidationErrors,
-} from '@angular/forms';
+import { Injectable, Optional, Self } from '@angular/core';
+import { ControlValueAccessor, NgControl, ValidationErrors, } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
