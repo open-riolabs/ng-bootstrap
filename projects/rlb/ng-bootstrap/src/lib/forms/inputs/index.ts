@@ -4,8 +4,12 @@ export * from './autocomplete.component';
 export * from './checkbox.component';
 export * from './color.component';
 export * from './datalist.component';
+export * from './dnd-file.component';
+export * from './dnd.directive';
 export * from './file.component';
+export * from './help-text.directive';
 export * from './input-group.component';
+export * from './input-validation.component';
 export * from './input.component';
 export * from './options.component';
 export * from './radio.component';
@@ -13,11 +17,9 @@ export * from './range.component';
 export * from './select.component';
 export * from './switch.component';
 export * from './text-area.component';
-export * from './help-text.directive';
-export * from './dnd.directive';
-export * from './dnd-file.component';
-export * from './input-validation.component';
 
+import { AutocompleteCountryComponent } from './autocomplete-country.component';
+import { AutocompleteTimezonesComponent } from './autocomplete-timezones.component';
 import { AutocompleteComponent } from './autocomplete.component';
 import { CheckboxComponent } from './checkbox.component';
 import { ColorComponent } from './color.component';
@@ -53,5 +55,8 @@ export const INPUTS = [
   HelpText,
   DndDirective,
   FileDndComponent,
-  InputValidationComponent
+  InputValidationComponent,
+
+  AutocompleteCountryComponent,
+  AutocompleteTimezonesComponent
 ];
