@@ -1,21 +1,7 @@
-import {
-  Component,
-  ContentChildren,
-  DoCheck,
-  Input,
-  QueryList,
-  OnInit,
-  OnDestroy,
-  ElementRef,
-  Output,
-  EventEmitter,
-  booleanAttribute,
-  AfterContentChecked,
-  AfterViewInit,
-} from '@angular/core';
+import { AfterViewInit, Component, ContentChildren, DoCheck, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, booleanAttribute } from '@angular/core';
+import { Carousel } from 'bootstrap';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { CarouselSlideComponent } from './carousel-slide.component';
-import { Carousel } from 'bootstrap';
 
 @Component({
   selector: 'rlb-carousel',
@@ -78,7 +64,7 @@ export class CarouselComponent implements DoCheck, OnInit, OnDestroy, AfterViewI
   @Input({ transform: booleanAttribute, alias: 'hide-controls' }) hideControls?: boolean;
   @Input({ transform: booleanAttribute, alias: 'cross-fade' }) crossFade?: boolean = false;
   @Input('autoplay') autoplay?: 'auto' | 'manual' | 'none' = 'none';
-  @Input('interval') interval?: number = 5000;
+  @Input('interval') interval?: number = 500;
   @Input('pause') pauseProp?: false | 'hover' = 'hover';
   @Input({ transform: booleanAttribute, alias: 'wrap' }) wrap?: boolean = true;
   @Input({ transform: booleanAttribute, alias: 'no-touch' }) noTouch?: boolean = false;
@@ -99,12 +85,7 @@ export class CarouselComponent implements DoCheck, OnInit, OnDestroy, AfterViewI
       {
         interval: this.interval,
         keyboard: this.keyboard,
-        ride:
-          this.autoplay === 'auto'
-            ? 'carousel'
-            : this.autoplay === 'manual'
-              ? true
-              : undefined,
+        ride: this.adaptRide(this.autoplay),
         touch: this.noTouch ? false : true,
         wrap: this.wrap,
         pause: this.pauseProp,
@@ -171,5 +152,12 @@ export class CarouselComponent implements DoCheck, OnInit, OnDestroy, AfterViewI
 
   public to(index: number): void {
     this.carousel?.to(index);
+  }
+
+  adaptRide(o?: 'auto' | 'manual' | 'none') {
+    if (o === 'auto') return 'carousel';
+    if (o === 'manual') return true;
+    if (o === 'none') return false;
+    return undefined;
   }
 }
