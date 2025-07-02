@@ -161,11 +161,10 @@ export class AutocompleteCountryComponent
     const h = this.countries.find(c => {
       if (typeof c === 'object') {
         const _c = c as { text: string, value: string; };
-        return _c.value === (typeof d === 'object' ? d.value : d) ? _c.text : '';
+        return _c.value === (typeof d === 'object' ? d?.value : d) ? _c.text : '';
       }
       return false;
     });
-    console.log(h);
     return (typeof h === 'object' ? h.text : '') || '';
   }
 
