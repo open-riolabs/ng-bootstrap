@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { booleanAttribute, Component, Input } from '@angular/core';
 
 @Component({
     selector: 'rlb-carousel-slide',
@@ -7,12 +7,11 @@ import { Component, Input } from '@angular/core';
     host: {
         class: 'carousel-item',
         "[class.active]": 'classActive'
-
     },
     standalone: false
 })
 export class CarouselSlideComponent {
-    active: boolean = true;
     classActive: boolean = true;
+    @Input({ alias: 'active', transform: booleanAttribute }) active: boolean = false;
     @Input({ alias: 'id' }) id: string = '';
 }
