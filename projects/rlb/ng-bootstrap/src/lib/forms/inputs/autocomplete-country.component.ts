@@ -54,7 +54,7 @@ import { AutocompleteItem } from './autocomplete.component';
   standalone: false
 })
 export class AutocompleteCountryComponent
-  extends AbstractComponent<AutocompleteItem>
+  extends AbstractComponent<string | undefined>
   implements ControlValueAccessor {
   acLoading: boolean = false;
   private typingTimeout: any;
@@ -81,6 +81,7 @@ export class AutocompleteCountryComponent
   }
 
   update(ev: EventTarget | null) {
+    this.setValue(undefined);
     if (this.typingTimeout) {
       clearTimeout(this.typingTimeout);
     }
@@ -96,12 +97,12 @@ export class AutocompleteCountryComponent
     }
   }
 
-  override onWrite(data: AutocompleteItem): void {
+  override onWrite(data?: AutocompleteItem): void {
     if (this.el && this.el.nativeElement) {
       if (typeof data === 'string') {
         this.el.nativeElement.value = data;
       } else {
-        this.el.nativeElement.value = data?.text;
+        this.el.nativeElement.value = data?.text || '';
       }
     }
   }
@@ -131,8 +132,8 @@ export class AutocompleteCountryComponent
         this.renderer.addClass(el, 'dropdown-item');
         this.renderer.appendChild(el, this.renderer.createText(typeof suggestion === 'string' ? suggestion : suggestion.text));
         this.renderer.listen(el, 'click', () => {
-          this.selected.emit(suggestion);
-          this.setValue(suggestion);
+          this.selected.emit(typeof suggestion === 'string' ? suggestion : suggestion.value);
+          this.setValue(typeof suggestion === 'string' ? suggestion : suggestion.value);
           this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
         });
         this.renderer.appendChild(this.dropdown.nativeElement, el);
@@ -156,8 +157,16 @@ export class AutocompleteCountryComponent
     }
   }
 
-  getText(d: AutocompleteItem) {
-    return typeof d === 'string' ? d : d?.text || '';
+  getText(d?: AutocompleteItem) {
+    const h = this.countries.find(c => {
+      if (typeof c === 'object') {
+        const _c = c as { text: string, value: string; };
+        return _c.value === (typeof d === 'object' ? d.value : d) ? _c.text : '';
+      }
+      return false;
+    });
+    console.log(h);
+    return (typeof h === 'object' ? h.text : '') || '';
   }
 
   private countries: AutocompleteItem[] = [

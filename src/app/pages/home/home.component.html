@@ -26,7 +26,8 @@
   </rlb-input>
 </form>
 <br>
-<rlb-autocomplete-country></rlb-autocomplete-country>
+<rlb-autocomplete-country [(ngModel)]="country"></rlb-autocomplete-country>
+{{ country }}
 <br>
 <rlb-autocomplete-timezones [(ngModel)]="timezone"></rlb-autocomplete-timezones>
-{{ timezone | json }}
+{{ timezone }}
