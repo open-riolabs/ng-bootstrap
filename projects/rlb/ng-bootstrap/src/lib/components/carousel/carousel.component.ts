@@ -71,7 +71,8 @@ export class CarouselComponent implements DoCheck, OnDestroy, AfterViewInit {
   @Input({ transform: booleanAttribute, alias: 'keyboard' }) keyboard?: boolean = true;
   @Output('slid') slid?: EventEmitter<Carousel.Event> = new EventEmitter<Carousel.Event>();
   @Output('slide') slide?: EventEmitter<Carousel.Event> = new EventEmitter<Carousel.Event>();
-  @Output('current-slideChange') currentSlideChange?: EventEmitter<number> = new EventEmitter<number>();
+  @Output('current-slideChange') currentSlideChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output('slide-count') slideCountChange: EventEmitter<number> = new EventEmitter<number>();
 
   @Input({ alias: 'current-slide', transform: numberAttribute }) set currentSlide(index: number) {
     this._currentSlide = index;
@@ -122,6 +123,7 @@ export class CarouselComponent implements DoCheck, OnDestroy, AfterViewInit {
       },
     );
     this.carousel.to(this._currentSlide);
+    this.slideCountChange.emit(this.items.length);
     this.elementRef.nativeElement.addEventListener('slid.bs.carousel', e => this.__event_slid_handler(e));
     this.elementRef.nativeElement.addEventListener('slide.bs.carousel', e => this.__event_slid_handler(e));
   }

@@ -20,6 +20,8 @@ export class HomeComponent {
   str: string = 'Hello World!';
   timezone: string = '';
   country: string = '';
+  carouselPage: number = 0;
+  carouselCount: number = 0;
 
   profileForm = new FormGroup({
     firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),
