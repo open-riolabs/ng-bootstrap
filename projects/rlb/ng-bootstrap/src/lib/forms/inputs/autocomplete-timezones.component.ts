@@ -9,32 +9,30 @@ import {
   Self,
   ViewChild,
   booleanAttribute,
-  numberAttribute,
+  numberAttribute
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { Observable, lastValueFrom } from 'rxjs';
-import { AbstractComponent } from './abstract-field.component';
+import { timezones } from '@open-rlb/date-tz';
 import { UniqueIdService } from '../../shared/unique-id.service';
-
-export type AutocompleteItem = string | { text: string, value: string }
-export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>
+import { AbstractComponent } from './abstract-field.component';
+import { AutocompleteItem } from './autocomplete.component';
 
 @Component({
-    selector: 'rlb-autocomplete',
-    template: `
+  selector: 'rlb-autocomplete-timezones',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
         #field
         [id]="id"
         class="form-control"
-        [type]="type"
+        type="text"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
         [class.form-control-lg]="size === 'large'"
         [class.form-control-sm]="size === 'small'"
-        [value]="getText(value)"
+        [value]="value || ''"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
@@ -54,10 +52,10 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
       [style.max-height.px]="maxHeight">
     </div>
    `,
-    standalone: false
+  standalone: false
 })
-export class AutocompleteComponent
-  extends AbstractComponent<AutocompleteItem>
+export class AutocompleteTimezonesComponent
+  extends AbstractComponent<string>
   implements ControlValueAccessor {
   acLoading: boolean = false;
   private typingTimeout: any;
@@ -68,11 +66,9 @@ export class AutocompleteComponent
   @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
   @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
   @Input({ alias: 'placeholder' }) placeholder?: string = '';
-  @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => { return [] };
-  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
   @Input() size?: 'small' | 'large' | undefined;
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
   @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
@@ -101,12 +97,10 @@ export class AutocompleteComponent
     }
   }
 
-  override onWrite(data: AutocompleteItem): void {
+  override onWrite(data: string): void {
     if (this.el && this.el.nativeElement) {
       if (typeof data === 'string') {
         this.el.nativeElement.value = data;
-      } else {
-        this.el.nativeElement.value = data?.text;
       }
     }
   }
@@ -119,39 +113,21 @@ export class AutocompleteComponent
       }
     }
     if (data && data.length > 0) {
-      const suggestions = this.autocomplete(data);
-      if (suggestions instanceof Promise) {
-        this.acLoading = true;
-        suggestions.then((suggestions) => {
-          this.renderAc(suggestions);
-        });
-        suggestions.finally(() => {
-          this.acLoading = false;
-        });
-      }
-      else if (suggestions instanceof Observable) {
-        this.acLoading = true;
-        const prm = lastValueFrom(suggestions);
-        prm.then((suggestions) => {
-          this.renderAc(suggestions);
-        });
-        prm.finally(() => {
-          this.acLoading = false;
-        });
-      } else {
-        this.renderAc(suggestions);
-      }
+      const suggestions = Object.keys(timezones).filter(o => {
+        return o.toLowerCase().startsWith(data.toLowerCase());
+      });
+      this.renderAc(suggestions);
     } else {
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
   }
 
-  renderAc(suggestions: AutocompleteItem[]) {
+  renderAc(suggestions: string[]) {
     if (suggestions.length > 0) {
       for (const suggestion of suggestions) {
         const el = this.renderer.createElement('a');
         this.renderer.addClass(el, 'dropdown-item');
-        this.renderer.appendChild(el, this.renderer.createText(typeof suggestion === 'string' ? suggestion : suggestion.text));
+        this.renderer.appendChild(el, this.renderer.createText(suggestion));
         this.renderer.listen(el, 'click', () => {
           this.selected.emit(suggestion);
           this.setValue(suggestion);
@@ -164,7 +140,7 @@ export class AutocompleteComponent
       this.renderer.addClass(el, 'dropdown-item');
       this.renderer.addClass(el, 'disabled');
       this.renderer.addClass(el, 'text-center');
-      this.renderer.setAttribute(el, 'disabled', 'true')
+      this.renderer.setAttribute(el, 'disabled', 'true');
       this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
       this.renderer.appendChild(this.dropdown.nativeElement, el);
     }
@@ -176,9 +152,5 @@ export class AutocompleteComponent
       this.setValue(t?.value);
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
-  }
-
-  getText(d: AutocompleteItem) {
-    return typeof d === 'string' ? d : d?.text;
   }
 }

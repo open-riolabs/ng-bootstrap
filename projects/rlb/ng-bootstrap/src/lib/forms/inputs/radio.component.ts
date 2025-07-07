@@ -50,14 +50,14 @@ export class RadioComponent
   implements DoCheck, ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean = false;
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   @ContentChildren(OptionComponent) options!: QueryList<OptionComponent>;
   @ViewChildren('content', { read: ViewContainerRef }) contents!: QueryList<ViewContainerRef>;
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   ngDoCheck() {
     for (const content of (this.contents || [])) {
-      console.log('content', content);  
       content?.detach();
     }
     this.options?.forEach((option, i) => {

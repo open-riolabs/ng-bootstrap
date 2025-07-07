@@ -42,7 +42,8 @@ export class SwitchComponent
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly?: boolean;
   @Input({ alias: 'size' }) size?: 'small' | 'large';
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(

@@ -1,5 +1,5 @@
 import { ComponentRef, Injectable, Type } from '@angular/core';
-import { Observable, filter, map, Subject } from 'rxjs';
+import { Observable, filter, map, Subject, of } from 'rxjs';
 import { ToastData } from './data/toast-data';
 import { AbstractRegistryService } from '../../shared/abstract.registry.service';
 import { ToastRegistryOptions } from './options/toast-registry.options';
@@ -15,11 +15,8 @@ import { ToastOptions } from './data/toast-options';
   providedIn: 'root',
 })
 export class InnerToastService extends AbstractRegistryService<Type<any>> {
-  public modalClose: Subject<ToastResult<any> & { id: string }> = new Subject<
-    ToastResult<any> & { id: string }
-  >();
-  private allModals: { id: string; toast: ComponentRef<GenericComponent> }[] =
-    [];
+
+  private allModals: { id: string; toast: ComponentRef<GenericComponent>, subject: Subject<ToastResult<any>> }[] = [];
   private builders: BuilderComponent<InnerToastService>[] = [];
 
   registerBuilder(builder: BuilderComponent<InnerToastService>) {
@@ -84,13 +81,12 @@ export class InnerToastService extends AbstractRegistryService<Type<any>> {
       },
       options,
     );
-    this.allModals.push({ id: toastId, toast: toast! });
-    return this.modalClose.asObservable().pipe(
-      filter((o) => o?.id === toastId),
-      map(({ reason, result }) => {
-        return { reason, result };
-      }),
-    );
+    this.allModals.push({ id: toastId, toast: toast!, subject: new Subject<ToastResult<Output>>() });
+    const subject = this.allModals.find((d) => d.id === toastId)?.subject;
+    if (!subject) {
+      return of({ reason: 'cancel', result: undefined } as ToastResult<Output>);
+    }
+    return subject.asObservable();
   }
 
   public eventToast(
@@ -105,7 +101,8 @@ export class InnerToastService extends AbstractRegistryService<Type<any>> {
         toast.toast.destroy();
         this.allModals = this.allModals.filter((d) => d.id !== id);
       }
-      this.modalClose.next({ reason, result, id });
+      toast?.subject.next({ reason, result });
+      toast?.subject.complete();
     }
   }
 }

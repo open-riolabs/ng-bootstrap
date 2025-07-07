@@ -1,24 +1,19 @@
 import { Injectable, Optional, Self } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NgControl,
-  ValidationErrors,
-} from '@angular/forms';
+import { ControlValueAccessor, NgControl, ValidationErrors, } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
 export abstract class AbstractComponent<T = any>
   implements ControlValueAccessor {
   public abstract disabled?: boolean;
+  protected abstract userDefinedId: string;
   protected onTouched: Function = () => { };
   protected onChanged: Function = (s: string) => { };
   public value!: T;
-  private _id: string;
-
-  public get id() {
-    return this._id;
+  private _id!: string;
+  public get id(): string {
+    return this.userDefinedId || this._id;
   }
-
   constructor(
     idService: UniqueIdService,
     @Self() @Optional() public control?: NgControl,

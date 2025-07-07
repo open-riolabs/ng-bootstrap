@@ -16,7 +16,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 @Component({
     selector: 'rlb-range',
     host: {
-        class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
+      class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
     },
     template: `
     <ng-content select="[before]"></ng-content>
@@ -50,7 +50,8 @@ export class RangeComponent
   @Input({ alias: 'min', transform: numberAttribute }) min?: number | undefined = undefined;
   @Input({ alias: 'max', transform: numberAttribute }) max?: number | undefined = undefined;
   @Input({ alias: 'step', transform: numberAttribute }) step?: number | undefined = undefined;
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(

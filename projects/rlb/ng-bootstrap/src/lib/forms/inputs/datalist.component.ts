@@ -50,7 +50,8 @@ export class DatalistComponent
   @Input({ alias: 'placeholder' }) placeholder?: string;
   @Input({ alias: 'size' }) size?: 'small' | 'large' | undefined = undefined;
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
-
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  
   constructor(
     idService: UniqueIdService,
     @Self() @Optional() override control?: NgControl,

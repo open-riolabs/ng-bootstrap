@@ -1,23 +1,23 @@
 import {
+  AfterViewInit,
   Directive,
   ElementRef,
-  Renderer2,
   Input,
   OnDestroy,
-  DoCheck,
-  AfterViewInit,
+  OnInit,
+  Renderer2
 } from '@angular/core';
 import { Modal } from 'bootstrap';
-import { InnerModalService } from './inner-modal.service';
 import { ModalCloseReason } from '../../shared/types';
 import { IModal } from './data/modal';
 import { ModalOptions } from './data/modal-options';
+import { InnerModalService } from './inner-modal.service';
 
 @Directive({
   selector: '[rlb-modal]',
   standalone: true,
 })
-export class ModalDirective implements OnDestroy, AfterViewInit {
+export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
   private bsModal!: Modal;
   private modalElement!: HTMLElement;
   private dialogElement!: HTMLElement;
@@ -34,6 +34,14 @@ export class ModalDirective implements OnDestroy, AfterViewInit {
     private renderer: Renderer2,
     private innerModalService: InnerModalService,
   ) { }
+
+  ngOnInit(): void {
+    if (this.instance.data.content) {
+      this.instance.result = structuredClone(this.instance.data.content);
+    } else {
+      this.instance.result = {};
+    }
+  }
 
   ngAfterViewInit(): void {
     const cont = this.el.nativeElement.parentNode;

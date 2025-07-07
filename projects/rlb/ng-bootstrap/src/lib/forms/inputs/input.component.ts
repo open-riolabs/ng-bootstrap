@@ -1,20 +1,21 @@
 import {
-  ChangeDetectionStrategy,
+  AfterViewInit,
   Component,
   ElementRef,
   Input,
+  OnInit,
   Optional,
   Self,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
   booleanAttribute,
-  numberAttribute,
+  numberAttribute
 } from '@angular/core';
-import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/forms';
-import { AbstractComponent } from './abstract-field.component';
+import { NgControl } from '@angular/forms';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import { UniqueIdService } from '../../shared/unique-id.service';
-import { IDateTz, DateTz } from '../../shared/i-date-tz';
+import { AbstractComponent } from './abstract-field.component';
 
 @Component({
   selector: 'rlb-input',
@@ -47,7 +48,7 @@ import { IDateTz, DateTz } from '../../shared/i-date-tz';
 })
 export class InputComponent
   extends AbstractComponent<any>
-  implements ControlValueAccessor {
+  implements OnInit, AfterViewInit {
   @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled?: boolean;
   @Input({ alias: 'readonly', transform: booleanAttribute, }) readonly?: boolean;
   @Input({ alias: 'before-text', transform: booleanAttribute, }) beforeText?: boolean;
@@ -60,6 +61,7 @@ export class InputComponent
   @Input({ alias: 'step', transform: numberAttribute }) step?: number;
   @Input({ alias: 'date-type' }) dateType?: 'date' | 'string' | 'number' | 'date-tz' = 'string';
   @Input({ alias: 'timezone' }) timezone?: string = 'UTC';
+  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
 
   public extValidation: boolean = false;
 
@@ -121,11 +123,6 @@ export class InputComponent
     }
   }
 
-
-  override writeValue(val: string): void {
-    this.onWrite(val);
-  }
-
   override onWrite(data: string): void {
     if (this.el && this.el.nativeElement) {
       if (this.type === 'number') {
@@ -177,12 +174,15 @@ export class InputComponent
     this.viewContainerRef.element.nativeElement.remove();
   }
 
+  ngAfterViewInit() {
+    this.onWrite(this.value || '');
+  }
+
   removeNonDigits(value: string): string {
-    if(!value) return '';
-    const filtered = value?.toString()?.match(/[0-9,.]/g)?.join('') || '';
-    const standardized = filtered?.replace(/,/g, '.');
-    const [integerPart, ...fractionalParts] = standardized?.split('.');
-    const result = fractionalParts.length > 0 ? `${integerPart}.${fractionalParts?.join('')}` : integerPart;
+    const filtered = value.toString().match(/[0-9,.]/g)?.join('') || '';
+    const standardized = filtered.replace(/,/g, '.');
+    const [integerPart, ...fractionalParts] = standardized.split('.');
+    const result = fractionalParts.length > 0 ? `${integerPart}.${fractionalParts.join('')}` : integerPart;
     return result;
   }
 
