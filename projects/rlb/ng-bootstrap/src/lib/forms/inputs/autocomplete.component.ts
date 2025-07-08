@@ -49,7 +49,7 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
     <div
       #autocomplete
       [id]="id+'-ac'"
-      class="dropdown-menu overflow-y-auto w-100 position-absolute d-inline-block"
+      class="dropdown-menu overflow-y-auto w-100 position-absolute"
       aria-labelledby="dropdownMenu"
       [style.max-height.px]="maxHeight"
       [style.width]="'fit-content !important'"
@@ -57,7 +57,7 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
    `,
   standalone: false,
   host: {
-    style: 'display: block; position: relative;',
+    style: 'position: relative;',
   }
 })
 export class AutocompleteComponent
