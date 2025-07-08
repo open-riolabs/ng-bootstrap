@@ -13,15 +13,15 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { Observable, lastValueFrom } from 'rxjs';
-import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
+import { AbstractComponent } from './abstract-field.component';
 
-export type AutocompleteItem = string | { text: string, value: string }
-export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>
+export type AutocompleteItem = string | { text: string, value: string; };
+export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>;
 
 @Component({
-    selector: 'rlb-autocomplete',
-    template: `
+  selector: 'rlb-autocomplete',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -49,12 +49,16 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
     <div
       #autocomplete
       [id]="id+'-ac'"
-      class="dropdown-menu overflow-y-auto w-100 position-relative"
+      class="dropdown-menu overflow-y-auto w-100 position-absolute d-inline-block"
       aria-labelledby="dropdownMenu"
-      [style.max-height.px]="maxHeight">
-    </div>
+      [style.max-height.px]="maxHeight"
+      [style.width]="'fit-content !important'"
+      [style.max-width.px]="menuMaxWidth"></div>
    `,
-    standalone: false
+  standalone: false,
+  host: {
+    style: 'display: block; position: relative;',
+  }
 })
 export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
@@ -68,11 +72,13 @@ export class AutocompleteComponent
   @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
   @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
   @Input({ alias: 'placeholder' }) placeholder?: string = '';
-  @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => { return [] };
+  @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => { return []; };
   @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
   @Input() size?: 'small' | 'large' | undefined;
+  @Input({ alias: 'chars-to-search', transform: numberAttribute }) charsToSearch: number = 3;
+  @Input({ alias: 'menu-max-width', transform: numberAttribute }) menuMaxWidth: number = 400;
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
   @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
@@ -95,10 +101,6 @@ export class AutocompleteComponent
         this.manageSuggestions(t?.value);
       }
     }, 500);
-    if (!this.disabled) {
-      const t = ev as HTMLInputElement;
-      this.manageSuggestions(t?.value);
-    }
   }
 
   override onWrite(data: AutocompleteItem): void {
@@ -118,7 +120,7 @@ export class AutocompleteComponent
         this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild);
       }
     }
-    if (data && data.length > 0) {
+    if (data && data.length >= this.charsToSearch) {
       const suggestions = this.autocomplete(data);
       if (suggestions instanceof Promise) {
         this.acLoading = true;
@@ -164,7 +166,7 @@ export class AutocompleteComponent
       this.renderer.addClass(el, 'dropdown-item');
       this.renderer.addClass(el, 'disabled');
       this.renderer.addClass(el, 'text-center');
-      this.renderer.setAttribute(el, 'disabled', 'true')
+      this.renderer.setAttribute(el, 'disabled', 'true');
       this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
       this.renderer.appendChild(this.dropdown.nativeElement, el);
     }
