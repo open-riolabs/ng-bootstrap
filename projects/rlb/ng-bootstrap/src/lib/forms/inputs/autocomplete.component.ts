@@ -1,16 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Optional,
-  Output,
-  Renderer2,
-  Self,
-  ViewChild,
-  booleanAttribute,
-  numberAttribute,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Optional, Output, Renderer2, Self, ViewChild, booleanAttribute, numberAttribute, } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { Observable, lastValueFrom } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
