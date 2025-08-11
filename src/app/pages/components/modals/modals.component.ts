@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalService } from '@sicilyaction/lib-ng-bootstrap';
+import { ModalService } from '@lbdsh/lib-ng-bootstrap';
 import { lastValueFrom } from 'rxjs';
 
 

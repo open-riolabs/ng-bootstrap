@@ -3,10 +3,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "@sicilyaction/lib-ng-bootstrap": [
+      "@lbdsh/lib-ng-bootstrap": [
         "./projects/rlb/ng-bootstrap/src/public-api.ts"
       ],
-      "@sicilyaction/lib-ng-c-bootstrap": [
+      "@lbdsh/lib-ng-c-bootstrap": [
         "./projects/rlb/ng-c-bootstrap/src/public-api.ts"
       ]
     },
@@ -39,4 +39,3 @@
     "strictTemplates": true
   }
 }
-

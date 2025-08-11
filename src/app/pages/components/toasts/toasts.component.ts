@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToastService } from '@sicilyaction/lib-ng-bootstrap';
+import { ToastService } from '@lbdsh/lib-ng-bootstrap';
 
 
 @Component({

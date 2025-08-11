@@ -1,4 +1,4 @@
-import { BreadcrumbItem } from '@sicilyaction/lib-ng-bootstrap';
+import { BreadcrumbItem } from '@lbdsh/lib-ng-bootstrap';
 
 export interface Breadcrumb {
   divider: string;

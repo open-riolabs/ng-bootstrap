@@ -1,4 +1,4 @@
-import { Color, TextAlignment } from '@sicilyaction/lib-ng-bootstrap';
+import { Color, TextAlignment } from '@lbdsh/lib-ng-bootstrap';
 
 export interface Tab {
   horizontalAlignment?: 'center' | 'end';
