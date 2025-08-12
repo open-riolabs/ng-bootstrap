@@ -1,5 +1,65 @@
 <div class="container mt-3">
-  
+
+  <h3>File</h3>
+  <p>Permette di caricare un file</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>disabled</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Disables the file input when set to true.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>readonly</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Makes the input read-only (not functional for file inputs in most browsers).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>multiple</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Allows selecting multiple files if set to true.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>accept</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Specifies accepted file types (e.g., <code>.jpg,.png</code> or <code>image/*</code>).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>size</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='info'>'small' | 'large'</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Adjusts the input size.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>id</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Custom ID for the input. If not provided, one will be auto-generated.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
