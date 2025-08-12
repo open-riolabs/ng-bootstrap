@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'rlb-option',
+	selector: 'app-option',
     templateUrl: './option.component.html',
     standalone: false
 })
