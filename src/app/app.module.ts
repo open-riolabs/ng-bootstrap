@@ -44,7 +44,7 @@ import { InputGroupsComponent } from './pages/inputs/input-group/input-group.com
 import { OptionsComponent } from './pages/inputs/option/option.component';
 import { RangesComponent } from './pages/inputs/range/range.component';
 import { SelectsComponent } from './pages/inputs/select/select.component';
-import { SwitchsComponent } from './pages/inputs/switch/switch.component';
+import { SwitchesComponent } from './pages/inputs/switch/switch.component';
 import { TextareasComponent } from './pages/inputs/textarea/textarea.component';
 import { RadiosComponent } from './pages/inputs/radio/radio.component';
 import { InputValidationsComponent } from './pages/inputs/input-validation/input-validation.component';
@@ -92,7 +92,7 @@ import { InputValidationsComponent } from './pages/inputs/input-validation/input
     RadiosComponent,
     RangesComponent,
     SelectsComponent,
-    SwitchsComponent,
+		SwitchesComponent,
     TextareasComponent
   ],
   imports: [

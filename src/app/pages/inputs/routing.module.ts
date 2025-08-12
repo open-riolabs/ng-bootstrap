@@ -12,7 +12,7 @@ import { InputGroupsComponent } from './input-group/input-group.component';
 import { OptionsComponent } from './option/option.component';
 import { RangesComponent } from './range/range.component';
 import { SelectsComponent } from './select/select.component';
-import { SwitchsComponent } from './switch/switch.component';
+import { SwitchesComponent } from './switch/switch.component';
 import { TextareasComponent } from './textarea/textarea.component';
 import { RadiosComponent } from './radio/radio.component';
 import { InputValidationsComponent } from './input-validation/input-validation.component';
@@ -32,7 +32,7 @@ const routes: Routes = [
   { path: 'radio', component: RadiosComponent },
   { path: 'range', component: RangesComponent },
   { path: 'select', component: SelectsComponent },
-  { path: 'switch', component: SwitchsComponent },
+	{ path: 'switch', component: SwitchesComponent },
   { path: 'textarea', component: TextareasComponent },
 ];
 

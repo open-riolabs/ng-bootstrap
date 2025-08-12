@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'rlb-switch',
+	selector: 'app-switch',
     templateUrl: './switch.component.html',
     standalone: false
 })
-export class SwitchsComponent {
+export class SwitchesComponent {
 
   html: string = `<rlb-switch></rlb-switch>`;
 }
