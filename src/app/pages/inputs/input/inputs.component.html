@@ -1,6 +1,107 @@
 <div class="container mt-3">
-  
-  <rlb-accordion>
+
+    <h3>Input</h3>
+    <p>
+        Si tratta di un input Angular universale ed estensibile, racchiuso in un componente form-friendly.
+        Supporta tutti i tipi di input HTML (testo, email, numero, password, datetime-local, ecc.)
+    </p>
+
+    <rlb-dt-table>
+        <rlb-dt-header>Parameters</rlb-dt-header>
+        <rlb-dt-header>Type</rlb-dt-header>
+        <rlb-dt-header>Required</rlb-dt-header>
+        <rlb-dt-header>Description</rlb-dt-header>
+        <rlb-dt-header>I/O</rlb-dt-header>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>type</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>
+                Input type: <code>text</code>, <code>email</code>, <code>number</code>, <code>password</code>,
+                <code>search</code>, <code>tel</code>, <code>url</code>, etc.
+            </rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>disabled</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>Disables the input field</rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>readonly</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>Makes the input read-only</rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>placeholder</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>Placeholder text</rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>name</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>HTML input name attribute</rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>size</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell><code>'small'</code> or <code>'large'</code> to control input size</rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>max / min / step</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='primary'>number</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>Constraints for numeric inputs</rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>dateType</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>
+                For <code>datetime-local</code> input:<br>
+                <code>'string'</code>, <code>'number'</code>, <code>'date'</code>, or <code>'date-tz'</code> to define
+                the output format.
+            </rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>timezone</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>Timezone used for parsing <code>date-tz</code> inputs (default: <code>'UTC'</code>)
+            </rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+
+        <rlb-dt-row>
+            <rlb-dt-cell>id</rlb-dt-cell>
+            <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+            <rlb-dt-cell>False</rlb-dt-cell>
+            <rlb-dt-cell>User-defined ID for the input element</rlb-dt-cell>
+            <rlb-dt-cell>Input</rlb-dt-cell>
+        </rlb-dt-row>
+    </rlb-dt-table>
+    <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
       <div rlb-accordion-body>
