@@ -1,5 +1,102 @@
 <div class="container mt-3">
-  
+
+  <h3>Autocomplete</h3>
+  <p>Autocomplete è un componente che combina un input di testo con una casella di riepilogo, consentendo agli utenti di filtrare
+    un elenco di opzioni in base agli elementi che corrispondono a una query.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>disabled</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Specifies whether the component is disabled (default is false).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>readonly</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Specifies whether the component is read-only (default is false).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>loading</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Indicates whether a loading spinner is displayed. Used for asynchronous operations (default is false).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>max-height</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='info'>number</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Sets the maximum height of the dropdown list (default is 200px).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>placeholder</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Text displayed in the input field when it is empty.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>autocomplete</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='dark'>AutocompleteFn</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>A function that returns an array of autocomplete options, taking a query string as an argument (can return a Promise or Observable).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>type</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Specifies the input field type: `text`, `email`, `number`, `password`, `search`, `tel`, `url` (default is `text`).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>size</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='info'>small | large</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Specifies the size of the input field: `small`, `large`, or `undefined` (default).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>chars-to-search</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='info'>number</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Minimum number of characters required in the query before search starts (default is 3).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>menu-max-width</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='info'>number</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Maximum width of the autocomplete dropdown menu (default is 400px).</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>id</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>User-defined ID for the component, automatically generated if not provided.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>selected</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>EventEmitter</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Event emitted when an item is selected from the autocomplete list.</rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
