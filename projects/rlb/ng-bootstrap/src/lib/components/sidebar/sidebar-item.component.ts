@@ -1,5 +1,16 @@
-import { Component, ContentChildren, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import {
+	Component,
+	ContentChildren,
+	Input,
+	OnInit,
+	QueryList,
+	TemplateRef,
+	ViewChild,
+	ViewContainerRef
+} from "@angular/core";
 import { UniqueIdService } from "../../shared/unique-id.service";
+import { NavigationEnd, Router } from "@angular/router";
+import { CollapseComponent } from "../collapse/collapse.component";
 
 
 @Component({
@@ -35,10 +46,12 @@ export class SidebarItemComponent implements OnInit {
 
   @ContentChildren(SidebarItemComponent) children!: QueryList<SidebarItemComponent>;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+	@ViewChild(CollapseComponent) collapseComponent?: CollapseComponent;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
-    private uniqueIdService: UniqueIdService
+		private uniqueIdService: UniqueIdService,
+		private router: Router
   ) { }
 
   _id: string = '';
@@ -50,5 +63,23 @@ export class SidebarItemComponent implements OnInit {
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
     this._id = this.uniqueIdService.id;
+		
+		this.router.events.subscribe(event => {
+			if (event instanceof NavigationEnd) {
+				this.expandIfAnyChildMatchesRoute(event.urlAfterRedirects);
+			}
+		});
   }
+	
+	private expandIfAnyChildMatchesRoute(currentUrl: string) {
+		if (!this.children?.length || !this.collapseComponent) return;
+		
+		const hasActiveChild = this.children.some(
+			child => typeof child.link === 'string' && currentUrl.startsWith(child.link)
+		);
+		
+		if (hasActiveChild) {
+			this.collapseComponent.open();
+		}
+	}
 }
