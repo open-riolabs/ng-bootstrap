@@ -154,31 +154,46 @@
         <h4>Offcanvas Sample</h4>
         <button rlb-button toggle="offcanvas" toggle-target="off-1" class="me-2">Offcanvas</button>
         <rlb-offcanvas id="off-1">
-          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+					<rlb-offcanvas-header>
+						<h5 rlb-offcanvas-title>Offcanvas Header</h5>
+					</rlb-offcanvas-header>
           <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
         </rlb-offcanvas>
-        <h4>Placement</h4>
+				<h4 class="mt-3">Placement</h4>
         <button rlb-button toggle="offcanvas" toggle-target="off-2" class="me-2">Offcanvas</button>
         <rlb-offcanvas id="off-2" [placement]="'end'">
-          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+					<rlb-offcanvas-header>
+						<h5 rlb-offcanvas-title>Offcanvas Header End Placement</h5>
+					</rlb-offcanvas-header>
           <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
         </rlb-offcanvas>
-        <h4>Responsive</h4>
-        <button rlb-button toggle="offcanvas" toggle-target="off-3" class="me-2">Offcanvas</button>
-        <rlb-offcanvas id="off-3" [responsive]="'sm'">
-          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
-          <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
-        </rlb-offcanvas>
-        <h4>Close Manual</h4>
+				<h4 class="mt-3">Responsive</h4>
+				<p class="text-muted d-none d-sm-block">
+					Riduci la dimensione della finestra per vedere il pulsante e l'esempio dell'offcanvas responsive.
+				</p>
+				<button rlb-button toggle="offcanvas" toggle-target="off-3" class="me-2 d-sm-none">Offcanvas</button>
+				<rlb-offcanvas id="off-3" [responsive]="'sm'" class="d-sm-none">
+					<rlb-offcanvas-header [offcanvasId]="'off-3'">
+						<h5 rlb-offcanvas-title>Offcanvas Header Responsive</h5>
+					</rlb-offcanvas-header>
+					<rlb-offcanvas-body>Offcanvas Body Responsive</rlb-offcanvas-body>
+				</rlb-offcanvas>
+				<h4 class="mt-3">Close Manual</h4>
         <button rlb-button toggle="offcanvas" toggle-target="off-4" class="me-2">Offcanvas</button>
-        <rlb-offcanvas id="off-4" [close-manual]="false">
-          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+				<rlb-offcanvas id="off-4" [close-manual]="true">
+					<rlb-offcanvas-header>
+						<h5 rlb-offcanvas-title>Offcanvas Header Manual Close</h5>
+					</rlb-offcanvas-header>
           <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
         </rlb-offcanvas>
-        <h4>Status Change</h4>
+				<h4 class="mt-3">Status Change</h4>
         <button rlb-button toggle="offcanvas" toggle-target="off-5" class="me-2">Offcanvas</button>
         <rlb-offcanvas id="off-5" (statusChange)="onStatusChenged($event, 0)">
-          <rlb-offcanvas-header>Offcanvas Header</rlb-offcanvas-header>
+					<rlb-offcanvas-header>
+						<h5 rlb-offcanvas-title>
+							Offcanvas Header Status Change
+						</h5>
+					</rlb-offcanvas-header>
           <rlb-offcanvas-body>Offcanvas Body {{message}}</rlb-offcanvas-body>
         </rlb-offcanvas>
       </div>
