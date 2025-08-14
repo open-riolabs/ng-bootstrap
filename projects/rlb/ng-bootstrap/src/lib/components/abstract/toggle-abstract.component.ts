@@ -1,4 +1,13 @@
-import { Injectable, EventEmitter, OnInit, OnDestroy, ElementRef, DoCheck, OnChanges, SimpleChanges, AfterContentChecked } from '@angular/core';
+import {
+	AfterContentChecked,
+	ElementRef,
+	EventEmitter,
+	Injectable,
+	OnChanges,
+	OnDestroy,
+	OnInit,
+	SimpleChanges
+} from '@angular/core';
 import { VisibilityEvent } from '../../shared/types';
 
 abstract class _bs_component {
@@ -19,59 +28,22 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
   abstract getOrCreateInstance(element: HTMLElement | Element): T;
   abstract statusChange: EventEmitter<VisibilityEvent>;
   abstract status?: VisibilityEvent;
-
-  constructor(private elementRef?: ElementRef<HTMLElement>) { }
+	
+	constructor(protected elementRef?: ElementRef<HTMLElement>) {
+	}
 
   ngOnInit(elemnt?: HTMLElement | Element): void {
     this.htmlElement = elemnt || this.elementRef?.nativeElement;
     if (!this.htmlElement) throw new Error(`ElementRef not defined`);
-    this.htmlElement.addEventListener(
-      `hide.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.addEventListener(
-      `hidden.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.addEventListener(
-      `hidePrevented.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.addEventListener(
-      `show.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.addEventListener(
-      `shown.${this.eventPrefix}`,
-      this._openChange_f,
-    );
+		this._addEventListeners();
     this._component = this.getOrCreateInstance(this.htmlElement);
   }
 
   ngOnDestroy(elemnt?: HTMLElement | Element): void {
     this.htmlElement = elemnt || this.elementRef?.nativeElement;
     if (!this.htmlElement) throw new Error(`ElementRef not defined`);
-    this.htmlElement.removeEventListener(
-      `hide.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.removeEventListener(
-      `hidden.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.removeEventListener(
-      `hidePrevented.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.removeEventListener(
-      `show.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this.htmlElement.removeEventListener(
-      `shown.${this.eventPrefix}`,
-      this._openChange_f,
-    );
-    this._component?.dispose();
+		this._removeEventListeners();
+		this._component?.dispose();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -92,25 +64,52 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
   ngAfterContentChecked(): void {
     if (this.status === `shown`) {
       this.status = `show`;
+			this.ensureInstance();
       this._component?.show();
     }
     if (this.status === `hidden`) {
       this.status = `hide`;
+			this.ensureInstance();
       this._component?.hide();
     }
   }
 
   open() {
-    this._component?.show();
+		this.ensureInstance();
+		this._component?.show();
   }
 
   close() {
+		this.ensureInstance();
     this._component?.hide();
   }
 
   toggle() {
+		this.ensureInstance();
     this._component?.toggle();
   }
+	
+	protected ensureInstance(): void {
+		if (!this._component && this.htmlElement) {
+			this._component = this.getOrCreateInstance(this.htmlElement);
+		}
+	}
+	
+	private _addEventListeners(): void {
+		this.htmlElement?.addEventListener(`hide.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.addEventListener(`hidden.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.addEventListener(`hidePrevented.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.addEventListener(`show.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.addEventListener(`shown.${this.eventPrefix}`, this._openChange_f);
+	}
+	
+	private _removeEventListeners(): void {
+		this.htmlElement?.removeEventListener(`hide.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.removeEventListener(`hidden.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.removeEventListener(`hidePrevented.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.removeEventListener(`show.${this.eventPrefix}`, this._openChange_f);
+		this.htmlElement?.removeEventListener(`shown.${this.eventPrefix}`, this._openChange_f);
+	}
 
   private _openChange_f = (e: Event) => {
     switch (e.type) {

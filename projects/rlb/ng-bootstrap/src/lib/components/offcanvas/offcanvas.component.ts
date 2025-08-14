@@ -1,12 +1,14 @@
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  booleanAttribute,
+	booleanAttribute,
+	Component,
+	DOCUMENT,
+	ElementRef,
+	EventEmitter,
+	Inject,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output,
 } from '@angular/core';
 import { Offcanvas } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
@@ -47,13 +49,32 @@ export class OffcanvasComponent
   @Input() override status?: VisibilityEvent;
 
   @Output() override statusChange = new EventEmitter<VisibilityEvent>();
-
-  constructor(elementRef: ElementRef<HTMLElement>) {
+	
+	constructor(elementRef: ElementRef<HTMLElement>, @Inject(DOCUMENT) private document: Document) {
     super(elementRef);
   }
-
-  override getOrCreateInstance(element: HTMLElement): Offcanvas {
-    return Offcanvas.getOrCreateInstance(element);
+	
+	override ngOnInit(elemnt?: HTMLElement | Element) {
+		super.ngOnInit(elemnt);
+		
+		const nativeEl = this.elementRef?.nativeElement;
+		
+		if (nativeEl && nativeEl.parentElement !== this.document.body) {
+			this.document.body.appendChild(nativeEl);
+		}
+	}
+	
+	override getOrCreateInstance(element: HTMLElement): Offcanvas {
+		const existingInstance = Offcanvas.getInstance(element);
+		if (existingInstance) {
+			existingInstance.dispose();
+		}
+		
+		return Offcanvas.getOrCreateInstance(element, {
+			scroll: this.bodyScroll ?? false,
+			keyboard: this.closeManual ? false : true,
+			backdrop: this.closeManual ? 'static' : true
+		});
   }
 
   override get eventPrefix(): string {
