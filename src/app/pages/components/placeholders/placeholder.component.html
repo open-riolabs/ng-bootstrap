@@ -3,36 +3,83 @@
   <h3>Placeholder</h3>
   <p>Il Placeholder è un elemento visivo temporaneo che occupa lo spazio di contenuti in caricamento o ancora non disponibili, come testo o immagini.</p>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>placeholder-color</rlb-dt-cell>
-      <rlb-dt-cell>Color</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placeholder-size</rlb-dt-cell>
-      <rlb-dt-cell>'xs' | 'sm' | 'md' | 'lg'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placeholder-animation</rlb-dt-cell>
-      <rlb-dt-cell>'glow' | 'fade' | 'none'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+	<rlb-dt-table>
+		<rlb-dt-header>Parameters</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
 
-  <rlb-accordion>
+		<!-- rlb-placeholder -->
+		<rlb-dt-row>
+			<rlb-dt-cell>animation</rlb-dt-cell>
+			<rlb-dt-cell>'glow' | 'wave' | 'none'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Applies Bootstrap placeholder animation class</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<!-- rlb-placeholder-line -->
+		<rlb-dt-row>
+			<rlb-dt-cell>color</rlb-dt-cell>
+			<rlb-dt-cell>Color</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Sets background color using Bootstrap contextual class (e.g., 'primary', 'secondary')</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>size</rlb-dt-cell>
+			<rlb-dt-cell>'xs' | 'sm' | 'md' | 'lg'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Controls the height and font size of the placeholder line</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>width</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color='primary'> string</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Sets the width of the placeholder line (e.g., '100%', '60%')</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>height</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color='primary'> string</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Explicit height override (optional)</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>rounded</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color='info'> boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Applies Bootstrap's 'rounded' class if true</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<!-- rlb-placeholder-text -->
+		<rlb-dt-row>
+			<rlb-dt-cell>lines</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color='success'> number</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Number of placeholder lines to generate (default: 1)</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>width</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color='primary'> string | string[]</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Single width or array of widths for each line</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
+
+
+	<rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
       <div rlb-accordion-body>
@@ -60,59 +107,58 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
-        <h4>Placeholder Sample</h4>
-        <div rlb-placeholder>
-          <span>Testo</span>
-        </div>  
-        <h4>Placeholder Color</h4>
-        <div rlb-placeholder [placeholder-color]="'primary'">
-          <span>Testo</span>
-        </div>
-        <div rlb-placeholder [placeholder-color]="'secondary'">
-          <span>Testo</span>
-        </div>  
-        <div rlb-placeholder [placeholder-color]="'success'">
-          <span>Testo</span>
-        </div> 
-        <div rlb-placeholder [placeholder-color]="'danger'">
-          <span>Testo</span>
-        </div> 
-        <div rlb-placeholder [placeholder-color]="'warning'">
-          <span>Testo</span>
-        </div> 
-        <div rlb-placeholder [placeholder-color]="'info'">
-          <span>Testo</span>
-        </div> 
-        <div rlb-placeholder [placeholder-color]="'light'">
-          <span>Testo</span>
-        </div> 
-        <div rlb-placeholder [placeholder-color]="'dark'">
-          <span>Testo</span>
-        </div>
-        <h4>Placeholder Size</h4>
-        <div rlb-placeholder [placeholder-size]="'xs'">
-          <span>Testo</span>
-        </div><br>
-        <div rlb-placeholder [placeholder-size]="'sm'">
-          <span>Testo</span>
-        </div><br>
-        <div rlb-placeholder [placeholder-size]="'md'">
-          <span>Testo</span>
-        </div><br>
-        <div rlb-placeholder [placeholder-size]="'lg'">
-          <span>Testo</span>
-        </div>
-        <h4>Placeholder Animation</h4>
-        <div rlb-placeholder [placeholder-animation]="'fade'">
-          <span>Testo</span>
-        </div><br>
-        <div rlb-placeholder [placeholder-animation]="'glow'">
-          <span>Testo</span>
-        </div><br>
-        <div rlb-placeholder [placeholder-animation]="'none'">
-          <span>Testo</span>
-        </div>
-      </div>
+				<h4>Placeholder Basic Sample</h4>
+				<rlb-placeholder-text/>
+
+				<h4 class="mt-3">Placeholder Color</h4>
+				<h6>primary</h6>
+				<rlb-placeholder-text color="primary"/>
+				<h6>Secondary</h6>
+				<rlb-placeholder-text color="secondary"/>
+				<h6>success</h6>
+				<rlb-placeholder-text color="success"/>
+				<h6>danger</h6>
+				<rlb-placeholder-text color="danger"/>
+				<h6>info</h6>
+				<rlb-placeholder-text color="info"/>
+				<h6>warning</h6>
+				<rlb-placeholder-text color="warning"/>
+				<h6>light</h6>
+				<rlb-placeholder-text color="light"/>
+				<h6>dark</h6>
+				<rlb-placeholder-text color="dark"/>
+
+				<h4 class="mt-3">Placeholder Size</h4>
+				<h6>xs</h6>
+				<rlb-placeholder-text size="xs"/>
+				<h6>sm</h6>
+				<rlb-placeholder-text size="sm"/>
+				<h6>md</h6>
+				<rlb-placeholder-text size="md"/>
+				<h6>lg</h6>
+				<rlb-placeholder-text size="lg"/>
+
+				<h4 class="mt-3">Placeholder Width</h4>
+				<h6>60%</h6>
+				<rlb-placeholder-text width="60%"/>
+				<h6>30%</h6>
+				<rlb-placeholder-text width="30%"/>
+				<h6>100%</h6>
+				<rlb-placeholder-text width="100%"/>
+
+				<h4 class="mt-3">Placeholder Animation</h4>
+				<h6>glow</h6>
+				<rlb-placeholder-text size="lg" animation="glow"/>
+				<h6>wave</h6>
+				<rlb-placeholder-text size="lg" animation="wave"/>
+
+				<h4 class="mt-3">Placeholder Advanced Usage</h4>
+				<rlb-placeholder animation="glow">
+					<rlb-placeholder-line width="100%"/>
+					<rlb-placeholder-line width="80%" color="primary" size="sm"/>
+					<rlb-placeholder-line width="60%" [rounded]="false"/>
+				</rlb-placeholder>
+			</div>
     </div>
   </rlb-accordion>
 </div>

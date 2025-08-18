@@ -65,6 +65,9 @@ import { ListItemImageComponent } from './list/list-item-image.component';
 import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
 import { ChatContainerComponent } from './chat/chat-container.component';
 import { ChatItemComponent } from './chat/chat-item.component';
+import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
+import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
+import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -199,6 +202,9 @@ export const COMPONENTS = [
   AvatarComponent,
   ChatContainerComponent,
   ChatItemComponent,
+	RlbPlaceholderComponent,
+	RlbPlaceholderLineComponent,
+	RlbPlaceholderTextComponent,
   ...[MODALS],
   ...[TOASTS],
 ];
