@@ -6,11 +6,31 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class ScrollspysComponent {
-
-  html: string = `<button rlb-button rlb-scrollspy="1">
-  text
-</button>
-<h1 id="1">header</h1>`;
+	
+	html: string = `<rlb-nav id="scroll-nav" horizontal-alignment="center" vertical="false" fill="true" pills="true">
+ <rlb-nav-item>
+ 	<a class="nav-link active" href="#section1">Section 1</a>
+ </rlb-nav-item>
+ <rlb-nav-item>
+ 	<a class="nav-link" href="#section2">Section 2</a>
+ </rlb-nav-item>
+ <rlb-nav-item>
+ 	<a class="nav-link" href="#section3">Section 3</a>
+ </rlb-nav-item>
+</rlb-nav>
+<div
+ rlb-scrollspy
+ [rlb-scrollspy-target]="'#scroll-nav'"
+ [height]="'150px'"
+ scroll-smooth="true">
+	
+ <h4 id="section1">Section 1</h4>
+ <p>...</p>
+ <h4 id="section2">Section 2</h4>
+ <p>...</p>
+ <h4 id="section3">Section 3</h4>
+ <p>...</p>
+</div>`;
 
   ts: string = `@Component({
   selector: 'app-modal',
