@@ -1,6 +1,18 @@
-import { Component, ElementRef, EventEmitter, Input, Optional, Output, Renderer2, Self, ViewChild, booleanAttribute, numberAttribute, } from '@angular/core';
+import {
+	booleanAttribute,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	numberAttribute,
+	Optional,
+	Output,
+	Renderer2,
+	Self,
+	ViewChild,
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { Observable, lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
@@ -172,6 +184,7 @@ export class AutocompleteComponent
   }
 
   getText(d: AutocompleteItem) {
+		if (d == null) return '';
     return typeof d === 'string' ? d : d?.text;
   }
 }
