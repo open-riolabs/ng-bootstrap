@@ -1,50 +1,51 @@
-<rlb-input type="number" min="0" max="10" step="0.1" [(ngModel)]="number"></rlb-input>
-{{ number }}
+<div class="p-3">
+	<rlb-input type="number" min="0" max="10" step="0.1" [(ngModel)]="number"></rlb-input>
+	{{ number }}
 
-<rlb-input type="datetime-local" min="0" max="10" step="0.1" [(ngModel)]="dtz" date-type="date-tz"></rlb-input>
-{{ dtz | dtz }}
+	<rlb-input type="datetime-local" min="0" max="10" step="0.1" [(ngModel)]="dtz" date-type="date-tz"></rlb-input>
+	{{ dtz | dtz }}
 
-<rlb-input type="text" [(ngModel)]="str"></rlb-input>
-{{ str }}
+	<rlb-input type="text" [(ngModel)]="str"></rlb-input>
+	{{ str }}
 
-<hr>
+	<hr>
 
-<rlb-carousel autoplay="none" [(current-slide)]="carouselPage" (slide-count)="carouselCount = $event" id="pippo">
-  <rlb-carousel-slide active>
-    <img src="https://placehold.co/100x400" alt="slide 1">
-  </rlb-carousel-slide>
-  <rlb-carousel-slide>
-    <img src="https://placehold.co/200x401" alt="slide 2">
-  </rlb-carousel-slide>
-  <rlb-carousel-slide>
-    <img src="https://placehold.co/300x401" alt="slide 2">
-  </rlb-carousel-slide>
-  <rlb-carousel-slide>
-    <img src="https://placehold.co/400x401" alt="slide 2">
-  </rlb-carousel-slide>
-  <rlb-carousel-slide>
-    <img src="https://placehold.co/500x401" alt="slide 2">
-  </rlb-carousel-slide>
+	<rlb-carousel autoplay="none" [(current-slide)]="carouselPage" (slide-count)="carouselCount = $event" id="pippo">
+		<rlb-carousel-slide active>
+			<img src="https://placehold.co/100x400" alt="slide 1">
+		</rlb-carousel-slide>
+		<rlb-carousel-slide>
+			<img src="https://placehold.co/200x401" alt="slide 2">
+		</rlb-carousel-slide>
+		<rlb-carousel-slide>
+			<img src="https://placehold.co/300x401" alt="slide 2">
+		</rlb-carousel-slide>
+		<rlb-carousel-slide>
+			<img src="https://placehold.co/400x401" alt="slide 2">
+		</rlb-carousel-slide>
+		<rlb-carousel-slide>
+			<img src="https://placehold.co/500x401" alt="slide 2">
+		</rlb-carousel-slide>
 
-</rlb-carousel>
+	</rlb-carousel>
 
-<rlb-input type="number" [(ngModel)]="carouselPage" min="0" [max]="carouselCount"></rlb-input>
-{{ carouselPage }} / {{ carouselCount }}
+	<rlb-input type="number" [(ngModel)]="carouselPage" min="0" [max]="carouselCount"></rlb-input>
+	{{ carouselPage }} / {{ carouselCount }}
 
 
+	<form [formGroup]="profileForm" (submit)="updateProfile()">
+		<rlb-input formControlName="firstName" size="small" type="text" name="firstName" id="lastName">
+			<label before for="lastName" class="mt-2 mb-1">
+				{{ "affiliates.userProfile.profile.firstName" }}
+			</label>
+		</rlb-input>
+	</form>
 
-<form [formGroup]="profileForm" (submit)="updateProfile()">
-  <rlb-input formControlName="firstName" size="small" type="text" name="firstName" id="lastName">
-    <label before for="lastName" class="mt-2 mb-1">
-      {{"affiliates.userProfile.profile.firstName"}}
-    </label>
-  </rlb-input>
-</form>
+	<br>
+	<rlb-autocomplete-country [(ngModel)]="country"></rlb-autocomplete-country>
+	{{ country }}
 
-<br>
-<rlb-autocomplete-country [(ngModel)]="country"></rlb-autocomplete-country>
-{{ country }}
-
-<br>
-<rlb-autocomplete-timezones [(ngModel)]="timezone"></rlb-autocomplete-timezones>
-{{ timezone }}
+	<br>
+	<rlb-autocomplete-timezones [(ngModel)]="timezone"></rlb-autocomplete-timezones>
+	{{ timezone }}
+</div>
