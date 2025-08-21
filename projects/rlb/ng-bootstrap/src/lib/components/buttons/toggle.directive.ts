@@ -1,4 +1,14 @@
-import { Directive, DoCheck, ElementRef, Host, Input, Optional, Renderer2, Self, booleanAttribute } from '@angular/core';
+import {
+	booleanAttribute,
+	Directive,
+	DoCheck,
+	ElementRef,
+	Host,
+	Input,
+	Optional,
+	Renderer2,
+	Self
+} from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
 
 @Directive({
@@ -10,7 +20,10 @@ import { ButtonToolbarComponent } from './boutton-toolbar.component';
   standalone: false
 })
 export class ToggleDirective implements DoCheck {
-  @Input({ alias: 'toggle', required: true }) toggle?: 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group';
+	@Input({
+		alias: 'toggle',
+		required: true
+	}) toggle?: 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group' | 'sidebar';
   @Input({ alias: 'toggle-target', required: true }) target!: string;
   @Input({ transform: booleanAttribute, alias: 'collapsed' }) collapsed?: boolean;
   @Input({ alias: 'auto-close' }) autoClose!: 'default' | 'inside' | 'outside' | 'manual';
@@ -28,7 +41,25 @@ export class ToggleDirective implements DoCheck {
     } else {
       element = this.elementRef.nativeElement;
     }
-    if (this.toggle)
+		
+		// CUSTOM FOR rlb-sidebar
+		if (this.toggle === 'sidebar') {
+			this.renderer.removeAttribute(element, 'data-bs-toggle');
+			this.renderer.removeAttribute(element, 'data-bs-target');
+			this.renderer.removeAttribute(element, 'href');
+			
+			element.onclick = (event: Event) => {
+				event.preventDefault();
+				const body = document.body;
+				const isOpen = body.classList.toggle('sidebar-enable');
+				
+				this.renderer.setAttribute(element, 'aria-expanded', isOpen ? 'true' : 'false');
+			};
+			
+			return;
+		}
+		
+		if (this.toggle)
       this.renderer.setAttribute(element, 'data-bs-toggle', this.toggle);
     if (this.autoClose === 'default') {
       this.renderer.setAttribute(

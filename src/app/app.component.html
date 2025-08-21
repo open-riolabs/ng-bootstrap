@@ -1,5 +1,5 @@
 <div class="rlb-app">
-  <rlb-sidebar class="rlb-sidebar">
+	<rlb-sidebar class="rlb-sidebar" id="sidebar" [rounded]="true">
     <rlb-sidebar-item title="RLB bootstrap" />
     <rlb-sidebar-item label="Components">
       <rlb-sidebar-item icon="bi bi-exclamation-triangle" link="/components/alerts">Alerts</rlb-sidebar-item>
@@ -42,8 +42,8 @@
 
   </rlb-sidebar>
   <rlb-navbar class="rlb-navbar" expand="lg">
-		<a class="d-block d-lg-none" rlb-button href="#" toggle="collapse" toggle-target="sidebar" [outline]="true">
-      <span class="navbar-toggler-icon"></span>
+		<a class="navbar-toggler d-lg-none " rlb-button href="#" toggle="sidebar" toggle-target="sidebar">
+			<span class="bi bi-three-dots"></span>
     </a>
     <a rlb-navbar-brand href="#">Navbar</a>
     <rlb-navbar-items class="me-auto">
