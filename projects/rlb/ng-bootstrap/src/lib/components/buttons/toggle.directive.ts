@@ -1,13 +1,13 @@
 import {
-	booleanAttribute,
-	Directive,
-	DoCheck,
-	ElementRef,
-	Host,
-	Input,
-	Optional,
-	Renderer2,
-	Self
+  booleanAttribute,
+  Directive,
+  DoCheck,
+  ElementRef,
+  Host,
+  Input,
+  Optional,
+  Renderer2,
+  Self
 } from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
 
@@ -16,7 +16,7 @@ import { ButtonToolbarComponent } from './boutton-toolbar.component';
     button[toggle],
     a[toggle],
     rlb-navbar-item[toggle],
-    rlb-button-toolbar[toogle]`,
+    rlb-button-toolbar[toggle]`,
   standalone: false
 })
 export class ToggleDirective implements DoCheck {
@@ -91,13 +91,13 @@ export class ToggleDirective implements DoCheck {
     }
     if (this.collapsed) {
       this.renderer.addClass(element, 'collapsed');
-      this.renderer.setAttribute(element, 'aria-expanded', 'true');
+      this.renderer.setAttribute(element, 'aria-expanded', 'false');
     } else {
       this.renderer.removeClass(element, 'collapsed');
-      this.renderer.setAttribute(element, 'aria-expanded', 'false');
+      this.renderer.setAttribute(element, 'aria-expanded', 'true');
     }
     this.renderer.setAttribute(element, 'aria-controls', this.target);
-    this.renderer.setAttribute(element, 'aria-expanded', 'false');
+    // this.renderer.setAttribute(element, 'aria-expanded', 'false');
 
     if (this.toggle === 'dropdown' && this.target === '#') {
       this.renderer.setAttribute(element, 'href', '#');
