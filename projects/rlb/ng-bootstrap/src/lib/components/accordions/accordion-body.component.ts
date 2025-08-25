@@ -8,7 +8,6 @@ import { Component } from '@angular/core';
     host: {
         class: 'accordion-collapse collapse',
         '[class.show]': 'expanded',
-        '[data-bs-parent]': 'parentId',
         '[id]': 'itemId',
         '[attr.data-bs-parent]': "'#'+parentId",
     },
