@@ -1,12 +1,12 @@
 import {
-	AfterContentChecked,
-	ElementRef,
-	EventEmitter,
-	Injectable,
-	OnChanges,
-	OnDestroy,
-	OnInit,
-	SimpleChanges
+  AfterContentChecked,
+  ElementRef,
+  EventEmitter,
+  Injectable,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges
 } from '@angular/core';
 import { VisibilityEvent } from '../../shared/types';
 
@@ -62,14 +62,11 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
   }
 
   ngAfterContentChecked(): void {
-    if (this.status === `shown`) {
-      this.status = `show`;
-			this.ensureInstance();
+    if (this.status === 'show') {
+      this.ensureInstance();
       this._component?.show();
-    }
-    if (this.status === `hidden`) {
-      this.status = `hide`;
-			this.ensureInstance();
+    } else if (this.status === 'hide') {
+      this.ensureInstance();
       this._component?.hide();
     }
   }
@@ -112,20 +109,28 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
 	}
 
   private _openChange_f = (e: Event) => {
+    if (e.target !== this.htmlElement) return;
+    e.stopPropagation();
+    
     switch (e.type) {
       case `hide.${this.eventPrefix}`:
+        this.status = `hide`;
         this.statusChange.emit(`hide`);
         break;
       case `hidden.${this.eventPrefix}`:
+        this.status = 'hidden';
         this.statusChange.emit(`hidden`);
         break;
       case `hidePrevented.${this.eventPrefix}`:
+        this.status = 'hidePrevented';
         this.statusChange.emit(`hidePrevented`);
         break;
       case `show.${this.eventPrefix}`:
+        this.status = 'show';
         this.statusChange.emit(`show`);
         break;
       case `shown.${this.eventPrefix}`:
+        this.status = 'shown';
         this.statusChange.emit(`shown`);
         break;
     }
