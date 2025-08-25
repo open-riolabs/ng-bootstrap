@@ -48,18 +48,18 @@
       <rlb-dt-cell>name</rlb-dt-cell>
       <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to make the accordion elements have an name</rlb-dt-cell>
+			<rlb-dt-cell>Custom identifier for the accordion item (used for linking header and body).</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
       <rlb-dt-cell>expanded</rlb-dt-cell>
       <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to ensure that a section of the accordion always remains open</rlb-dt-cell>
+			<rlb-dt-cell>Set to true to expand this item by default.</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
-      <rlb-dt-cell>class</rlb-dt-cell>
+			<rlb-dt-cell>cssClass</rlb-dt-cell>
       <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
       <rlb-dt-cell>Add to cause a CSS class to be applied to the accordion</rlb-dt-cell>
@@ -76,14 +76,14 @@
       <rlb-dt-cell>status</rlb-dt-cell>
       <rlb-dt-cell>VisibilityEvent</rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to apply change state VisibilityEvent</rlb-dt-cell>
+			<rlb-dt-cell>Controls the visibility state of the item ('visible' | 'hidden').</rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
     <rlb-dt-row>
       <rlb-dt-cell>statusChange</rlb-dt-cell>
       <rlb-dt-cell>EventEmitter&lt;VisibilityEvent&gt;</rlb-dt-cell>
       <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Take to receive a VisibilityEvent status change</rlb-dt-cell>
+			<rlb-dt-cell>Event emitted when the visibility of the item changes.</rlb-dt-cell>
       <rlb-dt-cell>Output</rlb-dt-cell>
     </rlb-dt-row>
   </rlb-dt-table>
@@ -193,7 +193,7 @@
 
         <h4>Always Open</h4>
 
-        <rlb-accordion [always-open]="false">
+				<rlb-accordion [always-open]="true">
           <div rlb-accordion-item>
             <rlb-accordion-header>Accordion Header</rlb-accordion-header>
             <div rlb-accordion-body>
