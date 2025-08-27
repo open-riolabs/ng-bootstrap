@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-  booleanAttribute,
-} from '@angular/core';
+import { booleanAttribute, Component, Input, TemplateRef, ViewChild, ViewContainerRef, } from '@angular/core';
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 
@@ -31,9 +24,11 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" [id]="navId">
-          <ng-content
-            select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
-          />
+					<div class="p-3">
+						<ng-content
+							select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
+						/>
+					</div>
         </div>
       </div>
     </nav>
