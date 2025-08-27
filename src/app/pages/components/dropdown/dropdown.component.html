@@ -1,119 +1,239 @@
 <div class="container mt-3">
-  
-  <h3>Dropdown</h3>
-  <p>Un Dropdown è un componente interattivo che permette di mostrare un elenco di opzioni o azioni quando l'utente clicca su un elemento di attivazione, come un pulsante o un link.</p>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>direction</rlb-dt-cell>
-      <rlb-dt-cell>'up' | 'down' | 'left' | 'right' | 'up-center' | 'down-center'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Aggiungi per impostare la direzione verso quale si aprirà il menù dropdown. Default: 'down'</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+	<h3>Dropdown</h3>
+	<p>Un Dropdown è un componente interattivo che permette di mostrare un elenco di opzioni o azioni quando l'utente
+		clicca su un elemento di attivazione, come un pulsante o un link.</p>
 
-  <h4>Dropdown Container</h4>
-  <p>Un Dropdown è un componente interattivo che permette di mostrare un elenco di opzioni o azioni quando l'utente clicca su un elemento di attivazione, come un pulsante o un link.</p>
+	<rlb-dt-table>
+		<rlb-dt-header>Parameter</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>placement</rlb-dt-cell>
-      <rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placement-sm</rlb-dt-cell>
-      <rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placement-md</rlb-dt-cell>
-      <rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placement-lg</rlb-dt-cell>
-      <rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placement-xl</rlb-dt-cell>
-      <rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placement-xxl</rlb-dt-cell>
-      <rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+		<rlb-dt-row>
+			<rlb-dt-cell>direction</rlb-dt-cell>
+			<rlb-dt-cell>'up' | 'down' | 'left' | 'right' | 'up-center' | 'down-center'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Controls the opening direction of the dropdown. Default: 'down'.<br>
+				<b>Note:</b> 'up-center' and 'down-center' are custom extensions not present in native Bootstrap.
+			</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
 
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <h4>Dropdown Sample</h4>
-            <pre><code [highlight]="sample" language="html"></code></pre>
-            <h4>Direction</h4>
-            <pre><code [highlight]="direction" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
-    </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
+	<h4>Dropdown Trigger (Directive)</h4>
+	<p>
+		Applied to a trigger element (button, link, badge). It manages Bootstrap dropdown behavior and exposes additional
+		options.
+	</p>
 
-        <h4>Dropdown Sample</h4>
-        <rlb-dropdown>
-          <button rlb-button rlb-dropdown>Dropdown Button</button>
-          <rlb-dropdown-container>
-            <p>Dropdown Container</p>
-          </rlb-dropdown-container>
-        </rlb-dropdown>
+	<rlb-dt-table>
+		<rlb-dt-header>Parameter</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
 
-        <h4>Direction</h4>
-        <rlb-dropdown [direction]="'right'">
-          <button rlb-button rlb-dropdown>Dropdown Button</button>
-          <rlb-dropdown-container>
-            <p>Dropdown Container</p>
-          </rlb-dropdown-container>
-        </rlb-dropdown>
-      </div>
-    </div>
-  </rlb-accordion>
-  <br>
-  <br>
+		<rlb-dt-row>
+			<rlb-dt-cell>offset</rlb-dt-cell>
+			<rlb-dt-cell>string</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Sets the offset of the dropdown menu relative to the trigger (e.g. "0,10").</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>auto-close</rlb-dt-cell>
+			<rlb-dt-cell>'default' | 'inside' | 'outside' | 'manual'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>
+				Controls when the dropdown should close:<br>
+				- <b>default</b>: closes when clicking inside or outside.<br>
+				- <b>inside</b>: closes only on inside clicks.<br>
+				- <b>outside</b>: closes only on outside clicks.<br>
+				- <b>manual</b>: requires programmatic closing.
+			</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>status-changed</rlb-dt-cell>
+			<rlb-dt-cell>'show' | 'shown' | 'hide' | 'hidden'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Event emitted when dropdown visibility changes (mapped from Bootstrap events).</rlb-dt-cell>
+			<rlb-dt-cell>Output</rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
+
+	<h4>Dropdown Container</h4>
+	<p>
+		The container that wraps dropdown items. Can be a <code>&lt;ul rlb-dropdown-menu&gt;</code> for list-based menus, or
+		<code>&lt;rlb-dropdown-container&gt;</code> for custom content.
+	</p>
+
+	<rlb-dt-table>
+		<rlb-dt-header>Parameter</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>placement</rlb-dt-cell>
+			<rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Menu alignment relative to trigger. Default: 'bottom'.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>placement-sm</rlb-dt-cell>
+			<rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Responsive placement for small screens.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>placement-md</rlb-dt-cell>
+			<rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Responsive placement for medium screens.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>placement-lg</rlb-dt-cell>
+			<rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Responsive placement for large screens.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>placement-xl</rlb-dt-cell>
+			<rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Responsive placement for extra large screens.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>placement-xxl</rlb-dt-cell>
+			<rlb-dt-cell>'bottom' | 'left' | 'right'</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Responsive placement for extra extra large screens.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
+
+	<h4>Dropdown Item</h4>
+	<p>
+		Individual items inside a dropdown list (<code>&lt;li rlb-dropdown-item&gt;</code>). Supports different modes:
+		normal item, header, divider.
+	</p>
+
+	<rlb-dt-table>
+		<rlb-dt-header>Parameter</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>active</rlb-dt-cell>
+			<rlb-dt-cell>boolean</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Highlights the item as active.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>disabled</rlb-dt-cell>
+			<rlb-dt-cell>boolean</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Disables the item.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>header</rlb-dt-cell>
+			<rlb-dt-cell>boolean</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Renders the item as a dropdown section header.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>divider</rlb-dt-cell>
+			<rlb-dt-cell>boolean</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Renders a visual divider between items.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
+
+	<rlb-accordion>
+		<div rlb-accordion-item>
+			<rlb-accordion-header>Code</rlb-accordion-header>
+			<div rlb-accordion-body>
+				<rlb-tabs>
+					<rlb-tab target="ex-1-html">HTML</rlb-tab>
+					<rlb-tab target="ex-1-ts">Ts</rlb-tab>
+				</rlb-tabs>
+				<rlb-tab-content>
+					<rlb-tab-pane id="ex-1-html">
+						<h4>Dropdown Sample</h4>
+						<pre><code [highlight]="sample" language="html"></code></pre>
+						<h4>Direction</h4>
+						<pre><code [highlight]="direction" language="html"></code></pre>
+						<h4>Auto-Close</h4>
+						<pre><code [highlight]="autoclose" language="html"></code></pre>
+						<h4>Dropdown Items</h4>
+						<pre><code [highlight]="items" language="html"></code></pre>
+					</rlb-tab-pane>
+					<rlb-tab-pane id="ex-1-ts">
+						<pre><code [highlight]="ts" language="ts"></code></pre>
+					</rlb-tab-pane>
+				</rlb-tab-content>
+			</div>
+		</div>
+		<div rlb-accordion-item>
+			<rlb-accordion-header>Examples</rlb-accordion-header>
+			<div rlb-accordion-body>
+
+				<h4>Dropdown Sample</h4>
+				<rlb-dropdown>
+					<button rlb-button rlb-dropdown>Dropdown Button</button>
+					<rlb-dropdown-container>
+						<p>Custom content inside dropdown</p>
+					</rlb-dropdown-container>
+				</rlb-dropdown>
+
+				<h4>Direction</h4>
+				<rlb-dropdown [direction]="'right'">
+					<button rlb-button rlb-dropdown>Right-aligned Dropdown</button>
+					<rlb-dropdown-container>
+						<p>Dropdown content</p>
+					</rlb-dropdown-container>
+				</rlb-dropdown>
+
+				<h4>Auto-Close = Manual</h4>
+				<rlb-dropdown>
+					<button rlb-button rlb-dropdown [auto-close]="'manual'">Manual Dropdown</button>
+					<rlb-dropdown-container>
+						<p>This dropdown won’t auto-close.</p>
+					</rlb-dropdown-container>
+				</rlb-dropdown>
+
+				<h4>Dropdown Items</h4>
+				<rlb-dropdown>
+					<button rlb-button rlb-dropdown>Dropdown List</button>
+					<ul rlb-dropdown-menu>
+						<li rlb-dropdown-item header>Header</li>
+						<li rlb-dropdown-item active>Active Item</li>
+						<li rlb-dropdown-item>Normal Item</li>
+						<li rlb-dropdown-item disabled>Disabled Item</li>
+						<li rlb-dropdown-item divider></li>
+					</ul>
+				</rlb-dropdown>
+
+			</div>
+		</div>
+	</rlb-accordion>
+	<br>
+	<br>
 </div>
