@@ -89,15 +89,14 @@ export class ToggleDirective implements DoCheck {
         'false',
       );
     }
-    if (this.collapsed) {
+    if (this.collapsed === true) {
       this.renderer.addClass(element, 'collapsed');
       this.renderer.setAttribute(element, 'aria-expanded', 'false');
-    } else {
+    } else if (this.collapsed === false) {
       this.renderer.removeClass(element, 'collapsed');
       this.renderer.setAttribute(element, 'aria-expanded', 'true');
     }
     this.renderer.setAttribute(element, 'aria-controls', this.target);
-    // this.renderer.setAttribute(element, 'aria-expanded', 'false');
 
     if (this.toggle === 'dropdown' && this.target === '#') {
       this.renderer.setAttribute(element, 'href', '#');

@@ -9,7 +9,6 @@ import { Component } from '@angular/core';
         class: 'accordion-collapse collapse',
         '[class.show]': 'expanded',
         '[id]': 'itemId',
-        '[attr.data-bs-parent]': "'#'+parentId",
     },
     standalone: false
 })

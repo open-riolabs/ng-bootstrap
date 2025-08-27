@@ -55,8 +55,12 @@ export class AccordionItemComponent
   }
 
   override ngOnInit(): void {
-    const element = this.elementRef?.nativeElement.getElementsByClassName('accordion-collapse')[0]
+    const element = this.elementRef?.nativeElement.querySelector('.accordion-collapse') as HTMLElement
     super.ngOnInit(element);
+    
+    if (this.expanded) {
+      this.open();
+    }
   }
 
   ngDoCheck(): void {
@@ -80,7 +84,7 @@ export class AccordionItemComponent
       }
     }
   }
-
+  
   override getOrCreateInstance(element: HTMLElement): Collapse {
     return Collapse.getOrCreateInstance(element, { toggle: false });
   }

@@ -87,9 +87,9 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
   }
 	
 	protected ensureInstance(): void {
-		if (!this._component && this.htmlElement) {
-			this._component = this.getOrCreateInstance(this.htmlElement);
-		}
+    if (!this._component && this.htmlElement) {
+      this._component = this.getOrCreateInstance(this.htmlElement);
+    }
 	}
 	
 	private _addEventListeners(): void {
@@ -110,7 +110,6 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
 
   private _openChange_f = (e: Event) => {
     if (e.target !== this.htmlElement) return;
-    e.stopPropagation();
     
     switch (e.type) {
       case `hide.${this.eventPrefix}`:
