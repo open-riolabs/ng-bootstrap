@@ -230,6 +230,20 @@
 						<li rlb-dropdown-item divider></li>
 					</ul>
 				</rlb-dropdown>
+				<h4>Status change: {{ message }}</h4>
+				<rlb-dropdown>
+					<button rlb-button rlb-dropdown (status-changed)="onStatus($event)">Dropdown</button>
+					<rlb-dropdown-container>Content</rlb-dropdown-container>
+				</rlb-dropdown>
+
+				<!--TODO: fix this case-->
+				<!--				<h4>Placement (responsive)</h4>-->
+				<!--				<rlb-dropdown>-->
+				<!--					<button rlb-button rlb-dropdown>Dropdown Button</button>-->
+				<!--					<rlb-dropdown-container [placement-lg]="'right'" [placement-md]="'bottom'">-->
+				<!--						<p>Custom content inside dropdown</p>-->
+				<!--					</rlb-dropdown-container>-->
+				<!--				</rlb-dropdown>-->
 
 			</div>
 		</div>

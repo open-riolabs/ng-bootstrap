@@ -6,7 +6,13 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class DropdownsComponent {
-
+  message: number = 0;
+  
+  onStatus(event: 'show' | 'shown' | 'hide' | 'hidden') {
+    console.log('Dropdown status:', event);
+    this.message++
+  }
+  
   sample: string = `<rlb-dropdown>
   <button rlb-button rlb-dropdown>Dropdown Button</button>
   <rlb-dropdown-container>
