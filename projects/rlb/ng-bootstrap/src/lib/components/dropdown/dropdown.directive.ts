@@ -1,13 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Renderer2,
-  Input,
-  DoCheck,
-  Output,
-  EventEmitter,
-  OnInit,
-} from '@angular/core';
+import { Directive, DoCheck, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, } from '@angular/core';
 import { Dropdown } from 'bootstrap';
 import { VisibilityEventBase } from '../../shared/types';
 
@@ -22,10 +13,42 @@ export class DropdownDirective implements DoCheck, OnInit {
   ) { }
   private _dropdown: Dropdown | undefined;
   @Input({ alias: 'offset' }) offset!: string;
-  @Input({ alias: 'auto-close' }) autoClose!: 'default' | 'inside' | 'outside' | 'manual';
+  @Input({ alias: 'auto-close' }) autoClose: 'default' | 'inside' | 'outside' | 'manual' = 'default';
   @Output('status-changed') statusChanged = new EventEmitter<VisibilityEventBase>();
 
   ngOnInit(): void {
+    
+    switch (this.autoClose) {
+      case 'default':
+        this.renderer.setAttribute(
+          this.elementRef.nativeElement,
+          'data-bs-auto-close',
+          'true',
+        );
+        break;
+      case 'inside':
+        this.renderer.setAttribute(
+          this.elementRef.nativeElement,
+          'data-bs-auto-close',
+          'inside',
+        );
+        break;
+      case 'outside':
+        this.renderer.setAttribute(
+          this.elementRef.nativeElement,
+          'data-bs-auto-close',
+          'outside',
+        );
+        break;
+      case 'manual':
+        this.renderer.setAttribute(
+          this.elementRef.nativeElement,
+          'data-bs-auto-close',
+          'false',
+        );
+        break;
+    }
+    
     this._dropdown = Dropdown.getOrCreateInstance(this.elementRef.nativeElement);
     this.elementRef.nativeElement.addEventListener('show.bs.dropdown', () => {
       this.statusChanged.emit('show');
@@ -45,11 +68,6 @@ export class DropdownDirective implements DoCheck, OnInit {
     this.renderer.addClass(this.elementRef.nativeElement, 'dropdown-toggle');
     this.renderer.setAttribute(
       this.elementRef.nativeElement,
-      'aria-expanded',
-      'false',
-    );
-    this.renderer.setAttribute(
-      this.elementRef.nativeElement,
       'data-bs-toggle',
       'dropdown',
     );
@@ -61,34 +79,6 @@ export class DropdownDirective implements DoCheck, OnInit {
         this.elementRef.nativeElement,
         'data-bs-offset',
         this.offset,
-      );
-    }
-    if (this.autoClose === 'default') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'true',
-      );
-    }
-    if (this.autoClose === 'inside') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'inside',
-      );
-    }
-    if (this.autoClose === 'outside') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'outside',
-      );
-    }
-    if (this.autoClose === 'manual') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'false',
       );
     }
   }
