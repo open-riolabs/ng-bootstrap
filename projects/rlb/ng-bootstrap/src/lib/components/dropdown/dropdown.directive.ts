@@ -1,6 +1,7 @@
 import { Directive, DoCheck, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, } from '@angular/core';
 import { Dropdown } from 'bootstrap';
 import { VisibilityEventBase } from '../../shared/types';
+import { ComponentOptions } from "bootstrap/js/dist/base-component";
 
 @Directive({
     selector: 'a[rlb-dropdown], button[rlb-dropdown], span[rlb-badge][rlb-dropdown]',
@@ -49,7 +50,28 @@ export class DropdownDirective implements DoCheck, OnInit {
         break;
     }
     
-    this._dropdown = Dropdown.getOrCreateInstance(this.elementRef.nativeElement);
+    
+    const offsetArray = this.offset
+      ? this.offset.split(',').map(v => parseInt(v.trim(), 10))
+      : [];
+    
+    const dropdownOptions: ComponentOptions = {
+      offset: offsetArray,
+      display: 'static'
+    }
+    // TODO understand how to handle this case
+    // offset functionality is available only in "display: dynamic" because it's popper driven behavior
+    // in other popper.js bring some conflicts in custom _dropdown.scss cascade
+    
+    // if (this.offset) {
+    //   this.renderer.setAttribute(
+    //     this.elementRef.nativeElement,
+    //     'data-bs-offset',
+    //     this.offset,
+    //   );
+    // }
+    
+    this._dropdown = Dropdown.getOrCreateInstance(this.elementRef.nativeElement, dropdownOptions);
     this.elementRef.nativeElement.addEventListener('show.bs.dropdown', () => {
       this.statusChanged.emit('show');
     })
@@ -73,13 +95,6 @@ export class DropdownDirective implements DoCheck, OnInit {
     );
     if (this.elementRef.nativeElement.nodeName.toLowerCase() === 'a') {
       this.renderer.setAttribute(this.elementRef.nativeElement, 'href', `#`);
-    }
-    if (this.offset) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-offset',
-        this.offset,
-      );
     }
   }
 }

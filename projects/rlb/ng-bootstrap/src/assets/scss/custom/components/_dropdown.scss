@@ -11,23 +11,27 @@
   position: absolute;
   z-index: 1000;
 
-  &.show {
-    top: 100% !important;
+  //&.show {
+  //  top: 100% !important;
+  //}
+}
+
+
+//.dropdown-menu-end[style] {
+//  left: auto !important;
+//  right: 0 !important;
+//}
+
+// ====== Popper-driven dropdowns (bootstrap default) ======
+.dropdown-menu[data-popper-placement] {
+  // Popper sets top/left/right by itself
+  // we only disable animations
+  &[data-popper-placement^="right"],
+  &[data-popper-placement^="top"],
+  &[data-popper-placement^="left"] {
+    top: auto !important;
+    animation: none !important;
   }
-}
-
-
-
-.dropdown-menu-end[style] {
-  left: auto !important;
-  right: 0 !important;
-}
-
-.dropdown-menu[data-popper-placement^="right"],
-.dropdown-menu[data-popper-placement^="top"],
-.dropdown-menu[data-popper-placement^="left"] {
-  top: auto !important;
-  animation: none !important;
 }
 
 @keyframes DropDownSlide {
@@ -69,4 +73,9 @@
 
 .dropdown-mega-menu-lg {
   width: 26rem;
+}
+
+// force inline styles to have bootstrap-like behavior
+rlb-dropdown {
+  display: inline-block;
 }

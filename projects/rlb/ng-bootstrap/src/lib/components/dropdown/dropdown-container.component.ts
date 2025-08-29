@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 
 @Component({
     selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
@@ -18,28 +18,26 @@ import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
         '[class.dropdown-menu-xl-start]': 'placementXl === "left"',
         '[class.dropdown-menu-xxl-end]': 'placementXxl === "right"',
         '[class.dropdown-menu-xxl-start]': 'placementXxl === "left"',
+      '[style.border]': 'isList ? null : "none"',
+      '[style.padding]': 'isList ? null : "0px"',
     },
     standalone: false
 })
 export class DropdownContainerComponent {
   isList: boolean = false;
-
-  @Input({ alias: 'placement' }) public placement: 'bottom' | 'left' | 'right' = 'bottom';
-  @Input({ alias: 'placement-sm' }) public placementSm: 'bottom' | 'left' | 'right' = 'bottom';
-  @Input({ alias: 'placement-md' }) public placementMd: 'bottom' | 'left' | 'right' = 'bottom';
-  @Input({ alias: 'placement-lg' }) public placementLg: 'bottom' | 'left' | 'right' = 'bottom';
-  @Input({ alias: 'placement-xl' }) public placementXl: 'bottom' | 'left' | 'right' = 'bottom';
-  @Input({ alias: 'placement-xxl' }) public placementXxl: 'bottom' | 'left' | 'right' = 'bottom';
+  
+  @Input({ alias: 'placement' }) public placement!: 'left' | 'right';
+  @Input({ alias: 'placement-sm' }) public placementSm!: 'left' | 'right'
+  @Input({ alias: 'placement-md' }) public placementMd!: 'left' | 'right'
+  @Input({ alias: 'placement-lg' }) public placementLg!: 'left' | 'right'
+  @Input({ alias: 'placement-xl' }) public placementXl!: 'left' | 'right'
+  @Input({ alias: 'placement-xxl' }) public placementXxl!: 'left' | 'right'
 
   constructor(
     private elementRef: ElementRef,
-    renderer: Renderer2,
   ) {
     if (this.elementRef.nativeElement.nodeName.toLowerCase() === 'ul') {
       this.isList = true;
-    } else {
-      renderer.setStyle(this.elementRef.nativeElement, 'border', 'none');
-      renderer.setStyle(this.elementRef.nativeElement, 'padding', '0px');
     }
   }
 }
