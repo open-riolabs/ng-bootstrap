@@ -46,6 +46,28 @@ export class DropdownsComponent {
     <li rlb-dropdown-item header>Header</li>
   </ul>
 </rlb-dropdown>`
+  
+  offset: string = `<rlb-dropdown>
+ <button rlb-button rlb-dropdown [offset]="[10, 25]">
+  Dropdown Button
+ </button>
+ <rlb-dropdown-container>
+  <p>Custom content inside dropdown</p>
+ </rlb-dropdown-container>
+</rlb-dropdown>`
+  
+  placement: string = `<rlb-dropdown>
+ <button rlb-button rlb-dropdown>Dropdown Button responsive placement</button>
+ <rlb-dropdown-container [placement]="'right'" [placement-lg]="'left'">
+  <p>Custom content inside dropdown</p>
+ </rlb-dropdown-container>
+</rlb-dropdown>
+  `
+  
+  statusChange: string = `<rlb-dropdown>
+ <button rlb-button rlb-dropdown (status-changed)="onStatus($event)">Dropdown</button>
+ <rlb-dropdown-container>Content</rlb-dropdown-container>
+</rlb-dropdown>`
 
   ts: string = `@Component({
   selector: 'app-modal',

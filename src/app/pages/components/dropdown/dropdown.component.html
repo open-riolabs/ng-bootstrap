@@ -184,6 +184,12 @@
 						<pre><code [highlight]="autoclose" language="html"></code></pre>
 						<h4>Dropdown Items</h4>
 						<pre><code [highlight]="items" language="html"></code></pre>
+						<h4>Dropdown Offset</h4>
+						<pre><code [highlight]="offset" language="html"></code></pre>
+						<h4>Dropdown Placement</h4>
+						<pre><code [highlight]="placement" language="html"></code></pre>
+						<h4>Status Change</h4>
+						<pre><code [highlight]="statusChange" language="html"></code></pre>
 					</rlb-tab-pane>
 					<rlb-tab-pane id="ex-1-ts">
 						<pre><code [highlight]="ts" language="ts"></code></pre>
@@ -230,14 +236,13 @@
 						<li rlb-dropdown-item divider></li>
 					</ul>
 				</rlb-dropdown>
-				<!--TODO: fix this case-->
-				<!--				<h4>Dropdown offset</h4>-->
-				<!--				<rlb-dropdown>-->
-				<!--					<button rlb-button rlb-dropdown [offset]="'100, 250'">Dropdown Button</button>-->
-				<!--					<rlb-dropdown-container>-->
-				<!--						<p>Custom content inside dropdown</p>-->
-				<!--					</rlb-dropdown-container>-->
-				<!--				</rlb-dropdown>-->
+				<h4>Dropdown offset</h4>
+				<rlb-dropdown>
+					<button rlb-button rlb-dropdown [offset]="[10, 25]">Dropdown Button</button>
+					<rlb-dropdown-container>
+						<p>Custom content inside dropdown</p>
+					</rlb-dropdown-container>
+				</rlb-dropdown>
 
 				<h4>Placement (resize page to see left/right replacement)</h4>
 				<rlb-dropdown>
