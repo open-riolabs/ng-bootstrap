@@ -112,9 +112,37 @@
       </div>
     </div>
     <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
+			<rlb-accordion-header>Examples</rlb-accordion-header>
       <div rlb-accordion-body>
-        <rlb-autocomplete></rlb-autocomplete>
+				<h2>Basic usage with a static source</h2>
+				<rlb-autocomplete
+					[placeholder]="'Search city...'"
+					[autocomplete]="searchCities"
+					(selected)="onCitySelect($event)">
+				</rlb-autocomplete>
+				<h2>Basic usage with a promise</h2>
+				<rlb-autocomplete
+					[placeholder]="'Search product...'"
+					[autocomplete]="searchProducts"
+					(selected)="onProductSelect($event)">
+				</rlb-autocomplete>
+				<h2>Basic usage with observable</h2>
+				<rlb-autocomplete
+					[placeholder]="'Search user...'"
+					[autocomplete]="searchUsers"
+					[chars-to-search]="2"
+					(selected)="onUserSelect($event)">
+				</rlb-autocomplete>
+				<h2>Basic usage with a Reactive Forms</h2>
+				<form [formGroup]="form">
+					<rlb-autocomplete
+						formControlName="country"
+						[placeholder]="'Search country...'"
+						[autocomplete]="searchCountries">
+					</rlb-autocomplete>
+				</form>
+
+				<p>Form value: {{ form.value | json }}</p>
       </div>
     </div>
   </rlb-accordion>
