@@ -103,11 +103,29 @@
       <div rlb-accordion-body>
         <rlb-tabs >
           <rlb-tab target="ex-1-html">HTML</rlb-tab>
+					<rlb-tab target="ex-1-ts">TS</rlb-tab>
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
+						<h3>Basic usage with a static source</h3>
             <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
+						<h3>Basic usage with a promise</h3>
+						<pre><code [highlight]="promiseHtml" language="html"></code></pre>
+						<h3>Basic usage with an observable</h3>
+						<pre><code [highlight]="observableHtml" language="html"></code></pre>
+						<h3>Basic usage with Reactive Forms</h3>
+						<pre><code [highlight]="reactiveFormsHtml" language="html"></code></pre>
+					</rlb-tab-pane>
+					<rlb-tab-pane id="ex-1-ts">
+						<h3>Basic usage with a static source</h3>
+						<pre><code [highlight]="ts" language="html"></code></pre>
+						<h3>Basic usage with a promise</h3>
+						<pre><code [highlight]="promiseTs" language="html"></code></pre>
+						<h3>Basic usage with an observable</h3>
+						<pre><code [highlight]="observableTs" language="html"></code></pre>
+						<h3>Basic usage with Reactive Forms</h3>
+						<pre><code [highlight]="reactiveFormsTs" language="html"></code></pre>
+					</rlb-tab-pane>
         </rlb-tab-content>
       </div>
     </div>
