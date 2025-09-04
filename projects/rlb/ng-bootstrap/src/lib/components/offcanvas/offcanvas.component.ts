@@ -76,6 +76,7 @@ export class OffcanvasComponent
   
   override getOrCreateInstance(element: HTMLElement): Offcanvas {
 		const existingInstance = Offcanvas.getInstance(element);
+    console.log("")
 		if (existingInstance) {
 			existingInstance.dispose();
 		}
