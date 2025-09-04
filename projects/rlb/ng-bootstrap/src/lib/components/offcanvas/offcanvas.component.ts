@@ -82,7 +82,7 @@ export class OffcanvasComponent
 		
 		return Offcanvas.getOrCreateInstance(element, {
 			scroll: this.bodyScroll ?? false,
-			keyboard: this.closeManual ? false : true,
+      keyboard: !this.closeManual,
 			backdrop: this.closeManual ? 'static' : true
 		});
   }
