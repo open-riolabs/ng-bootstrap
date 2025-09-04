@@ -116,7 +116,7 @@ jobs:
       - run: |
           cp ./package.json ./dist
           cd ./dist/rlb/ng-bootstrap
-          npm version ${{ needs.versioning.outputs.GitVersion_SemVer }}-alpha.0 --git-tag-version false
+          npm version ${{ needs.versioning.outputs.GitVersion_SemVer }} --git-tag-version false
           npm publish --access restricted
         env:
           NODE_AUTH_TOKEN: ${{ secrets.DEPLOY_PAT }}
@@ -124,5 +124,5 @@ jobs:
       - name: Tag repo with new version
         uses: cardinalby/git-tag-action@master
         env:
-          TAG: ${{ needs.versioning.outputs.GitVersion_SemVer }}-alpha.0
+          TAG: ${{ needs.versioning.outputs.GitVersion_SemVer }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
