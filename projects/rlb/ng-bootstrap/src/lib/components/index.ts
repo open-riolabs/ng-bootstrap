@@ -136,6 +136,10 @@ export * from './carousel/carousel-caption.component';
 export * from './avatar/avatar.component';
 export * from './chat/chat-container.component';
 export * from './chat/chat-item.component';
+export * from './placeholder/placeholder-line.component'
+export * from './placeholder/placeholder-text.component';
+export * from './placeholder/placeholder.component';
+
 
 export const COMPONENTS = [
   AlertComponent,
