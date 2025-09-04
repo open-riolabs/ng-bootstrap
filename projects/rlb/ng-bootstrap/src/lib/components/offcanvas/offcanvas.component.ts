@@ -1,14 +1,14 @@
 import {
-	booleanAttribute,
-	Component,
-	DOCUMENT,
-	ElementRef,
-	EventEmitter,
-	Inject,
-	Input,
-	OnDestroy,
-	OnInit,
-	Output,
+  booleanAttribute,
+  Component,
+  DOCUMENT,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
 } from '@angular/core';
 import { Offcanvas } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
@@ -63,8 +63,18 @@ export class OffcanvasComponent
 			this.document.body.appendChild(nativeEl);
 		}
 	}
-	
-	override getOrCreateInstance(element: HTMLElement): Offcanvas {
+  
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    
+    const nativeEl = this.elementRef?.nativeElement;
+    
+    if (nativeEl && nativeEl.parentElement === this.document.body) {
+      this.document.body.removeChild(nativeEl);
+    }
+  }
+  
+  override getOrCreateInstance(element: HTMLElement): Offcanvas {
 		const existingInstance = Offcanvas.getInstance(element);
 		if (existingInstance) {
 			existingInstance.dispose();
