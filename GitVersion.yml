@@ -13,6 +13,7 @@ branches:
     regex: ^master$|^main$
     tag: ''
     is-release-branch: true
+    increment: Patch
   develop:
     regex: ^dev(elop)?(ment)?$
     tag: alpha
