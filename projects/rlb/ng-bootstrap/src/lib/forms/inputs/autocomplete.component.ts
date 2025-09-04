@@ -1,15 +1,15 @@
 import {
-	booleanAttribute,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-	numberAttribute,
-	Optional,
-	Output,
-	Renderer2,
-	Self,
-	ViewChild,
+  booleanAttribute,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  numberAttribute,
+  Optional,
+  Output,
+  Renderer2,
+  Self,
+  ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { lastValueFrom, Observable } from 'rxjs';
@@ -68,10 +68,6 @@ export class AutocompleteComponent
 
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  // TODO
-  // What should this input do?
-  // Currently not used
-  @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
   @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
   @Input({ alias: 'placeholder' }) placeholder?: string = '';
