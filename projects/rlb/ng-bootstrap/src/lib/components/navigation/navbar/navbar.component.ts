@@ -24,7 +24,7 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" [id]="navId">
-					<div class="p-3">
+					<div class="p-3 d-flex w-100">
 						<ng-content
 							select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
 						/>
