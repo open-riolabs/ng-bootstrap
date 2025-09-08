@@ -48,7 +48,7 @@
       <rlb-dt-cell [col-span]="hasActions ? cols+1: cols" style="border: 0">
         <button *ngIf="paginationMode === 'load-more'" type="button" class="btn btn-primary float-end btn-sm mt-2"
           [disabled]="loading" (click)="loadMore.emit()">
-          {{ "common.lmore" | translate }}
+					{{ loadMoreLabel }}
         </button>
         <ng-container *ngIf="paginationMode === 'pages'">
           <nav aria-label="Page navigation example">

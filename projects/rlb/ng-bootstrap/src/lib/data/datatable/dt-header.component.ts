@@ -1,11 +1,12 @@
 import {
+  booleanAttribute,
   Component,
   EmbeddedViewRef,
   Input,
+  OnInit,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
-  booleanAttribute,
 } from '@angular/core';
 
 @Component({
@@ -18,7 +19,7 @@ import {
     </ng-template>`,
     standalone: false
 })
-export class DataTableHeaderComponent {
+export class DataTableHeaderComponent implements OnInit {
   @Input() field!: string;
   @Input() type!: 'number' | 'string';
   @Input({ alias: 'sortable', transform: booleanAttribute }) sortable?: boolean;
