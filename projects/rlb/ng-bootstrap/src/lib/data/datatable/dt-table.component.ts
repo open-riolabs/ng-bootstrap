@@ -1,4 +1,17 @@
-import { DoCheck, Component, ContentChildren, EventEmitter, Input, Output, QueryList, ViewChild, ViewContainerRef, booleanAttribute, numberAttribute, OnInit } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  DoCheck,
+  EventEmitter,
+  Input,
+  numberAttribute,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
 
@@ -30,6 +43,9 @@ export class DataTableComponent implements OnInit, DoCheck {
   @Input({ alias: 'current-page', transform: numberAttribute }) currentPage?: number;
   @Input({ alias: 'page-size', transform: numberAttribute }) pageSize?: number;
   @Input() showActions: 'row' | 'head' = 'row';
+  
+  // TODO ask we can handle it like this
+  @Input() loadMoreLabel: string = 'Load more';
 
   @Output('create-item') createItem: EventEmitter<void> = new EventEmitter();
   @Output('refresh-item') refreshItem: EventEmitter<void> = new EventEmitter();

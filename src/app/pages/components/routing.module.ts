@@ -22,7 +22,7 @@ import { TabssComponent } from './tabs/tab.component';
 import { TooltipssComponent } from './tooltipss/tooltips.component';
 import { NavsComponent } from './navigations/navs/nav.component';
 import { NavbarsComponent } from './navigations/navbars/navbar.component';
-import { InputsComponent } from '../inputs/input/inputs.component';
+import { TablesComponent } from "./tables/tables.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -38,6 +38,7 @@ const routes: Routes = [
   { path: 'buttons', component: ButtonsComponent },
   { path: 'cards', component: CardsComponent },
   { path: 'lists', component: ListsComponent },
+  { path: 'tables', component: TablesComponent },
   { path: 'loaders', component: LoadersComponent },
   { path: 'offcanvass', component: OffcanvassComponent },
   { path: 'paginations', component: PaginationsComponent },

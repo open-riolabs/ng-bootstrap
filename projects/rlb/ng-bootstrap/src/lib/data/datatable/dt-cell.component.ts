@@ -1,4 +1,13 @@
-import { Component, EmbeddedViewRef, Input, TemplateRef, ViewChild, ViewContainerRef, numberAttribute } from '@angular/core';
+import {
+  Component,
+  EmbeddedViewRef,
+  Input,
+  numberAttribute,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 
 @Component({
     selector: 'rlb-dt-cell',
@@ -10,7 +19,7 @@ import { Component, EmbeddedViewRef, Input, TemplateRef, ViewChild, ViewContaine
     </ng-template>`,
     standalone: false
 })
-export class DataTableCellComponent {
+export class DataTableCellComponent implements OnInit {
 
   @Input({ alias: 'col-span', transform: numberAttribute }) colSpan?: string;
   @Input({ alias: 'class' }) cssClass?: string

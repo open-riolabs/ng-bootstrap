@@ -1,20 +1,17 @@
 import {
+  booleanAttribute,
   Component,
   ContentChildren,
   DoCheck,
   EmbeddedViewRef,
-  Injector,
   Input,
+  OnInit,
   QueryList,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
-  ViewEncapsulation,
-  booleanAttribute,
 } from '@angular/core';
 import { DataTableActionComponent } from './dt-action.component';
-import { HostWrapper } from '../../shared/host-wrapper';
-import { WrappedComponent } from '../../shared/wrapped.component';
 
 @Component({
     selector: 'rlb-dt-actions',
@@ -38,7 +35,7 @@ import { WrappedComponent } from '../../shared/wrapped.component';
   `,
     standalone: false
 })
-export class DataTableActionsComponent implements DoCheck {
+export class DataTableActionsComponent implements DoCheck, OnInit {
   element!: HTMLElement;
   private temp!: EmbeddedViewRef<any>;
 

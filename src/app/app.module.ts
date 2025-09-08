@@ -1,8 +1,14 @@
-import { input, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions, SearchModalComponent, TabsComponent, AutocompleteComponent, InputValidationComponent } from 'projects/rlb/ng-bootstrap/src/public-api';
+import {
+  CommonModalComponent,
+  ModalRegistryOptions,
+  RlbBootstrapModule,
+  SearchModalComponent,
+  ToastRegistryOptions
+} from 'projects/rlb/ng-bootstrap/src/public-api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 import { RoutingModule } from './routing.module';
@@ -48,6 +54,7 @@ import { SwitchesComponent } from './pages/inputs/switch/switch.component';
 import { TextareasComponent } from './pages/inputs/textarea/textarea.component';
 import { RadiosComponent } from './pages/inputs/radio/radio.component';
 import { InputValidationsComponent } from './pages/inputs/input-validation/input-validation.component';
+import { TablesComponent } from "./pages/components/tables/tables.component";
 
 @NgModule({
   declarations: [
@@ -67,6 +74,7 @@ import { InputValidationsComponent } from './pages/inputs/input-validation/input
     ButtonsComponent,
     CardsComponent,
     ListsComponent,
+    TablesComponent,
     LoadersComponent,
     OffcanvassComponent,
     PaginationsComponent,
