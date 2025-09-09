@@ -1,15 +1,15 @@
 import {
-	Component,
-	ContentChildren,
-	Input,
-	OnInit,
-	QueryList,
-	TemplateRef,
-	ViewChild,
-	ViewContainerRef
+  Component,
+  ContentChildren,
+  Input,
+  OnInit,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
 } from "@angular/core";
 import { UniqueIdService } from "../../shared/unique-id.service";
-import { NavigationEnd, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { CollapseComponent } from "../collapse/collapse.component";
 
 
@@ -17,8 +17,8 @@ import { CollapseComponent } from "../collapse/collapse.component";
   selector: 'rlb-sidebar-item',
   template: `
     <ng-template #template>
-      <li *ngIf="title" class="menu-title">{{ title }}</li>
-      <li *ngIf="!title">
+			<li *ngIf="title" class="menu-title" [ngClass]="responsiveClasses">{{ title }}</li>
+			<li *ngIf="!title" [ngClass]="responsiveClasses">
         <a *ngIf="children?.length" href="javascript:void(0);" class="is-parent has-arrow" toggle="collapse" [toggle-target]="'side-item' + _id">
           <i *ngIf="icon" [class]="icon"></i>
           <span>{{ label }}</span>
@@ -43,6 +43,7 @@ export class SidebarItemComponent implements OnInit {
   @Input() icon?: string | undefined;
   @Input() label?: string | undefined;
   @Input() link?: any[] | string | null | undefined;
+  @Input() responsiveClasses?: string;
 
   @ContentChildren(SidebarItemComponent) children!: QueryList<SidebarItemComponent>;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
@@ -63,23 +64,5 @@ export class SidebarItemComponent implements OnInit {
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
     this._id = this.uniqueIdService.id;
-		
-		this.router.events.subscribe(event => {
-			if (event instanceof NavigationEnd) {
-				this.expandIfAnyChildMatchesRoute(event.urlAfterRedirects);
-			}
-		});
   }
-	
-	private expandIfAnyChildMatchesRoute(currentUrl: string) {
-		if (!this.children?.length || !this.collapseComponent) return;
-		
-		const hasActiveChild = this.children.some(
-			child => typeof child.link === 'string' && currentUrl.startsWith(child.link)
-		);
-		
-		if (hasActiveChild) {
-			this.collapseComponent.open();
-		}
-	}
 }

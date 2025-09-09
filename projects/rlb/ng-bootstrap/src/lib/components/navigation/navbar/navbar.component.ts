@@ -13,8 +13,20 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
         <ng-content
           select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator"
         />
+				<button
+					class="navbar-toggler"
+					[class.d-none]="!enableSidebarToggler"
+					type="button"
+					rlb-button
+					toggle="sidebar"
+					[toggle-target]="'sidebar'"
+					aria-label="Toggle sidebar"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
         <button
-          class="navbar-toggler"
+					class="navbar-toggler"
+					[class.d-none]="!enableDropdownToggler"
           type="button"
           rlb-button
           toggle="collapse"
@@ -55,6 +67,8 @@ export class NavbarComponent {
   @Input({ alias: 'placement' }) placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom';
   @Input({ alias: 'expand' }) expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
   @Input({ alias: 'class' }) cssClass?: string = '';
+  @Input({ alias: 'enable-dropdown-toggler', transform: booleanAttribute }) enableDropdownToggler: boolean = false;
+  @Input({ alias: 'enable-sidebar-toggler', transform: booleanAttribute }) enableSidebarToggler: boolean = true;
 
   constructor(
     private idService: UniqueIdService,
