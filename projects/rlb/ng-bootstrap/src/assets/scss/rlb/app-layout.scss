@@ -14,7 +14,7 @@
   top: $header-height;
   left: 0;
   width: $sidebar-width;
-  height: calc(100% - $header-height);
+  height: calc(100%);
   box-sizing: border-box;
 }
 
@@ -33,6 +33,7 @@
   }
 }
 
+/* ===== Mobile ===== */
 @media (max-width: 992px) {
   .rlb-content {
     left: 0 !important;
@@ -45,7 +46,17 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
   }
 
+  .rlb-sidebar {
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.35s ease, opacity 0.35s ease, visibility 0.35s ease;
+  }
+
   body.sidebar-enable .rlb-sidebar {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
     z-index: 1040;
   }
 }

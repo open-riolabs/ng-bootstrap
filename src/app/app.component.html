@@ -1,6 +1,45 @@
 <div class="rlb-app">
 	<rlb-sidebar class="rlb-sidebar" id="sidebar" [rounded]="true">
-    <rlb-sidebar-item title="RLB bootstrap" />
+		<rlb-sidebar-item responsiveClasses="d-lg-none">
+			<rlb-input-group validate>
+				<rlb-input type="search" class="search-input" placeholder="Search"
+									 name="search" size="small">
+					<button after rlb-button outline type="submit" size="sm">
+						<i class="bi bi-search"></i>
+					</button>
+				</rlb-input>
+			</rlb-input-group>
+		</rlb-sidebar-item>
+
+		<rlb-sidebar-item label="login" responsiveClasses="d-lg-none">
+			<span tooltip-placement="bottom" [tooltip]="('login')   ">
+            <i class=" bi bi-box-arrow-in-left"></i>
+          </span>
+			<span class="ms-1 d-lg-none">{{ 'login' }}</span>
+		</rlb-sidebar-item>
+
+		<rlb-sidebar-item responsiveClasses="d-lg-none">
+			<span tooltip-placement="bottom" [tooltip]="('title')  ">
+            <i class="bi bi-person"></i>
+          </span>
+			<span class="ms-1 d-lg-none">{{ 'title' }}</span>
+		</rlb-sidebar-item>
+
+		<rlb-sidebar-item responsiveClasses="d-lg-none">
+		<span tooltip-placement="bottom" [tooltip]="('settings')  ">
+            <i class="bi bi-gear"></i>
+          </span>
+			<span class="ms-1 d-lg-none">{{ 'settings' }}</span>
+		</rlb-sidebar-item>
+
+		<rlb-sidebar-item responsiveClasses="d-lg-none">
+		<span tooltip-placement="bottom" [tooltip]="('apps')">
+            <i class="bi bi-grid-3x3-gap-fill"></i>
+          </span>
+			<span class="ms-1 d-lg-none">{{ 'apps' }}</span>
+		</rlb-sidebar-item>
+
+		<rlb-sidebar-item title="RLB bootstrap"/>
     <rlb-sidebar-item label="Components">
       <rlb-sidebar-item icon="bi bi-exclamation-triangle" link="/components/alerts">Alerts</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-chevron-bar-expand" link="/components/accordions">Accordions</rlb-sidebar-item>
@@ -43,9 +82,6 @@
 
   </rlb-sidebar>
   <rlb-navbar class="rlb-navbar" expand="lg">
-		<a class="navbar-toggler fs-2 d-lg-none " rlb-button href="#" toggle="sidebar" toggle-target="sidebar">
-			<span class="bi bi-three-dots"></span>
-    </a>
     <a rlb-navbar-brand href="#">Navbar</a>
 		<rlb-navbar-form>
 			<rlb-input-group class="my-1 mx-3" validate>
