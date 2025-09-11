@@ -1,16 +1,16 @@
 import {
-  booleanAttribute,
-  Component,
-  ContentChildren,
-  DoCheck,
-  EventEmitter,
-  Input,
-  numberAttribute,
-  OnInit,
-  Output,
-  QueryList,
-  ViewChild,
-  ViewContainerRef
+	booleanAttribute,
+	Component,
+	ContentChildren,
+	DoCheck,
+	EventEmitter,
+	Input,
+	numberAttribute,
+	OnInit,
+	Output,
+	QueryList,
+	ViewChild,
+	ViewContainerRef
 } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
@@ -109,7 +109,10 @@ export class DataTableComponent implements OnInit, DoCheck {
     ev?.stopPropagation();
     if (this.currentPage === this.pages) return;
     this.currentPageChange.emit((this.currentPage || 1) + 1);
-    this.pagination.emit({ page: this.currentPage || 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
+		this.pagination.emit({
+			page: ((this.currentPage || 1) + 1),
+			size: this.pageSize ? parseInt(this.pageSize as any) : 20
+		});
   }
 
   prev(ev: MouseEvent) {
@@ -117,7 +120,10 @@ export class DataTableComponent implements OnInit, DoCheck {
     ev?.stopPropagation();
     if (this.currentPage === 1) return;
     this.currentPageChange.emit((this.currentPage || 1) - 1);
-    this.pagination.emit({ page: this.currentPage || 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
+		this.pagination.emit({
+			page: ((this.currentPage || 1) - 1),
+			size: this.pageSize ? parseInt(this.pageSize as any) : 20
+		});
   }
 
   onPgWeel(ev: WheelEvent) {
