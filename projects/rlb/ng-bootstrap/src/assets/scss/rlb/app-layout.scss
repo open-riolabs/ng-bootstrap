@@ -11,10 +11,11 @@
 
 .rlb-sidebar {
   position: fixed;
-  top: $header-height;
+  // top: $header-height;
+  margin-top: $header-height;
   left: 0;
   width: $sidebar-width;
-  height: calc(100%);
+  height: calc(100% - $header-height);
   box-sizing: border-box;
 }
 
