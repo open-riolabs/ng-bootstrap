@@ -99,7 +99,7 @@ export class DataTableComponent implements OnInit, DoCheck {
   selectPage(ev: MouseEvent, page: number) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (page === this.currentPage) return;
+		if (page === this.currentPage || this.loading) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({ page, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
@@ -107,7 +107,7 @@ export class DataTableComponent implements OnInit, DoCheck {
   next(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (this.currentPage === this.pages) return;
+		if (this.currentPage === this.pages || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) + 1);
 		this.pagination.emit({
 			page: ((this.currentPage || 1) + 1),
@@ -118,7 +118,7 @@ export class DataTableComponent implements OnInit, DoCheck {
   prev(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (this.currentPage === 1) return;
+		if (this.currentPage === 1 || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) - 1);
 		this.pagination.emit({
 			page: ((this.currentPage || 1) - 1),
