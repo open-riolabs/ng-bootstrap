@@ -1,11 +1,11 @@
 import {
-  Component,
-  ElementRef,
-  Input,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-  booleanAttribute,
+	Component,
+	ElementRef,
+	Input,
+	TemplateRef,
+	ViewChild,
+	ViewContainerRef,
+	booleanAttribute, OnInit,
 } from '@angular/core';
 
 @Component({
@@ -29,7 +29,7 @@ import {
     },
     standalone: false
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
   element!: HTMLElement;
 
   @Input({ alias: 'horizontal-alignment' }) horizontalAlignment?: 'center' | 'end';

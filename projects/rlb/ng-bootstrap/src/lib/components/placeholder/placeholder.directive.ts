@@ -1,12 +1,8 @@
-import {
-  Directive,
-  ElementRef,
-  Renderer2,
-  Input,
-  DoCheck,
-} from '@angular/core';
+import { Directive, DoCheck, ElementRef, Input, Renderer2, } from '@angular/core';
 import { Color } from '../../shared/types';
 
+// TODO do we need this directive?
+// component has more potential and flexibility
 @Directive({
     selector: '[rlb-placeholder]',
     standalone: false

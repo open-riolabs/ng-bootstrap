@@ -1,5 +1,45 @@
 <div class="container mt-3">
-  
+
+  <h3>Toast</h3>
+  <p>Un componente toast è un messaggio breve e non invasivo che appare temporaneamente
+    per fornire un feedback rapido all'utente, senza interrompere l'attività in corso.</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+    <rlb-dt-row>
+      <rlb-dt-cell>containerId</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell>Specifies a unique toast's container identifier, which should be defined in <b>rlb-toast-container</b> component</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>name</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell>Specifies a unique toast identifier, which should be defined in the app module's providers.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>data</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>ToastData</span></rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell>Basic configuration required for the toast.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>options</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>ToastOptions</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Optional advanced configuration for the toast.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>

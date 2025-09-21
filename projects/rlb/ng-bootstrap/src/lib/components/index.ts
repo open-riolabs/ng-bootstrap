@@ -65,6 +65,9 @@ import { ListItemImageComponent } from './list/list-item-image.component';
 import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
 import { ChatContainerComponent } from './chat/chat-container.component';
 import { ChatItemComponent } from './chat/chat-item.component';
+import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
+import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
+import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -93,6 +96,9 @@ export * from './loaders/spinner.component';
 export * from './tooltips/tooltip.directive';
 export * from './tooltips/popover.directive';
 export * from './placeholder/placeholder.directive';
+export * from './placeholder/placeholder-line.component';
+export * from './placeholder/placeholder-text.component';
+export * from './placeholder/placeholder.component';
 export * from './collapse/collapse.component';
 export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown-container.component';
@@ -133,6 +139,10 @@ export * from './carousel/carousel-caption.component';
 export * from './avatar/avatar.component';
 export * from './chat/chat-container.component';
 export * from './chat/chat-item.component';
+export * from './placeholder/placeholder-line.component'
+export * from './placeholder/placeholder-text.component';
+export * from './placeholder/placeholder.component';
+
 
 export const COMPONENTS = [
   AlertComponent,
@@ -199,6 +209,9 @@ export const COMPONENTS = [
   AvatarComponent,
   ChatContainerComponent,
   ChatItemComponent,
+	RlbPlaceholderComponent,
+	RlbPlaceholderLineComponent,
+	RlbPlaceholderTextComponent,
   ...[MODALS],
   ...[TOASTS],
 ];

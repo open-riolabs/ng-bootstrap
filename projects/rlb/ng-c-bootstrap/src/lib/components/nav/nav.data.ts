@@ -1,4 +1,3 @@
-import { Color } from '@rlb-core/lib-ng-bootstrap';
 
 export interface Nav {
   horizontalAlignment?: 'center' | 'end';

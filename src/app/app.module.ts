@@ -1,9 +1,15 @@
-import { input, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, ToastRegistryOptions, SearchModalComponent, TabsComponent, AutocompleteComponent, InputValidationComponent } from 'projects/rlb/ng-bootstrap/src/public-api';
-import { FormsModule } from '@angular/forms';
+import {
+  CommonModalComponent,
+  ModalRegistryOptions,
+  RlbBootstrapModule,
+  SearchModalComponent,
+  ToastRegistryOptions
+} from 'projects/rlb/ng-bootstrap/src/public-api';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 import { RoutingModule } from './routing.module';
 import { HomeComponent } from './pages/home/home.component';
@@ -44,10 +50,11 @@ import { InputGroupsComponent } from './pages/inputs/input-group/input-group.com
 import { OptionsComponent } from './pages/inputs/option/option.component';
 import { RangesComponent } from './pages/inputs/range/range.component';
 import { SelectsComponent } from './pages/inputs/select/select.component';
-import { SwitchsComponent } from './pages/inputs/switch/switch.component';
+import { SwitchesComponent } from './pages/inputs/switch/switch.component';
 import { TextareasComponent } from './pages/inputs/textarea/textarea.component';
 import { RadiosComponent } from './pages/inputs/radio/radio.component';
 import { InputValidationsComponent } from './pages/inputs/input-validation/input-validation.component';
+import { TablesComponent } from "./pages/components/tables/tables.component";
 
 @NgModule({
   declarations: [
@@ -67,6 +74,7 @@ import { InputValidationsComponent } from './pages/inputs/input-validation/input
     ButtonsComponent,
     CardsComponent,
     ListsComponent,
+    TablesComponent,
     LoadersComponent,
     OffcanvassComponent,
     PaginationsComponent,
@@ -92,7 +100,7 @@ import { InputValidationsComponent } from './pages/inputs/input-validation/input
     RadiosComponent,
     RangesComponent,
     SelectsComponent,
-    SwitchsComponent,
+		SwitchesComponent,
     TextareasComponent
   ],
   imports: [
@@ -101,7 +109,8 @@ import { InputValidationsComponent } from './pages/inputs/input-validation/input
     RlbBootstrapModule,
     FormsModule,
     RoutingModule,
-    HighlightModule
+    HighlightModule,
+    ReactiveFormsModule
   ],
   bootstrap: [AppComponent],
   providers: [

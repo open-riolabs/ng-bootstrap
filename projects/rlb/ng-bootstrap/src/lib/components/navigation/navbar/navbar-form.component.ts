@@ -1,15 +1,9 @@
-import {
-  Component,
-  ViewChild,
-  TemplateRef,
-  ViewContainerRef,
-  Input,
-} from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, } from '@angular/core';
 
 @Component({
     selector: 'rlb-navbar-form',
     template: ` <ng-template #template>
-    <form [attr.role]="role" class="d-flex {{ cssClass }}">
+			<form [attr.role]="role" class="d-flex ms-lg-auto mb-2 mb-lg-0 {{ cssClass }}">
       <ng-content />
     </form>
   </ng-template>`,

@@ -1,4 +1,17 @@
-import { DoCheck, Component, ContentChildren, EventEmitter, Input, Output, QueryList, ViewChild, ViewContainerRef, booleanAttribute, numberAttribute, OnInit } from '@angular/core';
+import {
+	booleanAttribute,
+	Component,
+	ContentChildren,
+	DoCheck,
+	EventEmitter,
+	Input,
+	numberAttribute,
+	OnInit,
+	Output,
+	QueryList,
+	ViewChild,
+	ViewContainerRef
+} from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
 
@@ -30,6 +43,9 @@ export class DataTableComponent implements OnInit, DoCheck {
   @Input({ alias: 'current-page', transform: numberAttribute }) currentPage?: number;
   @Input({ alias: 'page-size', transform: numberAttribute }) pageSize?: number;
   @Input() showActions: 'row' | 'head' = 'row';
+  
+  // TODO ask we can handle it like this
+  @Input() loadMoreLabel: string = 'Load more';
 
   @Output('create-item') createItem: EventEmitter<void> = new EventEmitter();
   @Output('refresh-item') refreshItem: EventEmitter<void> = new EventEmitter();
@@ -83,7 +99,7 @@ export class DataTableComponent implements OnInit, DoCheck {
   selectPage(ev: MouseEvent, page: number) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (page === this.currentPage) return;
+		if (page === this.currentPage || this.loading) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({ page, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
@@ -91,17 +107,23 @@ export class DataTableComponent implements OnInit, DoCheck {
   next(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (this.currentPage === this.pages) return;
+		if (this.currentPage === this.pages || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) + 1);
-    this.pagination.emit({ page: this.currentPage || 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
+		this.pagination.emit({
+			page: ((this.currentPage || 1) + 1),
+			size: this.pageSize ? parseInt(this.pageSize as any) : 20
+		});
   }
 
   prev(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (this.currentPage === 1) return;
+		if (this.currentPage === 1 || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) - 1);
-    this.pagination.emit({ page: this.currentPage || 1, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
+		this.pagination.emit({
+			page: ((this.currentPage || 1) - 1),
+			size: this.pageSize ? parseInt(this.pageSize as any) : 20
+		});
   }
 
   onPgWeel(ev: WheelEvent) {

@@ -1,5 +1,49 @@
 <div class="container mt-3">
-  
+
+  <h3>File</h3>
+  <p>Permette di caricare un file trascinandolo con il mouse</p>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>multiple</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Allows selecting or dropping multiple files if true. Otherwise, only one file is accepted.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>data</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>any</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Object containing UI content, e.g., drag-and-drop labels or button text.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>id</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Optional ID for the internal file input element.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <rlb-dt-row>
+      <rlb-dt-cell>files</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='warning'>File[]</span></rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell>Emits the selected or dropped file(s). Re-emitted whenever a file is added or removed.</rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
+
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>

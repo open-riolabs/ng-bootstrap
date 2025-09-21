@@ -11,7 +11,7 @@ export interface BreadcrumbItem {
     aria-label="breadcrumb"
     style="--bs-breadcrumb-divider: '{{ divider }}';"
   >
-    <ol class="breadcrumb">
+			<ol class="breadcrumb" [ngClass]="cssClasses">
       <ng-container *ngFor="let item of items; last as last">
         <li class="breadcrumb-item" [ngClass]="{ active: !last }">
           <a *ngIf="!last" [href]="item.link || '#'">{{ item.label }}</a>
@@ -25,4 +25,5 @@ export interface BreadcrumbItem {
 export class BreadcrumbComponent {
   @Input({ alias: 'divider' }) divider?: string = '>';
   @Input({ alias: 'items' }) items?: BreadcrumbItem[] = [];
+	@Input({ alias: 'cssClasses' }) cssClasses: string = '';
 }

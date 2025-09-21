@@ -1,6 +1,49 @@
 <div class="container mt-3">
-  
-  <rlb-accordion>
+
+	<h3>Switch</h3>
+	<p>
+		Un componente switch (o toggle) è un elemento del UI che permette all'utente di scegliere tra due stati: acceso
+		o spento, abilitato o disabilitato, ecc.
+		È essenzialmente un interruttore visivo che consente di attivare o disattivare un'opzione o una funzionalità.
+	</p>
+
+	<rlb-dt-table>
+		<rlb-dt-header>Parameter</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
+		<rlb-dt-row>
+			<rlb-dt-cell>disabled</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>false</rlb-dt-cell>
+			<rlb-dt-cell>Disables the switch toggle, preventing user interaction.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>readonly</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>false</rlb-dt-cell>
+			<rlb-dt-cell>Makes the switch read-only. Visually enabled but not changeable.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>size</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="success">'small' | 'large'</span></rlb-dt-cell>
+			<rlb-dt-cell>false</rlb-dt-cell>
+			<rlb-dt-cell>Changes the visual size of the switch toggle.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell>id</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="success">string</span></rlb-dt-cell>
+			<rlb-dt-cell>false</rlb-dt-cell>
+			<rlb-dt-cell>Custom identifier for the switch input. Auto-generated if not provided.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
+
+	<rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
       <div rlb-accordion-body>

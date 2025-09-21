@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'rlb-range',
+	selector: 'app-range',
     templateUrl: './range.component.html',
     standalone: false
 })

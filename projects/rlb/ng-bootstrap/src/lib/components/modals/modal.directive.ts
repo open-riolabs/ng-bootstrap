@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Directive,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  Renderer2
-} from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Modal } from 'bootstrap';
 import { ModalCloseReason } from '../../shared/types';
 import { IModal } from './data/modal';
@@ -34,14 +26,28 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
     private renderer: Renderer2,
     private innerModalService: InnerModalService,
   ) { }
-
-  ngOnInit(): void {
-    if (this.instance.data.content) {
-      this.instance.result = structuredClone(this.instance.data.content);
-    } else {
-      this.instance.result = {};
-    }
-  }
+	
+	ngOnInit(): void {
+		// Check prop existence
+		// This approach permits to handle empty string '' case
+		const hasContent =
+			Object.prototype.hasOwnProperty.call(this.instance.data, 'content') &&
+			this.instance.data.content !== undefined;
+		
+		if (hasContent) {
+			const content = this.instance.data.content;
+			// If content is Object / Array we handle it as a deep copy
+			if (content !== null && typeof content === 'object') {
+				this.instance.result = structuredClone(content);
+			} else {
+				// otherwise assign as is
+				this.instance.result = content;
+			}
+		} else {
+			// default fallback
+			this.instance.result = {};
+		}
+	}
 
   ngAfterViewInit(): void {
     const cont = this.el.nativeElement.parentNode;

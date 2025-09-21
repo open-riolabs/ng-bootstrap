@@ -1,18 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'rlb-offcanvas-header',
-    template: `
-    <ng-content select="h*[rlb-offcanvas-title]"></ng-content>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="offcanvas"
-      aria-label="Close"
-    ></button>
-    <ng-content select=":not([rlb-offcanvas-title])"></ng-content>
-  `,
-    host: { class: 'offcanvas-header' },
-    standalone: false
+	selector: 'rlb-offcanvas-header',
+	template: `
+		<ng-content select="[rlb-offcanvas-title]"></ng-content>
+		<button
+			type="button"
+			class="btn-close"
+			data-bs-dismiss="offcanvas"
+			[attr.data-bs-target]="_offcanvasId"
+			aria-label="Close"
+		></button>
+	`,
+	host: {
+		class: 'offcanvas-header d-flex justify-content-between align-items-center'
+	},
+	standalone: false
 })
-export class OffcanvasHeaderComponent {}
+export class OffcanvasHeaderComponent {
+	@Input() set offcanvasId(offcanvasId: string) {
+		this._offcanvasId = `#${offcanvasId}`;
+	}
+	
+	_offcanvasId: string = ''
+}

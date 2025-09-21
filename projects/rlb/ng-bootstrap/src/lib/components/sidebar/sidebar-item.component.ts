@@ -1,13 +1,26 @@
-import { Component, ContentChildren, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import {
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from "@angular/core";
 import { UniqueIdService } from "../../shared/unique-id.service";
+import { Router } from "@angular/router";
+import { CollapseComponent } from "../collapse/collapse.component";
 
 
 @Component({
   selector: 'rlb-sidebar-item',
   template: `
     <ng-template #template>
-      <li *ngIf="title" class="menu-title">{{ title }}</li>
-      <li *ngIf="!title">
+			<li *ngIf="title" (click)="click.emit($event)" class="menu-title" [ngClass]="responsiveClasses">{{ title }}</li>
+			<li *ngIf="!title" (click)="click.emit($event)" [ngClass]="responsiveClasses">
         <a *ngIf="children?.length" href="javascript:void(0);" class="is-parent has-arrow" toggle="collapse" [toggle-target]="'side-item' + _id">
           <i *ngIf="icon" [class]="icon"></i>
           <span>{{ label }}</span>
@@ -32,13 +45,18 @@ export class SidebarItemComponent implements OnInit {
   @Input() icon?: string | undefined;
   @Input() label?: string | undefined;
   @Input() link?: any[] | string | null | undefined;
+  @Input() responsiveClasses?: string;
+  
+  @Output() click = new EventEmitter<MouseEvent>();
 
   @ContentChildren(SidebarItemComponent) children!: QueryList<SidebarItemComponent>;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+	@ViewChild(CollapseComponent) collapseComponent?: CollapseComponent;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
-    private uniqueIdService: UniqueIdService
+		private uniqueIdService: UniqueIdService,
+		private router: Router
   ) { }
 
   _id: string = '';

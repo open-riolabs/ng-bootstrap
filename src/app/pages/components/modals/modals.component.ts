@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { ModalService } from '@rlb-core/lib-ng-bootstrap';
+import { lastValueFrom } from 'rxjs';
 
 
 @Component({
-    selector: 'app-modal',
-    templateUrl: './modals.component.html',
-    standalone: false
+  selector: 'app-modal',
+  templateUrl: './modals.component.html',
+  standalone: false
 })
 export class ModalsComponent {
   constructor(private modals: ModalService) {
@@ -48,7 +49,7 @@ export class ModalSampleComponent implements IModal<any, any> {
   get headerColor() {
     return this.data.type ? \` bg-\${this.data.type}\` : '';
   }
-}`
+}`;
 
   html: string = `<button rlb-button (click)="modal()" class="me-2">Open Modal</button>`;
 
@@ -74,7 +75,7 @@ export class ModalsComponent {
   }
 }`;
 
-init: string = ` providers: [
+  init: string = ` providers: [
     {
       provide: ModalRegistryOptions,
       useValue: {
@@ -88,17 +89,16 @@ init: string = ` providers: [
   ]`;
 
 
-  modal(): void {
-    this.modals
+  async modal() {
+
+    const o = await lastValueFrom(this.modals
       .openModal('sample-dialog', {
         title: 'Demo',
         content: 'This is a demo component',
         ok: 'OK',
         type: 'success',
-      })
-      .subscribe((o) => {
-        console.log('closed sub', o);
-      });
+      }));
+    console.log('closed sub', o);
   }
 
 }

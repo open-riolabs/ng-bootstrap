@@ -1,4 +1,4 @@
-import { Component, EmbeddedViewRef, Input, TemplateRef, ViewChild, ViewContainerRef, numberAttribute } from '@angular/core';
+import { Component, EmbeddedViewRef, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 
 @Component({
     selector: 'rlb-dt-loading',
@@ -8,7 +8,7 @@ import { Component, EmbeddedViewRef, Input, TemplateRef, ViewChild, ViewContaine
     </ng-template>`,
     standalone: false
 })
-export class DataTableLoadingComponent {
+export class DataTableLoadingComponent implements OnInit {
 
   element!: HTMLElement;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;

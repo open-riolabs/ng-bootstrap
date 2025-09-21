@@ -3,9 +3,9 @@ import { ToastService } from '@rlb-core/lib-ng-bootstrap';
 
 
 @Component({
-    selector: 'app-toasts',
-    templateUrl: './toasts.component.html',
-    standalone: false
+  selector: 'app-toasts',
+  templateUrl: './toasts.component.html',
+  standalone: false
 })
 export class ToastsComponent {
   constructor(private toasts: ToastService) {

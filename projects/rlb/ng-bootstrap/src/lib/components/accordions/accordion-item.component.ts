@@ -1,4 +1,15 @@
-import { Component, ContentChild, DoCheck, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef, booleanAttribute } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  ContentChild,
+  DoCheck,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewContainerRef
+} from '@angular/core';
 import { AccordionHeaderComponent } from './accordion-header.component';
 import { AccordionBodyComponent } from './accordion-body.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -44,7 +55,12 @@ export class AccordionItemComponent
   }
 
   override ngOnInit(): void {
-    super.ngOnInit(this.element?.getElementsByClassName('accordion-collapse')[0]);
+    const element = this.elementRef?.nativeElement.querySelector('.accordion-collapse') as HTMLElement
+    super.ngOnInit(element);
+    
+    if (this.expanded) {
+      this.open();
+    }
   }
 
   ngDoCheck(): void {
@@ -52,20 +68,23 @@ export class AccordionItemComponent
       if (!this.name) {
         this.name = `${this.parentId}-item${this.idService.id}`;
       }
+      
+      const isOpen = this.status === 'show' || this.status === 'shown';
 
       if (this.header) {
         this.header.parentId = this.parentId;
         this.header.itemId = this.name;
-        this.header.expanded = this.expanded;
+        this.header.expanded = isOpen;
       }
 
       if (this.body) {
         this.body.parentId = this.parentId;
         this.body.itemId = this.name;
+        this.body.expanded = isOpen;
       }
     }
   }
-
+  
   override getOrCreateInstance(element: HTMLElement): Collapse {
     return Collapse.getOrCreateInstance(element, { toggle: false });
   }

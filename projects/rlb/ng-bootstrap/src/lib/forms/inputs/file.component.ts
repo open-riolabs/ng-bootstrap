@@ -1,12 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  Optional,
-  Self,
-  ViewChild,
-  booleanAttribute,
-} from '@angular/core';
+import { booleanAttribute, Component, ElementRef, Input, Optional, Self, ViewChild, } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -32,8 +24,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [class.form-control-sm]="size === 'small'"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-        (change)="update($event.target)"
-        [value]="value" />
+				(change)="onFileChange($event)"
+			/>
       <div class="invalid-feedback">
         {{ errors | json }}
       </div>
@@ -42,7 +34,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
     standalone: false
 })
 export class FileComponent
-  extends AbstractComponent<string>
+	extends AbstractComponent<File | File[] | null>
   implements ControlValueAccessor {
   @Input({ alias: 'disabled', transform: booleanAttribute, }) disabled? = false;
   @Input({ alias: 'readonly', transform: booleanAttribute }) readonly? = false;
@@ -59,17 +51,21 @@ export class FileComponent
   ) {
     super(idService, control);
   }
-
-  update(ev: EventTarget | null) {
-    if (!this.disabled) {
-      const t = ev as HTMLInputElement;
-      this.setValue(t?.value);
-    }
-  }
-
-  override onWrite(data: string): void {
+	
+	onFileChange(ev: Event) {
+		if (!this.disabled) {
+			const input = ev.target as HTMLInputElement;
+			if (!input.files) {
+				this.setValue(null);
+				return;
+			}
+			this.setValue(this.multiple ? Array.from(input.files) : input.files[0]);
+		}
+	}
+	
+	override onWrite(data: File | File[] | null): void {
     if (this.el && this.el.nativeElement) {
-      this.el.nativeElement.value = data;
+			this.el.nativeElement.value = '';
     }
   }
 }

@@ -2,42 +2,67 @@
 // _dropdown.scss
 //
 
-.dropdown-menu {
-  box-shadow: $box-shadow-lg;
-  animation-name: DropDownSlide;
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
-  margin: 0;
-  position: absolute;
-  z-index: 1000;
+//.dropdown-menu {
+//  box-shadow: $box-shadow-lg;
+//  animation-name: DropDownSlide;
+//  animation-duration: 0.3s;
+//  animation-fill-mode: both;
+//  margin: 0;
+//  position: absolute;
+//  z-index: 1000;
+//
+//  &.show {
+//    top: 100% !important;
+//  }
+//}
 
-  &.show {
-    top: 100% !important;
-  }
-}
 
+//.dropdown-menu-end[style] {
+//  left: auto !important;
+//  right: 0 !important;
+//}
 
+// default (static)
+//.dropdown-static .dropdown-menu {
+//  animation: DropDownSlide 0.3s both;
+//}
+//
+//// for dynamic (Popper)
+//.dropdown-dynamic .dropdown-menu {
+//  animation: DropDownFade 0.2s ease-out both;
+//}
 
-.dropdown-menu-end[style] {
-  left: auto !important;
-  right: 0 !important;
-}
+// ====== Popper-driven dropdowns (bootstrap default) ======
+//.dropdown-menu[data-popper-placement] {
+//  // Popper sets top/left/right by itself
+//  // we only disable animations
+//  &[data-popper-placement^="right"],
+//  &[data-popper-placement^="top"],
+//  &[data-popper-placement^="left"] {
+//    top: auto !important;
+//    animation: none !important;
+//  }
+//}
 
-.dropdown-menu[data-popper-placement^="right"],
-.dropdown-menu[data-popper-placement^="top"],
-.dropdown-menu[data-popper-placement^="left"] {
-  top: auto !important;
-  animation: none !important;
-}
-
-@keyframes DropDownSlide {
-  100% {
-    transform: translateY(0);
-  }
-  0% {
-    transform: translateY(10px);
-  }
-}
+//@keyframes DropDownSlide {
+//  100% {
+//    transform: translateY(0);
+//  }
+//  0% {
+//    transform: translateY(10px);
+//  }
+//}
+//
+//@keyframes DropDownFade {
+//  0% {
+//    opacity: 0;
+//    transform: scaleY(0.95);
+//  }
+//  100% {
+//    opacity: 1;
+//    transform: scaleY(1);
+//  }
+//}
 
 @media (min-width: 600px) {
   .dropdown-menu-lg {
@@ -69,4 +94,9 @@
 
 .dropdown-mega-menu-lg {
   width: 26rem;
+}
+
+// force inline styles to have bootstrap-like behavior
+rlb-dropdown {
+  display: inline-block;
 }

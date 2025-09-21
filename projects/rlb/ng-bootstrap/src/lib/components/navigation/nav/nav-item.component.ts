@@ -1,12 +1,4 @@
-import {
-  Component,
-  Input,
-  ViewContainerRef,
-  OnInit,
-  ViewChild,
-  TemplateRef,
-  booleanAttribute,
-} from '@angular/core';
+import { booleanAttribute, Component, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef, } from '@angular/core';
 
 @Component({
     selector: 'rlb-nav-item',
@@ -16,7 +8,7 @@ import {
         class="nav-link"
         [class.active]="active"
         [attr.href]="href || '#'"
-        [class.disabled]
+				[class.disabled]="disabled"
         [attr.aria-disabled]="disabled ? 'true' : undefined"
       >
         <ng-content />

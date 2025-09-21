@@ -1,12 +1,52 @@
 <div class="container mt-3">
 
-  <rlb-accordion>
+	<h3>Radio</h3>
+	<p>
+		Un componente radio (radio button)
+		è un elemento UI che permette all'utente di selezionare una sola opzione da un gruppo di
+		scelte.
+	</p>
+
+	<rlb-dt-table>
+		<rlb-dt-header>Parameter</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>disabled</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Disables all radio buttons in the group.</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>readonly</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Makes the radio group read-only (user cannot change selection).</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+
+		<rlb-dt-row>
+			<rlb-dt-cell>id</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="success">string</span></rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Sets a unique identifier for the radio group, used for input names and internal references.
+			</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
+
+
+	<rlb-accordion>
     <div rlb-accordion-item>
       <rlb-accordion-header>Code</rlb-accordion-header>
       <div rlb-accordion-body>
         <rlb-tabs>
           <rlb-tab target="ex-1-html">HTML</rlb-tab>
-
         </rlb-tabs>
         <rlb-tab-content>
           <rlb-tab-pane id="ex-1-html">
