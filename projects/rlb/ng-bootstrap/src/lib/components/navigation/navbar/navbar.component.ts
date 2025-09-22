@@ -10,9 +10,6 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
       [attr.data-bs-theme]="dark"
     >
       <div class="container-fluid">
-        <ng-content
-          select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator"
-        />
 				<button
 					class="navbar-toggler"
 					[class.d-none]="!enableSidebarToggler"
@@ -24,6 +21,9 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
 				>
 					<span class="navbar-toggler-icon"></span>
 				</button>
+        <ng-content
+          select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator"
+        />
         <button
 					class="navbar-toggler"
 					[class.d-none]="!enableDropdownToggler"
@@ -33,7 +33,7 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
           [toggle-target]="navId"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+					<i class="bi bi-three-dots fs-2"></i>
         </button>
         <div class="collapse navbar-collapse" [id]="navId">
 					<div class="p-3 d-flex w-100 flex-column flex-lg-row">
@@ -67,8 +67,8 @@ export class NavbarComponent {
   @Input({ alias: 'placement' }) placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom';
   @Input({ alias: 'expand' }) expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
   @Input({ alias: 'class' }) cssClass?: string = '';
-  @Input({ alias: 'enable-dropdown-toggler', transform: booleanAttribute }) enableDropdownToggler: boolean = false;
-  @Input({ alias: 'enable-sidebar-toggler', transform: booleanAttribute }) enableSidebarToggler: boolean = true;
+	@Input({ alias: 'enable-dropdown-toggler', transform: booleanAttribute }) enableDropdownToggler: boolean = true;
+	@Input({ alias: 'enable-sidebar-toggler', transform: booleanAttribute }) enableSidebarToggler: boolean = false;
 
   constructor(
     private idService: UniqueIdService,
