@@ -55,11 +55,12 @@
 			</rlb-input-group>
 		</rlb-navbar-form>
 		<rlb-navbar-items>
-      <rlb-navbar-item [routerLink]="['/']" routerLinkActive="active">Home</rlb-navbar-item>
-      <rlb-navbar-item rlb-navbar-item [routerLink]="['/getting-started']" routerLinkActive="active">Getting
-        started</rlb-navbar-item>
+			<rlb-navbar-item [router-link]="'/'">Home</rlb-navbar-item>
+			<rlb-navbar-item [router-link]="'/getting-started'">Getting
+				started
+			</rlb-navbar-item>
       <rlb-navbar-separator />
-      <rlb-navbar-item dropdown toggle-target="#" autoClose="manual">Components
+			<rlb-navbar-dropdown-item dropdown toggle-target="#" autoClose="manual">Components
         <rlb-dropdown-container>
           <rlb-card>
             <rlb-card-body>
@@ -71,7 +72,7 @@
             </rlb-card-body>
           </rlb-card>
         </rlb-dropdown-container>
-      </rlb-navbar-item>
+			</rlb-navbar-dropdown-item>
     </rlb-navbar-items>
 		<!--		<rlb-navbar-form>-->
 		<!--				<rlb-input />-->
