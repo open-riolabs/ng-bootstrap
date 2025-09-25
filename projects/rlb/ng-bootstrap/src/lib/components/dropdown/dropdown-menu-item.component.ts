@@ -1,13 +1,15 @@
-import { Component, Input, booleanAttribute } from '@angular/core';
+import { booleanAttribute, Component, Input } from '@angular/core';
 
 @Component({
     selector: 'li[rlb-dropdown-item]',
     template: ` <a
       *ngIf="!header && !divider"
-      class="dropdown-item"
+			class="dropdown-item "
       href="#"
       [class.active]="active"
       [class.disabled]="disabled"
+			[class.text-wrap]="textWrap"
+			[class.text-break]="textWrap"
       [attr.aria-current]="active"
       [attr.aria-disabled]="disabled"
     >
@@ -25,4 +27,5 @@ export class DropdownMenuItemComponent {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
   @Input({ alias: 'header', transform: booleanAttribute }) header?: boolean;
   @Input({ alias: 'divider', transform: booleanAttribute }) divider?: boolean;
+	@Input({ alias: 'text-wrap', transform: booleanAttribute }) textWrap?: boolean;
 }
