@@ -6,6 +6,7 @@ import { booleanAttribute, Component, Input } from '@angular/core';
 		<span
 			*ngIf="!link && !divider && !header"
 			class="dropdown-item "
+			role="button"
 			[class.active]="active"
 			[class.disabled]="disabled"
 			[class.text-wrap]="textWrap"
