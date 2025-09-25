@@ -46,6 +46,16 @@ export class DropdownsComponent {
     <li rlb-dropdown-item header>Header</li>
   </ul>
 </rlb-dropdown>`
+	
+	links: string = `<rlb-dropdown>
+ <button rlb-button rlb-dropdown>Dropdown Links</button>
+ <ul rlb-dropdown-menu>
+  <li rlb-dropdown-item link="/">Home (root path)</li>
+  <li rlb-dropdown-item link="/getting-started">Getting started (Absolute path)</li>
+  <li rlb-dropdown-item link="not-found">Not found (Relative path)</li>
+ </ul>
+</rlb-dropdown>
+	`
   
   offset: string = `<rlb-dropdown>
  <button rlb-button rlb-dropdown [offset]="[10, 25]">

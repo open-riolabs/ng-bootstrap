@@ -165,6 +165,14 @@
 			<rlb-dt-cell>Input</rlb-dt-cell>
 		</rlb-dt-row>
 		<rlb-dt-row>
+			<rlb-dt-cell>link</rlb-dt-cell>
+			<rlb-dt-cell>string</rlb-dt-cell>
+			<rlb-dt-cell>False</rlb-dt-cell>
+			<rlb-dt-cell>Route link reference. If populated renders element as html anchor and assigns routerLink
+			</rlb-dt-cell>
+			<rlb-dt-cell>Input</rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
 			<rlb-dt-cell>text-wrap</rlb-dt-cell>
 			<rlb-dt-cell>boolean</rlb-dt-cell>
 			<rlb-dt-cell>False</rlb-dt-cell>
@@ -191,6 +199,8 @@
 						<pre><code [highlight]="autoclose" language="html"></code></pre>
 						<h4>Dropdown Items</h4>
 						<pre><code [highlight]="items" language="html"></code></pre>
+						<h4>Dropdown Links</h4>
+						<pre><code [highlight]="links" language="html"></code></pre>
 						<h4>Dropdown Offset</h4>
 						<pre><code [highlight]="offset" language="html"></code></pre>
 						<h4>Dropdown Placement</h4>
@@ -243,6 +253,17 @@
 						<li rlb-dropdown-item divider></li>
 					</ul>
 				</rlb-dropdown>
+
+				<h4>Router links</h4>
+				<rlb-dropdown>
+					<button rlb-button rlb-dropdown>Dropdown Links</button>
+					<ul rlb-dropdown-menu>
+						<li rlb-dropdown-item link="/">Home (root path)</li>
+						<li rlb-dropdown-item link="/getting-started">Getting started (Absolute path)</li>
+						<li rlb-dropdown-item link="not-found">Not found (Relative path)</li>
+					</ul>
+				</rlb-dropdown>
+
 				<h4>Dropdown offset</h4>
 				<rlb-dropdown>
 					<button rlb-button rlb-dropdown [offset]="[10, 25]">Dropdown Button</button>
