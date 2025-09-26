@@ -14,7 +14,7 @@ export interface BreadcrumbItem {
 			<ol class="breadcrumb" [ngClass]="cssClasses">
       <ng-container *ngFor="let item of items; last as last">
         <li class="breadcrumb-item" [ngClass]="{ active: !last }">
-					<a *ngIf="!last" [routerLink]="item.link || '#'">{{ item.label }}</a>
+					<a *ngIf="!last" [routerLink]="item.link">{{ item.label }}</a>
           <span *ngIf="last">{{ item.label }}</span>
         </li>
       </ng-container>
