@@ -26,28 +26,28 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
     private renderer: Renderer2,
     private innerModalService: InnerModalService,
   ) { }
-	
-	ngOnInit(): void {
-		// Check prop existence
-		// This approach permits to handle empty string '' case
-		const hasContent =
-			Object.prototype.hasOwnProperty.call(this.instance.data, 'content') &&
-			this.instance.data.content !== undefined;
-		
-		if (hasContent) {
-			const content = this.instance.data.content;
-			// If content is Object / Array we handle it as a deep copy
-			if (content !== null && typeof content === 'object') {
-				this.instance.result = structuredClone(content);
-			} else {
-				// otherwise assign as is
-				this.instance.result = content;
-			}
-		} else {
-			// default fallback
-			this.instance.result = {};
-		}
-	}
+
+  ngOnInit(): void {
+    // Check prop existence
+    // This approach permits to handle empty string '' case
+    const hasContent =
+      Object.prototype.hasOwnProperty.call(this.instance.data, 'content') &&
+      this.instance.data.content !== undefined;
+
+    if (hasContent) {
+      const content = this.instance.data.content;
+      // If content is Object / Array we handle it as a deep copy
+      if (content !== null && typeof content === 'object') {
+        this.instance.result = structuredClone(content);
+      } else {
+        // otherwise assign as is
+        this.instance.result = content;
+      }
+    } else {
+      // default fallback
+      this.instance.result = {};
+    }
+  }
 
   ngAfterViewInit(): void {
     const cont = this.el.nativeElement.parentNode;
@@ -145,6 +145,16 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
       this.instance?.result,
     );
   };
+
+  show() {
+    this.bsModal?.show();
+  }
+  hide(reason?: ModalCloseReason) {
+    if (reason) {
+      this._modalReason = reason;
+    }
+    this.bsModal?.hide();
+  }
 
   initButtons(): void {
     this._reasonButtons = this.contentElement.querySelectorAll(
