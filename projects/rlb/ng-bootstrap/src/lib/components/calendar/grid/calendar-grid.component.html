@@ -1,0 +1,21 @@
+<ng-container [ngSwitch]="view">
+	<div class="rlb-calendar-grid d-grid" [ngClass]="view">
+		<ng-container *ngSwitchCase="'week'">
+			<rlb-calendar-cell
+				*ngFor="let day of days"
+				[date]="day"
+				[events]="[]"
+				(eventClick)="eventClick.emit($event)">
+			</rlb-calendar-cell>
+		</ng-container>
+		<ng-container *ngSwitchDefault>
+<!--			<rlb-calendar-cell-->
+<!--				*ngFor="let day of days"-->
+<!--				[date]="day"-->
+<!--				[events]="getEventsForDate(day)"-->
+<!--				(eventClick)="eventClick.emit($event)">-->
+<!--			</rlb-calendar-cell>-->
+			on going!
+		</ng-container>
+	</div>
+</ng-container>

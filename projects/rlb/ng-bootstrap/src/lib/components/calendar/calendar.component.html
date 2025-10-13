@@ -1,0 +1,16 @@
+<div class="rlb-calendar">
+	<rlb-calendar-header
+		*ngIf="showToolbar"
+		[view]="view"
+		[currentDate]="currentDate"
+		(viewChange)="setView($event)"
+		(dateChange)="dateChange.emit($event)">
+	</rlb-calendar-header>
+
+	<rlb-calendar-grid
+		[events]="events"
+		[view]="view"
+		[currentDate]="currentDate"
+		(eventClick)="eventClick.emit($event)">
+	</rlb-calendar-grid>
+</div>
