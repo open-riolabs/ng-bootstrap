@@ -69,6 +69,7 @@ import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
 import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
 import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
 import { NavbarItemComponent } from "./navigation/navbar/navbar-item.component";
+import { CALENDAR_COMPONENTS } from "./calendar";
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -144,6 +145,7 @@ export * from './chat/chat-item.component';
 export * from './placeholder/placeholder-line.component'
 export * from './placeholder/placeholder-text.component';
 export * from './placeholder/placeholder.component';
+export * from './calendar/'
 
 
 export const COMPONENTS = [
@@ -217,4 +219,5 @@ export const COMPONENTS = [
 	RlbPlaceholderTextComponent,
   ...[MODALS],
   ...[TOASTS],
+	...[CALENDAR_COMPONENTS]
 ];

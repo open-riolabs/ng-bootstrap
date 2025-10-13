@@ -56,6 +56,7 @@ import { RadiosComponent } from './pages/inputs/radio/radio.component';
 import { InputValidationsComponent } from './pages/inputs/input-validation/input-validation.component';
 import { TablesComponent } from "./pages/components/tables/tables.component";
 import { HttpClientModule } from "@angular/common/http";
+import { CalendarComponent } from "./pages/components/calendar/calendar.component";
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { HttpClientModule } from "@angular/common/http";
     NavsComponent,
     NavbarsComponent,
     NotFoundComponent,
+		CalendarComponent,
     // inputs
     InputsHomeComponent,
     AutocompletesComponent,
