@@ -1,13 +1,29 @@
-import { Component, Input, booleanAttribute } from '@angular/core';
+import { booleanAttribute, Component, Input } from '@angular/core';
 
 @Component({
     selector: 'li[rlb-dropdown-item]',
-    template: ` <a
-      *ngIf="!header && !divider"
-      class="dropdown-item"
-      href="#"
+	template: `
+		<span
+			*ngIf="!link && !divider && !header"
+			class="dropdown-item "
+			role="button"
+			[class.active]="active"
+			[class.disabled]="disabled"
+			[class.text-wrap]="textWrap"
+			[class.text-break]="textWrap"
+			[attr.aria-current]="active"
+			[attr.aria-disabled]="disabled"
+		>
+				<ng-container *ngTemplateOutlet="content"></ng-container>
+			</span>
+		<a
+			*ngIf="link"
+			class="dropdown-item "
+			[routerLink]="link"
       [class.active]="active"
       [class.disabled]="disabled"
+			[class.text-wrap]="textWrap"
+			[class.text-break]="textWrap"
       [attr.aria-current]="active"
       [attr.aria-disabled]="disabled"
     >
@@ -25,4 +41,6 @@ export class DropdownMenuItemComponent {
   @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
   @Input({ alias: 'header', transform: booleanAttribute }) header?: boolean;
   @Input({ alias: 'divider', transform: booleanAttribute }) divider?: boolean;
+	@Input({ alias: 'link' }) link?: string = '';
+	@Input({ alias: 'text-wrap', transform: booleanAttribute }) textWrap?: boolean;
 }

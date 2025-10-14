@@ -1,3 +1,4 @@
+import { Color, TextAlignment } from '@rlb-core/lib-ng-bootstrap';
 
 export interface Tab {
   horizontalAlignment?: 'center' | 'end';

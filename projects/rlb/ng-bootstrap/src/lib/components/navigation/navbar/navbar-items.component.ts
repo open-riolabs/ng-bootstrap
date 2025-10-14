@@ -1,11 +1,4 @@
-import {
-  Component,
-  ViewContainerRef,
-  Input,
-  TemplateRef,
-  ViewChild,
-  OnInit,
-} from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef, } from '@angular/core';
 
 @Component({
     selector: 'rlb-navbar-items',
@@ -16,7 +9,7 @@ import {
       [style.--bs-scroll-height]="scroll"
     >
       <ng-content
-        select="rlb-navbar-item, rlb-navbar-separator, ng-container"
+				select="rlb-navbar-item, rlb-navbar-dropdown-item, rlb-navbar-separator, ng-container"
       />
     </ul>
   </ng-template>`,

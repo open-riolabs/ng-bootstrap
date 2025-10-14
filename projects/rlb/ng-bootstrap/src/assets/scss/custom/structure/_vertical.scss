@@ -34,7 +34,7 @@
 
 
 .vertical-menu {
-  width: $sidebar-width;
+  width: inherit;
   //z-index: 1001;
   background: $sidebar-bg;
   //bottom: 0;
@@ -223,7 +223,7 @@
   // Side menu
   .vertical-menu {
     position: absolute;
-    width: $sidebar-collapsed-width !important;
+    width: inherit !important;
     z-index: 5;
 
     .simplebar-mask,

@@ -38,7 +38,7 @@ import { NavbarBrandDirective } from './navigation/navbar/navbar-brand.directive
 import { NavbarFormComponent } from './navigation/navbar/navbar-form.component';
 
 import { NavbarItemsComponent } from './navigation/navbar/navbar-items.component';
-import { NavbarItemComponent } from './navigation/navbar/navbar-item.component';
+import { NavbarDropdownItemComponent } from './navigation/navbar/navbar-dropdown-item.component';
 import { NavbarComponent } from './navigation/navbar/navbar.component';
 import { OffcanvasBodyComponent } from './offcanvas/offcanvas-body.component';
 import { OffcanvasHeaderComponent } from './offcanvas/offcanvas-header.component';
@@ -68,6 +68,7 @@ import { ChatItemComponent } from './chat/chat-item.component';
 import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
 import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
 import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
+import { NavbarItemComponent } from "./navigation/navbar/navbar-item.component";
 
 export * from './alerts/alert.component';
 export * from './breadcrumb/breadcrumb.component';
@@ -111,6 +112,7 @@ export * from './navigation/navbar/navbar.component';
 export * from './navigation/navbar/navbar-form.component';
 export * from './navigation/navbar/navbar-text.component';
 export * from './navigation/navbar/navbar-item.component';
+export * from './navigation/navbar/navbar-dropdown-item.component';
 export * from './navigation/navbar/navbar-items.component';
 export * from './navigation/navbar/navbar-brand.directive';
 export * from './navigation/navbar/navbar-separator.component';
@@ -182,7 +184,8 @@ export const COMPONENTS = [
   NavbarFormComponent,
   NavbarTextComponent,
   NavbarItemsComponent,
-  NavbarItemComponent,
+	NavbarDropdownItemComponent,
+	NavbarItemComponent,
   NavbarSeparatorComponent,
   OffcanvasComponent,
   OffcanvasHeaderComponent,
