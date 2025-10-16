@@ -18,25 +18,37 @@ import { CollapseComponent } from "../collapse/collapse.component";
 @Component({
   selector: 'rlb-sidebar-item',
   template: `
-    <ng-template #template>
+		<ng-template #template>
 			<li *ngIf="title" (click)="click.emit($event)" class="menu-title">{{ title }}</li>
 			<li *ngIf="!title" (click)="click.emit($event)">
-        <a *ngIf="children?.length" href="javascript:void(0);" class="is-parent has-arrow" toggle="collapse" [toggle-target]="'side-item' + _id">
-          <i *ngIf="icon" [class]="icon"></i>
-          <span>{{ label }}</span>
-        </a>
-        <rlb-collapse [id]="'side-item' + _id">
-          <ul class="sub-menu" aria-expanded="false">
-            <ng-content select="rlb-sidebar-item"></ng-content>
-          </ul>
-        </rlb-collapse>
-        <a *ngIf="!children?.length" [routerLink]="link" class="side-nav-link-ref" routerLinkActive="active">
-          <i *ngIf="icon" [class]="icon"></i>
-          <ng-content></ng-content>
-        </a>
-      </li>
-    </ng-template>
-  `,
+				<a
+					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter?.toString(): undefined"
+					*ngIf="children?.length" href="javascript:void(0);"
+					class="is-parent has-arrow"
+					toggle="collapse"
+					[toggle-target]="'side-item' + _id"
+				>
+					<i *ngIf="icon" [class]="icon"></i>
+					<span>{{ label }}</span>
+				</a>
+				<rlb-collapse [id]="'side-item' + _id">
+					<ul class="sub-menu" aria-expanded="false">
+						<ng-content select="rlb-sidebar-item"></ng-content>
+					</ul>
+				</rlb-collapse>
+				<a
+					*ngIf="!children?.length"
+					[routerLink]="link"
+					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter?.toString(): undefined"
+					class="side-nav-link-ref"
+					routerLinkActive="active"
+				>
+					<i *ngIf="icon" [class]="icon"></i>
+					<ng-content></ng-content>
+				</a>
+			</li>
+		</ng-template>
+	`,
   standalone: false
 })
 export class SidebarItemComponent implements OnInit {
@@ -45,6 +57,7 @@ export class SidebarItemComponent implements OnInit {
   @Input() icon?: string | undefined;
   @Input() label?: string | undefined;
   @Input() link?: any[] | string | null | undefined;
+	@Input() badgeCounter?: number;
   
   @Output() click = new EventEmitter<MouseEvent>();
 

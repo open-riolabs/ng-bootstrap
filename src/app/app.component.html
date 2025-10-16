@@ -1,9 +1,10 @@
 <div class="rlb-app">
 	<rlb-sidebar class="rlb-sidebar" id="sidebar" [rounded]="true">
 		<rlb-sidebar-item title="RLB bootstrap"/>
-    <rlb-sidebar-item label="Components">
+		<rlb-sidebar-item [badgeCounter]="1234" label="Components">
 			<rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-exclamation-triangle" link="/components/alerts">Alerts</rlb-sidebar-item>
+			<rlb-sidebar-item icon="bi bi-exclamation-triangle" [badgeCounter]="54321" link="/components/alerts">Alerts
+			</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-chevron-bar-expand" link="/components/accordions">Accordions</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-window" link="/components/modals">Modals</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-bell" link="/components/toasts">Toasts</rlb-sidebar-item>
