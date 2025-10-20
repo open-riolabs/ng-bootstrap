@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
 import { CalendarView } from "../interfaces/calendar-view.type";
+import { addDays, getToday } from "../utils/calendar-date-utils";
 
 @Component({
 	selector: 'rlb-calendar-header',
@@ -14,7 +15,33 @@ export class CalendarHeaderComponent {
 	@Output() dateChange = new EventEmitter<IDateTz>();
 	@Output() viewChange = new EventEmitter<CalendarView>();
 	
-	prev() {}
-	next() {}
-	today() {}
+	next() {
+		switch (this.view) {
+			case 'week':
+			default:
+				const nextWeek = addDays(this.currentDate, 7)
+				this.dateChange.emit(nextWeek);
+				break;
+		}
+	}
+	
+	prev() {
+		switch (this.view) {
+			case 'week':
+			default:
+				const pastWeek = addDays(this.currentDate, -7)
+				this.dateChange.emit(pastWeek);
+				break;
+		}
+	}
+	
+	today() {
+		switch (this.view) {
+			case 'week':
+			default:
+				const today = getToday()
+				this.dateChange.emit(today);
+				break;
+		}
+	}
 }

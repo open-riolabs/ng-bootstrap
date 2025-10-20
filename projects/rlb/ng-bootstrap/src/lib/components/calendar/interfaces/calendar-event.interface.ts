@@ -5,7 +5,7 @@ export interface CalendarEvent {
 	id?: string | number;
 	title: string;
 	start: IDateTz;
-	end?: IDateTz;
+	end: IDateTz;
 	color?: Color;
 	allDay?: boolean;
 	data?: any;
