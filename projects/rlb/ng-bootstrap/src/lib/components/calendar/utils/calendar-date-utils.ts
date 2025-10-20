@@ -1,9 +1,14 @@
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 
 export function isSameDay(a: IDateTz, b: IDateTz): boolean {
-	const da = new DateTz(a);
-	const db = new DateTz(b);
-	return da.year === db.year && da.month === db.month && da.day === db.day;
+	const commonTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	
+	const daInCommonTz = new DateTz(a.timestamp, a.timezone).convertToTimezone(commonTimeZone);
+	const dbInCommonTz = new DateTz(b.timestamp, b.timezone).convertToTimezone(commonTimeZone);
+	
+	return daInCommonTz.year === dbInCommonTz.year &&
+		daInCommonTz.month === dbInCommonTz.month &&
+		daInCommonTz.day === dbInCommonTz.day;
 }
 
 export function isSameMonth(a: IDateTz, b: IDateTz): boolean {
@@ -22,13 +27,23 @@ export function startOfMonth(date: IDateTz): DateTz {
 }
 
 export function endOfMonth(date: IDateTz): DateTz {
-	const d = new DateTz(date);
-	const nextMonth = new DateTz(date).add(1, 'month');
-	nextMonth.set(1, 'day');
-	return nextMonth.add(-1, 'day');
+	const d = new DateTz(date.timestamp, date.timezone);
+	return d.add(1, 'month').set(1, 'day').add(-1, 'day');
 }
 
 export function isToday(date: IDateTz): boolean {
-	const today = DateTz.now();
-	return date.year === today.year && date.month === today.month && date.day === today.day;
+	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	const today = DateTz.now(timezone);
+	
+	const dateInUserTimeZone = new DateTz(date.timestamp, date.timezone).convertToTimezone(timezone);
+	
+	return dateInUserTimeZone.year === today.year &&
+		dateInUserTimeZone.month === today.month &&
+		dateInUserTimeZone.day === today.day;
+}
+
+export function getToday(): DateTz {
+	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	const today = DateTz.now(timezone);
+	return today
 }
