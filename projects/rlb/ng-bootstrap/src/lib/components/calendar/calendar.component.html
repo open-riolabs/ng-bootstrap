@@ -4,7 +4,7 @@
 		[view]="view"
 		[currentDate]="currentDate"
 		(viewChange)="setView($event)"
-		(dateChange)="dateChange.emit($event)">
+		(dateChange)="setDate($event)">
 	</rlb-calendar-header>
 
 	<rlb-calendar-grid
