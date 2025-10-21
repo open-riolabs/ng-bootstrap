@@ -2,9 +2,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { VisibilityEventBase } from '../../shared/types';
 
 @Component({
-    selector: 'rlb-chat-item',
-    template: `
-  <div [id]="id" class="chat-bubble-item" [class.left]="position==='left'" [class.right]="position==='right'">
+  selector: 'rlb-chat-item',
+  template: `
+  <div
+    [id]="id"
+    class="chat-bubble-item d-flex"
+    [class.left]="position === 'left'"
+    [class.right]="position === 'right'"
+    [class.justify-content-start]="position === 'left'"
+    [class.justify-content-end]="position === 'right'">
     <button *ngIf="canReply && position === 'right'" class="reply-button" (click)="replyClick($event)">
       <i class="bi bi-reply-fill"></i>
     </button>
@@ -42,8 +48,7 @@ import { VisibilityEventBase } from '../../shared/types';
     </button>
   </div>
   `,
-    host: { '[class.ms-auto]': 'position === "right"' },
-    standalone: false
+  standalone: false
 })
 export class ChatItemComponent {
 
