@@ -126,13 +126,13 @@ export class InputComponent
   override onWrite(data: string): void {
     if (this.el && this.el.nativeElement) {
       if (this.type === 'number') {
-        let val = parseFloat(this.removeNonDigits(data));
-				
 				if (data === '' || data === null || data === undefined) {
 					this.value = '';
 					this.el.nativeElement.value = '';
 					return;
 				}
+				
+				let val = parseFloat(this.removeNonDigits(data));
 				
 				if (this.max && val > this.max) {
           val = this.max;
