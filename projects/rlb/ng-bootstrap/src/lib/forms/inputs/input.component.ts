@@ -1,16 +1,16 @@
 import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  Optional,
-  Self,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-  booleanAttribute,
-  numberAttribute
+	AfterViewInit,
+	booleanAttribute,
+	Component,
+	ElementRef,
+	Input,
+	numberAttribute,
+	OnInit,
+	Optional,
+	Self,
+	TemplateRef,
+	ViewChild,
+	ViewContainerRef
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
@@ -127,7 +127,14 @@ export class InputComponent
     if (this.el && this.el.nativeElement) {
       if (this.type === 'number') {
         let val = parseFloat(this.removeNonDigits(data));
-        if (this.max && val > this.max) {
+				
+				if (data === '' || data === null || data === undefined) {
+					this.value = '';
+					this.el.nativeElement.value = '';
+					return;
+				}
+				
+				if (this.max && val > this.max) {
           val = this.max;
         }
         if (this.min && val < this.min) {
