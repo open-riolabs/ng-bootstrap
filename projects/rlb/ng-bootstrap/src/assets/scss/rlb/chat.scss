@@ -16,6 +16,7 @@
   word-break: break-word;
   padding: 11px 0px;
 
+
   &.left {
     .text {
       position: relative;
@@ -36,8 +37,11 @@
   }
 
   &.right {
+    margin-left: auto;
+
     .text {
       position: relative;
+      margin-left: auto;
 
       &::after {
         content: "";
