@@ -62,8 +62,7 @@ export class InputComponent
   @Input({ alias: 'date-type' }) dateType?: 'date' | 'string' | 'number' | 'date-tz' = 'string';
   @Input({ alias: 'timezone' }) timezone?: string = 'UTC';
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-
-  public extValidation: boolean = false;
+	@Input({ alias: 'extValidation', transform: booleanAttribute, }) extValidation: boolean = false;
 
   get _type(): string {
     if (this.type === 'number') return 'text';
