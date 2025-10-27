@@ -1,15 +1,15 @@
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Optional,
-  Output,
-  Renderer2,
-  Self,
-  ViewChild,
-  booleanAttribute,
-  numberAttribute
+	booleanAttribute,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	numberAttribute,
+	Optional,
+	Output,
+	Renderer2,
+	Self,
+	ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { timezones } from '@open-rlb/date-tz';
@@ -71,7 +71,7 @@ export class AutocompleteTimezonesComponent
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
-  @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
+	@Output() selected: EventEmitter<AutocompleteItem | string> = new EventEmitter<AutocompleteItem | string>();
 
   constructor(
     idService: UniqueIdService,
