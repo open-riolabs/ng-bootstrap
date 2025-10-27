@@ -1,15 +1,15 @@
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Optional,
-  Output,
-  Renderer2,
-  Self,
-  ViewChild,
-  booleanAttribute,
-  numberAttribute
+	booleanAttribute,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	numberAttribute,
+	Optional,
+	Output,
+	Renderer2,
+	Self,
+	ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -54,7 +54,7 @@ import { AutocompleteItem } from './autocomplete.component';
   standalone: false
 })
 export class AutocompleteCountryComponent
-  extends AbstractComponent<string | undefined>
+	extends AbstractComponent<string | AutocompleteItem>
   implements ControlValueAccessor {
   acLoading: boolean = false;
   private typingTimeout: any;
@@ -67,10 +67,11 @@ export class AutocompleteCountryComponent
   @Input({ alias: 'placeholder' }) placeholder?: string = '';
   @Input() size?: 'small' | 'large' | undefined;
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-
-  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
+	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
+	
+	@ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
-  @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
+	@Output() selected: EventEmitter<AutocompleteItem | string> = new EventEmitter<AutocompleteItem | string>();
 
   constructor(
     idService: UniqueIdService,
@@ -81,7 +82,7 @@ export class AutocompleteCountryComponent
   }
 
   update(ev: EventTarget | null) {
-    this.setValue(undefined);
+		this.setValue(undefined as unknown as AutocompleteItem);
     if (this.typingTimeout) {
       clearTimeout(this.typingTimeout);
     }
@@ -96,8 +97,8 @@ export class AutocompleteCountryComponent
       this.manageSuggestions(t?.value);
     }
   }
-
-  override onWrite(data?: AutocompleteItem): void {
+	
+	override onWrite(data?: AutocompleteItem | string): void {
     if (this.el && this.el.nativeElement) {
       if (typeof data === 'string') {
         this.el.nativeElement.value = data;
@@ -115,7 +116,7 @@ export class AutocompleteCountryComponent
       }
     }
     if (data && data.length > 0) {
-      const suggestions = this.countries.filter(o => {
+			const suggestions = this.getCountries().filter(o => {
         const _c = o as { text: string, value: string; };
         return _c.text.toLowerCase().startsWith(data.toLowerCase());
       });
@@ -124,29 +125,53 @@ export class AutocompleteCountryComponent
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
   }
-
-  renderAc(suggestions: AutocompleteItem[]) {
-    if (suggestions.length > 0) {
-      for (const suggestion of suggestions) {
-        const el = this.renderer.createElement('a');
-        this.renderer.addClass(el, 'dropdown-item');
-        this.renderer.appendChild(el, this.renderer.createText(typeof suggestion === 'string' ? suggestion : suggestion.text));
-        this.renderer.listen(el, 'click', () => {
-          this.selected.emit(typeof suggestion === 'string' ? suggestion : suggestion.value);
-          this.setValue(typeof suggestion === 'string' ? suggestion : suggestion.value);
-          this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-        });
-        this.renderer.appendChild(this.dropdown.nativeElement, el);
-      }
-    } else {
-      const el = this.renderer.createElement('a');
-      this.renderer.addClass(el, 'dropdown-item');
-      this.renderer.addClass(el, 'disabled');
-      this.renderer.addClass(el, 'text-center');
-      this.renderer.setAttribute(el, 'disabled', 'true');
-      this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
-      this.renderer.appendChild(this.dropdown.nativeElement, el);
-    }
+	
+	renderAc(suggestions: AutocompleteItem[] | string[]) {
+		const el = this.renderer.createElement('a');
+		
+		if (suggestions.length === 0) {
+			this.renderer.addClass(el, 'dropdown-item');
+			this.renderer.addClass(el, 'disabled');
+			this.renderer.addClass(el, 'text-center');
+			this.renderer.setAttribute(el, 'disabled', 'true');
+			this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
+			this.renderer.appendChild(this.dropdown.nativeElement, el);
+			return
+		}
+		
+		for (const suggestion of suggestions) {
+			const itemData: AutocompleteItem = typeof suggestion === 'string'
+				? { text: suggestion, value: suggestion }
+				: suggestion;
+			
+			const el = this.renderer.createElement('a');
+			this.renderer.addClass(el, 'dropdown-item');
+			
+			if (itemData.iconClass) {
+				const icon = this.renderer.createElement('i');
+				
+				const classes = itemData.iconClass.split(/\s+/);
+				for (const cls of classes) {
+					if (cls) {
+						// Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
+						// it causes silent runtime error
+						// Instead we should split it, and add one by one
+						this.renderer.addClass(icon, cls);
+					}
+				}
+				this.renderer.addClass(icon, 'me-2');
+				this.renderer.appendChild(el, icon);
+			}
+			
+			this.renderer.appendChild(el, this.renderer.createText(itemData.text));
+			
+			this.renderer.listen(el, 'click', () => {
+				this.selected.emit(itemData);
+				this.setValue(typeof suggestion === 'string' ? suggestion : itemData);
+				this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
+			});
+			this.renderer.appendChild(this.dropdown.nativeElement, el);
+		}
   }
 
   onEnter(ev: EventTarget | null) {
@@ -156,9 +181,9 @@ export class AutocompleteCountryComponent
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
   }
-
-  getText(d?: AutocompleteItem) {
-    const h = this.countries.find(c => {
+	
+	getText(d?: AutocompleteItem | string) {
+		const h = this.getCountries().find(c => {
       if (typeof c === 'object') {
         const _c = c as { text: string, value: string; };
         return _c.value === (typeof d === 'object' ? d?.value : d) ? _c.text : '';
@@ -167,8 +192,21 @@ export class AutocompleteCountryComponent
     });
     return (typeof h === 'object' ? h.text : '') || '';
   }
-
-  private countries: AutocompleteItem[] = [
+	
+	getCountries(): AutocompleteItem[] {
+		if (this.enableFlagIcons) {
+			return this._countries.map((country) => {
+				return {
+					...country,
+					iconClass: `fi fi-${country.value.toLowerCase()}`,
+				}
+			})
+		} else {
+			return this._countries;
+		}
+	}
+	
+	private _countries: AutocompleteItem[] = [
     { "text": "Afghanistan", "value": "AF" },
     { "text": "Albania", "value": "AL" },
     { "text": "Algeria", "value": "DZ" },

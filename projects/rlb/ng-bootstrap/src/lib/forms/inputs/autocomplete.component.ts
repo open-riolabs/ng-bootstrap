@@ -17,8 +17,13 @@ import { lastValueFrom, Observable } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
-export type AutocompleteItem = string | { text: string, value: string; iconClass?: string };
-export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>;
+export interface AutocompleteItem {
+	text: string;
+	value: string;
+	iconClass?: string;
+}
+
+export type AutocompleteFn = (q?: string) => Array<AutocompleteItem | string> | Promise<Array<AutocompleteItem | string>> | Observable<Array<AutocompleteItem | string>>;
 
 @Component({
   selector: 'rlb-autocomplete',
@@ -147,7 +152,7 @@ export class AutocompleteComponent
 		}
 	}
 	
-	renderAc(suggestions: AutocompleteItem[]) {
+	renderAc(suggestions: Array<string | AutocompleteItem>) {
 		this.clearDropdown();
 		if (!suggestions || suggestions.length === 0) {
 			const el = this.renderer.createElement('a');
@@ -161,11 +166,10 @@ export class AutocompleteComponent
 		}
 		
 		for (const suggestion of suggestions) {
-			const itemData = (typeof suggestion === 'string' ? { text: suggestion, value: suggestion } : suggestion) as {
-				text: string,
-				value: string;
-				iconClass?: string
-			};
+			const itemData: AutocompleteItem = typeof suggestion === 'string'
+				? { text: suggestion, value: suggestion }
+				: suggestion;
+			
 			const el = this.renderer.createElement('a');
 			this.renderer.addClass(el, 'dropdown-item');
 			
@@ -188,8 +192,8 @@ export class AutocompleteComponent
 			this.renderer.appendChild(el, this.renderer.createText(itemData.text));
 			
 			this.renderer.listen(el, 'click', (ev: Event) => {
-				this.selected.emit(suggestion);
-				this.setValue(suggestion);
+				this.selected.emit(itemData);
+				this.setValue(itemData);
 				this.closeDropdown();
 				ev.stopPropagation();
 			});
@@ -201,7 +205,11 @@ export class AutocompleteComponent
 	onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
     if (!this.disabled && t && t.value) {
-      this.setValue(t?.value);
+			const item: AutocompleteItem = {
+				text: t.value,
+				value: t.value
+			};
+			this.setValue(item);
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
   }
