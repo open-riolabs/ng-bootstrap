@@ -17,7 +17,7 @@ import { lastValueFrom, Observable } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
-export type AutocompleteItem = string | { text: string, value: string; };
+export type AutocompleteItem = string | { text: string, value: string; iconClass?: string };
 export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>;
 
 @Component({
@@ -161,9 +161,32 @@ export class AutocompleteComponent
 		}
 		
 		for (const suggestion of suggestions) {
+			const itemData = (typeof suggestion === 'string' ? { text: suggestion, value: suggestion } : suggestion) as {
+				text: string,
+				value: string;
+				iconClass?: string
+			};
 			const el = this.renderer.createElement('a');
 			this.renderer.addClass(el, 'dropdown-item');
-			this.renderer.appendChild(el, this.renderer.createText(typeof suggestion === 'string' ? suggestion : suggestion.text));
+			
+			if (itemData.iconClass) {
+				const icon = this.renderer.createElement('i');
+				
+				const classes = itemData.iconClass.split(/\s+/);
+				for (const cls of classes) {
+					if (cls) {
+						// Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
+						// it causes silent runtime error
+						// Instead we should split it, and add one by one
+						this.renderer.addClass(icon, cls);
+					}
+				}
+				this.renderer.addClass(icon, 'me-2');
+				this.renderer.appendChild(el, icon);
+			}
+			
+			this.renderer.appendChild(el, this.renderer.createText(itemData.text));
+			
 			this.renderer.listen(el, 'click', (ev: Event) => {
 				this.selected.emit(suggestion);
 				this.setValue(suggestion);
