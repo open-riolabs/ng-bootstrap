@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import {
 	CommonModalComponent,
+	EventCreateEditComponent,
 	ModalRegistryOptions,
 	RlbBootstrapModule,
 	SearchModalComponent,
@@ -124,8 +125,9 @@ import { CalendarComponent } from "./pages/components/calendar/calendar.componen
         modals: {
           "sample-dialog": ModalSampleComponent,
           'rlb-search': SearchModalComponent,
-          'rlb-common': CommonModalComponent
-        }
+					'rlb-common': CommonModalComponent,
+					'rlb-calendar-event-create-edit': EventCreateEditComponent
+				}
       },
       multi: true,
     },

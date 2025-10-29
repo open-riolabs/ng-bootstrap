@@ -5,6 +5,10 @@
 import { EnvironmentProviders, Provider } from '@angular/core';
 import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, SearchModalComponent } from './public-api';
 
+import {
+	EventCreateEditComponent
+} from "./lib/components/calendar/calendar-event-create-edit/event-create-edit.component";
+
 export * from './lib/components';
 export * from './lib/data/datatable';
 export * from './lib/forms/inputs';
@@ -25,7 +29,8 @@ export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
       provide: ModalRegistryOptions, useValue: {
         modals: {
           'rlb-search': SearchModalComponent,
-          'rlb-common': CommonModalComponent
+					'rlb-common': CommonModalComponent,
+					'rlb-calendar-event-create-edit': EventCreateEditComponent
         }
       } as ModalRegistryOptions, multi: true
     }

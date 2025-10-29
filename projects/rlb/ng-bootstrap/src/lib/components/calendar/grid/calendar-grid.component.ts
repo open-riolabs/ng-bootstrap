@@ -4,6 +4,7 @@ import { isSameDay, isToday } from "../utils/calendar-date-utils";
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
 import { CalendarView } from "../interfaces/calendar-view.type";
+import { ModalService } from "../../modals";
 
 @Component({
 	selector: 'rlb-calendar-grid',
@@ -21,32 +22,35 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	timeSlots: string[] = [];
 	
 	rowHeight = 100; // px for a full hour slot
-	maxBodyHeight: number = 34; // rem
+	maxBodyHeight: number = 30; // rem
 	
 	now: DateTz;
 	private nowInterval: any;
-	private readonly userTimeZone: string;
 	
-	private _eventsInUserTimeZone: CalendarEvent[] = [];
+	constructor(
+		private modals: ModalService
+	) {
+		this.now = DateTz.now();
+	}
 	
-	
-	constructor() {
-		this.userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		this.now = DateTz.now(this.userTimeZone);
+	createOrEditEvent() {
+		console.log("Event clicked");
+		this.modals.openModal('rlb-calendar-event-create-edit', {
+			title: 'Demo',
+			content: 'This is a demo component',
+			ok: 'OK',
+			type: 'success',
+		}).subscribe((result) => {
+			console.log(result);
+		})
 	}
 	
 	ngOnChanges(changes: SimpleChanges) {
-		if (changes['events'] && this.events) {
-			this._eventsInUserTimeZone = this.events.map(event => ({
-				...event,
-				start: new DateTz(event.start.timestamp, event.start.timezone).convertToTimezone(this.userTimeZone),
-				end: new DateTz(event.end.timestamp, event.end.timezone).convertToTimezone(this.userTimeZone)
-			}));
-		}
-		
-		if (this.view === 'week') {
-			this.buildWeekGrid(this.currentDate);
-			this.buildTimeSlots();
+		if (changes['view']) {
+			if (this.view === 'week') {
+				this.buildWeekGrid(this.currentDate);
+				this.buildTimeSlots();
+			}
 		}
 	}
 	
@@ -56,7 +60,7 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	
 	private startNowTimer() {
 		this.nowInterval = setInterval(() => {
-			this.now = DateTz.now(this.userTimeZone);
+			this.now = DateTz.now();
 			// this.cdr.detectChanges();
 		}, 60 * 1000); // every minute
 	}
@@ -71,16 +75,16 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 		return this.events.filter(e => isSameDay(e.start, date));
 	}
 	
-	private buildWeekGrid(date: IDateTz) {
-		const dayOfWeek = date.dayOfWeek!; // 0 = Sunday, 1 = Monday ...
+	private buildWeekGrid(currentDate: IDateTz) {
+		const dayOfWeek = currentDate.dayOfWeek!; // 0 = Sunday, 1 = Monday ...
 		
 		// Week init (monday)
-		const start = new DateTz(date.timestamp, date.timezone)
+		const start = new DateTz(currentDate.timestamp, 'UTC')
 			.add(-(dayOfWeek - 1), 'day'); // clone or create new for start date
 		
 		this.days = [];
 		for (let i = 0; i < 7; i++) {
-			this.days.push(new DateTz(start.timestamp, start.timezone).add(i, 'day'));
+			this.days.push(new DateTz(start.timestamp, 'UTC').add(i, 'day'));
 		}
 		this.startNowTimer();
 	}
@@ -97,13 +101,13 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 		const [hourStr] = time.split(':');
 		const hour = parseInt(hourStr, 10);
 		
-		const startOfHour = new DateTz(day.timestamp, day.timezone)
+		const startOfHour = new DateTz(day.timestamp, 'UTC')
 			.set(hour, 'hour')
 			.set(0, 'minute')
 		
-		const endOfHour = new DateTz(startOfHour.timestamp, startOfHour.timezone).add(1, 'hour');
+		const endOfHour = new DateTz(startOfHour.timestamp, 'UTC').add(1, 'hour');
 		
-		return this._eventsInUserTimeZone.filter(event => {
+		return this.events.filter(event => {
 			const eventStart = event.start;
 			const eventEnd = event.end;
 			
@@ -114,27 +118,64 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 		});
 	}
 	
-	calculateEventTop(event: CalendarEvent, time: string): number {
+	calculateEventTop(event: CalendarEvent, time: string, day: IDateTz): number {
 		const [hourStr] = time.split(':');
 		const hour = parseInt(hourStr, 10);
 		
-		const startOfCurrentHour = new DateTz(event.start.timestamp, event.start.timezone)
+		const startOfCurrentHour = new DateTz(day.timestamp, 'UTC')
 			.set(hour, 'hour')
 			.set(0, 'minute')
 		
-		const eventStart = new DateTz(event.start.timestamp, event.start.timezone);
-		
-		const diffMs = eventStart.timestamp - startOfCurrentHour.timestamp;
+		const eventStart = event.start;
+		const effectiveStartTimestamp = Math.max(eventStart.timestamp, startOfCurrentHour.timestamp);
+		const diffMs = effectiveStartTimestamp - startOfCurrentHour.timestamp;
 		const diffMinutes = diffMs / (1000 * 60);
 		
 		return (diffMinutes / 60) * this.rowHeight;
 	}
 	
-	calculateEventHeight(event: CalendarEvent): number {
-		const eventStart = new DateTz(event.start.timestamp, event.start.timezone);
-		const eventEnd = new DateTz(event.end.timestamp, event.end.timezone);
+	isEventStartInHour(event: CalendarEvent, time: string, day: IDateTz): boolean {
+		const [hourStr] = time.split(':');
+		const hour = parseInt(hourStr, 10);
 		
-		const durationMs = eventEnd.timestamp - eventStart.timestamp;
+		const startOfHour = new DateTz(day.timestamp, 'UTC')
+			.set(hour, 'hour')
+			.set(0, 'minute')
+		
+		const endOfHour = new DateTz(startOfHour.timestamp, 'UTC').add(1, 'hour');
+		
+		const eventStart = event.start;
+		
+		const startsAfterOrAtStart = eventStart.compare!(startOfHour) >= 0;
+		const startsBeforeEnd = eventStart.compare!(endOfHour) < 0;
+		
+		const startsOnCurrentDay = isSameDay(event.start, day);
+		
+		return startsOnCurrentDay && startsAfterOrAtStart && startsBeforeEnd;
+	}
+	
+	
+	calculateEventHeightInHour(event: CalendarEvent, time: string, day: IDateTz): number {
+		const [hourStr] = time.split(':');
+		const hour = parseInt(hourStr, 10);
+		
+		const startOfCurrentHour = new DateTz(day.timestamp, 'UTC')
+			.set(hour, 'hour')
+			.set(0, 'minute')
+		
+		const endOfCurrentHour = new DateTz(startOfCurrentHour.timestamp, 'UTC').add(1, 'hour');
+		
+		const eventStart = event.start;
+		const eventEnd = event.end;
+		
+		const effectiveStartTimestamp = Math.max(eventStart.timestamp, startOfCurrentHour.timestamp);
+		
+		const effectiveEndTimestamp = Math.min(eventEnd.timestamp, endOfCurrentHour.timestamp);
+		
+		const durationMs = effectiveEndTimestamp - effectiveStartTimestamp;
+		
+		if (durationMs <= 0) return 0;
+		
 		const durationMinutes = durationMs / (1000 * 60);
 		
 		return (durationMinutes / 60) * this.rowHeight;

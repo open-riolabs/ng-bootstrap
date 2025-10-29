@@ -27,18 +27,32 @@
 
 .calendar-event {
   position: absolute;
-  left: 2px;
-  right: 2px;
-  background-color: #d1e7dd;
-  border: 1px solid #0f5132;
+  left: 0;
+  right: 0;
+  z-index: 11;
   border-radius: 4px;
   padding: 2px 4px;
-  font-size: 0.8em;
   overflow: hidden;
-  z-index: 2;
   cursor: pointer;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  box-sizing: border-box;
+  // color: var(--bs-body-color);
+
+  &.bg-primary,
+  &.bg-secondary,
+  &.bg-success,
+  &.bg-danger,
+  &.bg-info,
+  &.bg-dark {
+    color: var(--bs-gray-100) !important;
+  }
+
+  &.bg-warning,
+  &.bg-light,
+  &.bg-white {
+    color: var(--bs-gray-600) !important;
+  }
 }
 
 
