@@ -113,9 +113,9 @@ export class AutocompleteTimezonesComponent
       }
     }
     if (data && data.length > 0) {
-      const suggestions = Object.keys(timezones).filter(o => {
-        return o.toLowerCase().startsWith(data.toLowerCase());
-      });
+			const suggestions = Object.keys(timezones).filter(o => {
+				return o.toLowerCase().includes(data.toLowerCase());
+			});
       this.renderAc(suggestions);
     } else {
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');

@@ -22,6 +22,7 @@ export class HomeComponent {
   country: string = '';
   carouselPage: number = 0;
   carouselCount: number = 0;
+	countryDialCode = '';
 
   profileForm = new FormGroup({
     firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),
