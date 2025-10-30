@@ -1,17 +1,17 @@
 import {
-  ContentChildren,
-  Component,
-  Input,
-  Optional,
-  Self,
-  ViewContainerRef,
-  ViewChild,
-  QueryList,
-  DoCheck,
-  numberAttribute,
-  booleanAttribute,
-  ElementRef,
-  AfterContentChecked,
+	AfterContentChecked,
+	booleanAttribute,
+	Component,
+	ContentChildren,
+	DoCheck,
+	ElementRef,
+	Input,
+	numberAttribute,
+	Optional,
+	QueryList,
+	Self,
+	ViewChild,
+	ViewContainerRef,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -35,16 +35,17 @@ import { OptionComponent } from './options.component';
         [attr.placeholder]="placeholder"
         [attr.size]="display"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+				[ngClass]="{
+        'is-invalid': control?.touched && control?.invalid,
+        'is-valid': control?.touched && control?.valid
+        }"
         (change)="update($event.target)"
       >
         <option *ngIf="placeholder" selected disabled>{{ placeholder }}</option>
         <ng-container #projectedDisplayOptions></ng-container>
       </select>
-      <div class="invalid-feedback">
-        {{ errors | json }}
-      </div>
-    </div>
+			<rlb-input-validation *ngIf="errors" [errors]="errors"/>
+		</div>
     <ng-content select="[after]"></ng-content>`,
     standalone: false
 })
