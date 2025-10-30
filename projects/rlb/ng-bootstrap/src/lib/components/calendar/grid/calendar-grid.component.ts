@@ -4,7 +4,7 @@ import { isSameDay, isToday } from "../utils/calendar-date-utils";
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
 import { CalendarView } from "../interfaces/calendar-view.type";
-import { ModalService } from "../../modals";
+import { ModalService } from "../../modals/modal.service";
 
 @Component({
 	selector: 'rlb-calendar-grid',
@@ -28,7 +28,8 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	private nowInterval: any;
 	
 	constructor(
-		private modals: ModalService
+		private modals: ModalService,
+		//private innerModalService: InnerModalService,
 	) {
 		this.now = DateTz.now();
 	}

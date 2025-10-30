@@ -66,6 +66,15 @@ export class CalendarComponent implements OnChanges {
 			end: now.cloneToTimezone('UTC').set(12, 'hour').set(30, 'minute'),
 		});
 		
+		// TODO: Understand, how to handle multiple events in same hour
+		
+		// events.push({
+		// 	color: 'danger',
+		// 	title: 'Today 1.5h test 2 (11:00-12:30)',
+		// 	start: now.cloneToTimezone('UTC').set(11, 'hour').set(0, 'minute'),
+		// 	end: now.cloneToTimezone('UTC').set(12, 'hour').set(30, 'minute'),
+		// });
+		
 		// Today from 15:15 ti 16:00
 		events.push({
 			color: 'danger',
