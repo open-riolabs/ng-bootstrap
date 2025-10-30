@@ -94,8 +94,8 @@
     </div>
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-		  <rlb-select [placeholder]="'Select option'">
+			<div rlb-accordion-body [formGroup]="form">
+				<rlb-select formControlName="select" [placeholder]="'Select option'">
 			  <rlb-option value="1">Option 1</rlb-option>
 			  <rlb-option value="2">Option 2</rlb-option>
 			  <rlb-option value="3">Option 3</rlb-option>

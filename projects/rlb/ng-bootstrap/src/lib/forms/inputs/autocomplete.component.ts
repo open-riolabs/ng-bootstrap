@@ -43,14 +43,15 @@ export type AutocompleteFn = (q?: string) => Array<AutocompleteItem | string> | 
         [class.form-control-sm]="size === 'small'"
         [value]="getText(value)"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+				[ngClass]="{
+        'is-invalid': control?.touched && control?.invalid,
+        'is-valid': control?.touched && control?.valid
+        }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
       />
-      <div class="invalid-feedback">
-        {{ errors | json }}
-      </div>
-    </div>
+			<rlb-input-validation *ngIf="errors" [errors]="errors"/>
+		</div>
     <rlb-progress class="w-100" [height]="2" [infinite]="loading || acLoading" color="primary" />
     <ng-content select="[after]"></ng-content>
     <div
