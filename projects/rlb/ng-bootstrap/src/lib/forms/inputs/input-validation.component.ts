@@ -28,7 +28,7 @@ export class InputValidationComponent {
 	}
 	
 	getTranslatedError(errorKey: string, errorValue: any): string {
-		const i18nKey = `validation.${errorKey}`; // Create i18n key ex: 'validation.required'
+		const i18nKey = `common.form.validation.${errorKey}`; // Create i18n key ex: 'common.form.validation.required'
 		
 		if (this.translationService) {
 			return this.translationService.instant(i18nKey, errorValue);

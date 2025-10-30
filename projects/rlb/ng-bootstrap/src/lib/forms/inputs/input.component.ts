@@ -38,7 +38,10 @@ import { AbstractComponent } from './abstract-field.component';
         [class.form-control-sm]="size === 'small'"
         [value]="value || ''"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+				[ngClass]="{
+        'is-invalid': control?.touched && control?.invalid,
+        'is-valid': control?.touched && control?.valid
+        }"
         (input)="update($event.target)"
       />
       <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
