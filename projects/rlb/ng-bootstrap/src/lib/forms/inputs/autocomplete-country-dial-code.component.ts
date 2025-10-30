@@ -190,7 +190,7 @@ export class AutocompleteCountryDialCodeComponent
       }
       return false;
     });
-    return (typeof h === 'object' ? h.value : '') || '';
+		return (typeof h === 'object' ? `${h.value} ${h.text}` : '') || '';
   }
 	
 	getCountries(): AutocompleteItem[] {
