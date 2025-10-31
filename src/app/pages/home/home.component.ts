@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
-import { ModalService, ToastService } from 'projects/rlb/ng-bootstrap/src/public-api';
+import {
+	AutocompleteItem,
+	ModalService,
+	requiredAutocompleteValue,
+	ToastService
+} from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +18,11 @@ export class HomeComponent {
   constructor(
     private modals: ModalService,
     private toasts: ToastService,
-  ) { }
+	) {
+		this.profileForm.valueChanges.subscribe((value) => {
+			console.log("Form value: ", value);
+		})
+	}
 
   number: number = 0;
   dtz?: IDateTz = DateTz.now();
@@ -26,9 +35,24 @@ export class HomeComponent {
 
   profileForm = new FormGroup({
     firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),
-		country: new FormControl("", [Validators.required, Validators.minLength(2)]),
+		country: new FormControl<AutocompleteItem>(
+			{ text: '', value: '' },
+			[requiredAutocompleteValue()]
+		),
+		timezone: new FormControl<AutocompleteItem>(
+			{ text: '', value: '' },
+			[requiredAutocompleteValue()]
+		),
+		dialCode: new FormControl<AutocompleteItem>(
+			{ text: '', value: '' },
+			[requiredAutocompleteValue()]
+		),
   });
 
   updateProfile() { }
+	
+	test() {
+		console.log(this.profileForm.value);
+	}
 }
 

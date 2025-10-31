@@ -8,7 +8,8 @@ export abstract class AbstractComponent<T = any>
   public abstract disabled?: boolean;
   protected abstract userDefinedId: string;
   protected onTouched: Function = () => { };
-  protected onChanged: Function = (s: string) => { };
+	protected onChanged: Function = (v: T) => {
+	};
   public value!: T;
   private _id!: string;
   public get id(): string {
@@ -37,8 +38,8 @@ export abstract class AbstractComponent<T = any>
     this.value = val;
     this.onWrite(val);
   }
-
-  registerOnChange(fn: (v: string) => void): void {
+	
+	registerOnChange(fn: (v: T) => void): void {
     this.onChanged = fn;
   }
 

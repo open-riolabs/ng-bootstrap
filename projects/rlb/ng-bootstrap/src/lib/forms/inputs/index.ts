@@ -1,4 +1,7 @@
 export * from './abstract-field.component';
+export * from './abstract-autocomplete.component'
+export * from './autocomplete-model'
+export * from '../rlb-validators/required-autocomplete-validator'
 
 export * from './autocomplete-country-dial-code.component'
 export * from './autocomplete-country.component';

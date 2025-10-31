@@ -16,15 +16,8 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { lastValueFrom, Observable } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
+import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
 
-export interface AutocompleteItem<T = any> {
-	text: string;
-	value: string;
-	iconClass?: string;
-	data?: T
-}
-
-export type AutocompleteFn = (q?: string) => Array<AutocompleteItem | string> | Promise<Array<AutocompleteItem | string>> | Observable<Array<AutocompleteItem | string>>;
 
 @Component({
   selector: 'rlb-autocomplete',

@@ -1,21 +1,9 @@
-import {
-	booleanAttribute,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-	numberAttribute,
-	Optional,
-	Output,
-	Renderer2,
-	Self,
-	ViewChild
-} from '@angular/core';
+import { booleanAttribute, Component, Input, Optional, Renderer2, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { timezones } from '@open-rlb/date-tz';
 import { UniqueIdService } from '../../shared/unique-id.service';
-import { AbstractComponent } from './abstract-field.component';
-import { AutocompleteItem } from './autocomplete.component';
+import { AutocompleteItem } from "./autocomplete-model";
+import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
 
 @Component({
   selector: 'rlb-autocomplete-timezones',
@@ -30,16 +18,15 @@ import { AutocompleteItem } from './autocomplete.component';
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
-        [class.form-control-lg]="size === 'large'"
+				[attr.autocomplete]="'off'"
+				[class.form-control-lg]="size === 'large'"
         [class.form-control-sm]="size === 'small'"
-        [value]="value || ''"
         (blur)="touch()"
 				[ngClass]="{
         'is-invalid': control?.touched && control?.invalid,
         'is-valid': control?.touched && control?.valid
         }"
         (input)="update($event.target)"
-        (keyup.enter)="onEnter($event.target)"
       />
 			<rlb-input-validation *ngIf="errors && showError" [errors]="errors"/>
 		</div>
@@ -62,102 +49,40 @@ import { AutocompleteItem } from './autocomplete.component';
   standalone: false
 })
 export class AutocompleteTimezonesComponent
-  extends AbstractComponent<string>
+	extends AbstractAutocompleteComponent
   implements ControlValueAccessor {
-  acLoading: boolean = false;
-  private typingTimeout: any;
-
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
-  @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
-  @Input({ alias: 'placeholder' }) placeholder?: string = '';
-  @Input() size?: 'small' | 'large' | undefined;
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-
-  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
-  @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
-	@Output() selected: EventEmitter<AutocompleteItem | string> = new EventEmitter<AutocompleteItem | string>();
-
-  constructor(
-    idService: UniqueIdService,
-    private readonly renderer: Renderer2,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
-  }
-
-  update(ev: EventTarget | null) {
-    if (this.typingTimeout) {
-      clearTimeout(this.typingTimeout);
-    }
-    this.typingTimeout = setTimeout(() => {
-      if (!this.disabled) {
-        const t = ev as HTMLInputElement;
-        this.manageSuggestions(t?.value);
-      }
-    }, 500);
-    if (!this.disabled) {
-      const t = ev as HTMLInputElement;
-      this.manageSuggestions(t?.value);
-    }
-  }
-
-  override onWrite(data: string): void {
-    if (this.el && this.el.nativeElement) {
-      if (typeof data === 'string') {
-        this.el.nativeElement.value = data;
-      }
-    }
-  }
-
-  manageSuggestions(data: string) {
-    this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
-    while (this.dropdown.nativeElement.firstChild) {
-      if (this.dropdown.nativeElement.lastChild) {
-        this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild);
-      }
-    }
-    if (data && data.length > 0) {
+	
+	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
+	
+	constructor(
+		idService: UniqueIdService,
+		renderer: Renderer2,
+		@Self() @Optional() override control?: NgControl,
+	) {
+		super(idService, renderer, control);
+	}
+	
+	protected override getSuggestions(query: string) {
+		this.clearDropdown();
+		this.activeIndex = -1;
+		
+		if (query && query.length > 0) {
+			this.openDropdown();
 			const suggestions = Object.keys(timezones).filter(o => {
-				return o.toLowerCase().includes(data.toLowerCase());
+				return o.toLowerCase().includes(query.toLowerCase());
 			});
-      this.renderAc(suggestions);
-    } else {
-      this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-    }
-  }
-
-  renderAc(suggestions: string[]) {
-    if (suggestions.length > 0) {
-      for (const suggestion of suggestions) {
-        const el = this.renderer.createElement('a');
-        this.renderer.addClass(el, 'dropdown-item');
-        this.renderer.appendChild(el, this.renderer.createText(suggestion));
-        this.renderer.listen(el, 'click', () => {
-          this.selected.emit(suggestion);
-          this.setValue(suggestion);
-          this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-        });
-        this.renderer.appendChild(this.dropdown.nativeElement, el);
-      }
-    } else {
-      const el = this.renderer.createElement('a');
-      this.renderer.addClass(el, 'dropdown-item');
-      this.renderer.addClass(el, 'disabled');
-      this.renderer.addClass(el, 'text-center');
-      this.renderer.setAttribute(el, 'disabled', 'true');
-      this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
-      this.renderer.appendChild(this.dropdown.nativeElement, el);
-    }
-  }
-
-  onEnter(ev: EventTarget | null) {
-    const t = ev as HTMLInputElement;
-    if (!this.disabled && t && t.value) {
-      this.setValue(t?.value);
-      this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-    }
-  }
+			this.renderAc(suggestions);
+		} else {
+			this.closeDropdown();
+		}
+	}
+	
+	protected override getItemText(data?: AutocompleteItem | string): string {
+		if (typeof data === 'object' && data !== null && 'text' in data) {
+			return (data as AutocompleteItem).text || '';
+		} else if (typeof data === 'string') {
+			return data || '';
+		}
+		return '';
+	}
 }
