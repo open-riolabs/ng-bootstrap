@@ -44,7 +44,7 @@ import { OptionComponent } from './options.component';
         <option *ngIf="placeholder" selected disabled>{{ placeholder }}</option>
         <ng-container #projectedDisplayOptions></ng-container>
       </select>
-			<rlb-input-validation *ngIf="errors" [errors]="errors"/>
+			<rlb-input-validation *ngIf="errors && showError" [errors]="errors"/>
 		</div>
     <ng-content select="[after]"></ng-content>`,
     standalone: false

@@ -44,7 +44,7 @@ import { AbstractComponent } from './abstract-field.component';
         }"
         (input)="update($event.target)"
       />
-      <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
+		<rlb-input-validation *ngIf="!extValidation && showError" [errors]="errors"/>
     <ng-content select="[after]"></ng-content>
   </ng-template>`,
   standalone: false
