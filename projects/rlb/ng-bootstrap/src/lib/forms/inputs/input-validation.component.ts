@@ -7,9 +7,9 @@ import { RLB_TRANSLATION_SERVICE, RlbTranslationService } from "../../shared/i18
     host: { class: 'invalid-feedback' },
 	template: `
 		<ng-container *ngIf="errors">
-			<p *ngFor="let errorKey of getErrorKeys(errors)">
+			<span *ngFor="let errorKey of getErrorKeys(errors)">
 				{{ getTranslatedError(errorKey, errors[errorKey]) }}
-			</p>
+			</span>
 		</ng-container>
 	`,
     standalone: false
