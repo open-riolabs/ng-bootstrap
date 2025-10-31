@@ -41,7 +41,7 @@ import { AutocompleteItem } from './autocomplete.component';
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
       />
-			<rlb-input-validation *ngIf="errors" [errors]="errors"/>
+			<rlb-input-validation *ngIf="errors && showError" [errors]="errors"/>
 		</div>
     <rlb-progress class="w-100" [height]="2" [infinite]="loading || acLoading" color="primary" />
     <ng-content select="[after]"></ng-content>
