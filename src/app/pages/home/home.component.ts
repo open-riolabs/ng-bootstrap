@@ -26,7 +26,7 @@ export class HomeComponent {
 
   profileForm = new FormGroup({
     firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),
-
+		country: new FormControl("", [Validators.required, Validators.minLength(2)]),
   });
 
   updateProfile() { }

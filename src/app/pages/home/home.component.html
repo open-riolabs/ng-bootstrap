@@ -42,11 +42,13 @@
 	</form>
 
 	<br>
-	<rlb-autocomplete-country [(ngModel)]="country"></rlb-autocomplete-country>
+	<div [formGroup]="profileForm">
+		<rlb-autocomplete-country formControlName="country"></rlb-autocomplete-country>
+	</div>
 	{{ country }}
 
 	<br>
-	<rlb-autocomplete-timezones [(ngModel)]="timezone"></rlb-autocomplete-timezones>
+	<rlb-autocomplete-timezones required [(ngModel)]="timezone"></rlb-autocomplete-timezones>
 	{{ timezone }}
 
 	<br>
