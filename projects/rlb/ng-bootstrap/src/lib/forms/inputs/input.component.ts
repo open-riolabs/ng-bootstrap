@@ -1,16 +1,16 @@
 import {
-	AfterViewInit,
-	booleanAttribute,
-	Component,
-	ElementRef,
-	Input,
-	numberAttribute,
-	OnInit,
-	Optional,
-	Self,
-	TemplateRef,
-	ViewChild,
-	ViewContainerRef
+  AfterViewInit,
+  booleanAttribute,
+  Component,
+  ElementRef,
+  Input,
+  numberAttribute,
+  OnInit,
+  Optional,
+  Self,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
@@ -56,13 +56,13 @@ export class InputComponent
   @Input({ alias: 'readonly', transform: booleanAttribute, }) readonly?: boolean;
   @Input({ alias: 'before-text', transform: booleanAttribute, }) beforeText?: boolean;
   @Input({ alias: 'placeholder' }) placeholder?: string;
-  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
+  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | 'datetime-local' | string = 'text';
   @Input({ alias: 'size' }) size?: 'small' | 'large';
   @Input({ alias: 'name' }) name?: string;
   @Input({ alias: 'max', transform: numberAttribute }) max?: number;
   @Input({ alias: 'min', transform: numberAttribute }) min?: number;
   @Input({ alias: 'step', transform: numberAttribute }) step?: number;
-  @Input({ alias: 'date-type' }) dateType?: 'date' | 'string' | 'number' | 'date-tz' = 'string';
+  @Input({ alias: 'date-type' }) dateType?: 'date' | 'string' | 'number' | 'date-tz' | string;
   @Input({ alias: 'timezone' }) timezone?: string = 'UTC';
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
 	@Input({ alias: 'extValidation', transform: booleanAttribute, }) extValidation: boolean = false;
@@ -133,10 +133,10 @@ export class InputComponent
 					this.el.nativeElement.value = '';
 					return;
 				}
-				
-				let val = parseFloat(this.removeNonDigits(data));
-				
-				if (this.max && val > this.max) {
+
+        let val = parseFloat(this.removeNonDigits(data));
+
+        if (this.max && val > this.max) {
           val = this.max;
         }
         if (this.min && val < this.min) {
