@@ -11,35 +11,38 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr *ngFor="let time of timeSlots" [style.height.px]="rowHeight">
-					<td class="text-center small d-flex align-items-center justify-content-center" [style.height.px]="rowHeight">
-						{{ time }}
-					</td>
-					<td *ngFor="let day of days" class="calendar-hour-cell" [style.height.px]="rowHeight"
-							(click)="createOrEditEvent(); $event.stopPropagation()">
-						<div class="quarter-hour-line top-25"></div>
-						<div class="quarter-hour-line top-50"></div>
-						<div class="quarter-hour-line top-75"></div>
+        <tr *ngFor="let time of timeSlots" [style.height.px]="rowHeight">
+          <td class="text-center small d-flex align-items-center justify-content-center" [style.height.px]="rowHeight">
+            {{ time }}
+          </td>
+          <td *ngFor="let day of days" class="calendar-hour-cell" [style.height.px]="rowHeight"
+              (click)="createOrEditEvent(); $event.stopPropagation()">
+            <div class="quarter-hour-line top-25"></div>
+            <div class="quarter-hour-line top-50"></div>
+            <div class="quarter-hour-line top-75"></div>
 
-						<ng-container *ngFor="let event of getEventsForHour(day, time)">
-							<div class="calendar-event"
-									 [ngClass]="'bg-' + event.color + ' border-light'"
-									 [style.top.px]="calculateEventTop(event, time, day)"
-									 [style.height.px]="calculateEventHeightInHour(event, time, day)"
-									 (click)="eventClick.emit(event); $event.stopPropagation()"
-							>
-								<ng-container *ngIf="isEventStartInHour(event, time, day)">
-								{{ event.title }}
-								</ng-container>
-							</div>
-						</ng-container>
-						<div *ngIf="isCurrentDay(day) && isCurrentHour(time)"
-								 class="now-line"
-								 [style.top.px]="calculateNowLineTop()">
-							<div class="now-line-dot"></div>
-						</div>
-					</td>
-				</tr>
+            <ng-container *ngFor="let event of getEventsForHour(day, time)">
+              <div class="calendar-event"
+                   [tooltip]="event.title"
+                   [ngClass]="'bg-' + event.color + ' border-light'"
+                   [style.top.px]="calculateEventTop(event, time, day)"
+                   [style.height.px]="calculateEventHeightInHour(event, time, day)"
+                   [style.left.%]="event.left"
+                   [style.width.%]="event.width"
+                   (click)="eventClick.emit(event); $event.stopPropagation()"
+              >
+                <ng-container *ngIf="isEventStartInHour(event, time, day)">
+                  {{ event.title }}
+                </ng-container>
+              </div>
+            </ng-container>
+            <div *ngIf="isCurrentDay(day) && isCurrentHour(time)"
+                 class="now-line"
+                 [style.top.px]="calculateNowLineTop()">
+              <div class="now-line-dot"></div>
+            </div>
+          </td>
+        </tr>
 				</tbody>
 			</table>
 		</div>
