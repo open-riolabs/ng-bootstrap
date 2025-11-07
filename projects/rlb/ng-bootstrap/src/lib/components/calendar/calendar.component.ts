@@ -2,6 +2,10 @@ import { booleanAttribute, Component, EventEmitter, Input, OnChanges, Output, Si
 import { CalendarEvent } from "./interfaces/calendar-event.interface";
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
 import { CalendarChangeEvent, CalendarView } from "./interfaces/calendar-view.type";
+import { ModalService } from "../modals/modal.service";
+import { UniqueIdService } from "../../shared/unique-id.service";
+import { take } from "rxjs";
+
 
 @Component({
 	selector: "rlb-calendar",
@@ -28,7 +32,7 @@ export class CalendarComponent implements OnChanges {
   // private userTimeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	private dateFormat: string = 'YYYY-MM-DD HH:mm:ss';
 
-  constructor() {
+  constructor(private modals: ModalService, private unique: UniqueIdService) {
 		this.currentDate = DateTz.now();
 	}
 
@@ -43,6 +47,39 @@ export class CalendarComponent implements OnChanges {
 		}
 	}
 
+  onEventClick(eventToEdit?: CalendarEvent) {
+    if (eventToEdit) {
+      this.eventClick.emit(eventToEdit)
+    }
+
+    this.modals.openModal<CalendarEvent | undefined, CalendarEvent>('rlb-calendar-event-create-edit', {
+      title: eventToEdit ? 'Edit event' : 'Create event',
+      content: eventToEdit,
+      ok: 'OK',
+      type: 'success',
+    }).pipe(
+      take(1)
+    ).subscribe((modalResult) => {
+      const newEvent = modalResult.result;
+      if (modalResult.reason === 'cancel' && eventToEdit) {
+        this.events = [...this.events.filter(event => event.id !== eventToEdit.id),]
+        return
+      }
+
+      if (modalResult.reason === 'cancel') {
+        return
+      }
+
+      if (eventToEdit) {
+        const idx = this.events.findIndex((event) => event.id === eventToEdit.id);
+        this.events[idx] = newEvent
+      } else {
+        this.events.push(newEvent)
+      }
+
+      this.events = [...this.events];
+    })
+  }
 
   setDate(date: IDateTz) {
 		this.currentDate = date;
@@ -185,6 +222,11 @@ export class CalendarComponent implements OnChanges {
 			end: dayBeforeYesterdayEnd.cloneToTimezone('UTC').set(2, 'hour').set(0, 'minute'),
 		});
 
-    this.events = events
+    this.events = events.map((event) => {
+      return {
+        ...event,
+        id: this.unique.id
+      }
+    })
 	}
 }

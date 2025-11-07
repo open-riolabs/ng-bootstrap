@@ -4,7 +4,6 @@ import { isSameDay, isToday } from "../utils/calendar-date-utils";
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
 import { CalendarView } from "../interfaces/calendar-view.type";
-import { ModalService } from "../../modals/modal.service";
 
 @Component({
 	selector: 'rlb-calendar-grid',
@@ -16,7 +15,7 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	@Input() view!: CalendarView;
 	@Input() currentDate!: IDateTz;
 	@Input() events: CalendarEvent[] = [];
-	@Output() eventClick = new EventEmitter<CalendarEvent>();
+  @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
 
   // Map<timestamp_day, CalendarEventWithLayout[]>
   processedEvents: Map<number, CalendarEventWithLayout[]> = new Map();
@@ -31,22 +30,13 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	private nowInterval: any;
 
   constructor(
-		private modals: ModalService,
 	) {
 		this.now = DateTz.now();
 	}
 
-  createOrEditEvent() {
-		console.log("Event clicked");
-		this.modals.openModal('rlb-calendar-event-create-edit', {
-			title: 'Demo',
-			content: 'This is a demo component',
-			ok: 'OK',
-			type: 'success',
-		}).subscribe((result) => {
-			console.log(result);
-		})
-	}
+  onEventEdit(event?: CalendarEventWithLayout): void {
+    this.eventClick.emit(event);
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['view'] || changes['currentDate']) {

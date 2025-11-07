@@ -16,7 +16,7 @@
             {{ time }}
           </td>
           <td *ngFor="let day of days" class="calendar-hour-cell" [style.height.px]="rowHeight"
-              (click)="createOrEditEvent(); $event.stopPropagation()">
+              (click)="onEventEdit(); $event.stopPropagation()">
             <div class="quarter-hour-line top-25"></div>
             <div class="quarter-hour-line top-50"></div>
             <div class="quarter-hour-line top-75"></div>
@@ -29,7 +29,7 @@
                    [style.height.px]="calculateEventHeightInHour(event, time, day)"
                    [style.left.%]="event.left"
                    [style.width.%]="event.width"
-                   (click)="eventClick.emit(event); $event.stopPropagation()"
+                   (click)="onEventEdit(event); $event.stopPropagation()"
               >
                 <ng-container *ngIf="isEventStartInHour(event, time, day)">
                   {{ event.title }}
