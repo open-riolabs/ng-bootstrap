@@ -60,7 +60,7 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 		const [hourStr] = time.split(':');
 		const hour = parseInt(hourStr, 10);
 
-    const startOfHour = new DateTz(day.timestamp, 'UTC')
+    const startOfHour = new DateTz(day)
 			.set(hour, 'hour')
 			.set(0, 'minute')
 

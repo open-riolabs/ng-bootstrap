@@ -1,6 +1,6 @@
 import { booleanAttribute, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { CalendarEvent } from "./interfaces/calendar-event.interface";
-import { DateTz, IDateTz } from "@open-rlb/date-tz";
+import { DateTz } from "@open-rlb/date-tz";
 import { CalendarChangeEvent, CalendarView } from "./interfaces/calendar-view.type";
 import { ModalService } from "../modals/modal.service";
 import { UniqueIdService } from "../../shared/unique-id.service";
@@ -19,7 +19,7 @@ export class CalendarComponent implements OnChanges {
 
 	@Input({ alias: 'events' }) events: CalendarEvent[] = [];
 
-	@Input({ alias: 'current-date' }) currentDate: IDateTz;
+  @Input({ alias: 'current-date' }) currentDate: DateTz;
 
 	@Input({ alias: 'loading', transform: booleanAttribute }) loading = false;
 
@@ -38,7 +38,7 @@ export class CalendarComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
 		if (changes['currentDate']) {
-			const incomingDate = changes['currentDate'].currentValue as IDateTz;
+      const incomingDate = changes['currentDate'].currentValue as DateTz;
 			this.currentDate = incomingDate;
 		}
 
@@ -81,7 +81,7 @@ export class CalendarComponent implements OnChanges {
     })
   }
 
-  setDate(date: IDateTz) {
+  setDate(date: DateTz) {
 		this.currentDate = date;
 		this.dateChange.emit({ date, view: this.view });
 	}
@@ -184,43 +184,43 @@ export class CalendarComponent implements OnChanges {
 
 
     // === 2. Event "Tomorrow" (currentDate + 1 day) ===
-		const tomorrow = now.cloneToTimezone('UTC').add(1, 'day');
-		events.push({
-			color: 'info',
-			title: 'Tomorrow 2h (09:00-11:00)',
-			start: tomorrow.cloneToTimezone('UTC').set(9, 'hour').set(0, 'minute'),
-			end: tomorrow.cloneToTimezone('UTC').set(11, 'hour').set(0, 'minute'),
-		});
+    const tomorrow = now.add(1, 'day');
+    events.push({
+      color: 'info',
+      title: 'Tomorrow 2h (09:00-11:00)',
+      start: tomorrow.set!(9, 'hour').set!(0, 'minute'),
+      end: tomorrow.set!(11, 'hour').set!(0, 'minute'),
+    });
 
 
     // === 3. Event after tomorrow (currentDate + 2 days) ===
-		const dayAfterTomorrow = now.cloneToTimezone('UTC').add(2, 'day');
-		events.push({
-			color: 'success',
-			title: 'After Tomorrow 1h (17:00-18:00)',
-			start: dayAfterTomorrow.cloneToTimezone('UTC').set(17, 'hour').set(0, 'minute'),
-			end: dayAfterTomorrow.cloneToTimezone('UTC').set(18, 'hour').set(0, 'minute'),
-		});
+    const dayAfterTomorrow = now.cloneToTimezone('UTC').add(2, 'day');
+    events.push({
+      color: 'success',
+      title: 'After Tomorrow 1h (17:00-18:00)',
+      start: dayAfterTomorrow.set!(17, 'hour').set!(0, 'minute'),
+      end: dayAfterTomorrow.set!(18, 'hour').set!(0, 'minute'),
+    });
 
 
     // === 4. Event (currentDate - 1 day) ===
-		const yesterday = now.cloneToTimezone('UTC').add(-1, 'day');
-		events.push({
-			color: 'warning',
-			title: 'Yesterday 2h (14:00-16:00)',
-			start: yesterday.cloneToTimezone('UTC').set(14, 'hour').set(0, 'minute'),
-			end: yesterday.cloneToTimezone('UTC').set(16, 'hour').set(0, 'minute'),
-		});
+    const yesterday = now.cloneToTimezone('UTC').add(-1, 'day');
+    events.push({
+      color: 'warning',
+      title: 'Yesterday 2h (14:00-16:00)',
+      start: yesterday.set!(14, 'hour').set!(0, 'minute'),
+      end: yesterday.set!(16, 'hour').set!(0, 'minute'),
+    });
 
     // === 5. Event "Cross day"  ===
-		const dayBeforeYesterday = now.cloneToTimezone('UTC').add(-2, 'day');
-		const dayBeforeYesterdayEnd = now.cloneToTimezone('UTC').add(-1, 'day');
-		events.push({
-			color: 'secondary',
-			title: 'Cross Day (22:00 -> 02:00)',
-			start: dayBeforeYesterday.cloneToTimezone('UTC').set(22, 'hour').set(0, 'minute'),
-			end: dayBeforeYesterdayEnd.cloneToTimezone('UTC').set(2, 'hour').set(0, 'minute'),
-		});
+    const dayBeforeYesterday = now.cloneToTimezone('UTC').add(-2, 'day');
+    const dayBeforeYesterdayEnd = now.cloneToTimezone('UTC').add(-1, 'day');
+    events.push({
+      color: 'secondary',
+      title: 'Cross Day (22:00 -> 02:00)',
+      start: dayBeforeYesterday.set!(0, 'minute'),
+      end: dayBeforeYesterdayEnd.set!(0, 'minute'),
+    });
 
     this.events = events.map((event) => {
       return {
