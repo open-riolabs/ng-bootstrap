@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DateTz, IDateTz } from '@open-rlb/date-tz';
+import { DateTz } from '@open-rlb/date-tz';
 import {
-	AutocompleteItem,
-	ModalService,
-	requiredAutocompleteValue,
-	ToastService
+  AutocompleteItem,
+  ModalService,
+  requiredAutocompleteValue,
+  ToastService
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
@@ -25,7 +25,7 @@ export class HomeComponent {
 	}
 
   number: number = 0;
-  dtz?: IDateTz = DateTz.now();
+  dtz: DateTz = DateTz.now();
   str: string = 'Hello World!';
   timezone: string = '';
   country: string = '';
@@ -50,8 +50,8 @@ export class HomeComponent {
   });
 
   updateProfile() { }
-	
-	test() {
+
+  test() {
 		console.log(this.profileForm.value);
 	}
 }
