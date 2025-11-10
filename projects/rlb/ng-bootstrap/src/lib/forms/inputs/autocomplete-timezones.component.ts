@@ -1,6 +1,6 @@
 import { booleanAttribute, Component, Input, Optional, Renderer2, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { timezones } from '@open-rlb/date-tz';
+// import { timezones } from '@open-rlb/date-tz';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AutocompleteItem } from "./autocomplete-model";
 import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
@@ -51,23 +51,25 @@ import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component
 export class AutocompleteTimezonesComponent
 	extends AbstractAutocompleteComponent
   implements ControlValueAccessor {
-	
+
 	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
-	
-	constructor(
+
+  constructor(
 		idService: UniqueIdService,
 		renderer: Renderer2,
 		@Self() @Optional() override control?: NgControl,
 	) {
 		super(idService, renderer, control);
 	}
-	
-	protected override getSuggestions(query: string) {
+
+  protected override getSuggestions(query: string) {
 		this.clearDropdown();
 		this.activeIndex = -1;
-		
-		if (query && query.length > 0) {
+
+    if (query && query.length > 0) {
 			this.openDropdown();
+      // TODO handle data source
+      const timezones = {}
 			const suggestions = Object.keys(timezones).filter(o => {
 				return o.toLowerCase().includes(query.toLowerCase());
 			});
@@ -76,8 +78,8 @@ export class AutocompleteTimezonesComponent
 			this.closeDropdown();
 		}
 	}
-	
-	protected override getItemText(data?: AutocompleteItem | string): string {
+
+  protected override getItemText(data?: AutocompleteItem | string): string {
 		if (typeof data === 'object' && data !== null && 'text' in data) {
 			return (data as AutocompleteItem).text || '';
 		} else if (typeof data === 'string') {

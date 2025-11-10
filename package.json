@@ -36,7 +36,7 @@
     "@angular/platform-browser-dynamic": "^20.1.0",
     "@angular/router": "^20.1.0",
     "@ngx-translate/core": "^16.0.4",
-    "@open-rlb/date-tz": "^1.0.3",
+    "@open-rlb/date-tz": ">=2.0.1",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "ngx-highlightjs": "^14.0.1",
