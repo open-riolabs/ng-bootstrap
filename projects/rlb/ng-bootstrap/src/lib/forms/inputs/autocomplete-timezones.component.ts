@@ -1,6 +1,6 @@
 import { booleanAttribute, Component, Input, Optional, Renderer2, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-// import { timezones } from '@open-rlb/date-tz';
+import { DateTz } from '@open-rlb/date-tz';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AutocompleteItem } from "./autocomplete-model";
 import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
@@ -68,9 +68,8 @@ export class AutocompleteTimezonesComponent
 
     if (query && query.length > 0) {
 			this.openDropdown();
-      // TODO handle data source
-      const timezones = {}
-			const suggestions = Object.keys(timezones).filter(o => {
+      const timezones = DateTz.timezones()
+      const suggestions = timezones.filter(o => {
 				return o.toLowerCase().includes(query.toLowerCase());
 			});
 			this.renderAc(suggestions);
