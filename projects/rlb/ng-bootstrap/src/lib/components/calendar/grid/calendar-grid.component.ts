@@ -38,13 +38,9 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	now: DateTz;
 	private nowInterval: any;
 
-  //private nativeNow: Date = new Date();
-
   constructor(
 	) {
     this.now = getToday()
-    // const nowOffset = this.now.timezoneOffset;
-    // this.nativeNow = new Date(this.now.timestamp + nowOffset);
   }
 
   onEventEdit(event?: CalendarEventWithLayout): void {
@@ -232,16 +228,30 @@ export class CalendarGrid implements OnChanges, OnDestroy {
     const eventsByDay = new Map<number, CalendarEvent[]>();
 
     for (const event of this.events) {
-      const dayStartTz = new DateTz(event.start.timestamp, 'UTC')
-        .set(0, 'hour')
-        .set(0, 'minute')
+      // clean input events from ms offset
+      const cleanStart = new DateTz(event.start).stripSecMillis() as DateTz;
+      const cleanEnd = new DateTz(event.end).stripSecMillis() as DateTz;
+      const cleanEvent: CalendarEvent = { ...event, start: cleanStart, end: cleanEnd };
 
-      const dayTimestamp = dayStartTz.stripSecMillis().timestamp
+      let currentDateStartOfDay = new DateTz(cleanStart).set(0, 'hour').set(0, 'minute').stripSecMillis() as DateTz;
 
-      if (!eventsByDay.has(dayTimestamp)) {
-        eventsByDay.set(dayTimestamp, []);
+      const dayAfterEnd = new DateTz(cleanEnd)
+        .add!(1, 'day')
+        .set!(0, 'hour')
+        .set!(0, 'minute')
+        .stripSecMillis!() as DateTz;
+
+
+      while (currentDateStartOfDay.compare!(dayAfterEnd) < 0) {
+        const dayTimestamp = currentDateStartOfDay.timestamp;
+
+        if (!eventsByDay.has(dayTimestamp)) {
+          eventsByDay.set(dayTimestamp, []);
+        }
+        eventsByDay.get(dayTimestamp)!.push(cleanEvent);
+
+        currentDateStartOfDay = currentDateStartOfDay.add(1, 'day') as DateTz;
       }
-      eventsByDay.get(dayTimestamp)!.push(event);
     }
 
     for (const [dayTimestamp, dayEvents] of eventsByDay.entries()) {
