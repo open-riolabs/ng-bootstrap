@@ -1,7 +1,7 @@
 <div class="rlb-calendar">
 	<div class="my-3 d-flex align-items-center justify-content-between">
 		<span>
-			DateTz.now(): {{ currentDate.hour | json }}:{{ currentDate.minute | json }}
+			DateTz.now(): {{ currentDate.hour | json }}:{{ currentDate.minute | json }} {{ currentDate.timezone }}
 		</span>
 		<button rlb-button outline (click)="generateTestEvents()">Generate events</button>
 	</div>

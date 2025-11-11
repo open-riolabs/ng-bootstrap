@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges
+} from "@angular/core";
 import { CalendarEvent, CalendarEventWithLayout } from "../interfaces/calendar-event.interface";
 import { getToday, isSameDay, isToday } from "../utils/calendar-date-utils";
 import { IDateTz } from "@open-rlb/date-tz";
@@ -9,7 +18,8 @@ import { CalendarView } from "../interfaces/calendar-view.type";
 	selector: 'rlb-calendar-grid',
 	templateUrl: './calendar-grid.component.html',
 	styleUrls: ['./calendar-grid.component.scss'],
-	standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarGrid implements OnChanges, OnDestroy {
 	@Input() view!: CalendarView;
@@ -28,10 +38,14 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	now: DateTz;
 	private nowInterval: any;
 
+  //private nativeNow: Date = new Date();
+
   constructor(
 	) {
     this.now = getToday()
-	}
+    // const nowOffset = this.now.timezoneOffset;
+    // this.nativeNow = new Date(this.now.timestamp + nowOffset);
+  }
 
   onEventEdit(event?: CalendarEventWithLayout): void {
     this.eventClick.emit(event);
@@ -189,7 +203,6 @@ export class CalendarGrid implements OnChanges, OnDestroy {
       .set!(0, 'minute')
       .stripSecMillis!();
 
-    
     this.days = [];
     for (let i = 0; i < 7; i++) {
       this.days.push(new DateTz(start.timestamp, 'UTC').add(i, 'day'));
