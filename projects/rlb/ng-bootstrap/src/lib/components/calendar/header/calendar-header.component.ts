@@ -11,7 +11,7 @@ import { addDays, getToday } from "../utils/calendar-date-utils";
 })
 export class CalendarHeaderComponent {
 	@Input() view: CalendarView = 'month';
-  @Input() currentDate: DateTz = DateTz.now();
+  @Input() currentDate!: DateTz
   @Output() dateChange = new EventEmitter<DateTz>();
 	@Output() viewChange = new EventEmitter<CalendarView>();
 

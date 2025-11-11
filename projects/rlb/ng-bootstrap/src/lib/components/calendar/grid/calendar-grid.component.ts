@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
 import { CalendarEvent, CalendarEventWithLayout } from "../interfaces/calendar-event.interface";
-import { isSameDay, isToday } from "../utils/calendar-date-utils";
+import { getToday, isSameDay, isToday } from "../utils/calendar-date-utils";
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
 import { CalendarView } from "../interfaces/calendar-view.type";
@@ -17,7 +17,6 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	@Input() events: CalendarEvent[] = [];
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
 
-  // Map<timestamp_day, CalendarEventWithLayout[]>
   processedEvents: Map<number, CalendarEventWithLayout[]> = new Map();
 
   days: IDateTz[] = [];
@@ -31,7 +30,7 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 
   constructor(
 	) {
-		this.now = DateTz.now();
+    this.now = getToday()
 	}
 
   onEventEdit(event?: CalendarEventWithLayout): void {
@@ -40,11 +39,11 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['view'] || changes['currentDate']) {
-			if (this.view === 'week') {
-				this.buildWeekGrid(this.currentDate);
-				this.buildTimeSlots();
-			}
-		}
+      if (this.view === 'week') {
+        this.buildWeekGrid(this.currentDate);
+        this.buildTimeSlots();
+      }
+    }
 
     if (changes['events']) {
       this.events = changes['events'].currentValue as CalendarEvent[];
@@ -57,23 +56,24 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	}
 
   getEventsForHour(day: IDateTz, time: string): CalendarEventWithLayout[] {
-		const [hourStr] = time.split(':');
-		const hour = parseInt(hourStr, 10);
+    const [hourStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
 
     const startOfHour = new DateTz(day)
-			.set(hour, 'hour')
-			.set(0, 'minute')
+      .set(hour, 'hour')
+      .set(0, 'minute')
 
     const endOfHour = new DateTz(startOfHour.timestamp, 'UTC').add(1, 'hour');
 
-    const dayTimestamp = new DateTz(day.timestamp, 'UTC')
+    const dayStartTz = new DateTz(day.timestamp, 'UTC')
       .set(0, 'hour')
-      .set(0, 'minute')
-      .timestamp;
+      .set(0, 'minute');
+
+    const dayTimestamp = dayStartTz.stripSecMillis().timestamp
 
     const dayEvents = this.processedEvents.get(dayTimestamp) || [];
 
-    return dayEvents.filter(event => {
+    const filteredDayEvents = dayEvents.filter(event => {
       const eventStart = event.start;
       const eventEnd = event.end;
 
@@ -82,38 +82,40 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 
       return eventStartsBeforeEndOfHour && eventEndsAfterStartOfHour;
     });
+
+    return filteredDayEvents;
 	}
 
   calculateEventTop(event: CalendarEvent, time: string, day: IDateTz): number {
-		const [hourStr] = time.split(':');
-		const hour = parseInt(hourStr, 10);
+    const [hourStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
 
     const startOfCurrentHour = new DateTz(day.timestamp, 'UTC')
-			.set(hour, 'hour')
-			.set(0, 'minute')
+      .set(hour, 'hour')
+      .set(0, 'minute')
 
     const eventStart = event.start;
-		const effectiveStartTimestamp = Math.max(eventStart.timestamp, startOfCurrentHour.timestamp);
-		const diffMs = effectiveStartTimestamp - startOfCurrentHour.timestamp;
-		const diffMinutes = diffMs / (1000 * 60);
+    const effectiveStartTimestamp = Math.max(eventStart.timestamp, startOfCurrentHour.timestamp);
+    const diffMs = effectiveStartTimestamp - startOfCurrentHour.timestamp;
+    const diffMinutes = diffMs / (1000 * 60);
 
     return (diffMinutes / 60) * this.rowHeight;
 	}
 
   isEventStartInHour(event: CalendarEventWithLayout, time: string, day: IDateTz): boolean {
-		const [hourStr] = time.split(':');
-		const hour = parseInt(hourStr, 10);
+    const [hourStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
 
     const startOfHour = new DateTz(day.timestamp, 'UTC')
-			.set(hour, 'hour')
-			.set(0, 'minute')
+      .set(hour, 'hour')
+      .set(0, 'minute')
 
     const endOfHour = new DateTz(startOfHour.timestamp, 'UTC').add(1, 'hour');
 
     const eventStart = event.start;
 
     const startsAfterOrAtStart = eventStart.compare!(startOfHour) >= 0;
-		const startsBeforeEnd = eventStart.compare!(endOfHour) < 0;
+    const startsBeforeEnd = eventStart.compare!(endOfHour) < 0;
 
     const startsOnCurrentDay = isSameDay(event.start, day);
 
@@ -121,17 +123,17 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	}
 
   calculateEventHeightInHour(event: CalendarEvent, time: string, day: IDateTz): number {
-		const [hourStr] = time.split(':');
-		const hour = parseInt(hourStr, 10);
+    const [hourStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
 
     const startOfCurrentHour = new DateTz(day.timestamp, 'UTC')
-			.set(hour, 'hour')
-			.set(0, 'minute')
+      .set(hour, 'hour')
+      .set(0, 'minute')
 
     const endOfCurrentHour = new DateTz(startOfCurrentHour.timestamp, 'UTC').add(1, 'hour');
 
     const eventStart = event.start;
-		const eventEnd = event.end;
+    const eventEnd = event.end;
 
     const effectiveStartTimestamp = Math.max(eventStart.timestamp, startOfCurrentHour.timestamp);
 
@@ -168,7 +170,6 @@ export class CalendarGrid implements OnChanges, OnDestroy {
   private startNowTimer() {
     this.nowInterval = setInterval(() => {
       this.now = DateTz.now();
-      // this.cdr.detectChanges();
     }, 60 * 1000); // every minute
   }
 
@@ -183,8 +184,12 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 
     // Week init (monday)
     const start = new DateTz(currentDate.timestamp, 'UTC')
-      .add(-(dayOfWeek - 1), 'day'); // clone or create new for start date
+      .add!(-(dayOfWeek - 1), 'day') // clone or create new for start date
+      .set!(0, 'hour')
+      .set!(0, 'minute')
+      .stripSecMillis!();
 
+    
     this.days = [];
     for (let i = 0; i < 7; i++) {
       this.days.push(new DateTz(start.timestamp, 'UTC').add(i, 'day'));
@@ -214,10 +219,11 @@ export class CalendarGrid implements OnChanges, OnDestroy {
     const eventsByDay = new Map<number, CalendarEvent[]>();
 
     for (const event of this.events) {
-      const dayTimestamp = new DateTz(event.start.timestamp, 'UTC')
+      const dayStartTz = new DateTz(event.start.timestamp, 'UTC')
         .set(0, 'hour')
         .set(0, 'minute')
-        .timestamp;
+
+      const dayTimestamp = dayStartTz.stripSecMillis().timestamp
 
       if (!eventsByDay.has(dayTimestamp)) {
         eventsByDay.set(dayTimestamp, []);

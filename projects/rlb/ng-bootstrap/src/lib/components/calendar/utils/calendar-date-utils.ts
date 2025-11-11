@@ -1,22 +1,12 @@
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 
 export function isSameDay(a: IDateTz, b: IDateTz): boolean {
-
-	const daInCommonTz = new DateTz(a.timestamp, 'UTC');
-	const dbInCommonTz = new DateTz(b.timestamp, 'UTC');
-
-	return daInCommonTz.year === dbInCommonTz.year &&
-		daInCommonTz.month === dbInCommonTz.month &&
-		daInCommonTz.day === dbInCommonTz.day;
+  return a.yearUTC === b.yearUTC &&
+    a.monthUTC === b.monthUTC &&
+    a.dayUTC === b.dayUTC;
 }
 
-export function isSameMonth(a: IDateTz, b: IDateTz): boolean {
-	const da = new DateTz(a);
-	const db = new DateTz(b);
-	return da.year === db.year && da.month === db.month;
-}
-
-export function addDays(date: IDateTz, days: number): DateTz {
+export function addDays(date: DateTz, days: number): DateTz {
   return new DateTz(date.add!(days, 'day'));
 }
 
@@ -34,15 +24,15 @@ export function isToday(date: IDateTz): boolean {
 	// const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	const today = DateTz.now();
 
-  const dateInUserTimeZone = new DateTz(date.timestamp, 'UTC');
+  // const dateInUserTimeZone = new DateTz(date.timestamp, 'UTC');
 
-  return dateInUserTimeZone.year === today.year &&
-		dateInUserTimeZone.month === today.month &&
-		dateInUserTimeZone.day === today.day;
+  return date.yearUTC === today.yearUTC &&
+    date.monthUTC === today.monthUTC &&
+    date.dayUTC === today.dayUTC;
 }
 
 export function getToday(): DateTz {
 	//const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	const today = DateTz.now('UTC');
+  const today = DateTz.now();
 	return today
 }
