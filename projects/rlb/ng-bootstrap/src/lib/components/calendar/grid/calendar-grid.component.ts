@@ -233,7 +233,10 @@ export class CalendarGrid implements OnChanges, OnDestroy {
       const cleanEnd = new DateTz(event.end).stripSecMillis() as DateTz;
       const cleanEvent: CalendarEvent = { ...event, start: cleanStart, end: cleanEnd };
 
-      let currentDateStartOfDay = new DateTz(cleanStart).set(0, 'hour').set(0, 'minute').stripSecMillis() as DateTz;
+      let currentDateStartOfDay = new DateTz(cleanStart)
+        .set(0, 'hour')
+        .set(0, 'minute')
+        .stripSecMillis() as DateTz;
 
       const dayAfterEnd = new DateTz(cleanEnd)
         .add!(1, 'day')

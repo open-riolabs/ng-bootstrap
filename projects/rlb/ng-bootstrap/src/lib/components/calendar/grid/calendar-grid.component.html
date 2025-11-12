@@ -22,6 +22,8 @@
             <div class="quarter-hour-line top-75"></div>
 
             <ng-container *ngFor="let event of getEventsForHour(day, time)">
+              <!--todo: review layout concurrent events, Google model-->
+              <!-- todo: extract event in component -->
               <div class="calendar-event"
                    [tooltip]="event.title"
                    [ngClass]="'bg-' + event.color + ' border-light'"
