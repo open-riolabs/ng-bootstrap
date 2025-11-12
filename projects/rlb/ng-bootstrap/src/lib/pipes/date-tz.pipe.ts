@@ -7,7 +7,7 @@ import { DateTz, IDateTz } from "@open-rlb/date-tz";
 })
 export class DateTzPipe implements PipeTransform {
 
-  transform(value?: DateTz | IDateTz, ...args: (string | boolean)[]): string {
+  transform(value?: IDateTz, ...args: (string | boolean)[]): string {
     const format = args[0] as string || 'YYYY-MM-DDTHH:mm';
     const tz = args[1] as boolean || false;
     if (value) {
