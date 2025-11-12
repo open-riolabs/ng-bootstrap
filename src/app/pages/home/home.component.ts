@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DateTz } from '@open-rlb/date-tz';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import {
   AutocompleteItem,
   ModalService,
@@ -25,7 +25,7 @@ export class HomeComponent {
 	}
 
   number: number = 0;
-  dtz: DateTz = DateTz.now();
+  dtz: IDateTz = DateTz.now();
   str: string = 'Hello World!';
   timezone: string = '';
   country: string = '';
