@@ -22,8 +22,8 @@ import { AutocompleteItem } from "./autocomplete-model";
         [class.form-control-sm]="size === 'small'"
         (blur)="touch()"
 				[ngClass]="{
-  				'is-invalid': control?.touched && control?.invalid,
-  				'is-valid': control?.touched && control?.valid
+  				'is-invalid': control?.touched && control?.invalid && enableValidation,
+  				'is-valid': control?.touched && control?.valid && enableValidation
 				}"
         (input)="update($event.target)"
       />
@@ -50,22 +50,24 @@ import { AutocompleteItem } from "./autocomplete-model";
 export class AutocompleteCountryComponent
 	extends AbstractAutocompleteComponent
   implements ControlValueAccessor {
-	
+
 	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
-	
-	constructor(
+  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
+
+
+  constructor(
 		idService: UniqueIdService,
 		renderer: Renderer2,
 		@Self() @Optional() override control?: NgControl,
 	) {
 		super(idService, renderer, control);
 	}
-	
-	protected override getSuggestions(query: string) {
+
+  protected override getSuggestions(query: string) {
 		this.clearDropdown();
 		this.activeIndex = -1;
-		
-		if (query && query.length > 0) {
+
+    if (query && query.length > 0) {
 			this.openDropdown();
 			const suggestions = this.getCountries().filter(o => {
 				const _c = o as { text: string, value: string; };
@@ -76,8 +78,8 @@ export class AutocompleteCountryComponent
 			this.closeDropdown();
 		}
 	}
-	
-	protected override getItemText(data?: AutocompleteItem | string): string {
+
+  protected override getItemText(data?: AutocompleteItem | string): string {
 		const h = this.getCountries().find(c => {
 			if (typeof c === 'object') {
 				const _c = c as { text: string, value: string; };
@@ -87,8 +89,8 @@ export class AutocompleteCountryComponent
 		});
 		return (typeof h === 'object' ? h.text : '');
 	}
-	
-	getCountries(): AutocompleteItem[] {
+
+  getCountries(): AutocompleteItem[] {
 		if (this.enableFlagIcons) {
 			return this._countries.map((country) => {
 				return {
@@ -100,8 +102,8 @@ export class AutocompleteCountryComponent
 			return this._countries;
 		}
 	}
-	
-	private _countries: AutocompleteItem[] = [
+
+  private _countries: AutocompleteItem[] = [
     { "text": "Afghanistan", "value": "AF" },
     { "text": "Albania", "value": "AL" },
     { "text": "Algeria", "value": "DZ" },

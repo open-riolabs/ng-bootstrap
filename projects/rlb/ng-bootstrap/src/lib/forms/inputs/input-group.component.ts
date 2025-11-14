@@ -1,4 +1,12 @@
-import { AfterContentInit, Component, ContentChild, ContentChildren, Input, QueryList, booleanAttribute } from '@angular/core';
+import {
+  AfterContentInit,
+  booleanAttribute,
+  Component,
+  ContentChild,
+  ContentChildren,
+  Input,
+  QueryList
+} from '@angular/core';
 import { InputComponent } from './input.component';
 import { ValidationErrors } from '@angular/forms';
 import { InputValidationComponent } from './input-validation.component';
@@ -18,7 +26,7 @@ import { InputValidationComponent } from './input-validation.component';
 export class InputGroupComponent implements AfterContentInit {
 
   @Input({ alias: 'text', transform: booleanAttribute }) text?: boolean
-  @Input({ alias: 'validate', transform: booleanAttribute }) validate?: boolean
+  @Input({ alias: 'validate', transform: booleanAttribute }) validate?: boolean = false
   @Input({ alias: 'size' }) size?: 'small' | 'large'
 
   validations: ValidationErrors = {};
