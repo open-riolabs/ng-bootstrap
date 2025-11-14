@@ -39,8 +39,8 @@ import { AbstractComponent } from './abstract-field.component';
         [value]="value || ''"
         (blur)="touch()"
 				[ngClass]="{
-        'is-invalid': control?.touched && control?.invalid,
-        'is-valid': control?.touched && control?.valid
+        'is-invalid': control?.touched && control?.invalid && enableValidation,
+        'is-valid': control?.touched && control?.valid && enableValidation
         }"
         (input)="update($event.target)"
       />
@@ -66,6 +66,7 @@ export class InputComponent
   @Input({ alias: 'timezone' }) timezone?: string = 'UTC';
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
 	@Input({ alias: 'extValidation', transform: booleanAttribute, }) extValidation: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
 
   get _type(): string {
     if (this.type === 'number') return 'text';

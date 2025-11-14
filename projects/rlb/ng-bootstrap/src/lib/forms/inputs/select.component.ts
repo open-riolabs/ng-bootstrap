@@ -1,17 +1,17 @@
 import {
-	AfterContentChecked,
-	booleanAttribute,
-	Component,
-	ContentChildren,
-	DoCheck,
-	ElementRef,
-	Input,
-	numberAttribute,
-	Optional,
-	QueryList,
-	Self,
-	ViewChild,
-	ViewContainerRef,
+  AfterContentChecked,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  DoCheck,
+  ElementRef,
+  Input,
+  numberAttribute,
+  Optional,
+  QueryList,
+  Self,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -36,8 +36,8 @@ import { OptionComponent } from './options.component';
         [attr.size]="display"
         (blur)="touch()"
 				[ngClass]="{
-        'is-invalid': control?.touched && control?.invalid,
-        'is-valid': control?.touched && control?.valid
+        'is-invalid': control?.touched && control?.invalid && enableValidation,
+        'is-valid': control?.touched && control?.valid && enableValidation
         }"
         (change)="update($event.target)"
       >
@@ -59,7 +59,8 @@ export class SelectComponent
   @Input({ alias: 'multiple', transform: booleanAttribute }) multiple?: boolean;
   @Input({ alias: 'display', transform: numberAttribute }) display?: number;
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  
+  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
+
   @ViewChild('select') el!: ElementRef<HTMLSelectElement>;
 
   constructor(
