@@ -1,12 +1,11 @@
 import {
-  AfterViewChecked,
   booleanAttribute,
   Component,
   ContentChildren,
+  DoCheck,
   EventEmitter,
   Input,
   numberAttribute,
-  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -15,7 +14,6 @@ import {
 } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
-import { Subscription } from "rxjs";
 
 export interface TableDataQuery {
   pagination?: { size: number };
@@ -29,11 +27,11 @@ export interface PaginationEvent {
 }
 
 @Component({
-    selector: 'rlb-dt-table',
-    templateUrl: './dt-table.component.html',
-    standalone: false
+  selector: 'rlb-dt-table',
+  templateUrl: './dt-table.component.html',
+  standalone: false
 })
-export class DataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class DataTableComponent implements OnInit, DoCheck {
   @Input({ alias: 'title' }) title?: string;
   @Input({ alias: 'creation-strategy' }) creationStrategy: 'none' | 'modal' | 'page' = 'none';
   @Input({ alias: 'creation-url' }) creationUrl!: any[] | string | null | undefined;
@@ -59,8 +57,6 @@ export class DataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ContentChildren(DataTableRowComponent) public rows!: QueryList<DataTableRowComponent>;
   @ContentChildren(DataTableHeaderComponent) columns!: QueryList<DataTableHeaderComponent>;
 
-  private _columnsSubscription: Subscription | undefined;
-
   ngOnInit() {
     this.currentPage = 1;
     this.pageSize = 20;
@@ -77,15 +73,7 @@ export class DataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
     );
   }
 
-  ngAfterViewChecked() {
-    this._renderHeaders();
-
-    this._columnsSubscription = this.columns.changes.subscribe(() => {
-      this._renderHeaders();
-    });
-  }
-
-  private _renderHeaders() {
+  ngDoCheck() {
     if (this._projectedDisplayColumns) {
       for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
         this._projectedDisplayColumns.detach();
@@ -93,12 +81,6 @@ export class DataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.columns.forEach((column) => {
         this._projectedDisplayColumns.insert(column._view);
       });
-    }
-  }
-
-  ngOnDestroy() {
-    if (this._columnsSubscription) {
-      this._columnsSubscription.unsubscribe();
     }
   }
 
@@ -116,7 +98,7 @@ export class DataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
   selectPage(ev: MouseEvent, page: number) {
     ev?.preventDefault();
     ev?.stopPropagation();
-		if (page === this.currentPage || this.loading) return;
+    if (page === this.currentPage || this.loading) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({ page, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
@@ -124,23 +106,23 @@ export class DataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
   next(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-		if (this.currentPage === this.pages || this.loading) return;
+    if (this.currentPage === this.pages || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) + 1);
-		this.pagination.emit({
-			page: ((this.currentPage || 1) + 1),
-			size: this.pageSize ? parseInt(this.pageSize as any) : 20
-		});
+    this.pagination.emit({
+      page: ((this.currentPage || 1) + 1),
+      size: this.pageSize ? parseInt(this.pageSize as any) : 20
+    });
   }
 
   prev(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-		if (this.currentPage === 1 || this.loading) return;
+    if (this.currentPage === 1 || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) - 1);
-		this.pagination.emit({
-			page: ((this.currentPage || 1) - 1),
-			size: this.pageSize ? parseInt(this.pageSize as any) : 20
-		});
+    this.pagination.emit({
+      page: ((this.currentPage || 1) - 1),
+      size: this.pageSize ? parseInt(this.pageSize as any) : 20
+    });
   }
 
   onPgWeel(ev: WheelEvent) {
