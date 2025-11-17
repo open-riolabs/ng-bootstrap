@@ -1,19 +1,21 @@
 import {
-	booleanAttribute,
-	Component,
-	ContentChildren,
-	DoCheck,
-	EventEmitter,
-	Input,
-	numberAttribute,
-	OnInit,
-	Output,
-	QueryList,
-	ViewChild,
-	ViewContainerRef
+  AfterViewChecked,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  numberAttribute,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
+import { Subscription } from "rxjs";
 
 export interface TableDataQuery {
   pagination?: { size: number };
@@ -31,7 +33,7 @@ export interface PaginationEvent {
     templateUrl: './dt-table.component.html',
     standalone: false
 })
-export class DataTableComponent implements OnInit, DoCheck {
+export class DataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
   @Input({ alias: 'title' }) title?: string;
   @Input({ alias: 'creation-strategy' }) creationStrategy: 'none' | 'modal' | 'page' = 'none';
   @Input({ alias: 'creation-url' }) creationUrl!: any[] | string | null | undefined;
@@ -43,8 +45,7 @@ export class DataTableComponent implements OnInit, DoCheck {
   @Input({ alias: 'current-page', transform: numberAttribute }) currentPage?: number;
   @Input({ alias: 'page-size', transform: numberAttribute }) pageSize?: number;
   @Input() showActions: 'row' | 'head' = 'row';
-  
-  // TODO ask we can handle it like this
+
   @Input() loadMoreLabel: string = 'Load more';
 
   @Output('create-item') createItem: EventEmitter<void> = new EventEmitter();
@@ -57,6 +58,8 @@ export class DataTableComponent implements OnInit, DoCheck {
   @ViewChild('projectedDisplayColumns', { read: ViewContainerRef }) _projectedDisplayColumns!: ViewContainerRef;
   @ContentChildren(DataTableRowComponent) public rows!: QueryList<DataTableRowComponent>;
   @ContentChildren(DataTableHeaderComponent) columns!: QueryList<DataTableHeaderComponent>;
+
+  private _columnsSubscription: Subscription | undefined;
 
   ngOnInit() {
     this.currentPage = 1;
@@ -74,7 +77,15 @@ export class DataTableComponent implements OnInit, DoCheck {
     );
   }
 
-  ngDoCheck() {
+  ngAfterViewChecked() {
+    this._renderHeaders();
+
+    this._columnsSubscription = this.columns.changes.subscribe(() => {
+      this._renderHeaders();
+    });
+  }
+
+  private _renderHeaders() {
     if (this._projectedDisplayColumns) {
       for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
         this._projectedDisplayColumns.detach();
@@ -82,6 +93,12 @@ export class DataTableComponent implements OnInit, DoCheck {
       this.columns.forEach((column) => {
         this._projectedDisplayColumns.insert(column._view);
       });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this._columnsSubscription) {
+      this._columnsSubscription.unsubscribe();
     }
   }
 

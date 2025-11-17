@@ -1,15 +1,18 @@
 import {
+  AfterViewChecked,
   Component,
   ContentChildren,
+  EmbeddedViewRef,
+  Input,
+  OnDestroy,
+  OnInit,
   QueryList,
-  DoCheck,
+  TemplateRef,
   ViewChild,
   ViewContainerRef,
-  EmbeddedViewRef,
-  TemplateRef,
-  Input,
 } from '@angular/core';
 import { DataTableActionsComponent } from './dt-actions.component';
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'rlb-dt-row',
@@ -24,7 +27,7 @@ import { DataTableActionsComponent } from './dt-actions.component';
     </ng-template>`,
     standalone: false
 })
-export class DataTableRowComponent implements DoCheck {
+export class DataTableRowComponent implements AfterViewChecked, OnDestroy, OnInit {
   @Input({ alias: 'class' }) cssClass?: string
   @Input({ alias: 'style' }) cssStyle?: string;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
@@ -33,6 +36,8 @@ export class DataTableRowComponent implements DoCheck {
 
   element!: HTMLElement;
   private temp!: EmbeddedViewRef<any>;
+
+  private _actionsBlockSubscription: Subscription | undefined;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
@@ -52,14 +57,41 @@ export class DataTableRowComponent implements DoCheck {
     this.viewContainerRef.element.nativeElement.remove();
   }
 
-  ngDoCheck() {
-    if (this.hasActions) {
-      if (this._projectedActions) {
-        for (let i = this._projectedActions.length; i > 0; i--) {
-          this._projectedActions.detach();
-        }
+  ngAfterViewChecked() {
+    this._renderActions();
+
+    this._actionsBlockSubscription = this.actionsBlock.changes.subscribe(() => {
+      this._renderActions();
+    });
+  }
+
+  private _renderActions() {
+    if (this.hasActions && this._projectedActions) {
+
+      for (let i = this._projectedActions.length; i > 0; i--) {
+        this._projectedActions.detach();
+      }
+
+      if (this.actionsBlock.first) {
         this._projectedActions.insert(this.actionsBlock.first._view);
       }
     }
   }
+
+  ngOnDestroy() {
+    if (this._actionsBlockSubscription) {
+      this._actionsBlockSubscription.unsubscribe();
+    }
+  }
+
+  // ngDoCheck() {
+  //   if (this.hasActions) {
+  //     if (this._projectedActions) {
+  //       for (let i = this._projectedActions.length; i > 0; i--) {
+  //         this._projectedActions.detach();
+  //       }
+  //       this._projectedActions.insert(this.actionsBlock.first._view);
+  //     }
+  //   }
+  // }
 }

@@ -1,10 +1,11 @@
 import {
+  AfterViewChecked,
   booleanAttribute,
   Component,
   ContentChildren,
-  DoCheck,
   EmbeddedViewRef,
   Input,
+  OnDestroy,
   OnInit,
   QueryList,
   TemplateRef,
@@ -12,6 +13,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { DataTableActionComponent } from './dt-action.component';
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'rlb-dt-actions',
@@ -35,7 +37,7 @@ import { DataTableActionComponent } from './dt-action.component';
   `,
     standalone: false
 })
-export class DataTableActionsComponent implements DoCheck, OnInit {
+export class DataTableActionsComponent implements OnInit, AfterViewChecked, OnDestroy {
   element!: HTMLElement;
   private temp!: EmbeddedViewRef<any>;
 
@@ -44,6 +46,7 @@ export class DataTableActionsComponent implements DoCheck, OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @ContentChildren(DataTableActionComponent) actions!: QueryList<DataTableActionComponent>;
   @ViewChild('projectedActions', { read: ViewContainerRef }) _projectedActions!: ViewContainerRef;
+  private _actionsSubscription: Subscription | undefined;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
@@ -65,8 +68,18 @@ export class DataTableActionsComponent implements DoCheck, OnInit {
     this.viewContainerRef.element.nativeElement.remove();
   }
 
-  ngDoCheck() {
-    if (this._projectedActions) {
+  ngAfterViewChecked() {
+    this._renderActions();
+  }
+
+  ngOnDestroy() {
+    if (this._actionsSubscription) {
+      this._actionsSubscription.unsubscribe();
+    }
+  }
+
+  private _renderActions() {
+    if (this._projectedActions && this.actions) {
       for (let i = this._projectedActions?.length; i > 0; i--) {
         this._projectedActions.detach();
       }
@@ -75,4 +88,5 @@ export class DataTableActionsComponent implements DoCheck, OnInit {
       });
     }
   }
+
 }
