@@ -1,4 +1,5 @@
 import {
+  AfterContentInit,
   AfterViewInit,
   booleanAttribute,
   Component,
@@ -6,6 +7,7 @@ import {
   EventEmitter,
   Input,
   numberAttribute,
+  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -14,6 +16,7 @@ import {
 } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
+import { Subscription } from "rxjs";
 
 export interface TableDataQuery {
   pagination?: { size: number };
@@ -31,7 +34,7 @@ export interface PaginationEvent {
   templateUrl: './dt-table.component.html',
   standalone: false
 })
-export class DataTableComponent implements OnInit, AfterViewInit {
+export class DataTableComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   @Input({ alias: 'title' }) title?: string;
   @Input({ alias: 'creation-strategy' }) creationStrategy: 'none' | 'modal' | 'page' = 'none';
   @Input({ alias: 'creation-url' }) creationUrl!: any[] | string | null | undefined;
@@ -57,6 +60,8 @@ export class DataTableComponent implements OnInit, AfterViewInit {
   @ContentChildren(DataTableRowComponent) public rows!: QueryList<DataTableRowComponent>;
   @ContentChildren(DataTableHeaderComponent) columns!: QueryList<DataTableHeaderComponent>;
 
+  private subscription: Subscription | undefined
+
   ngOnInit() {
     this.currentPage = 1;
     this.pageSize = 20;
@@ -75,6 +80,16 @@ export class DataTableComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this._renderHeaders();
+  }
+
+  ngAfterContentInit() {
+    this.subscription = this.columns.changes.subscribe(() => {
+      this._renderHeaders()
+    })
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe()
   }
 
   private _renderHeaders() {
