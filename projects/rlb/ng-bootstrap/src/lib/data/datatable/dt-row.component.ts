@@ -1,9 +1,10 @@
 import {
+  AfterViewInit,
   Component,
   ContentChildren,
-  DoCheck,
   EmbeddedViewRef,
   Input,
+  OnInit,
   QueryList,
   TemplateRef,
   ViewChild,
@@ -24,7 +25,7 @@ import { DataTableActionsComponent } from './dt-actions.component';
     </ng-template>`,
   standalone: false
 })
-export class DataTableRowComponent implements DoCheck {
+export class DataTableRowComponent implements AfterViewInit, OnInit {
   @Input({ alias: 'class' }) cssClass?: string
   @Input({ alias: 'style' }) cssStyle?: string;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
@@ -52,14 +53,23 @@ export class DataTableRowComponent implements DoCheck {
     this.viewContainerRef.element.nativeElement.remove();
   }
 
-  ngDoCheck() {
-    if (this.hasActions) {
-      if (this._projectedActions) {
-        for (let i = this._projectedActions.length; i > 0; i--) {
-          this._projectedActions.detach();
-        }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this._renderActions();
+    })
+  }
+
+  private _renderActions() {
+    if (this.hasActions && this._projectedActions) {
+      for (let i = this._projectedActions.length; i > 0; i--) {
+        this._projectedActions.detach();
+      }
+
+      if (this.actionsBlock.first) {
         this._projectedActions.insert(this.actionsBlock.first._view);
       }
     }
   }
+
 }

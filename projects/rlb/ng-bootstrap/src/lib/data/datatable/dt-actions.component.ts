@@ -1,8 +1,8 @@
 import {
+  AfterViewInit,
   booleanAttribute,
   Component,
   ContentChildren,
-  DoCheck,
   EmbeddedViewRef,
   Input,
   OnInit,
@@ -35,7 +35,7 @@ import { DataTableActionComponent } from './dt-action.component';
   `,
   standalone: false
 })
-export class DataTableActionsComponent implements DoCheck, OnInit {
+export class DataTableActionsComponent implements OnInit, AfterViewInit {
   element!: HTMLElement;
   private temp!: EmbeddedViewRef<any>;
 
@@ -65,8 +65,12 @@ export class DataTableActionsComponent implements DoCheck, OnInit {
     this.viewContainerRef.element.nativeElement.remove();
   }
 
-  ngDoCheck() {
-    if (this._projectedActions) {
+  ngAfterViewInit() {
+    this._renderActions();
+  }
+
+  private _renderActions() {
+    if (this._projectedActions && this.actions) {
       for (let i = this._projectedActions?.length; i > 0; i--) {
         this._projectedActions.detach();
       }

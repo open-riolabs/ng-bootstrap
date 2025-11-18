@@ -1,8 +1,8 @@
 import {
+  AfterViewInit,
   booleanAttribute,
   Component,
   ContentChildren,
-  DoCheck,
   EventEmitter,
   Input,
   numberAttribute,
@@ -31,7 +31,7 @@ export interface PaginationEvent {
   templateUrl: './dt-table.component.html',
   standalone: false
 })
-export class DataTableComponent implements OnInit, DoCheck {
+export class DataTableComponent implements OnInit, AfterViewInit {
   @Input({ alias: 'title' }) title?: string;
   @Input({ alias: 'creation-strategy' }) creationStrategy: 'none' | 'modal' | 'page' = 'none';
   @Input({ alias: 'creation-url' }) creationUrl!: any[] | string | null | undefined;
@@ -73,7 +73,11 @@ export class DataTableComponent implements OnInit, DoCheck {
     );
   }
 
-  ngDoCheck() {
+  ngAfterViewInit() {
+    this._renderHeaders();
+  }
+
+  private _renderHeaders() {
     if (this._projectedDisplayColumns) {
       for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
         this._projectedDisplayColumns.detach();
