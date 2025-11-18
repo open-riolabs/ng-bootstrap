@@ -15,15 +15,6 @@ import {
   standalone: false
 })
 export class HomeComponent {
-  constructor(
-    private modals: ModalService,
-    private toasts: ToastService,
-	) {
-		this.profileForm.valueChanges.subscribe((value) => {
-			console.log("Form value: ", value);
-		})
-	}
-
   number: number = 0;
   dtz: IDateTz = DateTz.now();
   str: string = 'Hello World!';
@@ -48,6 +39,15 @@ export class HomeComponent {
 			[requiredAutocompleteValue()]
 		),
   });
+
+  constructor(
+    private modals: ModalService,
+    private toasts: ToastService,
+  ) {
+    this.profileForm.valueChanges.subscribe((value) => {
+      console.log("Form value: ", value);
+    })
+  }
 
   updateProfile() { }
 
