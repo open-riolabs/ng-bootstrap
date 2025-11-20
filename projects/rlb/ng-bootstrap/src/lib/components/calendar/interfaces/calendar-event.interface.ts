@@ -16,4 +16,8 @@ export interface CalendarEventWithLayout extends CalendarEvent {
   left: number;
   // Width percent (100, 50, 33.3, etc.)
   width: number;
+  // isEventContainer flag
+  isOverflowIndicator?: boolean;
+  overflowEvents?: CalendarEventWithLayout[];
+  overlapCount?: number;
 }

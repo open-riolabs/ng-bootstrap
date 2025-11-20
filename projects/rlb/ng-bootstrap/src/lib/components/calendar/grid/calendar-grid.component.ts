@@ -38,9 +38,24 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	now: DateTz;
 	private nowInterval: any;
 
+  private readonly MAX_VISIBLE_COLUMNS = 4;
+
+  public overflowEvents: CalendarEventWithLayout[] | null = null;
+
   constructor(
 	) {
     this.now = getToday()
+  }
+
+  onOverflowIndicatorClick(indicator: CalendarEventWithLayout): void {
+    if (indicator.isOverflowIndicator && indicator.overflowEvents) {
+      this.overflowEvents = indicator.overflowEvents;
+      console.log('Opening modal with events:', indicator.overflowEvents);
+    }
+  }
+
+  closeOverflowModal(): void {
+    this.overflowEvents = null;
   }
 
   onEventEdit(event?: CalendarEventWithLayout): void {
@@ -329,51 +344,177 @@ export class CalendarGrid implements OnChanges, OnDestroy {
     if (!groupEvents || groupEvents.length === 0) return [];
 
     const maxColumns = this.getMaxConcurrentEvents(groupEvents);
+
+    // case 1 -> full width event
     if (maxColumns <= 1) {
       return groupEvents.map(event => ({ ...event, left: 0, width: 100 }));
     }
 
-    const columnWidth = 100 / maxColumns;
-
     const sortedEvents = [...groupEvents].sort((a, b) => a.start.compare!(b.start));
 
+    // case 2 -> less than max events per hour
+    if (maxColumns <= this.MAX_VISIBLE_COLUMNS) {
+      const columnWidth = 100 / maxColumns;
+
+      const processedEvents: CalendarEventWithLayout[] = [];
+
+      const columnEnds: number[] = new Array(maxColumns).fill(-Infinity);
+
+      const eventToColumnMap = new Map<CalendarEvent, number>();
+
+      for (const event of sortedEvents) {
+        let assignedColumn = -1
+        for (let col = 0; col < maxColumns; col++) {
+          if (columnEnds[col] <= event.start.timestamp) {
+            assignedColumn = col;
+            break;
+          }
+        }
+
+        if (assignedColumn === -1) {
+          let minEnd = Infinity;
+          for (let col = 0; col < maxColumns; col++) {
+            if (columnEnds[col] < minEnd) {
+              minEnd = columnEnds[col];
+              assignedColumn = col;
+            }
+          }
+        }
+
+        const eventWithLayout: CalendarEventWithLayout = {
+          ...event,
+          left: assignedColumn * columnWidth,
+          width: columnWidth,
+        };
+
+        columnEnds[assignedColumn] = event.end.timestamp;
+
+        processedEvents.push(eventWithLayout);
+        eventToColumnMap.set(event, assignedColumn);
+      }
+
+      return processedEvents;
+    }
+
+    // case 3 -> too many events to render in a single cell -> generic events container
+
+    const visualMaxColumns = this.MAX_VISIBLE_COLUMNS;
+    const columnWidth = 100 / visualMaxColumns;
+    const overflowColumnIndex = visualMaxColumns - 1;
+
     const processedEvents: CalendarEventWithLayout[] = [];
+    const hiddenEvents: CalendarEventWithLayout[] = [];
 
-    const columnEnds: number[] = new Array(maxColumns).fill(-Infinity);
-
-    const eventToColumnMap = new Map<CalendarEvent, number>();
+    const trueColumnEnds: number[] = new Array(maxColumns).fill(-Infinity);
 
     for (const event of sortedEvents) {
-      let assignedColumn = -1
+      let assignedCol = -1;
+
       for (let col = 0; col < maxColumns; col++) {
-        if (columnEnds[col] <= event.start.timestamp) {
-          assignedColumn = col;
+        if (trueColumnEnds[col] <= event.start.timestamp) {
+          assignedCol = col;
           break;
         }
       }
 
-      if (assignedColumn === -1) {
+      if (assignedCol === -1) {
         let minEnd = Infinity;
         for (let col = 0; col < maxColumns; col++) {
-          if (columnEnds[col] < minEnd) {
-            minEnd = columnEnds[col];
-            assignedColumn = col;
+          if (trueColumnEnds[col] < minEnd) {
+            minEnd = trueColumnEnds[col];
+            assignedCol = col;
           }
         }
       }
 
-      const eventWithLayout: CalendarEventWithLayout = {
-        ...event,
-        left: assignedColumn * columnWidth,
+      trueColumnEnds[assignedCol] = event.end.timestamp;
+
+      if (assignedCol < overflowColumnIndex) {
+        const eventWithLayout: CalendarEventWithLayout = {
+          ...event,
+          left: assignedCol * columnWidth,
+          width: columnWidth,
+        };
+        processedEvents.push(eventWithLayout);
+
+      } else {
+        const eventWithLayout: CalendarEventWithLayout = {
+          ...event,
+          // Visually align with the indicator column
+          left: overflowColumnIndex * columnWidth,
+          width: columnWidth,
+        };
+        hiddenEvents.push(eventWithLayout);
+      }
+    }
+
+    if (hiddenEvents.length > 0) {
+      const minStart = hiddenEvents.reduce((min, e) => Math.min(min, e.start.timestamp), Infinity);
+      const maxEnd = hiddenEvents.reduce((max, e) => Math.max(max, e.end.timestamp), -Infinity);
+
+      const overflowIndicator: CalendarEventWithLayout = {
+        id: -1,
+        title: `+${hiddenEvents.length} more`,
+        start: new DateTz(minStart),
+        end: new DateTz(maxEnd),
+        color: 'light',
+
+        left: overflowColumnIndex * columnWidth,
         width: columnWidth,
+
+        isOverflowIndicator: true,
+        overflowEvents: hiddenEvents,
+        overlapCount: hiddenEvents.length
       };
 
-      columnEnds[assignedColumn] = event.end.timestamp;
-
-      processedEvents.push(eventWithLayout);
-      eventToColumnMap.set(event, assignedColumn);
+      processedEvents.push(overflowIndicator);
     }
 
     return processedEvents;
+  }
+
+  getEventClasses(event: CalendarEventWithLayout, time: string, day: IDateTz): string[] {
+    const eventClasses: string[] = [];
+    eventClasses.push('border-light')
+
+    const eventColorClass = `bg-${event.color ? event.color : ''}`;
+    eventClasses.push(eventColorClass);
+
+    if (this.isEventFragmentTop(event, time, day)) {
+      eventClasses.push('event-fragment-top')
+    }
+
+    if (this.isEventFragmentBottom(event, time, day)) {
+      eventClasses.push('event-fragment-bottom')
+    }
+
+    if (!this.isEventFragmentTop(event, time, day) && !this.isEventFragmentBottom(event, time, day)) {
+      eventClasses.push('event-fragment-middle')
+    }
+
+    return eventClasses
+  }
+
+  isEventFragmentTop(event: CalendarEventWithLayout, time: string, day: IDateTz): boolean {
+    const [hourStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
+    const startOfHour = new DateTz(day.timestamp, 'UTC').set(hour, 'hour').set(0, 'minute');
+
+    const isStartInOrAfterHour = event.start.compare!(startOfHour) >= 0;
+    const isContinuation = event.start.compare!(startOfHour) < 0;
+    const isDayStartContinuation = isContinuation && hour === 0;
+
+    return isStartInOrAfterHour || isDayStartContinuation;
+  }
+
+  isEventFragmentBottom(event: CalendarEventWithLayout, time: string, day: IDateTz): boolean {
+    const [hourStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
+    const endOfHour = new DateTz(day.timestamp, 'UTC').set(hour + 1, 'hour').set(0, 'minute');
+
+    const isEndInHour = event.end.compare!(endOfHour) <= 0;
+    const isEndFragmentOfDay = hour === 23 && event.end.compare!(endOfHour) > 0;
+
+    return isEndInHour || isEndFragmentOfDay;
   }
 }

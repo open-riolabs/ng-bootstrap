@@ -22,11 +22,11 @@
             <div class="quarter-hour-line top-75"></div>
 
             <ng-container *ngFor="let event of getEventsForHour(day, time)">
-              <!--todo: review layout concurrent events, Google model-->
               <!-- todo: extract event in component -->
               <div class="calendar-event"
+                   *ngIf="!event.isOverflowIndicator"
                    [tooltip]="event.title"
-                   [ngClass]="'bg-' + event.color + ' border-light'"
+                   [ngClass]="getEventClasses(event, time, day)"
                    [style.top.px]="calculateEventTop(event, time, day)"
                    [style.height.px]="calculateEventHeightInHour(event, time, day)"
                    [style.left.%]="event.left"
@@ -35,6 +35,20 @@
               >
                 <ng-container *ngIf="isEventStartInHour(event, time, day)">
                   {{ event.title }}
+                </ng-container>
+              </div>
+              <div *ngIf="event.isOverflowIndicator"
+                   [tooltip]="'See more events'"
+                   class="calendar-event overflow-indicator"
+                   [ngClass]="getEventClasses(event, time, day)"
+                   [style.top.px]="calculateEventTop(event, time, day)"
+                   [style.height.px]="calculateEventHeightInHour(event, time, day)"
+                   [style.left.%]="event.left"
+                   [style.width.%]="event.width"
+                   (click)="onOverflowIndicatorClick(event); $event.stopPropagation()"
+              >
+                <ng-container *ngIf="isEventStartInHour(event, time, day)">
+                  +{{ event.overlapCount }} more
                 </ng-container>
               </div>
             </ng-container>
