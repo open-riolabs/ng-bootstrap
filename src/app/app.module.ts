@@ -3,12 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import {
-	CommonModalComponent,
-	EventCreateEditComponent,
-	ModalRegistryOptions,
-	RlbBootstrapModule,
-	SearchModalComponent,
-	ToastRegistryOptions
+  CalendarOverflowEventsContainerComponent,
+  CommonModalComponent,
+  EventCreateEditComponent,
+  ModalRegistryOptions,
+  RlbBootstrapModule,
+  SearchModalComponent,
+  ToastRegistryOptions
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
@@ -126,8 +127,9 @@ import { CalendarComponent } from "./pages/components/calendar/calendar.componen
           "sample-dialog": ModalSampleComponent,
           'rlb-search': SearchModalComponent,
 					'rlb-common': CommonModalComponent,
-					'rlb-calendar-event-create-edit': EventCreateEditComponent
-				}
+          'rlb-calendar-event-create-edit': EventCreateEditComponent,
+          'rlb-calendar-overlow-events-container': CalendarOverflowEventsContainerComponent
+        }
       },
       multi: true,
     },

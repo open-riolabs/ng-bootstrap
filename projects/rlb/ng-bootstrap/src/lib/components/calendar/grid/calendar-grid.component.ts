@@ -26,6 +26,7 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	@Input() currentDate!: IDateTz;
 	@Input() events: CalendarEvent[] = [];
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
+  @Output() eventContainerClick = new EventEmitter<CalendarEventWithLayout[] | undefined>();
 
   processedEvents: Map<number, CalendarEventWithLayout[]> = new Map();
 
@@ -40,8 +41,6 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 
   private readonly MAX_VISIBLE_COLUMNS = 4;
 
-  public overflowEvents: CalendarEventWithLayout[] | null = null;
-
   constructor(
 	) {
     this.now = getToday()
@@ -49,13 +48,8 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 
   onOverflowIndicatorClick(indicator: CalendarEventWithLayout): void {
     if (indicator.isOverflowIndicator && indicator.overflowEvents) {
-      this.overflowEvents = indicator.overflowEvents;
-      console.log('Opening modal with events:', indicator.overflowEvents);
+      this.eventContainerClick.emit(indicator.overflowEvents);
     }
-  }
-
-  closeOverflowModal(): void {
-    this.overflowEvents = null;
   }
 
   onEventEdit(event?: CalendarEventWithLayout): void {

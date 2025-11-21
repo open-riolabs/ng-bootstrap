@@ -6,8 +6,11 @@ import { EnvironmentProviders, Provider } from '@angular/core';
 import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, SearchModalComponent } from './public-api';
 
 import {
-	EventCreateEditComponent
+  EventCreateEditComponent
 } from "./lib/components/calendar/calendar-event-create-edit/event-create-edit.component";
+import {
+  CalendarOverflowEventsContainerComponent
+} from "./lib/components/calendar/calendar-overflow-events-container/calendar-overflow-events-container.component"
 
 export * from './lib/components';
 export * from './lib/data/datatable';
@@ -31,7 +34,8 @@ export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
         modals: {
           'rlb-search': SearchModalComponent,
 					'rlb-common': CommonModalComponent,
-					'rlb-calendar-event-create-edit': EventCreateEditComponent
+          'rlb-calendar-event-create-edit': EventCreateEditComponent,
+          'rlb-calendar-overlow-events-container': CalendarOverflowEventsContainerComponent
         }
       } as ModalRegistryOptions, multi: true
     }

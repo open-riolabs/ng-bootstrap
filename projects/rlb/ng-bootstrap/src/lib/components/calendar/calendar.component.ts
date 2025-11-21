@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
-import { CalendarEvent } from "./interfaces/calendar-event.interface";
+import { CalendarEvent, CalendarEventWithLayout } from "./interfaces/calendar-event.interface";
 import { DateTz } from "@open-rlb/date-tz";
 import { CalendarChangeEvent, CalendarView } from "./interfaces/calendar-view.type";
 import { ModalService } from "../modals/modal.service";
@@ -47,6 +47,21 @@ export class CalendarComponent implements OnChanges {
 			this.events = changes['events'].currentValue as CalendarEvent[];
 		}
 	}
+
+  onEventContainerClick(events: CalendarEventWithLayout[] | undefined) {
+    console.log("onEventContainerClick", events);
+    this.modals.openModal(
+      'rlb-calendar-overlow-events-container',
+      {
+        title: 'Overflow events',
+        ok: 'OK',
+        type: 'success',
+        content: events
+      }
+    ).pipe(
+      take(1),
+    ).subscribe()
+  }
 
   onEventClick(eventToEdit?: CalendarEvent) {
     if (eventToEdit) {
