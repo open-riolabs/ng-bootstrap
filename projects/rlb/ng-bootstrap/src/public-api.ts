@@ -3,14 +3,15 @@
  */
 
 import { EnvironmentProviders, Provider } from '@angular/core';
-import { CommonModalComponent, ModalRegistryOptions, RlbBootstrapModule, SearchModalComponent } from './public-api';
+import {
+  CalendarOverflowEventsContainerComponent,
+  CommonModalComponent,
+  EventCreateEditComponent,
+  ModalRegistryOptions,
+  RlbBootstrapModule,
+  SearchModalComponent
+} from './public-api';
 
-import {
-  EventCreateEditComponent
-} from "./lib/components/calendar/calendar-event-create-edit/event-create-edit.component";
-import {
-  CalendarOverflowEventsContainerComponent
-} from "./lib/components/calendar/calendar-overflow-events-container/calendar-overflow-events-container.component"
 
 export * from './lib/components';
 export * from './lib/data/datatable';
@@ -25,6 +26,8 @@ export * from './lib/shared/types';
 export * from './lib/shared/unique-id.service';
 export * from './lib/utils';
 export * from './lib/shared/i18-abstraction';
+
+export * from './lib/components/calendar/calendar-dialogs/index'
 
 export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
   return [

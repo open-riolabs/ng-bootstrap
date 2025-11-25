@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { CalendarEvent, IModal, ModalData, ModalDirective } from '../../index';
+import { CalendarEvent, IModal, ModalData, ModalDirective } from '../../../index';
 import { CommonModule } from "@angular/common";
+import { RlbBootstrapModule } from "../../../../rlb-bootstrap.module";
 
 @Component({
   standalone: true,
@@ -11,8 +12,8 @@ import { CommonModule } from "@angular/common";
 		</div>
     <div class="modal-body">
       <div class="d-flex flex-column gap-1">
-        <div class="border"  *ngFor="let event of data.content">
-          <span [ngClass]="'bg-' + event.color" >teest</span>
+        <div class="border-bottom" *ngFor="let event of data.content">
+          <span rlb-badge pill [color]="event.color">&nbsp;</span>
           {{event.title}}
         </div>
       </div>
@@ -36,7 +37,7 @@ import { CommonModule } from "@angular/common";
       inputs: ['id', 'data-instance', 'data-options'],
     },
   ],
-  imports: [CommonModule]
+  imports: [CommonModule, RlbBootstrapModule]
 })
 export class CalendarOverflowEventsContainerComponent implements IModal<CalendarEvent[] , CalendarEvent[]>, OnInit {
   data!: ModalData<CalendarEvent[]>;
@@ -51,5 +52,9 @@ export class CalendarOverflowEventsContainerComponent implements IModal<Calendar
 
   ngOnInit() {
     console.log(this.data);
+  }
+
+  test(event: CalendarEvent) {
+    console.log(event);
   }
 }

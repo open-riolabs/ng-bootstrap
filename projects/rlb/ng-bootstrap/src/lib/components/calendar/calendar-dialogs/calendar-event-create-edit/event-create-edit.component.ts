@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { CalendarEvent, IModal, ModalData, ModalDirective } from '../../index';
-import { RlbBootstrapModule } from "../../../rlb-bootstrap.module";
+import { CalendarEvent, IModal, ModalData, ModalDirective } from '../../../index';
+import { RlbBootstrapModule } from "../../../../rlb-bootstrap.module";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { Color } from "../../../shared/types";
+import { Color } from "../../../../shared/types";
 import { Subject, takeUntil } from "rxjs";
-import { UniqueIdService } from "../../../shared/unique-id.service";
+import { UniqueIdService } from "../../../../shared/unique-id.service";
 import { IDateTz } from "@open-rlb/date-tz";
 
 @Component({
