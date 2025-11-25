@@ -69,6 +69,7 @@ import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
 import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
 import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
 import { NavbarItemComponent } from "./navigation/navbar/navbar-item.component";
+import { RlbFabComponent } from "./buttons/fab/fab.component";
 import { CALENDAR_COMPONENTS } from "./calendar";
 
 export * from './alerts/alert.component';
@@ -81,6 +82,7 @@ export * from './buttons/buttons.component';
 export * from './buttons/buttons-close.component';
 export * from './buttons/boutton-group.component';
 export * from './buttons/boutton-toolbar.component';
+export * from './buttons/fab/fab.component'
 export * from './badges/badge.directive';
 export * from './badges/badge.component';
 export * from './cards/card-body.component';
@@ -159,6 +161,7 @@ export const COMPONENTS = [
   ButtonCloseComponent,
   ButtonGroupComponent,
   ButtonToolbarComponent,
+  RlbFabComponent,
   BadgeDirective,
   BadgeComponent,
   CardBodyComponent,
