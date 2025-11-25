@@ -4,8 +4,10 @@ import { DateTz } from "@open-rlb/date-tz";
 import { CalendarChangeEvent, CalendarView } from "./interfaces/calendar-view.type";
 import { ModalService } from "../modals/modal.service";
 import { UniqueIdService } from "../../shared/unique-id.service";
-import { take } from "rxjs";
+import { filter, map, switchMap, take, tap } from "rxjs";
 import { getToday } from "./utils/calendar-date-utils";
+import { ModalResult } from "../modals";
+import { CalendarOverflowEventsDialogResult } from "./calendar-dialogs";
 
 
 @Component({
@@ -49,7 +51,6 @@ export class CalendarComponent implements OnChanges {
 	}
 
   onEventContainerClick(events: CalendarEventWithLayout[] | undefined) {
-    console.log("onEventContainerClick", events);
     this.modals.openModal(
       'rlb-calendar-overlow-events-container',
       {
@@ -60,6 +61,40 @@ export class CalendarComponent implements OnChanges {
       }
     ).pipe(
       take(1),
+      filter((modalResult: ModalResult<CalendarOverflowEventsDialogResult>) => modalResult.reason === 'ok'),
+      switchMap((modalResult) => {
+        const action = modalResult.result.action
+        const event = modalResult.result.event;
+        if (action === 'delete') {
+          return this.modals.openConfirmModal(
+            "Event delete",
+            "Are you sure you want to delete this event?",
+            "",
+            "Ok",
+            "Cancel"
+          ).pipe(
+            take(1),
+            filter((deleteConfirmResult) => deleteConfirmResult.reason === 'ok'),
+            map(result => ({ action, modalResult: result, event }))
+          )
+        } else {
+          return this.openEditEventDialog(event).pipe(
+            map(result => ({ action, modalResult: result, event }))
+          );
+        }
+      }),
+      tap(({ action, modalResult, event }) => {
+        if (action === 'delete' && modalResult.reason === 'ok' || action === 'edit' && modalResult.reason === 'cancel') {
+          this.events = [...this.events.filter(entry => event.id !== entry.id),]
+          return
+        }
+
+        if (action === 'edit' && modalResult.reason === 'ok') {
+          const idx = this.events.findIndex((entry) => event.id === entry.id);
+          this.events[idx] = modalResult.result;
+          this.events = [...this.events];
+        }
+      })
     ).subscribe()
   }
 
@@ -68,14 +103,7 @@ export class CalendarComponent implements OnChanges {
       this.eventClick.emit(eventToEdit)
     }
 
-    this.modals.openModal<CalendarEvent | undefined, CalendarEvent>('rlb-calendar-event-create-edit', {
-      title: eventToEdit ? 'Edit event' : 'Create event',
-      content: eventToEdit,
-      ok: 'OK',
-      type: 'success',
-    }).pipe(
-      take(1)
-    ).subscribe((modalResult) => {
+    this.openEditEventDialog(eventToEdit).subscribe((modalResult) => {
       const newEvent = modalResult.result;
       if (modalResult.reason === 'cancel' && eventToEdit) {
         this.events = [...this.events.filter(event => event.id !== eventToEdit.id),]
@@ -247,4 +275,15 @@ export class CalendarComponent implements OnChanges {
       }
     })
 	}
+
+  private openEditEventDialog(eventToEdit?: CalendarEvent) {
+    return this.modals.openModal<CalendarEvent | undefined, CalendarEvent>('rlb-calendar-event-create-edit', {
+      title: eventToEdit ? 'Edit event' : 'Create event',
+      content: eventToEdit,
+      ok: 'OK',
+      type: 'success',
+    }).pipe(
+      take(1)
+    )
+  }
 }

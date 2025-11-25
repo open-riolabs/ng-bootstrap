@@ -11,23 +11,47 @@ import { RlbBootstrapModule } from "../../../../rlb-bootstrap.module";
 			<button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
 		</div>
     <div class="modal-body">
-      <div class="d-flex flex-column gap-1">
-        <div class="border-bottom" *ngFor="let event of data.content">
-          <span rlb-badge pill [color]="event.color">&nbsp;</span>
-          {{event.title}}
-        </div>
+      <div class="d-flex flex-column gap-1 overflow-y-auto p-3" [style.height.rem]="containerHeightRem">
+        <rlb-card class="mb-0 shadow-lg rounded" [border]="event.color" *ngFor="let event of data.content">
+          <rlb-card-body class="d-flex align-items-center justify-content-between">
+            <div>
+              <span rlb-badge pill [color]="event.color">&nbsp;</span>
+              <span>
+                {{ event.title }}
+              </span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <rlb-fab
+                (click)="closeDialog(event, 'edit')"
+                data-modal-reason="ok"
+                class="align-self-end"
+                size="xs"
+                outline
+              >
+                <i class="bi bi-pencil"></i>
+              </rlb-fab>
+              <rlb-fab
+                (click)="closeDialog(event, 'delete')"
+                data-modal-reason="ok"
+                class="align-self-end"
+                size="xs"
+                color="danger"
+                outline
+              >
+                <i class="bi bi-trash"></i>
+              </rlb-fab>
+            </div>
+          </rlb-card-body>
+        </rlb-card>
       </div>
     </div>
 		<div class="modal-footer">
       <button
-        type="button"
-        class="btn "
+        rlb-button
+        color="secondary"
         data-modal-reason="cancel"
       >
         {{ 'Close' }}
-			</button>
-      <button type="button" [disabled]="!valid" class="btn btn-primary" data-modal-reason="ok">
-				Save changes
 			</button>
 		</div>
 	`,
@@ -39,8 +63,13 @@ import { RlbBootstrapModule } from "../../../../rlb-bootstrap.module";
   ],
   imports: [CommonModule, RlbBootstrapModule]
 })
-export class CalendarOverflowEventsContainerComponent implements IModal<CalendarEvent[] , CalendarEvent[]>, OnInit {
+export class CalendarOverflowEventsContainerComponent implements IModal<CalendarEvent[], CalendarOverflowEventsDialogResult>, OnInit {
   data!: ModalData<CalendarEvent[]>;
+  containerHeightRem = 25;
+  result: CalendarOverflowEventsDialogResult = {
+    action: '' as CalendarOverflowEventDialogActionType,
+    event: undefined as unknown as CalendarEvent
+  };
 
   get headerColor() {
     return this.data.type ? ` bg-${this.data.type}` : '';
@@ -51,10 +80,16 @@ export class CalendarOverflowEventsContainerComponent implements IModal<Calendar
   }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
-  test(event: CalendarEvent) {
-    console.log(event);
+  closeDialog(event: CalendarEvent, action: CalendarOverflowEventDialogActionType) {
+    this.result = { event, action }
   }
 }
+
+export interface CalendarOverflowEventsDialogResult {
+  action: CalendarOverflowEventDialogActionType,
+  event: CalendarEvent
+}
+
+export type CalendarOverflowEventDialogActionType = 'delete' | 'edit'
