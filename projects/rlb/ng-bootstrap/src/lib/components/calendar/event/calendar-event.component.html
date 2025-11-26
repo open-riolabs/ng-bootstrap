@@ -1,0 +1,28 @@
+<div class="calendar-event"
+     *ngIf="!event.isOverflowIndicator"
+     [tooltip]="event.title"
+     [ngClass]="getEventClasses(event, time, day)"
+     [style.top.px]="calculateEventTop(event, time, day)"
+     [style.height.px]="calculateEventHeightInHour(event, time, day)"
+     [style.left.%]="event.left"
+     [style.width.%]="event.width"
+     (click)="onEventEdit(event); $event.stopPropagation()"
+>
+  <ng-container *ngIf="isEventStartInHour(event, time, day)">
+    {{ event.title }}
+  </ng-container>
+</div>
+<div *ngIf="event.isOverflowIndicator"
+     [tooltip]="'See more events'"
+     class="calendar-event overflow-indicator"
+     [ngClass]="getEventClasses(event, time, day)"
+     [style.top.px]="calculateEventTop(event, time, day)"
+     [style.height.px]="calculateEventHeightInHour(event, time, day)"
+     [style.left.%]="event.left"
+     [style.width.%]="event.width"
+     (click)="onOverflowIndicatorClick(event); $event.stopPropagation()"
+>
+  <ng-container *ngIf="isEventStartInHour(event, time, day)">
+    +{{ event.overlapCount }} more
+  </ng-container>
+</div>

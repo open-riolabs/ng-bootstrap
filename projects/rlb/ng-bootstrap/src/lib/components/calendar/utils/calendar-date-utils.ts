@@ -21,10 +21,7 @@ export function startOfMonth(date: IDateTz): DateTz {
 // }
 
 export function isToday(date: IDateTz): boolean {
-	// const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	const today = DateTz.now();
-
-  // const dateInUserTimeZone = new DateTz(date.timestamp, 'UTC');
+  const today = getToday()
 
   return date.yearUTC === today.yearUTC &&
     date.monthUTC === today.monthUTC &&
@@ -32,7 +29,7 @@ export function isToday(date: IDateTz): boolean {
 }
 
 export function getToday(): DateTz {
-	//const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const today = DateTz.now();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const today = DateTz.now(timezone);
 	return today
 }

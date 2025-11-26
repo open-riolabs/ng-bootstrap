@@ -1,0 +1,51 @@
+.calendar-hour-cell {
+  position: relative;
+  padding: 0;
+  border-bottom: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+  box-sizing: border-box;
+}
+
+.quarter-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dotted #e0e0e0;
+  z-index: 1;
+}
+
+.top-25 {
+  top: 25%;
+}
+
+.top-50 {
+  top: 50%;
+}
+
+.top-75 {
+  top: 75%;
+}
+
+.time-line-container {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #db4437;
+  z-index: 13;
+}
+
+.now-line-dot {
+  position: absolute;
+  left: -5px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  background-color: #db4437;
+  border-radius: 50%;
+}
