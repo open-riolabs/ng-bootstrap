@@ -1,6 +1,6 @@
 //
 // _menu.scss
-// 
+//
 
 .metismenu {
   margin: 0;
@@ -379,6 +379,10 @@ html[data-bs-theme="dark"] {
   }
 
   #sidebar-menu {
+
+    .side-nav-link-ref {
+      cursor: pointer;
+    }
 
     .side-nav-link-ref.active {
       color: $sidebar-dark-menu-item-active-color !important;
