@@ -4,11 +4,11 @@ export interface NavigableItem {
   active?: boolean;
   disabled?: boolean;
   url?: any[] | string | null | undefined;
-  externalUrl?: string;
 }
 
 export interface SidebarNavigableItem extends NavigableItem {
   items?: SidebarNavigableItem[];
   title?: string;
 	badgeCounter?: number;
+  externalUrl?: string;
 }
