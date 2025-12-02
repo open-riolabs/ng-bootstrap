@@ -41,6 +41,12 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
   @Input({ alias: 'items' }) items!: any[];
   @Input({ alias: 'pagination-mode' }) paginationMode?: 'none' | 'load-more' | 'pages' = 'none';
   @Input({ alias: 'loading', transform: booleanAttribute }) loading?: boolean;
+  @Input({ alias: 'table-hover', transform: booleanAttribute }) tableHover?: boolean;
+  @Input({ alias: 'table-striped', transform: booleanAttribute }) tableStriped?: boolean = true; // default true to keep main table styling
+  @Input({ alias: 'table-striped-columns', transform: booleanAttribute }) tableStripedColumns?: boolean;
+  @Input({ alias: 'table-bordered', transform: booleanAttribute }) tableBordered?: boolean;
+  @Input({ alias: 'table-borderless', transform: booleanAttribute }) tableBorderless?: boolean;
+  @Input({ alias: 'table-small', transform: booleanAttribute }) tableSmall?: boolean;
   @Input({ alias: 'show-refresh', transform: booleanAttribute }) showRefresh?: boolean;
   @Input({ alias: 'total-items', transform: numberAttribute }) totalItems?: number;
   @Input({ alias: 'current-page', transform: numberAttribute }) currentPage?: number;
@@ -105,6 +111,36 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
 
   get cols() {
     return this.columns.length + (this.showActions !== 'row' ? 1 : 0);
+  }
+
+  getTableClasses(): string[] {
+    const classes = ['table'];
+
+    if (this.tableStriped) {
+      classes.push('table-striped');
+    }
+
+    if (this.tableStripedColumns) {
+      classes.push('table-striped-columns');
+    }
+
+    if (this.tableHover) {
+      classes.push('table-hover');
+    }
+
+    if (this.tableBordered) {
+      classes.push('table-bordered');
+    }
+
+    if (this.tableBorderless) {
+      classes.push('table-borderless');
+    }
+
+    if (this.tableSmall) {
+      classes.push('table-small');
+    }
+
+    return classes;
   }
 
   selectSize() {

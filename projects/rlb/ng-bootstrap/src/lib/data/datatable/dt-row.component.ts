@@ -4,9 +4,11 @@ import {
   Component,
   ContentChildren,
   EmbeddedViewRef,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   TemplateRef,
   ViewChild,
@@ -19,7 +21,7 @@ import { Subscription } from "rxjs";
   selector: 'rlb-dt-row',
   template: `
     <ng-template #template>
-      <tr [class]="cssClass" [style]="cssStyle">
+      <tr [class]="cssClass" [style]="cssStyle" (click)="rowClick.emit($event)">
         <ng-content select="rlb-dt-cell"></ng-content>
         <rlb-dt-cell *ngIf="hasActions">
           <ng-container #projectedActions></ng-container>
@@ -32,6 +34,8 @@ export class DataTableRowComponent implements AfterViewInit, OnInit, AfterConten
   @Input({ alias: 'class' }) cssClass?: string
   @Input({ alias: 'style' }) cssStyle?: string;
   hasActions: boolean = true
+
+  @Output() rowClick: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @ViewChild('projectedActions', { read: ViewContainerRef }) _projectedActions!: ViewContainerRef;
