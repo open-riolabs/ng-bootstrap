@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders, ApplicationConfig } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { COMPONENTS } from './components';
 import { FormFieldsComponent } from './forms/rlb-form-fields/rlb-form-fields.component';
 import { COMPONENT_BUILDER } from './shared/component-builder';
 import { PIPES } from './pipes';
+import { CdkDrag, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,10 @@ import { PIPES } from './pipes';
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
+    CdkDrag,
+    CdkDropListGroup,
+    CdkDropList,
+    CdkDragPlaceholder
   ],
   exports: [
     ...TABLE,

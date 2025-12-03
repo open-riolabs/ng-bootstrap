@@ -6,6 +6,7 @@
       [events]="events"
       (eventClick)="eventClick.emit($event)"
       (eventContainerClick)="eventContainerClick.emit($event)"
+      (eventChange)="eventChange.emit($event)"
     />
 	</ng-container>
 	<ng-container *ngSwitchDefault>

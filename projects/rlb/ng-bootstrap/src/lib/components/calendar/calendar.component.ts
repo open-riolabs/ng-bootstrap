@@ -50,6 +50,13 @@ export class CalendarComponent implements OnChanges {
 		}
 	}
 
+  // DnD event
+  onEventChange(eventToEdit: CalendarEvent) {
+    const idx = this.events.findIndex((event) => event.id === eventToEdit.id);
+    this.events[idx] = eventToEdit
+    this.events = [...this.events];
+  }
+
   onEventContainerClick(events: CalendarEventWithLayout[] | undefined) {
     this.modals.openModal(
       'rlb-calendar-overlow-events-container',

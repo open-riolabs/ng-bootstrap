@@ -12,7 +12,9 @@ import { IDateTz } from "@open-rlb/date-tz";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
-import { getToday, isSameDay, isToday } from "../../utils/calendar-date-utils";
+import { getToday, isToday } from "../../utils/calendar-date-utils";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
+
 
 @Component({
   selector: 'rlb-calendar-week-grid',
@@ -27,6 +29,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
   @Input() events: CalendarEvent[] = [];
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
   @Output() eventContainerClick = new EventEmitter<CalendarEventWithLayout[] | undefined>();
+  @Output() eventChange = new EventEmitter<CalendarEvent>();
 
   days: IDateTz[] = [];
   timeSlots: string[] = [];
@@ -38,6 +41,8 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
   rowHeight = 100; // px for a full hour slot
   maxBodyHeight: number = 30; // rem
   private readonly MAX_VISIBLE_COLUMNS = 4;
+  private readonly SNAP_MINUTES = 15;
+
 
   constructor(
   ) {
@@ -62,58 +67,68 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
     this.stopNowTimer();
   }
 
-  onEventEdit(event?: CalendarEventWithLayout): void {
-    this.eventClick.emit(event);
-  }
 
-  getEventsForHour(day: IDateTz, time: string): CalendarEventWithLayout[] {
-    const [hourStr] = time.split(':');
-    const hour = parseInt(hourStr, 10);
+  onEventDrop(event: CdkDragDrop<IDateTz, any, CalendarEventWithLayout>) {
+    const movedEvent = event.item.data as CalendarEventWithLayout;
+    const newDay = event.container.data;
 
-    const startOfHour = new DateTz(day)
-      .set(hour, 'hour')
-      .set(0, 'minute')
+    const columnRect = event.container.element.nativeElement.getBoundingClientRect();
+    const relativeY = event.dropPoint.y - columnRect.top;
 
-    const endOfHour = new DateTz(startOfHour.timestamp, 'UTC').add(1, 'hour');
+    const rawMinutesFromStart = (relativeY / this.rowHeight) * 60;
 
-    const dayStartTz = new DateTz(day.timestamp, 'UTC')
+    const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
+
+    const validMinutes = Math.max(0, snappedMinutes);
+
+    const newStart = new DateTz(newDay)
       .set(0, 'hour')
-      .set(0, 'minute');
+      .set(0, 'minute')
+      .add(validMinutes, 'minute')
+      .stripSecMillis!()
 
-    const dayTimestamp = dayStartTz.stripSecMillis().timestamp
 
-    const dayEvents = this.processedEvents.get(dayTimestamp) || [];
+    const durationMs = movedEvent.end.timestamp - movedEvent.start.timestamp;
+    const newEnd = new DateTz(newStart.timestamp + durationMs);
 
-    const filteredDayEvents = dayEvents.filter(event => {
-      const eventStart = event.start;
-      const eventEnd = event.end;
+    if (newStart.timestamp !== movedEvent.start.timestamp) {
+      const updatedEvent: CalendarEvent = {
+        ...movedEvent,
+        start: newStart,
+        end: newEnd,
+      };
 
-      const eventStartsBeforeEndOfHour = eventStart.compare!(endOfHour) < 0; // eventStart < endOfHour
-      const eventEndsAfterStartOfHour = eventEnd.compare!(startOfHour) > 0; // eventEnd > startOfHour
-
-      return eventStartsBeforeEndOfHour && eventEndsAfterStartOfHour;
-    });
-
-    return filteredDayEvents;
+      this.eventChange.emit(updatedEvent);
+    }
   }
 
-  isCurrentDay(day: IDateTz): boolean {
-    return isSameDay(day, this.now);
+
+  getEventsForDay(day: IDateTz): CalendarEventWithLayout[] {
+    const dayTs = new DateTz(day.timestamp, 'UTC').set(0, 'hour').set(0, 'minute').stripSecMillis().timestamp;
+    return this.processedEvents.get(dayTs) || [];
+  }
+
+  calculateEventTop(event: CalendarEventWithLayout): number {
+    const startOfDay = new DateTz(event.start).set(0, 'hour').set(0, 'minute').stripSecMillis();
+    const diffMs = event.start.timestamp - startOfDay.timestamp;
+    const diffMinutes = diffMs / (1000 * 60);
+    return (diffMinutes / 60) * this.rowHeight;
+  }
+
+  calculateEventHeight(event: CalendarEventWithLayout): number {
+    const durationMs = event.end.timestamp - event.start.timestamp;
+    const durationMinutes = durationMs / (1000 * 60);
+    return (durationMinutes / 60) * this.rowHeight;
+  }
+
+  getNowTop(): number {
+    const hours = this.now.hour;
+    const minutes = this.now.minute;
+    return ((hours * 60) + minutes) / 60 * this.rowHeight;
   }
 
   isToday(date: IDateTz): boolean {
     return isToday(date)
-  }
-
-  isCurrentHour(time: string): boolean {
-    const [hourStr] = time.split(':');
-    const hour = parseInt(hourStr, 10);
-    return hour === this.now.hour;
-  }
-
-  calculateNowLineTop(): number {
-    const currentMinute = this.now.minute;
-    return (currentMinute / 60) * this.rowHeight;
   }
 
   private startNowTimer() {
@@ -164,41 +179,55 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
   private processAllEvents() {
     this.processedEvents.clear();
 
-    const eventsByDay = new Map<number, CalendarEvent[]>();
+    const eventsByDay = new Map<number, CalendarEventWithLayout[]>();
 
     for (const event of this.events) {
-      // clean input events from ms offset
-      const cleanStart = new DateTz(event.start).stripSecMillis() as DateTz;
-      const cleanEnd = new DateTz(event.end).stripSecMillis() as DateTz;
-      const cleanEvent: CalendarEvent = { ...event, start: cleanStart, end: cleanEnd };
+      const originalStart = new DateTz(event.start);
+      const originalEnd = new DateTz(event.end);
 
-      let currentDateStartOfDay = new DateTz(cleanStart)
-        .set(0, 'hour')
-        .set(0, 'minute')
-        .stripSecMillis() as DateTz;
+      let currentChunkStart: IDateTz = new DateTz(originalStart);
 
-      const dayAfterEnd = new DateTz(cleanEnd)
-        .add!(1, 'day')
-        .set!(0, 'hour')
-        .set!(0, 'minute')
-        .stripSecMillis!() as DateTz;
+      while (currentChunkStart.timestamp < originalEnd.timestamp) {
 
+        const startOfNextDay = new DateTz(currentChunkStart).set(0, 'hour')
+          .set(0, 'minute')
+          .add(1, 'day')
+          .stripSecMillis!()
 
-      while (currentDateStartOfDay.compare!(dayAfterEnd) < 0) {
-        const dayTimestamp = currentDateStartOfDay.timestamp;
+        const chunkEndTimestamp = Math.min(originalEnd.timestamp, startOfNextDay!.timestamp);
+        const chunkEnd = new DateTz(chunkEndTimestamp);
+
+        const currentDayStart = new DateTz(currentChunkStart)
+          .set(0, 'hour')
+          .set(0, 'minute')
+          .stripSecMillis();
+
+        const dayTimestamp = currentDayStart.timestamp;
+
+        const isContinuedBefore = currentChunkStart.timestamp > originalStart.timestamp;
+        const isContinuedAfter = chunkEnd.timestamp < originalEnd.timestamp;
+
+        const visualEvent: CalendarEventWithLayout = {
+          ...event,
+          start: currentChunkStart,
+          end: chunkEnd,
+          isContinuedBefore: isContinuedBefore,
+          isContinuedAfter: isContinuedAfter,
+          left: 0,
+          width: 0
+        }
 
         if (!eventsByDay.has(dayTimestamp)) {
           eventsByDay.set(dayTimestamp, []);
         }
-        eventsByDay.get(dayTimestamp)!.push(cleanEvent);
+        eventsByDay.get(dayTimestamp)!.push(visualEvent);
 
-        currentDateStartOfDay = currentDateStartOfDay.add(1, 'day') as DateTz;
+        currentChunkStart = startOfNextDay;
       }
     }
 
     for (const [dayTimestamp, dayEvents] of eventsByDay.entries()) {
       const groups = this.groupEventsByConflicts(dayEvents);
-
       const eventsWithLayout: CalendarEventWithLayout[] = [];
 
       for (const group of groups) {
@@ -210,30 +239,6 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
     }
   }
 
-  private getMaxConcurrentEvents(groupEvents: CalendarEvent[]): number {
-    if (groupEvents.length === 0) return 0;
-
-    const sortedEvents = [...groupEvents].sort((a, b) => a.start.compare!(b.start));
-
-    let maxConcurrent = 0;
-    const activeEnds: number[] = [];
-
-    for (const event of sortedEvents) {
-      const start = event.start.timestamp;
-
-      for (let i = activeEnds.length - 1; i >= 0; i--) {
-        if (activeEnds[i] <= start) {
-          activeEnds.splice(i, 1);
-        }
-      }
-
-      activeEnds.push(event.end.timestamp);
-
-      maxConcurrent = Math.max(maxConcurrent, activeEnds.length);
-    }
-
-    return maxConcurrent;
-  }
 
   private groupEventsByConflicts(dayEvents: CalendarEvent[]): CalendarEvent[][] {
     if (dayEvents.length === 0) return [];
@@ -396,4 +401,30 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
 
     return processedEvents;
   }
+
+  private getMaxConcurrentEvents(groupEvents: CalendarEvent[]): number {
+    if (groupEvents.length === 0) return 0;
+
+    const sortedEvents = [...groupEvents].sort((a, b) => a.start.compare!(b.start));
+
+    let maxConcurrent = 0;
+    const activeEnds: number[] = [];
+
+    for (const event of sortedEvents) {
+      const start = event.start.timestamp;
+
+      for (let i = activeEnds.length - 1; i >= 0; i--) {
+        if (activeEnds[i] <= start) {
+          activeEnds.splice(i, 1);
+        }
+      }
+
+      activeEnds.push(event.end.timestamp);
+
+      maxConcurrent = Math.max(maxConcurrent, activeEnds.length);
+    }
+
+    return maxConcurrent;
+  }
+
 }

@@ -1,34 +1,96 @@
-.calendar-hour-cell {
-  position: relative;
-  padding: 0;
-  border-bottom: 1px solid #dee2e6;
-  border-right: 1px solid #dee2e6;
-  box-sizing: border-box;
+// Config
+$time-col-width: 60px;
+$min-day-width: 120px;
+
+:host {
+  display: block;
+  height: 100%;
 }
 
-.quarter-hour-line {
-  position: absolute;
+.calendar-wrapper {
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  overflow: hidden;
+}
+
+// === SCROLL CONTAINER ===
+.calendar-scroller {
+
+}
+
+// === HEADER ===
+.header-row {
+  top: 0;
+  box-shadow: 0 1px 0 var(--bs-border-color);
+
+  z-index: 100;
+  width: fit-content;
+  min-width: 100%;
+}
+
+.time-gutter {
+  width: $time-col-width;
+  border-color: var(--bs-border-color) !important;
+
+  position: sticky;
   left: 0;
-  right: 0;
-  border-top: 1px dotted #e0e0e0;
-  z-index: 1;
+  z-index: 101;
+  background-color: inherit;
 }
 
-.top-25 {
-  top: 25%;
+.day-cell {
+  border-color: var(--bs-border-color) !important;
+  flex: 1 0 auto;
+  min-width: $min-day-width;
 }
 
-.top-50 {
-  top: 50%;
+
+// === BODY ===
+
+.body-row {
+  width: fit-content;
+  min-width: 100%;
 }
 
-.top-75 {
-  top: 75%;
+.time-sidebar {
+  width: $time-col-width;
+  border-color: var(--bs-border-color) !important;
+
+  position: sticky;
+  left: 0;
+  z-index: 50;
+  background-color: var(--bs-body-bg);
 }
 
-.time-line-container {
-  height: 300px;
-  overflow-y: auto;
+.grid-layer {
+}
+
+.grid-row {
+  border-color: var(--bs-border-color) !important;
+  box-sizing: border-box;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    border-bottom: 1px dotted currentColor;
+    opacity: 0.15;
+    top: 50%;
+    left: 0;
+    pointer-events: none;
+  }
+}
+
+.day-column {
+  border-color: var(--bs-border-color) !important;
+
+  flex: 1 0 auto; // grow: 1, shrink: 0
+  min-width: $min-day-width;
+
+  &:last-child {
+    border-right: none !important;
+  }
 }
 
 .now-line {
@@ -36,16 +98,49 @@
   left: 0;
   right: 0;
   height: 2px;
-  background-color: #db4437;
-  z-index: 13;
+  background-color: var(--bs-danger);
+  z-index: 10;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--bs-danger);
+    border-radius: 50%;
+  }
 }
 
-.now-line-dot {
-  position: absolute;
-  left: -5px;
-  top: -4px;
-  width: 10px;
-  height: 10px;
-  background-color: #db4437;
-  border-radius: 50%;
+.z-0 {
+  z-index: 0;
+}
+
+.z-1 {
+  z-index: 1;
+}
+
+::ng-deep .cdk-drag-preview {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3) !important;
+  opacity: 0.9;
+  border-radius: var(--bs-border-radius-sm);
+  cursor: grabbing;
+
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+::ng-deep .cdk-drag-placeholder {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px dashed #ccc;
+}
+
+::ng-deep .cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.day-column.cdk-drop-list-dragging .calendar-event:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

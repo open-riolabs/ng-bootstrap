@@ -15,6 +15,7 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	@Input() events: CalendarEvent[] = [];
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
   @Output() eventContainerClick = new EventEmitter<CalendarEventWithLayout[] | undefined>();
+  @Output() eventChange = new EventEmitter<CalendarEvent>();
 
   constructor(
 	) {

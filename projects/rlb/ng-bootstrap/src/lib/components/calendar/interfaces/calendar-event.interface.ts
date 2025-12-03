@@ -18,6 +18,8 @@ export interface CalendarEventWithLayout extends CalendarEvent {
   width: number;
   // isEventContainer flag
   isOverflowIndicator?: boolean;
+  isContinuedBefore?: boolean;
+  isContinuedAfter?: boolean
   overflowEvents?: CalendarEventWithLayout[];
   overlapCount?: number;
 }
