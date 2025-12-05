@@ -141,6 +141,6 @@ $min-day-width: 120px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.day-column.cdk-drop-list-dragging .calendar-event:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
+//.day-column.cdk-drop-list-dragging .calendar-event:not(.cdk-drag-placeholder) {
+//  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+//}

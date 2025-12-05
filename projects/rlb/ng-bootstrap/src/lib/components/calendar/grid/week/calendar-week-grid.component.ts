@@ -67,15 +67,21 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
     this.stopNowTimer();
   }
 
+  trackByEventId(index: number, item: CalendarEventWithLayout): string | number {
+    return item.id
+  }
 
   onEventDrop(event: CdkDragDrop<IDateTz, any, CalendarEventWithLayout>) {
     const movedEvent = event.item.data as CalendarEventWithLayout;
     const newDay = event.container.data;
 
-    const columnRect = event.container.element.nativeElement.getBoundingClientRect();
-    const relativeY = event.dropPoint.y - columnRect.top;
+    const originalTopPx = this.calculateEventTop(movedEvent);
 
-    const rawMinutesFromStart = (relativeY / this.rowHeight) * 60;
+    const dragDistancePx = event.distance.y;
+
+    const newTopPx = originalTopPx + dragDistancePx;
+
+    const rawMinutesFromStart = (newTopPx / this.rowHeight) * 60;
 
     const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
 
@@ -85,8 +91,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
       .set(0, 'hour')
       .set(0, 'minute')
       .add(validMinutes, 'minute')
-      .stripSecMillis!()
-
+      .stripSecMillis!();
 
     const durationMs = movedEvent.end.timestamp - movedEvent.start.timestamp;
     const newEnd = new DateTz(newStart.timestamp + durationMs);
@@ -101,7 +106,6 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
       this.eventChange.emit(updatedEvent);
     }
   }
-
 
   getEventsForDay(day: IDateTz): CalendarEventWithLayout[] {
     const dayTs = new DateTz(day.timestamp, 'UTC').set(0, 'hour').set(0, 'minute').stripSecMillis().timestamp;
@@ -182,44 +186,42 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
     const eventsByDay = new Map<number, CalendarEventWithLayout[]>();
 
     for (const event of this.events) {
-      const originalStart = new DateTz(event.start);
-      const originalEnd = new DateTz(event.end);
+      const originalStart = new DateTz(event.start).stripSecMillis!();
+      const originalEnd = new DateTz(event.end).stripSecMillis!();
 
       let currentChunkStart: IDateTz = new DateTz(originalStart);
 
       while (currentChunkStart.timestamp < originalEnd.timestamp) {
-
-        const startOfNextDay = new DateTz(currentChunkStart).set(0, 'hour')
+        const startOfNextDay = new DateTz(currentChunkStart)
+          .set(0, 'hour')
           .set(0, 'minute')
           .add(1, 'day')
-          .stripSecMillis!()
+          .stripSecMillis!();
 
-        const chunkEndTimestamp = Math.min(originalEnd.timestamp, startOfNextDay!.timestamp);
+        const chunkEndTimestamp = Math.min(originalEnd.timestamp, startOfNextDay.timestamp);
         const chunkEnd = new DateTz(chunkEndTimestamp);
 
         const currentDayStart = new DateTz(currentChunkStart)
           .set(0, 'hour')
           .set(0, 'minute')
-          .stripSecMillis();
+          .stripSecMillis!();
 
         const dayTimestamp = currentDayStart.timestamp;
-
-        const isContinuedBefore = currentChunkStart.timestamp > originalStart.timestamp;
-        const isContinuedAfter = chunkEnd.timestamp < originalEnd.timestamp;
 
         const visualEvent: CalendarEventWithLayout = {
           ...event,
           start: currentChunkStart,
           end: chunkEnd,
-          isContinuedBefore: isContinuedBefore,
-          isContinuedAfter: isContinuedAfter,
+          isContinuedBefore: currentChunkStart.timestamp > originalStart.timestamp,
+          isContinuedAfter: chunkEnd.timestamp < originalEnd.timestamp,
           left: 0,
           width: 0
-        }
+        };
 
         if (!eventsByDay.has(dayTimestamp)) {
           eventsByDay.set(dayTimestamp, []);
         }
+
         eventsByDay.get(dayTimestamp)!.push(visualEvent);
 
         currentChunkStart = startOfNextDay;
@@ -227,7 +229,10 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
     }
 
     for (const [dayTimestamp, dayEvents] of eventsByDay.entries()) {
-      const groups = this.groupEventsByConflicts(dayEvents);
+
+      const sortedDayEvents = this.sortEventsStable(dayEvents);
+
+      const groups = this.groupEventsByConflicts(sortedDayEvents);
       const eventsWithLayout: CalendarEventWithLayout[] = [];
 
       for (const group of groups) {
@@ -238,7 +243,6 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
       this.processedEvents.set(dayTimestamp, eventsWithLayout);
     }
   }
-
 
   private groupEventsByConflicts(dayEvents: CalendarEvent[]): CalendarEvent[][] {
     if (dayEvents.length === 0) return [];
@@ -272,159 +276,109 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
   private resolveConflictGroupLayout(groupEvents: CalendarEvent[]): CalendarEventWithLayout[] {
     if (!groupEvents || groupEvents.length === 0) return [];
 
-    const maxColumns = this.getMaxConcurrentEvents(groupEvents);
+    const columns: CalendarEventWithLayout[][] = [];
 
-    // case 1 -> full width event
-    if (maxColumns <= 1) {
-      return groupEvents.map(event => ({ ...event, left: 0, width: 100 }));
-    }
+    const columnLastEndTimes: number[] = [];
 
-    const sortedEvents = [...groupEvents].sort((a, b) => a.start.compare!(b.start));
-
-    // case 2 -> less than max events per hour
-    if (maxColumns <= this.MAX_VISIBLE_COLUMNS) {
-      const columnWidth = 100 / maxColumns;
-
-      const processedEvents: CalendarEventWithLayout[] = [];
-
-      const columnEnds: number[] = new Array(maxColumns).fill(-Infinity);
-
-      const eventToColumnMap = new Map<CalendarEvent, number>();
-
-      for (const event of sortedEvents) {
-        let assignedColumn = -1
-        for (let col = 0; col < maxColumns; col++) {
-          if (columnEnds[col] <= event.start.timestamp) {
-            assignedColumn = col;
-            break;
-          }
-        }
-
-        if (assignedColumn === -1) {
-          let minEnd = Infinity;
-          for (let col = 0; col < maxColumns; col++) {
-            if (columnEnds[col] < minEnd) {
-              minEnd = columnEnds[col];
-              assignedColumn = col;
-            }
-          }
-        }
-
-        const eventWithLayout: CalendarEventWithLayout = {
-          ...event,
-          left: assignedColumn * columnWidth,
-          width: columnWidth,
-        };
-
-        columnEnds[assignedColumn] = event.end.timestamp;
-
-        processedEvents.push(eventWithLayout);
-        eventToColumnMap.set(event, assignedColumn);
-      }
-
-      return processedEvents;
-    }
-
-    // case 3 -> too many events to render in a single cell -> generic events container
-
-    const visualMaxColumns = this.MAX_VISIBLE_COLUMNS;
-    const columnWidth = 100 / visualMaxColumns;
-    const overflowColumnIndex = visualMaxColumns - 1;
-
-    const processedEvents: CalendarEventWithLayout[] = [];
-    const hiddenEvents: CalendarEventWithLayout[] = [];
-
-    const trueColumnEnds: number[] = new Array(maxColumns).fill(-Infinity);
-
-    for (const event of sortedEvents) {
+    for (const event of groupEvents) {
       let assignedCol = -1;
 
-      for (let col = 0; col < maxColumns; col++) {
-        if (trueColumnEnds[col] <= event.start.timestamp) {
-          assignedCol = col;
+      for (let i = 0; i < columnLastEndTimes.length; i++) {
+        if (columnLastEndTimes[i] <= event.start.timestamp) {
+          assignedCol = i;
           break;
         }
       }
 
       if (assignedCol === -1) {
-        let minEnd = Infinity;
-        for (let col = 0; col < maxColumns; col++) {
-          if (trueColumnEnds[col] < minEnd) {
-            minEnd = trueColumnEnds[col];
-            assignedCol = col;
-          }
-        }
+        assignedCol = columns.length;
+        columns.push([]);
+        columnLastEndTimes.push(0);
       }
 
-      trueColumnEnds[assignedCol] = event.end.timestamp;
+      columns[assignedCol].push(event as CalendarEventWithLayout);
+      columnLastEndTimes[assignedCol] = event.end.timestamp;
+    }
 
-      if (assignedCol < overflowColumnIndex) {
-        const eventWithLayout: CalendarEventWithLayout = {
-          ...event,
-          left: assignedCol * columnWidth,
-          width: columnWidth,
-        };
-        processedEvents.push(eventWithLayout);
+    const totalColumns = columns.length;
 
-      } else {
-        const eventWithLayout: CalendarEventWithLayout = {
-          ...event,
-          // Visually align with the indicator column
-          left: overflowColumnIndex * columnWidth,
-          width: columnWidth,
-        };
-        hiddenEvents.push(eventWithLayout);
+    const resultEvents: CalendarEventWithLayout[] = [];
+
+
+    // Case 1: All visible
+    if (totalColumns <= this.MAX_VISIBLE_COLUMNS) {
+      const colWidth = 100 / totalColumns;
+
+      columns.forEach((colEvents, colIndex) => {
+        colEvents.forEach(event => {
+          resultEvents.push({
+            ...event,
+            left: colIndex * colWidth,
+            width: colWidth
+          });
+        });
+      });
+    }
+    // Case 2 (Overflow)
+    else {
+      const visibleColsCount = this.MAX_VISIBLE_COLUMNS - 1;
+      const colWidth = 100 / this.MAX_VISIBLE_COLUMNS;
+      const hiddenEvents: CalendarEventWithLayout[] = [];
+
+      for (let i = 0; i < visibleColsCount; i++) {
+        columns[i].forEach(event => {
+          resultEvents.push({
+            ...event,
+            left: i * colWidth,
+            width: colWidth
+          });
+        });
+      }
+
+      for (let i = visibleColsCount; i < totalColumns; i++) {
+        columns[i].forEach(event => {
+          hiddenEvents.push({
+            ...event,
+            left: visibleColsCount * colWidth,
+            width: colWidth
+          });
+        });
+      }
+
+      if (hiddenEvents.length > 0) {
+        const minStart = hiddenEvents.reduce((min, e) => Math.min(min, e.start.timestamp), Infinity);
+        const maxEnd = hiddenEvents.reduce((max, e) => Math.max(max, e.end.timestamp), -Infinity);
+
+        resultEvents.push({
+          id: -9999,
+          title: `+${hiddenEvents.length} more`,
+          start: new DateTz(minStart),
+          end: new DateTz(maxEnd),
+          color: 'light',
+          left: visibleColsCount * colWidth,
+          width: colWidth,
+          isOverflowIndicator: true,
+          overflowEvents: hiddenEvents,
+          overlapCount: hiddenEvents.length
+        });
       }
     }
 
-    if (hiddenEvents.length > 0) {
-      const minStart = hiddenEvents.reduce((min, e) => Math.min(min, e.start.timestamp), Infinity);
-      const maxEnd = hiddenEvents.reduce((max, e) => Math.max(max, e.end.timestamp), -Infinity);
-
-      const overflowIndicator: CalendarEventWithLayout = {
-        id: -1,
-        title: `+${hiddenEvents.length} more`,
-        start: new DateTz(minStart),
-        end: new DateTz(maxEnd),
-        color: 'light',
-
-        left: overflowColumnIndex * columnWidth,
-        width: columnWidth,
-
-        isOverflowIndicator: true,
-        overflowEvents: hiddenEvents,
-        overlapCount: hiddenEvents.length
-      };
-
-      processedEvents.push(overflowIndicator);
-    }
-
-    return processedEvents;
+    return resultEvents;
   }
 
-  private getMaxConcurrentEvents(groupEvents: CalendarEvent[]): number {
-    if (groupEvents.length === 0) return 0;
+  private sortEventsStable(events: CalendarEvent[]): CalendarEvent[] {
+    return [...events].sort((a, b) => {
+      const diff = a.start.timestamp - b.start.timestamp;
+      if (diff !== 0) return diff;
 
-    const sortedEvents = [...groupEvents].sort((a, b) => a.start.compare!(b.start));
+      const durA = a.end.timestamp - a.start.timestamp;
+      const durB = b.end.timestamp - b.start.timestamp;
+      if (durB !== durA) return durB - durA;
 
-    let maxConcurrent = 0;
-    const activeEnds: number[] = [];
-
-    for (const event of sortedEvents) {
-      const start = event.start.timestamp;
-
-      for (let i = activeEnds.length - 1; i >= 0; i--) {
-        if (activeEnds[i] <= start) {
-          activeEnds.splice(i, 1);
-        }
-      }
-
-      activeEnds.push(event.end.timestamp);
-
-      maxConcurrent = Math.max(maxConcurrent, activeEnds.length);
-    }
-
-    return maxConcurrent;
+      const idA = a.id ? a.id.toString() : a.title;
+      const idB = b.id ? b.id.toString() : b.title;
+      return idA.localeCompare(idB);
+    });
   }
-
 }

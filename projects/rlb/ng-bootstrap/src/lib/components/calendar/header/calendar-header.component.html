@@ -9,7 +9,7 @@
 		</button>
 	</div>
 
-	<h5 class="mb-0">{{ currentDate | dtz:'DD MM yyyy' | monthFormatter }}</h5>
+  <h5 class="mb-0">{{ currentDate | dtz:'DD MM yyyy' | monthFormatter }} {{ currentDate.timezone }}</h5>
 
 	<rlb-dropdown>
 		<button rlb-button outline rlb-dropdown>{{ view | titlecase }}</button>

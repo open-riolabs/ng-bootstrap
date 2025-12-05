@@ -143,7 +143,7 @@ export class CalendarComponent implements OnChanges {
 	}
 
   generateTestEvents(): void {
-		const events: CalendarEvent[] = [];
+    const events: any[] = [];
 
     const now = getToday()
 

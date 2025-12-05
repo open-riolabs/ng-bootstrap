@@ -15,7 +15,7 @@
              [class.fw-bold]="isToday(day)"
              [class.bg-primary]="isToday(day)"
         >
-          <div class="small text-uppercase text-body-secondary">{{ day | dtz:'ddd' }}</div>
+          <div class="small text-uppercase text-body-secondary">{{ day | dayOfWeek: 'short' }}</div>
           <div class="h5 m-0">{{ day | dtz:'DD' }}</div>
         </div>
       </div>
@@ -51,12 +51,13 @@
           <div *ngFor="let day of days"
                class="day-column position-relative border-end h-100"
                cdkDropList
+               [cdkDropListSortingDisabled]="true"
                [cdkDropListData]="day"
                (cdkDropListDropped)="onEventDrop($event)"
           >
 
             <rlb-calendar-event
-              *ngFor="let event of getEventsForDay(day)"
+              *ngFor="let event of getEventsForDay(day); trackBy: trackByEventId"
               [event]="event"
               [style.top.px]="calculateEventTop(event)"
               [style.height.px]="calculateEventHeight(event)"
