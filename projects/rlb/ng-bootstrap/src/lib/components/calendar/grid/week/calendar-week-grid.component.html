@@ -54,6 +54,7 @@
                [cdkDropListSortingDisabled]="true"
                [cdkDropListData]="day"
                (cdkDropListDropped)="onEventDrop($event)"
+               (click)="eventClick.emit()"
           >
 
             <rlb-calendar-event

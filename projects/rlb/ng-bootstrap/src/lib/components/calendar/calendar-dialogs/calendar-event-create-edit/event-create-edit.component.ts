@@ -7,6 +7,7 @@ import { Color } from "../../../../shared/types";
 import { Subject, takeUntil } from "rxjs";
 import { UniqueIdService } from "../../../../shared/unique-id.service";
 import { IDateTz } from "@open-rlb/date-tz";
+import { dateRangeValidator } from "./event-date-validator";
 
 @Component({
 	standalone: true,
@@ -16,16 +17,16 @@ import { IDateTz } from "@open-rlb/date-tz";
 			<button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
 		</div>
     <div class="modal-body" [formGroup]="form">
-      <rlb-input formControlName="title">
+      <rlb-input enable-validation formControlName="title">
         <label before>Event title</label>
       </rlb-input>
-      <rlb-input type="datetime-local" date-type="date-tz" formControlName="start">
+      <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="start">
         <label before class="mt-3">Event start</label>
       </rlb-input>
-      <rlb-input type="datetime-local" date-type="date-tz" formControlName="end">
+      <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="end">
         <label before class="mt-3">Event end</label>
       </rlb-input>
-      <rlb-select [placeholder]="'Choose event color'" formControlName="color">
+      <rlb-select enable-validation [placeholder]="'Choose event color'" formControlName="color">
         <label before class="mt-3">Event color</label>
         <ng-container *ngFor="let color of colors">
           <rlb-option [value]="color">
@@ -86,7 +87,7 @@ export class EventCreateEditComponent implements IModal<CalendarEvent | undefine
       start: [this.eventToEdit ? this.eventToEdit.start : "", Validators.required],
       end: [this.eventToEdit ? this.eventToEdit.end : "", Validators.required],
       color: [this.eventToEdit ? this.eventToEdit.color : "", Validators.required],
-    })
+    }, { validators: dateRangeValidator })
 
     this.form.valueChanges.pipe(
       takeUntil(this.destroy$)

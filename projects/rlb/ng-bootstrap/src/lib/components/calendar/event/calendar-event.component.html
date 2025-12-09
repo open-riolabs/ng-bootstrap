@@ -1,5 +1,5 @@
 <div [ngClass]="classes"
-     (click)="onClick(event)">
+     (click)="onClick($event)">
 
   <ng-container *ngIf="!event.isOverflowIndicator">
     <strong>{{ event.title }}</strong>

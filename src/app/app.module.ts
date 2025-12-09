@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import {
   CalendarOverflowEventsContainerComponent,
+  CalendarToastComponent,
   CommonModalComponent,
   EventCreateEditComponent,
   ModalRegistryOptions,
@@ -12,7 +13,6 @@ import {
   ToastRegistryOptions
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 import { RoutingModule } from './routing.module';
 import { HomeComponent } from './pages/home/home.component';
 import { GettingStartedComponent } from './pages/getting-started/getting-started.component';
@@ -137,7 +137,7 @@ import { CalendarComponent } from "./pages/components/calendar/calendar.componen
       provide: ToastRegistryOptions,
       useValue: {
         toasts: {
-          "sample-toast": ToastSampleComponent
+          "rlb-calendar-toast": CalendarToastComponent
         }
       },
       multi: true,

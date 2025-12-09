@@ -5,11 +5,13 @@
 import { EnvironmentProviders, Provider } from '@angular/core';
 import {
   CalendarOverflowEventsContainerComponent,
+  CalendarToastComponent,
   CommonModalComponent,
   EventCreateEditComponent,
   ModalRegistryOptions,
   RlbBootstrapModule,
-  SearchModalComponent
+  SearchModalComponent,
+  ToastRegistryOptions
 } from './public-api';
 
 
@@ -41,6 +43,15 @@ export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
           'rlb-calendar-overlow-events-container': CalendarOverflowEventsContainerComponent
         }
       } as ModalRegistryOptions, multi: true
-    }
+    },
+    {
+      provide: ToastRegistryOptions,
+      useValue: {
+        toasts: {
+          "rlb-calendar-toast": CalendarToastComponent
+        }
+      },
+      multi: true,
+    },
   ];
 }

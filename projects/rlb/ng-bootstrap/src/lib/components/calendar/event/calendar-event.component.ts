@@ -38,11 +38,15 @@ export class CalendarEventComponent {
     return classes;
   }
 
-  onClick(event: CalendarEventWithLayout) {
-    if (event.isOverflowIndicator && event.overflowEvents) {
-      this.eventContainerClick.emit(event.overflowEvents)
+  onClick(e: Event) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation()
+
+    if (this.event.isOverflowIndicator && this.event.overflowEvents) {
+      this.eventContainerClick.emit(this.event.overflowEvents)
     } else {
-      this.eventClick.emit(event);
+      this.eventClick.emit(this.event);
     }
   }
 }

@@ -4,10 +4,12 @@ import { DateTz } from "@open-rlb/date-tz";
 import { CalendarChangeEvent, CalendarView } from "./interfaces/calendar-view.type";
 import { ModalService } from "../modals/modal.service";
 import { UniqueIdService } from "../../shared/unique-id.service";
-import { filter, map, switchMap, take, tap } from "rxjs";
+import { filter, map, of, switchMap, take } from "rxjs";
 import { getToday } from "./utils/calendar-date-utils";
 import { ModalResult } from "../modals";
 import { CalendarOverflowEventsDialogResult } from "./calendar-dialogs";
+import { ToastService } from "../toast";
+import { ModalType } from "../../shared/types";
 
 
 @Component({
@@ -35,8 +37,12 @@ export class CalendarComponent implements OnChanges {
   // private userTimeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	private dateFormat: string = 'YYYY-MM-DD HH:mm:ss';
 
-  constructor(private modals: ModalService, private unique: UniqueIdService) {
-    this.currentDate = getToday()
+  constructor(
+    private modals: ModalService,
+    private unique: UniqueIdService,
+    private toasts: ToastService,
+  ) {
+    this.currentDate = getToday();
 	}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -55,6 +61,17 @@ export class CalendarComponent implements OnChanges {
     const idx = this.events.findIndex((event) => event.id === eventToEdit.id);
     this.events[idx] = eventToEdit
     this.events = [...this.events];
+    this.toasts.openToast(
+      'toast-c-1',
+      'rlb-calendar-toast',
+      {
+        title: 'Success!',
+        content: 'Event edited successfully.',
+        type: 'success',
+      }
+    ).pipe(
+      take(1)
+    ).subscribe()
   }
 
   onEventContainerClick(events: CalendarEventWithLayout[] | undefined) {
@@ -90,17 +107,51 @@ export class CalendarComponent implements OnChanges {
           );
         }
       }),
-      tap(({ action, modalResult, event }) => {
+      switchMap(({ action, modalResult, event }) => {
         if (action === 'delete' && modalResult.reason === 'ok' || action === 'edit' && modalResult.reason === 'cancel') {
           this.events = [...this.events.filter(entry => event.id !== entry.id),]
-          return
+          return of({ action: 'delete' })
         }
 
         if (action === 'edit' && modalResult.reason === 'ok') {
           const idx = this.events.findIndex((entry) => event.id === entry.id);
           this.events[idx] = modalResult.result;
           this.events = [...this.events];
+          return of({ action: 'edit' })
         }
+
+        return of(null)
+      }),
+      switchMap((result) => {
+        if (result) {
+          let content = '';
+          let type: ModalType = 'success'
+          switch (result.action) {
+            case 'delete':
+              content = 'Event deleted successfully.';
+              type = 'warning';
+              break;
+            case 'edit':
+              content = 'Event edited successfully.';
+              type = 'info'
+              break;
+            case 'create':
+              content = 'Event created successfully.';
+              break;
+          }
+          return this.toasts.openToast(
+            'toast-c-1',
+            'rlb-calendar-toast',
+            {
+              title: 'Success!',
+              content,
+              type,
+            }
+          ).pipe(
+            take(1)
+          )
+        }
+        return of(null)
       })
     ).subscribe()
   }
@@ -110,26 +161,64 @@ export class CalendarComponent implements OnChanges {
       this.eventClick.emit(eventToEdit)
     }
 
-    this.openEditEventDialog(eventToEdit).subscribe((modalResult) => {
-      const newEvent = modalResult.result;
-      if (modalResult.reason === 'cancel' && eventToEdit) {
-        this.events = [...this.events.filter(event => event.id !== eventToEdit.id),]
-        return
-      }
+    this.openEditEventDialog(eventToEdit).pipe(
+      switchMap((modalResult) => {
+        const newEvent = modalResult.result;
+        let result = null
+        if (modalResult.reason === 'cancel' && eventToEdit) {
+          this.events = [...this.events.filter(event => event.id !== eventToEdit.id),]
+          result = { action: 'delete' }
+          return of(result)
+        }
 
-      if (modalResult.reason === 'cancel' || modalResult.reason === 'close' || modalResult.reason === undefined) {
-        return
-      }
+        if (modalResult.reason === 'cancel' || modalResult.reason === 'close' || modalResult.reason === undefined) {
+          return of(result)
+        }
 
-      if (eventToEdit) {
-        const idx = this.events.findIndex((event) => event.id === eventToEdit.id);
-        this.events[idx] = newEvent
-      } else {
-        this.events.push(newEvent)
-      }
+        if (eventToEdit) {
+          const idx = this.events.findIndex((event) => event.id === eventToEdit.id);
+          this.events[idx] = newEvent
+          result = { action: 'edit' }
+        } else {
+          this.events.push(newEvent)
+          result = { action: 'create' }
+        }
 
-      this.events = [...this.events];
-    })
+        this.events = [...this.events];
+        return of(result)
+      }),
+      switchMap((result) => {
+        if (result) {
+          let content = '';
+          let type: ModalType = 'success'
+          switch (result.action) {
+            case 'delete':
+              content = 'Event deleted successfully.';
+              type = 'warning';
+              break;
+            case 'edit':
+              content = 'Event edited successfully.';
+              type = 'info'
+              break;
+            case 'create':
+              content = 'Event created successfully.';
+              break;
+          }
+          return this.toasts.openToast(
+            'toast-c-1',
+            'rlb-calendar-toast',
+            {
+              title: 'Success!',
+              content,
+              type,
+            }
+          ).pipe(
+            take(1)
+          )
+        }
+        return of(null)
+      })
+    ).subscribe()
   }
 
   setDate(date: DateTz) {
