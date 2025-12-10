@@ -20,7 +20,7 @@ import { ModalType } from "../../shared/types";
 })
 export class CalendarComponent implements OnChanges {
 
-	@Input({ alias: 'view' }) view: CalendarView = 'week';
+  @Input({ alias: 'view' }) view: CalendarView = 'month';
 
 	@Input({ alias: 'events' }) events: CalendarEvent[] = [];
 
@@ -74,7 +74,7 @@ export class CalendarComponent implements OnChanges {
     ).subscribe()
   }
 
-  onEventContainerClick(events: CalendarEventWithLayout[] | undefined) {
+  onEventContainerClick(events: CalendarEventWithLayout[] | CalendarEvent[] | undefined) {
     this.modals.openModal(
       'rlb-calendar-overlow-events-container',
       {

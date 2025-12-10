@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.min-height-0 {
+  min-height: 0 !important; // Firefox/Flex nesting fix
+}
+
+.min-h-row {
+  min-height: 100px; // Ensure rows don't collapse on small content
+}
+
+.border-end:last-child {
+  border-right: 0 !important;
+}
+
+.day-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &.today {
+    background-color: var(--bs-primary);
+    color: white;
+  }
+}
+
+.event-spacer {
+  height: 20px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.hover-bg:hover {
+  background-color: var(--bs-secondary-bg-subtle);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// Compact Event Styling Override
+::ng-deep rlb-calendar-event {
+  display: block; // Required for w-100
+
+  .calendar-event {
+    padding: 0 4px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    // Remove corners for continuous events
+    &.rounded-bottom-0 { border-bottom-right-radius: 0; border-bottom-left-radius: 0; }
+    &.rounded-top-0 { border-top-right-radius: 0; border-top-left-radius: 0; }
+  }
+}

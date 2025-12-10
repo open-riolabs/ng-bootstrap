@@ -9,6 +9,16 @@
       (eventChange)="eventChange.emit($event)"
     />
 	</ng-container>
+  <ng-container *ngSwitchCase="'month'">
+    <rlb-calendar-month-grid
+      [view]="view"
+      [currentDate]="currentDate"
+      [events]="events"
+      (eventClick)="eventClick.emit($event)"
+      (eventContainerClick)="eventContainerClick.emit($event)"
+      (eventChange)="eventChange.emit($event)"
+    />
+  </ng-container>
 	<ng-container *ngSwitchDefault>
 		not implemented yet
 	</ng-container>

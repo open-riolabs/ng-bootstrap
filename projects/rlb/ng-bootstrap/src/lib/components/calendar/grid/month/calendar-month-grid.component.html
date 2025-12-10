@@ -1,0 +1,76 @@
+<div class="d-flex flex-column w-100 bg-body user-select-none" [style.max-height.rem]="maxBodyHeight">
+
+  <!-- SCROLL CONTAINER -->
+  <div class="calendar-scroller flex-grow-1 overflow-auto bg-body position-relative">
+
+    <!-- 1. Header Row (Fixed) -->
+    <div class="d-flex flex-shrink-0 border-bottom bg-body-tertiary sticky-top">
+      <div *ngFor="let day of weekDaysHeader"
+           class="flex-fill text-center py-2 border-end small fw-bold text-secondary text-uppercase"
+           style="width: 0">
+        {{ day | dayOfWeek:'short' }}
+      </div>
+    </div>
+
+    <!-- 2. Grid Body (Scrollable) -->
+    <div class="d-flex flex-column flex-grow-1 overflow-y-auto min-height-0">
+
+      <div class="d-flex flex-column" cdkDropListGroup>
+        <div *ngFor="let week of weeks;"
+             class="d-flex border-bottom min-h-row"
+             style="flex: 1 0 auto;">
+
+          <div *ngFor="let slot of week;"
+               class="flex-fill border-end p-1 d-flex flex-column position-relative"
+               style="width: 0"
+               [class.bg-light]="!isCurrentMonth(slot.date)"
+               cdkDropList
+               [cdkDropListData]="slot.date"
+               (cdkDropListDropped)="onEventDrop($event)"
+               (click)="eventClick.emit()"
+          >
+            <!-- Date Number -->
+            <div class="d-flex justify-content-center mb-1">
+               <span class="day-number d-flex align-items-center justify-content-center"
+                     [class.today]="isToday(slot.date)">
+                 {{ slot.date | dtz:'DD' }}
+               </span>
+            </div>
+
+            <!-- Events Stack -->
+            <div class="d-flex flex-column gap-1 w-100">
+              <ng-container *ngFor="let event of slot.events; trackBy: trackByEvent">
+
+                <!-- Spacer -->
+                <div *ngIf="event.isSpacer" class="event-spacer"></div>
+
+                <!-- Event -->
+                <rlb-calendar-event
+                  *ngIf="!event.isSpacer"
+                  [event]="event"
+                  class="w-100"
+                  cdkDrag
+                  [cdkDragData]="event"
+                  (eventClick)="eventClick.emit($event)"
+                >
+                  <!-- Drag Preview (Optional but nice) -->
+                  <div *cdkDragPlaceholder style="opacity: 0"></div>
+                </rlb-calendar-event>
+
+              </ng-container>
+            </div>
+
+            <!-- Overflow (+N more) -->
+            <div *ngIf="slot.hasOverflow"
+                 class="mt-auto small text-secondary text-center cursor-pointer p-1 rounded hover-bg"
+                 (click)="$event.stopPropagation(); eventContainerClick.emit(slot.overflowEvents)">
+              +{{ slot.overflowCount }} more
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

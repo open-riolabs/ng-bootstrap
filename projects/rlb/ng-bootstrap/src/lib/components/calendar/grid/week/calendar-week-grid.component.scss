@@ -41,8 +41,15 @@ $min-day-width: 120px;
 
 .day-cell {
   border-color: var(--bs-border-color) !important;
-  flex: 1 0 auto;
+
+  flex: 1 1 0px;
+  width: 0;
   min-width: $min-day-width;
+  overflow: hidden;
+
+  &:last-child {
+    border-right: none !important;
+  }
 }
 
 
@@ -85,7 +92,8 @@ $min-day-width: 120px;
 .day-column {
   border-color: var(--bs-border-color) !important;
 
-  flex: 1 0 auto; // grow: 1, shrink: 0
+  flex: 1 1 0px;
+  width: 0;
   min-width: $min-day-width;
 
   &:last-child {
