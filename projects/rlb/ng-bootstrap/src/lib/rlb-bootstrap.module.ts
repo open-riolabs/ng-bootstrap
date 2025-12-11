@@ -9,7 +9,7 @@ import { COMPONENTS } from './components';
 import { FormFieldsComponent } from './forms/rlb-form-fields/rlb-form-fields.component';
 import { COMPONENT_BUILDER } from './shared/component-builder';
 import { PIPES } from './pipes';
-import { CdkDrag, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
+import { CdkDrag, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -29,7 +29,8 @@ import { CdkDrag, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from "@ang
     CdkDrag,
     CdkDropListGroup,
     CdkDropList,
-    CdkDragPlaceholder
+    CdkDragPlaceholder,
+    CdkDragPreview
   ],
   exports: [
     ...TABLE,

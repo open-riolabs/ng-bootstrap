@@ -1,4 +1,4 @@
-<div class="d-flex flex-column w-100 bg-body user-select-none" [style.max-height.rem]="maxBodyHeight">
+<div class="d-flex flex-column w-100 bg-body user-select-none month-view-root" [style.max-height.rem]="maxBodyHeight">
 
   <!-- SCROLL CONTAINER -->
   <div class="calendar-scroller flex-grow-1 overflow-auto bg-body position-relative">
@@ -52,9 +52,18 @@
                   cdkDrag
                   [cdkDragData]="event"
                   (eventClick)="eventClick.emit($event)"
+                  [view]="view"
                 >
                   <!-- Drag Preview (Optional but nice) -->
                   <div *cdkDragPlaceholder style="opacity: 0"></div>
+                  <ng-template cdkDragPreview matchSize class="rlb-calendar-drag-preview">
+                    <rlb-calendar-event
+                      [event]="event"
+                      [view]="view"
+                      style="box-sizing: border-box;"
+                    >
+                    </rlb-calendar-event>
+                  </ng-template>
                 </rlb-calendar-event>
 
               </ng-container>

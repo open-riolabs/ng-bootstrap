@@ -28,7 +28,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
   @Input() currentDate!: IDateTz;
   @Input() events: CalendarEvent[] = [];
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
-  @Output() eventContainerClick = new EventEmitter<CalendarEventWithLayout[] | undefined>();
+  @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
   @Output() eventChange = new EventEmitter<CalendarEvent>();
 
   days: IDateTz[] = [];
@@ -94,7 +94,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
       .stripSecMillis!();
 
     const durationMs = movedEvent.end.timestamp - movedEvent.start.timestamp;
-    const newEnd = new DateTz(newStart.timestamp + durationMs);
+    const newEnd = new DateTz(newStart.timestamp + durationMs).stripSecMillis();
 
     if (newStart.timestamp !== movedEvent.start.timestamp) {
       const updatedEvent: CalendarEvent = {

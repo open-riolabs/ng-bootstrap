@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
-import { CalendarEvent, CalendarEventWithLayout } from "../interfaces/calendar-event.interface";
+import { CalendarEvent } from "../interfaces/calendar-event.interface";
 import { IDateTz } from "@open-rlb/date-tz";
 import { CalendarView } from "../interfaces/calendar-view.type";
 
@@ -14,7 +14,7 @@ export class CalendarGrid implements OnChanges, OnDestroy {
 	@Input() currentDate!: IDateTz;
 	@Input() events: CalendarEvent[] = [];
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
-  @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | CalendarEventWithLayout[] | undefined>();
+  @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
   @Output() eventChange = new EventEmitter<CalendarEvent>();
 
   constructor(

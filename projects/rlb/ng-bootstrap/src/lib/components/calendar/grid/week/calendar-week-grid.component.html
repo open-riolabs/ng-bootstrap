@@ -59,6 +59,7 @@
 
             <rlb-calendar-event
               *ngFor="let event of getEventsForDay(day); trackBy: trackByEventId"
+              [view]="view"
               [event]="event"
               [style.top.px]="calculateEventTop(event)"
               [style.height.px]="calculateEventHeight(event)"
@@ -69,6 +70,7 @@
               cdkDrag
               [cdkDragData]="event"
               [cdkDragDisabled]="event.isOverflowIndicator"
+              class="position-absolute"
             >
               <div *cdkDragPlaceholder style="opacity: 0"></div>
             </rlb-calendar-event>

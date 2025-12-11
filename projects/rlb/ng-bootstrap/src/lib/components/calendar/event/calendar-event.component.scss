@@ -1,6 +1,6 @@
 :host {
   display: block;
-  position: absolute;
+  height: 100%;
   overflow: hidden;
   border-radius: var(--bs-border-radius-sm); // 0.25rem
   padding: 0 1px;
@@ -29,5 +29,32 @@
     justify-content: center;
     font-weight: 600;
     border-style: dashed !important;
+  }
+
+  &.mode-week {
+    height: 100%;
+    padding: 2px 4px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+
+  &.mode-month {
+    height: 20px !important;
+    padding: 0 4px;
+    line-height: 20px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.rounded-bottom-0 {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &.rounded-top-0 {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
   }
 }

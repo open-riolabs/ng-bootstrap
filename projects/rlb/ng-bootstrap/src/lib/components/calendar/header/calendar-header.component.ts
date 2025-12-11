@@ -18,9 +18,18 @@ export class CalendarHeaderComponent {
 	next() {
 		switch (this.view) {
 			case 'week':
-			default:
-				const nextWeek = addDays(this.currentDate, 7)
+        const nextWeek = addDays(this.currentDate, 7)
         this.dateChange.emit(new DateTz(nextWeek));
+        break;
+      case 'month':
+        const nextMonth = new DateTz(this.currentDate)
+          .set(1, 'day')
+          .add(1, 'month');
+
+        this.dateChange.emit(new DateTz(nextMonth));
+        break;
+			default:
+
 				break;
 		}
 	}
@@ -28,10 +37,19 @@ export class CalendarHeaderComponent {
   prev() {
 		switch (this.view) {
 			case 'week':
-			default:
-				const pastWeek = addDays(this.currentDate, -7)
+        const pastWeek = addDays(this.currentDate, -7)
         this.dateChange.emit(new DateTz(pastWeek));
-				break;
+        break;
+      case 'month':
+        const pastMonth = new DateTz(this.currentDate)
+          .set(1, 'day')
+          .add(-1, 'month');
+        
+        this.dateChange.emit(new DateTz(pastMonth));
+        break;
+			default:
+
+        break;
 		}
 	}
 

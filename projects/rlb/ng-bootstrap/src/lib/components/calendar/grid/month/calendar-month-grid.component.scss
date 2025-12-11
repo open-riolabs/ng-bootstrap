@@ -43,21 +43,7 @@
   cursor: pointer;
 }
 
-// Compact Event Styling Override
-::ng-deep rlb-calendar-event {
-  display: block; // Required for w-100
-
-  .calendar-event {
-    padding: 0 4px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    // Remove corners for continuous events
-    &.rounded-bottom-0 { border-bottom-right-radius: 0; border-bottom-left-radius: 0; }
-    &.rounded-top-0 { border-top-right-radius: 0; border-top-left-radius: 0; }
-  }
+.cdk-drag-preview {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+  border-radius: var(--bs-border-radius-sm);
 }

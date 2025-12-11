@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { CalendarEvent, CalendarEventWithLayout } from "../interfaces/calendar-event.interface";
+import { CalendarView } from "../interfaces/calendar-view.type";
 
 @Component({
   selector: 'rlb-calendar-event',
@@ -9,12 +10,22 @@ import { CalendarEvent, CalendarEventWithLayout } from "../interfaces/calendar-e
 })
 export class CalendarEventComponent {
   @Input({ required: true }) event!: CalendarEventWithLayout;
+  @Input({ required: true }) view!: CalendarView;
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
   @Output() eventContainerClick = new EventEmitter<CalendarEventWithLayout[] | undefined>();
 
   get classes(): string[] {
     const baseColor = this.event.color || 'primary';
     const classes = ['calendar-event', 'shadow-sm'];
+
+    switch (this.view) {
+      case 'week':
+        classes.push('mode-week');
+        break;
+      case 'month':
+        classes.push('mode-month');
+        break;
+    }
 
     if (this.event.isContinuedAfter) {
       classes.push('rounded-bottom-0', 'border-bottom-0');

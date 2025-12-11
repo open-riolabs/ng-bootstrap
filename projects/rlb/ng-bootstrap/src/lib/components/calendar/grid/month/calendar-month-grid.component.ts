@@ -295,8 +295,8 @@ export class CalendarMonthGridComponent implements OnChanges {
 
     const updatedEvent: CalendarEvent = {
       ...baseEvent,
-      start: new DateTz(newStartTs, sourceStart.timezone),
-      end: new DateTz(newEndTs, sourceEnd.timezone)
+      start: new DateTz(newStartTs, sourceStart.timezone).stripSecMillis(),
+      end: new DateTz(newEndTs, sourceEnd.timezone).stripSecMillis()
     };
 
     this.eventChange.emit(updatedEvent);
