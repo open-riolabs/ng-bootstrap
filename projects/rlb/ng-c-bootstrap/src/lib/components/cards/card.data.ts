@@ -1,4 +1,4 @@
-import { Color, TextAlignment } from '@rlb-core/lib-ng-bootstrap';
+import { Color, TextAlignment } from '@open-rlb/ng-bootstrap';
 
 export interface CardAction {
   text: string;

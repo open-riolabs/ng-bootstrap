@@ -102,7 +102,7 @@
         }
       }
     },
-    "@rlb-core/lib-ng-bootstrap": {
+    "@open-rlb/ng-bootstrap": {
       "projectType": "library",
       "root": "projects/rlb/ng-bootstrap",
       "sourceRoot": "projects/rlb/ng-bootstrap/src",
@@ -135,7 +135,7 @@
         }
       }
     },
-    "@rlb-core/lib-ng-c-bootstrap": {
+    "@open-rlb/lib-ng-c-bootstrap": {
       "projectType": "library",
       "root": "projects/rlb/ng-c-bootstrap",
       "sourceRoot": "projects/rlb/ng-c-bootstrap/src",

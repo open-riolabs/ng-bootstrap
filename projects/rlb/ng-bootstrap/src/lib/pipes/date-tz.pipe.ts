@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DateTz, IDateTz } from '@open-rlb/date-tz';
+import { DateTz, IDateTz } from "@open-rlb/date-tz";
 
 @Pipe({
   name: 'dtz',

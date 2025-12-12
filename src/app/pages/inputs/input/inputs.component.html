@@ -118,8 +118,8 @@
     </div>
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-input></rlb-input>
+			<div rlb-accordion-body [formGroup]="form">
+				<rlb-input formControlName="input"></rlb-input>
       </div>
     </div>
   </rlb-accordion>

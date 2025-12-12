@@ -1,16 +1,16 @@
 import {
   AfterViewInit,
+  booleanAttribute,
   Component,
   ElementRef,
   Input,
+  numberAttribute,
   OnInit,
   Optional,
   Self,
   TemplateRef,
   ViewChild,
-  ViewContainerRef,
-  booleanAttribute,
-  numberAttribute
+  ViewContainerRef
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
@@ -38,10 +38,13 @@ import { AbstractComponent } from './abstract-field.component';
         [class.form-control-sm]="size === 'small'"
         [value]="value || ''"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+				[ngClass]="{
+        'is-invalid': control?.touched && control?.invalid && enableValidation,
+        'is-valid': control?.touched && control?.valid && enableValidation
+        }"
         (input)="update($event.target)"
       />
-      <rlb-input-validation *ngIf="!extValidation" [errors]="errors"/>
+		<rlb-input-validation *ngIf="!extValidation && showError" [errors]="errors"/>
     <ng-content select="[after]"></ng-content>
   </ng-template>`,
   standalone: false
@@ -53,17 +56,17 @@ export class InputComponent
   @Input({ alias: 'readonly', transform: booleanAttribute, }) readonly?: boolean;
   @Input({ alias: 'before-text', transform: booleanAttribute, }) beforeText?: boolean;
   @Input({ alias: 'placeholder' }) placeholder?: string;
-  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
+  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | 'datetime-local' | string = 'text';
   @Input({ alias: 'size' }) size?: 'small' | 'large';
   @Input({ alias: 'name' }) name?: string;
   @Input({ alias: 'max', transform: numberAttribute }) max?: number;
   @Input({ alias: 'min', transform: numberAttribute }) min?: number;
   @Input({ alias: 'step', transform: numberAttribute }) step?: number;
-  @Input({ alias: 'date-type' }) dateType?: 'date' | 'string' | 'number' | 'date-tz' = 'string';
+  @Input({ alias: 'date-type' }) dateType?: 'date' | 'string' | 'number' | 'date-tz' | string;
   @Input({ alias: 'timezone' }) timezone?: string = 'UTC';
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-
-  public extValidation: boolean = false;
+	@Input({ alias: 'extValidation', transform: booleanAttribute, }) extValidation: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
 
   get _type(): string {
     if (this.type === 'number') return 'text';
@@ -126,7 +129,14 @@ export class InputComponent
   override onWrite(data: string): void {
     if (this.el && this.el.nativeElement) {
       if (this.type === 'number') {
+				if (data === '' || data === null || data === undefined) {
+					this.value = '';
+					this.el.nativeElement.value = '';
+					return;
+				}
+
         let val = parseFloat(this.removeNonDigits(data));
+
         if (this.max && val > this.max) {
           val = this.max;
         }

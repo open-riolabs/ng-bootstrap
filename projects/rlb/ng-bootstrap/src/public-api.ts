@@ -17,6 +17,7 @@ export * from './lib/modals';
 export * from './lib/shared/types';
 export * from './lib/shared/unique-id.service';
 export * from './lib/utils';
+export * from './lib/shared/i18-abstraction';
 
 export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
   return [

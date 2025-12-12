@@ -3,7 +3,7 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "@rlb-core/lib-ng-bootstrap": [
+      "@open-rlb/ng-bootstrap": [
         "../ng-bootstrap/src/public-api"
       ],
     },

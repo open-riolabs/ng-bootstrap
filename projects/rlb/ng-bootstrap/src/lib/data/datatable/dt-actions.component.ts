@@ -1,10 +1,12 @@
 import {
+  AfterContentInit,
+  AfterViewInit,
   booleanAttribute,
   Component,
   ContentChildren,
-  DoCheck,
   EmbeddedViewRef,
   Input,
+  OnDestroy,
   OnInit,
   QueryList,
   TemplateRef,
@@ -12,18 +14,19 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { DataTableActionComponent } from './dt-action.component';
+import { Subscription } from "rxjs";
 
 @Component({
-    selector: 'rlb-dt-actions',
-    template: `
+  selector: 'rlb-dt-actions',
+  template: `
     <ng-template #template>
       <div class="dropdown">
         <button
-            class="btn btn-outline py-0 pe-2 float-end"
-            [disabled]="_disabled"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
+          class="btn btn-outline py-0 pe-2 float-end"
+          [disabled]="_disabled"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
           <i class="bi bi-three-dots"></i>
         </button>
         <ul class="dropdown-menu">
@@ -33,9 +36,9 @@ import { DataTableActionComponent } from './dt-action.component';
 
     </ng-template>
   `,
-    standalone: false
+  standalone: false
 })
-export class DataTableActionsComponent implements DoCheck, OnInit {
+export class DataTableActionsComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   element!: HTMLElement;
   private temp!: EmbeddedViewRef<any>;
 
@@ -44,6 +47,7 @@ export class DataTableActionsComponent implements DoCheck, OnInit {
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @ContentChildren(DataTableActionComponent) actions!: QueryList<DataTableActionComponent>;
   @ViewChild('projectedActions', { read: ViewContainerRef }) _projectedActions!: ViewContainerRef;
+  private _actionsSubscription: Subscription | undefined;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
@@ -65,8 +69,24 @@ export class DataTableActionsComponent implements DoCheck, OnInit {
     this.viewContainerRef.element.nativeElement.remove();
   }
 
-  ngDoCheck() {
-    if (this._projectedActions) {
+  ngAfterContentInit() {
+    this._actionsSubscription = this.actions.changes.subscribe(() => {
+      this._renderActions();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this._actionsSubscription) {
+      this._actionsSubscription.unsubscribe();
+    }
+  }
+
+  ngAfterViewInit() {
+    this._renderActions();
+  }
+
+  private _renderActions() {
+    if (this._projectedActions && this.actions) {
       for (let i = this._projectedActions?.length; i > 0; i--) {
         this._projectedActions.detach();
       }

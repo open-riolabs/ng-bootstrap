@@ -1,4 +1,4 @@
-import { Color } from '@rlb-core/lib-ng-bootstrap';
+import { Color } from '@open-rlb/ng-bootstrap';
 
 export interface Badge {
   color?: Color;

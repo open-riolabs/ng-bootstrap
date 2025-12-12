@@ -1,5 +1,9 @@
 export * from './abstract-field.component';
+export * from './abstract-autocomplete.component'
+export * from './autocomplete-model'
+export * from '../rlb-validators/required-autocomplete-validator'
 
+export * from './autocomplete-country-dial-code.component'
 export * from './autocomplete-country.component';
 export * from './autocomplete-timezones.component';
 export * from './autocomplete.component';
@@ -20,6 +24,7 @@ export * from './select.component';
 export * from './switch.component';
 export * from './text-area.component';
 
+import { AutocompleteCountryDialCodeComponent } from './autocomplete-country-dial-code.component';
 import { AutocompleteCountryComponent } from './autocomplete-country.component';
 import { AutocompleteTimezonesComponent } from './autocomplete-timezones.component';
 import { AutocompleteComponent } from './autocomplete.component';
@@ -60,5 +65,6 @@ export const INPUTS = [
   InputValidationComponent,
 
   AutocompleteCountryComponent,
-  AutocompleteTimezonesComponent
+	AutocompleteTimezonesComponent,
+	AutocompleteCountryDialCodeComponent
 ];
