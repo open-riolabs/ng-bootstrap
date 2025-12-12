@@ -1,5 +1,4 @@
 <div class="container mt-3">
-
   <h3>Button</h3>
   <p>Un Button è un elemento interattivo che consente agli utenti di eseguire azioni, come inviare moduli, avviare processi o navigare tra sezioni</p>
 
@@ -45,7 +44,70 @@
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
   </rlb-dt-table>
-  
+
+  <h3>FAB (Floating Action Button)</h3>
+
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
+
+    <!-- color -->
+    <rlb-dt-row>
+      <rlb-dt-cell>color</rlb-dt-cell>
+      <rlb-dt-cell>Color</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Defines the color of the floating action button.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <!-- size -->
+    <rlb-dt-row>
+      <rlb-dt-cell>size</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary"> 'xs' | 'sm' | 'md' | 'lg' </span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Defines the size of the floating action button.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <!-- disabled -->
+    <rlb-dt-row>
+      <rlb-dt-cell>disabled</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Disables the floating action button when set to true.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <!-- outline -->
+    <rlb-dt-row>
+      <rlb-dt-cell>outline</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Applies outline style instead of a filled button background.</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+    <!-- position -->
+    <rlb-dt-row>
+      <rlb-dt-cell>position</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">'br' | 'bl' | 'tr' | 'tl' | undefined</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>
+        Sets the screen position of the floating action button.<br>
+        <strong>br</strong> – bottom right (default) <br>
+        <strong>bl</strong> – bottom left <br>
+        <strong>tr</strong> – top right <br>
+        <strong>tl</strong> – top left <br>
+        <strong>undefined</strong> – FAB behaves like a normal inline button (no fixed position)
+      </rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
+
+  </rlb-dt-table>
+
   <rlb-accordion>
     <div rlb-accordion-item >
       <rlb-accordion-header>Code</rlb-accordion-header>
@@ -66,6 +128,8 @@
             <pre><code [highlight]="outline" language="html"></code></pre>
             <h4>IsLink</h4>
             <pre><code [highlight]="isLink" language="html"></code></pre>
+            <h4>Fab</h4>
+            <pre><code [highlight]="fab" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -95,6 +159,44 @@
         <button rlb-button [outline]="true">Search</button>
         <h4>IsLink</h4>
         <button rlb-button [isLink]="true">Search</button>
+        <h4>FAB</h4>
+        <div class="d-flex gap-3 flex-wrap align-items-center">
+          <rlb-fab>
+            <i class="bi bi-plus"></i>
+          </rlb-fab>
+        </div>
+
+        <h4>Colors</h4>
+        <div class="d-flex gap-3 flex-wrap align-items-center">
+          <rlb-fab color="primary"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab color="secondary"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab color="success"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab color="danger"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab color="warning"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab color="info"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab color="light"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab color="dark"><i class="bi bi-plus"></i></rlb-fab>
+        </div>
+
+        <h4>Sizes</h4>
+        <div class="d-flex gap-3 flex-wrap align-items-center">
+          <rlb-fab size="xs"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab size="sm"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab size="md"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab size="lg"><i class="bi bi-plus"></i></rlb-fab>
+        </div>
+
+        <h4>Outline</h4>
+        <div class="d-flex gap-3 flex-wrap align-items-center">
+          <rlb-fab outline color="primary"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab outline color="secondary"><i class="bi bi-plus"></i></rlb-fab>
+          <rlb-fab outline color="danger"><i class="bi bi-plus"></i></rlb-fab>
+        </div>
+
+        <h4>Disabled</h4>
+        <div class="d-flex gap-3 flex-wrap align-items-center">
+          <rlb-fab disabled><i class="bi bi-slash-circle"></i></rlb-fab>
+        </div>
       </div>
     </div>
   </rlb-accordion>

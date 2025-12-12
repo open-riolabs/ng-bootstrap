@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalService } from '@rlb-core/lib-ng-bootstrap';
+import { ModalService } from '@open-rlb/ng-bootstrap';
 import { lastValueFrom } from 'rxjs';
 
 
@@ -49,7 +49,7 @@ export class ModalSampleComponent implements IModal<any, any> {
   get headerColor() {
     return this.data.type ? \` bg-\${this.data.type}\` : '';
   }
-}`
+}`;
 
   html: string = `<button rlb-button (click)="modal()" class="me-2">Open Modal</button>`;
 
@@ -90,7 +90,7 @@ export class ModalsComponent {
 
 
   async modal() {
-    
+
     const o = await lastValueFrom(this.modals
       .openModal('sample-dialog', {
         title: 'Demo',

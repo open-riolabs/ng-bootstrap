@@ -1,20 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Optional,
-  Output,
-  Renderer2,
-  Self,
-  ViewChild,
-  booleanAttribute,
-  numberAttribute
-} from '@angular/core';
+import { booleanAttribute, Component, Input, Optional, Renderer2, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
-import { AbstractComponent } from './abstract-field.component';
-import { AutocompleteItem } from './autocomplete.component';
+import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
+import { AutocompleteItem } from "./autocomplete-model";
 
 @Component({
   selector: 'rlb-autocomplete-country',
@@ -26,22 +14,28 @@ import { AutocompleteItem } from './autocomplete.component';
         [id]="id"
         class="form-control"
         type="text"
-        [attr.disabled]="disabled ? true : undefined"
+				[attr.autocomplete]="'off'"
+				[attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
         [class.form-control-lg]="size === 'large'"
         [class.form-control-sm]="size === 'small'"
-        [value]="getText(value)"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+				[ngClass]="{
+  				'is-invalid': control?.touched && control?.invalid && enableValidation,
+  				'is-valid': control?.touched && control?.valid && enableValidation
+				}"
         (input)="update($event.target)"
-        (keyup.enter)="onEnter($event.target)"
       />
-      <div class="invalid-feedback">
-        {{ errors | json }}
-      </div>
-    </div>
-    <rlb-progress class="w-100" [height]="2" [infinite]="loading || acLoading" color="primary" />
+			<rlb-input-validation *ngIf="errors && showError" [errors]="errors"/>
+		</div>
+		<rlb-progress
+			*ngIf="loading || acLoading"
+			[height]="2"
+			[infinite]="loading || acLoading"
+			color="primary"
+			class="w-100"
+		/>
     <ng-content select="[after]"></ng-content>
     <div
       #autocomplete
@@ -54,121 +48,62 @@ import { AutocompleteItem } from './autocomplete.component';
   standalone: false
 })
 export class AutocompleteCountryComponent
-  extends AbstractComponent<string | undefined>
+	extends AbstractAutocompleteComponent
   implements ControlValueAccessor {
-  acLoading: boolean = false;
-  private typingTimeout: any;
 
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input({ transform: booleanAttribute, alias: 'before-text' }) beforeText?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
-  @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
-  @Input({ alias: 'placeholder' }) placeholder?: string = '';
-  @Input() size?: 'small' | 'large' | undefined;
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
 
-  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
-  @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
-  @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
 
   constructor(
-    idService: UniqueIdService,
-    private readonly renderer: Renderer2,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
-  }
+		idService: UniqueIdService,
+		renderer: Renderer2,
+		@Self() @Optional() override control?: NgControl,
+	) {
+		super(idService, renderer, control);
+	}
 
-  update(ev: EventTarget | null) {
-    this.setValue(undefined);
-    if (this.typingTimeout) {
-      clearTimeout(this.typingTimeout);
-    }
-    this.typingTimeout = setTimeout(() => {
-      if (!this.disabled) {
-        const t = ev as HTMLInputElement;
-        this.manageSuggestions(t?.value);
-      }
-    }, 500);
-    if (!this.disabled) {
-      const t = ev as HTMLInputElement;
-      this.manageSuggestions(t?.value);
-    }
-  }
+  protected override getSuggestions(query: string) {
+		this.clearDropdown();
+		this.activeIndex = -1;
 
-  override onWrite(data?: AutocompleteItem): void {
-    if (this.el && this.el.nativeElement) {
-      if (typeof data === 'string') {
-        this.el.nativeElement.value = data;
-      } else {
-        this.el.nativeElement.value = data?.text || '';
-      }
-    }
-  }
+    if (query && query.length > 0) {
+			this.openDropdown();
+			const suggestions = this.getCountries().filter(o => {
+				const _c = o as { text: string, value: string; };
+				return _c.text.toLowerCase().startsWith(query.toLowerCase());
+			});
+			this.renderAc(suggestions);
+		} else {
+			this.closeDropdown();
+		}
+	}
 
-  manageSuggestions(data: string) {
-    this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
-    while (this.dropdown.nativeElement.firstChild) {
-      if (this.dropdown.nativeElement.lastChild) {
-        this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild);
-      }
-    }
-    if (data && data.length > 0) {
-      const suggestions = this.countries.filter(o => {
-        const _c = o as { text: string, value: string; };
-        return _c.text.toLowerCase().startsWith(data.toLowerCase());
-      });
-      this.renderAc(suggestions);
-    } else {
-      this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-    }
-  }
+  protected override getItemText(data?: AutocompleteItem | string): string {
+		const h = this.getCountries().find(c => {
+			if (typeof c === 'object') {
+				const _c = c as { text: string, value: string; };
+				return _c.value === (typeof data === 'object' ? data?.value : data) ? _c.text : '';
+			}
+			return false;
+		});
+		return (typeof h === 'object' ? h.text : '');
+	}
 
-  renderAc(suggestions: AutocompleteItem[]) {
-    if (suggestions.length > 0) {
-      for (const suggestion of suggestions) {
-        const el = this.renderer.createElement('a');
-        this.renderer.addClass(el, 'dropdown-item');
-        this.renderer.appendChild(el, this.renderer.createText(typeof suggestion === 'string' ? suggestion : suggestion.text));
-        this.renderer.listen(el, 'click', () => {
-          this.selected.emit(typeof suggestion === 'string' ? suggestion : suggestion.value);
-          this.setValue(typeof suggestion === 'string' ? suggestion : suggestion.value);
-          this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-        });
-        this.renderer.appendChild(this.dropdown.nativeElement, el);
-      }
-    } else {
-      const el = this.renderer.createElement('a');
-      this.renderer.addClass(el, 'dropdown-item');
-      this.renderer.addClass(el, 'disabled');
-      this.renderer.addClass(el, 'text-center');
-      this.renderer.setAttribute(el, 'disabled', 'true');
-      this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
-      this.renderer.appendChild(this.dropdown.nativeElement, el);
-    }
-  }
+  getCountries(): AutocompleteItem[] {
+		if (this.enableFlagIcons) {
+			return this._countries.map((country) => {
+				return {
+					...country,
+					iconClass: `fi fi-${country.value.toLowerCase()}`,
+				}
+			})
+		} else {
+			return this._countries;
+		}
+	}
 
-  onEnter(ev: EventTarget | null) {
-    const t = ev as HTMLInputElement;
-    if (!this.disabled && t && t.value) {
-      this.setValue(t?.value);
-      this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-    }
-  }
-
-  getText(d?: AutocompleteItem) {
-    const h = this.countries.find(c => {
-      if (typeof c === 'object') {
-        const _c = c as { text: string, value: string; };
-        return _c.value === (typeof d === 'object' ? d?.value : d) ? _c.text : '';
-      }
-      return false;
-    });
-    return (typeof h === 'object' ? h.text : '') || '';
-  }
-
-  private countries: AutocompleteItem[] = [
+  private _countries: AutocompleteItem[] = [
     { "text": "Afghanistan", "value": "AF" },
     { "text": "Albania", "value": "AL" },
     { "text": "Algeria", "value": "DZ" },

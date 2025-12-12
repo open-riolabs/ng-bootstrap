@@ -1,19 +1,22 @@
 import {
-	booleanAttribute,
-	Component,
-	ContentChildren,
-	DoCheck,
-	EventEmitter,
-	Input,
-	numberAttribute,
-	OnInit,
-	Output,
-	QueryList,
-	ViewChild,
-	ViewContainerRef
+  AfterContentInit,
+  AfterViewInit,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  numberAttribute,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
+import { Subscription } from "rxjs";
 
 export interface TableDataQuery {
   pagination?: { size: number };
@@ -27,24 +30,29 @@ export interface PaginationEvent {
 }
 
 @Component({
-    selector: 'rlb-dt-table',
-    templateUrl: './dt-table.component.html',
-    standalone: false
+  selector: 'rlb-dt-table',
+  templateUrl: './dt-table.component.html',
+  standalone: false
 })
-export class DataTableComponent implements OnInit, DoCheck {
+export class DataTableComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   @Input({ alias: 'title' }) title?: string;
   @Input({ alias: 'creation-strategy' }) creationStrategy: 'none' | 'modal' | 'page' = 'none';
   @Input({ alias: 'creation-url' }) creationUrl!: any[] | string | null | undefined;
   @Input({ alias: 'items' }) items!: any[];
   @Input({ alias: 'pagination-mode' }) paginationMode?: 'none' | 'load-more' | 'pages' = 'none';
   @Input({ alias: 'loading', transform: booleanAttribute }) loading?: boolean;
+  @Input({ alias: 'table-hover', transform: booleanAttribute }) tableHover?: boolean;
+  @Input({ alias: 'table-striped', transform: booleanAttribute }) tableStriped?: boolean = true; // default true to keep main table styling
+  @Input({ alias: 'table-striped-columns', transform: booleanAttribute }) tableStripedColumns?: boolean;
+  @Input({ alias: 'table-bordered', transform: booleanAttribute }) tableBordered?: boolean;
+  @Input({ alias: 'table-borderless', transform: booleanAttribute }) tableBorderless?: boolean;
+  @Input({ alias: 'table-small', transform: booleanAttribute }) tableSmall?: boolean;
   @Input({ alias: 'show-refresh', transform: booleanAttribute }) showRefresh?: boolean;
   @Input({ alias: 'total-items', transform: numberAttribute }) totalItems?: number;
   @Input({ alias: 'current-page', transform: numberAttribute }) currentPage?: number;
   @Input({ alias: 'page-size', transform: numberAttribute }) pageSize?: number;
   @Input() showActions: 'row' | 'head' = 'row';
-  
-  // TODO ask we can handle it like this
+
   @Input() loadMoreLabel: string = 'Load more';
 
   @Output('create-item') createItem: EventEmitter<void> = new EventEmitter();
@@ -57,6 +65,8 @@ export class DataTableComponent implements OnInit, DoCheck {
   @ViewChild('projectedDisplayColumns', { read: ViewContainerRef }) _projectedDisplayColumns!: ViewContainerRef;
   @ContentChildren(DataTableRowComponent) public rows!: QueryList<DataTableRowComponent>;
   @ContentChildren(DataTableHeaderComponent) columns!: QueryList<DataTableHeaderComponent>;
+
+  private subscription: Subscription | undefined
 
   ngOnInit() {
     this.currentPage = 1;
@@ -74,7 +84,21 @@ export class DataTableComponent implements OnInit, DoCheck {
     );
   }
 
-  ngDoCheck() {
+  ngAfterViewInit() {
+    this._renderHeaders();
+  }
+
+  ngAfterContentInit() {
+    this.subscription = this.columns.changes.subscribe(() => {
+      this._renderHeaders()
+    })
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe()
+  }
+
+  private _renderHeaders() {
     if (this._projectedDisplayColumns) {
       for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
         this._projectedDisplayColumns.detach();
@@ -89,6 +113,36 @@ export class DataTableComponent implements OnInit, DoCheck {
     return this.columns.length + (this.showActions !== 'row' ? 1 : 0);
   }
 
+  getTableClasses(): string[] {
+    const classes = ['table'];
+
+    if (this.tableStriped) {
+      classes.push('table-striped');
+    }
+
+    if (this.tableStripedColumns) {
+      classes.push('table-striped-columns');
+    }
+
+    if (this.tableHover) {
+      classes.push('table-hover');
+    }
+
+    if (this.tableBordered) {
+      classes.push('table-bordered');
+    }
+
+    if (this.tableBorderless) {
+      classes.push('table-borderless');
+    }
+
+    if (this.tableSmall) {
+      classes.push('table-small');
+    }
+
+    return classes;
+  }
+
   selectSize() {
     this.currentPageChange.emit(1);
     this.pageSizeChange.emit(parseInt(this.pageSize as any));
@@ -99,7 +153,7 @@ export class DataTableComponent implements OnInit, DoCheck {
   selectPage(ev: MouseEvent, page: number) {
     ev?.preventDefault();
     ev?.stopPropagation();
-		if (page === this.currentPage || this.loading) return;
+    if (page === this.currentPage || this.loading) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({ page, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
@@ -107,23 +161,23 @@ export class DataTableComponent implements OnInit, DoCheck {
   next(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-		if (this.currentPage === this.pages || this.loading) return;
+    if (this.currentPage === this.pages || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) + 1);
-		this.pagination.emit({
-			page: ((this.currentPage || 1) + 1),
-			size: this.pageSize ? parseInt(this.pageSize as any) : 20
-		});
+    this.pagination.emit({
+      page: ((this.currentPage || 1) + 1),
+      size: this.pageSize ? parseInt(this.pageSize as any) : 20
+    });
   }
 
   prev(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-		if (this.currentPage === 1 || this.loading) return;
+    if (this.currentPage === 1 || this.loading) return;
     this.currentPageChange.emit((this.currentPage || 1) - 1);
-		this.pagination.emit({
-			page: ((this.currentPage || 1) - 1),
-			size: this.pageSize ? parseInt(this.pageSize as any) : 20
-		});
+    this.pagination.emit({
+      page: ((this.currentPage || 1) - 1),
+      size: this.pageSize ? parseInt(this.pageSize as any) : 20
+    });
   }
 
   onPgWeel(ev: WheelEvent) {

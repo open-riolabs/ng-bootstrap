@@ -1,24 +1,23 @@
 import {
-	booleanAttribute,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	Input,
-	numberAttribute,
-	Optional,
-	Output,
-	Renderer2,
-	Self,
-	ViewChild,
+  booleanAttribute,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  numberAttribute,
+  Optional,
+  Output,
+  Renderer2,
+  Self,
+  ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { lastValueFrom, Observable } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
+import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
 
-export type AutocompleteItem = string | { text: string, value: string; };
-export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<AutocompleteItem[]> | Observable<AutocompleteItem[]>;
 
 @Component({
   selector: 'rlb-autocomplete',
@@ -37,15 +36,22 @@ export type AutocompleteFn = (q?: string) => AutocompleteItem[] | Promise<Autoco
         [class.form-control-sm]="size === 'small'"
         [value]="getText(value)"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+				[ngClass]="{
+        'is-invalid': control?.touched && control?.invalid && enableValidation,
+        'is-valid': control?.touched && control?.valid && enableValidation
+        }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
       />
-      <div class="invalid-feedback">
-        {{ errors | json }}
-      </div>
-    </div>
-    <rlb-progress class="w-100" [height]="2" [infinite]="loading || acLoading" color="primary" />
+      <rlb-input-validation *ngIf="errors && showError && enableValidation" [errors]="errors"/>
+		</div>
+		<rlb-progress
+			*ngIf="loading || acLoading"
+			[height]="2"
+			[infinite]="loading || acLoading"
+			color="primary"
+			class="w-100"
+		/>
     <ng-content select="[after]"></ng-content>
     <div
       #autocomplete
@@ -67,7 +73,7 @@ export class AutocompleteComponent
   acLoading: boolean = false;
 	private typingTimeout: any;
 	isOpen = false;
-	
+
 	@Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
   @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
@@ -79,17 +85,18 @@ export class AutocompleteComponent
   @Input({ alias: 'chars-to-search', transform: numberAttribute }) charsToSearch: number = 3;
   @Input({ alias: 'menu-max-width', transform: numberAttribute }) menuMaxWidth: number = 400;
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
   @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
-	
-	@HostListener('document:pointerdown', ['$event'])
+
+  @HostListener('document:pointerdown', ['$event'])
 	onDocumentPointerDown(event: PointerEvent) {
 		this.handleOutsideEvent(event);
 	}
-	
-	@HostListener('document:keydown.escape', ['$event'])
+
+  @HostListener('document:keydown.escape', ['$event'])
 	onEscape(event: KeyboardEvent) {
 		if (this.isOpen) {
 			this.closeDropdown();
@@ -127,8 +134,8 @@ export class AutocompleteComponent
       }
     }
   }
-	
-	manageSuggestions(data: string) {
+
+  manageSuggestions(data: string) {
 		this.clearDropdown();
 		if (data && data.length >= this.charsToSearch) {
 			this.openDropdown();
@@ -146,8 +153,8 @@ export class AutocompleteComponent
 			this.closeDropdown();
 		}
 	}
-	
-	renderAc(suggestions: AutocompleteItem[]) {
+
+  renderAc(suggestions: Array<string | AutocompleteItem>) {
 		this.clearDropdown();
 		if (!suggestions || suggestions.length === 0) {
 			const el = this.renderer.createElement('a');
@@ -159,26 +166,52 @@ export class AutocompleteComponent
 			this.renderer.appendChild(this.dropdown.nativeElement, el);
 			return;
 		}
-		
-		for (const suggestion of suggestions) {
-			const el = this.renderer.createElement('a');
+
+    for (const suggestion of suggestions) {
+			const itemData: AutocompleteItem = typeof suggestion === 'string'
+				? { text: suggestion, value: suggestion }
+				: suggestion;
+
+      const el = this.renderer.createElement('a');
 			this.renderer.addClass(el, 'dropdown-item');
-			this.renderer.appendChild(el, this.renderer.createText(typeof suggestion === 'string' ? suggestion : suggestion.text));
-			this.renderer.listen(el, 'click', (ev: Event) => {
-				this.selected.emit(suggestion);
-				this.setValue(suggestion);
+
+      if (itemData.iconClass) {
+				const icon = this.renderer.createElement('i');
+
+        const classes = itemData.iconClass.split(/\s+/);
+				for (const cls of classes) {
+					if (cls) {
+						// Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
+						// it causes silent runtime error
+						// Instead we should split it, and add one by one
+						this.renderer.addClass(icon, cls);
+					}
+				}
+				this.renderer.addClass(icon, 'me-2');
+				this.renderer.appendChild(el, icon);
+			}
+
+      this.renderer.appendChild(el, this.renderer.createText(itemData.text));
+
+      this.renderer.listen(el, 'click', (ev: Event) => {
+				this.selected.emit(itemData);
+				this.setValue(itemData);
 				this.closeDropdown();
 				ev.stopPropagation();
 			});
 			this.renderer.appendChild(this.dropdown.nativeElement, el);
 		}
 	}
-	
-	
-	onEnter(ev: EventTarget | null) {
+
+
+  onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
     if (!this.disabled && t && t.value) {
-      this.setValue(t?.value);
+			const item: AutocompleteItem = {
+				text: t.value,
+				value: t.value
+			};
+			this.setValue(item);
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
   }
@@ -187,36 +220,36 @@ export class AutocompleteComponent
 		if (d == null) return '';
     return typeof d === 'string' ? d : d?.text;
   }
-	
-	private handleOutsideEvent(event: Event) {
+
+  private handleOutsideEvent(event: Event) {
 		const target = event.target as HTMLElement;
-		
-		const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
-		
-		const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
+
+    const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
+
+    const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
 		const clickedInsideDropdown = this.dropdown?.nativeElement?.contains ? this.dropdown.nativeElement.contains(target) : false;
 		const clickedInPath = path.length ? path.some(p => p === this.hostRef.nativeElement || p === this.dropdown.nativeElement) : false;
-		
-		if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
+
+    if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
 			this.closeDropdown();
 		}
 	}
-	
-	openDropdown() {
+
+  openDropdown() {
 		if (!this.dropdown || this.isOpen) return;
 		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
 		this.isOpen = true;
 	}
-	
-	closeDropdown() {
+
+  closeDropdown() {
 		if (!this.dropdown || !this.isOpen) return;
 		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
 		this.isOpen = false;
 		this.clearDropdown();
 		this.acLoading = false;
 	}
-	
-	clearDropdown() {
+
+  clearDropdown() {
 		if (!this.dropdown) return;
 		while (this.dropdown.nativeElement.firstChild) {
 			this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild!);
