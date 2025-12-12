@@ -1,10 +1,11 @@
-<div class="calendar-wrapper d-flex flex-column" [style.max-height.rem]="maxBodyHeight">
+<div class="calendar-wrapper d-flex flex-column">
 
-  <!-- SCROLL CONTAINER -->
-  <div class="calendar-scroller flex-grow-1 overflow-auto bg-body position-relative">
+  <!--  HEADER WRAPPER -->
+  <div #headerRow
+       class="header-container overflow-hidden flex-shrink-0 border-bottom bg-body-tertiary"
+       [style.padding-right.px]="scrollbarWidth">
 
-    <!-- HEADER WRAPPER -->
-    <div class="header-row d-flex sticky-top border-bottom bg-body-tertiary">
+    <div class="header-row d-flex" [style.min-height.rem]="MIN_HEADER_HEIGHT">
 
       <div class="time-gutter border-end flex-shrink-0"></div>
 
@@ -20,15 +21,20 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- BODY WRAPPER -->
+  <!-- BODY WRAPPER  -->
+  <div #scrollBody
+       class="calendar-body flex-grow-1 overflow-auto bg-body position-relative"
+       (scroll)="onBodyScroll($event)" [style.max-height.rem]="MAX_BODY_HEIGHT">
+
     <div class="body-row d-flex position-relative">
 
       <!-- SIDEBAR (Sticky Left) -->
-      <div class="time-sidebar flex-shrink-0 border-end">
+      <div class="time-sidebar sticky-start flex-shrink-0 border-end">
         <div *ngFor="let time of timeSlots; let i = index"
              class="time-slot-label small text-body-secondary d-flex align-items-start justify-content-center"
-             [style.height.px]="rowHeight">
+             [style.height.px]="ROW_HEIGHT">
           <span *ngIf="i !== 0" style="transform: translateY(-50%)">
             {{ time }}
           </span>
@@ -42,7 +48,7 @@
         <div class="background-grid position-absolute w-100 h-100 top-0 start-0 z-0">
           <div *ngFor="let time of timeSlots"
                class="grid-row border-bottom"
-               [style.height.px]="rowHeight">
+               [style.height.px]="ROW_HEIGHT">
           </div>
         </div>
 

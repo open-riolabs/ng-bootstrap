@@ -20,7 +20,7 @@ import { ModalType } from "../../shared/types";
 })
 export class CalendarComponent implements OnChanges {
 
-  @Input({ alias: 'view' }) view: CalendarView = 'month';
+  @Input({ alias: 'view' }) view: CalendarView = 'week';
 
 	@Input({ alias: 'events' }) events: CalendarEvent[] = [];
 

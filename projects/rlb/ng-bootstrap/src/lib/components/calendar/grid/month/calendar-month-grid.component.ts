@@ -1,11 +1,15 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
@@ -29,7 +33,7 @@ interface DaySlot {
   overflowEvents: CalendarEvent[];
 }
 
-const MAX_EVENTS_PER_CELL = 4;
+const MAX_EVENTS_PER_CELL = 3;
 const DAYS_IN_GRID = 42; // 6 weeks * 7 days
 
 @Component({
@@ -39,7 +43,7 @@ const DAYS_IN_GRID = 42; // 6 weeks * 7 days
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarMonthGridComponent implements OnChanges {
+export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   @Input() view!: CalendarView;
   @Input() currentDate!: IDateTz;
@@ -49,10 +53,16 @@ export class CalendarMonthGridComponent implements OnChanges {
   @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
   @Output() eventChange = new EventEmitter<CalendarEvent>();
 
+  @ViewChild('scrollBody', { static: false }) scrollBodyRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('headerRow', { static: false }) headerRowRef!: ElementRef<HTMLDivElement>;
+
+  scrollbarWidth: number = 0;
+
   weeks: DaySlot[][] = [];
   weekDaysHeader: IDateTz[] = [];
-  maxBodyHeight: number = 30; // rem
-
+  readonly MAX_BODY_HEIGHT: number = 30; // rem
+  readonly MIN_ROW_HEIGHT = 110; // px for a full hour slot
+  readonly MIN_HEADER_HEIGHT = 3.5 // rem
 
   constructor() {}
 
@@ -61,6 +71,33 @@ export class CalendarMonthGridComponent implements OnChanges {
       this.buildMonthGrid();
     }
   }
+
+  ngAfterViewInit() {
+    this.updateScrollbarWidth();
+    window.addEventListener('resize', this.onResize);
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  private onResize = () => {
+    this.updateScrollbarWidth();
+  }
+
+  onBodyScroll(event: Event) {
+    if (this.headerRowRef && this.scrollBodyRef) {
+      this.headerRowRef.nativeElement.scrollLeft = this.scrollBodyRef.nativeElement.scrollLeft;
+    }
+  }
+
+  private updateScrollbarWidth() {
+    if (this.scrollBodyRef) {
+      const el = this.scrollBodyRef.nativeElement;
+      this.scrollbarWidth = el.offsetWidth - el.clientWidth;
+    }
+  }
+
 
   // --- Helpers ---
 

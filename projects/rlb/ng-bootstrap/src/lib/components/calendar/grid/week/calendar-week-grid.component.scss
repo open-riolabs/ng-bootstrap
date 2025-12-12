@@ -12,19 +12,17 @@ $min-day-width: 120px;
   border: 1px solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
   overflow: hidden;
-}
-
-// === SCROLL CONTAINER ===
-.calendar-scroller {
-
+  height: 100%;
 }
 
 // === HEADER ===
-.header-row {
-  top: 0;
-  box-shadow: 0 1px 0 var(--bs-border-color);
+.header-container {
+  background-color: var(--bs-body-bg);
+  z-index: 102;
+  box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
 
-  z-index: 100;
+.header-row {
   width: fit-content;
   min-width: 100%;
 }
@@ -32,11 +30,6 @@ $min-day-width: 120px;
 .time-gutter {
   width: $time-col-width;
   border-color: var(--bs-border-color) !important;
-
-  position: sticky;
-  left: 0;
-  z-index: 101;
-  background-color: inherit;
 }
 
 .day-cell {
@@ -55,19 +48,25 @@ $min-day-width: 120px;
 
 // === BODY ===
 
+.calendar-body {
+  scroll-behavior: auto;
+}
+
 .body-row {
   width: fit-content;
   min-width: 100%;
 }
 
-.time-sidebar {
-  width: $time-col-width;
-  border-color: var(--bs-border-color) !important;
-
+.sticky-start {
   position: sticky;
   left: 0;
   z-index: 50;
   background-color: var(--bs-body-bg);
+}
+
+.time-sidebar {
+  width: $time-col-width;
+  border-color: var(--bs-border-color) !important;
 }
 
 .grid-layer {

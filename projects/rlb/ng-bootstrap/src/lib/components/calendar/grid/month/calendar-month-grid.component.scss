@@ -7,10 +7,6 @@
   min-height: 0 !important; // Firefox/Flex nesting fix
 }
 
-.min-h-row {
-  min-height: 100px; // Ensure rows don't collapse on small content
-}
-
 .border-end:last-child {
   border-right: 0 !important;
 }

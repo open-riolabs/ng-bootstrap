@@ -1,12 +1,16 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
 import { CalendarView } from "../../interfaces/calendar-view.type";
@@ -23,7 +27,7 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
+export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterViewInit {
   @Input() view!: CalendarView;
   @Input() currentDate!: IDateTz;
   @Input() events: CalendarEvent[] = [];
@@ -35,16 +39,23 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
   timeSlots: string[] = [];
   processedEvents: Map<number, CalendarEventWithLayout[]> = new Map();
 
+  @ViewChild('scrollBody', { static: false }) scrollBodyRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('headerRow', { static: false }) headerRowRef!: ElementRef<HTMLDivElement>;
+  scrollbarWidth: number = 0;
+
   now: DateTz;
   private nowInterval: any;
 
-  rowHeight = 100; // px for a full hour slot
-  maxBodyHeight: number = 30; // rem
+  // CONFIG CONSTANTS
+  readonly ROW_HEIGHT = 110; // px for a full hour slot
+  readonly MAX_BODY_HEIGHT: number = 30; // rem
+  readonly MIN_HEADER_HEIGHT = 3.5 // rem
   private readonly MAX_VISIBLE_COLUMNS = 4;
   private readonly SNAP_MINUTES = 15;
 
 
   constructor(
+    private cd: ChangeDetectorRef,
   ) {
     this.now = getToday()
   }
@@ -63,8 +74,33 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
     }
   }
 
+  ngAfterViewInit() {
+    this.updateScrollbarWidth();
+    window.addEventListener('resize', this.onResize);
+    this.cd.detectChanges();
+  }
+
   ngOnDestroy() {
     this.stopNowTimer();
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  // arrow function to keep "this" context
+  private onResize = () => {
+    this.updateScrollbarWidth();
+  }
+
+  private updateScrollbarWidth() {
+    if (this.scrollBodyRef) {
+      const el = this.scrollBodyRef.nativeElement;
+      this.scrollbarWidth = el.offsetWidth - el.clientWidth;
+    }
+  }
+
+  onBodyScroll(event: Event) {
+    if (this.headerRowRef && this.scrollBodyRef) {
+      this.headerRowRef.nativeElement.scrollLeft = this.scrollBodyRef.nativeElement.scrollLeft;
+    }
   }
 
   trackByEventId(index: number, item: CalendarEventWithLayout): string | number {
@@ -81,7 +117,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
 
     const newTopPx = originalTopPx + dragDistancePx;
 
-    const rawMinutesFromStart = (newTopPx / this.rowHeight) * 60;
+    const rawMinutesFromStart = (newTopPx / this.ROW_HEIGHT) * 60;
 
     const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
 
@@ -116,19 +152,19 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy {
     const startOfDay = new DateTz(event.start).set(0, 'hour').set(0, 'minute').stripSecMillis();
     const diffMs = event.start.timestamp - startOfDay.timestamp;
     const diffMinutes = diffMs / (1000 * 60);
-    return (diffMinutes / 60) * this.rowHeight;
+    return (diffMinutes / 60) * this.ROW_HEIGHT;
   }
 
   calculateEventHeight(event: CalendarEventWithLayout): number {
     const durationMs = event.end.timestamp - event.start.timestamp;
     const durationMinutes = durationMs / (1000 * 60);
-    return (durationMinutes / 60) * this.rowHeight;
+    return (durationMinutes / 60) * this.ROW_HEIGHT;
   }
 
   getNowTop(): number {
     const hours = this.now.hour;
     const minutes = this.now.minute;
-    return ((hours * 60) + minutes) / 60 * this.rowHeight;
+    return ((hours * 60) + minutes) / 60 * this.ROW_HEIGHT;
   }
 
   isToday(date: IDateTz): boolean {
