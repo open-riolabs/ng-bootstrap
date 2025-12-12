@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<div class="d-flex gap-1">
+		<button rlb-button outline (click)="prev()">
+			<i class="bi bi-chevron-left"></i>
+		</button>
+		<button rlb-button outline (click)="today()">Today</button>
+		<button rlb-button outline (click)="next()">
+			<i class="bi-chevron-right"></i>
+		</button>
+	</div>
+
+  <h5 class="mb-0">{{ currentDate | dtz:'DD MM yyyy' | monthFormatter }} {{ currentDate.timezone }}</h5>
+
+	<rlb-dropdown>
+		<button rlb-button outline rlb-dropdown>{{ view | titlecase }}</button>
+		<ul rlb-dropdown-menu [placement]="'right'">
+			<li rlb-dropdown-item (click)="viewChange.emit('day')" >Day</li>
+			<li rlb-dropdown-item (click)="viewChange.emit('week')">Week</li>
+			<li rlb-dropdown-item (click)="viewChange.emit('month')">Month</li>
+		</ul>
+	</rlb-dropdown>
+</div>

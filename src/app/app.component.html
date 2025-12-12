@@ -1,9 +1,10 @@
 <div class="rlb-app">
-	<rlb-sidebar class="rlb-sidebar" id="sidebar" [rounded]="true">
-		<rlb-sidebar-item title="RLB bootstrap"/>
-		<rlb-sidebar-item [badgeCounter]="1234" label="Components">
-			<rlb-sidebar-item icon="bi bi-exclamation-triangle" [badgeCounter]="54321" link="/components/alerts">Alerts
-			</rlb-sidebar-item>
+  <rlb-sidebar class="rlb-sidebar" id="sidebar" [rounded]="true">
+    <rlb-sidebar-item title="RLB bootstrap" />
+    <rlb-sidebar-item [badgeCounter]="1234" label="Components">
+      <rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-exclamation-triangle" [badgeCounter]="54321" link="/components/alerts">Alerts
+      </rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-chevron-bar-expand" link="/components/accordions">Accordions</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-window" link="/components/modals">Modals</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-bell" link="/components/toasts">Toasts</rlb-sidebar-item>
@@ -13,18 +14,18 @@
       <rlb-sidebar-item icon="bi bi-person-badge" link="/components/badges">Badge</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-box" link="/components/breadcrumbs">Breadcrumb</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-box" link="/components/buttons">Button</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-card-heading" link="/components/cards">Card</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-list-ul" link="/components/lists">List</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-table" link="/components/tables">Tables</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-arrow-clockwise" link="/components/loaders">Loader</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-layout-sidebar" link="/components/offcanvass">Offcanvas</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-card-heading" link="/components/cards">Card</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-list-ul" link="/components/lists">List</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-table" link="/components/tables">Tables</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-arrow-clockwise" link="/components/loaders">Loader</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-layout-sidebar" link="/components/offcanvass">Offcanvas</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-box" link="/components/paginations">Pagination</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-box" link="/components/placeholders">Placeholder</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-box" link="/components/scrollspys">Scrollspy</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/tabs">Tab</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-question-circle" link="/components/tooltips">Tooltips</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navs">Nav</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navbars">Navbar</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/tabs">Tab</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-question-circle" link="/components/tooltips">Tooltips</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navs">Nav</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navbars">Navbar</rlb-sidebar-item>
     </rlb-sidebar-item>
     <rlb-sidebar-item label="Inputs">
       <rlb-sidebar-item icon="bi bi-menu-button" link="/inputs/autocomplete">Autocomplete</rlb-sidebar-item>
@@ -36,32 +37,31 @@
       <rlb-sidebar-item icon="bi bi-input-cursor" link="/inputs/input">Input</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-box" link="/inputs/input-group">Input Group</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-ui-radios" link="/inputs/radio">Radio</rlb-sidebar-item>
-			<rlb-sidebar-item icon="bi bi-sliders" link="/inputs/range">Range</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-sliders" link="/inputs/range">Range</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-box" link="/inputs/select">Select</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-toggles2" link="/inputs/switch">Switch</rlb-sidebar-item>
       <rlb-sidebar-item icon="bi bi-input-cursor" link="/inputs/textarea">Textarea</rlb-sidebar-item>
     </rlb-sidebar-item>
 
   </rlb-sidebar>
-	<rlb-navbar class="rlb-navbar border-bottom" expand="lg">
+  <rlb-navbar class="rlb-navbar border-bottom" expand="lg">
     <a rlb-navbar-brand href="#">Navbar</a>
-		<rlb-navbar-form>
-			<rlb-input-group class="my-1 mx-3" validate>
-				<rlb-input type="search" class="search-input" placeholder="Search"
-									 name="search" size="small">
-					<button after rlb-button outline type="submit" size="sm">
-						<i class="bi bi-search"></i>
-					</button>
-				</rlb-input>
-			</rlb-input-group>
-		</rlb-navbar-form>
-		<rlb-navbar-items>
-			<rlb-navbar-item [router-link]="'/'">Home</rlb-navbar-item>
-			<rlb-navbar-item [router-link]="'/getting-started'">Getting
-				started
-			</rlb-navbar-item>
+    <rlb-navbar-form>
+      <rlb-input-group class="my-1 mx-3" validate>
+        <rlb-input type="search" class="search-input" placeholder="Search" name="search" size="small">
+          <button after rlb-button outline type="submit" size="sm">
+            <i class="bi bi-search"></i>
+          </button>
+        </rlb-input>
+      </rlb-input-group>
+    </rlb-navbar-form>
+    <rlb-navbar-items>
+      <rlb-navbar-item [router-link]="'/'">Home</rlb-navbar-item>
+      <rlb-navbar-item [router-link]="'/getting-started'">Getting
+        started
+      </rlb-navbar-item>
       <rlb-navbar-separator />
-			<rlb-navbar-dropdown-item dropdown toggle-target="#" autoClose="manual">Components
+      <rlb-navbar-dropdown-item dropdown toggle-target="#" autoClose="manual">Components
         <rlb-dropdown-container>
           <rlb-card>
             <rlb-card-body>
@@ -73,7 +73,7 @@
             </rlb-card-body>
           </rlb-card>
         </rlb-dropdown-container>
-			</rlb-navbar-dropdown-item>
+      </rlb-navbar-dropdown-item>
     </rlb-navbar-items>
   </rlb-navbar>
   <div class="rlb-content rlb-sidebar-en">

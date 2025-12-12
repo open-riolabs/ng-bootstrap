@@ -37,8 +37,19 @@ import { NavComponent } from './navigation/nav/nav.component';
 import { NavbarBrandDirective } from './navigation/navbar/navbar-brand.directive';
 import { NavbarFormComponent } from './navigation/navbar/navbar-form.component';
 
-import { NavbarItemsComponent } from './navigation/navbar/navbar-items.component';
+import { AvatarComponent } from './avatar/avatar.component';
+import { RlbFabComponent } from "./buttons/fab/fab.component";
+import { CALENDAR_COMPONENTS } from "./calendar";
+import { ChatContainerComponent } from './chat/chat-container.component';
+import { ChatItemComponent } from './chat/chat-item.component';
+import { ListItemImageComponent } from './list/list-item-image.component';
+import { ListItemComponent } from './list/list-item.component';
+import { ListComponent } from './list/list.component';
 import { NavbarDropdownItemComponent } from './navigation/navbar/navbar-dropdown-item.component';
+import { NavbarItemComponent } from "./navigation/navbar/navbar-item.component";
+import { NavbarItemsComponent } from './navigation/navbar/navbar-items.component';
+import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
+import { NavbarTextComponent } from './navigation/navbar/navbar-text.component';
 import { NavbarComponent } from './navigation/navbar/navbar.component';
 import { OffcanvasBodyComponent } from './offcanvas/offcanvas-body.component';
 import { OffcanvasHeaderComponent } from './offcanvas/offcanvas-header.component';
@@ -46,6 +57,9 @@ import { OffcanvasTitleComponent } from './offcanvas/offcanvas-title.component';
 import { OffcanvasComponent } from './offcanvas/offcanvas.component';
 import { PaginationItemComponent } from './pagination/pagination-item.component';
 import { PaginationComponent } from './pagination/pagination.component';
+import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
+import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
+import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
 import { PlaceholderDirective } from './placeholder/placeholder.directive';
 import { ScrollspyDirective } from './scrollspy/scrollspy.directive';
 import { SidebarItemComponent } from './sidebar/sidebar-item.component';
@@ -57,33 +71,23 @@ import { TabsComponent } from './tabs/tabs.component';
 import { TOASTS } from './toast';
 import { PopoverDirective } from './tooltips/popover.directive';
 import { TooltipDirective } from './tooltips/tooltip.directive';
-import { NavbarTextComponent } from './navigation/navbar/navbar-text.component';
-import { ListComponent } from './list/list.component';
-import { ListItemComponent } from './list/list-item.component';
-import { AvatarComponent } from './avatar/avatar.component';
-import { ListItemImageComponent } from './list/list-item-image.component';
-import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
-import { ChatContainerComponent } from './chat/chat-container.component';
-import { ChatItemComponent } from './chat/chat-item.component';
-import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
-import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
-import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
-import { NavbarItemComponent } from "./navigation/navbar/navbar-item.component";
-import { RlbFabComponent } from "./buttons/fab/fab.component";
 
-export * from './alerts/alert.component';
-export * from './breadcrumb/breadcrumb.component';
-export * from './accordions/accordion.component';
-export * from './accordions/accordion-item.component';
-export * from './accordions/accordion-header.component';
 export * from './accordions/accordion-body.component';
-export * from './buttons/buttons.component';
-export * from './buttons/buttons-close.component';
+export * from './accordions/accordion-header.component';
+export * from './accordions/accordion-item.component';
+export * from './accordions/accordion.component';
+export * from './alerts/alert.component';
+export * from './avatar/avatar.component';
+export * from './badges/badge.component';
+export * from './badges/badge.directive';
+export * from './breadcrumb/breadcrumb.component';
 export * from './buttons/boutton-group.component';
 export * from './buttons/boutton-toolbar.component';
-export * from './buttons/fab/fab.component'
-export * from './badges/badge.directive';
-export * from './badges/badge.component';
+export * from './buttons/buttons-close.component';
+export * from './buttons/buttons.component';
+export * from './buttons/fab/fab.component';
+export * from './buttons/toggle.directive';
+export * from './calendar/';
 export * from './cards/card-body.component';
 export * from './cards/card-footer.component';
 export * from './cards/card-group.component';
@@ -94,58 +98,52 @@ export * from './cards/card-subtitle.component';
 export * from './cards/card-text.component';
 export * from './cards/card-title.component';
 export * from './cards/card.component';
-export * from './loaders/progress.component';
-export * from './loaders/spinner.component';
-export * from './tooltips/tooltip.directive';
-export * from './tooltips/popover.directive';
-export * from './placeholder/placeholder.directive';
-export * from './placeholder/placeholder-line.component';
-export * from './placeholder/placeholder-text.component';
-export * from './placeholder/placeholder.component';
+export * from './carousel/carousel-caption.component';
+export * from './carousel/carousel-slide.component';
+export * from './carousel/carousel.component';
+export * from './chat/chat-container.component';
+export * from './chat/chat-item.component';
 export * from './collapse/collapse.component';
-export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown-container.component';
 export * from './dropdown/dropdown-menu-item.component';
+export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown.directive';
-export * from './list/list.component';
-export * from './list/list-item.component';
 export * from './list/list-item-image.component';
-export * from './navigation/navbar/navbar.component';
-export * from './navigation/navbar/navbar-form.component';
-export * from './navigation/navbar/navbar-text.component';
-export * from './navigation/navbar/navbar-item.component';
-export * from './navigation/navbar/navbar-dropdown-item.component';
-export * from './navigation/navbar/navbar-items.component';
-export * from './navigation/navbar/navbar-brand.directive';
-export * from './navigation/navbar/navbar-separator.component';
-export * from './navigation/nav/nav.component';
-export * from './navigation/nav/nav.component';
+export * from './list/list-item.component';
+export * from './list/list.component';
+export * from './loaders/progress.component';
+export * from './loaders/spinner.component';
+export * from './modals';
 export * from './navigation/nav/nav-item.component';
-export * from './offcanvas/offcanvas.component';
+export * from './navigation/nav/nav.component';
+export * from './navigation/navbar/navbar-brand.directive';
+export * from './navigation/navbar/navbar-dropdown-item.component';
+export * from './navigation/navbar/navbar-form.component';
+export * from './navigation/navbar/navbar-item.component';
+export * from './navigation/navbar/navbar-items.component';
+export * from './navigation/navbar/navbar-separator.component';
+export * from './navigation/navbar/navbar-text.component';
+export * from './navigation/navbar/navbar.component';
 export * from './offcanvas/offcanvas-body.component';
 export * from './offcanvas/offcanvas-header.component';
 export * from './offcanvas/offcanvas-title.component';
-export * from './buttons/toggle.directive';
-export * from './sidebar/sidebar.component';
-export * from './sidebar/sidebar-item.component';
-export * from './tabs/tabs.component';
-export * from './tabs/tab.component';
-export * from './tabs/tab-content.component';
-export * from './tabs/tab-pane.component';
-export * from './modals';
-export * from './toast';
+export * from './offcanvas/offcanvas.component';
 export * from './pagination/pagination-item.component';
 export * from './pagination/pagination.component';
-export * from './scrollspy/scrollspy.directive';
-export * from './carousel/carousel.component';
-export * from './carousel/carousel-slide.component';
-export * from './carousel/carousel-caption.component';
-export * from './avatar/avatar.component';
-export * from './chat/chat-container.component';
-export * from './chat/chat-item.component';
-export * from './placeholder/placeholder-line.component'
+export * from './placeholder/placeholder-line.component';
 export * from './placeholder/placeholder-text.component';
 export * from './placeholder/placeholder.component';
+export * from './placeholder/placeholder.directive';
+export * from './scrollspy/scrollspy.directive';
+export * from './sidebar/sidebar-item.component';
+export * from './sidebar/sidebar.component';
+export * from './tabs/tab-content.component';
+export * from './tabs/tab-pane.component';
+export * from './tabs/tab.component';
+export * from './tabs/tabs.component';
+export * from './toast';
+export * from './tooltips/popover.directive';
+export * from './tooltips/tooltip.directive';
 
 
 export const COMPONENTS = [
@@ -187,8 +185,8 @@ export const COMPONENTS = [
   NavbarFormComponent,
   NavbarTextComponent,
   NavbarItemsComponent,
-	NavbarDropdownItemComponent,
-	NavbarItemComponent,
+  NavbarDropdownItemComponent,
+  NavbarItemComponent,
   NavbarSeparatorComponent,
   OffcanvasComponent,
   OffcanvasHeaderComponent,
@@ -215,9 +213,10 @@ export const COMPONENTS = [
   AvatarComponent,
   ChatContainerComponent,
   ChatItemComponent,
-	RlbPlaceholderComponent,
-	RlbPlaceholderLineComponent,
-	RlbPlaceholderTextComponent,
+  RlbPlaceholderComponent,
+  RlbPlaceholderLineComponent,
+  RlbPlaceholderTextComponent,
   ...[MODALS],
   ...[TOASTS],
+  ...[CALENDAR_COMPONENTS]
 ];
