@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.min-height-0 {
+  min-height: 0 !important; // Firefox/Flex nesting fix
+}
+
+.border-end:last-child {
+  border-right: 0 !important;
+}
+
+.day-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &.today {
+    background-color: var(--bs-primary);
+    color: white;
+  }
+}
+
+.event-spacer {
+  height: 20px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.hover-bg:hover {
+  background-color: var(--bs-secondary-bg-subtle);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+  border-radius: var(--bs-border-radius-sm);
+}

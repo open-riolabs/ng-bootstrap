@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { AutocompleteFn, AutocompleteItem } from "@open-rlb/ng-bootstrap";
+import { AutocompleteFn, AutocompleteItem } from '@open-rlb/ng-bootstrap';
 import { delay, Observable, of } from "rxjs";
+
 
 @Component({
   selector: 'app-autocomplete',

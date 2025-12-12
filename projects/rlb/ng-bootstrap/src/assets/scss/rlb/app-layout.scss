@@ -24,6 +24,11 @@
   }
 }
 
+.rlb-dropdown-menu {
+  z-index: $zindex-dropdown;
+}
+
+
 .rlb-content {
   position: fixed;
   left: 0;

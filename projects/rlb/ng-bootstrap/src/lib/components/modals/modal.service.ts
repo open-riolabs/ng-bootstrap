@@ -4,7 +4,7 @@ import { InnerModalService } from './inner-modal.service';
 import { ModalData } from './data/modal-data';
 import { ModalResult } from './data/modal-resutl';
 import { ModalOptions } from './data/modal-options';
-import { CommonModalData } from '../../modals';
+import { CommonModalData } from '../../modals/common-modal.data';
 import { ModalType } from '../../shared/types';
 
 @Injectable({

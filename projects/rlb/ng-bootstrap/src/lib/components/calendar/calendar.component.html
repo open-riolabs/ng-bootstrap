@@ -1,0 +1,22 @@
+<div class="rlb-calendar">
+	<div class="my-3 d-flex align-items-center justify-content-between">
+    <button class="ms-auto" rlb-button outline (click)="generateTestEvents()">Generate events</button>
+	</div>
+	<rlb-calendar-header
+		*ngIf="showToolbar"
+		[view]="view"
+		[currentDate]="currentDate"
+		(viewChange)="setView($event)"
+		(dateChange)="setDate($event)">
+	</rlb-calendar-header>
+
+	<rlb-calendar-grid
+		[events]="events"
+		[view]="view"
+		[currentDate]="currentDate"
+    (eventClick)="onEventClick($event)"
+    (eventContainerClick)="onEventContainerClick($event)"
+    (eventChange)="onEventChange($event)"
+  >
+	</rlb-calendar-grid>
+</div>

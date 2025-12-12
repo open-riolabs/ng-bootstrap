@@ -90,7 +90,6 @@ export class ModalsComponent {
 
 
   async modal() {
-
     const o = await lastValueFrom(this.modals
       .openModal('sample-dialog', {
         title: 'Demo',
@@ -100,6 +99,5 @@ export class ModalsComponent {
       }));
     console.log('closed sub', o);
   }
-
 }
 

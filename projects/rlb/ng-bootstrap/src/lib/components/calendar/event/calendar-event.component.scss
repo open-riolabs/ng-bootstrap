@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--bs-border-radius-sm); // 0.25rem
+  padding: 0 1px;
+  box-sizing: border-box;
+
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    z-index: 50;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+  }
+}
+
+.calendar-event {
+  height: 100%;
+  width: 100%;
+  padding: 2px 4px;
+  font-size: 0.75rem; // small text
+  line-height: 1.2;
+  border-radius: var(--bs-border-radius-sm);
+  cursor: pointer;
+
+  &.overflow-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border-style: dashed !important;
+  }
+
+  &.mode-week {
+    height: 100%;
+    padding: 2px 4px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+
+  &.mode-month {
+    height: 20px !important;
+    padding: 0 4px;
+    line-height: 20px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.rounded-bottom-0 {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &.rounded-top-0 {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+  }
+}
