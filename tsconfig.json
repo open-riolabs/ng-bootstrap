@@ -6,9 +6,6 @@
       "@open-rlb/ng-bootstrap": [
         "./projects/rlb/ng-bootstrap/src/public-api.ts"
       ],
-      "@open-rlb/lib-ng-c-bootstrap": [
-        "./projects/rlb/ng-c-bootstrap/src/public-api.ts"
-      ]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
