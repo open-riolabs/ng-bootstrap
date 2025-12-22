@@ -5,7 +5,7 @@ import {
   Optional,
   Self,
   ViewChild,
-  booleanAttribute,
+  booleanAttribute, AfterViewInit,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -38,13 +38,15 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 })
 export class SwitchComponent
   extends AbstractComponent<boolean>
-  implements ControlValueAccessor {
+  implements ControlValueAccessor, AfterViewInit {
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly?: boolean;
   @Input({ alias: 'size' }) size?: 'small' | 'large';
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
+
+  private data!: boolean;
 
   constructor(
     idService: UniqueIdService,
@@ -61,13 +63,17 @@ export class SwitchComponent
   }
 
   override onWrite(data: boolean): void {
+    this.data = data
+  }
+
+  ngAfterViewInit() {
     if (this.el && this.el.nativeElement) {
-      if (data === undefined || data === null) return;
-      if (typeof data === 'string') {
-        this.el.nativeElement.checked = /^true$/i.test(data);
+      if (this.data === undefined || this.data === null) return;
+      if (typeof this.data === 'string') {
+        this.el.nativeElement.checked = /^true$/i.test(this.data);
       }
       else {
-        this.el.nativeElement.checked = data;
+        this.el.nativeElement.checked = this.data;
       }
     }
   }
