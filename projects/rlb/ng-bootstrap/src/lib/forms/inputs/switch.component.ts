@@ -14,26 +14,26 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 @Component({
     selector: 'rlb-switch',
     template: `
-    <ng-content select="[before]"></ng-content>
-    <div class="form-check form-switch d-inline-block">
-      <input
-        #field
-        class="form-check-input"
-        type="checkbox"
-        [id]="id"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
-        [class.form-select-lg]="size === 'large'"
-        [class.form-select-sm]="size === 'small'"
-        (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-        (input)="update($event.target)"
-      />
-      <div class="invalid-feedback">
-        {{ errors | json }}
+      <div class="d-flex align-items-center gap-2">
+        <ng-content select="[before]"></ng-content>
+
+        <div class="form-check form-switch m-0">
+          <input
+            #field
+            class="form-check-input"
+            type="checkbox"
+            [id]="id"
+            [attr.disabled]="disabled ? true : undefined"
+            [attr.readonly]="readonly ? true : undefined"
+            (blur)="touch()"
+            [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+            (input)="update($event.target)"
+          />
+        </div>
+
+        <ng-content select="[after]"></ng-content>
       </div>
-    </div>
-    <ng-content select="[after]"></ng-content>`,
+    `,
     standalone: false
 })
 export class SwitchComponent
@@ -43,7 +43,7 @@ export class SwitchComponent
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly?: boolean;
   @Input({ alias: 'size' }) size?: 'small' | 'large';
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  
+
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
 
   constructor(
