@@ -143,7 +143,13 @@ import { RoutingModule } from './routing.module';
       multi: true,
     },
     provideHighlightOptions({
-      fullLibraryLoader: () => import('highlight.js')
+      coreLibraryLoader: () => import('highlight.js/lib/core'),
+      languages: {
+        typescript: () => import('highlight.js/lib/languages/typescript'),
+        html: () => import('highlight.js/lib/languages/xml'),
+        scss: () => import('highlight.js/lib/languages/scss'),
+      },
+      themePath: 'assets/styles/github-dark.css'
     })
   ],
 })

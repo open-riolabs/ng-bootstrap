@@ -2,13 +2,13 @@ import { Component, Input, booleanAttribute } from '@angular/core';
 import { Color, Size } from '../../shared/types';
 
 @Component({
-    selector: 'button[rlb-button], a[rlb-button]',
-    template: `<ng-content></ng-content>`,
-    host: {
-        '[class]': 'mainClass',
-        '[attr.disabled]': 'disabled?true:undefined',
-    },
-    standalone: false
+  selector: 'button[rlb-button], a[rlb-button]',
+  template: `<ng-content></ng-content>`,
+  host: {
+    '[class]': 'mainClass',
+    '[attr.disabled]': 'disabled?true:undefined',
+  },
+  standalone: false
 })
 export class ButtonComponent {
   @Input({ alias: 'color' }) color?: Color = 'primary';
