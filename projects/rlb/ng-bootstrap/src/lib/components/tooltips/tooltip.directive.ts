@@ -1,14 +1,13 @@
 import {
+  booleanAttribute,
   Directive,
   ElementRef,
-  Renderer2,
   Input,
-  DoCheck,
-  AfterViewInit,
-  booleanAttribute,
   OnChanges,
-  SimpleChanges,
+  OnDestroy,
   OnInit,
+  Renderer2,
+  SimpleChanges,
 } from '@angular/core';
 import { Tooltip } from 'bootstrap';
 
@@ -16,7 +15,7 @@ import { Tooltip } from 'bootstrap';
     selector: '[tooltip]',
     standalone: false
 })
-export class TooltipDirective implements OnInit, OnChanges {
+export class TooltipDirective implements OnInit, OnChanges, OnDestroy  {
   static bsInit = false;
   private _tooltip: Tooltip | undefined;
   @Input({ alias: 'tooltip', required: true }) tooltip!: string | null | undefined;
@@ -28,6 +27,12 @@ export class TooltipDirective implements OnInit, OnChanges {
     private elementRef: ElementRef,
     private renderer: Renderer2,
   ) { }
+
+  ngOnDestroy(): void {
+      if (this._tooltip) {
+        this._tooltip.dispose();
+      }
+    }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tooltip']) {

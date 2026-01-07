@@ -96,6 +96,16 @@
   padding: 0.25rem 0.5rem;
 }
 
+@media (hover: none) {
+  .tooltip {
+    display: none !important;
+  }
+}
+
+.sidebar-toggler-tooltip {
+  pointer-events: none;
+}
+
 /* ===== Mobile ===== */
 @media (max-width: 992px) {
   .navbar-collapse {
