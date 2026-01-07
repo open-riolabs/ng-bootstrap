@@ -1,6 +1,20 @@
-import { booleanAttribute, Component, Input, TemplateRef, ViewChild, ViewContainerRef, } from '@angular/core';
+import {
+  AfterContentInit,
+  booleanAttribute,
+  Component,
+  ContentChild,
+  Input,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
+import { NavbarItemsComponent } from "./navbar-items.component";
+import { Subject, takeUntil } from "rxjs";
+import { Collapse } from "bootstrap";
 
 @Component({
     selector: 'rlb-navbar',
@@ -36,9 +50,10 @@ import { UniqueIdService } from '../../../shared/unique-id.service';
   </ng-template>`,
     standalone: false
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy  {
   element!: HTMLElement;
   private _navId: string;
+  private destroy$: Subject<void> = new Subject<void>();
 
   public get navId(): string {
     return this._navId;
@@ -50,6 +65,7 @@ export class NavbarComponent {
   }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @ContentChild(NavbarItemsComponent) navbarItems!: NavbarItemsComponent;
 
   @Input({ alias: 'dark', transform: booleanAttribute }) dark?: boolean;
   @Input({ alias: 'color' }) color?: Color;
@@ -71,5 +87,28 @@ export class NavbarComponent {
     );
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
+  }
+
+  ngAfterContentInit() {
+    if (this.navbarItems) {
+      this.navbarItems.click.pipe(
+        takeUntil(this.destroy$),
+      ).subscribe(() => {
+        this.closeMobileMenu();
+      });
+    }
+  }
+
+  ngOnDestroy () {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private closeMobileMenu() {
+    const collapseEl = this.element?.querySelector('.navbar-collapse');
+    if (collapseEl && collapseEl.classList.contains('show')) {
+      const bsCollapse = Collapse.getOrCreateInstance(collapseEl);
+      bsCollapse.hide();
+    }
   }
 }
