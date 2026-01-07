@@ -1,11 +1,12 @@
 import {
+  AfterViewInit,
+  booleanAttribute,
   Component,
   ElementRef,
   Input,
   Optional,
   Self,
   ViewChild,
-  booleanAttribute, AfterViewInit,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { AbstractComponent } from './abstract-field.component';
@@ -63,10 +64,15 @@ export class SwitchComponent
   }
 
   override onWrite(data: boolean): void {
-    this.data = data
+    this.data = data;
+    this.updateInternalValue()
   }
 
   ngAfterViewInit() {
+    this.updateInternalValue()
+  }
+
+  private updateInternalValue(): void {
     if (this.el && this.el.nativeElement) {
       if (this.data === undefined || this.data === null) return;
       if (typeof this.data === 'string') {
