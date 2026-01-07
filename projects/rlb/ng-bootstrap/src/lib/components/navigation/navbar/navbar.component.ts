@@ -2,10 +2,11 @@ import {
   AfterContentInit,
   booleanAttribute,
   Component,
-  ContentChild,
+  ContentChildren,
   Input,
   OnDestroy,
   OnInit,
+  QueryList,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -13,7 +14,7 @@ import {
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 import { NavbarItemsComponent } from "./navbar-items.component";
-import { Subject, takeUntil } from "rxjs";
+import { startWith, Subject, takeUntil } from "rxjs";
 import { Collapse } from "bootstrap";
 
 @Component({
@@ -65,7 +66,8 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy  {
   }
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  @ContentChild(NavbarItemsComponent) navbarItems!: NavbarItemsComponent;
+  @ContentChildren(NavbarItemsComponent, { descendants: true })
+  navbarItemsGroups!: QueryList<NavbarItemsComponent>;
 
   @Input({ alias: 'dark', transform: booleanAttribute }) dark?: boolean;
   @Input({ alias: 'color' }) color?: Color;
@@ -90,13 +92,16 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy  {
   }
 
   ngAfterContentInit() {
-    if (this.navbarItems) {
-      this.navbarItems.click.pipe(
-        takeUntil(this.destroy$),
-      ).subscribe(() => {
-        this.closeMobileMenu();
+    this.navbarItemsGroups.changes.pipe(
+      startWith(this.navbarItemsGroups),
+      takeUntil(this.destroy$)
+    ).subscribe((groups: QueryList<NavbarItemsComponent>) => {
+      groups.forEach(group => {
+        group.click.pipe(
+          takeUntil(this.destroy$),
+        ).subscribe(() => this.closeMobileMenu());
       });
-    }
+    });
   }
 
   ngOnDestroy () {
