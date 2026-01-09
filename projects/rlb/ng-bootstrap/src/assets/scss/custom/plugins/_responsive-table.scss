@@ -154,7 +154,7 @@ body[data-layout="horizontal"] {
   @media (min-width: 992px) {
     .fixed-solution {
       .sticky-table-header{
-        top: $header-height + 50px !important;;
+        top: $header-height + 3.125rem !important;;
       }
     }
   }

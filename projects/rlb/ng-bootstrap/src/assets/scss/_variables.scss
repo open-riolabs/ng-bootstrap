@@ -11,7 +11,8 @@ $sidebar-menu-sub-item-color:                         #545a6d;
 $sidebar-menu-item-icon-color:                        #7f8387;
 $sidebar-menu-item-hover-color:                       #383c40;
 $sidebar-menu-item-active-color:                      #556ee6;
-$sidebar-width:                                       300px;
+$sidebar-width:                                       18.75rem;
+$sidebar-transition:                                  0.3s ease-in-out;
 $sidebar-collapsed-width:                             70px;
 $sidebar-width-sm:                                    160px;
 
@@ -24,7 +25,7 @@ $sidebar-dark-menu-item-hover-color:                  #ffffff;
 $sidebar-dark-menu-item-active-color:                 #ffffff;
 
 // Topbar - Default Light
-$header-height:                                       51px;
+$header-height:                                       3.75rem;
 $header-bg:                                           $white;
 $header-item-color:                                   #555b6d;
 
@@ -53,7 +54,7 @@ $rightbar-width:                                      280px;
 $display-none:                                        none;
 $display-block:                                       block;
 
-// Brand 
+// Brand
 $navbar-brand-box-width:                             250px;
 
 // Boxed layout width

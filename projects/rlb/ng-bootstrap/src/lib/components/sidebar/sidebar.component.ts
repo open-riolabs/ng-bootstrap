@@ -1,9 +1,9 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'rlb-sidebar',
 	template: `
-		<div class="vertical-menu" [class.d-none]="isCollapsed" [class.rounded-2]="rounded">
+		<div class="vertical-menu" [class.rounded-2]="rounded">
 			<div id="sidebar-menu" class="w-100 h-100 overflow-y-auto">
 				<ul class="metismenu list-unstyled" id="side-menu" #sideMenu>
 					<ng-content select="rlb-sidebar-item"></ng-content>
@@ -26,27 +26,42 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 /**
  * Sidebar component
  */
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   menu: any;
   data: any;
   @ViewChild('sideMenu') sideMenu!: ElementRef;
 	isCollapsed: boolean = false;
-	
+
 	@Input({ alias: 'rounded', required: false }) rounded: boolean = false
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkBreakpoint();
+  }
 
   constructor() {
   }
-	
-	toggleSidebar() {
-		this.isCollapsed = !this.isCollapsed;
-		const sidebar = document.getElementById('sidebar');
-		const content = document.querySelector('.rlb-content') as HTMLElement;
-		if (content) {
-			content.classList.toggle('expanded', this.isCollapsed);
-		}
-		
-		if (sidebar) {
-			sidebar.classList.toggle('collapsed', this.isCollapsed);
-		}
-	}
+
+  ngOnInit() {
+    this.checkBreakpoint();
+  }
+
+  toggleSidebar() {
+    this.setCollapsed(!this.isCollapsed);
+  }
+
+  private setCollapsed(collapsed: boolean) {
+    this.isCollapsed = collapsed;
+
+    const sidebar = document.getElementById('sidebar');
+    const content = document.querySelector('.rlb-content') as HTMLElement;
+
+    content?.classList.toggle('expanded', collapsed);
+    sidebar?.classList.toggle('collapsed', collapsed);
+  }
+
+  private checkBreakpoint() {
+    const shouldCollapse = window.innerWidth <= 992;
+    this.setCollapsed(shouldCollapse);
+  }
 }

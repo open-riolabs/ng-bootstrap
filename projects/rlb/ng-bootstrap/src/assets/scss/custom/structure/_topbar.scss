@@ -1,6 +1,6 @@
-// 
+//
 // _header.scss
-// 
+//
 
 #page-topbar {
     position: fixed;
@@ -51,7 +51,7 @@
 /* Search */
 
 .app-search {
-    padding: calc(#{$header-height - 38px} * 0.5) 0;
+    padding: calc(#{$header-height - 2.375rem} * 0.5) 0;
 
     .form-control {
         border: none;
