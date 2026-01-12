@@ -24,7 +24,7 @@
   transition: width $sidebar-transition, transform $sidebar-transition;
   background-color: var(--bs-tertiary-bg);
   border-right: 1px solid var(--bs-border-color);
-  z-index: 1020;
+  z-index: 1000;
   position: relative;
   overflow: visible !important;
 
