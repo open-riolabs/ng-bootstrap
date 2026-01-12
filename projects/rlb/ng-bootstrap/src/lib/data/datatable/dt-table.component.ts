@@ -69,8 +69,12 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
   private subscription: Subscription | undefined
 
   ngOnInit() {
-    this.currentPage = 1;
-    this.pageSize = 20;
+    if (this.currentPage == null) {
+      this.currentPage = 1;
+    }
+    if (this.pageSize == null) {
+      this.pageSize = 20;
+    }
   }
 
   get pages() {
