@@ -29,6 +29,7 @@ import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
         [id]="id"
         class="form-control"
         [type]="type"
+        [attr.autocomplete]="inputAutocomplete"
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
@@ -86,6 +87,7 @@ export class AutocompleteComponent
   @Input({ alias: 'menu-max-width', transform: numberAttribute }) menuMaxWidth: number = 400;
   @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
   @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
+  @Input() inputAutocomplete: string = 'one-time-code';
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
