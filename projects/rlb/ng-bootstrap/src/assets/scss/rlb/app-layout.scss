@@ -70,7 +70,9 @@
   }
 }
 
-.sidebar-toggler-tooltip {
+.sidebar-toggler-tooltip,
+[data-bs-theme="dark"] .tooltip
+{
   --bs-tooltip-bg: var(--bs-body-bg);
   --bs-tooltip-color: var(--bs-body-color);
 
