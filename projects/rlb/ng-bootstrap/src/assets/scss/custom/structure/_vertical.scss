@@ -1,3 +1,4 @@
+@use "sass:color";
 //
 // _menu.scss
 //
@@ -290,7 +291,7 @@
               position: relative;
               width: calc(190px + #{$sidebar-collapsed-width});
               color: $primary;
-              background-color: darken($sidebar-bg, 4%);
+              background-color: color.adjust($sidebar-bg, $lightness: -4%);
               transition: none;
 
               i {
@@ -386,7 +387,7 @@ html[data-bs-theme="dark"] {
 
     .side-nav-link-ref.active {
       color: $sidebar-dark-menu-item-active-color !important;
-      background-color: lighten($sidebar-dark-bg, 3%) !important;
+      background-color: color.adjust($sidebar-dark-bg, $lightness: 3%) !important;
       font-weight: 600;
       border-radius: 0.375rem;
 
@@ -444,7 +445,7 @@ html[data-bs-theme="dark"] {
 
             &:hover {
               >a {
-                background: lighten($sidebar-dark-bg, 2%);
+                background: color.adjust($sidebar-dark-bg, $lightness: 2%);
                 color: $sidebar-dark-menu-item-hover-color;
 
                 i {
@@ -557,7 +558,7 @@ body[data-sidebar-size="small"] {
   #sidebar-menu {
     ul li {
       &.menu-title {
-        background-color: lighten($sidebar-dark-bg, 2%);
+        background-color: color.adjust($sidebar-dark-bg, $lightness: 2%);
       }
 
       a {
@@ -697,7 +698,7 @@ body[data-sidebar="colored"] {
         >ul {
           >li {
             &:hover>a {
-              background-color: lighten($primary, 2%);
+              background-color: color.adjust($primary, $lightness: 2%);
               color: $white;
 
               i {

@@ -1,4 +1,20 @@
+@use "sass:color";
+@use "sass:string";
+
 // Variables
+$prefix: bs- !default;
+$white:  #fff !default;
+$black:  #000 !default;
+
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
 
 //
 // custom-variables
@@ -408,7 +424,7 @@ $success-bg-subtle:       rgba($success, 0.25);
 $info-bg-subtle:          rgba($info, 0.25);
 $warning-bg-subtle:       rgba($warning, 0.25);
 $danger-bg-subtle:        rgba($danger, 0.25);
-$light-bg-subtle:         mix($gray-100, $white);
+$light-bg-subtle:         color.mix($gray-100, $white);
 $dark-bg-subtle:          rgba($dark, 0.25);
 // scss-docs-end theme-bg-subtle-variables
 
@@ -1701,7 +1717,7 @@ $breadcrumb-margin-bottom:          1rem;
 $breadcrumb-bg:                     null;
 $breadcrumb-divider-color:          var(--#{$prefix}secondary-color);
 $breadcrumb-active-color:           var(--#{$prefix}secondary-color);
-$breadcrumb-divider:                quote("/");
+$breadcrumb-divider:                string.quote("/");
 $breadcrumb-divider-flipped:        $breadcrumb-divider;
 $breadcrumb-border-radius:          null;
 // scss-docs-end breadcrumb-variables

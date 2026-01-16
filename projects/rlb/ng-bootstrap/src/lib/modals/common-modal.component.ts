@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IModal, ModalData, ModalDirective } from '../components';
-import { SearchModalInput } from './search-modal.data';
 import { RlbBootstrapModule } from '../rlb-bootstrap.module';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,7 +7,7 @@ import { CommonModalData } from './common-modal.data';
 
 @Component({
   standalone: true,
-  imports: [ModalDirective, RlbBootstrapModule, FormsModule, CommonModule],
+  imports: [RlbBootstrapModule, FormsModule, CommonModule],
   template: `
     <div [class]="'modal-header' + headerColor">
       <h5 class="modal-title">{{ data.title }}</h5>

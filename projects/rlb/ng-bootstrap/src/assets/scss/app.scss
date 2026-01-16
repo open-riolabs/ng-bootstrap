@@ -1,10 +1,17 @@
-
+//Core files
 @import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
+
 @import "variables";
 @import "variables-dark";
+
+@import "bootstrap/scss/variables";
+
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
 @import "bootstrap/scss/bootstrap";
 
+// Components
 @import "custom/components/root";
 @import "custom/components/reboot";
 @import "custom/components/badge";
@@ -17,16 +24,18 @@
 @import "custom/components/pagination";
 @import "custom/components/progress";
 @import "custom/components/carousel";
+@import "custom/components/waves";
+@import "custom/components/avatar";
+@import "custom/components/accordion";
+@import "custom/components/helper";
+@import "custom/components/preloader";
+@import "custom/components/forms";
+@import "custom/components/widgets";
+@import "custom/components/demos";
+@import "custom/components/print";
 
 //Fonts
 @import "custom/fonts/fonts";
-
-//Core files
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "variables";
-@import "variables-dark";
-@import "bootstrap/scss/mixins";
 
 // Structure
 @import "custom/structure/general";
@@ -43,16 +52,6 @@
 @import "rlb/avatar";
 @import "rlb/chat.scss";
 
-// Components
-@import "custom/components/waves";
-@import "custom/components/avatar";
-@import "custom/components/accordion";
-@import "custom/components/helper";
-@import "custom/components/preloader";
-@import "custom/components/forms";
-@import "custom/components/widgets";
-@import "custom/components/demos";
-@import "custom/components/print";
 
 // Plugins
 @import "custom/plugins/custom-scrollbar";
