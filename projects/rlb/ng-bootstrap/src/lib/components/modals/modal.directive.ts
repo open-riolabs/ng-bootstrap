@@ -16,6 +16,7 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
   private contentElement!: HTMLElement;
   private _reasonButtons!: NodeListOf<HTMLButtonElement> | null;
   private _modalReason!: ModalCloseReason;
+  private triggerElement: HTMLElement | null = null;
 
   @Input({ alias: 'id' }) id!: string;
   @Input({ alias: 'data-instance' }) instance!: IModal;
@@ -28,6 +29,8 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.triggerElement = document.activeElement as HTMLElement;
+
     // Check prop existence
     // This approach permits to handle empty string '' case
     const hasContent =
@@ -154,6 +157,7 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
       this._modalReason = reason;
     }
     this.bsModal?.hide();
+    this.triggerElement?.focus();
   }
 
   initButtons(): void {
@@ -168,10 +172,12 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
           ) as ModalCloseReason;
           if (this._modalReason === 'cancel' || this._modalReason === 'close') {
             this.bsModal?.hide();
+            this.triggerElement?.focus();
           }
           if (this._modalReason === 'ok') {
             if (this.instance.valid) {
               this.bsModal?.hide();
+              this.triggerElement?.focus();
             }
           }
         });
