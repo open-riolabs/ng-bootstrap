@@ -1,12 +1,12 @@
 import {
-	AfterViewInit,
-	booleanAttribute,
-	Directive,
-	DoCheck,
-	ElementRef,
-	Input,
-	numberAttribute,
-	Renderer2,
+  AfterViewInit,
+  booleanAttribute,
+  Directive,
+  DoCheck,
+  ElementRef,
+  Input,
+  numberAttribute,
+  Renderer2,
 } from '@angular/core';
 import { Color } from '../../shared/types';
 
@@ -15,14 +15,14 @@ import { Color } from '../../shared/types';
     standalone: false
 })
 export class BadgeDirective implements AfterViewInit, DoCheck {
-	private _badge?: string;
+	private _badge: string = '';
 	@Input({ alias: 'badge' })
-	set badge(value: string | undefined) {
-		this._badge = value;
+	set badge(value: string | number | undefined) {
+		this._badge = this.castToString(value);
 		this.updateBadge();
 	}
-	
-	get badge() {
+
+	get badge(): string {
 		return this._badge;
 	}
   @Input({ alias: 'badge-pill', transform: booleanAttribute }) pill!: boolean;
@@ -57,7 +57,7 @@ export class BadgeDirective implements AfterViewInit, DoCheck {
 		if (!this.badge) return;
 		this.createBadgeElement()
   }
-	
+
 	private updateBadge() {
 		if (!this.badgeElement) return;
 		if (this.badge) {
@@ -73,10 +73,10 @@ export class BadgeDirective implements AfterViewInit, DoCheck {
 			this.badgeElement.style.display = 'none';
 		}
 	}
-	
+
 	private createBadgeElement() {
 		this.badgeElement = this.renderer.createElement('span');
-		
+
 		if (this.top || this.start || this.top === 0 || this.start === 0) {
 			this.renderer.addClass(this.badgeElement, 'position-absolute');
 			if (this.top || this.top === 0) {
@@ -127,4 +127,12 @@ export class BadgeDirective implements AfterViewInit, DoCheck {
 		}
 		this.renderer.appendChild(this.elementRef.nativeElement, this.badgeElement);
 	}
+
+  private castToString(value: string | number | undefined ): string {
+    if (value && typeof value === 'number') {
+      return value.toString();
+    } else {
+      return value as string;
+    }
+  }
 }

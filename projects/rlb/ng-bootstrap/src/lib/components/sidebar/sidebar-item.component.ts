@@ -22,7 +22,7 @@ import { CollapseComponent } from "../collapse/collapse.component";
       <li *ngIf="title" (click)="onItemClick($event)" class="menu-title">{{ title }}</li>
       <li *ngIf="!title" (click)="onItemClick($event)">
 				<a
-					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter?.toString(): undefined"
+					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter.toString() : undefined"
 					*ngIf="children?.length" href="javascript:void(0);"
 					class="is-parent has-arrow"
 					toggle="collapse"
@@ -39,7 +39,7 @@ import { CollapseComponent } from "../collapse/collapse.component";
 				<a
 					*ngIf="!children?.length"
 					[routerLink]="link"
-					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter?.toString(): undefined"
+					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter : undefined"
 					class="side-nav-link-ref"
 					routerLinkActive="active"
 				>
