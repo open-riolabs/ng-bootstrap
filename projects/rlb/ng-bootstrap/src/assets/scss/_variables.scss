@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "sass:string";
+
 // Variables
 
 //
@@ -408,7 +411,7 @@ $success-bg-subtle:       rgba($success, 0.25);
 $info-bg-subtle:          rgba($info, 0.25);
 $warning-bg-subtle:       rgba($warning, 0.25);
 $danger-bg-subtle:        rgba($danger, 0.25);
-$light-bg-subtle:         mix($gray-100, $white);
+$light-bg-subtle:         color.mix($gray-100, $white);
 $dark-bg-subtle:          rgba($dark, 0.25);
 // scss-docs-end theme-bg-subtle-variables
 
@@ -1701,7 +1704,7 @@ $breadcrumb-margin-bottom:          1rem;
 $breadcrumb-bg:                     null;
 $breadcrumb-divider-color:          var(--#{$prefix}secondary-color);
 $breadcrumb-active-color:           var(--#{$prefix}secondary-color);
-$breadcrumb-divider:                quote("/");
+$breadcrumb-divider:                string.quote("/");
 $breadcrumb-divider-flipped:        $breadcrumb-divider;
 $breadcrumb-border-radius:          null;
 // scss-docs-end breadcrumb-variables
