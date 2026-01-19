@@ -53,28 +53,33 @@
 				</button>
 				<ng-container *ngIf="paginationMode === 'pages'">
 					<nav aria-label="Page navigation example">
-						<ul class="pagination float-end pagination-sm">
-							<li class="page-item">
-								<a class="page-link d-block" [class.disabled]="currentPage === 1" href="#" aria-label="Previous"
-									 (click)="prev($event)">
-									<span aria-hidden="true">&laquo;</span>
-								</a>
-							</li>
-							<span class="d-flex overflow-x-hidden overflow-y-hidden" (wheel)="onPgWeel($event)"
-										style="max-width: 200px;">
-                <ng-container *ngFor="let page of [].constructor(pages); let i = index">
-                  <li class="page-item" [class.active]="currentPage === i+1">
-                    <a class="page-link d-block" href="#" (click)="selectPage($event, i+1)">{{i+1}}</a>
-                  </li>
-                </ng-container>
-              </span>
-							<li class="page-item">
-								<a class="page-link d-block" [class.disabled]="currentPage === pages" href="#" aria-label="Next"
-									 (click)="next($event)">
-									<span aria-hidden="true">&raquo;</span>
-								</a>
-							</li>
-						</ul>
+            <ul class="pagination float-end pagination-sm">
+              <li class="page-item">
+                <a class="page-link d-block" [class.disabled]="currentPage === 1" href="#" aria-label="Previous"
+                   (click)="prev($event)">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+
+              <ng-container *ngFor="let page of visiblePages">
+                <li class="page-item"
+                    [class.active]="currentPage === page"
+                    [class.disabled]="page === '...'">
+                  <a class="page-link d-block"
+                     href="#"
+                     (click)="selectPage($event, page)">
+                    {{ page }}
+                  </a>
+                </li>
+              </ng-container>
+
+              <li class="page-item">
+                <a class="page-link d-block" [class.disabled]="currentPage === pages" href="#" aria-label="Next"
+                   (click)="next($event)">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
 						<ul class="ps-0 float-end me-3">
 							<rlb-select size="small" [(ngModel)]="pageSize" (ngModelChange)="selectSize()"
 													[disabled]="items.length === 0">
