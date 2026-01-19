@@ -66,6 +66,8 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
   @ContentChildren(DataTableRowComponent) public rows!: QueryList<DataTableRowComponent>;
   @ContentChildren(DataTableHeaderComponent) columns!: QueryList<DataTableHeaderComponent>;
 
+  readonly MAX_VISIBLE_PAGES = 7;
+
   private subscription: Subscription | undefined
 
   ngOnInit() {
@@ -86,6 +88,27 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
       this.rows?.toArray()?.some((o) => o.hasActions) ||
       this.showActions !== 'row'
     );
+  }
+
+
+  get visiblePages(): (number | string)[] {
+    const total = this.pages;
+    const current = this.currentPage || 1;
+    const pages: (number | string)[] = [];
+
+    if (total <= this.MAX_VISIBLE_PAGES) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      if (current <= 4) {
+        pages.push(1, 2, 3, 4, 5, '...', total);
+      } else if (current >= total - 3) {
+        pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total);
+      } else {
+        pages.push(1, '...', current - 1, current, current + 1, '...', total);
+      }
+    }
+
+    return pages;
   }
 
   ngAfterViewInit() {
@@ -154,10 +177,10 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
   }
 
 
-  selectPage(ev: MouseEvent, page: number) {
+  selectPage(ev: MouseEvent, page: number | string) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (page === this.currentPage || this.loading) return;
+    if (typeof page !== 'number' || page === this.currentPage || this.loading) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({ page, size: this.pageSize ? parseInt(this.pageSize as any) : 20 });
   }
@@ -185,9 +208,9 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
   }
 
   onPgWeel(ev: WheelEvent) {
-    ev.preventDefault();
-    const t = ev.target as HTMLElement;
-    const c = t.parentElement?.parentElement
-    c?.scrollBy({ left: ev.deltaY < 0 ? -15 : 15 });
+    // ev.preventDefault();
+    // const t = ev.target as HTMLElement;
+    // const c = t.parentElement?.parentElement
+    // c?.scrollBy({ left: ev.deltaY < 0 ? -15 : 15 });
   }
 }
