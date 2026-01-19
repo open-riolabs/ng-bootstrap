@@ -1,0 +1,85 @@
+<div class="calendar-wrapper d-flex flex-column" *ngIf="day">
+
+    <!--  HEADER WRAPPER -->
+    <!-- For day view, we just show the date at top? Or maybe just keep it simple with body since main header has date -->
+    <!-- Mimicking structure of Week View but single column -->
+    <div class="header-container overflow-hidden flex-shrink-0 border-bottom bg-body-tertiary">
+      <div class="header-row d-flex">
+        <div class="time-gutter border-end flex-shrink-0"></div>
+        <div class="day-cell text-center p-2 flex-grow-1"
+             [class.text-primary]="isToday(day)"
+             [class.fw-bold]="isToday(day)"
+             [class.bg-primary]="isToday(day)"
+        >
+          <div class="small text-uppercase text-body-secondary">{{ day | dayOfWeek: 'long' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY WRAPPER  -->
+    <div #scrollBody
+         class="calendar-body flex-grow-1 overflow-auto bg-body position-relative"
+         [style.max-height.rem]="MAX_BODY_HEIGHT">
+
+      <div class="body-row d-flex position-relative">
+
+        <!-- SIDEBAR (Sticky Left) -->
+        <div class="time-sidebar sticky-start flex-shrink-0 border-end">
+          <div *ngFor="let time of timeSlots; let i = index"
+               class="time-slot-label small text-body-secondary d-flex align-items-start justify-content-center"
+               [style.height.px]="ROW_HEIGHT">
+            <span *ngIf="i !== 0" style="transform: translateY(-50%)">
+              {{ time }}
+            </span>
+          </div>
+        </div>
+
+        <!-- GRID AND EVENTS -->
+        <div class="grid-layer flex-grow-1 position-relative">
+
+          <!-- LAYER 1: Grid -->
+          <div class="background-grid position-absolute w-100 h-100 top-0 start-0 z-0">
+            <div *ngFor="let time of timeSlots"
+                 class="grid-row border-bottom"
+                 [style.height.px]="ROW_HEIGHT">
+            </div>
+          </div>
+
+          <!-- Layer 2: Events -->
+          <div class="events-container d-flex h-100 w-100 position-relative z-1" cdkDropListGroup>
+            <div class="day-column position-relative h-100 w-100"
+                 cdkDropList
+                 [cdkDropListSortingDisabled]="true"
+                 [cdkDropListData]="day"
+                 (cdkDropListDropped)="onEventDrop($event)"
+                 (click)="eventClick.emit()"
+            >
+
+              <rlb-calendar-event
+                *ngFor="let event of processedEvents; trackBy: trackByEventId"
+                [view]="view"
+                [event]="event"
+                [style.top.px]="calculateEventTop(event)"
+                [style.height.px]="calculateEventHeight(event)"
+                [style.left.%]="event.left"
+                [style.width.%]="event.width"
+                (eventClick)="eventClick.emit($event)"
+                (eventContainerClick)="eventContainerClick.emit($event)"
+                cdkDrag
+                [cdkDragData]="event"
+                class="position-absolute"
+              >
+                <div *cdkDragPlaceholder style="opacity: 0"></div>
+              </rlb-calendar-event>
+
+              <div *ngIf="isToday(day)"
+                   class="now-line"
+                   [style.top.px]="getNowTop()">
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

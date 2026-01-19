@@ -25,11 +25,13 @@ export class CalendarHeaderComponent {
         const nextMonth = new DateTz(this.currentDate)
           .set(1, 'day')
           .add(1, 'month');
-
         this.dateChange.emit(new DateTz(nextMonth));
         break;
+      case 'day':
+        const nextDay = addDays(this.currentDate, 1);
+        this.dateChange.emit(new DateTz(nextDay));
+        break;
 			default:
-
 				break;
 		}
 	}
@@ -44,8 +46,11 @@ export class CalendarHeaderComponent {
         const pastMonth = new DateTz(this.currentDate)
           .set(1, 'day')
           .add(-1, 'month');
-        
         this.dateChange.emit(new DateTz(pastMonth));
+        break;
+      case 'day':
+        const nextDay = addDays(this.currentDate, -1);
+        this.dateChange.emit(new DateTz(nextDay));
         break;
 			default:
 
