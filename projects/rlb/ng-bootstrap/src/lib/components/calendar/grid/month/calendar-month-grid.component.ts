@@ -1,3 +1,4 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -11,11 +12,12 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
+import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { isToday } from "../../utils/calendar-date-utils";
+
 
 // Extend the layout interface for internal rendering logic
 interface MonthViewEvent extends CalendarEventWithLayout {
@@ -48,6 +50,8 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
   @Input() view!: CalendarView;
   @Input() currentDate!: IDateTz;
   @Input() events: CalendarEvent[] = [];
+  @Input() layout!: CalendarLayout;
+
 
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
   @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
@@ -60,11 +64,9 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
 
   weeks: DaySlot[][] = [];
   weekDaysHeader: IDateTz[] = [];
-  readonly MAX_BODY_HEIGHT: number = 30; // rem
-  readonly MIN_ROW_HEIGHT = 110; // px for a full hour slot
-  readonly MIN_HEADER_HEIGHT = 3.5 // rem
 
-  constructor() {}
+  constructor() { }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['currentDate'] || changes['view'] || changes['events']) {
@@ -83,7 +85,7 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
 
   private onResize = () => {
     this.updateScrollbarWidth();
-  }
+  };
 
   onBodyScroll(event: Event) {
     if (this.headerRowRef && this.scrollBodyRef) {
@@ -191,6 +193,11 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
 
       this.weeks.push(row);
     }
+
+    // Defer scrollbar calculation to after the view updates
+    setTimeout(() => {
+      this.updateScrollbarWidth();
+    });
   }
 
   /**

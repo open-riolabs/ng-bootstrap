@@ -13,10 +13,12 @@ import {
   ViewChild
 } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
-import { CalendarView } from "../../interfaces/calendar-view.type";
-import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
+import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
+import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
+import { CalendarView } from "../../interfaces/calendar-view.type";
 import { getToday, isToday } from "../../utils/calendar-date-utils";
+
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 
 
@@ -31,7 +33,9 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
   @Input() view!: CalendarView;
   @Input() currentDate!: IDateTz;
   @Input() events: CalendarEvent[] = [];
+  @Input() layout!: CalendarLayout;
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
+
   @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
   @Output() eventChange = new EventEmitter<CalendarEvent>();
 
@@ -46,18 +50,16 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
   now: DateTz;
   private nowInterval: any;
 
-  // CONFIG CONSTANTS
-  readonly ROW_HEIGHT = 110; // px for a full hour slot
-  readonly MAX_BODY_HEIGHT: number = 30; // rem
-  readonly MIN_HEADER_HEIGHT = 3.5 // rem
+  // CONFIG CONSTANTS (Replaced by Layout Input)
   private readonly MAX_VISIBLE_COLUMNS = 4;
+
   private readonly SNAP_MINUTES = 15;
 
 
   constructor(
     private cd: ChangeDetectorRef,
   ) {
-    this.now = getToday()
+    this.now = getToday();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -88,7 +90,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
   // arrow function to keep "this" context
   private onResize = () => {
     this.updateScrollbarWidth();
-  }
+  };
 
   private updateScrollbarWidth() {
     if (this.scrollBodyRef) {
@@ -104,7 +106,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
   }
 
   trackByEventId(index: number, item: CalendarEventWithLayout): string | number {
-    return item.id
+    return item.id;
   }
 
   onEventDrop(event: CdkDragDrop<IDateTz, any, CalendarEventWithLayout>) {
@@ -117,7 +119,8 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
 
     const newTopPx = originalTopPx + dragDistancePx;
 
-    const rawMinutesFromStart = (newTopPx / this.ROW_HEIGHT) * 60;
+    const rawMinutesFromStart = (newTopPx / this.layout.rowHeight) * 60;
+
 
     const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
 
@@ -152,23 +155,26 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
     const startOfDay = new DateTz(event.start).set(0, 'hour').set(0, 'minute').stripSecMillis();
     const diffMs = event.start.timestamp - startOfDay.timestamp;
     const diffMinutes = diffMs / (1000 * 60);
-    return (diffMinutes / 60) * this.ROW_HEIGHT;
+    return (diffMinutes / 60) * this.layout.rowHeight;
   }
+
 
   calculateEventHeight(event: CalendarEventWithLayout): number {
     const durationMs = event.end.timestamp - event.start.timestamp;
     const durationMinutes = durationMs / (1000 * 60);
-    return (durationMinutes / 60) * this.ROW_HEIGHT;
+    return (durationMinutes / 60) * this.layout.rowHeight;
   }
+
 
   getNowTop(): number {
     const hours = this.now.hour;
     const minutes = this.now.minute;
-    return ((hours * 60) + minutes) / 60 * this.ROW_HEIGHT;
+    return ((hours * 60) + minutes) / 60 * this.layout.rowHeight;
   }
 
+
   isToday(date: IDateTz): boolean {
-    return isToday(date)
+    return isToday(date);
   }
 
   private startNowTimer() {

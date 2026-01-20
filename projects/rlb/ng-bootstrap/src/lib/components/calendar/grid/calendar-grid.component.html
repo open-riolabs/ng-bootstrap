@@ -1,19 +1,21 @@
 <ng-container [ngSwitch]="view">
   <ng-container *ngSwitchCase="'week'">
-    <rlb-calendar-week-grid [view]="view" [currentDate]="currentDate" [events]="events"
+    <rlb-calendar-week-grid [view]="view" [currentDate]="currentDate" [events]="events" [layout]="layout"
       (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
       (eventChange)="eventChange.emit($event)" />
   </ng-container>
   <ng-container *ngSwitchCase="'month'">
-    <rlb-calendar-month-grid [view]="view" [currentDate]="currentDate" [events]="events"
+    <rlb-calendar-month-grid [view]="view" [currentDate]="currentDate" [events]="events" [layout]="layout"
       (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
       (eventChange)="eventChange.emit($event)" />
   </ng-container>
+
   <ng-container *ngSwitchCase="'day'">
-    <rlb-calendar-day-grid [view]="view" [currentDate]="currentDate" [events]="events"
+    <rlb-calendar-day-grid [view]="view" [currentDate]="currentDate" [events]="events" [layout]="layout"
       (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
       (eventChange)="eventChange.emit($event)" />
   </ng-container>
+
   <ng-container *ngSwitchDefault>
     not implemented yet
   </ng-container>

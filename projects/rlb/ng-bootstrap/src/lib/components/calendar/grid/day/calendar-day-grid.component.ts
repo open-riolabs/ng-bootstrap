@@ -16,8 +16,10 @@ import {
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
+import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { getToday, isToday } from "../../utils/calendar-date-utils";
+
 
 
 @Component({
@@ -31,7 +33,9 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
   @Input() view!: CalendarView;
   @Input() currentDate!: IDateTz;
   @Input() events: CalendarEvent[] = [];
+  @Input() layout!: CalendarLayout;
   @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
+
   @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
   @Output() eventChange = new EventEmitter<CalendarEvent>();
 
@@ -44,11 +48,10 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
   now: DateTz;
   private nowInterval: any;
 
-  // CONFIG CONSTANTS
-  readonly ROW_HEIGHT = 110; // px for a full hour slot
-  readonly MAX_BODY_HEIGHT: number = 30; // rem
+  // CONFIG CONSTANTS (Replaced by Layout Input)
   private readonly MAX_VISIBLE_COLUMNS = 10; // More columns allow in day view
   private readonly SNAP_MINUTES = 15;
+
 
 
   constructor(
@@ -95,8 +98,9 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
     const dragDistancePx = event.distance.y;
     const newTopPx = originalTopPx + dragDistancePx;
 
-    const rawMinutesFromStart = (newTopPx / this.ROW_HEIGHT) * 60;
+    const rawMinutesFromStart = (newTopPx / this.layout.rowHeight) * 60;
     const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
+
     const validMinutes = Math.max(0, snappedMinutes);
 
     const newStart = new DateTz(newDay)
@@ -132,22 +136,25 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
 
     const diffMs = eventStart.timestamp - startOfDay.timestamp;
     const diffMinutes = diffMs / (1000 * 60);
-    return (diffMinutes / 60) * this.ROW_HEIGHT;
+    return (diffMinutes / 60) * this.layout.rowHeight;
   }
+
 
   calculateEventHeight(event: CalendarEventWithLayout): number {
     // If event continues to next day, visual end is midnight.
     // Logic from week grid's 'processAllEvents' handled chunking, so here specific event chunk should be correct.
     const durationMs = event.end.timestamp - event.start.timestamp;
     const durationMinutes = durationMs / (1000 * 60);
-    return (durationMinutes / 60) * this.ROW_HEIGHT;
+    return (durationMinutes / 60) * this.layout.rowHeight;
   }
+
 
   getNowTop(): number {
     const hours = this.now.hour;
     const minutes = this.now.minute;
-    return ((hours * 60) + minutes) / 60 * this.ROW_HEIGHT;
+    return ((hours * 60) + minutes) / 60 * this.layout.rowHeight;
   }
+
 
   isToday(date: IDateTz): boolean {
     return isToday(date);
