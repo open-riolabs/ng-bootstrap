@@ -1,5 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Modal } from 'bootstrap';
+import { BreakpointService } from '../../shared/breakpoint.service';
 import { ModalCloseReason } from '../../shared/types';
 import { IModal } from './data/modal';
 import { ModalOptions } from './data/modal-options';
@@ -26,6 +27,7 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
     private el: ElementRef,
     private renderer: Renderer2,
     private innerModalService: InnerModalService,
+    private breakpointService: BreakpointService,
   ) { }
 
   ngOnInit(): void {
@@ -92,6 +94,12 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
     if (this.options?.size) {
       this.renderer.addClass(this.dialogElement, `modal-${this.options.size}`);
     }
+
+    const isFullscreenUndefined = this.options?.fullscreen === undefined;
+    if (isFullscreenUndefined && this.breakpointService.isMobile) {
+      this.renderer.addClass(this.dialogElement, `modal-fullscreen`);
+    }
+
     if (this.options?.fullscreen === true) {
       this.renderer.addClass(this.dialogElement, `modal-fullscreen`);
     }

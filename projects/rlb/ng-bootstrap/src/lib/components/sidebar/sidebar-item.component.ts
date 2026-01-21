@@ -10,9 +10,10 @@ import {
   ViewChild,
   ViewContainerRef
 } from "@angular/core";
-import { UniqueIdService } from "../../shared/unique-id.service";
 import { Router } from "@angular/router";
+import { UniqueIdService } from "../../shared/unique-id.service";
 import { CollapseComponent } from "../collapse/collapse.component";
+import { SidebarService } from "./sidebar.service";
 
 
 @Component({
@@ -57,18 +58,19 @@ export class SidebarItemComponent implements OnInit {
   @Input() icon?: string | undefined;
   @Input() label?: string | undefined;
   @Input() link?: any[] | string | null | undefined;
-	@Input() badgeCounter?: number;
+  @Input() badgeCounter?: number;
 
   @Output() click = new EventEmitter<MouseEvent>();
 
   @ContentChildren(SidebarItemComponent) children!: QueryList<SidebarItemComponent>;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-	@ViewChild(CollapseComponent) collapseComponent?: CollapseComponent;
+  @ViewChild(CollapseComponent) collapseComponent?: CollapseComponent;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
-		private uniqueIdService: UniqueIdService,
-		private router: Router
+    private uniqueIdService: UniqueIdService,
+    private router: Router,
+    private sidebarService: SidebarService
   ) { }
 
   _id: string = '';
@@ -85,5 +87,9 @@ export class SidebarItemComponent implements OnInit {
   onItemClick(event: MouseEvent) {
     event.stopPropagation();
     this.click.emit(event);
+
+    if (!this.title && (!this.children || this.children.length === 0)) {
+      this.sidebarService.notifyItemClicked();
+    }
   }
 }
