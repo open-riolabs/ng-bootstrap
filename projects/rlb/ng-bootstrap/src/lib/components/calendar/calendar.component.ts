@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
-import { DateTz } from "@open-rlb/date-tz";
+import { DateTz, IDateTz } from "@open-rlb/date-tz";
 import { filter, map, of, switchMap, take } from "rxjs";
 import { ModalType } from "../../shared/types";
 import { UniqueIdService } from "../../shared/unique-id.service";
@@ -11,7 +11,6 @@ import { CalendarEvent } from "./interfaces/calendar-event.interface";
 import { CalendarLayout, DEFAULT_CALENDAR_LAYOUT } from "./interfaces/calendar-layout.interface";
 import { CalendarChangeEvent, CalendarView } from "./interfaces/calendar-view.type";
 import { getToday } from "./utils/calendar-date-utils";
-
 
 
 @Component({
@@ -26,7 +25,7 @@ export class CalendarComponent implements OnChanges {
 
   @Input({ alias: 'events' }) events: CalendarEvent[] = [];
 
-  @Input({ alias: 'current-date' }) currentDate: DateTz;
+  @Input({ alias: 'current-date', transform: (d: IDateTz) => new DateTz(d)}) currentDate: IDateTz;
 
   @Input({ alias: 'loading', transform: booleanAttribute }) loading = false;
 
