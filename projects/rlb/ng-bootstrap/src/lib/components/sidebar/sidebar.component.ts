@@ -1,8 +1,11 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { BreakpointService } from '../../shared/breakpoint.service';
+import { SidebarService } from './sidebar.service';
 
 @Component({
   selector: 'rlb-sidebar',
-	template: `
+  template: `
 		<div class="vertical-menu" [class.rounded-2]="rounded">
 			<div id="sidebar-menu" class="w-100 h-100 overflow-y-auto">
 				<ul class="metismenu list-unstyled" id="side-menu" #sideMenu>
@@ -26,24 +29,40 @@ import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@
 /**
  * Sidebar component
  */
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   menu: any;
   data: any;
   @ViewChild('sideMenu') sideMenu!: ElementRef;
-	isCollapsed: boolean = false;
+  isCollapsed: boolean = false;
 
-	@Input({ alias: 'rounded', required: false }) rounded: boolean = false
+  private subscription: Subscription = new Subscription();
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.checkBreakpoint();
-  }
+  @Input({ alias: 'rounded', required: false }) rounded: boolean = false;
 
-  constructor() {
+  constructor(
+    private sidebarService: SidebarService,
+    private breakpointService: BreakpointService
+  ) {
   }
 
   ngOnInit() {
-    this.checkBreakpoint();
+    this.subscription.add(
+      this.breakpointService.isMobile$.subscribe((isMobile) => {
+        this.setCollapsed(isMobile);
+      })
+    );
+
+    this.subscription.add(
+      this.sidebarService.itemClicked$.subscribe(() => {
+        if (this.breakpointService.isMobile) {
+          this.setCollapsed(true);
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   toggleSidebar() {
@@ -58,10 +77,5 @@ export class SidebarComponent implements OnInit {
 
     content?.classList.toggle('expanded', collapsed);
     sidebar?.classList.toggle('collapsed', collapsed);
-  }
-
-  private checkBreakpoint() {
-    const shouldCollapse = window.innerWidth <= 992;
-    this.setCollapsed(shouldCollapse);
   }
 }
