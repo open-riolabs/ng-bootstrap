@@ -14,7 +14,7 @@ import { CommonModalData } from './common-modal.data';
       <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
     </div>
     <div class="modal-body">
-      @if (data.content?.header) {
+      @if (data.content.header) {
         <h6>
           {{ data.content.header }}
         </h6>

@@ -73,7 +73,7 @@ export class SidebarItemComponent implements OnInit {
 
   @Output() click = new EventEmitter<MouseEvent>();
 
-  @ContentChildren(SidebarItemComponent) children!: QueryList<SidebarItemComponent>;
+  @ContentChildren(SidebarItemComponent) children: QueryList<SidebarItemComponent> | undefined;
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   @ViewChild(CollapseComponent) collapseComponent?: CollapseComponent;
 

@@ -41,7 +41,7 @@
       @if (!loading) {
         <ng-content select="rlb-dt-row"/>
       }
-      @if (!loading && items?.length === 0) {
+      @if (!loading && items.length === 0) {
         <rlb-dt-row class="text-center">
           <rlb-dt-cell [col-span]="cols" style="border: 0">
             <ng-content select="rlb-dt-noitems"/>
