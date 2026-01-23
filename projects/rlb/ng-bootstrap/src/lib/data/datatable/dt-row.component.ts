@@ -23,9 +23,11 @@ import { Subscription } from "rxjs";
     <ng-template #template>
       <tr [class]="cssClass" [style]="cssStyle" (click)="rowClick.emit($event)">
         <ng-content select="rlb-dt-cell"></ng-content>
-        <rlb-dt-cell *ngIf="hasActions">
-          <ng-container #projectedActions></ng-container>
-        </rlb-dt-cell>
+        @if (hasActions) {
+          <rlb-dt-cell>
+            <ng-container #projectedActions></ng-container>
+          </rlb-dt-cell>
+        }
       </tr>
     </ng-template>`,
   standalone: false

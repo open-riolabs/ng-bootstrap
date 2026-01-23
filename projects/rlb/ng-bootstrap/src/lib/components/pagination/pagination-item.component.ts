@@ -13,16 +13,20 @@ import {
     template: `
     <ng-template #template>
       <li class="page-item {{ cssClass }}" [class.disabled]="disabled" [class.active]="active">
-        <a class="page-link d-block" *ngIf="isIcon; else e" [attr.disabled]="disabled">
+        @if (isIcon) {
+          <a class="page-link d-block" [attr.disabled]="disabled">
+            <ng-container *ngTemplateOutlet="content"></ng-container>
+          </a>
+        } @else {
           <ng-container *ngTemplateOutlet="content"></ng-container>
-        </a>
+        }
         <ng-template #e>
           <ng-container *ngTemplateOutlet="content"></ng-container>
         </ng-template>
       </li>
     </ng-template>
     <ng-template #content><ng-content /></ng-template>
-  `,
+    `,
     standalone: false
 })
 export class PaginationItemComponent implements OnInit {

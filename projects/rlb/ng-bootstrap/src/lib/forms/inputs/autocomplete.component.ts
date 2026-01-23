@@ -43,26 +43,29 @@ import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
         }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
-      />
-      <rlb-input-validation *ngIf="errors && showError && enableValidation" [errors]="errors"/>
-		</div>
-		<rlb-progress
-			*ngIf="loading || acLoading"
-			[height]="2"
-			[infinite]="loading || acLoading"
-			color="primary"
-			class="w-100"
-		/>
-    <ng-content select="[after]"></ng-content>
-    <div
-      #autocomplete
-      [id]="id+'-ac'"
-      class="dropdown-menu overflow-y-auto w-100 position-absolute"
-      aria-labelledby="dropdownMenu"
-      [style.max-height.px]="maxHeight"
-      [style.width]="'fit-content !important'"
+        />
+        @if (errors && showError && enableValidation) {
+          <rlb-input-validation [errors]="errors"/>
+        }
+      </div>
+      @if (loading || acLoading) {
+        <rlb-progress
+          [height]="2"
+          [infinite]="loading || acLoading"
+          color="primary"
+          class="w-100"
+          />
+      }
+      <ng-content select="[after]"></ng-content>
+      <div
+        #autocomplete
+        [id]="id+'-ac'"
+        class="dropdown-menu overflow-y-auto w-100 position-absolute"
+        aria-labelledby="dropdownMenu"
+        [style.max-height.px]="maxHeight"
+        [style.width]="'fit-content !important'"
       [style.max-width.px]="menuMaxWidth"></div>
-   `,
+    `,
   standalone: false,
   host: {
     style: 'position: relative;',

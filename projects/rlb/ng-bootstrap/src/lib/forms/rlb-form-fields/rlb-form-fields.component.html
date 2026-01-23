@@ -1,65 +1,72 @@
-<ng-container *ngIf="noCard; else card">
+@if (noCard) {
   <ng-container [ngTemplateOutlet]="form"></ng-container>
-</ng-container>
-
-<ng-template #card>
+} @else {
   <div class="card mb-3">
     <div class="card-body">
-      <h5 class="card-title" *ngIf="title">{{ title | translate }}</h5>
-      <p class="card-text" *ngIf="subTitle">{{ subTitle | translate }}</p>
+      @if (title) {
+        <h5 class="card-title">{{ title | translate }}</h5>
+      }
+      @if (subTitle) {
+        <p class="card-text">{{ subTitle | translate }}</p>
+      }
       <ng-container [ngTemplateOutlet]="form"></ng-container>
     </div>
   </div>
-</ng-template>
+}
+
 
 <ng-template #form>
-  <form
-    *ngIf="filterForm"
-    [formGroup]="filterForm"
-    [class.was-validated]="ngForm.submitted"
-    class="needs-validation"
-    #ngForm="ngForm"
-    (ngSubmit)="onFilterSubmit()"
-  >
-    <div class="row">
-      <div
-        class="col"
-        [ngClass]="input.cols"
-        *ngFor="let input of _fields; trackBy: identify"
+  @if (filterForm) {
+    <form
+      [formGroup]="filterForm"
+      [class.was-validated]="ngForm.submitted"
+      class="needs-validation"
+      #ngForm="ngForm"
+      (ngSubmit)="onFilterSubmit()"
       >
-        <div class="mb-3">
-          <ng-container *ngIf="isText(input.type)">
-            <rlb-input
-              [formControlName]="input.property"
-              [type]="input.type"
-              [placeholder]="input.name | translate"
-            >
-              <ng-container *ngIf="input.label" before>
-                <span #after [innerHTML]="">
-                  {{ input.label | translate }}
-                </span>
-              </ng-container>
-            </rlb-input>
-          </ng-container>
-          <ng-container *ngIf="isSwitch(input.type)">
-            <rlb-switch
-              [formControlName]="input.property"
-            />
-          </ng-container>
-        </div>
-      </div>
-    </div>
-    <ng-container *ngIf="!noSubmit">
       <div class="row">
-        <div class="col">
-          <button
-            class="btn btn-primary float-end"
-            [disabled]="!filterForm.valid"
-          >
-            {{ "common.filter" | translate }}
-          </button>
+        @for (input of _fields; track identify($index, input)) {
+          <div
+            class="col"
+            [ngClass]="input.cols"
+            >
+            <div class="mb-3">
+              @if (isText(input.type)) {
+                <rlb-input
+                  [formControlName]="input.property"
+                  [type]="input.type"
+                  [placeholder]="input.name | translate"
+                  >
+                  @if (input.label) {
+                    <ng-container before>
+                      <span #after [innerHTML]="">
+                        {{ input.label | translate }}
+                      </span>
+                    </ng-container>
+                  }
+                </rlb-input>
+              }
+              @if (isSwitch(input.type)) {
+                <rlb-switch
+                  [formControlName]="input.property"
+                  />
+                }
+              </div>
+            </div>
+          }
         </div>
-      </div>
-    </ng-container>
-  </form>
-</ng-template>
+        @if (!noSubmit) {
+          <div class="row">
+            <div class="col">
+              <button
+                class="btn btn-primary float-end"
+                [disabled]="!filterForm.valid"
+                >
+                {{ "common.filter" | translate }}
+              </button>
+            </div>
+          </div>
+        }
+      </form>
+    }
+  </ng-template>

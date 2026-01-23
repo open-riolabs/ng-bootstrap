@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import {
   ToastData,
@@ -8,16 +8,18 @@ import {
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   selector: 'app-toast',
   template: `
   <div class="toast-header">
-  <strong class="me-auto">{{data.title}}</strong>
-  <small *ngIf="data.subtitle"> {{data.subtitle }}</small>
-  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-</div>
-<div class="toast-body">{{data.content}}</div>
-`,
+    <strong class="me-auto">{{data.title}}</strong>
+    @if (data.subtitle) {
+      <small> {{data.subtitle }}</small>
+    }
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">{{data.content}}</div>
+  `,
   hostDirectives: [
     {
       directive: ToastDirective,

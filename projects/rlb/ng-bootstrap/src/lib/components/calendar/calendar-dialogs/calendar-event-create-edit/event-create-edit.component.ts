@@ -13,42 +13,42 @@ import { dateRangeValidator } from "./event-date-validator";
 	standalone: true,
 	template: `
 		<div [class]="'modal-header' + headerColor">
-      <h5 class="modal-title">{{ data.title }}</h5>
-			<button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
+		  <h5 class="modal-title">{{ data.title }}</h5>
+		  <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
 		</div>
-    <div class="modal-body" [formGroup]="form">
-      <rlb-input enable-validation formControlName="title">
-        <label before>Event title</label>
-      </rlb-input>
-      <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="start">
-        <label before class="mt-3">Event start</label>
-      </rlb-input>
-      <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="end">
-        <label before class="mt-3">Event end</label>
-      </rlb-input>
-      <rlb-select enable-validation [placeholder]="'Choose event color'" formControlName="color">
-        <label before class="mt-3">Event color</label>
-        <ng-container *ngFor="let color of colors">
-          <rlb-option [value]="color">
-            {{ color }}
-          </rlb-option>
-        </ng-container>
-      </rlb-select>
-    </div>
+		<div class="modal-body" [formGroup]="form">
+		  <rlb-input enable-validation formControlName="title">
+		    <label before>Event title</label>
+		  </rlb-input>
+		  <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="start">
+		    <label before class="mt-3">Event start</label>
+		  </rlb-input>
+		  <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="end">
+		    <label before class="mt-3">Event end</label>
+		  </rlb-input>
+		  <rlb-select enable-validation [placeholder]="'Choose event color'" formControlName="color">
+		    <label before class="mt-3">Event color</label>
+		    @for (color of colors; track color) {
+		      <rlb-option [value]="color">
+		        {{ color }}
+		      </rlb-option>
+		    }
+		  </rlb-select>
+		</div>
 		<div class="modal-footer">
-      <button
-        type="button"
-        class="btn "
-        data-modal-reason="cancel"
-        [ngClass]="{ 'btn-secondary': !eventToEdit, 'btn-danger': eventToEdit }"
-      >
-        {{ eventToEdit ? 'Delete event' : 'Close' }}
-			</button>
-      <button type="button" [disabled]="!valid" class="btn btn-primary" data-modal-reason="ok">
-				Save changes
-			</button>
+		  <button
+		    type="button"
+		    class="btn "
+		    data-modal-reason="cancel"
+		    [ngClass]="{ 'btn-secondary': !eventToEdit, 'btn-danger': eventToEdit }"
+		    >
+		    {{ eventToEdit ? 'Delete event' : 'Close' }}
+		  </button>
+		  <button type="button" [disabled]="!valid" class="btn btn-primary" data-modal-reason="ok">
+		    Save changes
+		  </button>
 		</div>
-	`,
+		`,
 	hostDirectives: [
 		{
 			directive: ModalDirective,

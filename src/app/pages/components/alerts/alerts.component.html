@@ -7,110 +7,112 @@
   <h3>Examples <a href="#examples" class="text-primary italic">#</a></h3>
   <p>Alerts are available for any length of text, as well as an optional close button. For proper styling, use one of
     the eight <strong>required</strong> contextual props (e.g., <span
-      class="text-danger-emphasis">color="success"</span>). For inline dismissal, use the prop <span
-      class="text-danger-emphasis">dismissible</span></p>
+  class="text-danger-emphasis">color="success"</span>). For inline dismissal, use the prop <span
+class="text-danger-emphasis">dismissible</span></p>
 
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <rlb-alert color='primary'>This is a primary alert—check it out!</rlb-alert>
-      <rlb-alert color='secondary'>This is a secondary alert—check it out!</rlb-alert>
-      <rlb-alert color='success'>This is a success alert—check it out!</rlb-alert>
-      <rlb-alert color='danger'>This is a danger alert—check it out!</rlb-alert>
-      <rlb-alert color='warning'>This is a warning alert—check it out!</rlb-alert>
-      <rlb-alert color='info'>This is a info alert—check it out!</rlb-alert>
-      <rlb-alert color='light'>This is a light alert—check it out!</rlb-alert>
-      <rlb-alert color='dark'>This is a dark alert—check it out!</rlb-alert>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(alertVariants)"></i>
-      </div>
+<rlb-card id="#examples">
+  <rlb-card-body>
+    <rlb-alert color='primary'>This is a primary alert—check it out!</rlb-alert>
+    <rlb-alert color='secondary'>This is a secondary alert—check it out!</rlb-alert>
+    <rlb-alert color='success'>This is a success alert—check it out!</rlb-alert>
+    <rlb-alert color='danger'>This is a danger alert—check it out!</rlb-alert>
+    <rlb-alert color='warning'>This is a warning alert—check it out!</rlb-alert>
+    <rlb-alert color='info'>This is a info alert—check it out!</rlb-alert>
+    <rlb-alert color='light'>This is a light alert—check it out!</rlb-alert>
+    <rlb-alert color='dark'>This is a dark alert—check it out!</rlb-alert>
+  </rlb-card-body>
+  <rlb-card-footer>
+    <div class="w-full d-flex justify-content-between fs-5 pb-1">
+      <span>HTML</span>
+      <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
+      (click)="copyToClipboard(alertVariants)"></i>
+    </div>
 
-      <pre class="fs-5"><code language="html" [highlight]="alertVariants" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
+    <pre class="fs-5"><code language="html" [highlight]="alertVariants" class="bg-transparent"></code>
+  </pre>
+</rlb-card-footer>
+</rlb-card>
 
 
 
-  <h3>Live Examples <a href="" class="text-primary italic">#</a></h3>
-  <p>Click the button below to show an alert (hidden with inline styles to start), then dismiss (and destroy) it with
-    the built-in close button.</p>
+<h3>Live Examples <a href="" class="text-primary italic">#</a></h3>
+<p>Click the button below to show an alert (hidden with inline styles to start), then dismiss (and destroy) it with
+the built-in close button.</p>
 
-  <rlb-card>
-    <rlb-card-body>
+<rlb-card>
+  <rlb-card-body>
 
-      <rlb-alert *ngFor="let n of liveAlertsArray" [dismissible]="true" color="primary" class="fade show"> This is a
+    @for (n of liveAlertsArray; track n) {
+      <rlb-alert [dismissible]="true" color="primary" class="fade show"> This is a
         dismissible alert—check it
-        out!</rlb-alert>
+      out!</rlb-alert>
+    }
 
-      <button rlb-button (click)="liveAlertsNumber = liveAlertsNumber + 1">Show Live Alert</button>
-    </rlb-card-body>
-  </rlb-card>
+    <button rlb-button (click)="liveAlertsNumber = liveAlertsNumber + 1">Show Live Alert</button>
+  </rlb-card-body>
+</rlb-card>
 
 
 
 
-  <h3>Link color <a href="" class="text-primary italic">#</a></h3>
-  <p>Use the <span class="text-danger-emphasis">.alert-link</span> utility class to quickly provide matching colored
-    links within any alert.</p>
+<h3>Link color <a href="" class="text-primary italic">#</a></h3>
+<p>Use the <span class="text-danger-emphasis">.alert-link</span> utility class to quickly provide matching colored
+links within any alert.</p>
 
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <rlb-alert color='primary'>A simple primary alert with <a href="#" class="alert-link"> an example link</a>. Give
-        it
-        a click if you
-        like.</rlb-alert>
-      <rlb-alert color='secondary'>A simple secondary alert with <a href="#" class="alert-link"> an example link</a>.
-        Give
-        it a click if you
-        like.</rlb-alert>
-      <rlb-alert color='success'>A simple success alert with <a href="#" class="alert-link"> an example link</a>. Give
-        it
-        a click if you
-        like.</rlb-alert>
-      <rlb-alert color='danger'>A simple danger alert with <a href="#" class="alert-link"> an example link</a>. Give it
-        a click if you
-        like.</rlb-alert>
-      <rlb-alert color='warning'>A simple warning alert with <a href="#" class="alert-link"> an example link</a>. Give
-        it
-        a click if you
-        like.</rlb-alert>
-      <rlb-alert color='info'>A simple info alert with <a href="#" class="alert-link"> an example link</a>. Give it a
-        click if you
-        like.</rlb-alert>
-      <rlb-alert color='light'>A simple light alert with <a href="#" class="alert-link"> an example link</a>. Give it
-        a
-        click if you
-        like.</rlb-alert>
-      <rlb-alert color='dark'>A simple dark alert with <a href="#" class="alert-link"> an example link</a>. Give it a
-        click if you
-        like.</rlb-alert>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(alertLinkVariants)"></i>
-      </div>
+<rlb-card id="#examples">
+  <rlb-card-body>
+    <rlb-alert color='primary'>A simple primary alert with <a href="#" class="alert-link"> an example link</a>. Give
+    it
+    a click if you
+  like.</rlb-alert>
+  <rlb-alert color='secondary'>A simple secondary alert with <a href="#" class="alert-link"> an example link</a>.
+  Give
+  it a click if you
+like.</rlb-alert>
+<rlb-alert color='success'>A simple success alert with <a href="#" class="alert-link"> an example link</a>. Give
+it
+a click if you
+like.</rlb-alert>
+<rlb-alert color='danger'>A simple danger alert with <a href="#" class="alert-link"> an example link</a>. Give it
+a click if you
+like.</rlb-alert>
+<rlb-alert color='warning'>A simple warning alert with <a href="#" class="alert-link"> an example link</a>. Give
+it
+a click if you
+like.</rlb-alert>
+<rlb-alert color='info'>A simple info alert with <a href="#" class="alert-link"> an example link</a>. Give it a
+click if you
+like.</rlb-alert>
+<rlb-alert color='light'>A simple light alert with <a href="#" class="alert-link"> an example link</a>. Give it
+a
+click if you
+like.</rlb-alert>
+<rlb-alert color='dark'>A simple dark alert with <a href="#" class="alert-link"> an example link</a>. Give it a
+click if you
+like.</rlb-alert>
+</rlb-card-body>
+<rlb-card-footer>
+  <div class="w-full d-flex justify-content-between fs-5 pb-1">
+    <span>HTML</span>
+    <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
+    (click)="copyToClipboard(alertLinkVariants)"></i>
+  </div>
 
-      <pre class="fs-5"><code language="html" [highlight]="alertLinkVariants" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
+  <pre class="fs-5"><code language="html" [highlight]="alertLinkVariants" class="bg-transparent"></code>
+</pre>
+</rlb-card-footer>
+</rlb-card>
 
-  <h3>Additional content <a href="" class="text-primary italic">#</a></h3>
-  <p>Alerts can also contain additional HTML elements like headings, paragraphs and dividers.</p>
+<h3>Additional content <a href="" class="text-primary italic">#</a></h3>
+<p>Alerts can also contain additional HTML elements like headings, paragraphs and dividers.</p>
 
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <rlb-alert color="success">
-        <h4 class="alert-heading">Well done!</h4>
-        <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer
-          so that you can see how spacing within an alert works with this kind of content.</p>
-        <hr>
+<rlb-card id="#examples">
+  <rlb-card-body>
+    <rlb-alert color="success">
+      <h4 class="alert-heading">Well done!</h4>
+      <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer
+      so that you can see how spacing within an alert works with this kind of content.</p>
+      <hr>
         <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
       </rlb-alert>
     </rlb-card-body>
@@ -118,78 +120,78 @@
       <div class="w-full d-flex justify-content-between fs-5 pb-1">
         <span>HTML</span>
         <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(additionalContentAlert)"></i>
+        (click)="copyToClipboard(additionalContentAlert)"></i>
       </div>
 
       <pre class="fs-5"><code language="html" [highlight]="additionalContentAlert" class="bg-transparent"></code>
     </pre>
-    </rlb-card-footer>
-  </rlb-card>
+  </rlb-card-footer>
+</rlb-card>
 
-  <h3>Icons <a href="" class="text-primary italic">#</a></h3>
-  <p>Similarly, you can use <span class="text-info">flexbox utilities</span> and <a
-      href="https://icons.getbootstrap.com/" target="_blank" class="text-info">Bootstrap Icons</a> to create alerts with
-    icons.
-    Depending on your icons
-    and content, you may want to add more utilities or custom styles.</p>
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <rlb-alert color="info" class="fs-5">
-        <i class="bi bi-exclamation-lg me-1"></i>
-        An example alert with an icon
-      </rlb-alert>
-      <rlb-alert color="success" class="fs-5">
-        <i class="bi bi-check-lg me-1"></i>
-        An example alert with an icon
-      </rlb-alert>
-      <rlb-alert color="warning" class="fs-5">
-        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-        An example alert with an icon
-      </rlb-alert>
-      <rlb-alert color="danger" class="fs-5">
-        <i class="bi bi-x-lg me-1"></i>
-        An example alert with an icon
-      </rlb-alert>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(alertWithIcon)"></i>
-      </div>
+<h3>Icons <a href="" class="text-primary italic">#</a></h3>
+<p>Similarly, you can use <span class="text-info">flexbox utilities</span> and <a
+href="https://icons.getbootstrap.com/" target="_blank" class="text-info">Bootstrap Icons</a> to create alerts with
+icons.
+Depending on your icons
+and content, you may want to add more utilities or custom styles.</p>
+<rlb-card id="#examples">
+  <rlb-card-body>
+    <rlb-alert color="info" class="fs-5">
+      <i class="bi bi-exclamation-lg me-1"></i>
+      An example alert with an icon
+    </rlb-alert>
+    <rlb-alert color="success" class="fs-5">
+      <i class="bi bi-check-lg me-1"></i>
+      An example alert with an icon
+    </rlb-alert>
+    <rlb-alert color="warning" class="fs-5">
+      <i class="bi bi-exclamation-triangle-fill me-1"></i>
+      An example alert with an icon
+    </rlb-alert>
+    <rlb-alert color="danger" class="fs-5">
+      <i class="bi bi-x-lg me-1"></i>
+      An example alert with an icon
+    </rlb-alert>
+  </rlb-card-body>
+  <rlb-card-footer>
+    <div class="w-full d-flex justify-content-between fs-5 pb-1">
+      <span>HTML</span>
+      <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
+      (click)="copyToClipboard(alertWithIcon)"></i>
+    </div>
 
-      <pre class="fs-5"><code language="html" [highlight]="alertWithIcon" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
+    <pre class="fs-5"><code language="html" [highlight]="alertWithIcon" class="bg-transparent"></code>
+  </pre>
+</rlb-card-footer>
+</rlb-card>
 
 
-  <h3>Dismissing <a href="" class="text-primary italic">#</a></h3>
-  <p>
-    You can make alerts dismissible (i.e., have a close button) by adding the prop <span
-      class="text-danger-emphasis">dismissible</span>. This adds extra padding to the right of the
-    alert and
-    positions the
-    close button in the top right corner. Be sure to add the <span class="text-danger-emphasis">.fade</span> and <span
-      class="text-danger-emphasis">.show</span> classes to animate the alert when it is closed.
-  </p>
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <rlb-alert dismissible color='primary' class="fade show"><strong>Holy guacamole!</strong> You should check in on
-        some of those fields below.</rlb-alert>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(dismissingAlert)"></i>
-      </div>
+<h3>Dismissing <a href="" class="text-primary italic">#</a></h3>
+<p>
+  You can make alerts dismissible (i.e., have a close button) by adding the prop <span
+class="text-danger-emphasis">dismissible</span>. This adds extra padding to the right of the
+alert and
+positions the
+close button in the top right corner. Be sure to add the <span class="text-danger-emphasis">.fade</span> and <span
+class="text-danger-emphasis">.show</span> classes to animate the alert when it is closed.
+</p>
+<rlb-card id="#examples">
+  <rlb-card-body>
+    <rlb-alert dismissible color='primary' class="fade show"><strong>Holy guacamole!</strong> You should check in on
+  some of those fields below.</rlb-alert>
+</rlb-card-body>
+<rlb-card-footer>
+  <div class="w-full d-flex justify-content-between fs-5 pb-1">
+    <span>HTML</span>
+    <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
+    (click)="copyToClipboard(dismissingAlert)"></i>
+  </div>
 
-      <pre class="fs-5"><code language="html" [highlight]="dismissingAlert" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
-  <hr>
+  <pre class="fs-5"><code language="html" [highlight]="dismissingAlert" class="bg-transparent"></code>
+</pre>
+</rlb-card-footer>
+</rlb-card>
+<hr>
 
   <rlb-dt-table>
     <rlb-dt-header>Parameters</rlb-dt-header>
@@ -252,7 +254,7 @@
       <div class="w-full d-flex justify-content-between fs-5 pb-1">
         <span>TypeScript</span>
         <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(implementationExample)"></i>
+        (click)="copyToClipboard(implementationExample)"></i>
       </div>
     </rlb-card-header>
     <rlb-card-body>

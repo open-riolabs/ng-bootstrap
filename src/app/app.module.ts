@@ -59,6 +59,7 @@ import { SwitchesComponent } from './pages/inputs/switch/switch.component';
 import { TextareasComponent } from './pages/inputs/textarea/textarea.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RoutingModule } from './routing.module';
+import { ToastSampleComponent } from "./pages/components/toasts/toasts-sample.component";
 
 @NgModule({
   declarations: [
@@ -137,6 +138,7 @@ import { RoutingModule } from './routing.module';
       provide: ToastRegistryOptions,
       useValue: {
         toasts: {
+          "sample-toast": ToastSampleComponent,
           "rlb-calendar-toast": CalendarToastComponent
         }
       },

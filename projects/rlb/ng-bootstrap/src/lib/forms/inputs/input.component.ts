@@ -22,31 +22,33 @@ import { AbstractComponent } from './abstract-field.component';
   template: `
   <ng-template #template>
     <ng-content select="[before]"></ng-content>
-      <input
-        #field
-        [id]="id"
-        class="form-control"
-        [type]="_type"
-        [name]="name"
-        [attr.max]="type === 'number' && max !== null && max !== undefined ? max : undefined"
-        [attr.min]="type === 'number' && min !== null && min !== undefined ? min : undefined"
-        [attr.step]="type === 'number' && step !== null && step !== undefined ? step : undefined"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
-        [attr.placeholder]="placeholder"
-        [class.form-control-lg]="size === 'large'"
-        [class.form-control-sm]="size === 'small'"
-        [value]="value || ''"
-        (blur)="touch()"
+    <input
+      #field
+      [id]="id"
+      class="form-control"
+      [type]="_type"
+      [name]="name"
+      [attr.max]="type === 'number' && max !== null && max !== undefined ? max : undefined"
+      [attr.min]="type === 'number' && min !== null && min !== undefined ? min : undefined"
+      [attr.step]="type === 'number' && step !== null && step !== undefined ? step : undefined"
+      [attr.disabled]="disabled ? true : undefined"
+      [attr.readonly]="readonly ? true : undefined"
+      [attr.placeholder]="placeholder"
+      [class.form-control-lg]="size === 'large'"
+      [class.form-control-sm]="size === 'small'"
+      [value]="value || ''"
+      (blur)="touch()"
 				[ngClass]="{
         'is-invalid': control?.touched && control?.invalid && enableValidation,
         'is-valid': control?.touched && control?.valid && enableValidation
         }"
-        (input)="update($event.target)"
+      (input)="update($event.target)"
       />
-		<rlb-input-validation *ngIf="!extValidation && showError" [errors]="errors"/>
-    <ng-content select="[after]"></ng-content>
-  </ng-template>`,
+      @if (!extValidation && showError) {
+        <rlb-input-validation [errors]="errors"/>
+      }
+      <ng-content select="[after]"></ng-content>
+    </ng-template>`,
   standalone: false
 })
 export class InputComponent

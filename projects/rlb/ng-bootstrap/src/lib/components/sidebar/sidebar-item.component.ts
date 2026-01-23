@@ -20,36 +20,47 @@ import { SidebarService } from "./sidebar.service";
   selector: 'rlb-sidebar-item',
   template: `
 		<ng-template #template>
-      <li *ngIf="title" (click)="onItemClick($event)" class="menu-title">{{ title }}</li>
-      <li *ngIf="!title" (click)="onItemClick($event)">
-				<a
-					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter.toString() : undefined"
-					*ngIf="children?.length" href="javascript:void(0);"
-					class="is-parent has-arrow"
-					toggle="collapse"
-					[toggle-target]="'side-item' + _id"
-				>
-					<i *ngIf="icon" [class]="icon"></i>
-					<span>{{ label }}</span>
-				</a>
-				<rlb-collapse [id]="'side-item' + _id">
-					<ul class="sub-menu" aria-expanded="false">
-						<ng-content select="rlb-sidebar-item"></ng-content>
-					</ul>
-				</rlb-collapse>
-				<a
-					*ngIf="!children?.length"
-					[routerLink]="link"
-					[badge]="badgeCounter && badgeCounter > 0 ? badgeCounter : undefined"
-					class="side-nav-link-ref"
-					routerLinkActive="active"
-				>
-					<i *ngIf="icon" [class]="icon"></i>
-					<ng-content></ng-content>
-				</a>
-			</li>
+		  @if (title) {
+		    <li (click)="onItemClick($event)" class="menu-title">{{ title }}</li>
+		  }
+		  @if (!title) {
+		    <li (click)="onItemClick($event)">
+		      @if (children?.length) {
+		        <a
+		          [badge]="badgeCounter && badgeCounter > 0 ? badgeCounter.toString() : undefined"
+		          href="javascript:void(0);"
+		          class="is-parent has-arrow"
+		          toggle="collapse"
+		          [toggle-target]="'side-item' + _id"
+		          >
+		          @if (icon) {
+		            <i [class]="icon"></i>
+		          }
+		          <span>{{ label }}</span>
+		        </a>
+		      }
+		      <rlb-collapse [id]="'side-item' + _id">
+		        <ul class="sub-menu" aria-expanded="false">
+		          <ng-content select="rlb-sidebar-item"></ng-content>
+		        </ul>
+		      </rlb-collapse>
+		      @if (!children?.length) {
+		        <a
+		          [routerLink]="link"
+		          [badge]="badgeCounter && badgeCounter > 0 ? badgeCounter : undefined"
+		          class="side-nav-link-ref"
+		          routerLinkActive="active"
+		          >
+		          @if (icon) {
+		            <i [class]="icon"></i>
+		          }
+		          <ng-content></ng-content>
+		        </a>
+		      }
+		    </li>
+		  }
 		</ng-template>
-	`,
+		`,
   standalone: false
 })
 export class SidebarItemComponent implements OnInit {

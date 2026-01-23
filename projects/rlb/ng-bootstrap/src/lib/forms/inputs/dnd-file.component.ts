@@ -11,17 +11,19 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, booleanA
       <label class="btn btn-primary" for="fileDropRef">{{ data.content?.button }}</label>
     </div>
     <div class="rlb-file-dnd-list">
-      <div class="single-file" *ngFor="let file of files; let i = index">
-        <i class="bi bi-file-earmark-image" style="font-size: 36px;"></i>
-        <div class="info">
-          <span class="d-block name"> {{ file.name }} </span>
-          <span class="d-block size">{{ formatBytes(file.size) }}</span>
-          <rlb-progress [height]="3" [value]="10" animated ></rlb-progress>
+      @for (file of files; track file; let i = $index) {
+        <div class="single-file">
+          <i class="bi bi-file-earmark-image" style="font-size: 36px;"></i>
+          <div class="info">
+            <span class="d-block name"> {{ file.name }} </span>
+            <span class="d-block size">{{ formatBytes(file.size) }}</span>
+            <rlb-progress [height]="3" [value]="10" animated ></rlb-progress>
+          </div>
+          <button rlb-button outline class="p-0 mb-auto border-0">
+            <i class="bi bi-trash" (click)="deleteFile(file)"></i>
+          </button>
         </div>
-        <button rlb-button outline class="p-0 mb-auto border-0">
-          <i class="bi bi-trash" (click)="deleteFile(file)"></i>
-        </button>
-      </div>
+      }
     </div>`,
     standalone: false
 })

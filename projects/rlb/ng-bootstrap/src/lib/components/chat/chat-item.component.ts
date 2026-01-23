@@ -5,41 +5,55 @@ import { VisibilityEventBase } from '../../shared/types';
   selector: 'rlb-chat-item',
   template: `
   <div [id]="id" class="chat-bubble-item" [class.left]="position==='left'" [class.right]="position==='right'">
-    <button *ngIf="canReply && position === 'right'" class="reply-button" (click)="replyClick($event)">
-      <i class="bi bi-reply-fill"></i>
-    </button>
-    <div class="avatar small" *ngIf="position === 'left'">
-      <img [src]="avatar" alt="avatar">
-    </div>
-    <div class="text">
-      <div class="replied-message" *ngIf="replayText">
-        <span class="name">{{replaySubject}}</span>
-        <p>{{replayText}}</p>
+    @if (canReply && position === 'right') {
+      <button class="reply-button" (click)="replyClick($event)">
+        <i class="bi bi-reply-fill"></i>
+      </button>
+    }
+    @if (position === 'left') {
+      <div class="avatar small">
+        <img [src]="avatar" alt="avatar">
       </div>
+    }
+    <div class="text">
+      @if (replayText) {
+        <div class="replied-message">
+          <span class="name">{{replaySubject}}</span>
+          <p>{{replayText}}</p>
+        </div>
+      }
       <div>
         <ng-content/>
       </div>
       <i class="bi bi-check-all float-end"></i>
       <span class="time float-end">{{ dateTime | date:'dd/MM HH:mm:ss' }}</span>
       <rlb-dropdown direction="up" class="reaction">
-        <a rlb-button  rlb-dropdown *ngIf="!reaction"
+        @if (!reaction) {
+          <a rlb-button  rlb-dropdown
             autoClose="manual" class="reaction add p-1"
             [class.right]="position==='right'" [class.left]="position==='left'"
             (status-changed)="this.reactionSelector.emit($event)">
-          <i class="bi bi-plus m-0 p-0"></i>
-        </a>
+            <i class="bi bi-plus m-0 p-0"></i>
+          </a>
+        }
         <rlb-dropdown-container>
           <ng-content select="[reaction-picker]" />
         </rlb-dropdown-container>
       </rlb-dropdown>
-      <span class="reaction" *ngIf="reaction" [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('remove')">{{reaction}}</span>
+      @if (reaction) {
+        <span class="reaction" [class.right]="position==='right'" [class.left]="position==='left'" (click)="reactionClick.emit('remove')">{{reaction}}</span>
+      }
     </div>
-    <div class="avatar small" *ngIf="position === 'right'">
-      <img [src]="avatar" alt="avatar">
-    </div>
-    <button *ngIf="canReply && position === 'left'" class="reply-button" (click)="replyClick($event)">
-      <i class="bi bi-reply-fill"></i>
-    </button>
+    @if (position === 'right') {
+      <div class="avatar small">
+        <img [src]="avatar" alt="avatar">
+      </div>
+    }
+    @if (canReply && position === 'left') {
+      <button class="reply-button" (click)="replyClick($event)">
+        <i class="bi bi-reply-fill"></i>
+      </button>
+    }
   </div>
   `,
   host: { '[class.ms-auto]': 'position === "right"' },

@@ -9,11 +9,13 @@
       <div class="time-gutter border-end flex-shrink-0"></div>
 
       <div class="days-header d-flex flex-grow-1">
-        <div *ngFor="let day of days" class="day-cell text-center p-2 border-end" [class.text-primary]="isToday(day)"
-          [class.fw-bold]="isToday(day)" [class.bg-primary]="isToday(day)">
-          <div class="small text-uppercase text-body-secondary">{{ day | dayOfWeek: 'short' }}</div>
-          <div class="h5 m-0">{{ day | dtz:'DD' }}</div>
-        </div>
+        @for (day of days; track day) {
+          <div class="day-cell text-center p-2 border-end" [class.text-primary]="isToday(day)"
+            [class.fw-bold]="isToday(day)" [class.bg-primary]="isToday(day)">
+            <div class="small text-uppercase text-body-secondary">{{ day | dayOfWeek: 'short' }}</div>
+            <div class="h5 m-0">{{ day | dtz:'DD' }}</div>
+          </div>
+        }
       </div>
     </div>
   </div>
@@ -26,13 +28,17 @@
 
       <!-- SIDEBAR (Sticky Left) -->
       <div class="time-sidebar sticky-start flex-shrink-0 border-end">
-        <div *ngFor="let time of timeSlots; let i = index"
-          class="time-slot-label small text-body-secondary d-flex align-items-start justify-content-center"
-          [style.height.px]="layout.rowHeight">
-          <span *ngIf="i !== 0" style="transform: translateY(-50%)">
-            {{ time }}
-          </span>
-        </div>
+        @for (time of timeSlots; track time; let i = $index) {
+          <div
+            class="time-slot-label small text-body-secondary d-flex align-items-start justify-content-center"
+            [style.height.px]="layout.rowHeight">
+            @if (i !== 0) {
+              <span style="transform: translateY(-50%)">
+                {{ time }}
+              </span>
+            }
+          </div>
+        }
       </div>
 
       <!-- GRID AND EVENTS -->
@@ -40,28 +46,33 @@
 
         <!-- LAYER 1: Grid -->
         <div class="background-grid position-absolute w-100 h-100 top-0 start-0 z-0">
-          <div *ngFor="let time of timeSlots" class="grid-row border-bottom" [style.height.px]="layout.rowHeight">
-          </div>
+          @for (time of timeSlots; track time) {
+            <div class="grid-row border-bottom" [style.height.px]="layout.rowHeight">
+            </div>
+          }
         </div>
 
         <!-- Layer 2: Events -->
         <div class="events-container d-flex h-100 w-100 position-relative z-1" cdkDropListGroup>
-          <div *ngFor="let day of days" class="day-column position-relative border-end h-100" cdkDropList
-            [cdkDropListSortingDisabled]="true" [cdkDropListData]="day" (cdkDropListDropped)="onEventDrop($event)"
-            (click)="eventClick.emit()">
-
-            <rlb-calendar-event *ngFor="let event of getEventsForDay(day); trackBy: trackByEventId" [view]="view"
-              [event]="event" [style.top.px]="calculateEventTop(event)" [style.height.px]="calculateEventHeight(event)"
-              [style.left.%]="event.left" [style.width.%]="event.width" (eventClick)="eventClick.emit($event)"
-              (eventContainerClick)="eventContainerClick.emit($event)" cdkDrag [cdkDragData]="event"
-              [cdkDragDisabled]="event.isOverflowIndicator" class="position-absolute">
-              <div *cdkDragPlaceholder style="opacity: 0"></div>
-            </rlb-calendar-event>
-
-            <div *ngIf="isToday(day)" class="now-line" [style.top.px]="getNowTop()">
+          @for (day of days; track day) {
+            <div class="day-column position-relative border-end h-100" cdkDropList
+              [cdkDropListSortingDisabled]="true" [cdkDropListData]="day" (cdkDropListDropped)="onEventDrop($event)"
+              (click)="eventClick.emit()">
+              @for (event of getEventsForDay(day); track trackByEventId($index, event)) {
+                <rlb-calendar-event [view]="view"
+                  [event]="event" [style.top.px]="calculateEventTop(event)" [style.height.px]="calculateEventHeight(event)"
+                  [style.left.%]="event.left" [style.width.%]="event.width" (eventClick)="eventClick.emit($event)"
+                  (eventContainerClick)="eventContainerClick.emit($event)" cdkDrag [cdkDragData]="event"
+                  [cdkDragDisabled]="event.isOverflowIndicator" class="position-absolute">
+                  <div *cdkDragPlaceholder style="opacity: 0"></div>
+                </rlb-calendar-event>
+              }
+              @if (isToday(day)) {
+                <div class="now-line" [style.top.px]="getNowTop()">
+                </div>
+              }
             </div>
-
-          </div>
+          }
         </div>
       </div>
     </div>

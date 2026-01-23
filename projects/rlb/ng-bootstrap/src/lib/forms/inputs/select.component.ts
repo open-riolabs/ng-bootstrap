@@ -40,12 +40,16 @@ import { OptionComponent } from './options.component';
         'is-valid': control?.touched && control?.valid && enableValidation
         }"
         (change)="update($event.target)"
-      >
-        <option *ngIf="placeholder" selected disabled>{{ placeholder }}</option>
+        >
+        @if (placeholder) {
+          <option selected disabled>{{ placeholder }}</option>
+        }
         <ng-container #projectedDisplayOptions></ng-container>
       </select>
-			<rlb-input-validation *ngIf="errors && showError" [errors]="errors"/>
-		</div>
+      @if (errors && showError) {
+        <rlb-input-validation [errors]="errors"/>
+      }
+    </div>
     <ng-content select="[after]"></ng-content>`,
     standalone: false
 })

@@ -1,4 +1,17 @@
-import { AfterViewInit, Component, ContentChildren, DoCheck, ElementRef, EventEmitter, Input, OnDestroy, Output, QueryList, booleanAttribute, numberAttribute } from '@angular/core';
+import {
+  AfterViewInit,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  DoCheck,
+  ElementRef,
+  EventEmitter,
+  Input,
+  numberAttribute,
+  OnDestroy,
+  Output,
+  QueryList
+} from '@angular/core';
 import { Carousel } from 'bootstrap';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { CarouselSlideComponent } from './carousel-slide.component';
@@ -6,9 +19,9 @@ import { CarouselSlideComponent } from './carousel-slide.component';
 @Component({
   selector: 'rlb-carousel',
   template: `
-      <ng-container *ngIf="!hideIndicators">
+      @if (!hideIndicators) {
         <div class="carousel-indicators">
-          <ng-container *ngFor="let item of items; let i = index">
+          @for (item of items; track item; let i = $index) {
             <button
               type="button"
               [class.active]="item.active"
@@ -16,33 +29,35 @@ import { CarouselSlideComponent } from './carousel-slide.component';
               [attr.data-bs-slide-to]="i"
               [attr.aria-label]="'Slide ' + (i + 1)"
             ></button>
-          </ng-container>
+          }
         </div>
-      </ng-container>
-    <div class="carousel-inner">
-      <ng-content select="rlb-carousel-slide" />
-    </div>
-    <button
-      *ngIf="!hideControls"
-      class="carousel-control-prev"
-      type="button"
-      [attr.data-bs-target]="'#' + id"
-      data-bs-slide="prev"
-    >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-      *ngIf="!hideControls"
-      class="carousel-control-next"
-      type="button"
-      [attr.data-bs-target]="'#' + id"
-      data-bs-slide="next"
-    >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  `,
+      }
+      <div class="carousel-inner">
+        <ng-content select="rlb-carousel-slide" />
+      </div>
+      @if (!hideControls) {
+        <button
+          class="carousel-control-prev"
+          type="button"
+          [attr.data-bs-target]="'#' + id"
+          data-bs-slide="prev"
+          >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+      }
+      @if (!hideControls) {
+        <button
+          class="carousel-control-next"
+          type="button"
+          [attr.data-bs-target]="'#' + id"
+          data-bs-slide="next"
+          >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      }
+      `,
   host: {
     class: 'carousel slide',
     '[class.carousel-fade]': 'crossFade',
@@ -52,7 +67,7 @@ import { CarouselSlideComponent } from './carousel-slide.component';
     '[attr.data-bs-interval]': 'interval',
     '[attr.data-bs-keyboard]': '!keyboard ? "false" : undefined',
     '[attr.data-bs-wrap]': '!wrap ? "false" : undefined',
-    '[attr.data-bs-pause]': 'pause === false ? "false" : undefined',
+    '[attr.data-bs-pause]': 'pauseProp === false ? "false" : undefined',
   },
   standalone: false
 })

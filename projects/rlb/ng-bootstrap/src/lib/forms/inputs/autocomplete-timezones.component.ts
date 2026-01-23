@@ -18,8 +18,8 @@ import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component
         [attr.disabled]="disabled ? true : undefined"
         [attr.readonly]="readonly ? true : undefined"
         [attr.placeholder]="placeholder"
-				[attr.autocomplete]="'off'"
-				[class.form-control-lg]="size === 'large'"
+        [attr.autocomplete]="'off'"
+        [class.form-control-lg]="size === 'large'"
         [class.form-control-sm]="size === 'small'"
         (blur)="touch()"
 				[ngClass]="{
@@ -27,25 +27,28 @@ import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component
         'is-valid': control?.touched && control?.valid
         }"
         (input)="update($event.target)"
-      />
-			<rlb-input-validation *ngIf="errors && showError" [errors]="errors"/>
-		</div>
-		<rlb-progress
-			*ngIf="loading || acLoading"
-			[height]="2"
-			[infinite]="loading || acLoading"
-			color="primary"
-			class="w-100"
-		/>
-    <ng-content select="[after]"></ng-content>
-    <div
-      #autocomplete
-      [id]="id+'-ac'"
-      class="dropdown-menu overflow-y-auto w-100 position-relative"
-      aria-labelledby="dropdownMenu"
-      [style.max-height.px]="maxHeight">
-    </div>
-   `,
+        />
+        @if (errors && showError) {
+          <rlb-input-validation [errors]="errors"/>
+        }
+      </div>
+      @if (loading || acLoading) {
+        <rlb-progress
+          [height]="2"
+          [infinite]="loading || acLoading"
+          color="primary"
+          class="w-100"
+          />
+      }
+      <ng-content select="[after]"></ng-content>
+      <div
+        #autocomplete
+        [id]="id+'-ac'"
+        class="dropdown-menu overflow-y-auto w-100 position-relative"
+        aria-labelledby="dropdownMenu"
+        [style.max-height.px]="maxHeight">
+      </div>
+    `,
   standalone: false
 })
 export class AutocompleteTimezonesComponent
