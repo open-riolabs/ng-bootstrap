@@ -15,7 +15,9 @@ import { Color } from '../../shared/types';
   <ng-template #template>
     <span [class]="style">
       <ng-content></ng-content>
-      <span *ngIf="hiddenText" class="visually-hidden">{{ hiddenText }}</span>
+      @if (hiddenText) {
+        <span class="visually-hidden">{{ hiddenText }}</span>
+      }
     </span>
   </ng-template>`,
   standalone: false

@@ -11,13 +11,16 @@ import { Color } from '../../shared/types';
       [class.infinite-progress]="infinite"
       [style.background-color]="infinite? 'unset' : null"
       [style.width.%]="infinite? max :getPercentValue()">
-      <div *ngIf="infinite" class="inner bg-{{color}}"></div>
-      <span *ngIf="showValue; else e">
-        {{ getPercentValue() }}
-      </span>
-      <ng-template #e>
+      @if (infinite) {
+        <div class="inner bg-{{color}}"></div>
+      }
+      @if (showValue) {
+        <span>
+          {{ getPercentValue() }}
+        </span>
+      } @else {
         <ng-content></ng-content>
-      </ng-template>
+      }
     </div>`,
     host: {
         class: 'progress',

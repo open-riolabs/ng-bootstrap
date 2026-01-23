@@ -38,7 +38,7 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterContentIn
   @Input({ alias: 'title' }) title?: string;
   @Input({ alias: 'creation-strategy' }) creationStrategy: 'none' | 'modal' | 'page' = 'none';
   @Input({ alias: 'creation-url' }) creationUrl!: any[] | string | null | undefined;
-  @Input({ alias: 'items' }) items!: any[];
+  @Input({ alias: 'items' }) items: any[] = [];
   @Input({ alias: 'pagination-mode' }) paginationMode?: 'none' | 'load-more' | 'pages' = 'none';
   @Input({ alias: 'loading', transform: booleanAttribute }) loading?: boolean;
   @Input({ alias: 'table-hover', transform: booleanAttribute }) tableHover?: boolean;

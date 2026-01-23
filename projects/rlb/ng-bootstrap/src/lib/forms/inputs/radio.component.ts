@@ -19,7 +19,7 @@ import { OptionComponent } from './options.component';
     template: `
     <div class="input-group has-validation">
       <ng-content select="[before]"></ng-content>
-      <ng-container *ngFor="let option of options; index as i">
+      @for (option of options; track option; let i = $index) {
         <div class="form-check">
           <input
             #field
@@ -34,15 +34,15 @@ import { OptionComponent } from './options.component';
             (blur)="touch()"
             [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
             (change)="update($event.target)"
-          />
-          <span #content></span>
+            />
+            <span #content></span>
+          </div>
+        }
+        <ng-content select="[after]"></ng-content>
+        <div class="invalid-feedback">
+          {{ errors | json }}
         </div>
-      </ng-container> 
-      <ng-content select="[after]"></ng-content>
-      <div class="invalid-feedback">
-        {{ errors | json }}
-      </div>
-    </div>`,
+      </div>`,
     standalone: false
 })
 export class RadioComponent

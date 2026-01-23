@@ -5,16 +5,17 @@ import { Component, Input } from '@angular/core';
 	standalone: false,
 	template: `
     <rlb-placeholder [animation]="animation">
-      <rlb-placeholder-line
-        *ngFor="let w of computedWidths"
-        [size]="size"
-        [color]="color"
-        [width]="w"
-        [rounded]="rounded"
-        [height]="height"
-      ></rlb-placeholder-line>
+      @for (w of computedWidths; track w) {
+        <rlb-placeholder-line
+          [size]="size"
+          [color]="color"
+          [width]="w"
+          [rounded]="rounded"
+          [height]="height"
+        ></rlb-placeholder-line>
+      }
     </rlb-placeholder>
-  `,
+    `,
 })
 export class RlbPlaceholderTextComponent {
 	@Input() lines: number = 1;

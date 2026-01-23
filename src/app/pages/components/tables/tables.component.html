@@ -1,272 +1,276 @@
 <div class="container mt-3">
 
-	<h3>DataTable</h3>
-	<p>
-		DataTable è un componente avanzato per la visualizzazione e gestione dei dati in formato tabellare.
-		Supporta funzionalità come intestazioni personalizzate, righe con azioni, paginazione,
-		proiezione di contenuto e slot dedicati per loading e no-data.
-	</p>
+  <h3>DataTable</h3>
+  <p>
+    DataTable è un componente avanzato per la visualizzazione e gestione dei dati in formato tabellare.
+    Supporta funzionalità come intestazioni personalizzate, righe con azioni, paginazione,
+    proiezione di contenuto e slot dedicati per loading e no-data.
+  </p>
 
-	<!-- PARAMETERS TABLE -->
-	<rlb-dt-table>
-		<rlb-dt-header>Parameters</rlb-dt-header>
-		<rlb-dt-header>Type</rlb-dt-header>
-		<rlb-dt-header>Required</rlb-dt-header>
-		<rlb-dt-header>Description</rlb-dt-header>
-		<rlb-dt-header>I/O</rlb-dt-header>
+  <!-- PARAMETERS TABLE -->
+  <rlb-dt-table>
+    <rlb-dt-header>Parameters</rlb-dt-header>
+    <rlb-dt-header>Type</rlb-dt-header>
+    <rlb-dt-header>Required</rlb-dt-header>
+    <rlb-dt-header>Description</rlb-dt-header>
+    <rlb-dt-header>I/O</rlb-dt-header>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>title</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">string</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Table title</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>title</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="info">string</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Table title</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>creation-strategy</rlb-dt-cell>
-			<rlb-dt-cell>'none' | 'modal' | 'page'</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Defines how new items can be created (none, modal, or page)</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>creation-strategy</rlb-dt-cell>
+      <rlb-dt-cell>'none' | 'modal' | 'page'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Defines how new items can be created (none, modal, or page)</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>creation-url</rlb-dt-cell>
-			<rlb-dt-cell>string | any[]</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>URL or route for creating new items</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>creation-url</rlb-dt-cell>
+      <rlb-dt-cell>string | any[]</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>URL or route for creating new items</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>items</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">any[]</span></rlb-dt-cell>
-			<rlb-dt-cell>True</rlb-dt-cell>
-			<rlb-dt-cell>Data items displayed in the table rows</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>items</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="info">any[]</span></rlb-dt-cell>
+      <rlb-dt-cell>True</rlb-dt-cell>
+      <rlb-dt-cell>Data items displayed in the table rows</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>pagination-mode</rlb-dt-cell>
-			<rlb-dt-cell>'none' | 'load-more' | 'pages'</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Defines the pagination mode (none, load-more button, or page numbers)</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>pagination-mode</rlb-dt-cell>
+      <rlb-dt-cell>'none' | 'load-more' | 'pages'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Defines the pagination mode (none, load-more button, or page numbers)</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>loading</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="primary">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Shows loading state</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>loading</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Shows loading state</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>show-refresh</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="primary">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Shows a refresh button</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>show-refresh</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">boolean</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Shows a refresh button</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>total-items</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="primary">number</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Total number of items (used for pagination)</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>total-items</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">number</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Total number of items (used for pagination)</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>current-page</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="primary">number</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Current page index</rlb-dt-cell>
-			<rlb-dt-cell>Input + Output</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>current-page</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">number</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Current page index</rlb-dt-cell>
+      <rlb-dt-cell>Input + Output</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>page-size</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="primary">number</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Number of items per page</rlb-dt-cell>
-			<rlb-dt-cell>Input + Output</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>page-size</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color="primary">number</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Number of items per page</rlb-dt-cell>
+      <rlb-dt-cell>Input + Output</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>showActions</rlb-dt-cell>
-			<rlb-dt-cell>'row' | 'head'</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Defines where to show actions: per row or in the table header</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>showActions</rlb-dt-cell>
+      <rlb-dt-cell>'row' | 'head'</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Defines where to show actions: per row or in the table header</rlb-dt-cell>
+      <rlb-dt-cell>Input</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<!-- Outputs -->
-		<rlb-dt-row>
-			<rlb-dt-cell>create-item</rlb-dt-cell>
-			<rlb-dt-cell>EventEmitter&lt;void&gt;</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Emitted when a new item is created</rlb-dt-cell>
-			<rlb-dt-cell>Output</rlb-dt-cell>
-		</rlb-dt-row>
+    <!-- Outputs -->
+    <rlb-dt-row>
+      <rlb-dt-cell>create-item</rlb-dt-cell>
+      <rlb-dt-cell>EventEmitter&lt;void&gt;</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Emitted when a new item is created</rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>refresh-item</rlb-dt-cell>
-			<rlb-dt-cell>EventEmitter&lt;void&gt;</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Emitted when the table is refreshed</rlb-dt-cell>
-			<rlb-dt-cell>Output</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>refresh-item</rlb-dt-cell>
+      <rlb-dt-cell>EventEmitter&lt;void&gt;</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Emitted when the table is refreshed</rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>load-more</rlb-dt-cell>
-			<rlb-dt-cell>EventEmitter&lt;void&gt;</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Emitted when the user requests more data</rlb-dt-cell>
-			<rlb-dt-cell>Output</rlb-dt-cell>
-		</rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>load-more</rlb-dt-cell>
+      <rlb-dt-cell>EventEmitter&lt;void&gt;</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Emitted when the user requests more data</rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
 
-		<rlb-dt-row>
-			<rlb-dt-cell>pagination</rlb-dt-cell>
-			<rlb-dt-cell>EventEmitter&lt;&#123; page: number; size: number &#125;&gt;</rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Emitted when pagination changes</rlb-dt-cell>
-			<rlb-dt-cell>Output</rlb-dt-cell>
-		</rlb-dt-row>
-	</rlb-dt-table>
+    <rlb-dt-row>
+      <rlb-dt-cell>pagination</rlb-dt-cell>
+      <rlb-dt-cell>EventEmitter&lt;&#123; page: number; size: number &#125;&gt;</rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Emitted when pagination changes</rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
+  </rlb-dt-table>
 
-	<!-- CODE -->
-	<rlb-accordion>
-		<div rlb-accordion-item>
-			<rlb-accordion-header>Code</rlb-accordion-header>
-			<div rlb-accordion-body>
-				<rlb-tabs>
-					<rlb-tab target="ex-dt-html">HTML</rlb-tab>
-					<rlb-tab target="ex-dt-ts">TS</rlb-tab>
-				</rlb-tabs>
-				<rlb-tab-content>
-					<rlb-tab-pane id="ex-dt-html">
-						<h4>Basic Table</h4>
-						<pre><code [highlight]="dtBaseHtml" language="html"></code></pre>
-						<h4>Basic Pagination Table</h4>
-						<pre><code [highlight]="dtBasePaginationHtml" language="html"></code></pre>
-						<h4>Basic load-more Table</h4>
-						<pre><code [highlight]="loadMoreHtml" language="html"></code></pre>
-						<h4>No items Table</h4>
-						<pre><code [highlight]="noItemsHtml" language="html"></code></pre>
-						<h4>Loading state</h4>
-						<pre><code [highlight]="loadingStateHtml" language="html"></code></pre>
-					</rlb-tab-pane>
-					<rlb-tab-pane id="ex-dt-ts">
-						<h4>Basic Table</h4>
-						<pre><code [highlight]="dtBaseTs" language="ts"></code></pre>
-						<h4>Basic Pagination Table</h4>
-						<pre><code [highlight]="dtBasePaginationTs" language="html"></code></pre>
-						<h4>Basic load-more Table</h4>
-						<pre><code [highlight]="loadMoreTs" language="html"></code></pre>
-						<h4>No items Table</h4>
-						<pre><code [highlight]="noItemsTs" language="html"></code></pre>
-						<h4>Loading state</h4>
-						<pre><code [highlight]="loadingStateTs" language="html"></code></pre>
-					</rlb-tab-pane>
-				</rlb-tab-content>
-			</div>
-		</div>
+  <!-- CODE -->
+  <rlb-accordion>
+    <div rlb-accordion-item>
+      <rlb-accordion-header>Code</rlb-accordion-header>
+      <div rlb-accordion-body>
+        <rlb-tabs>
+          <rlb-tab target="ex-dt-html">HTML</rlb-tab>
+          <rlb-tab target="ex-dt-ts">TS</rlb-tab>
+        </rlb-tabs>
+        <rlb-tab-content>
+          <rlb-tab-pane id="ex-dt-html">
+            <h4>Basic Table</h4>
+            <pre><code [highlight]="dtBaseHtml" language="html"></code></pre>
+            <h4>Basic Pagination Table</h4>
+            <pre><code [highlight]="dtBasePaginationHtml" language="html"></code></pre>
+            <h4>Basic load-more Table</h4>
+            <pre><code [highlight]="loadMoreHtml" language="html"></code></pre>
+            <h4>No items Table</h4>
+            <pre><code [highlight]="noItemsHtml" language="html"></code></pre>
+            <h4>Loading state</h4>
+            <pre><code [highlight]="loadingStateHtml" language="html"></code></pre>
+          </rlb-tab-pane>
+          <rlb-tab-pane id="ex-dt-ts">
+            <h4>Basic Table</h4>
+            <pre><code [highlight]="dtBaseTs" language="ts"></code></pre>
+            <h4>Basic Pagination Table</h4>
+            <pre><code [highlight]="dtBasePaginationTs" language="html"></code></pre>
+            <h4>Basic load-more Table</h4>
+            <pre><code [highlight]="loadMoreTs" language="html"></code></pre>
+            <h4>No items Table</h4>
+            <pre><code [highlight]="noItemsTs" language="html"></code></pre>
+            <h4>Loading state</h4>
+            <pre><code [highlight]="loadingStateTs" language="html"></code></pre>
+          </rlb-tab-pane>
+        </rlb-tab-content>
+      </div>
+    </div>
 
-		<!-- EXAMPLE -->
-		<div rlb-accordion-item>
-			<rlb-accordion-header>Example</rlb-accordion-header>
-			<div rlb-accordion-body>
-				<div class="container mt-3">
+    <!-- EXAMPLE -->
+    <div rlb-accordion-item>
+      <rlb-accordion-header>Example</rlb-accordion-header>
+      <div rlb-accordion-body>
+        <div class="container mt-3">
 
-					<h4>Basic static table</h4>
+          <h4>Basic static table</h4>
           <rlb-dt-table table-hover table-small table-striped="false" table-borderless>
-						<rlb-dt-header>ID</rlb-dt-header>
-						<rlb-dt-header>Name</rlb-dt-header>
-						<rlb-dt-header>Email</rlb-dt-header>
-						<rlb-dt-row>
-							<rlb-dt-cell>1</rlb-dt-cell>
-							<rlb-dt-cell>George</rlb-dt-cell>
-							<rlb-dt-cell>george&#64;gmail.com</rlb-dt-cell>
-						</rlb-dt-row>
-						<rlb-dt-row>
-							<rlb-dt-cell>2</rlb-dt-cell>
-							<rlb-dt-cell>Paul</rlb-dt-cell>
-							<rlb-dt-cell>paul&#64;gmail.com</rlb-dt-cell>
-						</rlb-dt-row>
-						<rlb-dt-row>
-							<rlb-dt-cell>3</rlb-dt-cell>
-							<rlb-dt-cell>Alex</rlb-dt-cell>
-							<rlb-dt-cell>alex&#64;gmail.com</rlb-dt-cell>
-						</rlb-dt-row>
-					</rlb-dt-table>
+            <rlb-dt-header>ID</rlb-dt-header>
+            <rlb-dt-header>Name</rlb-dt-header>
+            <rlb-dt-header>Email</rlb-dt-header>
+            <rlb-dt-row>
+              <rlb-dt-cell>1</rlb-dt-cell>
+              <rlb-dt-cell>George</rlb-dt-cell>
+              <rlb-dt-cell>george&#64;gmail.com</rlb-dt-cell>
+            </rlb-dt-row>
+            <rlb-dt-row>
+              <rlb-dt-cell>2</rlb-dt-cell>
+              <rlb-dt-cell>Paul</rlb-dt-cell>
+              <rlb-dt-cell>paul&#64;gmail.com</rlb-dt-cell>
+            </rlb-dt-row>
+            <rlb-dt-row>
+              <rlb-dt-cell>3</rlb-dt-cell>
+              <rlb-dt-cell>Alex</rlb-dt-cell>
+              <rlb-dt-cell>alex&#64;gmail.com</rlb-dt-cell>
+            </rlb-dt-row>
+          </rlb-dt-table>
 
-					<h4>Basic Table with Pagination and Actions</h4>
-					<rlb-dt-table
-						[items]="users"
-						[pagination-mode]="'pages'"
-						[total-items]="users.length"
-						[(current-page)]="page"
-						[page-size]="3">
-						<rlb-dt-header>ID</rlb-dt-header>
-						<rlb-dt-header>Name</rlb-dt-header>
-						<rlb-dt-header>Email</rlb-dt-header>
-						<rlb-dt-row *ngFor="let user of users">
-							<rlb-dt-cell>{{user.id}}</rlb-dt-cell>
-							<rlb-dt-cell>{{user.name}}</rlb-dt-cell>
-							<rlb-dt-cell>{{user.email}}</rlb-dt-cell>
-							<rlb-dt-actions>
-								<rlb-dt-action (click)="onEdit(user)">Edit</rlb-dt-action>
-								<rlb-dt-action (click)="onDelete(user)">Delete</rlb-dt-action>
-							</rlb-dt-actions>
-						</rlb-dt-row>
-					</rlb-dt-table>
+          <h4>Basic Table with Pagination and Actions</h4>
+          <rlb-dt-table
+            [items]="users"
+            [pagination-mode]="'pages'"
+            [total-items]="users.length"
+            [(current-page)]="page"
+            [page-size]="3">
+            <rlb-dt-header>ID</rlb-dt-header>
+            <rlb-dt-header>Name</rlb-dt-header>
+            <rlb-dt-header>Email</rlb-dt-header>
+            @for (user of users; track user) {
+              <rlb-dt-row>
+                <rlb-dt-cell>{{user.id}}</rlb-dt-cell>
+                <rlb-dt-cell>{{user.name}}</rlb-dt-cell>
+                <rlb-dt-cell>{{user.email}}</rlb-dt-cell>
+                <rlb-dt-actions>
+                  <rlb-dt-action (click)="onEdit(user)">Edit</rlb-dt-action>
+                  <rlb-dt-action (click)="onDelete(user)">Delete</rlb-dt-action>
+                </rlb-dt-actions>
+              </rlb-dt-row>
+            }
+          </rlb-dt-table>
 
-					<h4>Basic Table with load-more</h4>
-					<rlb-dt-table
-						[items]="users"
-						[pagination-mode]="'load-more'"
-						[loadMoreLabel]="'Load more users'"
-						(load-more)="onLoadMore()"
-					>
-						<rlb-dt-header>ID</rlb-dt-header>
-						<rlb-dt-header>Name</rlb-dt-header>
-						<rlb-dt-header>Email</rlb-dt-header>
-						<rlb-dt-row *ngFor="let user of usersLoadMore">
-							<rlb-dt-cell>{{user.id}}</rlb-dt-cell>
-							<rlb-dt-cell>{{user.name}}</rlb-dt-cell>
-							<rlb-dt-cell>{{user.email}}</rlb-dt-cell>
-						</rlb-dt-row>
-					</rlb-dt-table>
+          <h4>Basic Table with load-more</h4>
+          <rlb-dt-table
+            [items]="users"
+            [pagination-mode]="'load-more'"
+            [loadMoreLabel]="'Load more users'"
+            (load-more)="onLoadMore()"
+            >
+            <rlb-dt-header>ID</rlb-dt-header>
+            <rlb-dt-header>Name</rlb-dt-header>
+            <rlb-dt-header>Email</rlb-dt-header>
+            @for (user of usersLoadMore; track user) {
+              <rlb-dt-row>
+                <rlb-dt-cell>{{user.id}}</rlb-dt-cell>
+                <rlb-dt-cell>{{user.name}}</rlb-dt-cell>
+                <rlb-dt-cell>{{user.email}}</rlb-dt-cell>
+              </rlb-dt-row>
+            }
+          </rlb-dt-table>
 
-					<h4>No items table</h4>
-					<rlb-dt-table [items]="[]">
-						<rlb-dt-header>ID</rlb-dt-header>
-						<rlb-dt-header>Name</rlb-dt-header>
-						<rlb-dt-header>Email</rlb-dt-header>
+          <h4>No items table</h4>
+          <rlb-dt-table [items]="[]">
+            <rlb-dt-header>ID</rlb-dt-header>
+            <rlb-dt-header>Name</rlb-dt-header>
+            <rlb-dt-header>Email</rlb-dt-header>
 
-						<rlb-dt-noitems>
-							<rlb-alert>No users available.</rlb-alert>
-						</rlb-dt-noitems>
-					</rlb-dt-table>
+            <rlb-dt-noitems>
+              <rlb-alert>No users available.</rlb-alert>
+            </rlb-dt-noitems>
+          </rlb-dt-table>
 
-					<h4>Table with loading state</h4>
-					<rlb-dt-table [items]="users" [loading]="true">
-						<rlb-dt-header>ID</rlb-dt-header>
-						<rlb-dt-header>Name</rlb-dt-header>
-						<rlb-dt-header>Email</rlb-dt-header>
+          <h4>Table with loading state</h4>
+          <rlb-dt-table [items]="users" [loading]="true">
+            <rlb-dt-header>ID</rlb-dt-header>
+            <rlb-dt-header>Name</rlb-dt-header>
+            <rlb-dt-header>Email</rlb-dt-header>
 
-						<rlb-dt-loading>
-							<rlb-spinner [color]="'primary'"></rlb-spinner>
-						</rlb-dt-loading>
-					</rlb-dt-table>
-				</div>
-			</div>
-		</div>
-	</rlb-accordion>
+            <rlb-dt-loading>
+              <rlb-spinner [color]="'primary'"></rlb-spinner>
+            </rlb-dt-loading>
+          </rlb-dt-table>
+        </div>
+      </div>
+    </div>
+  </rlb-accordion>
 
-	<br>
-	<br>
-</div>
+  <br>
+    <br>
+    </div>

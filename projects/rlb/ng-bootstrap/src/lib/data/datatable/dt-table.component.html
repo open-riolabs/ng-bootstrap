@@ -1,98 +1,112 @@
-<div class="row" *ngIf="creationStrategy !== 'none' || title || showRefresh">
-  <div class="col">
-    <h3 *ngIf="title" class="float-start">{{ title }}</h3>
-    <ng-container *ngIf="showRefresh">
-      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="refreshItem.emit()"
-        [disabled]="loading">
-        <i class="fa-solid fa-arrows-rotate"></i>
-      </button>
-    </ng-container>
-    <ng-container *ngIf="creationStrategy === 'page'">
-      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl">
-        <i class="fa-solid fa-plus"></i>
-      </button>
-    </ng-container>
-    <ng-container *ngIf="creationStrategy === 'modal'">
-      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()">
-        <i class="fa-solid fa-plus"></i>
-      </button>
-    </ng-container>
+@if (creationStrategy !== 'none' || title || showRefresh) {
+  <div class="row">
+    <div class="col">
+      @if (title) {
+        <h3 class="float-start">{{ title }}</h3>
+      }
+      @if (showRefresh) {
+        <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="refreshItem.emit()"
+          [disabled]="loading">
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+      }
+      @if (creationStrategy === 'page') {
+        <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      }
+      @if (creationStrategy === 'modal') {
+        <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      }
+    </div>
   </div>
-</div>
+}
 <div class="table-responsive">
   <table [ngClass]="getTableClasses()">
-		<thead>
-		<tr>
-			<ng-container #projectedDisplayColumns></ng-container>
-			<th *ngIf="hasActions">
-        <span class="float-end pe-2">
-          Actions
-        </span>
-			</th>
-		</tr>
-		</thead>
-		<tbody>
-		<ng-content *ngIf="!loading" select="rlb-dt-row"/>
-		<rlb-dt-row *ngIf="!loading && items?.length === 0" class="text-center">
-			<rlb-dt-cell [col-span]="cols" style="border: 0">
-				<ng-content select="rlb-dt-noitems"/>
-			</rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row *ngIf="loading" class="text-center">
-			<rlb-dt-cell [col-span]="cols" style="border: 0">
-				<ng-content select="rlb-dt-loading"/>
-			</rlb-dt-cell>
-		</rlb-dt-row>
-		</tbody>
-		<tfoot *ngIf="pagination && paginationMode !== 'none'">
-		<rlb-dt-row>
-			<rlb-dt-cell [col-span]="hasActions ? cols+1: cols" style="border: 0">
-				<button *ngIf="paginationMode === 'load-more'" type="button" class="btn btn-primary float-end btn-sm mt-2"
-								[disabled]="loading" (click)="loadMore.emit()">
-					{{ loadMoreLabel }}
-				</button>
-				<ng-container *ngIf="paginationMode === 'pages'">
-					<nav aria-label="Page navigation example">
-            <ul class="pagination float-end pagination-sm">
-              <li class="page-item">
-                <a class="page-link d-block" [class.disabled]="currentPage === 1" href="#" aria-label="Previous"
-                   (click)="prev($event)">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-
-              <ng-container *ngFor="let page of visiblePages">
-                <li class="page-item"
-                    [class.active]="currentPage === page"
-                    [class.disabled]="page === '...'">
-                  <a class="page-link d-block"
-                     href="#"
-                     (click)="selectPage($event, page)">
-                    {{ page }}
-                  </a>
-                </li>
-              </ng-container>
-
-              <li class="page-item">
-                <a class="page-link d-block" [class.disabled]="currentPage === pages" href="#" aria-label="Next"
-                   (click)="next($event)">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-						<ul class="ps-0 float-end me-3">
-							<rlb-select size="small" [(ngModel)]="pageSize" (ngModelChange)="selectSize()"
-													[disabled]="items.length === 0">
-								<rlb-option [value]="10">10</rlb-option>
-								<rlb-option [value]="20">20</rlb-option>
-								<rlb-option [value]="50">50</rlb-option>
-								<rlb-option [value]="100">100</rlb-option>
-							</rlb-select>
-						</ul>
-					</nav>
-				</ng-container>
-			</rlb-dt-cell>
-		</rlb-dt-row>
-		</tfoot>
-	</table>
+    <thead>
+      <tr>
+        <ng-container #projectedDisplayColumns></ng-container>
+        @if (hasActions) {
+          <th>
+            <span class="float-end pe-2">
+              Actions
+            </span>
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @if (!loading) {
+        <ng-content select="rlb-dt-row"/>
+      }
+      @if (!loading && items.length === 0) {
+        <rlb-dt-row class="text-center">
+          <rlb-dt-cell [col-span]="cols" style="border: 0">
+            <ng-content select="rlb-dt-noitems"/>
+          </rlb-dt-cell>
+        </rlb-dt-row>
+      }
+      @if (loading) {
+        <rlb-dt-row class="text-center">
+          <rlb-dt-cell [col-span]="cols" style="border: 0">
+            <ng-content select="rlb-dt-loading"/>
+          </rlb-dt-cell>
+        </rlb-dt-row>
+      }
+    </tbody>
+    @if (pagination && paginationMode !== 'none') {
+      <tfoot>
+        <rlb-dt-row>
+          <rlb-dt-cell [col-span]="hasActions ? cols+1: cols" style="border: 0">
+            @if (paginationMode === 'load-more') {
+              <button type="button" class="btn btn-primary float-end btn-sm mt-2"
+                [disabled]="loading" (click)="loadMore.emit()">
+                {{ loadMoreLabel }}
+              </button>
+            }
+            @if (paginationMode === 'pages') {
+              <nav aria-label="Page navigation example">
+                <ul class="pagination float-end pagination-sm">
+                  <li class="page-item">
+                    <a class="page-link d-block" [class.disabled]="currentPage === 1" href="#" aria-label="Previous"
+                      (click)="prev($event)">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  @for (page of visiblePages; track page) {
+                    <li class="page-item"
+                      [class.active]="currentPage === page"
+                      [class.disabled]="page === '...'">
+                      <a class="page-link d-block"
+                        href="#"
+                        (click)="selectPage($event, page)">
+                        {{ page }}
+                      </a>
+                    </li>
+                  }
+                  <li class="page-item">
+                    <a class="page-link d-block" [class.disabled]="currentPage === pages" href="#" aria-label="Next"
+                      (click)="next($event)">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="ps-0 float-end me-3">
+                  <rlb-select size="small" [(ngModel)]="pageSize" (ngModelChange)="selectSize()"
+                    [disabled]="items.length === 0">
+                    <rlb-option [value]="10">10</rlb-option>
+                    <rlb-option [value]="20">20</rlb-option>
+                    <rlb-option [value]="50">50</rlb-option>
+                    <rlb-option [value]="100">100</rlb-option>
+                  </rlb-select>
+                </ul>
+              </nav>
+            }
+          </rlb-dt-cell>
+        </rlb-dt-row>
+      </tfoot>
+    }
+  </table>
 </div>

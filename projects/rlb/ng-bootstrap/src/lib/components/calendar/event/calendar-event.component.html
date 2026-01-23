@@ -1,14 +1,14 @@
 <div [ngClass]="classes"
-     (click)="onClick($event)">
+  (click)="onClick($event)">
 
-  <ng-container *ngIf="!event.isOverflowIndicator">
+  @if (!event.isOverflowIndicator) {
     <strong>{{ event.title }}</strong>
     <div class="small opacity-75">
       {{ event.start | dtz:'HH:mm' }} - {{ event.end | dtz:'HH:mm' }}
     </div>
-  </ng-container>
+  }
 
-  <ng-container *ngIf="event.isOverflowIndicator">
+  @if (event.isOverflowIndicator) {
     +{{ event.overlapCount }} more
-  </ng-container>
+  }
 </div>

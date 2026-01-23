@@ -13,18 +13,19 @@ import { Color } from '../../shared/types';
 @Component({
     selector: 'rlb-alert',
     template: ` <ng-template #template>
-    <div class="alert alert-{{ color }} {{ cssClass }}" role="alert">
-      <ng-content></ng-content>
-      <button
-        *ngIf="dismissible"
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-        (click)="dismissed.emit()"
-      ></button>
-    </div>
-  </ng-template>`,
+      <div class="alert alert-{{ color }} {{ cssClass }}" role="alert">
+        <ng-content></ng-content>
+        @if (dismissible) {
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+            (click)="dismissed.emit()"
+          ></button>
+        }
+      </div>
+    </ng-template>`,
     standalone: false
 })
 export class AlertComponent {

@@ -6,12 +6,14 @@ import { RLB_TRANSLATION_SERVICE, RlbTranslationService } from "../../shared/i18
     selector: 'rlb-input-validation',
     host: { class: 'invalid-feedback' },
 	template: `
-		<ng-container *ngIf="errors">
-			<span *ngFor="let errorKey of getErrorKeys(errors)">
-				{{ getTranslatedError(errorKey, errors[errorKey]) }}
-			</span>
-		</ng-container>
-	`,
+		@if (errors) {
+		  @for (errorKey of getErrorKeys(errors); track errorKey) {
+		    <span>
+		      {{ getTranslatedError(errorKey, errors[errorKey]) }}
+		    </span>
+		  }
+		}
+		`,
     standalone: false
 })
 export class InputValidationComponent {

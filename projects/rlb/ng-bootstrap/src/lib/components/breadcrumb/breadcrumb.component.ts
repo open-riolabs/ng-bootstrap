@@ -8,18 +8,22 @@ export interface BreadcrumbItem {
 @Component({
     selector: 'rlb-breadcrumb',
     template: ` <nav
-    aria-label="breadcrumb"
-    style="--bs-breadcrumb-divider: '{{ divider }}';"
-  >
-			<ol class="breadcrumb" [ngClass]="cssClasses">
-      <ng-container *ngFor="let item of items; last as last">
-        <li class="breadcrumb-item" [ngClass]="{ active: !last }">
-					<a *ngIf="!last" [routerLink]="item.link">{{ item.label }}</a>
-          <span *ngIf="last">{{ item.label }}</span>
-        </li>
-      </ng-container>
-    </ol>
-  </nav>`,
+      aria-label="breadcrumb"
+      style="--bs-breadcrumb-divider: '{{ divider }}';"
+      >
+      <ol class="breadcrumb" [ngClass]="cssClasses">
+        @for (item of items; track item; let last = $last) {
+          <li class="breadcrumb-item" [ngClass]="{ active: !last }">
+            @if (!last) {
+              <a [routerLink]="item.link">{{ item.label }}</a>
+            }
+            @if (last) {
+              <span>{{ item.label }}</span>
+            }
+          </li>
+        }
+      </ol>
+    </nav>`,
     standalone: false
 })
 export class BreadcrumbComponent {

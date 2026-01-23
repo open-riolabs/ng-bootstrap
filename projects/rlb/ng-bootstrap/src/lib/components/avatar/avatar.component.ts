@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component,
   Input,
@@ -12,20 +12,21 @@ import {
     selector: 'rlb-avatar',
     template: `
     <ng-template #template>
-      <img
-        *ngIf="src"
-        [src]="src"
-        alt="Avatar"
-        [class]="cssClass"
-        [style.vertical-align]="'middle'"
-        [style.width.px]="size"
-        [style.width.px]="size"
-        [style.height.px]="size"
-        [style.border]="'2px solid #cbcbcb'"
-        [style.border-radius]="_borderRadius"
-      />
+      @if (src) {
+        <img
+          [src]="src"
+          alt="Avatar"
+          [class]="cssClass"
+          [style.vertical-align]="'middle'"
+          [style.width.px]="size"
+          [style.width.px]="size"
+          [style.height.px]="size"
+          [style.border]="'2px solid #cbcbcb'"
+          [style.border-radius]="_borderRadius"
+          />
+      }
     </ng-template>
-  `,
+    `,
     standalone: false
 })
 export class AvatarComponent {

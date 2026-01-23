@@ -2,8 +2,12 @@ import { Component, ElementRef, Input } from '@angular/core';
 
 @Component({
     selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
-    template: ` <ng-content *ngIf="isList" select="li[rlb-dropdown-item]" />
-    <ng-content *ngIf="!isList" />`,
+    template: ` @if (isList) {
+  <ng-content select="li[rlb-dropdown-item]" />
+}
+@if (!isList) {
+  <ng-content />
+}`,
     host: {
         class: 'dropdown-menu',
         '[class.dropdown-menu-end]': 'placement === "right"',
