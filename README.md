@@ -4,16 +4,22 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 
 ## 📋 Table of Contents
 
-- [Features](#features)
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Components](#components)
-- [Forms](#forms)
-- [Development](#development)
-- [Building](#building)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
+- [Features](#-features)
+- [Installation](#-installation)
+- [Getting Started](#-getting-started)
+- [Components](#-components)
+- [Forms](#-forms)
+- [Development](#-development)
+- [Building](#-building)
+- [Testing](#-testing)
+- [Publishing](#-publishing)
+- [Styling](#-styling)
+- [Configuration](#-configuration)
+- [Additional Resources](#-additional-resources)
+- [Author](#-author)
+- [Contributors](#-contributors)
+- [License](#-license)
+- [Contributing](#-contributing)
 
 ## ✨ Features
 
@@ -326,6 +332,13 @@ providers: [
 
 - Email: riolo.giuseppe@gmail.com
 - GitHub: [@riologiuseppe](https://github.com/riologiuseppe)
+
+## 👥 Contributors
+
+**Denis**
+
+- Email: [neorimne@gmail.com](mailto:neorimne@gmail.com)
+- GitHub: [@Neorimne](https://github.com/Neorimne)
 
 ## 📄 License
 
