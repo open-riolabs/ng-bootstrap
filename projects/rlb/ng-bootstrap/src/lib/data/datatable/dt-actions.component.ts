@@ -13,8 +13,8 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { DataTableActionComponent } from './dt-action.component';
 import { Subscription } from "rxjs";
+import { DataTableActionComponent } from './dt-action.component';
 
 @Component({
   selector: 'rlb-dt-actions',
@@ -26,6 +26,7 @@ import { Subscription } from "rxjs";
           [disabled]="_disabled"
           type="button"
           data-bs-toggle="dropdown"
+          data-bs-popper-config='{"strategy":"fixed"}'
           aria-expanded="false">
           <i class="bi bi-three-dots"></i>
         </button>
@@ -58,7 +59,7 @@ export class DataTableActionsComponent implements OnInit, AfterViewInit, AfterCo
   }
 
   get _view() {
-    return this.temp
+    return this.temp;
   }
 
   ngOnInit() {
