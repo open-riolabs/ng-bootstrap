@@ -9,7 +9,7 @@
       <div class="time-gutter border-end flex-shrink-0"></div>
 
       <div class="days-header d-flex flex-grow-1">
-        @for (day of days; track day) {
+        @for (day of days; track day.timestamp) {
           <div class="day-cell text-center p-2 border-end" [class.text-primary]="isToday(day)"
             [class.fw-bold]="isToday(day)" [class.bg-primary]="isToday(day)">
             <div class="small text-uppercase text-body-secondary">{{ day | dayOfWeek: 'short' }}</div>
@@ -54,7 +54,7 @@
 
         <!-- Layer 2: Events -->
         <div class="events-container d-flex h-100 w-100 position-relative z-1" cdkDropListGroup>
-          @for (day of days; track day) {
+          @for (day of days; track day.timestamp) {
             <div class="day-column position-relative border-end h-100" cdkDropList
               [cdkDropListSortingDisabled]="true" [cdkDropListData]="day" (cdkDropListDropped)="onEventDrop($event)"
               (click)="eventClick.emit()">

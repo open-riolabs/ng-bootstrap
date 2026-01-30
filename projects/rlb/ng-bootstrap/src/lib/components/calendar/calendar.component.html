@@ -1,25 +1,28 @@
 <div class="rlb-calendar">
-  <div class="my-3 d-flex align-items-center justify-content-between">
-    <button class="ms-auto" rlb-button outline (click)="generateTestEvents()">Generate events</button>
-  </div>
+
   @if (showToolbar) {
     <rlb-calendar-header
       [view]="view"
       [currentDate]="currentDate"
       (viewChange)="setView($event)"
-      (dateChange)="setDate($event)">
+      (dateChange)="setDate($event)"
+    >
     </rlb-calendar-header>
   }
 
-  <rlb-calendar-grid
-    [events]="events"
-    [view]="view"
-    [currentDate]="currentDate"
-    [layout]="mergedLayout"
-    (eventClick)="onEventClick($event)"
-    (eventContainerClick)="onEventContainerClick($event)"
-    (eventChange)="onEventChange($event)"
+  @if (loading) {
+    <rlb-progress [infinite]="true" [animated]="true" [height]="3" [showValue]="false">
+    </rlb-progress>
+  } @else {
+    <rlb-calendar-grid
+      [events]="events"
+      [view]="view"
+      [currentDate]="currentDate"
+      [layout]="mergedLayout"
+      (eventClick)="onEventClick($event)"
+      (eventContainerClick)="onEventContainerClick($event)"
+      (eventChange)="onEventChange($event)"
     >
-  </rlb-calendar-grid>
-
+    </rlb-calendar-grid>
+  }
 </div>
