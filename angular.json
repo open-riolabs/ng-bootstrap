@@ -82,7 +82,7 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:vitest",
           "options": {
             "polyfills": [
               "zone.js",
@@ -124,7 +124,7 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:vitest",
           "options": {
             "tsConfig": "projects/rlb/ng-bootstrap/tsconfig.spec.json",
             "polyfills": [

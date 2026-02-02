@@ -75,10 +75,10 @@ export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
   implements ControlValueAccessor {
   acLoading: boolean = false;
-	private typingTimeout: any;
-	isOpen = false;
+  private typingTimeout: any;
+  isOpen = false;
 
-	@Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
+  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
   @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
   @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
@@ -97,23 +97,23 @@ export class AutocompleteComponent
   @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
 
   @HostListener('document:pointerdown', ['$event'])
-	onDocumentPointerDown(event: PointerEvent) {
-		this.handleOutsideEvent(event);
-	}
+  onDocumentPointerDown(event: PointerEvent) {
+    this.handleOutsideEvent(event);
+  }
 
   @HostListener('document:keydown.escape', ['$event'])
-	onEscape(event: KeyboardEvent) {
-		if (this.isOpen) {
-			this.closeDropdown();
-			this.el?.nativeElement?.blur();
-		}
-	}
+  onEscape(event: Event) {
+    if (this.isOpen) {
+      this.closeDropdown();
+      this.el?.nativeElement?.blur();
+    }
+  }
 
   constructor(
     idService: UniqueIdService,
     private readonly renderer: Renderer2,
-		private readonly hostRef: ElementRef<HTMLElement>,
-		@Self() @Optional() override control?: NgControl,
+    private readonly hostRef: ElementRef<HTMLElement>,
+    @Self() @Optional() override control?: NgControl,
   ) {
     super(idService, control);
   }
@@ -141,123 +141,123 @@ export class AutocompleteComponent
   }
 
   manageSuggestions(data: string) {
-		this.clearDropdown();
-		if (data && data.length >= this.charsToSearch) {
-			this.openDropdown();
-			const suggestions = this.autocomplete(data);
-			if (suggestions instanceof Promise) {
-				this.acLoading = true;
-				suggestions.then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
-			} else if (suggestions instanceof Observable) {
-				this.acLoading = true;
-				lastValueFrom(suggestions).then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
-			} else {
-				this.renderAc(suggestions);
-			}
-		} else {
-			this.closeDropdown();
-		}
-	}
+    this.clearDropdown();
+    if (data && data.length >= this.charsToSearch) {
+      this.openDropdown();
+      const suggestions = this.autocomplete(data);
+      if (suggestions instanceof Promise) {
+        this.acLoading = true;
+        suggestions.then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
+      } else if (suggestions instanceof Observable) {
+        this.acLoading = true;
+        lastValueFrom(suggestions).then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
+      } else {
+        this.renderAc(suggestions);
+      }
+    } else {
+      this.closeDropdown();
+    }
+  }
 
   renderAc(suggestions: Array<string | AutocompleteItem>) {
-		this.clearDropdown();
-		if (!suggestions || suggestions.length === 0) {
-			const el = this.renderer.createElement('a');
-			this.renderer.addClass(el, 'dropdown-item');
-			this.renderer.addClass(el, 'disabled');
-			this.renderer.addClass(el, 'text-center');
-			this.renderer.setAttribute(el, 'disabled', 'true');
-			this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
-			this.renderer.appendChild(this.dropdown.nativeElement, el);
-			return;
-		}
+    this.clearDropdown();
+    if (!suggestions || suggestions.length === 0) {
+      const el = this.renderer.createElement('a');
+      this.renderer.addClass(el, 'dropdown-item');
+      this.renderer.addClass(el, 'disabled');
+      this.renderer.addClass(el, 'text-center');
+      this.renderer.setAttribute(el, 'disabled', 'true');
+      this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
+      this.renderer.appendChild(this.dropdown.nativeElement, el);
+      return;
+    }
 
     for (const suggestion of suggestions) {
-			const itemData: AutocompleteItem = typeof suggestion === 'string'
-				? { text: suggestion, value: suggestion }
-				: suggestion;
+      const itemData: AutocompleteItem = typeof suggestion === 'string'
+        ? { text: suggestion, value: suggestion }
+        : suggestion;
 
       const el = this.renderer.createElement('a');
-			this.renderer.addClass(el, 'dropdown-item');
+      this.renderer.addClass(el, 'dropdown-item');
 
       if (itemData.iconClass) {
-				const icon = this.renderer.createElement('i');
+        const icon = this.renderer.createElement('i');
 
         const classes = itemData.iconClass.split(/\s+/);
-				for (const cls of classes) {
-					if (cls) {
-						// Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
-						// it causes silent runtime error
-						// Instead we should split it, and add one by one
-						this.renderer.addClass(icon, cls);
-					}
-				}
-				this.renderer.addClass(icon, 'me-2');
-				this.renderer.appendChild(el, icon);
-			}
+        for (const cls of classes) {
+          if (cls) {
+            // Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
+            // it causes silent runtime error
+            // Instead we should split it, and add one by one
+            this.renderer.addClass(icon, cls);
+          }
+        }
+        this.renderer.addClass(icon, 'me-2');
+        this.renderer.appendChild(el, icon);
+      }
 
       this.renderer.appendChild(el, this.renderer.createText(itemData.text));
 
       this.renderer.listen(el, 'click', (ev: Event) => {
-				this.selected.emit(itemData);
-				this.setValue(itemData);
-				this.closeDropdown();
-				ev.stopPropagation();
-			});
-			this.renderer.appendChild(this.dropdown.nativeElement, el);
-		}
-	}
+        this.selected.emit(itemData);
+        this.setValue(itemData);
+        this.closeDropdown();
+        ev.stopPropagation();
+      });
+      this.renderer.appendChild(this.dropdown.nativeElement, el);
+    }
+  }
 
 
   onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
     if (!this.disabled && t && t.value) {
-			const item: AutocompleteItem = {
-				text: t.value,
-				value: t.value
-			};
-			this.setValue(item);
+      const item: AutocompleteItem = {
+        text: t.value,
+        value: t.value
+      };
+      this.setValue(item);
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
     }
   }
 
   getText(d: AutocompleteItem) {
-		if (d == null) return '';
+    if (d == null) return '';
     return typeof d === 'string' ? d : d?.text;
   }
 
   private handleOutsideEvent(event: Event) {
-		const target = event.target as HTMLElement;
+    const target = event.target as HTMLElement;
 
     const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
 
     const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
-		const clickedInsideDropdown = this.dropdown?.nativeElement?.contains ? this.dropdown.nativeElement.contains(target) : false;
-		const clickedInPath = path.length ? path.some(p => p === this.hostRef.nativeElement || p === this.dropdown.nativeElement) : false;
+    const clickedInsideDropdown = this.dropdown?.nativeElement?.contains ? this.dropdown.nativeElement.contains(target) : false;
+    const clickedInPath = path.length ? path.some(p => p === this.hostRef.nativeElement || p === this.dropdown.nativeElement) : false;
 
     if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
-			this.closeDropdown();
-		}
-	}
+      this.closeDropdown();
+    }
+  }
 
   openDropdown() {
-		if (!this.dropdown || this.isOpen) return;
-		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
-		this.isOpen = true;
-	}
+    if (!this.dropdown || this.isOpen) return;
+    this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
+    this.isOpen = true;
+  }
 
   closeDropdown() {
-		if (!this.dropdown || !this.isOpen) return;
-		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-		this.isOpen = false;
-		this.clearDropdown();
-		this.acLoading = false;
-	}
+    if (!this.dropdown || !this.isOpen) return;
+    this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
+    this.isOpen = false;
+    this.clearDropdown();
+    this.acLoading = false;
+  }
 
   clearDropdown() {
-		if (!this.dropdown) return;
-		while (this.dropdown.nativeElement.firstChild) {
-			this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild!);
-		}
-	}
+    if (!this.dropdown) return;
+    while (this.dropdown.nativeElement.firstChild) {
+      this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild!);
+    }
+  }
 }
