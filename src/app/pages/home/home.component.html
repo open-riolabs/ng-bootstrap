@@ -3,7 +3,7 @@
 	{{ number }}
 
 	<rlb-input type="datetime-local" min="0" max="10" step="0.1" [(ngModel)]="dtz" date-type="date-tz"></rlb-input>
-  {{ dtz | dtz }} {{ dtz | dayOfWeek: 'short' }}
+	{{ dtz | dtz }} {{ dtz | dayOfWeek: 'short' }}
 
 	<rlb-input type="text" [(ngModel)]="str"></rlb-input>
 	{{ str }}
@@ -44,32 +44,23 @@
 	<br>
 
 	<button rlb-button outline (click)="test()">log form value</button>
+	<button rlb-button outline (click)="testPatch()">test patch value</button>
 
 	<div [formGroup]="profileForm" class="mt-3">
 		<label for="country">Country autocomplete</label>
-		<rlb-autocomplete-country
-			id="country"
-			enable-flag-icons
-			formControlName="country"
-		/>
+		<rlb-autocomplete-country id="country" enable-flag-icons formControlName="country" />
 	</div>
 
 	<br>
 	<div [formGroup]="profileForm" class="mt-3">
 		<label for="timezone">Timezone autocomplete</label>
-		<rlb-autocomplete-timezones
-			id="timezone"
-			formControlName="timezone"
-		/>
+		<rlb-autocomplete-timezones id="timezone"
+			[formControl]="profileForm.controls.profile.controls.culture.controls.timezone" />
 	</div>
 	<br>
 	<div [formGroup]="profileForm" class="mt-3">
 		<label for="dial-code">Dial code autocomplete</label>
-		<rlb-autocomplete-country-dial-code
-			enable-flag-icons
-			id="dial-code"
-			formControlName="dialCode"
-		/>
+		<rlb-autocomplete-country-dial-code enable-flag-icons id="dial-code" formControlName="dialCode" />
 	</div>
 	<br>
 </div>

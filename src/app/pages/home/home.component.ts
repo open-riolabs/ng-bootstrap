@@ -32,9 +32,11 @@ export class HomeComponent {
     country: new FormControl<AutocompleteItem>({ text: '', value: '' }, [
       requiredAutocompleteValue(),
     ]),
-    timezone: new FormControl<AutocompleteItem>({ text: '', value: '' }, [
-      requiredAutocompleteValue(),
-    ]),
+    profile: new FormGroup({
+      culture: new FormGroup({
+        timezone: new FormControl<string>('', [requiredAutocompleteValue()]),
+      }),
+    }),
     dialCode: new FormControl<AutocompleteItem>({ text: '', value: '' }, [
       requiredAutocompleteValue(),
     ]),
@@ -47,12 +49,28 @@ export class HomeComponent {
     this.profileForm.valueChanges.subscribe((value) => {
       console.log('Form value: ', value);
     });
+    this.profileForm.patchValue({
+      profile: {
+        culture: {
+          timezone: 'Europe/Rome',
+        },
+      },
+    });
   }
 
   updateProfile() {}
 
   test() {
-    console.log(this.profileForm.value);
-    console.log(this.profileForm.value);
+    console.log('Form value: ', this.profileForm.value);
+  }
+
+  testPatch() {
+    this.profileForm.patchValue({
+      profile: {
+        culture: {
+          timezone: 'Europe/Paris' as any,
+        },
+      },
+    });
   }
 }
