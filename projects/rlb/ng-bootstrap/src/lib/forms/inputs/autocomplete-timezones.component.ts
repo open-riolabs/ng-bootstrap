@@ -77,7 +77,7 @@ export class AutocompleteTimezonesComponent
     if (typeof data === 'object' && data !== null && 'text' in data) {
       return (data as AutocompleteItem).text || '';
     } else if (typeof data === 'string') {
-      return data || '';
+      return data;
     }
     return '';
   }

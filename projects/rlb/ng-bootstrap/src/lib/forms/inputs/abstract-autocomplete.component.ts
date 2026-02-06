@@ -78,8 +78,8 @@ export abstract class AbstractAutocompleteComponent
 		const t = ev as HTMLInputElement;
 		const inputValue = t?.value || '';
 
-		// this.value = inputValue as any;
-		const valueToPropagate = inputValue === '' ? { text: '', value: '' } : { text: inputValue, value: inputValue };
+		const valueToPropagate =
+			inputValue === '' ? { text: '', value: '' } : { text: inputValue, value: inputValue };
 		this.setValue(valueToPropagate as any);
 
 		if (this.control && this.control.control) {
@@ -93,7 +93,7 @@ export abstract class AbstractAutocompleteComponent
 
 		this.typingTimeout = setTimeout(() => {
 			if (!this.disabled) {
-				this.getSuggestions(inputValue); // Call specific for a class
+				this.getSuggestions(inputValue);
 			}
 		}, 500);
 	}
