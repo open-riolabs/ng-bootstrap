@@ -8,7 +8,7 @@ import { AutocompleteItem } from "./autocomplete-model";
   selector: 'rlb-autocomplete-country',
   template: `
     <ng-content select="[before]"></ng-content>
-    <div class="input-group has-validation">
+    <div class="input-group has-validation position-relative">
       <input
         #field
         [id]="id"
@@ -30,81 +30,73 @@ import { AutocompleteItem } from "./autocomplete-model";
         @if (errors && showError) {
           <rlb-input-validation [errors]="errors"/>
         }
-      </div>
-      @if (loading || acLoading) {
-        <rlb-progress
-          [height]="2"
-          [infinite]="loading || acLoading"
-          color="primary"
-          class="w-100"
-          />
-      }
-      <ng-content select="[after]"></ng-content>
-      <div
-        #autocomplete
-        [id]="id+'-ac'"
-        class="dropdown-menu overflow-y-auto w-100 position-relative"
-        aria-labelledby="dropdownMenu"
-        [style.max-height.px]="maxHeight">
+        <div
+          #autocomplete
+          [id]="id+'-ac'"
+          class="dropdown-menu overflow-y-auto w-100 position-absolute"
+          aria-labelledby="dropdownMenu"
+          [style.max-height.px]="maxHeight"
+          style="z-index: 1000; top: 100%;">
+        </div>
       </div>
     `,
   standalone: false
 })
 export class AutocompleteCountryComponent
-	extends AbstractAutocompleteComponent
+  extends AbstractAutocompleteComponent
   implements ControlValueAccessor {
 
-	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
+  @Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
   @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
 
 
   constructor(
-		idService: UniqueIdService,
-		renderer: Renderer2,
-		@Self() @Optional() override control?: NgControl,
-	) {
-		super(idService, renderer, control);
-	}
+    idService: UniqueIdService,
+    renderer: Renderer2,
+    @Self() @Optional() override control?: NgControl,
+  ) {
+    super(idService, renderer, control);
+  }
 
   protected override getSuggestions(query: string) {
-		this.clearDropdown();
-		this.activeIndex = -1;
+    this.clearDropdown();
+    this.activeIndex = -1;
 
     if (query && query.length > 0) {
-			this.openDropdown();
-			const suggestions = this.getCountries().filter(o => {
-				const _c = o as { text: string, value: string; };
-				return _c.text.toLowerCase().startsWith(query.toLowerCase());
-			});
-			this.renderAc(suggestions);
-		} else {
-			this.closeDropdown();
-		}
-	}
+      this.openDropdown();
+      const suggestions = this.getCountries().filter(o => {
+        const _c = o as { text: string, value: string; };
+        return _c.text.toLowerCase().startsWith(query.toLowerCase());
+      });
+      this.renderAc(suggestions);
+    } else {
+      this.closeDropdown();
+    }
+  }
 
   protected override getItemText(data?: AutocompleteItem | string): string {
-		const h = this.getCountries().find(c => {
-			if (typeof c === 'object') {
-				const _c = c as { text: string, value: string; };
-				return _c.value === (typeof data === 'object' ? data?.value : data) ? _c.text : '';
-			}
-			return false;
-		});
-		return (typeof h === 'object' ? h.text : '');
-	}
+    const h = this.getCountries().find(c => {
+      if (typeof c === 'object') {
+        const _c = c as { text: string, value: string; };
+        return _c.value === (typeof data === 'object' ? data?.value : data) ? _c.text : '';
+      }
+      return false;
+    });
+    return (typeof h === 'object' ? h.text : '');
+  }
 
   getCountries(): AutocompleteItem[] {
-		if (this.enableFlagIcons) {
-			return this._countries.map((country) => {
-				return {
-					...country,
-					iconClass: `fi fi-${country.value.toLowerCase()}`,
-				}
-			})
-		} else {
-			return this._countries;
-		}
-	}
+    if (this.enableFlagIcons) {
+      return this._countries.map((country) => {
+        return {
+          ...country,
+          iconClass: `fi fi-${country.value.toLowerCase()}`,
+        };
+      });
+    } else {
+      return this._countries;
+    }
+  }
 
   private _countries: AutocompleteItem[] = [
     { "text": "Afghanistan", "value": "AF" },
