@@ -9,7 +9,7 @@ import { AutocompleteItem } from './autocomplete-model';
   selector: 'rlb-autocomplete-timezones',
   template: `
     <ng-content select="[before]"></ng-content>
-    <div class="input-group has-validation">
+    <div class="input-group has-validation position-relative">
       <input
         #field
         [id]="id"
@@ -44,9 +44,10 @@ import { AutocompleteItem } from './autocomplete-model';
     <div
       #autocomplete
       [id]="id + '-ac'"
-      class="dropdown-menu overflow-y-auto w-100 position-relative"
+      class="dropdown-menu overflow-y-auto w-100 position-absolute"
       aria-labelledby="dropdownMenu"
       [style.max-height.px]="maxHeight()"
+      style="z-index: 1000; top: 100%;"
     ></div>
   `,
   standalone: false,
