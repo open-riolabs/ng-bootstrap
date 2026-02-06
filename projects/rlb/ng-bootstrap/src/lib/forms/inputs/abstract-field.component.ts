@@ -1,19 +1,28 @@
-import { Injectable, Optional, Self } from '@angular/core';
+import {
+  Injectable,
+  InputSignal,
+  ModelSignal,
+  Optional,
+  Self
+} from '@angular/core';
 import { ControlValueAccessor, NgControl, ValidationErrors, } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
 export abstract class AbstractComponent<T = any>
   implements ControlValueAccessor {
-  public abstract disabled?: boolean;
-  protected abstract userDefinedId: string;
+  public abstract disabled?: boolean | InputSignal<boolean | undefined> | ModelSignal<boolean>;
+  protected abstract userDefinedId: string | InputSignal<string> | ModelSignal<string>;
   protected onTouched: Function = () => { };
-	protected onChanged: Function = (v: T) => {
-	};
+  protected onChanged: Function = (v: T) => {
+  };
   public value!: T;
   private _id!: string;
   public get id(): string {
-    return this.userDefinedId || this._id;
+    const userDefinedIdValue = typeof this.userDefinedId === 'function'
+      ? (this.userDefinedId as any)()
+      : this.userDefinedId;
+    return (userDefinedIdValue as string) || this._id;
   }
   constructor(
     idService: UniqueIdService,
@@ -38,8 +47,8 @@ export abstract class AbstractComponent<T = any>
     this.value = val;
     this.onWrite(val);
   }
-	
-	registerOnChange(fn: (v: T) => void): void {
+
+  registerOnChange(fn: (v: T) => void): void {
     this.onChanged = fn;
   }
 
@@ -48,7 +57,11 @@ export abstract class AbstractComponent<T = any>
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    if (typeof this.disabled === 'function' && (this.disabled as any).set) {
+      (this.disabled as any).set(isDisabled);
+    } else {
+      (this.disabled as any) = isDisabled;
+    }
   }
 
   get invalid(): boolean {

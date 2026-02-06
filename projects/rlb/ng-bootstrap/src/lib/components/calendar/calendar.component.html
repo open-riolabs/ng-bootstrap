@@ -1,24 +1,24 @@
 <div class="rlb-calendar">
 
-  @if (showToolbar) {
+  @if (showToolbar()) {
     <rlb-calendar-header
-      [view]="view"
-      [currentDate]="currentDate"
+      [view]="view()"
+      [currentDate]="currentDate()"
       (viewChange)="setView($event)"
       (dateChange)="setDate($event)"
     >
     </rlb-calendar-header>
   }
 
-  @if (loading) {
+  @if (loading()) {
     <rlb-progress [infinite]="true" [animated]="true" [height]="3" [showValue]="false">
     </rlb-progress>
   } @else {
     <rlb-calendar-grid
-      [events]="events"
-      [view]="view"
-      [currentDate]="currentDate"
-      [layout]="mergedLayout"
+      [events]="events()"
+      [view]="view()"
+      [currentDate]="currentDate()"
+      [layout]="mergedLayout()"
       (eventClick)="onEventClick($event)"
       (eventContainerClick)="onEventContainerClick($event)"
       (eventChange)="onEventChange($event)"

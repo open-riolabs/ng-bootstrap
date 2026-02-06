@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, Input, Optional, Renderer2, Self } from '@angular/core';
+import { booleanAttribute, Component, input, Optional, Renderer2, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
@@ -15,15 +15,15 @@ import { AutocompleteItem } from "./autocomplete-model";
         class="form-control"
         type="text"
         [attr.autocomplete]="'off'"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
-        [attr.placeholder]="placeholder"
-        [class.form-control-lg]="size === 'large'"
-        [class.form-control-sm]="size === 'small'"
+        [attr.disabled]="disabled() ? true : undefined"
+        [attr.readonly]="readonly() ? true : undefined"
+        [attr.placeholder]="placeholder()"
+        [class.form-control-lg]="size() === 'large'"
+        [class.form-control-sm]="size() === 'small'"
         (blur)="touch()"
 				[ngClass]="{
-  				'is-invalid': control?.touched && control?.invalid && enableValidation,
-  				'is-valid': control?.touched && control?.valid && enableValidation
+  				'is-invalid': control?.touched && control?.invalid && enableValidation(),
+  				'is-valid': control?.touched && control?.valid && enableValidation()
 				}"
         (input)="update($event.target)"
         />
@@ -31,10 +31,10 @@ import { AutocompleteItem } from "./autocomplete-model";
           <rlb-input-validation [errors]="errors"/>
         }
       </div>
-      @if (loading || acLoading) {
+      @if (loading() || acLoading()) {
         <rlb-progress
           [height]="2"
-          [infinite]="loading || acLoading"
+          [infinite]="loading() || acLoading()"
           color="primary"
           class="w-100"
           />
@@ -45,66 +45,66 @@ import { AutocompleteItem } from "./autocomplete-model";
         [id]="id+'-ac'"
         class="dropdown-menu overflow-y-auto w-100 position-relative"
         aria-labelledby="dropdownMenu"
-        [style.max-height.px]="maxHeight">
+        [style.max-height.px]="maxHeight()">
       </div>
     `,
   standalone: false
 })
 export class AutocompleteCountryComponent
-	extends AbstractAutocompleteComponent
+  extends AbstractAutocompleteComponent
   implements ControlValueAccessor {
 
-	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
+  enableFlagIcons = input(false, { transform: booleanAttribute, alias: 'enable-flag-icons' });
+  enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
 
 
   constructor(
-		idService: UniqueIdService,
-		renderer: Renderer2,
-		@Self() @Optional() override control?: NgControl,
-	) {
-		super(idService, renderer, control);
-	}
+    idService: UniqueIdService,
+    renderer: Renderer2,
+    @Self() @Optional() override control?: NgControl,
+  ) {
+    super(idService, renderer, control);
+  }
 
   protected override getSuggestions(query: string) {
-		this.clearDropdown();
-		this.activeIndex = -1;
+    this.clearDropdown();
+    this.activeIndex.set(-1);
 
     if (query && query.length > 0) {
-			this.openDropdown();
-			const suggestions = this.getCountries().filter(o => {
-				const _c = o as { text: string, value: string; };
-				return _c.text.toLowerCase().startsWith(query.toLowerCase());
-			});
-			this.renderAc(suggestions);
-		} else {
-			this.closeDropdown();
-		}
-	}
+      this.openDropdown();
+      const suggestions = this.getCountries().filter(o => {
+        const _c = o as { text: string, value: string; };
+        return _c.text.toLowerCase().startsWith(query.toLowerCase());
+      });
+      this.renderAc(suggestions);
+    } else {
+      this.closeDropdown();
+    }
+  }
 
   protected override getItemText(data?: AutocompleteItem | string): string {
-		const h = this.getCountries().find(c => {
-			if (typeof c === 'object') {
-				const _c = c as { text: string, value: string; };
-				return _c.value === (typeof data === 'object' ? data?.value : data) ? _c.text : '';
-			}
-			return false;
-		});
-		return (typeof h === 'object' ? h.text : '');
-	}
+    const h = this.getCountries().find(c => {
+      if (typeof c === 'object') {
+        const _c = c as { text: string, value: string; };
+        return _c.value === (typeof data === 'object' ? data?.value : data) ? _c.text : '';
+      }
+      return false;
+    });
+    return (typeof h === 'object' ? h.text : '');
+  }
 
   getCountries(): AutocompleteItem[] {
-		if (this.enableFlagIcons) {
-			return this._countries.map((country) => {
-				return {
-					...country,
-					iconClass: `fi fi-${country.value.toLowerCase()}`,
-				}
-			})
-		} else {
-			return this._countries;
-		}
-	}
+    if (this.enableFlagIcons()) {
+      return this._countries.map((country) => {
+        return {
+          ...country,
+          iconClass: `fi fi-${country.value.toLowerCase()}`,
+        };
+      });
+    } else {
+      return this._countries;
+    }
+  }
 
   private _countries: AutocompleteItem[] = [
     { "text": "Afghanistan", "value": "AF" },
@@ -308,3 +308,4 @@ export class AutocompleteCountryComponent
   ];
 
 }
+

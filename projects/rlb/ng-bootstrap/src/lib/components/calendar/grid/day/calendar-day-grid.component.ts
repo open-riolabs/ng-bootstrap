@@ -2,16 +2,14 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  effect,
   ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
+  input,
   OnDestroy,
-  Output,
-  SimpleChanges,
-  ViewChild
+  output,
+  signal,
+  viewChild
 } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
@@ -29,23 +27,23 @@ import { getToday, isToday } from "../../utils/calendar-date-utils";
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterViewInit {
-  @Input() view!: CalendarView;
-  @Input() currentDate!: IDateTz;
-  @Input() events: CalendarEvent[] = [];
-  @Input() layout!: CalendarLayout;
-  @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
+export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
+  view = input.required<CalendarView>();
+  currentDate = input.required<IDateTz>();
+  events = input<CalendarEvent[]>([]);
+  layout = input.required<CalendarLayout>();
 
-  @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
-  @Output() eventChange = new EventEmitter<CalendarEvent>();
+  eventClick = output<CalendarEvent | undefined>();
+  eventContainerClick = output<CalendarEvent[] | undefined>();
+  eventChange = output<CalendarEvent>();
 
-  day!: IDateTz;
-  timeSlots: string[] = [];
-  processedEvents: CalendarEventWithLayout[] = [];
+  day = signal<IDateTz>(getToday());
+  timeSlots = signal<string[]>([]);
+  processedEvents = signal<CalendarEventWithLayout[]>([]);
 
-  @ViewChild('scrollBody', { static: false }) scrollBodyRef!: ElementRef<HTMLDivElement>;
+  scrollBodyRef = viewChild<ElementRef<HTMLDivElement>>('scrollBody');
 
-  now: DateTz;
+  now = signal<DateTz>(getToday());
   private nowInterval: any;
 
   // CONFIG CONSTANTS (Replaced by Layout Input)
@@ -54,32 +52,20 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
 
 
 
-  constructor(
-    private cd: ChangeDetectorRef,
-  ) {
-    this.now = getToday();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['view'] || changes['currentDate']) {
-      if (this.view === 'day') {
-        this.buildDayGrid(this.currentDate);
+  constructor() {
+    effect(() => {
+      if (this.view() === 'day') {
+        this.buildDayGrid(this.currentDate());
         this.buildTimeSlots();
       }
-    }
+    });
 
-    if (changes['events']) {
-      this.events = changes['events'].currentValue as CalendarEvent[];
-    }
-
-    if (changes['events'] || changes['currentDate']) {
-      this.processAllEvents();
-    }
+    effect(() => {
+      this.processAllEvents(this.events(), this.currentDate());
+    });
   }
 
-  ngAfterViewInit() {
-    this.cd.detectChanges();
-  }
+  ngAfterViewInit() { }
 
   ngOnDestroy() {
     this.stopNowTimer();
@@ -92,13 +78,13 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
   onEventDrop(event: CdkDragDrop<IDateTz, any, CalendarEventWithLayout>) {
     const movedEvent = event.item.data as CalendarEventWithLayout;
     // For day view, the container data is the single day we are viewing
-    const newDay = this.day;
+    const newDay = this.day();
 
     const originalTopPx = this.calculateEventTop(movedEvent);
     const dragDistancePx = event.distance.y;
     const newTopPx = originalTopPx + dragDistancePx;
 
-    const rawMinutesFromStart = (newTopPx / this.layout.rowHeight) * 60;
+    const rawMinutesFromStart = (newTopPx / this.layout().rowHeight) * 60;
     const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
 
     const validMinutes = Math.max(0, snappedMinutes);
@@ -124,7 +110,7 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
   }
 
   calculateEventTop(event: CalendarEventWithLayout): number {
-    const startOfDay = new DateTz(this.day).set(0, 'hour').set(0, 'minute').stripSecMillis();
+    const startOfDay = new DateTz(this.day()).set(0, 'hour').set(0, 'minute').stripSecMillis();
     // Use event.start directly, but ensure we are calculating relative to THIS day
     // If event starts on previous day, we should clamp?
     // Logic from week grid handles "chunks", here we assume processAllEvents has given us the chunk for this day.
@@ -136,7 +122,7 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
 
     const diffMs = eventStart.timestamp - startOfDay.timestamp;
     const diffMinutes = diffMs / (1000 * 60);
-    return (diffMinutes / 60) * this.layout.rowHeight;
+    return (diffMinutes / 60) * this.layout().rowHeight;
   }
 
 
@@ -145,14 +131,15 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
     // Logic from week grid's 'processAllEvents' handled chunking, so here specific event chunk should be correct.
     const durationMs = event.end.timestamp - event.start.timestamp;
     const durationMinutes = durationMs / (1000 * 60);
-    return (durationMinutes / 60) * this.layout.rowHeight;
+    return (durationMinutes / 60) * this.layout().rowHeight;
   }
 
 
   getNowTop(): number {
-    const hours = this.now.hour;
-    const minutes = this.now.minute;
-    return ((hours * 60) + minutes) / 60 * this.layout.rowHeight;
+    const now = this.now();
+    const hours = now.hour;
+    const minutes = now.minute;
+    return ((hours * 60) + minutes) / 60 * this.layout().rowHeight;
   }
 
 
@@ -163,8 +150,7 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
   private startNowTimer() {
     this.stopNowTimer(); // clear existing if any
     this.nowInterval = setInterval(() => {
-      this.now = getToday();
-      this.cd.detectChanges();
+      this.now.set(getToday());
     }, 60 * 1000); // every minute
   }
 
@@ -175,7 +161,7 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
   }
 
   private buildDayGrid(currentDate: IDateTz) {
-    this.day = new DateTz(currentDate.timestamp, 'UTC');
+    this.day.set(new DateTz(currentDate.timestamp, 'UTC'));
     this.startNowTimer();
   }
 
@@ -184,7 +170,7 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
     for (let h = 0; h < 24; h++) {
       slots.push(`${h.toString().padStart(2, '0')}:00`);
     }
-    this.timeSlots = slots;
+    this.timeSlots.set(slots);
   }
 
   private isOverlapping(eventA: CalendarEvent, eventB: CalendarEvent): boolean {
@@ -195,16 +181,16 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
     return startA < endB && startB < endA;
   }
 
-  private processAllEvents() {
-    if (!this.day) return;
+  private processAllEvents(events: CalendarEvent[], day: IDateTz) {
+    if (!day) return;
 
     // Filter events for this day
-    const dayStart = new DateTz(this.day).set(0, 'hour').set(0, 'minute').stripSecMillis!();
-    const dayEnd = new DateTz(this.day).set(0, 'hour').set(0, 'minute').add(1, 'day').stripSecMillis!();
+    const dayStart = new DateTz(day).set(0, 'hour').set(0, 'minute').stripSecMillis!();
+    const dayEnd = new DateTz(day).set(0, 'hour').set(0, 'minute').add(1, 'day').stripSecMillis!();
 
     const dayEvents: CalendarEventWithLayout[] = [];
 
-    for (const event of this.events) {
+    for (const event of events) {
       // Check overlap with the day
       if (event.end.timestamp > dayStart.timestamp && event.start.timestamp < dayEnd.timestamp) {
 
@@ -243,8 +229,7 @@ export class CalendarDayGridComponent implements OnChanges, OnDestroy, AfterView
       eventsWithLayout.push(...groupLayouts);
     }
 
-    this.processedEvents = eventsWithLayout;
-    this.cd.markForCheck();
+    this.processedEvents.set(eventsWithLayout);
   }
 
   private groupEventsByConflicts(dayEvents: CalendarEvent[]): CalendarEvent[][] {

@@ -1,11 +1,10 @@
 import {
   booleanAttribute,
   Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
+  computed,
+  input,
+  model,
+  output,
 } from '@angular/core';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import { filter, map, of, switchMap, take } from 'rxjs';
@@ -32,62 +31,58 @@ import { getToday } from './utils/calendar-date-utils';
   styleUrls: ['./calendar.component.scss'],
   standalone: false,
 })
-export class CalendarComponent implements OnChanges {
-  @Input({ alias: 'view' }) view: CalendarView = 'week';
+export class CalendarComponent {
+  view = model<CalendarView>('week', { alias: 'view' });
 
-  @Input({ alias: 'events' }) events: CalendarEvent[] = [];
+  // Internal mutable copy of events for local modifications
+  events = model<CalendarEvent[]>([], { alias: 'events' });
 
-  @Input({ alias: 'current-date', transform: (d: IDateTz) => new DateTz(d) })
-  currentDate: IDateTz;
+  currentDate = input<IDateTz, IDateTz>(getToday(), {
+    alias: 'current-date',
+    transform: (d: IDateTz) => new DateTz(d),
+  });
+  currentDateChange = output<IDateTz>({ alias: 'current-date-change' });
 
-  @Input({ alias: 'loading', transform: booleanAttribute }) loading = false;
+  loading = input(false, { alias: 'loading', transform: booleanAttribute });
 
-  @Input({ alias: 'show-toolbar', transform: booleanAttribute }) showToolbar =
-    true;
-  @Input({ alias: 'layout' }) layout: Partial<CalendarLayout> = {};
+  showToolbar = input(true, {
+    alias: 'show-toolbar',
+    transform: booleanAttribute,
+  });
 
-  mergedLayout: CalendarLayout = DEFAULT_CALENDAR_LAYOUT;
+  layout = input<Partial<CalendarLayout>>({}, { alias: 'layout' });
 
-  @Output('date-change') dateChange = new EventEmitter<CalendarChangeEvent>();
-  @Output('view-change') viewChange = new EventEmitter<CalendarChangeEvent>();
-  @Output('event-click') eventClick = new EventEmitter<CalendarEvent>();
+  mergedLayout = computed(() => ({
+    ...DEFAULT_CALENDAR_LAYOUT,
+    ...this.layout(),
+  }));
+
+  dateChange = output<CalendarChangeEvent>({ alias: 'date-change' });
+  viewChange = output<CalendarChangeEvent>({ alias: 'view-change' });
+  eventClick = output<CalendarEvent>({ alias: 'event-click' });
 
   constructor(
     private modals: ModalService,
     private unique: UniqueIdService,
     private toasts: ToastService,
-  ) {
-    this.currentDate = getToday();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['currentDate']) {
-      const incomingDate = changes['currentDate'].currentValue as DateTz;
-      this.currentDate = incomingDate;
-    }
-
-    if (changes['events']) {
-      this.events = changes['events'].currentValue as CalendarEvent[];
-    }
-
-    if (changes['layout']) {
-      this.mergedLayout = { ...DEFAULT_CALENDAR_LAYOUT, ...this.layout };
-    }
-  }
+  ) {}
 
   // DnD event
   onEventChange(eventToEdit: CalendarEvent) {
-    const idx = this.events.findIndex((event) => event.id === eventToEdit.id);
-    this.events[idx] = eventToEdit;
-    this.events = [...this.events];
-    this.toasts
-      .openToast('toast-c-1', 'rlb-calendar-toast', {
-        title: 'Success!',
-        content: 'Event edited successfully.',
-        type: 'success',
-      })
-      .pipe(take(1))
-      .subscribe();
+    const currentEvents = [...this.events()];
+    const idx = currentEvents.findIndex((event) => event.id === eventToEdit.id);
+    if (idx !== -1) {
+      currentEvents[idx] = eventToEdit;
+      this.events.set(currentEvents);
+      this.toasts
+        .openToast('toast-c-1', 'rlb-calendar-toast', {
+          title: 'Success!',
+          content: 'Event edited successfully.',
+          type: 'success',
+        })
+        .pipe(take(1))
+        .subscribe();
+    }
   }
 
   onEventContainerClick(events: CalendarEvent[] | undefined) {
@@ -134,16 +129,21 @@ export class CalendarComponent implements OnChanges {
             (action === 'delete' && modalResult.reason === 'ok') ||
             (action === 'edit' && modalResult.reason === 'cancel')
           ) {
-            this.events = [
-              ...this.events.filter((entry) => event.id !== entry.id),
-            ];
+            this.events.set([
+              ...this.events().filter((entry) => event.id !== entry.id),
+            ]);
             return of({ action: 'delete' });
           }
 
           if (action === 'edit' && modalResult.reason === 'ok') {
-            const idx = this.events.findIndex((entry) => event.id === entry.id);
-            this.events[idx] = modalResult.result;
-            this.events = [...this.events];
+            const currentEvents = [...this.events()];
+            const idx = currentEvents.findIndex(
+              (entry) => event.id === entry.id,
+            );
+            if (idx !== -1) {
+              currentEvents[idx] = modalResult.result;
+              this.events.set(currentEvents);
+            }
             return of({ action: 'edit' });
           }
 
@@ -191,9 +191,9 @@ export class CalendarComponent implements OnChanges {
           const newEvent = modalResult.result;
           let result = null;
           if (modalResult.reason === 'cancel' && eventToEdit) {
-            this.events = [
-              ...this.events.filter((event) => event.id !== eventToEdit.id),
-            ];
+            this.events.set([
+              ...this.events().filter((event) => event.id !== eventToEdit.id),
+            ]);
             result = { action: 'delete' };
             return of(result);
           }
@@ -206,18 +206,21 @@ export class CalendarComponent implements OnChanges {
             return of(result);
           }
 
+          const currentEvents = [...this.events()];
           if (eventToEdit) {
-            const idx = this.events.findIndex(
+            const idx = currentEvents.findIndex(
               (event) => event.id === eventToEdit.id,
             );
-            this.events[idx] = newEvent;
-            result = { action: 'edit' };
+            if (idx !== -1) {
+              currentEvents[idx] = newEvent;
+              result = { action: 'edit' };
+            }
           } else {
-            this.events.push(newEvent);
+            currentEvents.push(newEvent);
             result = { action: 'create' };
           }
 
-          this.events = [...this.events];
+          this.events.set(currentEvents);
           return of(result);
         }),
         switchMap((result) => {
@@ -252,13 +255,13 @@ export class CalendarComponent implements OnChanges {
   }
 
   setDate(date: DateTz) {
-    this.currentDate = date;
-    this.dateChange.emit({ date, view: this.view });
+    this.currentDateChange.emit(date);
+    this.dateChange.emit({ date, view: this.view() });
   }
 
   setView(view: CalendarView) {
-    this.view = view;
-    this.viewChange.emit({ date: this.currentDate, view });
+    this.view.set(view);
+    this.viewChange.emit({ date: this.currentDate(), view });
   }
 
   private openEditEventDialog(eventToEdit?: CalendarEvent) {

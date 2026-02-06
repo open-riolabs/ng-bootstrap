@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
+import { Component, input, OnDestroy, output } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
 import { CalendarEvent } from "../interfaces/calendar-event.interface";
 import { CalendarLayout } from "../interfaces/calendar-layout.interface";
 import { CalendarView } from "../interfaces/calendar-view.type";
-
 
 @Component({
 	selector: 'rlb-calendar-grid',
@@ -11,24 +10,17 @@ import { CalendarView } from "../interfaces/calendar-view.type";
 	styleUrls: ['./calendar-grid.component.scss'],
 	standalone: false,
 })
-export class CalendarGrid implements OnChanges, OnDestroy {
-	@Input() view!: CalendarView;
-	@Input() currentDate!: IDateTz;
-	@Input() events: CalendarEvent[] = [];
-	@Input() layout!: CalendarLayout;
+export class CalendarGrid implements OnDestroy {
+	view = input.required<CalendarView>();
+	currentDate = input.required<IDateTz>();
+	events = input<CalendarEvent[]>([]);
+	layout = input.required<CalendarLayout>();
 
-	@Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
-	@Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
-	@Output() eventChange = new EventEmitter<CalendarEvent>();
+	eventClick = output<CalendarEvent | undefined>();
+	eventContainerClick = output<CalendarEvent[] | undefined>();
+	eventChange = output<CalendarEvent>();
 
-	constructor(
-	) {
-	}
+	constructor() { }
 
-	ngOnChanges(changes: SimpleChanges) {
-
-	}
-
-	ngOnDestroy() {
-	}
+	ngOnDestroy() { }
 }

@@ -1,12 +1,12 @@
-import { booleanAttribute, Component, Input, Optional, Renderer2, Self } from '@angular/core';
+import { booleanAttribute, Component, input, Optional, Renderer2, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
-import { AutocompleteItem } from "./autocomplete-model";
 import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
+import { AutocompleteItem } from "./autocomplete-model";
 
 @Component({
-  selector: 'rlb-autocomplete-country-dial-code',
-  template: `
+	selector: 'rlb-autocomplete-country-dial-code',
+	template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -15,11 +15,11 @@ import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component
         class="form-control"
         type="text"
         [attr.autocomplete]="'off'"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
-        [attr.placeholder]="placeholder"
-        [class.form-control-lg]="size === 'large'"
-        [class.form-control-sm]="size === 'small'"
+        [attr.disabled]="disabled() ? true : undefined"
+        [attr.readonly]="readonly() ? true : undefined"
+        [attr.placeholder]="placeholder()"
+        [class.form-control-lg]="size() === 'large'"
+        [class.form-control-sm]="size() === 'small'"
         (blur)="touch()"
 				[ngClass]="{
         'is-invalid': control?.touched && control?.invalid,
@@ -31,10 +31,10 @@ import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component
           <rlb-input-validation [errors]="errors"/>
         }
       </div>
-      @if (loading || acLoading) {
+      @if (loading() || acLoading()) {
         <rlb-progress
           [height]="2"
-          [infinite]="loading || acLoading"
+          [infinite]="loading() || acLoading()"
           color="primary"
           class="w-100"
           />
@@ -45,17 +45,17 @@ import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component
         [id]="id+'-ac'"
         class="dropdown-menu overflow-y-auto w-100 position-relative"
         aria-labelledby="dropdownMenu"
-        [style.max-height.px]="maxHeight">
+        [style.max-height.px]="maxHeight()">
       </div>
     `,
-  standalone: false
+	standalone: false
 })
 export class AutocompleteCountryDialCodeComponent
 	extends AbstractAutocompleteComponent
-  implements ControlValueAccessor {
-	
-	@Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = true;
-	
+	implements ControlValueAccessor {
+
+	enableFlagIcons = input(true, { transform: booleanAttribute, alias: 'enable-flag-icons' });
+
 	constructor(
 		idService: UniqueIdService,
 		renderer: Renderer2,
@@ -63,11 +63,11 @@ export class AutocompleteCountryDialCodeComponent
 	) {
 		super(idService, renderer, control);
 	}
-	
+
 	protected override getSuggestions(query: string) {
 		this.clearDropdown();
-		this.activeIndex = -1;
-		
+		this.activeIndex.set(-1);
+
 		if (query && query.length > 0) {
 			this.openDropdown();
 			const suggestions = this.getCountries().filter(o => {
@@ -79,7 +79,7 @@ export class AutocompleteCountryDialCodeComponent
 			this.closeDropdown();
 		}
 	}
-	
+
 	protected override getItemText(data?: AutocompleteItem | string): string {
 		const h = this.getCountries().find(c => {
 			if (typeof c === 'object') {
@@ -90,20 +90,20 @@ export class AutocompleteCountryDialCodeComponent
 		});
 		return (typeof h === 'object' ? h.text : '');
 	}
-	
+
 	getCountries(): AutocompleteItem[] {
-		if (this.enableFlagIcons) {
+		if (this.enableFlagIcons()) {
 			return this._countries.map((country) => {
 				return {
 					...country,
 					iconClass: `fi fi-${country.data.toLowerCase()}`,
-				}
-			})
+				};
+			});
 		} else {
 			return this._countries;
 		}
 	}
-	
+
 	private _countries: AutocompleteItem[] = [
 		{
 			"text": "Afghanistan",
@@ -806,7 +806,7 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "FM"
 		},
 		{
-			"text": "Moldova",
+			"text": "Moldova, Republic of Moldova",
 			"value": "+373",
 			"data": "MD"
 		},
@@ -962,7 +962,7 @@ export class AutocompleteCountryDialCodeComponent
 		},
 		{
 			"text": "Pitcairn",
-			"value": "+872",
+			"value": "+870",
 			"data": "PN"
 		},
 		{
@@ -977,7 +977,7 @@ export class AutocompleteCountryDialCodeComponent
 		},
 		{
 			"text": "Puerto Rico",
-			"value": "+1939",
+			"value": "+1787",
 			"data": "PR"
 		},
 		{
@@ -986,12 +986,17 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "QA"
 		},
 		{
+			"text": "Reunion",
+			"value": "+262",
+			"data": "RE"
+		},
+		{
 			"text": "Romania",
 			"value": "+40",
 			"data": "RO"
 		},
 		{
-			"text": "Russia",
+			"text": "Russian Federation",
 			"value": "+7",
 			"data": "RU"
 		},
@@ -1001,17 +1006,12 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "RW"
 		},
 		{
-			"text": "Reunion",
-			"value": "+262",
-			"data": "RE"
-		},
-		{
 			"text": "Saint Barthelemy",
 			"value": "+590",
 			"data": "BL"
 		},
 		{
-			"text": "Saint Helena, Ascension and Tristan Da Cunha",
+			"text": "Saint Helena",
 			"value": "+290",
 			"data": "SH"
 		},
@@ -1111,11 +1111,6 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "ZA"
 		},
 		{
-			"text": "South Sudan",
-			"value": "+211",
-			"data": "SS"
-		},
-		{
 			"text": "South Georgia and the South Sandwich Islands",
 			"value": "+500",
 			"data": "GS"
@@ -1166,7 +1161,7 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "SY"
 		},
 		{
-			"text": "Taiwan",
+			"text": "Taiwan, Province of China",
 			"value": "+886",
 			"data": "TW"
 		},
@@ -1176,7 +1171,7 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "TJ"
 		},
 		{
-			"text": "Tanzania, United Republic of Tanzania",
+			"text": "Tanzania, United Republic of",
 			"value": "+255",
 			"data": "TZ"
 		},
@@ -1261,6 +1256,11 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "US"
 		},
 		{
+			"text": "United States Minor Outlying Islands",
+			"value": "+1",
+			"data": "UM"
+		},
+		{
 			"text": "Uruguay",
 			"value": "+598",
 			"data": "UY"
@@ -1276,12 +1276,12 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "VU"
 		},
 		{
-			"text": "Venezuela, Bolivarian Republic of Venezuela",
+			"text": "Venezuela, Bolivarian Republic of",
 			"value": "+58",
 			"data": "VE"
 		},
 		{
-			"text": "Vietnam",
+			"text": "Viet Nam",
 			"value": "+84",
 			"data": "VN"
 		},
@@ -1301,6 +1301,11 @@ export class AutocompleteCountryDialCodeComponent
 			"data": "WF"
 		},
 		{
+			"text": "Western Sahara",
+			"value": "+212",
+			"data": "EH"
+		},
+		{
 			"text": "Yemen",
 			"value": "+967",
 			"data": "YE"
@@ -1315,6 +1320,5 @@ export class AutocompleteCountryDialCodeComponent
 			"value": "+263",
 			"data": "ZW"
 		}
-	]
-
+	];
 }
