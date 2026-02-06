@@ -5,14 +5,14 @@ import {
   AutocompleteItem,
   ModalService,
   requiredAutocompleteValue,
-  ToastService
+  ToastService,
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class HomeComponent {
   number: number = 0;
@@ -22,22 +22,22 @@ export class HomeComponent {
   country: string = '';
   carouselPage: number = 0;
   carouselCount: number = 0;
-	countryDialCode = '';
+  countryDialCode = '';
 
   profileForm = new FormGroup({
-    firstName: new FormControl<string>("dd", [Validators.required, Validators.minLength(2)]),
-		country: new FormControl<AutocompleteItem>(
-			{ text: '', value: '' },
-			[requiredAutocompleteValue()]
-		),
-		timezone: new FormControl<AutocompleteItem>(
-			{ text: '', value: '' },
-			[requiredAutocompleteValue()]
-		),
-		dialCode: new FormControl<AutocompleteItem>(
-			{ text: '', value: '' },
-			[requiredAutocompleteValue()]
-		),
+    firstName: new FormControl<string>('dd', [
+      Validators.required,
+      Validators.minLength(2),
+    ]),
+    country: new FormControl<AutocompleteItem>({ text: '', value: '' }, [
+      requiredAutocompleteValue(),
+    ]),
+    timezone: new FormControl<AutocompleteItem>({ text: '', value: '' }, [
+      requiredAutocompleteValue(),
+    ]),
+    dialCode: new FormControl<AutocompleteItem>({ text: '', value: '' }, [
+      requiredAutocompleteValue(),
+    ]),
   });
 
   constructor(
@@ -45,14 +45,14 @@ export class HomeComponent {
     private toasts: ToastService,
   ) {
     this.profileForm.valueChanges.subscribe((value) => {
-      console.log("Form value: ", value);
-    })
+      console.log('Form value: ', value);
+    });
   }
 
-  updateProfile() { }
+  updateProfile() {}
 
   test() {
-		console.log(this.profileForm.value);
-	}
+    console.log(this.profileForm.value);
+    console.log(this.profileForm.value);
+  }
 }
-
