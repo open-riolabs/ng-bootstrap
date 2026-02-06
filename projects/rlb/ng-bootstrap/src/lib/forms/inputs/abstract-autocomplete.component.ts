@@ -1,14 +1,14 @@
 import {
-  booleanAttribute,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  numberAttribute,
-  Output,
-  Renderer2,
-  ViewChild,
+	booleanAttribute,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	numberAttribute,
+	Output,
+	Renderer2,
+	ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -20,7 +20,7 @@ import { AutocompleteItem } from "./autocomplete-model";
 	standalone: false
 })
 export abstract class AbstractAutocompleteComponent
-  extends AbstractComponent<AutocompleteItem>
+	extends AbstractComponent<AutocompleteItem>
 	implements ControlValueAccessor {
 
 	acLoading: boolean = false;
@@ -42,13 +42,13 @@ export abstract class AbstractAutocompleteComponent
 
 	@ViewChild('field', { read: ElementRef, static: false }) el!: ElementRef<HTMLInputElement>;
 	@ViewChild('autocomplete', { read: ElementRef, static: false }) dropdown!: ElementRef<HTMLElement>;
-  @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
+	@Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
 
-  protected abstract getSuggestions(query: string): void;
+	protected abstract getSuggestions(query: string): void;
 
-  protected abstract getItemText(data?: AutocompleteItem): string;
+	protected abstract getItemText(data?: AutocompleteItem): string;
 
-  protected constructor(
+	protected constructor(
 		idService: UniqueIdService,
 		protected readonly renderer: Renderer2, // protected, to gain access to child classes
 		control?: NgControl,
@@ -56,50 +56,49 @@ export abstract class AbstractAutocompleteComponent
 		super(idService, control);
 	}
 
-  // =========================================================================
+	// =========================================================================
 	// HTML FORM LOGIC
 	// =========================================================================
 
-  override onWrite(data?: AutocompleteItem): void {
+	override onWrite(data?: AutocompleteItem | string): void {
 		if (this.el && this.el.nativeElement) {
-			// this.el.nativeElement.value = this.getItemText(data);
-			if (typeof data === 'object' && data !== null) {
-        this.el.nativeElement.value = this.getItemText(data);
+			if (data) {
+				this.el.nativeElement.value = this.getItemText(data as AutocompleteItem);
 			} else {
 				this.el.nativeElement.value = '';
 			}
 		}
 	}
 
-  // =========================================================================
+	// =========================================================================
 	// INPUT HANDLING
 	// =========================================================================
 
-  update(ev: EventTarget | null) {
+	update(ev: EventTarget | null) {
 		const t = ev as HTMLInputElement;
 		const inputValue = t?.value || '';
 
-    // this.value = inputValue as any;
-    const valueToPropagate = inputValue === '' ? { text: '', value: '' } : inputValue;
-    this.setValue(valueToPropagate as any);
+		// this.value = inputValue as any;
+		const valueToPropagate = inputValue === '' ? { text: '', value: '' } : { text: inputValue, value: inputValue };
+		this.setValue(valueToPropagate as any);
 
-    if (this.control && this.control.control) {
+		if (this.control && this.control.control) {
 			this.control.control.markAsDirty();
 			this.control.control.updateValueAndValidity();
 		}
 
-    if (this.typingTimeout) {
+		if (this.typingTimeout) {
 			clearTimeout(this.typingTimeout);
 		}
 
-    this.typingTimeout = setTimeout(() => {
+		this.typingTimeout = setTimeout(() => {
 			if (!this.disabled) {
 				this.getSuggestions(inputValue); // Call specific for a class
 			}
 		}, 500);
 	}
 
-  onEnter(ev: EventTarget | null) {
+	onEnter(ev: EventTarget | null) {
 		const t = ev as HTMLInputElement;
 		if (!this.disabled && t && t.value) {
 			//this.setValue(t?.value);
@@ -107,11 +106,11 @@ export abstract class AbstractAutocompleteComponent
 		}
 	}
 
-  // =========================================================================
+	// =========================================================================
 	// COMMON NAVIGATE AND SELECT LOGIC
 	// =========================================================================
 
-  @HostListener('document:keydown', ['$event'])
+	@HostListener('document:keydown', ['$event'])
 	onKeyDown(event: KeyboardEvent) {
 		if (!this.isOpen || this.suggestionsList.length === 0) {
 			if (event.key === 'Enter') {
@@ -120,7 +119,7 @@ export abstract class AbstractAutocompleteComponent
 			return;
 		}
 
-    switch (event.key) {
+		switch (event.key) {
 			case 'ArrowDown':
 				event.preventDefault();
 				this.navigate(1);
@@ -140,66 +139,66 @@ export abstract class AbstractAutocompleteComponent
 		}
 	}
 
-  navigate(step: 1 | -1) {
+	navigate(step: 1 | -1) {
 		let newIndex = this.activeIndex + step;
 
-    if (newIndex >= this.suggestionsList.length) {
+		if (newIndex >= this.suggestionsList.length) {
 			newIndex = 0;
 		} else if (newIndex < 0) {
 			newIndex = this.suggestionsList.length - 1;
 		}
 
-    this.setActiveItem(newIndex);
+		this.setActiveItem(newIndex);
 	}
 
-  setActiveItem(index: number) {
+	setActiveItem(index: number) {
 		if (this.activeIndex !== -1 && this.dropdown.nativeElement.children[this.activeIndex]) {
 			const oldItem = this.dropdown.nativeElement.children[this.activeIndex];
 			this.renderer.removeClass(oldItem, 'active');
 		}
 
-    this.activeIndex = index;
+		this.activeIndex = index;
 
-    if (this.activeIndex !== -1 && this.dropdown.nativeElement.children[this.activeIndex]) {
+		if (this.activeIndex !== -1 && this.dropdown.nativeElement.children[this.activeIndex]) {
 			const newItem = this.dropdown.nativeElement.children[this.activeIndex];
 			this.renderer.addClass(newItem, 'active');
 			newItem.scrollIntoView({ block: 'nearest' });
 		}
 	}
 
-  selectActiveItem() {
+	selectActiveItem() {
 		if (this.activeIndex !== -1) {
 			const itemData = this.suggestionsList[this.activeIndex];
 			this.selected.emit(itemData);
 
-      this.setValue(itemData);
+			this.setValue(itemData);
 
-      if (this.el && this.el.nativeElement) {
+			if (this.el && this.el.nativeElement) {
 				this.el.nativeElement.value = itemData.text;
 			}
 
-      if (this.typingTimeout) {
+			if (this.typingTimeout) {
 				clearTimeout(this.typingTimeout);
 			}
 
-      this.closeDropdown();
+			this.closeDropdown();
 		} else {
 			this.onEnter(this.el?.nativeElement);
 		}
 	}
 
-  // =========================================================================
+	// =========================================================================
 	// DROPDOWN MANAGEMENT (COMMON)
 	// =========================================================================
 
-  openDropdown() {
+	openDropdown() {
 		if (!this.dropdown || !this.dropdown.nativeElement || this.isOpen) return;
 		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
 		// this.renderer.addClass(this.dropdown.nativeElement, 'show');
 		this.isOpen = true;
 	}
 
-  closeDropdown() {
+	closeDropdown() {
 		if (!this.dropdown || !this.dropdown.nativeElement || !this.isOpen) return;
 		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
 		this.isOpen = false;
@@ -209,14 +208,14 @@ export abstract class AbstractAutocompleteComponent
 		this.suggestionsList = [];
 	}
 
-  clearDropdown() {
+	clearDropdown() {
 		if (!this.dropdown || !this.dropdown.nativeElement) return;
 		while (this.dropdown.nativeElement.firstChild) {
 			this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild!);
 		}
 	}
 
-  // protected setValueSilent(val: string) {
+	// protected setValueSilent(val: string) {
 	// 	this.value = val as any;
 	//
 	// 	if (this.control && this.control.control) {
@@ -224,19 +223,19 @@ export abstract class AbstractAutocompleteComponent
 	// 	}
 	// }
 
-  protected renderAc(suggestions: Array<AutocompleteItem | string>) {
+	protected renderAc(suggestions: Array<AutocompleteItem | string>) {
 		if (!this.dropdown || !this.dropdown.nativeElement) return;
 		this.clearDropdown();
 		this.suggestionsList = [];
 		this.activeIndex = -1;
 
-    const normalizedSuggestions = suggestions.map(suggestion =>
+		const normalizedSuggestions = suggestions.map(suggestion =>
 			typeof suggestion === 'string' ? { text: suggestion, value: suggestion } : suggestion
 		);
 
-    this.suggestionsList = normalizedSuggestions;
+		this.suggestionsList = normalizedSuggestions;
 
-    if (!this.suggestionsList || this.suggestionsList.length === 0) {
+		if (!this.suggestionsList || this.suggestionsList.length === 0) {
 			const el = this.renderer.createElement('a');
 			this.renderer.addClass(el, 'dropdown-item');
 			this.renderer.addClass(el, 'disabled');
@@ -247,16 +246,16 @@ export abstract class AbstractAutocompleteComponent
 			return;
 		}
 
-    for (let i = 0; i < this.suggestionsList.length; i++) {
+		for (let i = 0; i < this.suggestionsList.length; i++) {
 			const itemData = this.suggestionsList[i];
 
-      const el = this.renderer.createElement('a');
+			const el = this.renderer.createElement('a');
 			this.renderer.addClass(el, 'dropdown-item');
 
-      if (itemData.iconClass) {
+			if (itemData.iconClass) {
 				const icon = this.renderer.createElement('i');
 
-        const classes = itemData.iconClass.split(/\s+/);
+				const classes = itemData.iconClass.split(/\s+/);
 				for (const cls of classes) {
 					if (cls) {
 						// Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
@@ -269,9 +268,9 @@ export abstract class AbstractAutocompleteComponent
 				this.renderer.appendChild(el, icon);
 			}
 
-      this.renderer.appendChild(el, this.renderer.createText(itemData.text));
+			this.renderer.appendChild(el, this.renderer.createText(itemData.text));
 
-      this.renderer.listen(el, 'click', (ev: Event) => {
+			this.renderer.listen(el, 'click', (ev: Event) => {
 				this.activeIndex = i;
 				this.selectActiveItem();
 				ev.stopPropagation();
