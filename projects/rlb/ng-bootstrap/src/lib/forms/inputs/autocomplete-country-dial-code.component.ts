@@ -82,14 +82,15 @@ export class AutocompleteCountryDialCodeComponent
 	}
 
 	protected override getItemText(data?: AutocompleteItem | string): string {
+		const valueToFind = typeof data === 'object' ? data?.value : data;
 		const h = this.getCountries().find(c => {
 			if (typeof c === 'object') {
 				const _c = c as { text: string, value: string; };
-				return _c.value === (typeof data === 'object' ? data?.value : data) ? _c.text : '';
+				return _c.value === valueToFind;
 			}
 			return false;
 		});
-		return (typeof h === 'object' ? h.text : '');
+		return (typeof h === 'object' ? h.text : (typeof data === 'string' ? data : ''));
 	}
 
 	getCountries(): AutocompleteItem[] {
