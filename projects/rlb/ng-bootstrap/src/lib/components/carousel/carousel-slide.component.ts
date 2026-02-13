@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, Input } from '@angular/core';
+import { booleanAttribute, Component, input } from '@angular/core';
 
 @Component({
     selector: 'rlb-carousel-slide',
@@ -6,11 +6,11 @@ import { booleanAttribute, Component, Input } from '@angular/core';
     <ng-content select="rlb-carousel-caption"></ng-content>`,
     host: {
         class: 'carousel-item',
-        "[class.active]": 'active'
+        "[class.active]": 'active()'
     },
     standalone: false
 })
 export class CarouselSlideComponent {
-    @Input({ alias: 'active', transform: booleanAttribute }) active: boolean = false;
-    @Input({ alias: 'id' }) id: string = '';
+    active = input(false, { alias: 'active', transform: booleanAttribute });
+    id = input('', { alias: 'id' });
 }

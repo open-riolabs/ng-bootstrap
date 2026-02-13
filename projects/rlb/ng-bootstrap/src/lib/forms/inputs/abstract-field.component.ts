@@ -1,11 +1,13 @@
 import {
+  computed,
   Injectable,
   InputSignal,
   ModelSignal,
   Optional,
-  Self
+  Self,
+  signal
 } from '@angular/core';
-import { ControlValueAccessor, NgControl, ValidationErrors, } from '@angular/forms';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
@@ -56,27 +58,25 @@ export abstract class AbstractComponent<T = any>
     this.onTouched = fn;
   }
 
+  protected cvaDisabled = signal(false);
+
   setDisabledState?(isDisabled: boolean): void {
-    if (typeof this.disabled === 'function' && (this.disabled as any).set) {
-      (this.disabled as any).set(isDisabled);
-    } else {
-      (this.disabled as any) = isDisabled;
-    }
+    this.cvaDisabled.set(isDisabled);
   }
 
-  get invalid(): boolean {
+  invalid = computed(() => {
     return this.control?.invalid || false;
-  }
+  });
 
-  get showError(): boolean {
+  showError = computed(() => {
     if (!this.control) return false;
     const { dirty, touched } = this.control;
-    return this.invalid ? dirty || touched || false : false;
-  }
+    return this.invalid() ? dirty || touched || false : false;
+  });
 
-  get errors(): ValidationErrors {
+  errors = computed(() => {
     return this.control?.errors || {};
-  }
+  });
 
   onWrite(data: T) { };
 }

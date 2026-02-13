@@ -27,8 +27,8 @@ import { AutocompleteItem } from "./autocomplete-model";
 				}"
         (input)="update($event.target)"
         />
-        @if (errors && showError) {
-          <rlb-input-validation [errors]="errors"/>
+        @if (errors() && showError()) {
+          <rlb-input-validation [errors]="errors()"/>
         }
       </div>
       @if (loading() || acLoading()) {

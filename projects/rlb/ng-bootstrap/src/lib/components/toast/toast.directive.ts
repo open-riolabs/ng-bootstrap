@@ -1,26 +1,26 @@
 import {
+  AfterViewInit,
   Directive,
   ElementRef,
-  Renderer2,
-  Input,
+  input,
+  isSignal,
   OnDestroy,
-  DoCheck,
-  AfterViewInit,
+  Renderer2,
 } from '@angular/core';
 import { Toast } from 'bootstrap';
-import { InnerToastService } from './inner-toast.service';
 import { ToastCloseReason } from '../../shared/types';
 import { IToast } from './data/toast';
 import { ToastOptions } from './data/toast-options';
+import { InnerToastService } from './inner-toast.service';
 
 @Directive({
   selector: '[rlb-toast]',
   standalone: true,
 })
 export class ToastDirective implements OnDestroy, AfterViewInit {
-  @Input({ alias: 'id' }) id!: string;
-  @Input({ alias: 'data-instance' }) instance!: IToast;
-  @Input({ alias: 'data-options' }) options!: ToastOptions;
+  id = input.required<string>({ alias: 'id' });
+  instance = input.required<IToast>({ alias: 'data-instance' });
+  options = input.required<ToastOptions>({ alias: 'data-options' });
 
   private bsToast!: Toast;
   private contentElement!: HTMLElement;
@@ -37,18 +37,20 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     const cont = this.el.nativeElement.parentNode;
     this.contentElement = this.renderer.createElement('div');
     this.renderer.addClass(this.contentElement, 'toast');
-    this.renderer.setAttribute(this.contentElement, 'id', `${this.id}`);
+    this.renderer.setAttribute(this.contentElement, 'id', `${this.id()}`);
     this.renderer.setAttribute(this.contentElement, 'role', 'alert');
     this.renderer.setAttribute(this.contentElement, 'aria-live', 'assertive');
     this.renderer.setAttribute(this.contentElement, 'aria-atomic', 'true');
-    if (this.options?.color) {
+
+    const opts = this.options();
+    if (opts?.color) {
       this.renderer.addClass(
         this.contentElement,
-        `text-bg-${this.options.color}`,
+        `text-bg-${opts.color}`,
       );
     }
-    if (this.options?.classes) {
-      for (const c of this.options.classes) {
+    if (opts?.classes) {
+      for (const c of opts.classes) {
         this.renderer.addClass(this.contentElement, c.trim());
       }
     }
@@ -66,33 +68,32 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     this.contentElement.addEventListener(`shown.bs.toast`, this._openChange_f);
     this.initButtons();
     this.bsToast = Toast.getOrCreateInstance(this.contentElement, {
-      animation: this.options?.animation || true,
-      autohide: this.options?.autohide || true,
-      delay: this.options?.delay || 5000,
+      animation: opts?.animation || true,
+      autohide: opts?.autohide || true,
+      delay: opts?.delay || 5000,
     });
     this.bsToast.show();
   }
 
   ngOnDestroy(): void {
-    this.contentElement.removeEventListener(
-      `hide.bs.toast`,
-      this._openChange_f,
-    );
-    this.contentElement.removeEventListener(
-      `hidden.bs.toast`,
-      this._openChange_f,
-    );
-    this.contentElement.removeEventListener(
-      `show.bs.toast`,
-      this._openChange_f,
-    );
-    this.contentElement.removeEventListener(
-      `shown.bs.toast`,
-      this._openChange_f,
-    );
-    // this._reasonButtons?.forEach((btn) => {
-    //   btn.removeEventListener('click', null);
-    // });
+    if (this.contentElement) {
+      this.contentElement.removeEventListener(
+        `hide.bs.toast`,
+        this._openChange_f,
+      );
+      this.contentElement.removeEventListener(
+        `hidden.bs.toast`,
+        this._openChange_f,
+      );
+      this.contentElement.removeEventListener(
+        `show.bs.toast`,
+        this._openChange_f,
+      );
+      this.contentElement.removeEventListener(
+        `shown.bs.toast`,
+        this._openChange_f,
+      );
+    }
     this.bsToast?.dispose();
   }
 
@@ -100,8 +101,8 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     this.innerToastService.eventToast(
       e.type.replace('.bs.toast', ''),
       this._toastReason,
-      this.id,
-      this.instance?.result,
+      this.id(),
+      this.instance()?.result,
     );
   };
 
@@ -119,7 +120,9 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
             this.bsToast?.hide();
           }
           if (this._toastReason === 'ok') {
-            if (this.instance.valid) {
+            const inst = this.instance();
+            const isValid = isSignal(inst.valid) ? inst.valid() : inst.valid;
+            if (isValid !== false) {
               this.bsToast?.hide();
             }
           }

@@ -1,49 +1,54 @@
 import {
+  booleanAttribute,
   Directive,
-  Output,
-  Input,
-  EventEmitter,
-  HostBinding,
-  HostListener,
-  booleanAttribute
+  input,
+  output,
+  signal
 } from '@angular/core';
 
 @Directive({
-    selector: '[rlb-dnd]',
-    standalone: false
+  selector: '[rlb-dnd]',
+  standalone: false,
+  host: {
+    '[class.fileover]': 'fileOver()',
+    '(dragover)': 'onDragOver($event)',
+    '(dragleave)': 'onDragLeave($event)',
+    '(drop)': 'onDrop($event)'
+  }
 })
 export class DndDirective {
-  @Input({ alias: 'multiple', transform: booleanAttribute }) multi: boolean = false;
+  multi = input(false, { alias: 'multiple', transform: booleanAttribute });
 
-  @Output() fileDropped = new EventEmitter<File[]>();
+  fileDropped = output<File[]>();
 
-  @HostBinding('class.fileover') fileOver!: boolean;
-  @HostListener('dragover', ['$event']) onDragOver(evt: DragEvent) {
+  fileOver = signal(false);
+
+  onDragOver(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver = true;
+    this.fileOver.set(true);
   }
 
-  @HostListener('dragleave', ['$event']) public onDragLeave(evt: DragEvent) {
+  onDragLeave(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver = false;
+    this.fileOver.set(false);
   }
 
-  @HostListener('drop', ['$event']) public ondrop(evt: DragEvent) {
+  onDrop(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver = false;
+    this.fileOver.set(false);
     let files = evt.dataTransfer?.files;
-    if (files && files.length > 1) {
-      if (!this.multi) {
-        const _f = []
-        for (let i = 0; i < files.length; i++) _f.push(files[i]);
-        this.fileDropped.emit(_f);
+    if (files && files.length > 0) {
+      const _f: File[] = [];
+      if (files.length > 1 && !this.multi()) {
+        _f.push(files[0]);
       }
       else {
-        this.fileDropped.emit([files[0]]);
+        for (let i = 0; i < files.length; i++) _f.push(files[i]);
       }
+      this.fileDropped.emit(_f);
     }
   }
 }

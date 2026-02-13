@@ -2,15 +2,15 @@ import {
   AfterViewInit,
   booleanAttribute,
   Component,
-  ContentChildren,
-  DoCheck,
+  computed,
+  contentChildren,
+  effect,
   ElementRef,
-  EventEmitter,
-  Input,
+  input,
+  model,
   numberAttribute,
   OnDestroy,
-  Output,
-  QueryList
+  output,
 } from '@angular/core';
 import { Carousel } from 'bootstrap';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -19,13 +19,13 @@ import { CarouselSlideComponent } from './carousel-slide.component';
 @Component({
   selector: 'rlb-carousel',
   template: `
-      @if (!hideIndicators) {
+      @if (!hideIndicators()) {
         <div class="carousel-indicators">
-          @for (item of items; track item; let i = $index) {
+          @for (item of items(); track item; let i = $index) {
             <button
               type="button"
-              [class.active]="item.active"
-              [attr.data-bs-target]="'#' + id"
+              [class.active]="item.active()"
+              [attr.data-bs-target]="'#' + id()"
               [attr.data-bs-slide-to]="i"
               [attr.aria-label]="'Slide ' + (i + 1)"
             ></button>
@@ -35,22 +35,22 @@ import { CarouselSlideComponent } from './carousel-slide.component';
       <div class="carousel-inner">
         <ng-content select="rlb-carousel-slide" />
       </div>
-      @if (!hideControls) {
+      @if (!hideControls()) {
         <button
           class="carousel-control-prev"
           type="button"
-          [attr.data-bs-target]="'#' + id"
+          [attr.data-bs-target]="'#' + id()"
           data-bs-slide="prev"
           >
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
       }
-      @if (!hideControls) {
+      @if (!hideControls()) {
         <button
           class="carousel-control-next"
           type="button"
-          [attr.data-bs-target]="'#' + id"
+          [attr.data-bs-target]="'#' + id()"
           data-bs-slide="next"
           >
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -60,68 +60,65 @@ import { CarouselSlideComponent } from './carousel-slide.component';
       `,
   host: {
     class: 'carousel slide',
-    '[class.carousel-fade]': 'crossFade',
-    '[id]': 'id',
-    '[attr.data-bs-ride]': 'autoplay === "auto" ? "carousel" : autoplay === "manual" ? "true": undefined',
-    '[attr.data-bs-touch]': 'noTouch ? undefined : true',
-    '[attr.data-bs-interval]': 'interval',
-    '[attr.data-bs-keyboard]': '!keyboard ? "false" : undefined',
-    '[attr.data-bs-wrap]': '!wrap ? "false" : undefined',
-    '[attr.data-bs-pause]': 'pauseProp === false ? "false" : undefined',
+    '[class.carousel-fade]': 'crossFade()',
+    '[id]': 'id()',
+    '[attr.data-bs-ride]': 'autoplay() === "auto" ? "carousel" : autoplay() === "manual" ? "true": undefined',
+    '[attr.data-bs-touch]': 'noTouch() ? undefined : true',
+    '[attr.data-bs-interval]': 'interval()',
+    '[attr.data-bs-keyboard]': '!keyboard() ? "false" : undefined',
+    '[attr.data-bs-wrap]': '!wrap() ? "false" : undefined',
+    '[attr.data-bs-pause]': 'pauseProp() === false ? "false" : undefined',
   },
   standalone: false
 })
-export class CarouselComponent implements DoCheck, OnDestroy, AfterViewInit {
-  @ContentChildren(CarouselSlideComponent) public items!: QueryList<CarouselSlideComponent>;
-  @Input() id!: string;
+export class CarouselComponent implements OnDestroy, AfterViewInit {
+  items = contentChildren(CarouselSlideComponent);
 
-  @Input({ transform: booleanAttribute, alias: 'hide-indicators' }) hideIndicators?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'hide-controls' }) hideControls?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'cross-fade' }) crossFade?: boolean = false;
-  @Input('autoplay') autoplay?: 'auto' | 'manual' | 'none' = 'auto';
-  @Input('interval') interval?: number = 500;
-  @Input('pause') pauseProp?: false | 'hover' = 'hover';
-  @Input({ transform: booleanAttribute, alias: 'wrap' }) wrap?: boolean = true;
-  @Input({ transform: booleanAttribute, alias: 'no-touch' }) noTouch?: boolean = false;
-  @Input({ transform: booleanAttribute, alias: 'keyboard' }) keyboard?: boolean = true;
-  @Output('slid') slid?: EventEmitter<Carousel.Event> = new EventEmitter<Carousel.Event>();
-  @Output('slide') slide?: EventEmitter<Carousel.Event> = new EventEmitter<Carousel.Event>();
-  @Output('current-slideChange') currentSlideChange: EventEmitter<number> = new EventEmitter<number>();
-  @Output('slide-count') slideCountChange: EventEmitter<number> = new EventEmitter<number>();
+  _id = input<string | undefined>(undefined, { alias: 'id' });
+  id = computed(() => this._id() || `carousel${this.idService.id}`);
 
-  @Input({ alias: 'current-slide', transform: numberAttribute }) set currentSlide(index: number) {
-    this._currentSlide = index;
-    this.carousel?.to(index);
-  }
+  hideIndicators = input(false, { alias: 'hide-indicators', transform: booleanAttribute });
+  hideControls = input(false, { alias: 'hide-controls', transform: booleanAttribute });
+  crossFade = input(false, { alias: 'cross-fade', transform: booleanAttribute });
+  autoplay = input<'auto' | 'manual' | 'none'>('auto');
+  interval = input(500, { transform: numberAttribute });
+  pauseProp = input<false | 'hover' | undefined>('hover', { alias: 'pause' });
+  wrap = input(true, { transform: booleanAttribute });
+  noTouch = input(false, { alias: 'no-touch', transform: booleanAttribute });
+  keyboard = input(true, { transform: booleanAttribute });
 
-  get currentSlide(): number {
-    return this._currentSlide;
-  }
-
+  slid = output<Carousel.Event>();
+  slide = output<Carousel.Event>();
+  currentSlide = model(0, { alias: 'current-slide' });
+  slideCountChange = output<number>({ alias: 'slide-count' });
 
   private carousel!: Carousel;
-  private _currentSlide: number = 0;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
     private idService: UniqueIdService,
-  ) { }
+  ) {
+    effect(() => {
+      const index = this.currentSlide();
+      this.carousel?.to(index);
+    });
 
-  ngOnDestroy(): void {
-    this.carousel?.dispose();
-    this.elementRef.nativeElement.removeEventListener(
-      'slid.bs.carousel',
-      this.__event_slid_handler,
-    );
-    this.elementRef.nativeElement.removeEventListener(
-      'slide.bs.carousel',
-      this.__event_slide_handler,
-    );
+    effect(() => {
+      this.slideCountChange.emit(this.items().length);
+    });
   }
 
-  ngDoCheck(): void {
-    if (!this.id) {
-      this.id = `carousel${this.idService.id}`;
+  ngOnDestroy(): void {
+    if (this.carousel) {
+      this.carousel.dispose();
+      this.elementRef.nativeElement.removeEventListener(
+        'slid.bs.carousel',
+        this.__event_slid_handler,
+      );
+      this.elementRef.nativeElement.removeEventListener(
+        'slide.bs.carousel',
+        this.__event_slide_handler,
+      );
     }
   }
 
@@ -129,28 +126,27 @@ export class CarouselComponent implements DoCheck, OnDestroy, AfterViewInit {
     this.carousel = Carousel.getOrCreateInstance(
       this.elementRef.nativeElement,
       {
-        interval: this.interval,
-        keyboard: this.keyboard,
-        ride: this.adaptRide(this.autoplay),
-        touch: this.noTouch ? false : true,
-        wrap: this.wrap,
-        pause: this.pauseProp,
+        interval: this.interval(),
+        keyboard: this.keyboard(),
+        ride: this.adaptRide(this.autoplay()),
+        touch: this.noTouch() ? false : true,
+        wrap: this.wrap(),
+        pause: this.pauseProp() as any,
       },
     );
-    this.carousel.to(this._currentSlide);
-    this.slideCountChange.emit(this.items.length);
+    this.carousel.to(this.currentSlide());
     this.elementRef.nativeElement.addEventListener('slid.bs.carousel', e => this.__event_slid_handler(e));
-    this.elementRef.nativeElement.addEventListener('slide.bs.carousel', e => this.__event_slid_handler(e));
+    this.elementRef.nativeElement.addEventListener('slide.bs.carousel', e => this.__event_slide_handler(e));
   }
 
-  private __event_slid_handler(e: any): void {
-    this.currentSlideChange?.emit(e.to as number);
-    this.slid?.emit(e as Carousel.Event);
-  }
+  private __event_slid_handler = (e: any): void => {
+    this.currentSlide.set(e.to as number);
+    this.slid.emit(e as Carousel.Event);
+  };
 
-  private __event_slide_handler(e: unknown): void {
-    this.slide?.emit(e as Carousel.Event);
-  }
+  private __event_slide_handler = (e: unknown): void => {
+    this.slide.emit(e as Carousel.Event);
+  };
 
   public prev(): void {
     this.carousel?.prev();
@@ -173,7 +169,7 @@ export class CarouselComponent implements DoCheck, OnDestroy, AfterViewInit {
   }
 
   get slideCount(): number {
-    return this.items.length;
+    return this.items().length;
   }
 
   adaptRide(o?: 'auto' | 'manual' | 'none') {

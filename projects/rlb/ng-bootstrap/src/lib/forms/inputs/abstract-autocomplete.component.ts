@@ -1,14 +1,17 @@
 import {
   booleanAttribute,
   Component,
+  computed,
   ElementRef,
   EventEmitter,
   HostListener,
-  Input,
+  input,
+  InputSignal,
   numberAttribute,
   Output,
   Renderer2,
-  ViewChild,
+  signal,
+  viewChild
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -21,46 +24,45 @@ import { AutocompleteItem } from './autocomplete-model';
 })
 export abstract class AbstractAutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor
-{
-  acLoading: boolean = false;
+  implements ControlValueAccessor {
+  acLoading = signal(false);
   protected typingTimeout: any; // protected, to gain access to child classes
   isOpen = false;
 
   protected suggestionsList: AutocompleteItem[] = [];
-  protected activeIndex: number = -1;
+  protected activeIndex = signal(-1);
 
   // COMMON INPUT/OUTPUT
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean =
-    false;
-  @Input({ transform: numberAttribute, alias: 'max-height' })
-  maxHeight?: number = 200;
-  @Input({ alias: 'placeholder' }) placeholder?: string = '';
-  @Input() size?: 'small' | 'large' | undefined;
-  @Input({ alias: 'id', transform: (v: string) => v || '' })
-  userDefinedId: string = '';
-  @Input({ alias: 'chars-to-search', transform: numberAttribute })
-  charsToSearch: number = 3;
+  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
 
-  private _el!: ElementRef<HTMLInputElement>;
+  isDisabled = computed(() => this.disabled() || this.cvaDisabled());
+  readonly = input(false, { transform: booleanAttribute });
+  loading = input(false, { transform: booleanAttribute });
+  maxHeight = input(200, { transform: numberAttribute, alias: 'max-height' });
+  placeholder = input('', { alias: 'placeholder' });
+  size = input<'small' | 'large' | undefined>(undefined);
+
+  userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' }) as unknown as InputSignal<string>;
+  charsToSearch = input(3, { alias: 'chars-to-search', transform: numberAttribute });
+
+  private _el = viewChild<ElementRef<HTMLInputElement>>('field');
   private _pendingValue: AutocompleteItem | string | undefined = undefined;
 
-  @ViewChild('field', { read: ElementRef, static: false })
-  set el(value: ElementRef<HTMLInputElement>) {
-    this._el = value;
-    if (this._el && this._pendingValue !== undefined) {
+  get el(): ElementRef<HTMLInputElement> | undefined {
+    const elValue = this._el();
+    if (elValue && this._pendingValue !== undefined) {
       this.applyValueToInput(this._pendingValue);
+      this._pendingValue = undefined; // Clear after applying
     }
+    return elValue;
   }
 
-  get el(): ElementRef<HTMLInputElement> {
-    return this._el;
+  dropdownEl = viewChild<ElementRef<HTMLElement>>('autocomplete');
+
+  get dropdown(): ElementRef<HTMLElement> {
+    return this.dropdownEl()!;
   }
 
-  @ViewChild('autocomplete', { read: ElementRef, static: false })
-  dropdown!: ElementRef<HTMLElement>;
   @Output() selected: EventEmitter<AutocompleteItem> =
     new EventEmitter<AutocompleteItem>();
 
@@ -121,7 +123,7 @@ export abstract class AbstractAutocompleteComponent
     }
 
     this.typingTimeout = setTimeout(() => {
-      if (!this.disabled) {
+      if (!this.isDisabled()) {
         this.getSuggestions(inputValue);
       }
     }, 500);
@@ -129,7 +131,7 @@ export abstract class AbstractAutocompleteComponent
 
   onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
-    if (!this.disabled && t && t.value) {
+    if (!this.isDisabled() && t && t.value) {
       //this.setValue(t?.value);
       this.closeDropdown();
     }
@@ -143,7 +145,7 @@ export abstract class AbstractAutocompleteComponent
   onKeyDown(event: KeyboardEvent) {
     if (!this.isOpen || this.suggestionsList.length === 0) {
       if (event.key === 'Enter') {
-        this.onEnter(this.el?.nativeElement);
+        this.onEnter(this.el?.nativeElement || null);
       }
       return;
     }
@@ -169,7 +171,7 @@ export abstract class AbstractAutocompleteComponent
   }
 
   navigate(step: 1 | -1) {
-    let newIndex = this.activeIndex + step;
+    let newIndex = this.activeIndex() + step;
 
     if (newIndex >= this.suggestionsList.length) {
       newIndex = 0;
@@ -182,28 +184,30 @@ export abstract class AbstractAutocompleteComponent
 
   setActiveItem(index: number) {
     if (
-      this.activeIndex !== -1 &&
-      this.dropdown.nativeElement.children[this.activeIndex]
+      this.activeIndex() !== -1 &&
+      this.dropdown.nativeElement.children[this.activeIndex()]
     ) {
-      const oldItem = this.dropdown.nativeElement.children[this.activeIndex];
+      const oldItem = this.dropdown.nativeElement.children[this.activeIndex()];
       this.renderer.removeClass(oldItem, 'active');
     }
 
-    this.activeIndex = index;
+    this.activeIndex.set(index);
 
+    const dropdown = this.dropdownEl();
     if (
-      this.activeIndex !== -1 &&
-      this.dropdown.nativeElement.children[this.activeIndex]
+      this.activeIndex() !== -1 &&
+      dropdown &&
+      dropdown.nativeElement.children[this.activeIndex()]
     ) {
-      const newItem = this.dropdown.nativeElement.children[this.activeIndex];
+      const newItem = dropdown.nativeElement.children[this.activeIndex()];
       this.renderer.addClass(newItem, 'active');
       newItem.scrollIntoView({ block: 'nearest' });
     }
   }
 
   selectActiveItem() {
-    if (this.activeIndex !== -1) {
-      const itemData = this.suggestionsList[this.activeIndex];
+    if (this.activeIndex() !== -1) {
+      const itemData = this.suggestionsList[this.activeIndex()];
       this.selected.emit(itemData);
 
       this.setValue(itemData);
@@ -218,7 +222,7 @@ export abstract class AbstractAutocompleteComponent
 
       this.closeDropdown();
     } else {
-      this.onEnter(this.el?.nativeElement);
+      this.onEnter(this.el?.nativeElement || null);
     }
   }
 
@@ -227,27 +231,30 @@ export abstract class AbstractAutocompleteComponent
   // =========================================================================
 
   openDropdown() {
-    if (!this.dropdown || !this.dropdown.nativeElement || this.isOpen) return;
-    this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
+    const dropdown = this.dropdownEl();
+    if (!dropdown || !dropdown.nativeElement || this.isOpen) return;
+    this.renderer.setStyle(dropdown.nativeElement, 'display', 'block');
     // this.renderer.addClass(this.dropdown.nativeElement, 'show');
     this.isOpen = true;
   }
 
   closeDropdown() {
-    if (!this.dropdown || !this.dropdown.nativeElement || !this.isOpen) return;
-    this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
+    const dropdown = this.dropdownEl();
+    if (!dropdown || !dropdown.nativeElement || !this.isOpen) return;
+    this.renderer.setStyle(dropdown.nativeElement, 'display', 'none');
     this.isOpen = false;
     this.clearDropdown();
-    this.acLoading = false;
-    this.activeIndex = -1;
+    this.acLoading.set(false);
+    this.activeIndex.set(-1);
     this.suggestionsList = [];
   }
 
   clearDropdown() {
-    if (!this.dropdown || !this.dropdown.nativeElement) return;
-    while (this.dropdown.nativeElement.firstChild) {
-      this.dropdown.nativeElement.removeChild(
-        this.dropdown.nativeElement.lastChild!,
+    const dropdown = this.dropdownEl();
+    if (!dropdown || !dropdown.nativeElement) return;
+    while (dropdown.nativeElement.firstChild) {
+      dropdown.nativeElement.removeChild(
+        dropdown.nativeElement.lastChild!,
       );
     }
   }
@@ -261,10 +268,11 @@ export abstract class AbstractAutocompleteComponent
   // }
 
   protected renderAc(suggestions: Array<AutocompleteItem | string>) {
-    if (!this.dropdown || !this.dropdown.nativeElement) return;
+    const dropdown = this.dropdownEl();
+    if (!dropdown || !dropdown.nativeElement) return;
     this.clearDropdown();
     this.suggestionsList = [];
-    this.activeIndex = -1;
+    this.activeIndex.set(-1);
 
     const normalizedSuggestions = suggestions.map((suggestion) =>
       typeof suggestion === 'string'
@@ -310,7 +318,7 @@ export abstract class AbstractAutocompleteComponent
       this.renderer.appendChild(el, this.renderer.createText(itemData.text));
 
       this.renderer.listen(el, 'click', (ev: Event) => {
-        this.activeIndex = i;
+        this.activeIndex.set(i);
         this.selectActiveItem();
         ev.stopPropagation();
       });

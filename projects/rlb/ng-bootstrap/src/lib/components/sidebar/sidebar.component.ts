@@ -1,4 +1,15 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  effect,
+  ElementRef,
+  input,
+  OnDestroy,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
 import { BreakpointService } from '../../shared/breakpoint.service';
 import { SidebarService } from './sidebar.service';
@@ -6,7 +17,7 @@ import { SidebarService } from './sidebar.service';
 @Component({
   selector: 'rlb-sidebar',
   template: `
-		<div class="vertical-menu" [class.rounded-2]="rounded">
+		<div class="vertical-menu" [class.rounded-2]="rounded()">
 			<div id="sidebar-menu" class="w-100 h-100 overflow-y-auto">
 				<ul class="metismenu list-unstyled" id="side-menu" #sideMenu>
 					<ng-content select="rlb-sidebar-item"></ng-content>
@@ -15,11 +26,11 @@ import { SidebarService } from './sidebar.service';
 		</div>
 		<div role="button"
 				 class="sidebar-toggle"
-				 [tooltip]="!isCollapsed ? 'Hide' : 'Show'"
-				 [tooltip-placement]="!isCollapsed ? 'top' : 'left'"
+				 [tooltip]="!isCollapsed() ? 'Hide' : 'Show'"
+				 [tooltip-placement]="!isCollapsed() ? 'top' : 'left'"
 				 [tooltip-class]="'sidebar-toggler-tooltip'"
 				 (click)="toggleSidebar()">
-			<i [class.bi-chevron-double-left]="!isCollapsed" [class.bi-chevron-double-right]="isCollapsed"
+			<i [class.bi-chevron-double-left]="!isCollapsed()" [class.bi-chevron-double-right]="isCollapsed()"
 				 class="bi "></i>
 		</div>
 	`,
@@ -33,25 +44,26 @@ export class SidebarComponent implements OnInit, OnDestroy {
   menu: any;
   data: any;
   @ViewChild('sideMenu') sideMenu!: ElementRef;
-  isCollapsed: boolean = false;
+  isCollapsed = signal(false);
 
   private subscription: Subscription = new Subscription();
 
-  @Input({ alias: 'rounded', required: false }) rounded: boolean = false;
+  rounded = input(false, { alias: 'rounded', transform: booleanAttribute });
+  private isMobile = toSignal(this.breakpointService.isMobile$);
 
   constructor(
     private sidebarService: SidebarService,
     private breakpointService: BreakpointService
   ) {
+    effect(() => {
+      const mobile = this.isMobile();
+      if (mobile !== undefined) {
+        this.setCollapsed(mobile);
+      }
+    });
   }
 
   ngOnInit() {
-    this.subscription.add(
-      this.breakpointService.isMobile$.subscribe((isMobile) => {
-        this.setCollapsed(isMobile);
-      })
-    );
-
     this.subscription.add(
       this.sidebarService.itemClicked$.subscribe(() => {
         if (this.breakpointService.isMobile) {
@@ -66,11 +78,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   toggleSidebar() {
-    this.setCollapsed(!this.isCollapsed);
+    this.setCollapsed(!this.isCollapsed());
   }
 
   private setCollapsed(collapsed: boolean) {
-    this.isCollapsed = collapsed;
+    this.isCollapsed.set(collapsed);
 
     const sidebar = document.getElementById('sidebar');
     const content = document.querySelector('.rlb-content') as HTMLElement;

@@ -1,130 +1,127 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { CalendarEvent, IModal, ModalData, ModalDirective } from '../../../index';
-import { RlbBootstrapModule } from "../../../../rlb-bootstrap.module";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { Color } from "../../../../shared/types";
-import { Subject, takeUntil } from "rxjs";
-import { UniqueIdService } from "../../../../shared/unique-id.service";
-import { IDateTz } from "@open-rlb/date-tz";
-import { dateRangeValidator } from "./event-date-validator";
+import {
+  Component,
+  computed,
+  input,
+  OnDestroy,
+  OnInit,
+  signal
+} from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
+import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
+import { UniqueIdService } from '../../../../shared/unique-id.service';
+import { IModal } from '../../../modals/data/modal';
+import { ModalData } from '../../../modals/data/modal-data';
+import { ModalDirective } from '../../../modals/modal.directive';
+import { CalendarEvent } from '../../interfaces/calendar-event.interface';
 
 @Component({
-	standalone: true,
-	template: `
-		<div [class]="'modal-header' + headerColor">
-		  <h5 class="modal-title">{{ data.title }}</h5>
-		  <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
-		</div>
-		<div class="modal-body" [formGroup]="form">
-		  <rlb-input enable-validation formControlName="title">
-		    <label before>Event title</label>
-		  </rlb-input>
-		  <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="start">
-		    <label before class="mt-3">Event start</label>
-		  </rlb-input>
-		  <rlb-input enable-validation type="datetime-local" date-type="date-tz" formControlName="end">
-		    <label before class="mt-3">Event end</label>
-		  </rlb-input>
-		  <rlb-select enable-validation [placeholder]="'Choose event color'" formControlName="color">
-		    <label before class="mt-3">Event color</label>
-		    @for (color of colors; track color) {
-		      <rlb-option [value]="color">
-		        {{ color }}
-		      </rlb-option>
-		    }
-		  </rlb-select>
-		</div>
-		<div class="modal-footer">
-		  <button
-		    type="button"
-		    class="btn "
-		    data-modal-reason="cancel"
-		    [ngClass]="{ 'btn-secondary': !eventToEdit, 'btn-danger': eventToEdit }"
-		    >
-		    {{ eventToEdit ? 'Delete event' : 'Close' }}
-		  </button>
-		  <button type="button" [disabled]="!valid" class="btn btn-primary" data-modal-reason="ok">
-		    Save changes
-		  </button>
-		</div>
-		`,
-	hostDirectives: [
-		{
-			directive: ModalDirective,
-			inputs: ['id', 'data-instance', 'data-options'],
-		},
-	],
-  imports: [RlbBootstrapModule, CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [RlbBootstrapModule, ReactiveFormsModule],
+  template: `
+    <div [formGroup]="form">
+      <div [class]="'modal-header' + headerColor()">
+        <h5 class="modal-title">
+          @if(eventToEdit?.id) { Edit Event } @else { Create Event }
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
+      </div>
+      <div class="modal-body">
+        <rlb-input label="Title" formControlName="title" placeholder="Event Title" class="mb-3" />
+        
+        <div class="row mb-3">
+          <div class="col">
+            <rlb-input label="Start Date" type="datetime-local" formControlName="start" />
+          </div>
+          <div class="col">
+            <rlb-input label="End Date" type="datetime-local" formControlName="end" />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <rlb-switch label="All Day" formControlName="allDay" />
+          </div>
+          <div class="col">
+            <rlb-select label="Color" formControlName="color">
+              @for(c of colors; track c.value) {
+                <rlb-option [value]="c.value">{{ c.name }}</rlb-option>
+              }
+            </rlb-select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary me-2" data-modal-reason="cancel">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" data-modal-reason="ok">
+          Save
+        </button>
+      </div>
+    </div>
+  `,
+  hostDirectives: [
+    {
+      directive: ModalDirective,
+      inputs: ['id', 'data-instance', 'data-options'],
+    },
+  ],
 })
-export class EventCreateEditComponent implements IModal<CalendarEvent | undefined, CalendarEvent>, OnInit, OnDestroy {
-  data!: ModalData<CalendarEvent>;
+export class EventCreateEditComponent
+  implements IModal<CalendarEvent | undefined, CalendarEvent>, OnInit, OnDestroy {
+  data = input<ModalData<CalendarEvent | undefined>>({} as any);
   result?: CalendarEvent;
-  form!: FormGroup;
-  colors: Color[] = [
-    'primary',
-    'secondary',
-    'success',
-    'warning',
-    'danger',
-    'info',
-    'light',
-    'dark',
-  ]
 
-  eventToEdit!: CalendarEvent;
+  private _valid = signal(false);
+  valid = this._valid.asReadonly();
 
-  destroy$ = new Subject<void>();
+  headerColor = computed(() => {
+    return this.data()?.type ? ` bg-${this.data().type}` : '';
+  });
 
-  constructor(private fb: FormBuilder, private unique: UniqueIdService) {
-  }
+  private destroy$ = new Subject<void>();
+  public form!: FormGroup;
+  public eventToEdit?: CalendarEvent;
 
-  ngOnInit() {
-    this.eventToEdit = this.data.content
+  public colors = [
+    { name: 'Primary', value: 'primary' },
+    { name: 'Secondary', value: 'secondary' },
+    { name: 'Success', value: 'success' },
+    { name: 'Danger', value: 'danger' },
+    { name: 'Warning', value: 'warning' },
+    { name: 'Info', value: 'info' },
+    { name: 'Light', value: 'light' },
+    { name: 'Dark', value: 'dark' },
+  ];
+
+  constructor(private fb: FormBuilder, private unique: UniqueIdService) { }
+
+  ngOnInit(): void {
+    this.eventToEdit = this.data()?.content;
     this.form = this.fb.group({
-      id: [this.eventToEdit ? this.eventToEdit.id : this.unique.id],
-      title: [this.eventToEdit ? this.eventToEdit.title : "", Validators.required],
-      start: [this.eventToEdit ? this.eventToEdit.start : "", Validators.required],
-      end: [this.eventToEdit ? this.eventToEdit.end : "", Validators.required],
-      color: [this.eventToEdit ? this.eventToEdit.color : "", Validators.required],
-    }, { validators: dateRangeValidator })
+      id: [this.eventToEdit?.id || this.unique.id],
+      title: [this.eventToEdit?.title || '', Validators.required],
+      start: [this.eventToEdit?.start || '', Validators.required],
+      end: [this.eventToEdit?.end || '', Validators.required],
+      allDay: [this.eventToEdit?.allDay || false],
+      color: [this.eventToEdit?.color || 'primary']
+    });
 
-    this.form.valueChanges.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe((value: CalendarEvent) => {
-      this.result = this.handleFormValueChange(value)
-    })
+    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value: CalendarEvent) => {
+      this.result = this.handleFormValueChange(value);
+      this._valid.set(!this.form.pristine && this.form.valid);
+    });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-  }
-
-  get headerColor() {
-		return this.data.type ? ` bg-${this.data.type}` : '';
-	}
-
-  get valid(): boolean {
-    return !this.form.pristine && this.form.valid
-  }
-
-  private handleFormValueChange(formValue: CalendarEvent): CalendarEvent {
-    const start = this.roundToQuarter(formValue.start);
-    const end = this.roundToQuarter(formValue.end);
+  private handleFormValueChange(value: CalendarEvent): CalendarEvent {
     return {
-      ...formValue,
-      start,
-      end
-    } as CalendarEvent;
+      ...value,
+    };
   }
 
-  private roundToQuarter(date?: IDateTz): IDateTz | string {
-    if (date) {
-      const minutes = date.minute!;
-      const roundedMinutes = Math.round(minutes / 15) * 15;
-      return date.set!(roundedMinutes, 'minute');
-    }
-
-    return ""
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

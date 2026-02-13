@@ -1,44 +1,69 @@
-import { Component, Input, booleanAttribute, numberAttribute } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  inject,
+  input,
+  numberAttribute
+} from '@angular/core';
 import { Color } from '../../shared/types';
+import { ListComponent } from './list.component';
 
 @Component({
   selector: 'rlb-list-item-image',
   template: `
     <div class="d-flex">
-      <rlb-avatar *ngIf="avatar" [src]="avatar" [size]="avatarSize" />
-      <i *ngIf="!avatar && icon" [class]="icon" style="font-size: {{avatarSize}}px;"></i>
+      @if (avatar()) {
+        <rlb-avatar [src]="avatar()!" [size]="avatarSize()" />
+      }
+      @if (!avatar() && icon()) {
+        <i [class]="icon()" [style.font-size.px]="avatarSize()"></i>
+      }
       <div class="ps-2 flex-grow-1">
-        <div class="fw-bold">{{ username }}</div>
-        <span *ngIf="line1" class="d-block">{{ line1 }}</span>
-        <span *ngIf="line2" class="d-block">{{ line2 }}</span>
+        <div class="fw-bold">{{ username() }}</div>
+        @if (line1()) {
+          <span class="d-block">{{ line1() }}</span>
+        }
+        @if (line2()) {
+          <span class="d-block">{{ line2() }}</span>
+        }
       </div>
-      <div *ngIf="counter || counterEmpty">
-        <span *ngIf="counterEmpty" rlb-badge [pill]="counterPill" [color]="counterColor" [border]="counterBorder">&nbsp;</span>
-        <span *ngIf="!counterEmpty" rlb-badge [pill]="counterPill" [color]="counterColor" [border]="counterBorder">{{ counter }}</span>
-      </div>
+      @if (counter() !== undefined || counterEmpty()) {
+        <div>
+          @if (counterEmpty()) {
+            <span rlb-badge [pill]="counterPill()" [color]="counterColor()" [border]="counterBorder()">&nbsp;</span>
+          } @else {
+            <span rlb-badge [pill]="counterPill()" [color]="counterColor()" [border]="counterBorder()">{{ counter() }}</span>
+          }
+        </div>
+      }
     </div>
   `,
   host: {
     class: 'list-group-item',
-    '[class.disabled]': 'disabled',
-    '[class.list-group-item-action]': 'disabled !== true',
-    '[class.active]': 'active',
-    '[attr.aria-current]': 'active',
+    '[class.disabled]': 'disabled()',
+    '[class.list-group-item-action]': 'disabled() !== true',
+    '[class.active]': 'active()',
+    '[attr.aria-current]': 'active()',
   },
   standalone: false
 })
 export class ListItemImageComponent {
-  @Input({ transform: booleanAttribute, alias: 'active', }) active!: boolean;
-  @Input({ transform: booleanAttribute, alias: 'disabled', }) disabled!: boolean;
-  @Input({ transform: booleanAttribute, alias: 'counter-empty', }) counterEmpty?: string;
-  @Input({ transform: booleanAttribute, alias: 'counter-pill', }) counterPill?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'counter-border', }) counterBorder?: boolean;
-  @Input({ transform: numberAttribute, alias: 'avatar-size', }) avatarSize?: number = 50;
-  @Input({ alias: 'username' }) username?: string;
-  @Input({ alias: 'line-1' }) line1?: string;
-  @Input({ alias: 'line-2' }) line2?: string;
-  @Input({ alias: 'avatar' }) avatar?: string;
-  @Input({ alias: 'counter' }) counter?: number | string;
-  @Input({ alias: 'counter-color' }) counterColor?: Color | undefined;
-  @Input({ alias: 'icon' }) icon?: string;
+  private parent = inject(ListComponent, { optional: true });
+
+  active = input(false, { transform: booleanAttribute });
+  disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
+  counterEmpty = input(false, { transform: booleanAttribute, alias: 'counter-empty' });
+  counterPill = input(false, { transform: booleanAttribute, alias: 'counter-pill' });
+  counterBorder = input(false, { transform: booleanAttribute, alias: 'counter-border' });
+  avatarSize = input(50, { transform: numberAttribute, alias: 'avatar-size' });
+  username = input<string | undefined>(undefined);
+  line1 = input<string | undefined>(undefined, { alias: 'line-1' });
+  line2 = input<string | undefined>(undefined, { alias: 'line-2' });
+  avatar = input<string | undefined>(undefined);
+  counter = input<number | string | undefined>(undefined);
+  counterColor = input<Color | undefined>(undefined, { alias: 'counter-color' });
+  icon = input<string | undefined>(undefined);
+
+  disabled = computed(() => this.disabledInput() || this.parent?.disabled() || false);
 }

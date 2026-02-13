@@ -65,7 +65,7 @@ export class CalendarComponent {
     private modals: ModalService,
     private unique: UniqueIdService,
     private toasts: ToastService,
-  ) {}
+  ) { }
 
   // DnD event
   onEventChange(eventToEdit: CalendarEvent) {
@@ -140,8 +140,8 @@ export class CalendarComponent {
             const idx = currentEvents.findIndex(
               (entry) => event.id === entry.id,
             );
-            if (idx !== -1) {
-              currentEvents[idx] = modalResult.result;
+            if (idx !== -1 && modalResult.result) {
+              currentEvents[idx] = modalResult.result as any;
               this.events.set(currentEvents);
             }
             return of({ action: 'edit' });
@@ -209,9 +209,9 @@ export class CalendarComponent {
           const currentEvents = [...this.events()];
           if (eventToEdit) {
             const idx = currentEvents.findIndex(
-              (event) => event.id === eventToEdit.id,
+              (entry) => eventToEdit.id === entry.id,
             );
-            if (idx !== -1) {
+            if (idx !== -1 && modalResult.result) {
               currentEvents[idx] = newEvent;
               result = { action: 'edit' };
             }

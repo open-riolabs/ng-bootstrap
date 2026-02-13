@@ -2,85 +2,104 @@ import {
   AfterContentInit,
   booleanAttribute,
   Component,
-  ContentChildren,
-  Input,
+  computed,
+  contentChildren,
+  effect,
+  input,
   OnDestroy,
   OnInit,
-  QueryList,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Collapse } from 'bootstrap';
+import { Subject } from 'rxjs';
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
-import { NavbarItemsComponent } from "./navbar-items.component";
-import { startWith, Subject, takeUntil } from "rxjs";
-import { Collapse } from "bootstrap";
+import { NavbarItemsComponent } from './navbar-items.component';
 
 @Component({
-    selector: 'rlb-navbar',
-    template: ` <ng-template #template>
+  selector: 'rlb-navbar',
+  template: ` <ng-template #template>
     <nav
-      class="navbar px-2 bg-{{ color }} {{ placement }} {{ _navExpand }} {{ cssClass }}"
-      [attr.data-bs-theme]="dark"
+      class="navbar px-2 bg-{{ color() }} {{ placement() }} {{
+        _navExpand()
+      }} {{ cssClass() }}"
+      [attr.data-bs-theme]="dark() ? 'dark' : 'light'"
     >
       <div class="container-fluid">
         <ng-content
           select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator"
         />
         <button
-					class="navbar-toggler"
-					[class.d-none]="!enableDropdownToggler"
+          class="navbar-toggler"
+          [class.d-none]="!enableDropdownToggler()"
           type="button"
           rlb-button
           toggle="collapse"
           [toggle-target]="navId"
           aria-label="Toggle navigation"
         >
-					<span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" [id]="navId">
-					<div class="p-3 d-flex w-100 flex-column flex-lg-row">
-						<ng-content
-							select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
-						/>
-					</div>
+          <div class="p-3 d-flex w-100 flex-column flex-lg-row">
+            <ng-content
+              select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
+            />
+          </div>
         </div>
       </div>
     </nav>
   </ng-template>`,
-    standalone: false
+  standalone: false,
 })
-export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy  {
+export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   element!: HTMLElement;
-  private _navId: string;
-  private destroy$: Subject<void> = new Subject<void>();
+  public readonly navId: string;
+  private destroy$ = new Subject<void>();
 
-  public get navId(): string {
-    return this._navId;
-  }
-  get _navExpand(): string | undefined {
-    if (!this.expand) return undefined;
-    else if (this.expand === 'always') return 'navbar-expand';
-    else return `navbar-expand-${this.expand}`;
-  }
+  _navExpand = computed(() => {
+    const exp = this.expand();
+    if (!exp) return '';
+    else if (exp === 'always') return 'navbar-expand';
+    else return `navbar-expand-${exp}`;
+  });
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  @ContentChildren(NavbarItemsComponent, { descendants: true })
-  navbarItemsGroups!: QueryList<NavbarItemsComponent>;
+  navbarItemsGroups = contentChildren(NavbarItemsComponent, {
+    descendants: true,
+  });
 
-  @Input({ alias: 'dark', transform: booleanAttribute }) dark?: boolean;
-  @Input({ alias: 'color' }) color?: Color;
-  @Input({ alias: 'placement' }) placement?: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom';
-  @Input({ alias: 'expand' }) expand?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
-  @Input({ alias: 'class' }) cssClass?: string = '';
-	@Input({ alias: 'enable-dropdown-toggler', transform: booleanAttribute }) enableDropdownToggler: boolean = true;
+  dark = input(true, { alias: 'dark', transform: booleanAttribute });
+  color = input<Color | undefined>(undefined);
+  placement = input<
+    'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom' | undefined
+  >(undefined);
+  expand = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always' | undefined>(
+    undefined,
+  );
+  cssClass = input('', { alias: 'class' });
+  enableDropdownToggler = input(true, {
+    alias: 'enable-dropdown-toggler',
+    transform: booleanAttribute,
+  });
 
   constructor(
     private idService: UniqueIdService,
     private viewContainerRef: ViewContainerRef,
   ) {
-    this._navId = `nav${this.idService.id}`;
+    this.navId = `nav${this.idService.id}`;
+
+    effect(() => {
+      const groups = this.navbarItemsGroups();
+      groups.forEach((group) => {
+        // Since output() is not a Signal, we still need to subscribe,
+        // but we can manage the subscription here more cleanly.
+        // However, output().subscribe returns OutputRefSubscription which we should track.
+        group.click.subscribe(() => this.closeMobileMenu());
+      });
+    });
   }
 
   ngOnInit() {
@@ -92,19 +111,10 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy  {
   }
 
   ngAfterContentInit() {
-    this.navbarItemsGroups.changes.pipe(
-      startWith(this.navbarItemsGroups),
-      takeUntil(this.destroy$)
-    ).subscribe((groups: QueryList<NavbarItemsComponent>) => {
-      groups.forEach(group => {
-        group.click.pipe(
-          takeUntil(this.destroy$),
-        ).subscribe(() => this.closeMobileMenu());
-      });
-    });
+    // Logic moved to effect() for reactivity to content changes
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }

@@ -28,8 +28,8 @@ import { AutocompleteItem } from './autocomplete-model';
         }"
         (input)="update($event.target)"
       />
-      @if (errors && showError) {
-        <rlb-input-validation [errors]="errors" />
+      @if (errors() && showError()) {
+        <rlb-input-validation [errors]="errors()" />
       }
     </div>
     @if (loading() || acLoading()) {
@@ -54,8 +54,7 @@ import { AutocompleteItem } from './autocomplete-model';
 })
 export class AutocompleteTimezonesComponent
   extends AbstractAutocompleteComponent
-  implements ControlValueAccessor
-{
+  implements ControlValueAccessor {
   enableFlagIcons = input(false, {
     transform: booleanAttribute,
     alias: 'enable-flag-icons',

@@ -1,42 +1,40 @@
 import {
-	booleanAttribute,
-	Component,
-	EventEmitter,
-	Input,
-	OnInit,
-	Output,
-	TemplateRef,
-	ViewChild,
-	ViewContainerRef,
+  booleanAttribute,
+  Component,
+  input,
+  OnInit,
+  output,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 
 @Component({
-	selector: 'rlb-navbar-item',
-    template: ` <ng-template #template>
-			<li class="nav-item">
+  selector: 'rlb-navbar-item',
+  template: ` <ng-template #template>
+    <li class="nav-item">
       <a
-        class="nav-link {{ cssClass }}"
-				[routerLink]="routerLink"
-				routerLinkActive='active'
+        class="nav-link {{ cssClass() }}"
+        [routerLink]="routerLink()"
+        routerLinkActive="active"
         (click)="click.emit($event)"
       >
         <ng-content select=":not(rlb-dropdown-container)"></ng-content>
       </a>
     </li>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
 export class NavbarItemComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
-	@Input({ alias: 'router-link' }) routerLink?: string;
-  @Input({ alias: 'class' }) cssClass?: string;
+  disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
+  routerLink = input<string | undefined>(undefined, { alias: 'router-link' });
+  cssClass = input('', { alias: 'class' });
 
+  click = output<MouseEvent>();
 
-  @Output() click = new EventEmitter<MouseEvent>();
-	
-	@ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 

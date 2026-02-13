@@ -1,19 +1,15 @@
 import {
-  AfterContentInit,
-  AfterViewInit,
   booleanAttribute,
   Component,
-  ContentChildren,
+  contentChildren,
+  effect,
   EmbeddedViewRef,
-  Input,
-  OnDestroy,
+  input,
   OnInit,
-  QueryList,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Subscription } from "rxjs";
 import { DataTableActionComponent } from './dt-action.component';
 
 @Component({
@@ -23,7 +19,7 @@ import { DataTableActionComponent } from './dt-action.component';
       <div class="dropdown">
         <button
           class="btn btn-outline py-0 pe-2 float-end"
-          [disabled]="_disabled"
+          [disabled]="_disabled()"
           type="button"
           data-bs-toggle="dropdown"
           data-bs-popper-config='{"strategy":"fixed"}'
@@ -39,23 +35,27 @@ import { DataTableActionComponent } from './dt-action.component';
   `,
   standalone: false
 })
-export class DataTableActionsComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
+export class DataTableActionsComponent implements OnInit {
   element!: HTMLElement;
   private temp!: EmbeddedViewRef<any>;
 
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
+  disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  @ContentChildren(DataTableActionComponent) actions!: QueryList<DataTableActionComponent>;
-  @ViewChild('projectedActions', { read: ViewContainerRef }) _projectedActions!: ViewContainerRef;
-  private _actionsSubscription: Subscription | undefined;
+  template = viewChild.required<TemplateRef<any>>('template');
+  actions = contentChildren(DataTableActionComponent);
+  _projectedActions = viewChild<ViewContainerRef>('projectedActions');
 
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  constructor(private viewContainerRef: ViewContainerRef) {
+    effect(() => {
+      this._renderActions();
+    });
+  }
 
-  get _disabled() {
-    if (this.disabled) return true;
-    if (!this.actions || this.actions.length === 0) return false;
-    return !this.actions.toArray().some((o) => !o.disabled);
+  _disabled() {
+    if (this.disabled()) return true;
+    const actions = this.actions();
+    if (!actions || actions.length === 0) return false;
+    return !actions.some((o) => !o.disabled());
   }
 
   get _view() {
@@ -64,35 +64,21 @@ export class DataTableActionsComponent implements OnInit, AfterViewInit, AfterCo
 
   ngOnInit() {
     this.temp = this.viewContainerRef.createEmbeddedView(
-      this.template,
+      this.template(),
     );
     this.element = this.temp.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
 
-  ngAfterContentInit() {
-    this._actionsSubscription = this.actions.changes.subscribe(() => {
-      this._renderActions();
-    });
-  }
-
-  ngOnDestroy() {
-    if (this._actionsSubscription) {
-      this._actionsSubscription.unsubscribe();
-    }
-  }
-
-  ngAfterViewInit() {
-    this._renderActions();
-  }
-
   private _renderActions() {
-    if (this._projectedActions && this.actions) {
-      for (let i = this._projectedActions?.length; i > 0; i--) {
-        this._projectedActions.detach();
+    const projectedActions = this._projectedActions();
+    const actions = this.actions();
+    if (projectedActions && actions) {
+      for (let i = projectedActions.length; i > 0; i--) {
+        projectedActions.detach();
       }
-      this.actions?.forEach((action) => {
-        this._projectedActions.insert(action._view);
+      actions.forEach((action) => {
+        projectedActions.insert(action._view);
       });
     }
   }

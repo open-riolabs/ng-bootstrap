@@ -45,8 +45,8 @@ import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
         />
-        @if (errors && showError && enableValidation()) {
-          <rlb-input-validation [errors]="errors"/>
+        @if (errors() && showError() && enableValidation()) {
+          <rlb-input-validation [errors]="errors()"/>
         }
       </div>
       @if (loading() || acLoading()) {

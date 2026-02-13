@@ -2,20 +2,27 @@ import {
   AfterViewInit,
   booleanAttribute,
   Component,
+  computed,
   ElementRef,
-  Input,
+  input,
+  InputSignal,
   Optional,
   Self,
-  ViewChild,
+  viewChild
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
+import { AbstractComponent } from './abstract-field.component';
 
 @Component({
-    selector: 'rlb-switch',
-    template: `
+  selector: 'rlb-switch',
+  template: `
       <div class="d-flex align-items-center gap-2">
+        @if (errors() && (control?.touched || control?.dirty)) {
+          <div class="invalid-feedback d-block">
+            {{ errors() | json }}
+          </div>
+        }
         <ng-content select="[before]"></ng-content>
 
         <div class="form-check form-switch m-0">
@@ -24,8 +31,8 @@ import { UniqueIdService } from '../../shared/unique-id.service';
             class="form-check-input"
             type="checkbox"
             [id]="id"
-            [attr.disabled]="disabled ? true : undefined"
-            [attr.readonly]="readonly ? true : undefined"
+            [attr.disabled]="isDisabled() ? true : undefined"
+            [attr.readonly]="readonly() ? true : undefined"
             (blur)="touch()"
             [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
             (input)="update($event.target)"
@@ -35,17 +42,19 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         <ng-content select="[after]"></ng-content>
       </div>
     `,
-    standalone: false
+  standalone: false
 })
 export class SwitchComponent
   extends AbstractComponent<boolean>
   implements ControlValueAccessor, AfterViewInit {
-  @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled?: boolean;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly?: boolean;
-  @Input({ alias: 'size' }) size?: 'small' | 'large';
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  readonly = input(false, { transform: booleanAttribute });
+  size = input<'small' | 'large' | undefined>(undefined);
+  userDefinedId = input('', { alias: 'id' });
 
-  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
+  el = viewChild.required<ElementRef<HTMLInputElement>>('field');
+
+  isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
   private data!: boolean;
 
@@ -57,7 +66,7 @@ export class SwitchComponent
   }
 
   update(ev: EventTarget | null) {
-    if (!this.disabled) {
+    if (!this.isDisabled()) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.checked);
     }
@@ -65,21 +74,22 @@ export class SwitchComponent
 
   override onWrite(data: boolean): void {
     this.data = data;
-    this.updateInternalValue()
+    this.updateInternalValue();
   }
 
   ngAfterViewInit() {
-    this.updateInternalValue()
+    this.updateInternalValue();
   }
 
   private updateInternalValue(): void {
-    if (this.el && this.el.nativeElement) {
+    const el = this.el();
+    if (el && el.nativeElement) {
       if (this.data === undefined || this.data === null) return;
       if (typeof this.data === 'string') {
-        this.el.nativeElement.checked = /^true$/i.test(this.data);
+        el.nativeElement.checked = /^true$/i.test(this.data);
       }
       else {
-        this.el.nativeElement.checked = this.data;
+        el.nativeElement.checked = this.data;
       }
     }
   }
