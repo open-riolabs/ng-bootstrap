@@ -13,7 +13,7 @@ import {
   signal,
   TemplateRef,
   viewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
@@ -22,8 +22,7 @@ import { AbstractComponent } from './abstract-field.component';
 
 @Component({
   selector: 'rlb-input',
-  template: `
-  <ng-template #template>
+  template: ` <ng-template #template>
     <ng-content select="[before]"></ng-content>
     <input
       #field
@@ -31,9 +30,21 @@ import { AbstractComponent } from './abstract-field.component';
       class="form-control"
       [type]="_type()"
       [name]="name()"
-      [attr.max]="type() === 'number' && max() !== null && max() !== undefined ? max() : undefined"
-      [attr.min]="type() === 'number' && min() !== null && min() !== undefined ? min() : undefined"
-      [attr.step]="type() === 'number' && step() !== null && step() !== undefined ? step() : undefined"
+      [attr.max]="
+        type() === 'number' && max() !== null && max() !== undefined
+          ? max()
+          : undefined
+      "
+      [attr.min]="
+        type() === 'number' && min() !== null && min() !== undefined
+          ? min()
+          : undefined
+      "
+      [attr.step]="
+        type() === 'number' && step() !== null && step() !== undefined
+          ? step()
+          : undefined
+      "
       [attr.disabled]="isDisabled() ? true : undefined"
       [attr.readonly]="readonly() ? true : undefined"
       [attr.placeholder]="placeholder()"
@@ -41,25 +52,32 @@ import { AbstractComponent } from './abstract-field.component';
       [class.form-control-sm]="size() === 'small'"
       [value]="value || ''"
       (blur)="touch()"
-        [ngClass]="{
-        'is-invalid': control?.touched && control?.invalid && enableValidation(),
-        'is-valid': control?.touched && control?.valid && enableValidation()
-        }"
+      [ngClass]="{
+        'is-invalid':
+          control?.touched && control?.invalid && enableValidation(),
+        'is-valid': control?.touched && control?.valid && enableValidation(),
+      }"
       (input)="update($event.target)"
-      />
-      @if (!_extValidation() && showError()) {
-        <rlb-input-validation [errors]="errors()"/>
-      }
-      <ng-content select="[after]"></ng-content>
-    </ng-template>`,
-  standalone: false
+    />
+    @if (!_extValidation() && showError()) {
+      <rlb-input-validation [errors]="errors()" />
+    }
+    <ng-content select="[after]"></ng-content>
+  </ng-template>`,
+  standalone: false,
 })
 export class InputComponent
   extends AbstractComponent<any>
-  implements OnInit, AfterViewInit {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  implements OnInit, AfterViewInit
+{
+  disabled = input(false, {
+    transform: booleanAttribute,
+  }) as unknown as InputSignal<boolean | undefined>;
   readonly = input(false, { transform: booleanAttribute });
-  beforeText = input(false, { alias: 'before-text', transform: booleanAttribute });
+  beforeText = input(false, {
+    alias: 'before-text',
+    transform: booleanAttribute,
+  });
   placeholder = input<string | undefined>(undefined);
   type = input<string>('text');
   size = input<'small' | 'large' | undefined>(undefined);
@@ -67,14 +85,21 @@ export class InputComponent
   max = input(undefined, { transform: numberAttribute });
   min = input(undefined, { transform: numberAttribute });
   step = input(undefined, { transform: numberAttribute });
-  dateType = input<'date' | 'string' | 'number' | 'date-tz' | string | undefined>(undefined, { alias: 'date-type' });
+  dateType = input<
+    'date' | 'string' | 'number' | 'date-tz' | string | undefined
+  >(undefined, { alias: 'date-type' });
   timezone = input('UTC');
   userDefinedId = input('', { alias: 'id' });
   extValidation = input(false, { transform: booleanAttribute });
-  enableValidation = input(false, { alias: 'enable-validation', transform: booleanAttribute });
+  enableValidation = input(false, {
+    alias: 'enable-validation',
+    transform: booleanAttribute,
+  });
 
   protected _forceExtValidation = signal(false);
-  protected _extValidation = computed(() => this.extValidation() || this._forceExtValidation());
+  protected _extValidation = computed(
+    () => this.extValidation() || this._forceExtValidation(),
+  );
 
   setExtValidation(val: boolean) {
     this._forceExtValidation.set(val);
@@ -87,10 +112,14 @@ export class InputComponent
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
-  el = viewChild.required<ElementRef<HTMLInputElement>>('field');
+  el = viewChild<ElementRef<HTMLInputElement>>('field');
   template = viewChild.required<TemplateRef<any>>('template');
 
-  constructor(private viewContainerRef: ViewContainerRef, idService: UniqueIdService, @Self() @Optional() override control?: NgControl) {
+  constructor(
+    private viewContainerRef: ViewContainerRef,
+    idService: UniqueIdService,
+    @Self() @Optional() override control?: NgControl,
+  ) {
     super(idService, control);
   }
 
@@ -112,13 +141,18 @@ export class InputComponent
           let text = v.toString() + (comma ? '.' : '');
           const firstDotIndex = text.indexOf('.');
           if (firstDotIndex !== -1) {
-            text = (text.match(/\./g) || [])?.length > 1 ? text.slice(0, firstDotIndex + 1) + text.slice(firstDotIndex + 1).replace(/\./g, '') : text;
+            text =
+              (text.match(/\./g) || [])?.length > 1
+                ? text.slice(0, firstDotIndex + 1) +
+                  text.slice(firstDotIndex + 1).replace(/\./g, '')
+                : text;
           }
           this.onChanged?.(parseFloat(text));
           t.value = text;
           return;
         }
-      } if (this.type() === 'datetime-local') {
+      }
+      if (this.type() === 'datetime-local') {
         if (this.dateType() === 'string') {
           const t = ev as HTMLInputElement;
           this.onChanged?.(t?.value || '');
@@ -133,8 +167,7 @@ export class InputComponent
           const d = DateTz.parse(t?.value, 'YYYY-MM-DDTHH:mm', this.timezone());
           this.onChanged?.(d);
         }
-      }
-      else {
+      } else {
         const t = ev as HTMLInputElement;
         this.setValue(t?.value || '');
       }
@@ -143,6 +176,14 @@ export class InputComponent
 
   override onWrite(data: string): void {
     const el = this.el();
+
+    // If the view isn't ready yet, just store the value and exit.
+    // ngAfterViewInit will call this method again once el() is available.
+    if (!el || !el.nativeElement) {
+      this.value = data;
+      return;
+    }
+
     if (el && el.nativeElement) {
       if (this.type() === 'number') {
         if (data === '' || data === null || data === undefined) {
@@ -162,7 +203,8 @@ export class InputComponent
         this.value = data;
         el.nativeElement.value = val.toString();
         return;
-      } if (this.type() === 'datetime-local') {
+      }
+      if (this.type() === 'datetime-local') {
         if (this.dateType() === 'string') {
           this.value = data;
           el.nativeElement.value = data || '';
@@ -179,18 +221,15 @@ export class InputComponent
           if (!d?.timestamp) return;
           if (!d?.timezone) d.timezone = this.timezone();
           d = new DateTz(d);
-          this.value = `${d.toString?.("YYYY-MM-DDTHH:mm")}`;
+          this.value = `${d.toString?.('YYYY-MM-DDTHH:mm')}`;
           el.nativeElement.value = this.value;
         }
-      }
-      else {
+      } else {
         this.value = data;
         el.nativeElement.value = data || '';
       }
     }
   }
-
-
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
@@ -205,11 +244,17 @@ export class InputComponent
   }
 
   removeNonDigits(value: string): string {
-    const filtered = value.toString().match(/[0-9,.]/g)?.join('') || '';
+    const filtered =
+      value
+        .toString()
+        .match(/[0-9,.]/g)
+        ?.join('') || '';
     const standardized = filtered.replace(/,/g, '.');
     const [integerPart, ...fractionalParts] = standardized.split('.');
-    const result = fractionalParts.length > 0 ? `${integerPart}.${fractionalParts.join('')}` : integerPart;
+    const result =
+      fractionalParts.length > 0
+        ? `${integerPart}.${fractionalParts.join('')}`
+        : integerPart;
     return result;
   }
-
 }

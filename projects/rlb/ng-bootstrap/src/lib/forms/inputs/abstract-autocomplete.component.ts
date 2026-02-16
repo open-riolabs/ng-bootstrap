@@ -1,30 +1,28 @@
 import {
   booleanAttribute,
-  Component,
   computed,
+  Directive,
+  effect,
   ElementRef,
-  EventEmitter,
   HostListener,
   input,
   InputSignal,
   numberAttribute,
-  Output,
+  output,
   Renderer2,
   signal,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteItem } from './autocomplete-model';
 
-@Component({
-  template: '',
-  standalone: false,
-})
+@Directive()
 export abstract class AbstractAutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor {
+  implements ControlValueAccessor
+{
   acLoading = signal(false);
   protected typingTimeout: any; // protected, to gain access to child classes
   isOpen = false;
@@ -33,7 +31,9 @@ export abstract class AbstractAutocompleteComponent
   protected activeIndex = signal(-1);
 
   // COMMON INPUT/OUTPUT
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  disabled = input(false, {
+    transform: booleanAttribute,
+  }) as unknown as InputSignal<boolean | undefined>;
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
   readonly = input(false, { transform: booleanAttribute });
@@ -42,29 +42,27 @@ export abstract class AbstractAutocompleteComponent
   placeholder = input('', { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined);
 
-  userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' }) as unknown as InputSignal<string>;
-  charsToSearch = input(3, { alias: 'chars-to-search', transform: numberAttribute });
+  userDefinedId = input('', {
+    alias: 'id',
+    transform: (v: string) => v || '',
+  }) as unknown as InputSignal<string>;
+  charsToSearch = input(3, {
+    alias: 'chars-to-search',
+    transform: numberAttribute,
+  });
 
+  dropdownEl = viewChild<ElementRef<HTMLElement>>('autocomplete');
+  selected = output<AutocompleteItem>();
   private _el = viewChild<ElementRef<HTMLInputElement>>('field');
   private _pendingValue: AutocompleteItem | string | undefined = undefined;
 
-  get el(): ElementRef<HTMLInputElement> | undefined {
-    const elValue = this._el();
-    if (elValue && this._pendingValue !== undefined) {
-      this.applyValueToInput(this._pendingValue);
-      this._pendingValue = undefined; // Clear after applying
-    }
-    return elValue;
+  get el() {
+    return this._el();
   }
-
-  dropdownEl = viewChild<ElementRef<HTMLElement>>('autocomplete');
 
   get dropdown(): ElementRef<HTMLElement> {
     return this.dropdownEl()!;
   }
-
-  @Output() selected: EventEmitter<AutocompleteItem> =
-    new EventEmitter<AutocompleteItem>();
 
   protected abstract getSuggestions(query: string): void;
 
@@ -76,6 +74,15 @@ export abstract class AbstractAutocompleteComponent
     control?: NgControl,
   ) {
     super(idService, control);
+
+    // This effect runs automatically whenever _el changes (e.g., becomes defined)
+    effect(() => {
+      const el = this._el();
+      if (el && this._pendingValue !== undefined) {
+        this.applyValueToInput(this._pendingValue);
+        this._pendingValue = undefined;
+      }
+    });
   }
 
   // =========================================================================
@@ -83,19 +90,19 @@ export abstract class AbstractAutocompleteComponent
   // =========================================================================
 
   override onWrite(data?: AutocompleteItem | string): void {
-    this._pendingValue = data;
-    this.applyValueToInput(data);
+    const el = this._el();
+    if (el) {
+      this.applyValueToInput(data);
+    } else {
+      // View not ready yet, store it for the effect above
+      this._pendingValue = data;
+    }
   }
 
   private applyValueToInput(data?: AutocompleteItem | string): void {
-    if (this.el && this.el.nativeElement) {
-      if (data) {
-        this.el.nativeElement.value = this.getItemText(
-          data as AutocompleteItem,
-        );
-      } else {
-        this.el.nativeElement.value = '';
-      }
+    const nativeEl = this._el()?.nativeElement;
+    if (nativeEl) {
+      nativeEl.value = data ? this.getItemText(data as any) : '';
     }
   }
 
@@ -232,97 +239,59 @@ export abstract class AbstractAutocompleteComponent
 
   openDropdown() {
     const dropdown = this.dropdownEl();
-    if (!dropdown || !dropdown.nativeElement || this.isOpen) return;
+    if (!dropdown) return;
+
+    // Always ensure the display is set, even if isOpen was already true
     this.renderer.setStyle(dropdown.nativeElement, 'display', 'block');
-    // this.renderer.addClass(this.dropdown.nativeElement, 'show');
     this.isOpen = true;
   }
 
   closeDropdown() {
     const dropdown = this.dropdownEl();
-    if (!dropdown || !dropdown.nativeElement || !this.isOpen) return;
+    if (!dropdown) return;
+
     this.renderer.setStyle(dropdown.nativeElement, 'display', 'none');
     this.isOpen = false;
     this.clearDropdown();
     this.acLoading.set(false);
-    this.activeIndex.set(-1);
-    this.suggestionsList = [];
   }
 
   clearDropdown() {
     const dropdown = this.dropdownEl();
-    if (!dropdown || !dropdown.nativeElement) return;
-    while (dropdown.nativeElement.firstChild) {
-      dropdown.nativeElement.removeChild(
-        dropdown.nativeElement.lastChild!,
-      );
-    }
-  }
+    if (!dropdown) return;
 
-  // protected setValueSilent(val: string) {
-  // 	this.value = val as any;
-  //
-  // 	if (this.control && this.control.control) {
-  // 		this.control.control.setValue(val, { emitEvent: false });
-  // 	}
-  // }
+    dropdown.nativeElement.innerHTML = '';
+  }
 
   protected renderAc(suggestions: Array<AutocompleteItem | string>) {
     const dropdown = this.dropdownEl();
-    if (!dropdown || !dropdown.nativeElement) return;
-    this.clearDropdown();
-    this.suggestionsList = [];
-    this.activeIndex.set(-1);
+    if (!dropdown) return;
 
-    const normalizedSuggestions = suggestions.map((suggestion) =>
-      typeof suggestion === 'string'
-        ? { text: suggestion, value: suggestion }
-        : suggestion,
+    this.clearDropdown();
+    this.suggestionsList = suggestions.map((s) =>
+      typeof s === 'string' ? { text: s, value: s } : s,
     );
 
-    this.suggestionsList = normalizedSuggestions;
-
-    if (!this.suggestionsList || this.suggestionsList.length === 0) {
+    if (this.suggestionsList.length === 0) {
       const el = this.renderer.createElement('a');
       this.renderer.addClass(el, 'dropdown-item');
       this.renderer.addClass(el, 'disabled');
-      this.renderer.addClass(el, 'text-center');
-      this.renderer.setAttribute(el, 'disabled', 'true');
       this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
-      this.renderer.appendChild(this.dropdown.nativeElement, el);
+      this.renderer.appendChild(dropdown.nativeElement, el);
       return;
     }
 
-    for (let i = 0; i < this.suggestionsList.length; i++) {
-      const itemData = this.suggestionsList[i];
-
+    this.suggestionsList.forEach((item, i) => {
       const el = this.renderer.createElement('a');
       this.renderer.addClass(el, 'dropdown-item');
+      this.renderer.appendChild(el, this.renderer.createText(item.text));
 
-      if (itemData.iconClass) {
-        const icon = this.renderer.createElement('i');
-
-        const classes = itemData.iconClass.split(/\s+/);
-        for (const cls of classes) {
-          if (cls) {
-            // Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
-            // it causes silent runtime error
-            // Instead we should split it, and add one by one
-            this.renderer.addClass(icon, cls);
-          }
-        }
-        this.renderer.addClass(icon, 'me-2');
-        this.renderer.appendChild(el, icon);
-      }
-
-      this.renderer.appendChild(el, this.renderer.createText(itemData.text));
-
-      this.renderer.listen(el, 'click', (ev: Event) => {
+      this.renderer.listen(el, 'click', (ev) => {
         this.activeIndex.set(i);
         this.selectActiveItem();
         ev.stopPropagation();
       });
-      this.renderer.appendChild(this.dropdown.nativeElement, el);
-    }
+      this.renderer.appendChild(dropdown.nativeElement, el);
+    });
   }
 }
