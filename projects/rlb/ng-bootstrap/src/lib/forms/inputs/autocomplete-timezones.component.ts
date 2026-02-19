@@ -13,7 +13,7 @@ import { AutocompleteItem } from './autocomplete-model';
       <input
         #field
         [id]="id"
-        class="rlb-autocomplete-timezones"
+        class="form-control"
         type="text"
         [attr.disabled]="disabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
@@ -31,6 +31,14 @@ import { AutocompleteItem } from './autocomplete-model';
       @if (errors() && showError()) {
         <rlb-input-validation [errors]="errors()" />
       }
+      <div
+        #autocomplete
+        [id]="id + '-ac'"
+        class="dropdown-menu overflow-y-auto w-100 position-absolute"
+        aria-labelledby="dropdownMenu"
+        [style.max-height.px]="maxHeight()"
+        style="z-index: 1000; top: 100%;"
+      ></div>
     </div>
     @if (loading() || acLoading()) {
       <rlb-progress
@@ -41,14 +49,6 @@ import { AutocompleteItem } from './autocomplete-model';
       />
     }
     <ng-content select="[after]"></ng-content>
-    <div
-      #autocomplete
-      [id]="id + '-ac'"
-      class="dropdown-menu overflow-y-auto w-100 position-absolute"
-      aria-labelledby="dropdownMenu"
-      [style.max-height.px]="maxHeight()"
-      style="z-index: 1000; top: 100%;"
-    ></div>
   `,
   standalone: false,
 })
