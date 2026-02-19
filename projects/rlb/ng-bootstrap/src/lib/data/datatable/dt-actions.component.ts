@@ -23,17 +23,17 @@ import { DataTableActionComponent } from './dt-action.component';
           type="button"
           data-bs-toggle="dropdown"
           data-bs-popper-config='{"strategy":"fixed"}'
-          aria-expanded="false">
+          aria-expanded="false"
+        >
           <i class="bi bi-three-dots"></i>
         </button>
         <ul class="dropdown-menu">
           <ng-container #projectedActions></ng-container>
         </ul>
       </div>
-
     </ng-template>
   `,
-  standalone: false
+  standalone: false,
 })
 export class DataTableActionsComponent implements OnInit {
   element!: HTMLElement;
@@ -41,9 +41,11 @@ export class DataTableActionsComponent implements OnInit {
 
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
 
-  template = viewChild.required<TemplateRef<any>>('template');
+  public template = viewChild.required<TemplateRef<any>>('template');
   actions = contentChildren(DataTableActionComponent);
-  _projectedActions = viewChild<ViewContainerRef>('projectedActions');
+  _projectedActions = viewChild('projectedActions', {
+    read: ViewContainerRef,
+  });
 
   constructor(private viewContainerRef: ViewContainerRef) {
     effect(() => {
@@ -55,30 +57,30 @@ export class DataTableActionsComponent implements OnInit {
     if (this.disabled()) return true;
     const actions = this.actions();
     if (!actions || actions.length === 0) return false;
-    return !actions.some((o) => !o.disabled());
-  }
-
-  get _view() {
-    return this.temp;
+    return !actions.some(o => !o.disabled());
   }
 
   ngOnInit() {
-    this.temp = this.viewContainerRef.createEmbeddedView(
-      this.template(),
-    );
+    this.temp = this.viewContainerRef.createEmbeddedView(this.template());
     this.element = this.temp.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
 
   private _renderActions() {
     const projectedActions = this._projectedActions();
-    const actions = this.actions();
-    if (projectedActions && actions) {
-      for (let i = projectedActions.length; i > 0; i--) {
-        projectedActions.detach();
-      }
-      actions.forEach((action) => {
-        projectedActions.insert(action._view);
+    const actions = this.actions(); // Signal of DataTableActionComponent[]
+
+    if (projectedActions && actions.length > 0) {
+      projectedActions.clear(); // Always use clear() instead of the manual detach loop
+
+      actions.forEach(action => {
+        // Check if the child actually has its template signal ready
+        const template = action.template();
+        if (template) {
+          // Parent creates the view. This is safe against race conditions
+          // because TemplateRef is available immediately.
+          projectedActions.createEmbeddedView(template);
+        }
       });
     }
   }

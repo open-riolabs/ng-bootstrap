@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   booleanAttribute,
   Component,
   computed,
@@ -11,15 +10,17 @@ import {
   OnInit,
   output,
   viewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
+import { DataTableNoItemsComponent } from './dt-noitems.component';
+import { DataTableLoadingComponent } from './dt-loading.component';
 
 export interface TableDataQuery {
-  pagination?: { size: number; };
-  sorting?: { column: string; direction: string; };
-  filter?: { [k: string]: number | string | boolean; };
+  pagination?: { size: number };
+  sorting?: { column: string; direction: string };
+  filter?: { [k: string]: number | string | boolean };
 }
 
 export interface PaginationEvent {
@@ -32,8 +33,7 @@ export interface PaginationEvent {
   templateUrl: './dt-table.component.html',
   standalone: false,
 })
-export class DataTableComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class DataTableComponent implements OnInit, OnDestroy {
   title = input<string | undefined>(undefined);
   creationStrategy = input<'none' | 'modal' | 'page'>('none', { alias: 'creation-strategy' });
   creationUrl = input<any[] | string | null | undefined>(undefined, { alias: 'creation-url' });
@@ -42,7 +42,10 @@ export class DataTableComponent
   loading = input(false, { transform: booleanAttribute });
   tableHover = input(false, { alias: 'table-hover', transform: booleanAttribute });
   tableStriped = input(true, { alias: 'table-striped', transform: booleanAttribute });
-  tableStripedColumns = input(false, { alias: 'table-striped-columns', transform: booleanAttribute });
+  tableStripedColumns = input(false, {
+    alias: 'table-striped-columns',
+    transform: booleanAttribute,
+  });
   tableBordered = input(false, { alias: 'table-bordered', transform: booleanAttribute });
   tableBorderless = input(false, { alias: 'table-borderless', transform: booleanAttribute });
   tableSmall = input(false, { alias: 'table-small', transform: booleanAttribute });
@@ -63,15 +66,28 @@ export class DataTableComponent
     size: number;
   }>({ alias: 'pagination' });
 
-  _projectedDisplayColumns = viewChild.required<ViewContainerRef>('projectedDisplayColumns');
+  _projectedDisplayColumns = viewChild('projectedDisplayColumns', {
+    read: ViewContainerRef,
+  });
+
   rows = contentChildren(DataTableRowComponent);
   columns = contentChildren(DataTableHeaderComponent);
+
+  _projectedNoItems = viewChild('projectedNoItems', { read: ViewContainerRef });
+  _projectedLoading = viewChild('projectedLoading', { read: ViewContainerRef });
+  _projectedRows = viewChild('projectedRows', { read: ViewContainerRef });
+
+  noItemsBlock = contentChildren(DataTableNoItemsComponent);
+  loadingBlock = contentChildren(DataTableLoadingComponent);
 
   readonly MAX_VISIBLE_PAGES = 7;
 
   constructor() {
     effect(() => {
       this._renderHeaders();
+      this._renderNoItems();
+      this._renderLoading();
+      this._renderRows();
     });
   }
 
@@ -81,9 +97,8 @@ export class DataTableComponent
 
   pages = computed(() => Math.ceil((this.totalItems() || 0) / (this.pageSize() || 1)));
 
-  hasActions = computed(() =>
-    this.rows().some((o) => o.hasActions) ||
-    this.showActions() !== 'row'
+  hasActions = computed(
+    () => this.rows().some(o => o.hasActions()) || this.showActions() !== 'row',
   );
 
   visiblePages = computed(() => {
@@ -106,22 +121,49 @@ export class DataTableComponent
     return pages;
   });
 
-  ngAfterViewInit() {
-    this._renderHeaders();
-  }
-
   ngOnDestroy() {
     // Effect cleanup
   }
 
+  private _renderRows() {
+    const container = this._projectedRows();
+    const rows = this.rows();
+    if (container) {
+      container.clear();
+      rows.forEach(row => {
+        const template = row.template();
+        if (template) {
+          container.createEmbeddedView(template);
+        }
+      });
+    }
+  }
+
+  private _renderNoItems() {
+    const container = this._projectedNoItems();
+    const block = this.noItemsBlock()[0];
+    if (container && block) {
+      container.clear();
+      container.createEmbeddedView(block.template());
+    }
+  }
+
+  private _renderLoading() {
+    const container = this._projectedLoading();
+    const block = this.loadingBlock()[0];
+    if (container && block) {
+      container.clear();
+      container.createEmbeddedView(block.template());
+    }
+  }
+
   private _renderHeaders() {
-    const projectedColumns = this._projectedDisplayColumns();
-    if (projectedColumns) {
-      for (let i = projectedColumns.length; i > 0; i--) {
-        projectedColumns.detach();
-      }
-      this.columns().forEach((column) => {
-        projectedColumns.insert(column._view);
+    const container = this._projectedDisplayColumns();
+    if (container) {
+      container.clear();
+      this.columns().forEach(column => {
+        // Use the template to create a new view
+        container.createEmbeddedView(column.template());
       });
     }
   }
@@ -170,8 +212,7 @@ export class DataTableComponent
   selectPage(ev: MouseEvent, page: number | string) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (typeof page !== 'number' || page === this.currentPage() || this.loading())
-      return;
+    if (typeof page !== 'number' || page === this.currentPage() || this.loading()) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({
       page,

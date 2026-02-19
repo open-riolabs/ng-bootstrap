@@ -38,28 +38,34 @@
       </tr>
     </thead>
     <tbody>
-      @if (!loading()) {
-      <ng-content select="rlb-dt-row" />
-      }
-      @if (!loading() && items().length === 0) {
-      <rlb-dt-row class="text-center">
-        <rlb-dt-cell [col-span]="cols()" style="border: 0">
-          <ng-content select="rlb-dt-noitems" />
-        </rlb-dt-cell>
-      </rlb-dt-row>
-      }
-      @if (loading()) {
-      <rlb-dt-row class="text-center">
-        <rlb-dt-cell [col-span]="cols()" style="border: 0">
-          <ng-content select="rlb-dt-loading" />
-        </rlb-dt-cell>
-      </rlb-dt-row>
-      }
+        @if (!loading()) {
+            <!-- 1. Use the ng-container for standard structural projected rows -->
+            <ng-container #projectedRows></ng-container>
+        }
+
+    <!-- 2. For internal states use native HTML tr/td -->
+        @if (!loading() && items().length === 0) {
+            <tr class="text-center">
+                <!-- Change to -->
+                <td="cols()" style="border: 0">
+                    <ng-container #projectedNoItems></ng-container>
+                </td>
+            </tr>
+        }
+
+        @if (loading()) {
+            <tr class="text-center">
+                <!-- Change to -->
+                <td="cols()" style="border: 0">
+                    <ng-container #projectedLoading></ng-container>
+                </td>
+            </tr>
+        }
     </tbody>
     @if (paginationMode() !== 'none') {
     <tfoot>
-      <rlb-dt-row>
-        <rlb-dt-cell [col-span]="hasActions() ? cols()+1: cols()" style="border: 0">
+      <tr>
+          <td="hasActions() ? cols()+1 : cols()" style="border: 0">
           @if (paginationMode() === 'load-more') {
           <button type="button" class="btn btn-primary float-end btn-sm mt-2" [disabled]="loading()"
             (click)="loadMore.emit()">
@@ -100,8 +106,8 @@
             </ul>
           </nav>
           }
-        </rlb-dt-cell>
-      </rlb-dt-row>
+        </td>
+      </tr>
     </tfoot>
     }
   </table>
