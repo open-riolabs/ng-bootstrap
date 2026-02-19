@@ -11,7 +11,7 @@ import {
   Self,
   untracked,
   viewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -38,35 +38,49 @@ import { OptionComponent } from './options.component';
         [class.is-invalid]="control?.touched && control?.invalid && enableValidation()"
         [class.is-valid]="control?.touched && control?.valid && enableValidation()"
         (change)="update($event.target)"
-        >
+      >
         @if (placeholder()) {
-          <option selected disabled>{{ placeholder() }}</option>
+          <option
+            selected
+            disabled
+          >
+            {{ placeholder() }}
+          </option>
         }
         <ng-container #projectedDisplayOptions></ng-container>
       </select>
       @if (errors() && showError()) {
-        <rlb-input-validation [errors]="errors()"/>
+        <rlb-input-validation [errors]="errors()" />
       }
     </div>
-    <ng-content select="[after]"></ng-content>`,
-  standalone: false
+    <ng-content select="[after]"></ng-content>
+  `,
+  standalone: false,
 })
 export class SelectComponent
   extends AbstractComponent<string | string[]>
-  implements ControlValueAccessor {
-
+  implements ControlValueAccessor
+{
   placeholder = input<string | undefined>(undefined, { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined, { alias: 'size' });
   // Cast to specific InputSignal type to satisfy AbstractComponent which expects boolean | undefined
-  disabled = input(false, { alias: 'disabled', transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  disabled = input(false, {
+    alias: 'disabled',
+    transform: booleanAttribute,
+  }) as unknown as InputSignal<boolean | undefined>;
   readonly = input(false, { alias: 'readonly', transform: booleanAttribute });
   multiple = input(false, { alias: 'multiple', transform: booleanAttribute });
   display = input<number, unknown>(undefined, { alias: 'display', transform: numberAttribute });
-  userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' }) as unknown as InputSignal<string>; // Abstract expects InputSignal<string> strictly, but inference might vary
+  userDefinedId = input('', {
+    alias: 'id',
+    transform: (v: string) => v || '',
+  }) as unknown as InputSignal<string>; // Abstract expects InputSignal<string> strictly, but inference might vary
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
 
   el = viewChild.required<ElementRef<HTMLSelectElement>>('select');
-  _projectedDisplayOptions = viewChild.required<ViewContainerRef>('projectedDisplayOptions');
+  _projectedDisplayOptions = viewChild('projectedDisplayOptions', {
+    read: ViewContainerRef,
+  });
   options = contentChildren(OptionComponent);
 
   constructor(
@@ -78,6 +92,8 @@ export class SelectComponent
     effect(() => {
       const vcr = this._projectedDisplayOptions();
       const options = this.options();
+
+      if (!vcr) return;
 
       vcr.clear();
       options.forEach(opt => {
@@ -95,8 +111,8 @@ export class SelectComponent
       const t = ev as HTMLSelectElement;
       if (this.multiple()) {
         const selected = Array.from(t.selectedOptions)
-          .filter((o) => o.selected)
-          .map((o) => o.value);
+          .filter(o => o.selected)
+          .map(o => o.value);
         this.setValue(selected);
       } else {
         this.setValue(t?.value);
@@ -110,15 +126,14 @@ export class SelectComponent
       if (this.multiple()) {
         if (!Array.isArray(data)) data = [data];
         const opt = Array.from(el.nativeElement.options);
-        opt.forEach((o) => {
+        opt.forEach(o => {
           o.selected = data.includes(o.value);
         });
-      }
-      else {
+      } else {
         if (data === undefined || data === null) return;
         if (Array.isArray(data) && data.length) data = data[0];
         const opt = Array.from(el.nativeElement.options);
-        const val = opt.find((o) => o.value == data);
+        const val = opt.find(o => o.value == data);
         if (val) val.selected = true;
       }
     }
