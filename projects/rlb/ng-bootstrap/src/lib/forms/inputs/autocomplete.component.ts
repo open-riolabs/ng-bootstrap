@@ -16,8 +16,7 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { lastValueFrom, Observable } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
-import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
-
+import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
 
 @Component({
   selector: 'rlb-autocomplete',
@@ -37,64 +36,84 @@ import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
         [class.form-control-sm]="size === 'small'"
         [value]="getText(value)"
         (blur)="touch()"
-				[ngClass]="{
-        'is-invalid': control?.touched && control?.invalid && enableValidation,
-        'is-valid': control?.touched && control?.valid && enableValidation
+        [ngClass]="{
+          'is-invalid':
+            control?.touched && control?.invalid && enableValidation,
+          'is-valid': control?.touched && control?.valid && enableValidation,
         }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
-        />
-        @if (errors && showError && enableValidation) {
-          <rlb-input-validation [errors]="errors"/>
-        }
-      </div>
-      @if (loading || acLoading) {
-        <rlb-progress
-          [height]="2"
-          [infinite]="loading || acLoading"
-          color="primary"
-          class="w-100"
-          />
+      />
+      @if (errors && showError && enableValidation) {
+        <rlb-input-validation [errors]="errors" />
       }
-      <ng-content select="[after]"></ng-content>
-      <div
-        #autocomplete
-        [id]="id+'-ac'"
-        class="dropdown-menu overflow-y-auto w-100 position-absolute"
-        aria-labelledby="dropdownMenu"
-        [style.max-height.px]="maxHeight"
-        [style.width]="'fit-content !important'"
-      [style.max-width.px]="menuMaxWidth"></div>
-    `,
+    </div>
+    @if (loading || acLoading) {
+      <rlb-progress
+        [height]="2"
+        [infinite]="loading || acLoading"
+        color="primary"
+        class="w-100"
+      />
+    }
+    <ng-content select="[after]"></ng-content>
+    <div
+      #autocomplete
+      [id]="id + '-ac'"
+      class="dropdown-menu overflow-y-auto w-100 position-absolute"
+      aria-labelledby="dropdownMenu"
+      [style.max-height.px]="maxHeight"
+      [style.width]="'fit-content !important'"
+      [style.max-width.px]="menuMaxWidth"
+    ></div>
+  `,
   standalone: false,
   host: {
     style: 'position: relative;',
-  }
+  },
 })
 export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor {
+  implements ControlValueAccessor
+{
   acLoading: boolean = false;
   private typingTimeout: any;
   isOpen = false;
 
   @Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
   @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
-  @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
+  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean =
+    false;
+  @Input({ transform: numberAttribute, alias: 'max-height' })
+  maxHeight?: number = 200;
   @Input({ alias: 'placeholder' }) placeholder?: string = '';
-  @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => { return []; };
-  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
+  @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => {
+    return [];
+  };
+  @Input({ alias: 'type' }) type?:
+    | 'text'
+    | 'email'
+    | 'number'
+    | 'password'
+    | 'search'
+    | 'tel'
+    | 'url'
+    | string = 'text';
   @Input() size?: 'small' | 'large' | undefined;
-  @Input({ alias: 'chars-to-search', transform: numberAttribute }) charsToSearch: number = 3;
-  @Input({ alias: 'menu-max-width', transform: numberAttribute }) menuMaxWidth: number = 400;
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
-  @Input() inputAutocomplete: string = 'one-time-code';
+  @Input({ alias: 'chars-to-search', transform: numberAttribute })
+  charsToSearch: number = 3;
+  @Input({ alias: 'menu-max-width', transform: numberAttribute })
+  menuMaxWidth: number = 400;
+  @Input({ alias: 'id', transform: (v: string) => v || '' })
+  userDefinedId: string = '';
+  @Input({ transform: booleanAttribute, alias: 'enable-validation' })
+  enableValidation? = false;
+  @Input() inputAutocomplete: string = 'off';
 
   @ViewChild('field') el!: ElementRef<HTMLInputElement>;
   @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
-  @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
+  @Output() selected: EventEmitter<AutocompleteItem> =
+    new EventEmitter<AutocompleteItem>();
 
   @HostListener('document:pointerdown', ['$event'])
   onDocumentPointerDown(event: PointerEvent) {
@@ -147,10 +166,14 @@ export class AutocompleteComponent
       const suggestions = this.autocomplete(data);
       if (suggestions instanceof Promise) {
         this.acLoading = true;
-        suggestions.then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
+        suggestions
+          .then((s) => this.renderAc(s))
+          .finally(() => (this.acLoading = false));
       } else if (suggestions instanceof Observable) {
         this.acLoading = true;
-        lastValueFrom(suggestions).then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
+        lastValueFrom(suggestions)
+          .then((s) => this.renderAc(s))
+          .finally(() => (this.acLoading = false));
       } else {
         this.renderAc(suggestions);
       }
@@ -173,9 +196,10 @@ export class AutocompleteComponent
     }
 
     for (const suggestion of suggestions) {
-      const itemData: AutocompleteItem = typeof suggestion === 'string'
-        ? { text: suggestion, value: suggestion }
-        : suggestion;
+      const itemData: AutocompleteItem =
+        typeof suggestion === 'string'
+          ? { text: suggestion, value: suggestion }
+          : suggestion;
 
       const el = this.renderer.createElement('a');
       this.renderer.addClass(el, 'dropdown-item');
@@ -208,13 +232,12 @@ export class AutocompleteComponent
     }
   }
 
-
   onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
     if (!this.disabled && t && t.value) {
       const item: AutocompleteItem = {
         text: t.value,
-        value: t.value
+        value: t.value,
       };
       this.setValue(item);
       this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
@@ -229,11 +252,21 @@ export class AutocompleteComponent
   private handleOutsideEvent(event: Event) {
     const target = event.target as HTMLElement;
 
-    const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
+    const path: EventTarget[] = (event as any).composedPath
+      ? (event as any).composedPath()
+      : [];
 
     const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
-    const clickedInsideDropdown = this.dropdown?.nativeElement?.contains ? this.dropdown.nativeElement.contains(target) : false;
-    const clickedInPath = path.length ? path.some(p => p === this.hostRef.nativeElement || p === this.dropdown.nativeElement) : false;
+    const clickedInsideDropdown = this.dropdown?.nativeElement?.contains
+      ? this.dropdown.nativeElement.contains(target)
+      : false;
+    const clickedInPath = path.length
+      ? path.some(
+          (p) =>
+            p === this.hostRef.nativeElement ||
+            p === this.dropdown.nativeElement,
+        )
+      : false;
 
     if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
       this.closeDropdown();
@@ -257,7 +290,9 @@ export class AutocompleteComponent
   clearDropdown() {
     if (!this.dropdown) return;
     while (this.dropdown.nativeElement.firstChild) {
-      this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild!);
+      this.dropdown.nativeElement.removeChild(
+        this.dropdown.nativeElement.lastChild!,
+      );
     }
   }
 }
