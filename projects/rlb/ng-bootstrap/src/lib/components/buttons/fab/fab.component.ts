@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, Input } from '@angular/core';
+import { booleanAttribute, Component, computed, input } from '@angular/core';
 import { Color } from "../../../shared/types";
 
 @Component({
@@ -8,20 +8,21 @@ import { Color } from "../../../shared/types";
   standalone: false,
 })
 export class RlbFabComponent {
-  @Input() color: Color = 'primary';
+  color = input<Color>('primary');
 
-  @Input() size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
+  size = input<'xs' | 'sm' | 'md' | 'lg'>('md');
 
-  @Input({ transform: booleanAttribute }) disabled = false;
-  @Input({ transform: booleanAttribute }) outline = false;
-  
-  @Input() position: 'br' | 'bl' | 'tr' | 'tl' | undefined = undefined;
+  disabled = input(false, { transform: booleanAttribute });
+  outline = input(false, { transform: booleanAttribute });
 
-  get positionClass() {
+  position = input<'br' | 'bl' | 'tr' | 'tl' | undefined>(undefined);
+
+  positionClass = computed(() => {
     let classes = '';
-    if (this.position) {
+    const pos = this.position();
+    if (pos) {
       classes += 'position-fixed ';
-      switch (this.position) {
+      switch (pos) {
         case 'bl':
           classes += 'fab-bottom-left';
           break;
@@ -35,16 +36,16 @@ export class RlbFabComponent {
           classes += 'fab-bottom-right';
       }
     }
-    return classes
-  }
+    return classes;
+  });
 
-  get sizeClass() {
-    switch (this.size) {
+  sizeClass = computed(() => {
+    switch (this.size()) {
       case 'xs': return 'fab-xs';
       case 'sm': return 'fab-sm';
       case 'lg': return 'fab-lg';
-      default:   return 'fab-md';
+      default: return 'fab-md';
     }
-  }
+  });
 }
 
