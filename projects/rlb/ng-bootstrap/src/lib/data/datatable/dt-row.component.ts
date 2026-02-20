@@ -2,12 +2,10 @@ import {
   Component,
   computed,
   contentChildren,
-  effect,
   input,
   output,
   TemplateRef,
   viewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import { DataTableActionsComponent } from './dt-actions.component';
 import { DataTableCellComponent } from './dt-cell.component';
@@ -17,16 +15,21 @@ import { DataTableCellComponent } from './dt-cell.component';
   template: `
     <ng-template #template>
       <tr
-        ="cssClass()"
-        ="cssStyle()"
+        [class]="cssClass()"
+        [style]="cssStyle()"
         (click)="rowClick.emit($event)"
       >
-        <!-- Use programmatic projection for cells! -->
-        <ng-container #projectedCells></ng-container>
+        <!-- Loop and render cells natively -->
+        @for (cell of cells(); track $index) {
+          <ng-container *ngTemplateOutlet="cell.template()"></ng-container>
+        }
 
         @if (hasActions()) {
           <td>
-            <ng-container #projectedActions></ng-container>
+            <!-- Loop and render actions natively -->
+            @for (actionBlock of actionsBlock(); track $index) {
+              <ng-container *ngTemplateOutlet="actionBlock.template()"></ng-container>
+            }
           </td>
         }
       </tr>
@@ -41,45 +44,8 @@ export class DataTableRowComponent {
 
   template = viewChild.required<TemplateRef<any>>('template');
 
-  _projectedActions = viewChild('projectedActions', { read: ViewContainerRef });
   actionsBlock = contentChildren(DataTableActionsComponent);
-
-  // 1. Query the Cell component templates
-  _projectedCells = viewChild('projectedCells', { read: ViewContainerRef });
   cells = contentChildren(DataTableCellComponent);
 
-  constructor() {
-    effect(() => {
-      this._renderActions();
-      this._renderCells(); // 2. Add to effect loop
-    });
-  }
-
-  hasActions = computed(() => {
-    return this.actionsBlock().length > 0;
-  });
-
-  private _renderActions() {
-    const container = this._projectedActions();
-    const actions = this.actionsBlock();
-    if (container && actions.length > 0) {
-      container.clear();
-      container.createEmbeddedView(actions[0].template());
-    }
-  }
-
-  // 3. Render the cells robustly
-  private _renderCells() {
-    const container = this._projectedCells();
-    const cells = this.cells();
-    if (container) {
-      container.clear();
-      cells.forEach(cell => {
-        const template = cell.template();
-        if (template) {
-          container.createEmbeddedView(template);
-        }
-      });
-    }
-  }
+  hasActions = computed(() => this.actionsBlock().length > 0);
 }
