@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  input,
-  OnDestroy,
-  OnInit,
-  signal
-} from '@angular/core';
+import { Component, computed, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
@@ -22,29 +15,57 @@ import { CalendarEvent } from '../../interfaces/calendar-event.interface';
     <div [formGroup]="form">
       <div [class]="'modal-header' + headerColor()">
         <h5 class="modal-title">
-          @if(eventToEdit?.id) { Edit Event } @else { Create Event }
+          @if (eventToEdit?.id) {
+            Edit Event
+          } @else {
+            Create Event
+          }
         </h5>
-        <button type="button" class="btn-close" aria-label="Close" data-modal-reason="close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          data-modal-reason="close"
+        ></button>
       </div>
       <div class="modal-body">
-        <rlb-input label="Title" formControlName="title" placeholder="Event Title" class="mb-3" />
-        
+        <rlb-input
+          formControlName="title"
+          placeholder="Event Title"
+          class="mb-3"
+        >
+          <label before>Title</label>
+        </rlb-input>
+
         <div class="row mb-3">
           <div class="col">
-            <rlb-input label="Start Date" type="datetime-local" formControlName="start" />
+            <rlb-input
+              type="datetime-local"
+              formControlName="start"
+            >
+              <label before>Start Date</label>
+            </rlb-input>
           </div>
           <div class="col">
-            <rlb-input label="End Date" type="datetime-local" formControlName="end" />
+            <rlb-input
+              type="datetime-local"
+              formControlName="end"
+            >
+              <label before>End Date</label>
+            </rlb-input>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col">
-            <rlb-switch label="All Day" formControlName="allDay" />
+            <rlb-switch formControlName="allDay">
+              <label before>All Day</label>
+            </rlb-switch>
           </div>
           <div class="col">
-            <rlb-select label="Color" formControlName="color">
-              @for(c of colors; track c.value) {
+            <rlb-select formControlName="color">
+              <label before>Color</label>
+              @for (c of colors; track c.value) {
                 <rlb-option [value]="c.value">{{ c.name }}</rlb-option>
               }
             </rlb-select>
@@ -52,10 +73,18 @@ import { CalendarEvent } from '../../interfaces/calendar-event.interface';
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary me-2" data-modal-reason="cancel">
+        <button
+          type="button"
+          class="btn btn-secondary me-2"
+          data-modal-reason="cancel"
+        >
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" data-modal-reason="ok">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-modal-reason="ok"
+        >
           Save
         </button>
       </div>
@@ -69,7 +98,8 @@ import { CalendarEvent } from '../../interfaces/calendar-event.interface';
   ],
 })
 export class EventCreateEditComponent
-  implements IModal<CalendarEvent | undefined, CalendarEvent>, OnInit, OnDestroy {
+  implements IModal<CalendarEvent | undefined, CalendarEvent>, OnInit, OnDestroy
+{
   data = input<ModalData<CalendarEvent | undefined>>({} as any);
   result?: CalendarEvent;
 
@@ -95,7 +125,10 @@ export class EventCreateEditComponent
     { name: 'Dark', value: 'dark' },
   ];
 
-  constructor(private fb: FormBuilder, private unique: UniqueIdService) { }
+  constructor(
+    private fb: FormBuilder,
+    private unique: UniqueIdService,
+  ) {}
 
   ngOnInit(): void {
     this.eventToEdit = this.data()?.content;
@@ -105,7 +138,7 @@ export class EventCreateEditComponent
       start: [this.eventToEdit?.start || '', Validators.required],
       end: [this.eventToEdit?.end || '', Validators.required],
       allDay: [this.eventToEdit?.allDay || false],
-      color: [this.eventToEdit?.color || 'primary']
+      color: [this.eventToEdit?.color || 'primary'],
     });
 
     this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value: CalendarEvent) => {

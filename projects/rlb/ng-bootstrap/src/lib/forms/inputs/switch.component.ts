@@ -8,7 +8,7 @@ import {
   InputSignal,
   Optional,
   Self,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -17,37 +17,40 @@ import { AbstractComponent } from './abstract-field.component';
 @Component({
   selector: 'rlb-switch',
   template: `
-      <div class="d-flex align-items-center gap-2">
-        @if (errors() && (control?.touched || control?.dirty)) {
-          <div class="invalid-feedback d-block">
-            {{ errors() | json }}
-          </div>
-        }
-        <ng-content select="[before]"></ng-content>
-
-        <div class="form-check form-switch m-0">
-          <input
-            #field
-            class="form-check-input"
-            type="checkbox"
-            [id]="id"
-            [attr.disabled]="isDisabled() ? true : undefined"
-            [attr.readonly]="readonly() ? true : undefined"
-            (blur)="touch()"
-            [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-            (input)="update($event.target)"
-          />
+    <div class="d-flex align-items-center gap-2">
+      @if (errors() && showError() && (control?.touched || control?.dirty)) {
+        <div class="invalid-feedback d-block">
+          {{ errors() | json }}
         </div>
+      }
+      <ng-content select="[before]"></ng-content>
 
-        <ng-content select="[after]"></ng-content>
+      <div class="form-check form-switch m-0">
+        <input
+          #field
+          class="form-check-input"
+          type="checkbox"
+          [id]="id"
+          [attr.disabled]="isDisabled() ? true : undefined"
+          [attr.readonly]="readonly() ? true : undefined"
+          (blur)="touch()"
+          [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+          (input)="update($event.target)"
+        />
       </div>
-    `,
-  standalone: false
+
+      <ng-content select="[after]"></ng-content>
+    </div>
+  `,
+  standalone: false,
 })
 export class SwitchComponent
   extends AbstractComponent<boolean>
-  implements ControlValueAccessor, AfterViewInit {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  implements ControlValueAccessor, AfterViewInit
+{
+  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<
+    boolean | undefined
+  >;
   readonly = input(false, { transform: booleanAttribute });
   size = input<'small' | 'large' | undefined>(undefined);
   userDefinedId = input('', { alias: 'id' });
@@ -87,8 +90,7 @@ export class SwitchComponent
       if (this.data === undefined || this.data === null) return;
       if (typeof this.data === 'string') {
         el.nativeElement.checked = /^true$/i.test(this.data);
-      }
-      else {
+      } else {
         el.nativeElement.checked = this.data;
       }
     }
