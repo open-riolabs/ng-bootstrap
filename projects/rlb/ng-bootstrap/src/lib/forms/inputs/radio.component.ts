@@ -19,38 +19,48 @@ import { OptionComponent } from './options.component';
 
 @Component({
   selector: 'rlb-radio',
-  template: ` <div class="input-group has-validation">
-    <ng-content select="[before]"></ng-content>
-    @for (option of options(); track option; let i = $index) {
-      <div class="form-check">
-        <input
-          #field
-          [attr.disabled]="disabled() ? true : undefined"
-          [attr.readonly]="readonly() ? true : undefined"
-          class="form-check-input {{ option.cssValue() }}"
-          type="radio"
-          [name]="id + '-radio'"
-          [id]="id + '-radio-' + i"
-          [value]="option.value()"
-          [checked]="value === option.value()"
-          (blur)="touch()"
-          [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
-          (change)="update($event.target)"
-        />
-        <span #content></span>
+  template: `
+    <div class="input-group has-validation">
+      <ng-content select="[before]"></ng-content>
+
+      @for (option of options(); track option; let i = $index) {
+        <div class="form-check">
+          <input
+            #field
+            [attr.disabled]="disabled() ? true : undefined"
+            [attr.readonly]="readonly() ? true : undefined"
+            class="form-check-input"
+            type="radio"
+            [name]="id + '-radio'"
+            [id]="id + '-radio-' + i"
+            [value]="option.value()"
+            [checked]="value === option.value()"
+            (blur)="touch()"
+            [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+            (change)="update($event.target)"
+          />
+          <!-- We use this span as an anchor to insert the Option text -->
+          <label
+            class="form-check-label"
+            [for]="id + '-radio-' + i"
+          >
+            <span #content></span>
+          </label>
+        </div>
+      }
+
+      <ng-content select="[after]"></ng-content>
+      <div class="invalid-feedback">
+        {{ errors() | json }}
       </div>
-    }
-    <ng-content select="[after]"></ng-content>
-    <div class="invalid-feedback">
-      {{ errors() | json }}
     </div>
-  </div>`,
+  `,
   standalone: false,
 })
-export class RadioComponent
-  extends AbstractComponent<string>
-  implements ControlValueAccessor {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+export class RadioComponent extends AbstractComponent<string> implements ControlValueAccessor {
+  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<
+    boolean | undefined
+  >;
   readonly = input(false, { transform: booleanAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
 
@@ -69,11 +79,12 @@ export class RadioComponent
       const contents = this.contents();
 
       if (options.length > 0 && contents.length === options.length) {
-        contents.forEach((content, i) => {
-          content.detach();
+        contents.forEach((vcr, i) => {
+          vcr.clear(); // Clear previous view
+
           const option = options[i];
-          if (option && option._view) {
-            content.insert(option._view);
+          if (option) {
+            vcr.createEmbeddedView(option.contentTemplate());
           }
         });
       }

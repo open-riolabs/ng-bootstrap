@@ -1,11 +1,4 @@
-import {
-  booleanAttribute,
-  Component,
-  computed,
-  input,
-  model,
-  output,
-} from '@angular/core';
+import { booleanAttribute, Component, computed, input, model, output } from '@angular/core';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import { filter, map, of, switchMap, take } from 'rxjs';
 import { ModalType } from '../../shared/types';
@@ -15,14 +8,8 @@ import { ModalService } from '../modals/modal.service';
 import { ToastService } from '../toast';
 import { CalendarOverflowEventsDialogResult } from './calendar-dialogs';
 import { CalendarEvent } from './interfaces/calendar-event.interface';
-import {
-  CalendarLayout,
-  DEFAULT_CALENDAR_LAYOUT,
-} from './interfaces/calendar-layout.interface';
-import {
-  CalendarChangeEvent,
-  CalendarView,
-} from './interfaces/calendar-view.type';
+import { CalendarLayout, DEFAULT_CALENDAR_LAYOUT } from './interfaces/calendar-layout.interface';
+import { CalendarChangeEvent, CalendarView } from './interfaces/calendar-view.type';
 import { getToday } from './utils/calendar-date-utils';
 
 @Component({
@@ -37,11 +24,10 @@ export class CalendarComponent {
   // Internal mutable copy of events for local modifications
   events = model<CalendarEvent[]>([], { alias: 'events' });
 
-  currentDate = input<IDateTz, IDateTz>(getToday(), {
+  currentDate = model<IDateTz>(getToday(), {
     alias: 'current-date',
-    transform: (d: IDateTz) => new DateTz(d),
   });
-  currentDateChange = output<IDateTz>({ alias: 'current-date-change' });
+  // currentDateChange = output<IDateTz>({ alias: 'current-date-change' });
 
   loading = input(false, { alias: 'loading', transform: booleanAttribute });
 
@@ -65,12 +51,12 @@ export class CalendarComponent {
     private modals: ModalService,
     private unique: UniqueIdService,
     private toasts: ToastService,
-  ) { }
+  ) {}
 
   // DnD event
   onEventChange(eventToEdit: CalendarEvent) {
     const currentEvents = [...this.events()];
-    const idx = currentEvents.findIndex((event) => event.id === eventToEdit.id);
+    const idx = currentEvents.findIndex(event => event.id === eventToEdit.id);
     if (idx !== -1) {
       currentEvents[idx] = eventToEdit;
       this.events.set(currentEvents);
@@ -99,7 +85,7 @@ export class CalendarComponent {
           (modalResult: ModalResult<CalendarOverflowEventsDialogResult>) =>
             modalResult.reason === 'ok',
         ),
-        switchMap((modalResult) => {
+        switchMap(modalResult => {
           const action = modalResult.result.action;
           const event = modalResult.result.event;
           if (action === 'delete') {
@@ -113,14 +99,12 @@ export class CalendarComponent {
               )
               .pipe(
                 take(1),
-                filter(
-                  (deleteConfirmResult) => deleteConfirmResult.reason === 'ok',
-                ),
-                map((result) => ({ action, modalResult: result, event })),
+                filter(deleteConfirmResult => deleteConfirmResult.reason === 'ok'),
+                map(result => ({ action, modalResult: result, event })),
               );
           } else {
             return this.openEditEventDialog(event).pipe(
-              map((result) => ({ action, modalResult: result, event })),
+              map(result => ({ action, modalResult: result, event })),
             );
           }
         }),
@@ -129,17 +113,13 @@ export class CalendarComponent {
             (action === 'delete' && modalResult.reason === 'ok') ||
             (action === 'edit' && modalResult.reason === 'cancel')
           ) {
-            this.events.set([
-              ...this.events().filter((entry) => event.id !== entry.id),
-            ]);
+            this.events.set([...this.events().filter(entry => event.id !== entry.id)]);
             return of({ action: 'delete' });
           }
 
           if (action === 'edit' && modalResult.reason === 'ok') {
             const currentEvents = [...this.events()];
-            const idx = currentEvents.findIndex(
-              (entry) => event.id === entry.id,
-            );
+            const idx = currentEvents.findIndex(entry => event.id === entry.id);
             if (idx !== -1 && modalResult.result) {
               currentEvents[idx] = modalResult.result as any;
               this.events.set(currentEvents);
@@ -149,7 +129,7 @@ export class CalendarComponent {
 
           return of(null);
         }),
-        switchMap((result) => {
+        switchMap(result => {
           if (result) {
             let content = '';
             let type: ModalType = 'success';
@@ -187,13 +167,11 @@ export class CalendarComponent {
 
     this.openEditEventDialog(eventToEdit)
       .pipe(
-        switchMap((modalResult) => {
+        switchMap(modalResult => {
           const newEvent = modalResult.result;
           let result = null;
           if (modalResult.reason === 'cancel' && eventToEdit) {
-            this.events.set([
-              ...this.events().filter((event) => event.id !== eventToEdit.id),
-            ]);
+            this.events.set([...this.events().filter(event => event.id !== eventToEdit.id)]);
             result = { action: 'delete' };
             return of(result);
           }
@@ -208,9 +186,7 @@ export class CalendarComponent {
 
           const currentEvents = [...this.events()];
           if (eventToEdit) {
-            const idx = currentEvents.findIndex(
-              (entry) => eventToEdit.id === entry.id,
-            );
+            const idx = currentEvents.findIndex(entry => eventToEdit.id === entry.id);
             if (idx !== -1 && modalResult.result) {
               currentEvents[idx] = newEvent;
               result = { action: 'edit' };
@@ -223,7 +199,7 @@ export class CalendarComponent {
           this.events.set(currentEvents);
           return of(result);
         }),
-        switchMap((result) => {
+        switchMap(result => {
           if (result) {
             let content = '';
             let type: ModalType = 'success';
@@ -255,7 +231,7 @@ export class CalendarComponent {
   }
 
   setDate(date: DateTz) {
-    this.currentDateChange.emit(date);
+    this.currentDate.set(date);
     this.dateChange.emit({ date, view: this.view() });
   }
 
@@ -266,15 +242,12 @@ export class CalendarComponent {
 
   private openEditEventDialog(eventToEdit?: CalendarEvent) {
     return this.modals
-      .openModal<CalendarEvent | undefined, CalendarEvent>(
-        'rlb-calendar-event-create-edit',
-        {
-          title: eventToEdit ? 'Edit event' : 'Create event',
-          content: eventToEdit,
-          ok: 'OK',
-          type: 'success',
-        },
-      )
+      .openModal<CalendarEvent | undefined, CalendarEvent>('rlb-calendar-event-create-edit', {
+        title: eventToEdit ? 'Edit event' : 'Create event',
+        content: eventToEdit,
+        ok: 'OK',
+        type: 'success',
+      })
       .pipe(take(1));
   }
 }

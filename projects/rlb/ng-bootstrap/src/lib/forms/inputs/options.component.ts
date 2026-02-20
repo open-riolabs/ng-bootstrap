@@ -1,37 +1,30 @@
-import { Component, EmbeddedViewRef, OnInit, TemplateRef, ViewContainerRef, booleanAttribute, input, viewChild } from '@angular/core';
+import { booleanAttribute, Component, input, TemplateRef, viewChild } from '@angular/core';
 
 @Component({
   selector: 'rlb-option',
   template: `
-    <ng-template #template>
+    <ng-template #content>
+      <ng-content></ng-content>
+    </ng-template>
+
+    <!-- wrap the content in an <option> tag for SelectComponent -->
+    <ng-template #element>
       <option
-        [attr.disabled]="disabled() ? true : undefined"
-        [attr.value]="value()"
+        [value]="value()"
+        [disabled]="disabled()"
       >
-        <ng-content></ng-content>
+        <ng-container *ngTemplateOutlet="content"></ng-container>
       </option>
     </ng-template>
-  <ng-content></ng-content>`,
-  standalone: false
+  `,
+  standalone: false,
 })
-export class OptionComponent implements OnInit {
-  private temp!: EmbeddedViewRef<any>;
+export class OptionComponent {
+  value = input.required<string | number | null>();
+  disabled = input(false, { transform: booleanAttribute });
 
-  disabled = input(undefined, { transform: booleanAttribute });
-  value = input<string | number | null>();
-  cssValue = input<string | number | null>(undefined, { alias: 'class' });
+  // 'template' is used by SelectComponent (contains <option> tag)
+  template = viewChild.required<TemplateRef<any>>('element');
 
-  template = viewChild.required<TemplateRef<any>>('template');
-
-  constructor(private viewContainerRef: ViewContainerRef) { }
-
-  get _view() {
-    return this.temp;
-  }
-
-  ngOnInit() {
-    this.temp = this.viewContainerRef.createEmbeddedView(
-      this.template(),
-    );
-  }
+  contentTemplate = viewChild.required<TemplateRef<any>>('content');
 }

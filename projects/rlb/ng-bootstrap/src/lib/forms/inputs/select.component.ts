@@ -90,14 +90,15 @@ export class SelectComponent
     super(idService, control);
 
     effect(() => {
-      const vcr = this._projectedDisplayOptions();
-      const options = this.options();
+      const vcr = this._projectedDisplayOptions(); // The ViewContainerRef in the Select
+      const options = this.options(); // The list of OptionComponents
 
       if (!vcr) return;
 
       vcr.clear();
+
       options.forEach(opt => {
-        vcr.insert(opt._view);
+        vcr.createEmbeddedView(opt.template());
       });
 
       untracked(() => {
