@@ -4,10 +4,9 @@ import {
   computed,
   ElementRef,
   input,
-  InputSignal,
   Optional,
   Self,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -36,13 +35,17 @@ import { AbstractComponent } from './abstract-field.component';
         </div>
       }
       <ng-content select="[after]"></ng-content>
-    </div>`,
-  standalone: false
+    </div>
+  `,
+  standalone: false,
 })
 export class CheckboxComponent
   extends AbstractComponent<boolean | undefined>
-  implements ControlValueAccessor {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  implements ControlValueAccessor
+{
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
   readonly = input(false, { transform: booleanAttribute });
   indeterminate = input(false, { transform: booleanAttribute });
   userDefinedId = input('', { alias: 'id' });
@@ -74,8 +77,7 @@ export class CheckboxComponent
         if (data === undefined || data === null) return;
         if (typeof data === 'string') {
           el.nativeElement.checked = /^true$/i.test(data);
-        }
-        else {
+        } else {
           el.nativeElement.checked = data;
         }
       }

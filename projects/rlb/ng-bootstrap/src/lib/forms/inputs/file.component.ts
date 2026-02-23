@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   input,
-  InputSignal,
   Optional,
   Self,
   viewChild,
@@ -39,13 +38,17 @@ import { AbstractComponent } from './abstract-field.component';
         {{ errors | json }}
       </div>
     </div>
-    <ng-content select="[after]"></ng-content>`,
-  standalone: false
+    <ng-content select="[after]"></ng-content>
+  `,
+  standalone: false,
 })
 export class FileComponent
   extends AbstractComponent<File | File[] | null>
-  implements ControlValueAccessor {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  implements ControlValueAccessor
+{
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
   readonly = input(false, { transform: booleanAttribute });
   multiple = input(false, { transform: booleanAttribute });
   size = input<'small' | 'large' | undefined>(undefined);

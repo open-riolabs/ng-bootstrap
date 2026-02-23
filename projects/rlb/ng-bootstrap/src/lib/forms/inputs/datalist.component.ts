@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   input,
-  InputSignal,
   Optional,
   Self,
   viewChild,
@@ -36,16 +35,17 @@ import { AbstractComponent } from './abstract-field.component';
         <ng-content></ng-content>
       </datalist>
       @if (errors() && showError()) {
-        <rlb-input-validation [errors]="errors()"/>
+        <rlb-input-validation [errors]="errors()" />
       }
     </div>
-    <ng-content select="[after]"></ng-content>`,
-  standalone: false
+    <ng-content select="[after]"></ng-content>
+  `,
+  standalone: false,
 })
-export class DatalistComponent
-  extends AbstractComponent<string>
-  implements ControlValueAccessor {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+export class DatalistComponent extends AbstractComponent<string> implements ControlValueAccessor {
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
   readonly = input(false, { transform: booleanAttribute });
   placeholder = input<string | undefined>(undefined);
   size = input<'small' | 'large' | undefined>(undefined);
