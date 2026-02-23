@@ -1,15 +1,21 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { IModal, ModalData, ModalDirective } from '../components';
-import { SearchModalInput } from './search-modal.data';
-import { RlbBootstrapModule } from '../rlb-bootstrap.module';
+import {
+  Component,
+  ElementRef,
+  input,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { IModal, ModalData, ModalDirective } from '../components';
+import { RlbBootstrapModule } from '../rlb-bootstrap.module';
+import { SearchModalInput } from './search-modal.data';
 
 @Component({
   imports: [RlbBootstrapModule, FormsModule],
   standalone: true,
   template: ` <div class="modal-header">
-      <h5 class="modal-title">{{ data.title }}</h5>
+      <h5 class="modal-title">{{ data().title }}</h5>
       <button
         type="button"
         class="btn-close"
@@ -18,10 +24,10 @@ import { FormsModule } from '@angular/forms';
       ></button>
     </div>
     <div class="modal-body">
-      <h6>{{ data.content.searchText }}</h6>
+      <h6>{{ data().content.searchText }}</h6>
       <rlb-input
         class="search-input"
-        [placeholder]="data.content.placeholder"
+        [placeholder]="data().content.placeholder"
         [(ngModel)]="searchText"
         (keyup.enter)="onEnter()"
       >
@@ -42,14 +48,15 @@ import { FormsModule } from '@angular/forms';
       directive: ModalDirective,
       inputs: ['id', 'data-instance', 'data-options'],
     },
-  ]
+  ],
 })
 export class SearchModalComponent
-  implements IModal<SearchModalInput, string>, OnInit {
+  implements IModal<SearchModalInput, string>, OnInit
+{
   @ViewChild('btn') btn!: ElementRef<HTMLElement>;
 
-  data!: ModalData<SearchModalInput>;
-  valid?: boolean = true;
+  data = input<ModalData<SearchModalInput>>({} as any);
+  valid = signal(true);
   result?: string;
   searchText?: string;
 
@@ -57,7 +64,7 @@ export class SearchModalComponent
     this.result = this.searchText;
   }
 
-  onEnter() { }
+  onEnter() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

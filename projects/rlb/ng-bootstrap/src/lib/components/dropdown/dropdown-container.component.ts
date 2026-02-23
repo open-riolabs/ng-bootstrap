@@ -1,41 +1,41 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, input } from '@angular/core';
 
 @Component({
-    selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
-    template: ` @if (isList) {
+  selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
+  template: ` @if (isList) {
   <ng-content select="li[rlb-dropdown-item]" />
 }
 @if (!isList) {
   <ng-content />
 }`,
-    host: {
-        class: 'dropdown-menu',
-        '[class.dropdown-menu-end]': 'placement === "right"',
-        '[class.dropdown-menu-start]': 'placement === "left"',
-        '[class.dropdown-menu-sm-end]': 'placementSm === "right"',
-        '[class.dropdown-menu-sm-start]': 'placementSm === "left"',
-        '[class.dropdown-menu-md-end]': 'placementMd === "right"',
-        '[class.dropdown-menu-md-start]': 'placementMd === "left"',
-        '[class.dropdown-menu-lg-end]': 'placementLg === "right"',
-        '[class.dropdown-menu-lg-start]': 'placementLg === "left"',
-        '[class.dropdown-menu-xl-end]': 'placementXl === "right"',
-        '[class.dropdown-menu-xl-start]': 'placementXl === "left"',
-        '[class.dropdown-menu-xxl-end]': 'placementXxl === "right"',
-        '[class.dropdown-menu-xxl-start]': 'placementXxl === "left"',
-      '[style.border]': 'isList ? null : "none"',
-      '[style.padding]': 'isList ? null : "0px"',
-    },
-    standalone: false
+  host: {
+    class: 'dropdown-menu',
+    '[class.dropdown-menu-end]': 'placement() === "right"',
+    '[class.dropdown-menu-start]': 'placement() === "left"',
+    '[class.dropdown-menu-sm-end]': 'placementSm() === "right"',
+    '[class.dropdown-menu-sm-start]': 'placementSm() === "left"',
+    '[class.dropdown-menu-md-end]': 'placementMd() === "right"',
+    '[class.dropdown-menu-md-start]': 'placementMd() === "left"',
+    '[class.dropdown-menu-lg-end]': 'placementLg() === "right"',
+    '[class.dropdown-menu-lg-start]': 'placementLg() === "left"',
+    '[class.dropdown-menu-xl-end]': 'placementXl() === "right"',
+    '[class.dropdown-menu-xl-start]': 'placementXl() === "left"',
+    '[class.dropdown-menu-xxl-end]': 'placementXxl() === "right"',
+    '[class.dropdown-menu-xxl-start]': 'placementXxl() === "left"',
+    '[style.border]': 'isList ? null : "none"',
+    '[style.padding]': 'isList ? null : "0px"',
+  },
+  standalone: false
 })
 export class DropdownContainerComponent {
   isList: boolean = false;
-  
-  @Input({ alias: 'placement' }) public placement!: 'left' | 'right';
-  @Input({ alias: 'placement-sm' }) public placementSm!: 'left' | 'right'
-  @Input({ alias: 'placement-md' }) public placementMd!: 'left' | 'right'
-  @Input({ alias: 'placement-lg' }) public placementLg!: 'left' | 'right'
-  @Input({ alias: 'placement-xl' }) public placementXl!: 'left' | 'right'
-  @Input({ alias: 'placement-xxl' }) public placementXxl!: 'left' | 'right'
+
+  placement = input<'left' | 'right' | undefined>(undefined, { alias: 'placement' });
+  placementSm = input<'left' | 'right' | undefined>(undefined, { alias: 'placement-sm' });
+  placementMd = input<'left' | 'right' | undefined>(undefined, { alias: 'placement-md' });
+  placementLg = input<'left' | 'right' | undefined>(undefined, { alias: 'placement-lg' });
+  placementXl = input<'left' | 'right' | undefined>(undefined, { alias: 'placement-xl' });
+  placementXxl = input<'left' | 'right' | undefined>(undefined, { alias: 'placement-xxl' });
 
   constructor(
     private elementRef: ElementRef,

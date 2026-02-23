@@ -1,16 +1,14 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  effect,
   ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
+  input,
   OnDestroy,
-  Output,
-  SimpleChanges,
-  ViewChild
+  output,
+  signal,
+  viewChild
 } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
@@ -29,57 +27,48 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterViewInit {
-  @Input() view!: CalendarView;
-  @Input() currentDate!: IDateTz;
-  @Input() events: CalendarEvent[] = [];
-  @Input() layout!: CalendarLayout;
-  @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
+export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
+  view = input.required<CalendarView>();
+  currentDate = input.required<IDateTz>();
+  events = input<CalendarEvent[]>([]);
+  layout = input.required<CalendarLayout>();
 
-  @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
-  @Output() eventChange = new EventEmitter<CalendarEvent>();
+  eventClick = output<CalendarEvent | undefined>();
+  eventContainerClick = output<CalendarEvent[] | undefined>();
+  eventChange = output<CalendarEvent>();
 
-  days: IDateTz[] = [];
-  timeSlots: string[] = [];
-  processedEvents: Map<number, CalendarEventWithLayout[]> = new Map();
+  days = signal<IDateTz[]>([]);
+  timeSlots = signal<string[]>([]);
+  processedEvents = signal<Map<number, CalendarEventWithLayout[]>>(new Map());
 
-  @ViewChild('scrollBody', { static: false }) scrollBodyRef!: ElementRef<HTMLDivElement>;
-  @ViewChild('headerRow', { static: false }) headerRowRef!: ElementRef<HTMLDivElement>;
-  scrollbarWidth: number = 0;
+  scrollBodyRef = viewChild<ElementRef<HTMLDivElement>>('scrollBody');
+  headerRowRef = viewChild<ElementRef<HTMLDivElement>>('headerRow');
+  scrollbarWidth = signal(0);
 
-  now: DateTz;
+  now = signal<DateTz>(getToday());
   private nowInterval: any;
 
   // CONFIG CONSTANTS (Replaced by Layout Input)
   private readonly MAX_VISIBLE_COLUMNS = 4;
-
   private readonly SNAP_MINUTES = 15;
 
 
-  constructor(
-    private cd: ChangeDetectorRef,
-  ) {
-    this.now = getToday();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['view'] || changes['currentDate']) {
-      if (this.view === 'week') {
-        this.buildWeekGrid(this.currentDate);
+  constructor() {
+    effect(() => {
+      if (this.view() === 'week') {
+        this.buildWeekGrid(this.currentDate());
         this.buildTimeSlots();
       }
-    }
+    });
 
-    if (changes['events']) {
-      this.events = changes['events'].currentValue as CalendarEvent[];
-      this.processAllEvents();
-    }
+    effect(() => {
+      this.processAllEvents(this.events());
+    });
   }
 
   ngAfterViewInit() {
     this.updateScrollbarWidth();
     window.addEventListener('resize', this.onResize);
-    this.cd.detectChanges();
   }
 
   ngOnDestroy() {
@@ -93,15 +82,18 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
   };
 
   private updateScrollbarWidth() {
-    if (this.scrollBodyRef) {
-      const el = this.scrollBodyRef.nativeElement;
-      this.scrollbarWidth = el.offsetWidth - el.clientWidth;
+    const scrollBody = this.scrollBodyRef();
+    if (scrollBody) {
+      const el = scrollBody.nativeElement;
+      this.scrollbarWidth.set(el.offsetWidth - el.clientWidth);
     }
   }
 
   onBodyScroll(event: Event) {
-    if (this.headerRowRef && this.scrollBodyRef) {
-      this.headerRowRef.nativeElement.scrollLeft = this.scrollBodyRef.nativeElement.scrollLeft;
+    const headerRow = this.headerRowRef();
+    const scrollBody = this.scrollBodyRef();
+    if (headerRow && scrollBody) {
+      headerRow.nativeElement.scrollLeft = scrollBody.nativeElement.scrollLeft;
     }
   }
 
@@ -114,16 +106,11 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
     const newDay = event.container.data;
 
     const originalTopPx = this.calculateEventTop(movedEvent);
-
     const dragDistancePx = event.distance.y;
-
     const newTopPx = originalTopPx + dragDistancePx;
 
-    const rawMinutesFromStart = (newTopPx / this.layout.rowHeight) * 60;
-
-
+    const rawMinutesFromStart = (newTopPx / this.layout().rowHeight) * 60;
     const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
-
     const validMinutes = Math.max(0, snappedMinutes);
 
     const newStart = new DateTz(newDay)
@@ -148,28 +135,29 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
 
   getEventsForDay(day: IDateTz): CalendarEventWithLayout[] {
     const dayTs = new DateTz(day.timestamp, 'UTC').set(0, 'hour').set(0, 'minute').stripSecMillis().timestamp;
-    return this.processedEvents.get(dayTs) || [];
+    return this.processedEvents().get(dayTs) || [];
   }
 
   calculateEventTop(event: CalendarEventWithLayout): number {
     const startOfDay = new DateTz(event.start).set(0, 'hour').set(0, 'minute').stripSecMillis();
     const diffMs = event.start.timestamp - startOfDay.timestamp;
     const diffMinutes = diffMs / (1000 * 60);
-    return (diffMinutes / 60) * this.layout.rowHeight;
+    return (diffMinutes / 60) * this.layout().rowHeight;
   }
 
 
   calculateEventHeight(event: CalendarEventWithLayout): number {
     const durationMs = event.end.timestamp - event.start.timestamp;
     const durationMinutes = durationMs / (1000 * 60);
-    return (durationMinutes / 60) * this.layout.rowHeight;
+    return (durationMinutes / 60) * this.layout().rowHeight;
   }
 
 
   getNowTop(): number {
-    const hours = this.now.hour;
-    const minutes = this.now.minute;
-    return ((hours * 60) + minutes) / 60 * this.layout.rowHeight;
+    const now = this.now();
+    const hours = now.hour;
+    const minutes = now.minute;
+    return ((hours * 60) + minutes) / 60 * this.layout().rowHeight;
   }
 
 
@@ -178,14 +166,16 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
   }
 
   private startNowTimer() {
+    if (this.nowInterval) return;
     this.nowInterval = setInterval(() => {
-      this.now = getToday();
+      this.now.set(getToday());
     }, 60 * 1000); // every minute
   }
 
   private stopNowTimer() {
     if (this.nowInterval) {
       clearInterval(this.nowInterval);
+      this.nowInterval = null;
     }
   }
 
@@ -199,10 +189,11 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
       .set!(0, 'minute')
       .stripSecMillis!();
 
-    this.days = [];
+    const newDays: IDateTz[] = [];
     for (let i = 0; i < 7; i++) {
-      this.days.push(new DateTz(start.timestamp, 'UTC').add(i, 'day'));
+      newDays.push(new DateTz(start.timestamp, 'UTC').add(i, 'day'));
     }
+    this.days.set(newDays);
     this.startNowTimer();
   }
 
@@ -211,7 +202,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
     for (let h = 0; h < 24; h++) {
       slots.push(`${h.toString().padStart(2, '0')}:00`);
     }
-    this.timeSlots = slots;
+    this.timeSlots.set(slots);
   }
 
   private isOverlapping(eventA: CalendarEvent, eventB: CalendarEvent): boolean {
@@ -222,12 +213,10 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
     return startA < endB && startB < endA;
   }
 
-  private processAllEvents() {
-    this.processedEvents.clear();
-
+  private processAllEvents(events: CalendarEvent[]) {
     const eventsByDay = new Map<number, CalendarEventWithLayout[]>();
 
-    for (const event of this.events) {
+    for (const event of events) {
       const originalStart = new DateTz(event.start).stripSecMillis!();
       const originalEnd = new DateTz(event.end).stripSecMillis!();
 
@@ -270,10 +259,10 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
       }
     }
 
+    const newProcessedEvents = new Map<number, CalendarEventWithLayout[]>();
     for (const [dayTimestamp, dayEvents] of eventsByDay.entries()) {
 
       const sortedDayEvents = this.sortEventsStable(dayEvents);
-
       const groups = this.groupEventsByConflicts(sortedDayEvents);
       const eventsWithLayout: CalendarEventWithLayout[] = [];
 
@@ -282,8 +271,9 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
         eventsWithLayout.push(...groupLayouts);
       }
 
-      this.processedEvents.set(dayTimestamp, eventsWithLayout);
+      newProcessedEvents.set(dayTimestamp, eventsWithLayout);
     }
+    this.processedEvents.set(newProcessedEvents);
   }
 
   private groupEventsByConflicts(dayEvents: CalendarEvent[]): CalendarEvent[][] {
@@ -319,7 +309,6 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
     if (!groupEvents || groupEvents.length === 0) return [];
 
     const columns: CalendarEventWithLayout[][] = [];
-
     const columnLastEndTimes: number[] = [];
 
     for (const event of groupEvents) {
@@ -343,9 +332,7 @@ export class CalendarWeekGridComponent implements OnChanges, OnDestroy, AfterVie
     }
 
     const totalColumns = columns.length;
-
     const resultEvents: CalendarEventWithLayout[] = [];
-
 
     // Case 1: All visible
     if (totalColumns <= this.MAX_VISIBLE_COLUMNS) {

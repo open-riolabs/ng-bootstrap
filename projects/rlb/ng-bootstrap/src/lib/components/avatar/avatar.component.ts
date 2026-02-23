@@ -1,48 +1,48 @@
-
 import {
   Component,
-  Input,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
+  computed,
+  input,
   numberAttribute,
+  OnInit,
+  TemplateRef,
+  viewChild,
+  ViewContainerRef,
 } from '@angular/core';
 
 @Component({
-    selector: 'rlb-avatar',
-    template: `
+  selector: 'rlb-avatar',
+  template: `
     <ng-template #template>
-      @if (src) {
+      @if (src()) {
         <img
-          [src]="src"
+          [src]="src()!"
           alt="Avatar"
-          [class]="cssClass"
+          [class]="cssClass()"
           [style.vertical-align]="'middle'"
-          [style.width.px]="size"
-          [style.width.px]="size"
-          [style.height.px]="size"
+          [style.width.px]="size()"
+          [style.height.px]="size()"
           [style.border]="'2px solid #cbcbcb'"
-          [style.border-radius]="_borderRadius"
+          [style.border-radius]="_borderRadius()"
           />
       }
     </ng-template>
     `,
-    standalone: false
+  standalone: false
 })
-export class AvatarComponent {
+export class AvatarComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'size', transform: numberAttribute }) size?: number = 50;
-  @Input({ alias: 'shape' }) shape?: 'circle' | 'round' | 'square' = 'circle';
-  @Input({ alias: 'src' }) src?: string;
-  @Input({ alias: 'class' }) cssClass?: string = '';
+  size = input<number, unknown>(50, { alias: 'size', transform: numberAttribute });
+  shape = input<'circle' | 'round' | 'square'>('circle', { alias: 'shape' });
+  src = input<string | undefined>(undefined, { alias: 'src' });
+  cssClass = input<string | undefined>('', { alias: 'class' });
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  template = viewChild.required<TemplateRef<any>>('template');
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
-  get _borderRadius() {
-    switch (this.shape) {
+  _borderRadius = computed(() => {
+    switch (this.shape()) {
       case 'circle':
         return '50%';
       case 'round':
@@ -52,11 +52,11 @@ export class AvatarComponent {
       default:
         return '50%';
     }
-  }
+  });
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template,
+      this.template(),
     );
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();

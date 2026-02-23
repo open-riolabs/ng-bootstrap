@@ -1,21 +1,20 @@
-
-@switch (view) {
-  @case ('week') {
-    <rlb-calendar-week-grid [view]="view" [currentDate]="currentDate" [events]="events" [layout]="layout"
-      (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
-      (eventChange)="eventChange.emit($event)" />
-    }
-    @case ('month') {
-      <rlb-calendar-month-grid [view]="view" [currentDate]="currentDate" [events]="events" [layout]="layout"
-        (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
-        (eventChange)="eventChange.emit($event)" />
-      }
-      @case ('day') {
-        <rlb-calendar-day-grid [view]="view" [currentDate]="currentDate" [events]="events" [layout]="layout"
-          (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
-          (eventChange)="eventChange.emit($event)" />
-        }
-        @default {
-          not implemented yet
-        }
-      }
+@switch (view()) {
+@case ('week') {
+<rlb-calendar-week-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [layout]="layout()"
+  (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
+  (eventChange)="eventChange.emit($event)" />
+}
+@case ('month') {
+<rlb-calendar-month-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [layout]="layout()"
+  (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
+  (eventChange)="eventChange.emit($event)" />
+}
+@case ('day') {
+<rlb-calendar-day-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [layout]="layout()"
+  (eventClick)="eventClick.emit($event)" (eventContainerClick)="eventContainerClick.emit($event)"
+  (eventChange)="eventChange.emit($event)" />
+}
+@default {
+not implemented yet
+}
+}

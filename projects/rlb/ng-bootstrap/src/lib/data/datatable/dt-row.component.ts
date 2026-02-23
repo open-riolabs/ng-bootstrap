@@ -1,92 +1,51 @@
 import {
-  AfterContentInit,
-  AfterViewInit,
   Component,
-  ContentChildren,
-  EmbeddedViewRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  QueryList,
+  computed,
+  contentChildren,
+  input,
+  output,
   TemplateRef,
-  ViewChild,
-  ViewContainerRef,
+  viewChild,
 } from '@angular/core';
 import { DataTableActionsComponent } from './dt-actions.component';
-import { Subscription } from "rxjs";
+import { DataTableCellComponent } from './dt-cell.component';
 
 @Component({
   selector: 'rlb-dt-row',
   template: `
     <ng-template #template>
-      <tr [class]="cssClass" [style]="cssStyle" (click)="rowClick.emit($event)">
-        <ng-content select="rlb-dt-cell"></ng-content>
-        @if (hasActions) {
-          <rlb-dt-cell>
-            <ng-container #projectedActions></ng-container>
-          </rlb-dt-cell>
+      <tr
+        [class]="cssClass()"
+        [style]="cssStyle()"
+        (click)="rowClick.emit($event)"
+      >
+        <!-- Loop and render cells natively -->
+        @for (cell of cells(); track $index) {
+          <ng-container *ngTemplateOutlet="cell.template()"></ng-container>
+        }
+
+        @if (hasActions()) {
+          <td>
+            <!-- Loop and render actions natively -->
+            @for (actionBlock of actionsBlock(); track $index) {
+              <ng-container *ngTemplateOutlet="actionBlock.template()"></ng-container>
+            }
+          </td>
         }
       </tr>
-    </ng-template>`,
-  standalone: false
+    </ng-template>
+  `,
+  standalone: false,
 })
-export class DataTableRowComponent implements AfterViewInit, OnInit, AfterContentInit, OnDestroy {
-  @Input({ alias: 'class' }) cssClass?: string
-  @Input({ alias: 'style' }) cssStyle?: string;
-  hasActions: boolean = true
+export class DataTableRowComponent {
+  cssClass = input<string | undefined>(undefined, { alias: 'class' });
+  cssStyle = input<string | undefined>(undefined, { alias: 'style' });
+  rowClick = output<MouseEvent>();
 
-  @Output() rowClick: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+  template = viewChild.required<TemplateRef<any>>('template');
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  @ViewChild('projectedActions', { read: ViewContainerRef }) _projectedActions!: ViewContainerRef;
-  @ContentChildren(DataTableActionsComponent) public actionsBlock!: QueryList<DataTableActionsComponent>;
+  actionsBlock = contentChildren(DataTableActionsComponent);
+  cells = contentChildren(DataTableCellComponent);
 
-  element!: HTMLElement;
-  private temp!: EmbeddedViewRef<any>;
-  private _actionsBlockSubscription: Subscription | undefined;
-
-  constructor(private viewContainerRef: ViewContainerRef) { }
-
-  get _view() {
-    return this.temp
-  }
-
-
-  ngOnInit() {
-    this.temp = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
-    this.element = this.temp.rootNodes[0];
-    this.viewContainerRef.element.nativeElement.remove();
-  }
-
-  ngAfterContentInit() {
-    this._actionsBlockSubscription = this.actionsBlock.changes.subscribe(() => {
-      this._renderActions();
-    });
-    this.hasActions = !!this.actionsBlock.length;
-  }
-
-  ngAfterViewInit() {
-    this._renderActions();
-  }
-
-  ngOnDestroy() {
-    if (this._actionsBlockSubscription) {
-      this._actionsBlockSubscription.unsubscribe();
-    }
-  }
-
-  private _renderActions() {
-    if (this.hasActions && this._projectedActions) {
-      for (let i = this._projectedActions.length; i > 0; i--) {
-        this._projectedActions.detach();
-      }
-      if (this.actionsBlock.first) {
-        this._projectedActions.insert(this.actionsBlock.first._view);
-      }
-    }
-  }
+  hasActions = computed(() => this.actionsBlock().length > 0);
 }

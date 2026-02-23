@@ -1,14 +1,13 @@
-<div [ngClass]="classes"
-  (click)="onClick($event)">
+<div [ngClass]="classes()" (click)="onClick($event)">
 
-  @if (!event.isOverflowIndicator) {
-    <strong>{{ event.title }}</strong>
-    <div class="small opacity-75">
-      {{ event.start | dtz:'HH:mm' }} - {{ event.end | dtz:'HH:mm' }}
-    </div>
+  @if (!event().isOverflowIndicator) {
+  <strong>{{ event().title }}</strong>
+  <div class="small opacity-75">
+    {{ event().start | dtz:'HH:mm' }} - {{ event().end | dtz:'HH:mm' }}
+  </div>
   }
 
-  @if (event.isOverflowIndicator) {
-    +{{ event.overlapCount }} more
+  @if (event().isOverflowIndicator) {
+  +{{ event().overlapCount }} more
   }
 </div>

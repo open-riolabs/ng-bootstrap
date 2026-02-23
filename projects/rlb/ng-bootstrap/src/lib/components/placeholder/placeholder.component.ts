@@ -1,18 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
 	selector: 'rlb-placeholder',
 	template: `
-		<div [ngClass]="containerClass">
+		<div [class]="containerClass()">
 			<ng-content/>
 		</div>`,
 	standalone: false
 })
 export class RlbPlaceholderComponent {
-	@Input() animation: 'glow' | 'wave' | 'none' = 'none';
-	
-	get containerClass(): string | string[] {
-		if (this.animation === 'none') return [];
-		return `placeholder-${this.animation}`;
-	}
+	animation = input<'glow' | 'wave' | 'none'>('none');
+
+	containerClass = computed(() => {
+		if (this.animation() === 'none') return [];
+		return `placeholder-${this.animation()}`;
+	});
 }

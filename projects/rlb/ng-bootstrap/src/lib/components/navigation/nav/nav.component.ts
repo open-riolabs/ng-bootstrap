@@ -1,43 +1,67 @@
 import {
-	Component,
-	ElementRef,
-	Input,
-	TemplateRef,
-	ViewChild,
-	ViewContainerRef,
-	booleanAttribute, OnInit,
+  booleanAttribute,
+  Component,
+  computed,
+  ElementRef,
+  input,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 
 @Component({
-    selector: 'rlb-nav',
-    template: ` <ng-template #template>
+  selector: 'rlb-nav',
+  template: ` <ng-template #template>
     <ul
-      [attr.id]="id ? id : undefined"
-      class="nav nav-underline {{ cssClass }}"
-      [class.justify-content-center]="horizontalAlignment === 'center'"
-      [class.justify-content-end]="horizontalAlignment === 'end'"
-      [class.flex-column]="vertical"
-      [class.nav-pills]="pills"
-      [class.nav-fill]="fill"
+      class="nav {{ cssClass() }}"
+      [class.nav-tabs]="effectiveView() === 'tab' || effectiveView() === 'tabs'"
+      [class.nav-pills]="effectiveView() === 'pills'"
+      [class.nav-underline]="effectiveView() === 'underline'"
+      [class.nav-fill]="effectiveFill() === 'fill'"
+      [class.nav-justified]="effectiveFill() === 'justified'"
+      [class.flex-column]="vertical()"
+      [class.justify-content-center]="horizontalAlignment() === 'center'"
+      [class.justify-content-end]="horizontalAlignment() === 'end'"
     >
       <ng-content select="rlb-nav-item" />
     </ul>
   </ng-template>`,
-    host: {
-        '[attr.class]': 'undefined',
-        '[attr.id]': 'undefined',
-    },
-    standalone: false
+  standalone: false
 })
 export class NavComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'horizontal-alignment' }) horizontalAlignment?: 'center' | 'end';
-  @Input({ alias: 'vertical', transform: booleanAttribute }) vertical?: boolean;
-  @Input({ alias: 'fill', transform: booleanAttribute }) fill?: boolean;
-  @Input({ alias: 'pills', transform: booleanAttribute }) pills?: boolean;
-  @Input({ alias: 'id' }) id!: string;
-  @Input({ alias: 'class' }) cssClass?: string = '';
+  horizontalAlignment = input<'center' | 'end' | undefined>(undefined, { alias: 'horizontal-alignment' });
+  view = input<'tab' | 'tabs' | 'pills' | 'underline' | 'none'>('tab', { alias: 'view' });
+  pills = input(false, { transform: booleanAttribute });
+  tabs = input(false, { transform: booleanAttribute });
+  underline = input(false, { transform: booleanAttribute });
+
+  vertical = input(false, { alias: 'vertical', transform: booleanAttribute });
+
+  fill = input<'fill' | 'justified' | boolean | undefined, any>(undefined, {
+    alias: 'fill',
+    transform: (v: any) => {
+      if (v === 'fill' || v === 'justified') return v;
+      return booleanAttribute(v);
+    }
+  });
+
+  cssClass = input('', { alias: 'class' });
+
+  effectiveView = computed(() => {
+    if (this.pills()) return 'pills';
+    if (this.tabs()) return 'tab';
+    if (this.underline()) return 'underline';
+    return this.view();
+  });
+
+  effectiveFill = computed(() => {
+    const val = this.fill();
+    if (val === 'fill' || val === 'justified') return val;
+    return val === true ? 'fill' : undefined;
+  });
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 

@@ -1,50 +1,55 @@
 import {
   AfterContentInit,
   Component,
-  ContentChildren,
-  EventEmitter,
-  Input,
+  contentChildren,
+  effect,
+  input,
   OnDestroy,
   OnInit,
-  Output,
-  QueryList,
+  output,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Subject } from "rxjs";
 import { NavbarItemComponent } from "./navbar-item.component";
-import { startWith, Subject, takeUntil } from "rxjs";
 
 @Component({
-    selector: 'rlb-navbar-items',
-    template: ` <ng-template #template>
+  selector: 'rlb-navbar-items',
+  template: ` <ng-template #template>
     <ul
-      class="navbar-nav {{ cssClass }}"
-      [class.navbar-nav-scroll]="scroll"
-      [style.--bs-scroll-height]="scroll"
+      class="navbar-nav {{ cssClass() }}"
+      [class.navbar-nav-scroll]="scroll()"
+      [style.--bs-scroll-height]="scroll()"
     >
       <ng-content
 				select="rlb-navbar-item, rlb-navbar-dropdown-item, rlb-navbar-separator, ng-container"
       />
     </ul>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
-export class NavbarItemsComponent implements OnInit, AfterContentInit, OnDestroy  {
-  @Input({ alias: 'scroll' }) scroll?: string;
-  @Input({ alias: 'class' }) cssClass?: string;
+export class NavbarItemsComponent implements OnInit, AfterContentInit, OnDestroy {
+  scroll = input<string | undefined>(undefined);
+  cssClass = input('', { alias: 'class' });
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
   element!: HTMLElement;
 
-  @ContentChildren(NavbarItemComponent, { descendants: true })
-  menuItems!: QueryList<NavbarItemComponent>;
+  menuItems = contentChildren(NavbarItemComponent, { descendants: true });
 
-  @Output() click = new EventEmitter<MouseEvent>();
+  click = output<MouseEvent>();
 
   private destroy$ = new Subject<void>();
 
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  constructor(private viewContainerRef: ViewContainerRef) {
+    effect(() => {
+      const items = this.menuItems();
+      items.forEach(item => {
+        item.click.subscribe(event => this.click.emit(event));
+      });
+    });
+  }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
@@ -55,14 +60,7 @@ export class NavbarItemsComponent implements OnInit, AfterContentInit, OnDestroy
   }
 
   ngAfterContentInit() {
-    this.menuItems.changes.pipe(
-      startWith(this.menuItems), // handles initial list
-      takeUntil(this.destroy$)
-    ).subscribe((items: QueryList<NavbarItemComponent>) => {
-      items.forEach(item => {
-        item.click.pipe(takeUntil(this.destroy$)).subscribe(event => this.click.emit(event));
-      });
-    });
+    // Migrated to effect()
   }
 
   ngOnDestroy() {

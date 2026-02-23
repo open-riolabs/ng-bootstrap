@@ -1,67 +1,68 @@
 import {
+  AfterViewInit,
   Directive,
   ElementRef,
   Renderer2,
-  Input,
-  DoCheck,
-  AfterViewInit,
+  effect,
+  input,
 } from '@angular/core';
 import { Popover } from 'bootstrap';
 
 @Directive({
-    selector: '[popover]',
-    standalone: false
+  selector: '[popover]',
+  standalone: false
 })
-export class PopoverDirective implements DoCheck, AfterViewInit {
+export class PopoverDirective implements AfterViewInit {
   static bsInit = false;
+  private _popover: Popover | undefined;
 
-  @Input({ alias: 'popover', required: true }) popover!: string | undefined;
-  @Input({ alias: 'popover-placement' }) placement!: 'top' | 'bottom' | 'left' | 'right';
-  @Input({ alias: 'popover-class' }) customClass!: string;
-  @Input({ alias: 'popover-title' }) title!: string;
+  popover = input<string | undefined>(undefined, { alias: 'popover' });
+  placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'popover-placement' });
+  customClass = input('', { alias: 'popover-class' });
+  title = input('', { alias: 'popover-title' });
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-  ) { }
+  ) {
+    effect(() => {
+      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-toggle', 'popover');
+    });
 
-  ngDoCheck() {
-    this.renderer.setAttribute(
-      this.elementRef.nativeElement,
-      'data-bs-toggle',
-      'popover',
-    );
-    if (this.placement) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-placement',
-        this.placement,
-      );
-    }
-    if (this.customClass) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-custom-class',
-        this.customClass,
-      );
-    }
-    if (this.title) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-title',
-        this.title,
-      );
-    }
-    if (this.popover) {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-content',
-        this.popover,
-      );
-    }
+    effect(() => {
+      const p = this.placement();
+      if (p) {
+        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-placement', p);
+        this._popover?.update();
+      }
+    });
+
+    effect(() => {
+      const c = this.customClass();
+      if (c) {
+        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-custom-class', c);
+        this._popover?.update();
+      }
+    });
+
+    effect(() => {
+      const t = this.title();
+      if (t) {
+        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-title', t);
+        this._popover?.update();
+      }
+    });
+
+    effect(() => {
+      const content = this.popover();
+      if (content) {
+        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-content', content);
+        this._popover?.update();
+      }
+    });
   }
 
   ngAfterViewInit() {
-    new Popover(this.elementRef.nativeElement);
+    this._popover = new Popover(this.elementRef.nativeElement);
   }
 }

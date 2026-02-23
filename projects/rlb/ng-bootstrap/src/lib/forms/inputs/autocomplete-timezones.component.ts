@@ -1,9 +1,9 @@
-import { booleanAttribute, Component, Input, Optional, Renderer2, Self } from '@angular/core';
+import { booleanAttribute, Component, input, Optional, Renderer2, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { DateTz } from '@open-rlb/date-tz';
 import { UniqueIdService } from '../../shared/unique-id.service';
-import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
-import { AutocompleteItem } from "./autocomplete-model";
+import { AbstractAutocompleteComponent } from './abstract-autocomplete.component';
+import { AutocompleteItem } from './autocomplete-model';
 
 @Component({
   selector: 'rlb-autocomplete-timezones',
@@ -15,39 +15,50 @@ import { AutocompleteItem } from "./autocomplete-model";
         [id]="id"
         class="form-control"
         type="text"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
-        [attr.placeholder]="placeholder"
+        [attr.disabled]="disabled() ? true : undefined"
+        [attr.readonly]="readonly() ? true : undefined"
+        [attr.placeholder]="placeholder()"
         [attr.autocomplete]="'off'"
-        [class.form-control-lg]="size === 'large'"
-        [class.form-control-sm]="size === 'small'"
+        [class.form-control-lg]="size() === 'large'"
+        [class.form-control-sm]="size() === 'small'"
         (blur)="touch()"
-				[ngClass]="{
-        'is-invalid': control?.touched && control?.invalid,
-        'is-valid': control?.touched && control?.valid
+        [ngClass]="{
+          'is-invalid': control?.touched && control?.invalid,
+          'is-valid': control?.touched && control?.valid,
         }"
         (input)="update($event.target)"
-        />
-        @if (errors && showError) {
-          <rlb-input-validation [errors]="errors"/>
-        }
-        <div
-          #autocomplete
-          [id]="id+'-ac'"
-          class="dropdown-menu overflow-y-auto w-100 position-absolute"
-          aria-labelledby="dropdownMenu"
-          [style.max-height.px]="maxHeight"
-          style="z-index: 1000; top: 100%;">
-        </div>
-      </div>
-    `,
-  standalone: false
+      />
+      @if (errors() && showError()) {
+        <rlb-input-validation [errors]="errors()" />
+      }
+      <div
+        #autocomplete
+        [id]="id + '-ac'"
+        class="dropdown-menu overflow-y-auto w-100 position-absolute"
+        aria-labelledby="dropdownMenu"
+        [style.max-height.px]="maxHeight()"
+        style="z-index: 1000; top: 100%;"
+      ></div>
+    </div>
+    @if (loading() || acLoading()) {
+      <rlb-progress
+        [height]="2"
+        [infinite]="loading() || acLoading()"
+        color="primary"
+        class="w-100"
+      />
+    }
+    <ng-content select="[after]"></ng-content>
+  `,
+  standalone: false,
 })
 export class AutocompleteTimezonesComponent
   extends AbstractAutocompleteComponent
   implements ControlValueAccessor {
-
-  @Input({ transform: booleanAttribute, alias: 'enable-flag-icons' }) enableFlagIcons?: boolean = false;
+  enableFlagIcons = input(false, {
+    transform: booleanAttribute,
+    alias: 'enable-flag-icons',
+  });
 
   constructor(
     idService: UniqueIdService,
@@ -59,12 +70,12 @@ export class AutocompleteTimezonesComponent
 
   protected override getSuggestions(query: string) {
     this.clearDropdown();
-    this.activeIndex = -1;
+    this.activeIndex.set(-1);
 
     if (query && query.length > 0) {
       this.openDropdown();
       const timezones = DateTz.timezones();
-      const suggestions = timezones.filter(o => {
+      const suggestions = timezones.filter((o) => {
         return o.toLowerCase().includes(query.toLowerCase());
       });
       this.renderAc(suggestions);

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, computed, input, output } from "@angular/core";
 import { CalendarEvent, CalendarEventWithLayout } from "../interfaces/calendar-event.interface";
 import { CalendarView } from "../interfaces/calendar-view.type";
 
@@ -9,16 +9,18 @@ import { CalendarView } from "../interfaces/calendar-view.type";
   standalone: false,
 })
 export class CalendarEventComponent {
-  @Input({ required: true }) event!: CalendarEventWithLayout;
-  @Input({ required: true }) view!: CalendarView;
-  @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
-  @Output() eventContainerClick = new EventEmitter<CalendarEventWithLayout[] | undefined>();
+  event = input.required<CalendarEventWithLayout>();
+  view = input.required<CalendarView>();
+  eventClick = output<CalendarEvent | undefined>();
+  eventContainerClick = output<CalendarEventWithLayout[] | undefined>();
 
-  get classes(): string[] {
-    const baseColor = this.event.color || 'primary';
+  classes = computed(() => {
+    const event = this.event();
+    const view = this.view();
+    const baseColor = event.color || 'primary';
     const classes = ['calendar-event', 'shadow-sm'];
 
-    switch (this.view) {
+    switch (view) {
       case 'week':
         classes.push('mode-week');
         break;
@@ -27,16 +29,16 @@ export class CalendarEventComponent {
         break;
     }
 
-    if (this.event.isContinuedAfter) {
+    if (event.isContinuedAfter) {
       classes.push('rounded-bottom-0', 'border-bottom-0');
     }
 
-    if (this.event.isContinuedBefore) {
+    if (event.isContinuedBefore) {
       classes.push('rounded-top-0', 'border-top-0', 'opacity-75');
     }
 
 
-    if (this.event.isOverflowIndicator) {
+    if (event.isOverflowIndicator) {
       classes.push('overflow-indicator', 'bg-light', 'text-dark', 'border');
     } else {
       classes.push(`bg-${baseColor}`);
@@ -47,17 +49,18 @@ export class CalendarEventComponent {
       }
     }
     return classes;
-  }
+  });
 
   onClick(e: Event) {
+    const event = this.event();
     e.preventDefault();
     e.stopPropagation();
-    e.stopImmediatePropagation()
+    e.stopImmediatePropagation();
 
-    if (this.event.isOverflowIndicator && this.event.overflowEvents) {
-      this.eventContainerClick.emit(this.event.overflowEvents)
+    if (event.isOverflowIndicator && event.overflowEvents) {
+      this.eventContainerClick.emit(event.overflowEvents);
     } else {
-      this.eventClick.emit(this.event);
+      this.eventClick.emit(event);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 export interface BreadcrumbItem {
   id: string;
@@ -10,11 +10,11 @@ export interface BreadcrumbItem {
   selector: 'rlb-breadcrumb',
   template: ` <nav
     aria-label="breadcrumb"
-    style="--bs-breadcrumb-divider: '{{ divider }}';"
+    style="--bs-breadcrumb-divider: '{{ divider() }}';"
   >
-    <ol class="breadcrumb" [ngClass]="cssClasses">
-      @for (item of items; track item.link; let last = $last) {
-        <li class="breadcrumb-item" [ngClass]="{ active: !last }">
+    <ol class="breadcrumb" [class]="cssClasses()">
+      @for (item of items(); track item.link; let last = $last) {
+        <li class="breadcrumb-item" [class.active]="!last">
           @if (!last) {
             <a [routerLink]="item.link">{{ item.label }}</a>
           }
@@ -28,7 +28,7 @@ export interface BreadcrumbItem {
   standalone: false,
 })
 export class BreadcrumbComponent {
-  @Input({ alias: 'divider' }) divider?: string = '>';
-  @Input({ alias: 'items' }) items?: BreadcrumbItem[] = [];
-  @Input({ alias: 'cssClasses' }) cssClasses: string = '';
+  divider = input('>', { alias: 'divider' });
+  items = input<BreadcrumbItem[]>([], { alias: 'items' });
+  cssClasses = input('', { alias: 'cssClasses' });
 }

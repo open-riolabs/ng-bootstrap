@@ -1,38 +1,30 @@
-import { Component, Input, ViewContainerRef, Injector, TemplateRef, ViewChild, OnInit, EmbeddedViewRef, booleanAttribute } from '@angular/core';
-import { WrappedComponent } from '../../shared/wrapped.component';
-import { HostWrapper } from '../../shared/host-wrapper';
+import { booleanAttribute, Component, input, TemplateRef, viewChild } from '@angular/core';
 
 @Component({
-    selector: 'rlb-option',
-    template: `
-    <ng-template #template>
+  selector: 'rlb-option',
+  template: `
+    <ng-template #content>
+      <ng-content></ng-content>
+    </ng-template>
+
+    <!-- wrap the content in an <option> tag for SelectComponent -->
+    <ng-template #element>
       <option
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.value]="value"
+        [value]="value()"
+        [disabled]="disabled()"
       >
-        <ng-content></ng-content>
+        <ng-container *ngTemplateOutlet="content"></ng-container>
       </option>
     </ng-template>
-  <ng-content></ng-content>`,
-    standalone: false
+  `,
+  standalone: false,
 })
-export class OptionComponent implements OnInit {
-  private temp!: EmbeddedViewRef<any>;
+export class OptionComponent {
+  value = input.required<string | number | null>();
+  disabled = input(false, { transform: booleanAttribute });
 
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
-  @Input({ alias: 'value' }) value?: string | number | null;
-  @Input({ alias: 'class' }) cssValue?: string | number | null;
+  // 'template' is used by SelectComponent (contains <option> tag)
+  template = viewChild.required<TemplateRef<any>>('element');
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  constructor(private viewContainerRef: ViewContainerRef) { }
-
-  get _view() {
-    return this.temp
-  }
-
-  ngOnInit() {
-    this.temp = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
-  }
+  contentTemplate = viewChild.required<TemplateRef<any>>('content');
 }
