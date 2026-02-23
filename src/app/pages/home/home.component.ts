@@ -8,12 +8,6 @@ import {
   ToastService,
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
-export interface AccessActionModel<Key = string> {
-  _id?: Key;
-  name: string;
-  description: string;
-}
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -29,8 +23,6 @@ export class HomeComponent {
   carouselPage: number = 0;
   carouselCount: number = 0;
   countryDialCode = '';
-  actions: AccessActionModel[] = [];
-  item = { enabled: false };
 
   profileForm = new FormGroup({
     firstName: new FormControl<string>('dd', [Validators.required, Validators.minLength(2)]),
