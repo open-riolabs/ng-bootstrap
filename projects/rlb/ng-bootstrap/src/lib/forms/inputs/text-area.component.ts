@@ -4,11 +4,10 @@ import {
   computed,
   ElementRef,
   input,
-  InputSignal,
   numberAttribute,
   Optional,
   Self,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -35,16 +34,17 @@ import { AbstractComponent } from './abstract-field.component';
         (input)="update($event.target)"
       ></textarea>
       @if (errors() && showError()) {
-        <rlb-input-validation [errors]="errors()"/>
+        <rlb-input-validation [errors]="errors()" />
       }
     </div>
-    <ng-content select="[after]"></ng-content>`,
-  standalone: false
+    <ng-content select="[after]"></ng-content>
+  `,
+  standalone: false,
 })
-export class TextAreaComponent
-  extends AbstractComponent<string>
-  implements ControlValueAccessor {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+export class TextAreaComponent extends AbstractComponent<string> implements ControlValueAccessor {
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
   readonly = input(false, { transform: booleanAttribute });
   placeholder = input<string | undefined>(undefined);
   size = input<'small' | 'large' | undefined>(undefined);

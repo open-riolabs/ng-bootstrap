@@ -4,11 +4,10 @@ import {
   computed,
   ElementRef,
   input,
-  InputSignal,
   numberAttribute,
   Optional,
   Self,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
@@ -40,13 +39,14 @@ import { AbstractComponent } from './abstract-field.component';
         {{ errors() | json }}
       </div>
     </div>
-    <ng-content select="[after]"></ng-content>`,
-  standalone: false
+    <ng-content select="[after]"></ng-content>
+  `,
+  standalone: false,
 })
-export class RangeComponent
-  extends AbstractComponent<string>
-  implements ControlValueAccessor {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+export class RangeComponent extends AbstractComponent<string> implements ControlValueAccessor {
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
   readonly = input(false, { transform: booleanAttribute });
   min = input(undefined, { transform: numberAttribute });
   max = input(undefined, { transform: numberAttribute });

@@ -5,7 +5,6 @@ import {
   effect,
   ElementRef,
   input,
-  InputSignal,
   numberAttribute,
   Optional,
   Self,
@@ -63,18 +62,17 @@ export class SelectComponent
 {
   placeholder = input<string | undefined>(undefined, { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined, { alias: 'size' });
-  // Cast to specific InputSignal type to satisfy AbstractComponent which expects boolean | undefined
   disabled = input(false, {
     alias: 'disabled',
     transform: booleanAttribute,
-  }) as unknown as InputSignal<boolean | undefined>;
+  });
   readonly = input(false, { alias: 'readonly', transform: booleanAttribute });
   multiple = input(false, { alias: 'multiple', transform: booleanAttribute });
   display = input<number, unknown>(undefined, { alias: 'display', transform: numberAttribute });
   userDefinedId = input('', {
     alias: 'id',
-    transform: (v: string) => v || '',
-  }) as unknown as InputSignal<string>; // Abstract expects InputSignal<string> strictly, but inference might vary
+    transform: (v: string | undefined) => v || '',
+  });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
 
   el = viewChild.required<ElementRef<HTMLSelectElement>>('select');

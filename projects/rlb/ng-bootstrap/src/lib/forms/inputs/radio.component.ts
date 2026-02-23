@@ -58,9 +58,9 @@ import { OptionComponent } from './options.component';
   standalone: false,
 })
 export class RadioComponent extends AbstractComponent<string> implements ControlValueAccessor {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<
-    boolean | undefined
-  >;
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
   readonly = input(false, { transform: booleanAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
 

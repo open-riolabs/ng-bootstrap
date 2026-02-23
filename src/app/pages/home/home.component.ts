@@ -25,10 +25,7 @@ export class HomeComponent {
   countryDialCode = '';
 
   profileForm = new FormGroup({
-    firstName: new FormControl<string>('dd', [
-      Validators.required,
-      Validators.minLength(2),
-    ]),
+    firstName: new FormControl<string>('dd', [Validators.required, Validators.minLength(2)]),
     country: new FormControl<AutocompleteItem>({ text: '', value: '' }, [
       requiredAutocompleteValue(),
     ]),
@@ -46,7 +43,7 @@ export class HomeComponent {
     private modals: ModalService,
     private toasts: ToastService,
   ) {
-    this.profileForm.valueChanges.subscribe((value) => {
+    this.profileForm.valueChanges.subscribe(value => {
       console.log('Form value: ', value);
     });
     this.profileForm.patchValue({

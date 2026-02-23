@@ -20,7 +20,7 @@ import { booleanAttribute, Component, input, TemplateRef, viewChild } from '@ang
   standalone: false,
 })
 export class OptionComponent {
-  value = input.required<string | number | null | undefined>();
+  value = input<string | number | null | undefined>();
   disabled = input(false, { transform: booleanAttribute });
 
   // 'template' is used by SelectComponent (contains <option> tag)

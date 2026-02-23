@@ -33,7 +33,7 @@ export abstract class AbstractAutocompleteComponent
   // COMMON INPUT/OUTPUT
   disabled = input(false, {
     transform: booleanAttribute,
-  }) as unknown as InputSignal<boolean | undefined>;
+  });
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
   readonly = input(false, { transform: booleanAttribute });
@@ -115,9 +115,7 @@ export abstract class AbstractAutocompleteComponent
     const inputValue = t?.value || '';
 
     const valueToPropagate =
-      inputValue === ''
-        ? { text: '', value: '' }
-        : { text: inputValue, value: inputValue };
+      inputValue === '' ? { text: '', value: '' } : { text: inputValue, value: inputValue };
     this.setValue(valueToPropagate as any);
 
     if (this.control && this.control.control) {
@@ -190,10 +188,7 @@ export abstract class AbstractAutocompleteComponent
   }
 
   setActiveItem(index: number) {
-    if (
-      this.activeIndex() !== -1 &&
-      this.dropdown.nativeElement.children[this.activeIndex()]
-    ) {
+    if (this.activeIndex() !== -1 && this.dropdown.nativeElement.children[this.activeIndex()]) {
       const oldItem = this.dropdown.nativeElement.children[this.activeIndex()];
       this.renderer.removeClass(oldItem, 'active');
     }
@@ -268,7 +263,7 @@ export abstract class AbstractAutocompleteComponent
     if (!dropdown) return;
 
     this.clearDropdown();
-    this.suggestionsList = suggestions.map((s) =>
+    this.suggestionsList = suggestions.map(s =>
       typeof s === 'string' ? { text: s, value: s } : s,
     );
 
@@ -286,7 +281,7 @@ export abstract class AbstractAutocompleteComponent
       this.renderer.addClass(el, 'dropdown-item');
       this.renderer.appendChild(el, this.renderer.createText(item.text));
 
-      this.renderer.listen(el, 'click', (ev) => {
+      this.renderer.listen(el, 'click', ev => {
         this.activeIndex.set(i);
         this.selectActiveItem();
         ev.stopPropagation();

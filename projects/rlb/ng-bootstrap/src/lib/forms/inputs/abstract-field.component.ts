@@ -1,21 +1,11 @@
-import {
-  computed,
-  Injectable,
-  InputSignal,
-  ModelSignal,
-  Optional,
-  Self,
-  signal,
-  Signal,
-} from '@angular/core';
+import { computed, Injectable, ModelSignal, Optional, Self, signal, Signal } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
 export abstract class AbstractComponent<T = any> implements ControlValueAccessor {
   public abstract disabled?: boolean | Signal<boolean | undefined> | ModelSignal<boolean>;
-
-  protected abstract userDefinedId: string | InputSignal<string> | ModelSignal<string>;
+  protected abstract userDefinedId: string | Signal<string> | ModelSignal<string>;
   protected onTouched: Function = () => {};
   protected onChanged: Function = (v: T) => {};
   public value!: T;
