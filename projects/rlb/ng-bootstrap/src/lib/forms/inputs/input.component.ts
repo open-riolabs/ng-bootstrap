@@ -5,7 +5,6 @@ import {
   computed,
   ElementRef,
   input,
-  InputSignal,
   numberAttribute,
   OnInit,
   Optional,
@@ -22,57 +21,49 @@ import { AbstractComponent } from './abstract-field.component';
 
 @Component({
   selector: 'rlb-input',
-  template: ` <ng-template #template>
-    <ng-content select="[before]"></ng-content>
-    <input
-      #field
-      [id]="id"
-      class="form-control"
-      [type]="_type()"
-      [name]="name()"
-      [attr.max]="
-        type() === 'number' && max() !== null && max() !== undefined
-          ? max()
-          : undefined
-      "
-      [attr.min]="
-        type() === 'number' && min() !== null && min() !== undefined
-          ? min()
-          : undefined
-      "
-      [attr.step]="
-        type() === 'number' && step() !== null && step() !== undefined
-          ? step()
-          : undefined
-      "
-      [attr.disabled]="isDisabled() ? true : undefined"
-      [attr.readonly]="readonly() ? true : undefined"
-      [attr.placeholder]="placeholder()"
-      [class.form-control-lg]="size() === 'large'"
-      [class.form-control-sm]="size() === 'small'"
-      [value]="value || ''"
-      (blur)="touch()"
-      [ngClass]="{
-        'is-invalid':
-          control?.touched && control?.invalid && enableValidation(),
-        'is-valid': control?.touched && control?.valid && enableValidation(),
-      }"
-      (input)="update($event.target)"
-    />
-    @if (!_extValidation() && showError()) {
-      <rlb-input-validation [errors]="errors()" />
-    }
-    <ng-content select="[after]"></ng-content>
-  </ng-template>`,
+  template: `
+    <ng-template #template>
+      <ng-content select="[before]"></ng-content>
+      <input
+        #field
+        [id]="id"
+        class="form-control"
+        [type]="_type()"
+        [name]="name()"
+        [attr.max]="
+          type() === 'number' && max() !== null && max() !== undefined ? max() : undefined
+        "
+        [attr.min]="
+          type() === 'number' && min() !== null && min() !== undefined ? min() : undefined
+        "
+        [attr.step]="
+          type() === 'number' && step() !== null && step() !== undefined ? step() : undefined
+        "
+        [attr.disabled]="isDisabled() ? true : undefined"
+        [attr.readonly]="readonly() ? true : undefined"
+        [attr.placeholder]="placeholder()"
+        [class.form-control-lg]="size() === 'large'"
+        [class.form-control-sm]="size() === 'small'"
+        [value]="value || ''"
+        (blur)="touch()"
+        [ngClass]="{
+          'is-invalid': control?.touched && control?.invalid && enableValidation(),
+          'is-valid': control?.touched && control?.valid && enableValidation(),
+        }"
+        (input)="update($event.target)"
+      />
+      @if (!_extValidation() && showError()) {
+        <rlb-input-validation [errors]="errors()" />
+      }
+      <ng-content select="[after]"></ng-content>
+    </ng-template>
+  `,
   standalone: false,
 })
-export class InputComponent
-  extends AbstractComponent<any>
-  implements OnInit, AfterViewInit
-{
+export class InputComponent extends AbstractComponent<any> implements OnInit, AfterViewInit {
   disabled = input(false, {
     transform: booleanAttribute,
-  }) as unknown as InputSignal<boolean | undefined>;
+  });
   readonly = input(false, { transform: booleanAttribute });
   beforeText = input(false, {
     alias: 'before-text',
@@ -85,9 +76,9 @@ export class InputComponent
   max = input(undefined, { transform: numberAttribute });
   min = input(undefined, { transform: numberAttribute });
   step = input(undefined, { transform: numberAttribute });
-  dateType = input<
-    'date' | 'string' | 'number' | 'date-tz' | string | undefined
-  >(undefined, { alias: 'date-type' });
+  dateType = input<'date' | 'string' | 'number' | 'date-tz' | string | undefined>(undefined, {
+    alias: 'date-type',
+  });
   timezone = input('UTC');
   userDefinedId = input('', { alias: 'id' });
   extValidation = input(false, { transform: booleanAttribute });
@@ -97,9 +88,7 @@ export class InputComponent
   });
 
   protected _forceExtValidation = signal(false);
-  protected _extValidation = computed(
-    () => this.extValidation() || this._forceExtValidation(),
-  );
+  protected _extValidation = computed(() => this.extValidation() || this._forceExtValidation());
 
   setExtValidation(val: boolean) {
     this._forceExtValidation.set(val);
@@ -232,9 +221,7 @@ export class InputComponent
   }
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template(),
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
     //this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
@@ -252,9 +239,7 @@ export class InputComponent
     const standardized = filtered.replace(/,/g, '.');
     const [integerPart, ...fractionalParts] = standardized.split('.');
     const result =
-      fractionalParts.length > 0
-        ? `${integerPart}.${fractionalParts.join('')}`
-        : integerPart;
+      fractionalParts.length > 0 ? `${integerPart}.${fractionalParts.join('')}` : integerPart;
     return result;
   }
 }

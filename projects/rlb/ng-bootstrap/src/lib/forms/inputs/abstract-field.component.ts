@@ -5,25 +5,24 @@ import {
   ModelSignal,
   Optional,
   Self,
-  signal
+  signal,
+  Signal,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
-export abstract class AbstractComponent<T = any>
-  implements ControlValueAccessor {
-  public abstract disabled?: boolean | InputSignal<boolean | undefined> | ModelSignal<boolean>;
+export abstract class AbstractComponent<T = any> implements ControlValueAccessor {
+  public abstract disabled?: boolean | Signal<boolean | undefined> | ModelSignal<boolean>;
+
   protected abstract userDefinedId: string | InputSignal<string> | ModelSignal<string>;
-  protected onTouched: Function = () => { };
-  protected onChanged: Function = (v: T) => {
-  };
+  protected onTouched: Function = () => {};
+  protected onChanged: Function = (v: T) => {};
   public value!: T;
   private _id!: string;
   public get id(): string {
-    const userDefinedIdValue = typeof this.userDefinedId === 'function'
-      ? (this.userDefinedId as any)()
-      : this.userDefinedId;
+    const userDefinedIdValue =
+      typeof this.userDefinedId === 'function' ? (this.userDefinedId as any)() : this.userDefinedId;
     return (userDefinedIdValue as string) || this._id;
   }
   constructor(
@@ -78,5 +77,5 @@ export abstract class AbstractComponent<T = any>
     return this.control?.errors || {};
   });
 
-  onWrite(data: T) { };
+  onWrite(data: T) {}
 }
