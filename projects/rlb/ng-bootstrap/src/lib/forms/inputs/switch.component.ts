@@ -5,7 +5,6 @@ import {
   computed,
   ElementRef,
   input,
-  InputSignal,
   Optional,
   Self,
   viewChild,
@@ -48,9 +47,9 @@ export class SwitchComponent
   extends AbstractComponent<boolean>
   implements ControlValueAccessor, AfterViewInit
 {
-  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<
-    boolean | undefined
-  >;
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
   readonly = input(false, { transform: booleanAttribute });
   size = input<'small' | 'large' | undefined>(undefined);
   userDefinedId = input('', { alias: 'id' });
