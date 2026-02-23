@@ -1,8 +1,22 @@
-import { booleanAttribute, Component, input, Optional, Renderer2, Self } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  input,
+  model,
+  numberAttribute,
+  Optional,
+  output,
+  Self,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
-import { AbstractAutocompleteComponent } from "./abstract-autocomplete.component";
-import { AutocompleteItem } from "./autocomplete-model";
+import { AbstractComponent } from './abstract-field.component';
+import { AutocompleteItem } from './autocomplete-model';
 
 @Component({
   selector: 'rlb-autocomplete-country-dial-code',
@@ -14,7 +28,8 @@ import { AutocompleteItem } from "./autocomplete-model";
         [id]="id"
         class="form-control"
         type="text"
-        [attr.autocomplete]="'off'"
+        [value]="getText(value)"
+        autocomplete="off"
         [attr.disabled]="disabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
         [attr.placeholder]="placeholder()"
@@ -26,23 +41,47 @@ import { AutocompleteItem } from "./autocomplete-model";
           'is-valid': control?.touched && control?.valid,
         }"
         (input)="update($event.target)"
+        (keyup.enter)="onEnter($event.target)"
       />
       @if (errors() && showError()) {
         <rlb-input-validation [errors]="errors()" />
       }
-      <div
-        #autocomplete
-        [id]="id + '-ac'"
-        class="dropdown-menu overflow-y-auto w-100 position-absolute"
-        aria-labelledby="dropdownMenu"
-        [style.max-height.px]="maxHeight()"
-        style="z-index: 1000; top: 100%;"
-      ></div>
+
+      <!-- Dropdown Logic -->
+      @if (isOpen()) {
+        <div
+          #autocomplete
+          class="dropdown-menu show w-100 position-absolute overflow-y-auto"
+          [style.max-height.px]="maxHeight()"
+          style="z-index: 1000; top: 100%;"
+        >
+          @if (!hasSuggestions()) {
+            <a class="dropdown-item disabled text-center">No suggestions</a>
+          } @else {
+            @for (item of suggestions(); track item.value) {
+              <a
+                class="dropdown-item"
+                (click)="selectItem(item, $event)"
+                style="cursor: pointer"
+              >
+                @if (item.iconClass) {
+                  <i
+                    [class]="item.iconClass"
+                    class="me-2"
+                  ></i>
+                }
+                <!-- Display Country Name and Dial Code -->
+                {{ item.text }} ({{ item.value }})
+              </a>
+            }
+          }
+        </div>
+      }
     </div>
-    @if (loading() || acLoading()) {
+    @if (loading()) {
       <rlb-progress
         [height]="2"
-        [infinite]="loading() || acLoading()"
+        [infinite]="loading()"
         color="primary"
         class="w-100"
       />
@@ -52,55 +91,158 @@ import { AutocompleteItem } from "./autocomplete-model";
   standalone: false,
 })
 export class AutocompleteCountryDialCodeComponent
-  extends AbstractAutocompleteComponent
+  extends AbstractComponent<AutocompleteItem>
   implements ControlValueAccessor
 {
+  // State
+  isOpen = signal(false);
+  protected suggestions = signal<AutocompleteItem[]>([]);
+  protected hasSuggestions = computed(() => this.suggestions().length > 0);
+  private typingTimeout: any;
+
+  // Inputs
+  disabled = model(false);
+  readonly = input(false, { transform: booleanAttribute });
+  placeholder = input('', { alias: 'placeholder' });
+  size = input<'small' | 'large' | undefined>(undefined);
+  maxHeight = input(200, { transform: numberAttribute, alias: 'max-height' });
+  loading = input(false, { transform: booleanAttribute, alias: 'loading' });
+  userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
+
   enableFlagIcons = input(true, { transform: booleanAttribute, alias: 'enable-flag-icons' });
+
+  // View Children
+  el = viewChild<ElementRef<HTMLInputElement>>('field');
+  dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
+  selected = output<AutocompleteItem>();
+
+  @HostListener('document:pointerdown', ['$event'])
+  onDocumentPointerDown(event: PointerEvent) {
+    this.handleOutsideEvent(event);
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscape(event: Event) {
+    if (this.isOpen()) {
+      this.closeDropdown();
+      this.el()?.nativeElement?.blur();
+    }
+  }
 
   constructor(
     idService: UniqueIdService,
-    renderer: Renderer2,
+    private readonly hostRef: ElementRef<HTMLElement>,
     @Self() @Optional() override control?: NgControl,
   ) {
-    super(idService, renderer, control);
+    super(idService, control);
   }
 
-  protected override getSuggestions(query: string) {
-    this.clearDropdown();
-    this.activeIndex.set(-1);
+  update(ev: EventTarget | null) {
+    if (this.typingTimeout) clearTimeout(this.typingTimeout);
+
+    this.typingTimeout = setTimeout(() => {
+      if (!this.disabled()) {
+        const t = ev as HTMLInputElement;
+        this.manageSuggestions(t?.value);
+      }
+    }, 200);
+  }
+
+  override onWrite(data: AutocompleteItem | string): void {
+    const field = this.el();
+    if (field && field.nativeElement) {
+      if (typeof data === 'string') {
+        const match = this._countries.find(c => c.value === data);
+        field.nativeElement.value = match ? match.text : data;
+      } else {
+        field.nativeElement.value = data?.text || '';
+      }
+    }
+  }
+
+  getText(d: AutocompleteItem | string | null | undefined) {
+    if (!d) return '';
+    if (typeof d === 'string') {
+      const match = this._countries.find(c => c.value === d);
+      return match ? match.text : d;
+    }
+    return d.text;
+  }
+
+  manageSuggestions(query: string) {
+    this.suggestions.set([]);
 
     if (query && query.length > 0) {
       this.openDropdown();
-      const suggestions = this.getCountries().filter(o => {
-        const _c = o as { text: string; value: string };
-        return _c.text.toLowerCase().startsWith(query.toLowerCase());
-      });
-      this.renderAc(suggestions);
+
+      const rawSuggestions = this.getCountries().filter(c =>
+        c.text.toLowerCase().startsWith(query.toLowerCase()),
+      );
+
+      this.suggestions.set(rawSuggestions);
     } else {
       this.closeDropdown();
     }
   }
 
-  protected override getItemText(data?: AutocompleteItem | string): string {
-    const valueToFind = typeof data === 'object' ? data?.value : data;
-    const h = this.getCountries().find(c => {
-      if (typeof c === 'object') {
-        const _c = c as { text: string; value: string };
-        return _c.value === valueToFind;
-      }
-      return false;
-    });
-    return typeof h === 'object' ? h.text : typeof data === 'string' ? data : '';
+  selectItem(item: AutocompleteItem, ev?: Event) {
+    ev?.stopPropagation();
+    this.selected.emit(item);
+    this.setValue(item);
+    this.closeDropdown();
+  }
+
+  onEnter(ev: EventTarget | null) {
+    const t = ev as HTMLInputElement;
+    if (!this.disabled() && t && t.value) {
+      // Try to find exact match by name
+      const match = this._countries.find(c => c.text.toLowerCase() === t.value.toLowerCase());
+      const item: AutocompleteItem = match || { text: t.value, value: t.value };
+
+      this.setValue(item);
+      this.closeDropdown();
+    }
+  }
+
+  private handleOutsideEvent(event: Event) {
+    if (!this.isOpen()) return;
+
+    const target = event.target as HTMLElement;
+    const dropdown = this.dropdown();
+    const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
+
+    const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
+    const clickedInsideDropdown = dropdown?.nativeElement?.contains
+      ? dropdown.nativeElement.contains(target)
+      : false;
+    const clickedInPath = path.length
+      ? path.some(
+          p => p === this.hostRef.nativeElement || (dropdown && p === dropdown.nativeElement),
+        )
+      : false;
+
+    if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
+      this.closeDropdown();
+    }
+  }
+
+  openDropdown() {
+    if (this.isOpen()) return;
+    this.isOpen.set(true);
+  }
+
+  closeDropdown() {
+    if (!this.isOpen()) return;
+    this.isOpen.set(false);
   }
 
   getCountries(): AutocompleteItem[] {
     if (this.enableFlagIcons()) {
-      return this._countries.map(country => {
-        return {
-          ...country,
-          iconClass: `fi fi-${country.data.toLowerCase()}`,
-        };
-      });
+      return this._countries.map(country => ({
+        ...country,
+        // Using 'data' (ISO Code) for flag class
+        iconClass: country.data ? `fi fi-${country.data.toLowerCase()}` : undefined,
+      }));
     } else {
       return this._countries;
     }
