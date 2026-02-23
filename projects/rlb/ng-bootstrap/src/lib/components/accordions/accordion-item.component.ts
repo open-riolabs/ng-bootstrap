@@ -1,50 +1,58 @@
 import {
   booleanAttribute,
   Component,
-  ContentChild,
-  DoCheck,
+  computed,
+  contentChild,
+  effect,
   ElementRef,
-  EventEmitter,
-  Input,
+  input,
   OnInit,
-  Output,
-  ViewContainerRef
+  output,
+  signal,
+  ViewContainerRef,
 } from '@angular/core';
-import { AccordionHeaderComponent } from './accordion-header.component';
-import { AccordionBodyComponent } from './accordion-body.component';
-import { UniqueIdService } from '../../shared/unique-id.service';
-import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
 import { Collapse } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
+import { UniqueIdService } from '../../shared/unique-id.service';
+import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
+import { AccordionBodyComponent } from './accordion-body.component';
+import { AccordionHeaderComponent } from './accordion-header.component';
 
 @Component({
-    selector: 'div[rlb-accordion-item]',
-    template: `
+  selector: 'div[rlb-accordion-item]',
+  template: `
     <ng-content select="rlb-accordion-header"></ng-content>
     <ng-content select="[rlb-accordion-body]"></ng-content>
   `,
-    host: { class: 'accordion-item' },
-    standalone: false
+  host: { class: 'accordion-item' },
+  standalone: false
 })
 export class AccordionItemComponent
   extends ToggleAbstractComponent<Collapse>
-  implements DoCheck, OnInit {
+  implements OnInit {
 
   element!: HTMLElement;
-  public parentId!: string;
-  public alwaysOpen?: boolean = false;
+  public parentId = signal<string | undefined>(undefined);
+  public alwaysOpen = signal(false);
 
-  @Input({ alias: 'name' }) public name?: string;
-  @Input({ transform: booleanAttribute, alias: 'expanded' }) expanded: boolean = false;
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  @Input({ alias: 'style' }) style?: string;
-  @Input({ alias: 'status' }) override status: VisibilityEvent = 'hidden';
+  name = input<string | undefined>(undefined, { alias: 'name' });
+  expanded = input(false, { alias: 'expanded', transform: booleanAttribute });
+  cssClass = input('', { alias: 'class' });
+  style = input<string | undefined>(undefined, { alias: 'style' });
+  // We use a property for status because the base class updates it.
+  // We'll sync it with an input via effect if provided.
+  public override status: VisibilityEvent = 'hidden';
+  public override statusChange = output<VisibilityEvent>({ alias: 'statusChange' });
 
-  @Output('statusChange') override statusChange = new EventEmitter<VisibilityEvent>();
+  header = contentChild(AccordionHeaderComponent);
+  body = contentChild(AccordionBodyComponent);
 
-
-  @ContentChild(AccordionHeaderComponent) public header!: AccordionHeaderComponent;
-  @ContentChild(AccordionBodyComponent) public body!: AccordionBodyComponent;
+  private _internalName = signal('');
+  effectiveName = computed(() => {
+    const pId = this.parentId();
+    if (!pId) return '';
+    return this.name() || `${pId}-${this._internalName()}`;
+  });
 
   constructor(
     elementRef: ElementRef<HTMLElement>,
@@ -52,39 +60,40 @@ export class AccordionItemComponent
     private idService: UniqueIdService
   ) {
     super(elementRef);
+    this._internalName.set(`item${this.idService.id}`);
+
+    effect(() => {
+      const pId = this.parentId();
+      const name = this.effectiveName();
+      if (pId && name) {
+        const isOpen = this.status === 'show' || this.status === 'shown';
+        const header = this.header();
+        const body = this.body();
+
+        if (header) {
+          header.parentId.set(pId);
+          header.itemId.set(name);
+          header.expanded.set(isOpen);
+        }
+
+        if (body) {
+          body.parentId.set(pId);
+          body.itemId.set(name);
+          body.expanded.set(isOpen);
+        }
+      }
+    });
   }
 
   override ngOnInit(): void {
-    const element = this.elementRef?.nativeElement.querySelector('.accordion-collapse') as HTMLElement
+    const element = this.elementRef?.nativeElement.querySelector('.accordion-collapse') as HTMLElement;
     super.ngOnInit(element);
-    
-    if (this.expanded) {
+
+    if (this.expanded()) {
       this.open();
     }
   }
 
-  ngDoCheck(): void {
-    if (this.parentId) {
-      if (!this.name) {
-        this.name = `${this.parentId}-item${this.idService.id}`;
-      }
-      
-      const isOpen = this.status === 'show' || this.status === 'shown';
-
-      if (this.header) {
-        this.header.parentId = this.parentId;
-        this.header.itemId = this.name;
-        this.header.expanded = isOpen;
-      }
-
-      if (this.body) {
-        this.body.parentId = this.parentId;
-        this.body.itemId = this.name;
-        this.body.expanded = isOpen;
-      }
-    }
-  }
-  
   override getOrCreateInstance(element: HTMLElement): Collapse {
     return Collapse.getOrCreateInstance(element, { toggle: false });
   }

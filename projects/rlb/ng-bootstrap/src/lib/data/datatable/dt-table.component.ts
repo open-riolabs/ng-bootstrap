@@ -1,22 +1,21 @@
 import {
-  AfterContentInit,
-  AfterViewInit,
   booleanAttribute,
   Component,
-  ContentChildren,
-  EventEmitter,
-  Input,
+  computed,
+  contentChildren,
+  effect,
+  input,
   numberAttribute,
   OnDestroy,
   OnInit,
-  Output,
-  QueryList,
-  ViewChild,
+  output,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
+import { DataTableNoItemsComponent } from './dt-noitems.component';
+import { DataTableLoadingComponent } from './dt-loading.component';
 
 export interface TableDataQuery {
   pagination?: { size: number };
@@ -34,94 +33,77 @@ export interface PaginationEvent {
   templateUrl: './dt-table.component.html',
   standalone: false,
 })
-export class DataTableComponent
-  implements OnInit, AfterViewInit, AfterContentInit, OnDestroy
-{
-  @Input({ alias: 'title' }) title?: string;
-  @Input({ alias: 'creation-strategy' }) creationStrategy:
-    | 'none'
-    | 'modal'
-    | 'page' = 'none';
-  @Input({ alias: 'creation-url' }) creationUrl!:
-    | any[]
-    | string
-    | null
-    | undefined;
-  @Input({ alias: 'items' }) items: any[] = [];
-  @Input({ alias: 'pagination-mode' }) paginationMode?:
-    | 'none'
-    | 'load-more'
-    | 'pages' = 'none';
-  @Input({ alias: 'loading', transform: booleanAttribute }) loading?: boolean;
-  @Input({ alias: 'table-hover', transform: booleanAttribute })
-  tableHover?: boolean;
-  @Input({ alias: 'table-striped', transform: booleanAttribute })
-  tableStriped?: boolean = true; // default true to keep main table styling
-  @Input({ alias: 'table-striped-columns', transform: booleanAttribute })
-  tableStripedColumns?: boolean;
-  @Input({ alias: 'table-bordered', transform: booleanAttribute })
-  tableBordered?: boolean;
-  @Input({ alias: 'table-borderless', transform: booleanAttribute })
-  tableBorderless?: boolean;
-  @Input({ alias: 'table-small', transform: booleanAttribute })
-  tableSmall?: boolean;
-  @Input({ alias: 'show-refresh', transform: booleanAttribute })
-  showRefresh?: boolean;
-  @Input({ alias: 'total-items', transform: numberAttribute })
-  totalItems?: number;
-  @Input({ alias: 'current-page', transform: numberAttribute })
-  currentPage?: number;
-  @Input({ alias: 'page-size', transform: numberAttribute }) pageSize?: number;
-  @Input() showActions: 'row' | 'head' = 'row';
+export class DataTableComponent implements OnInit, OnDestroy {
+  title = input<string | undefined>(undefined);
+  creationStrategy = input<'none' | 'modal' | 'page'>('none', { alias: 'creation-strategy' });
+  creationUrl = input<any[] | string | null | undefined>(undefined, { alias: 'creation-url' });
+  items = input<any[]>([]);
+  paginationMode = input<'none' | 'load-more' | 'pages'>('none', { alias: 'pagination-mode' });
+  loading = input(false, { transform: booleanAttribute });
+  tableHover = input(false, { alias: 'table-hover', transform: booleanAttribute });
+  tableStriped = input(true, { alias: 'table-striped', transform: booleanAttribute });
+  tableStripedColumns = input(false, {
+    alias: 'table-striped-columns',
+    transform: booleanAttribute,
+  });
+  tableBordered = input(false, { alias: 'table-bordered', transform: booleanAttribute });
+  tableBorderless = input(false, { alias: 'table-borderless', transform: booleanAttribute });
+  tableSmall = input(false, { alias: 'table-small', transform: booleanAttribute });
+  showRefresh = input(false, { alias: 'show-refresh', transform: booleanAttribute });
+  totalItems = input(undefined, { alias: 'total-items', transform: numberAttribute });
+  currentPage = input(undefined, { alias: 'current-page', transform: numberAttribute });
+  pageSize = input(undefined, { alias: 'page-size', transform: numberAttribute });
+  showActions = input<'row' | 'head'>('row');
+  loadMoreLabel = input('Load more');
 
-  @Input() loadMoreLabel: string = 'Load more';
-
-  @Output('create-item') createItem: EventEmitter<void> = new EventEmitter();
-  @Output('refresh-item') refreshItem: EventEmitter<void> = new EventEmitter();
-  @Output('load-more') loadMore: EventEmitter<void> = new EventEmitter();
-  @Output('current-pageChange') currentPageChange: EventEmitter<number> =
-    new EventEmitter();
-  @Output('page-sizeChange') pageSizeChange: EventEmitter<number> =
-    new EventEmitter();
-  @Output('pagination') pagination: EventEmitter<{
+  createItem = output<void>({ alias: 'create-item' });
+  refreshItem = output<void>({ alias: 'refresh-item' });
+  loadMore = output<void>({ alias: 'load-more' });
+  currentPageChange = output<number>({ alias: 'current-pageChange' });
+  pageSizeChange = output<number>({ alias: 'page-sizeChange' });
+  pagination = output<{
     page: number;
     size: number;
-  }> = new EventEmitter();
+  }>({ alias: 'pagination' });
 
-  @ViewChild('projectedDisplayColumns', { read: ViewContainerRef })
-  _projectedDisplayColumns!: ViewContainerRef;
-  @ContentChildren(DataTableRowComponent)
-  public rows!: QueryList<DataTableRowComponent>;
-  @ContentChildren(DataTableHeaderComponent)
-  columns!: QueryList<DataTableHeaderComponent>;
+  _projectedDisplayColumns = viewChild('projectedDisplayColumns', {
+    read: ViewContainerRef,
+  });
+
+  rows = contentChildren(DataTableRowComponent);
+  columns = contentChildren(DataTableHeaderComponent);
+
+  _projectedNoItems = viewChild('projectedNoItems', { read: ViewContainerRef });
+  _projectedLoading = viewChild('projectedLoading', { read: ViewContainerRef });
+  _projectedRows = viewChild('projectedRows', { read: ViewContainerRef });
+
+  noItemsBlock = contentChildren(DataTableNoItemsComponent);
+  loadingBlock = contentChildren(DataTableLoadingComponent);
 
   readonly MAX_VISIBLE_PAGES = 7;
 
-  private subscription: Subscription | undefined;
+  constructor() {
+    effect(() => {
+      this._renderHeaders();
+      this._renderNoItems();
+      this._renderLoading();
+      this._renderRows();
+    });
+  }
 
   ngOnInit() {
-    if (this.currentPage == null) {
-      this.currentPage = 1;
-    }
-    if (this.pageSize == null) {
-      this.pageSize = 20;
-    }
+    // defaults handled by input initial values or logic
   }
 
-  get pages() {
-    return Math.ceil((this.totalItems || 0) / (this.pageSize || 1));
-  }
+  pages = computed(() => Math.ceil((this.totalItems() || 0) / (this.pageSize() || 1)));
 
-  get hasActions() {
-    return (
-      this.rows?.toArray()?.some((o) => o.hasActions) ||
-      this.showActions !== 'row'
-    );
-  }
+  hasActions = computed(
+    () => this.rows().some(o => o.hasActions()) || this.showActions() !== 'row',
+  );
 
-  get visiblePages(): (number | string)[] {
-    const total = this.pages;
-    const current = this.currentPage || 1;
+  visiblePages = computed(() => {
+    const total = this.pages();
+    const current = this.currentPage() || 1;
     const pages: (number | string)[] = [];
 
     if (total <= this.MAX_VISIBLE_PAGES) {
@@ -137,107 +119,126 @@ export class DataTableComponent
     }
 
     return pages;
-  }
-
-  ngAfterViewInit() {
-    this._renderHeaders();
-  }
-
-  ngAfterContentInit() {
-    this.subscription = this.columns.changes.subscribe(() => {
-      this._renderHeaders();
-    });
-  }
+  });
 
   ngOnDestroy() {
-    this.subscription?.unsubscribe();
+    // Effect cleanup
   }
 
-  private _renderHeaders() {
-    if (this._projectedDisplayColumns) {
-      for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
-        this._projectedDisplayColumns.detach();
-      }
-      this.columns.forEach((column) => {
-        this._projectedDisplayColumns.insert(column._view);
+  private _renderRows() {
+    const container = this._projectedRows();
+    const rows = this.rows();
+    if (container) {
+      container.clear();
+      rows.forEach(row => {
+        const template = row.template();
+        if (template) {
+          container.createEmbeddedView(template);
+        }
       });
     }
   }
 
-  get cols() {
-    return this.columns.length + (this.hasActions ? 1 : 0);
+  private _renderNoItems() {
+    const container = this._projectedNoItems();
+    const block = this.noItemsBlock()[0];
+    if (container && block) {
+      container.clear();
+      container.createEmbeddedView(block.template());
+    }
   }
+
+  private _renderLoading() {
+    const container = this._projectedLoading();
+    const block = this.loadingBlock()[0];
+    if (container && block) {
+      container.clear();
+      container.createEmbeddedView(block.template());
+    }
+  }
+
+  private _renderHeaders() {
+    const container = this._projectedDisplayColumns();
+    if (container) {
+      container.clear();
+      this.columns().forEach(column => {
+        // Use the template to create a new view
+        container.createEmbeddedView(column.template());
+      });
+    }
+  }
+
+  cols = computed(() => this.columns().length + (this.hasActions() ? 1 : 0));
 
   getTableClasses(): string[] {
     const classes = ['table'];
 
-    if (this.tableStriped) {
+    if (this.tableStriped()) {
       classes.push('table-striped');
     }
 
-    if (this.tableStripedColumns) {
+    if (this.tableStripedColumns()) {
       classes.push('table-striped-columns');
     }
 
-    if (this.tableHover) {
+    if (this.tableHover()) {
       classes.push('table-hover');
     }
 
-    if (this.tableBordered) {
+    if (this.tableBordered()) {
       classes.push('table-bordered');
     }
 
-    if (this.tableBorderless) {
+    if (this.tableBorderless()) {
       classes.push('table-borderless');
     }
 
-    if (this.tableSmall) {
+    if (this.tableSmall()) {
       classes.push('table-small');
     }
 
     return classes;
   }
 
-  selectSize() {
+  onPageSizeChange(newSize: number) {
     this.currentPageChange.emit(1);
-    this.pageSizeChange.emit(parseInt(this.pageSize as any));
+    this.pageSizeChange.emit(newSize);
     this.pagination.emit({
       page: 1,
-      size: this.pageSize ? parseInt(this.pageSize as any) : 20,
+      size: newSize,
     });
   }
 
   selectPage(ev: MouseEvent, page: number | string) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (typeof page !== 'number' || page === this.currentPage || this.loading)
-      return;
+    if (typeof page !== 'number' || page === this.currentPage() || this.loading()) return;
     this.currentPageChange.emit(page);
     this.pagination.emit({
       page,
-      size: this.pageSize ? parseInt(this.pageSize as any) : 20,
+      size: this.pageSize() ? parseInt(this.pageSize() as any) : 20,
     });
   }
 
   next(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (this.currentPage === this.pages || this.loading) return;
-    this.currentPageChange.emit((this.currentPage || 1) + 1);
+    if (this.currentPage() === this.pages() || this.loading()) return;
+    this.currentPageChange.emit((this.currentPage() || 1) + 1);
     this.pagination.emit({
-      page: (this.currentPage || 1) + 1,
-      size: this.pageSize ? parseInt(this.pageSize as any) : 20,
+      page: (this.currentPage() || 1) + 1,
+      size: this.pageSize() ? parseInt(this.pageSize() as any) : 20,
     });
   }
 
   prev(ev: MouseEvent) {
     ev?.preventDefault();
     ev?.stopPropagation();
-    if (this.currentPage === 1 || this.loading) return;
-    this.currentPageChange.emit((this.currentPage || 1) - 1);
+    if (this.currentPage() === 1 || this.loading()) return;
+    this.currentPageChange.emit((this.currentPage() || 1) - 1);
     this.pagination.emit({
-      page: (this.currentPage || 1) - 1,
-      size: this.pageSize ? parseInt(this.pageSize as any) : 20,
+      page: (this.currentPage() || 1) - 1,
+      size: this.pageSize() ? parseInt(this.pageSize() as any) : 20,
     });
   }
 }

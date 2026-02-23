@@ -1,21 +1,21 @@
 import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-  ViewContainerRef,
-  TemplateRef,
   booleanAttribute,
+  Component,
+  input,
+  OnInit,
+  output,
+  TemplateRef,
+  viewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { Color } from '../../shared/types';
 
 @Component({
-    selector: 'rlb-alert',
-    template: ` <ng-template #template>
-      <div class="alert alert-{{ color }} {{ cssClass }}" role="alert">
+  selector: 'rlb-alert',
+  template: ` <ng-template #template>
+      <div class="alert alert-{{ color() }} {{ cssClass() }}" role="alert">
         <ng-content></ng-content>
-        @if (dismissible) {
+        @if (dismissible()) {
           <button
             type="button"
             class="btn-close"
@@ -26,24 +26,24 @@ import { Color } from '../../shared/types';
         }
       </div>
     </ng-template>`,
-    standalone: false
+  standalone: false
 })
-export class AlertComponent {
+export class AlertComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'color' }) color: Color = 'primary';
-  @Input({alias: 'dismissible', transform: booleanAttribute}) dismissible?: boolean;
-  @Input({ alias: 'class' }) cssClass?: string = '';
+  color = input<Color>('primary', { alias: 'color' });
+  dismissible = input(false, { alias: 'dismissible', transform: booleanAttribute });
+  cssClass = input<string | undefined>(undefined, { alias: 'class' });
 
-  @Output() dismissed: EventEmitter<void> = new EventEmitter<void>();
+  dismissed = output<void>();
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  template = viewChild.required<TemplateRef<any>>('template');
 
   constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template,
+      this.template(),
     );
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();

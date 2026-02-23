@@ -1,13 +1,13 @@
 import {
-	booleanAttribute,
-	Directive,
-	DoCheck,
-	ElementRef,
-	Host,
-	Input,
-	Optional,
-	Renderer2,
-	Self
+  booleanAttribute,
+  Directive,
+  effect,
+  ElementRef,
+  Host,
+  input,
+  Optional,
+  Renderer2,
+  Self
 } from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
 
@@ -19,74 +19,53 @@ import { ButtonToolbarComponent } from './boutton-toolbar.component';
     rlb-button-toolbar[toggle]`,
   standalone: false
 })
-export class ToggleDirective implements DoCheck {
-	@Input({
-		alias: 'toggle',
-		required: true
-	}) toggle?: 'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group';
-  @Input({ alias: 'toggle-target', required: true }) target!: string;
-  @Input({ transform: booleanAttribute, alias: 'collapsed' }) collapsed?: boolean;
-  @Input({ alias: 'auto-close' }) autoClose!: 'default' | 'inside' | 'outside' | 'manual';
+export class ToggleDirective {
+  toggle = input.required<'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group'>({ alias: 'toggle' });
+  target = input.required<string>({ alias: 'toggle-target' });
+  collapsed = input(false, { transform: booleanAttribute });
+  autoClose = input<'default' | 'inside' | 'outside' | 'manual'>('default', { alias: 'auto-close' });
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
     @Host() @Self() @Optional() public buttonToolbar: ButtonToolbarComponent,
-  ) { }
+  ) {
+    effect(() => {
+      const element = this.elementRef.nativeElement;
+      const toggle = this.toggle();
+      const target = this.target();
+      const collapsed = this.collapsed();
+      const autoClose = this.autoClose();
 
-  ngDoCheck() {
-    let element: HTMLElement;
-    if (this.buttonToolbar) {
-      element = this.elementRef.nativeElement;
-    } else {
-      element = this.elementRef.nativeElement;
-    }
-		
-		if (this.toggle)
-      this.renderer.setAttribute(element, 'data-bs-toggle', this.toggle);
-    if (this.autoClose === 'default') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'true',
-      );
-    }
-    if (this.autoClose === 'inside') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'inside',
-      );
-    }
-    if (this.autoClose === 'outside') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'outside',
-      );
-    }
-    if (this.autoClose === 'manual') {
-      this.renderer.setAttribute(
-        this.elementRef.nativeElement,
-        'data-bs-auto-close',
-        'false',
-      );
-    }
-    if (this.collapsed === true) {
-      this.renderer.addClass(element, 'collapsed');
-      this.renderer.setAttribute(element, 'aria-expanded', 'false');
-    } else if (this.collapsed === false) {
-      this.renderer.removeClass(element, 'collapsed');
-      this.renderer.setAttribute(element, 'aria-expanded', 'true');
-    }
-    this.renderer.setAttribute(element, 'aria-controls', this.target);
+      this.renderer.setAttribute(element, 'data-bs-toggle', toggle);
 
-    if (this.toggle === 'dropdown' && this.target === '#') {
-      this.renderer.setAttribute(element, 'href', '#');
-    } else if (element?.nodeName.toLowerCase() === 'a') {
-      this.renderer.setAttribute(element, 'href', `#${this.target}`);
-    } else {
-      this.renderer.setAttribute(element, 'data-bs-target', `#${this.target}`);
-    }
+      if (autoClose === 'default') {
+        this.renderer.setAttribute(element, 'data-bs-auto-close', 'true');
+      } else if (autoClose === 'inside') {
+        this.renderer.setAttribute(element, 'data-bs-auto-close', 'inside');
+      } else if (autoClose === 'outside') {
+        this.renderer.setAttribute(element, 'data-bs-auto-close', 'outside');
+      } else if (autoClose === 'manual') {
+        this.renderer.setAttribute(element, 'data-bs-auto-close', 'false');
+      }
+
+      if (collapsed === true) {
+        this.renderer.addClass(element, 'collapsed');
+        this.renderer.setAttribute(element, 'aria-expanded', 'false');
+      } else {
+        this.renderer.removeClass(element, 'collapsed');
+        this.renderer.setAttribute(element, 'aria-expanded', 'true');
+      }
+
+      this.renderer.setAttribute(element, 'aria-controls', target);
+
+      if (toggle === 'dropdown' && target === '#') {
+        this.renderer.setAttribute(element, 'href', '#');
+      } else if (element?.nodeName.toLowerCase() === 'a') {
+        this.renderer.setAttribute(element, 'href', `#${target}`);
+      } else {
+        this.renderer.setAttribute(element, 'data-bs-target', `#${target}`);
+      }
+    });
   }
 }

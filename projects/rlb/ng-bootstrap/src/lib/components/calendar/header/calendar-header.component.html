@@ -9,14 +9,14 @@
 		</button>
 	</div>
 
-  <h5 class="mb-0">{{ currentDate | dtz:'DD MM yyyy' | monthFormatter }} {{ currentDate.timezone }}</h5>
+	<h5 class="mb-0">{{ currentDate() | dtz:'DD MM yyyy' | monthFormatter }} {{ currentDate().timezone }}</h5>
 
 	<rlb-dropdown>
-		<button rlb-button outline rlb-dropdown>{{ view | titlecase }}</button>
+		<button rlb-button outline rlb-dropdown>{{ view() | titlecase }}</button>
 		<ul rlb-dropdown-menu [placement]="'right'">
-			<li rlb-dropdown-item (click)="viewChange.emit('day')" >Day</li>
-			<li rlb-dropdown-item (click)="viewChange.emit('week')">Week</li>
-			<li rlb-dropdown-item (click)="viewChange.emit('month')">Month</li>
+			<li rlb-dropdown-item (click)="setView('day')">Day</li>
+			<li rlb-dropdown-item (click)="setView('week')">Week</li>
+			<li rlb-dropdown-item (click)="setView('month')">Month</li>
 		</ul>
 	</rlb-dropdown>
 </div>

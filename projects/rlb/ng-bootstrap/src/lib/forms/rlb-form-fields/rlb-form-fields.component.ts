@@ -1,66 +1,68 @@
 import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-  ViewChild,
   booleanAttribute,
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+  viewChild,
 } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { FormFieldsDefinition, FormField, IForm } from './form-fields';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
+import { FormField, FormFieldsDefinition, IForm } from './form-fields';
 
 @Component({
-    selector: 'rlb-form-fields',
-    templateUrl: './rlb-form-fields.component.html',
-    styleUrls: ['./rlb-form-fields.component.scss'],
-    standalone: false
+  selector: 'rlb-form-fields',
+  templateUrl: './rlb-form-fields.component.html',
+  styleUrls: ['./rlb-form-fields.component.scss'],
+  standalone: false
 })
-export class FormFieldsComponent implements IForm, OnChanges {
-  public filterForm!: FormGroup;
+export class FormFieldsComponent implements IForm {
+  public filterForm = signal<FormGroup | undefined>(undefined);
 
-  @Input({ alias: 'title' }) public title!: string;
-  @Input({ alias: 'sub-title' }) public subTitle!: string;
-  @Input({ alias: 'no-submit', transform: booleanAttribute }) public noSubmit?: boolean;
-  @Input({ alias: 'no-card', transform: booleanAttribute }) public noCard?: boolean;
-  @Input({ alias: 'fields' }) public fields?: FormFieldsDefinition;
+  title = input<string>('', { alias: 'title' });
+  subTitle = input<string>('', { alias: 'sub-title' });
+  noSubmit = input(false, { alias: 'no-submit', transform: booleanAttribute });
+  noCard = input(false, { alias: 'no-card', transform: booleanAttribute });
+  fields = input<FormFieldsDefinition | undefined>(undefined, { alias: 'fields' });
 
-  @Output() public submit: EventEmitter<any> = new EventEmitter();
+  submit = output<any>();
 
-  @ViewChild('ngForm') form!: NgForm;
+  form = viewChild<NgForm>('ngForm');
 
-  get _fields() {
-    if (!this.fields) return [];
-    return Object.keys(this.fields).map((o) => {
-      return { property: o, ...this.fields?.[o] } as FormField;
+  _fields = computed(() => {
+    const fieldsData = this.fields();
+    if (!fieldsData) return [];
+    return Object.keys(fieldsData).map((o) => {
+      return { property: o, ...(fieldsData as any)[o] } as FormField;
+    });
+  });
+
+  constructor() {
+    effect(() => {
+      this.buildForm(this.fields());
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes['fields'].previousValue !== changes['fields'].currentValue ||
-      changes['fields'].isFirstChange()
-    ) {
-      this.buildForm();
+  private buildForm(fieldsData: FormFieldsDefinition | undefined) {
+    if (!fieldsData) {
+      this.filterForm.set(undefined);
+      return;
     }
-  }
-
-  private buildForm() {
-    if (!this.fields) return;
-    const formGroup = {} as { [k: string]: FormControl };
-    for (const field of this._fields) {
+    const formGroup = {} as { [k: string]: FormControl; };
+    for (const field of this._fields()) {
       formGroup[field.property] = new FormControl(
         field.property,
         field.validators,
       );
     }
-    this.filterForm = new FormGroup(formGroup);
+    this.filterForm.set(new FormGroup(formGroup));
   }
 
   onFilterSubmit() {
-    if (this.filterForm.valid) {
-      this.submit.emit(this.filterForm.value);
+    const form = this.filterForm();
+    if (form && form.valid) {
+      this.submit.emit(form.value);
     }
   }
 
@@ -86,6 +88,6 @@ export class FormFieldsComponent implements IForm, OnChanges {
   }
 
   submitForm() {
-    this.form.onSubmit({} as Event);
+    this.form()?.onSubmit({} as Event);
   }
 }

@@ -3,14 +3,13 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  effect,
   ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
+  input,
   OnDestroy,
-  Output,
-  SimpleChanges,
-  ViewChild
+  output,
+  signal,
+  viewChild
 } from '@angular/core';
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
@@ -45,34 +44,36 @@ const DAYS_IN_GRID = 42; // 6 weeks * 7 days
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
 
-  @Input() view!: CalendarView;
-  @Input() currentDate!: IDateTz;
-  @Input() events: CalendarEvent[] = [];
-  @Input() layout!: CalendarLayout;
-
-
-  @Output() eventClick = new EventEmitter<CalendarEvent | undefined>();
-  @Output() eventContainerClick = new EventEmitter<CalendarEvent[] | undefined>();
-  @Output() eventChange = new EventEmitter<CalendarEvent>();
-
-  @ViewChild('scrollBody', { static: false }) scrollBodyRef!: ElementRef<HTMLDivElement>;
-  @ViewChild('headerRow', { static: false }) headerRowRef!: ElementRef<HTMLDivElement>;
-
-  scrollbarWidth: number = 0;
-
-  weeks: DaySlot[][] = [];
-  weekDaysHeader: IDateTz[] = [];
-
-  constructor() { }
+  view = input.required<CalendarView>();
+  currentDate = input.required<IDateTz>();
+  events = input<CalendarEvent[]>([]);
+  layout = input.required<CalendarLayout>();
 
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['currentDate'] || changes['view'] || changes['events']) {
+  eventClick = output<CalendarEvent | undefined>();
+  eventContainerClick = output<CalendarEvent[] | undefined>();
+  eventChange = output<CalendarEvent>();
+
+  scrollBodyRef = viewChild<ElementRef<HTMLDivElement>>('scrollBody');
+  headerRowRef = viewChild<ElementRef<HTMLDivElement>>('headerRow');
+
+  scrollbarWidth = signal(0);
+
+  weeks = signal<DaySlot[][]>([]);
+  weekDaysHeader = signal<IDateTz[]>([]);
+
+  constructor() {
+    effect(() => {
+      // Accessing signals to register dependency
+      this.currentDate();
+      this.view();
+      this.events();
       this.buildMonthGrid();
-    }
+    });
   }
+
 
   ngAfterViewInit() {
     this.updateScrollbarWidth();
@@ -88,15 +89,18 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
   };
 
   onBodyScroll(event: Event) {
-    if (this.headerRowRef && this.scrollBodyRef) {
-      this.headerRowRef.nativeElement.scrollLeft = this.scrollBodyRef.nativeElement.scrollLeft;
+    const headerRow = this.headerRowRef();
+    const scrollBody = this.scrollBodyRef();
+    if (headerRow && scrollBody) {
+      headerRow.nativeElement.scrollLeft = scrollBody.nativeElement.scrollLeft;
     }
   }
 
   private updateScrollbarWidth() {
-    if (this.scrollBodyRef) {
-      const el = this.scrollBodyRef.nativeElement;
-      this.scrollbarWidth = el.offsetWidth - el.clientWidth;
+    const scrollBody = this.scrollBodyRef();
+    if (scrollBody) {
+      const el = scrollBody.nativeElement;
+      this.scrollbarWidth.set(el.offsetWidth - el.clientWidth);
     }
   }
 
@@ -108,7 +112,7 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
   }
 
   isCurrentMonth(date: IDateTz): boolean {
-    return date.month === this.currentDate.month;
+    return date.month === this.currentDate().month;
   }
 
   trackByDay(_index: number, item: DaySlot): number {
@@ -124,7 +128,7 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
 
   private buildMonthGrid() {
     // 1. Calculate Grid Boundaries
-    const current = new DateTz(this.currentDate);
+    const current = new DateTz(this.currentDate());
     // Find the first day of the month
     const startOfMonth = new DateTz(current).set(1, 'day').set(0, 'hour').set(0, 'minute').stripSecMillis();
 
@@ -145,13 +149,13 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
     }
 
     // Header is just the first week
-    this.weekDaysHeader = days.slice(0, 7);
+    this.weekDaysHeader.set(days.slice(0, 7));
 
     // 3. Process Events (Slotting Algorithm)
-    const slotsMap = this.calculateEventSlots(days, this.events);
+    const slotsMap = this.calculateEventSlots(days, this.events());
 
     // 4. Build View Model (Weeks & Overflow logic)
-    this.weeks = [];
+    const newWeeks: DaySlot[][] = [];
     for (let i = 0; i < DAYS_IN_GRID; i += 7) {
       const weekDays = days.slice(i, i + 7);
 
@@ -191,8 +195,10 @@ export class CalendarMonthGridComponent implements OnChanges, AfterViewInit, OnD
         };
       });
 
-      this.weeks.push(row);
+      newWeeks.push(row);
     }
+
+    this.weeks.set(newWeeks);
 
     // Defer scrollbar calculation to after the view updates
     setTimeout(() => {

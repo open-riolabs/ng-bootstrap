@@ -1,14 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, booleanAttribute } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, input, output, viewChild } from '@angular/core';
 
 @Component({
-    selector: 'rlb-file-dnd',
-    template: `
-    <div class="rlb-file-dnd" rlb-dnd [multiple]="multiple" (fileDropped)="onFileDropped($event)">
-      <input type="file" #fileDropRef id="fileDropRef" [attr.multiple]="multiple?'':undefined" (change)="fileBrowseHandler($event)" />
+  selector: 'rlb-file-dnd',
+  template: `
+    <div class="rlb-file-dnd" rlb-dnd [multiple]="multiple()" (fileDropped)="onFileDropped($event)">
+      <input type="file" #fileDropRef id="fileDropRef" [attr.multiple]="multiple() ? '' : undefined" (change)="fileBrowseHandler($event)" />
       <i class="bi bi-upload"></i>
-      <h3>{{ data.content?.drag }}</h3>
+      <h3>{{ data().content?.drag }}</h3>
       <h3>-</h3>
-      <label class="btn btn-primary" for="fileDropRef">{{ data.content?.button }}</label>
+      <label class="btn btn-primary" for="fileDropRef">{{ data().content?.button }}</label>
     </div>
     <div class="rlb-file-dnd-list">
       @for (file of files; track file; let i = $index) {
@@ -25,43 +25,48 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, booleanA
         </div>
       }
     </div>`,
-    standalone: false
+  standalone: false
 })
 export class FileDndComponent {
   files: File[] = [];
 
-  @Input({ alias: 'multiple', transform: booleanAttribute }) multiple: boolean = false;
-  @Input({ alias: 'data' }) data: any = {};
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  
-  @Output('files') filesChange = new EventEmitter<File[]>();
+  multiple = input(false, { transform: booleanAttribute });
+  data = input<any>({});
+  userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
 
-  @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
+  filesChange = output<File[]>({ alias: 'files' });
 
+  fileDropEl = viewChild<ElementRef<HTMLInputElement>>('fileDropRef');
 
   onFileDropped(files: File[]) {
-    if (this.multiple) {
+    if (this.multiple()) {
       this.files = files;
     }
     else {
       this.files = [files[files.length - 1]];
     }
     this.filesChange.emit(this.files);
-    this.fileDropEl.nativeElement.value = "";
+    const el = this.fileDropEl();
+    if (el) {
+      el.nativeElement.value = "";
+    }
   }
 
   fileBrowseHandler(event: Event) {
     const _target = event.target as HTMLInputElement;
     if (_target.files && _target.files?.length) {
-      let _f: File[] = []
-      if (this.multiple) {
-        for (let i = 0; i < _target.files.length; i++) _f.push(_target.files[i])
+      let _f: File[] = [];
+      if (this.multiple()) {
+        for (let i = 0; i < _target.files.length; i++) _f.push(_target.files[i]);
       } else {
-        for (let i = 0; i < _target.files.length; i++) _f = [_target.files[i]]
+        for (let i = 0; i < _target.files.length; i++) _f = [_target.files[i]];
       }
       this.files = _f;
       this.filesChange.emit(this.files);
-      this.fileDropEl.nativeElement.value = "";
+      const el = this.fileDropEl();
+      if (el) {
+        el.nativeElement.value = "";
+      }
     }
   }
 
