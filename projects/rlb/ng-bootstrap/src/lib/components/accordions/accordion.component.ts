@@ -14,13 +14,16 @@ import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({
   selector: 'rlb-accordion',
-  template: `<ng-content select="[rlb-accordion-item]"></ng-content>`,
+  template: `
+    <ng-content select="[rlb-accordion-item]"></ng-content>
+  `,
   host: {
     class: 'accordion',
     '[class.accordion-flush]': 'flush()',
+    '[class.accordion-card-style]': 'cardStyle()',
     '[id]': 'effectiveId()',
   },
-  standalone: false
+  standalone: false,
 })
 export class AccordionComponent implements OnDestroy {
   flush = input(false, { alias: 'flush', transform: booleanAttribute });
@@ -33,6 +36,8 @@ export class AccordionComponent implements OnDestroy {
   private subs: OutputRefSubscription[] = [];
 
   items = contentChildren(AccordionItemComponent);
+
+  cardStyle = input(true, { alias: 'card-style', transform: booleanAttribute });
 
   constructor(private idService: UniqueIdService) {
     this._internalId.set(`accordion${this.idService.id}`);
@@ -47,7 +52,7 @@ export class AccordionComponent implements OnDestroy {
     const id = this.effectiveId();
     const alwaysOpen = this.alwaysOpen();
 
-    items.forEach((item) => {
+    items.forEach(item => {
       item.parentId.set(id);
       item.alwaysOpen.set(alwaysOpen);
     });
@@ -66,13 +71,13 @@ export class AccordionComponent implements OnDestroy {
     const alwaysOpen = this.alwaysOpen();
     const id = this.effectiveId();
 
-    items.forEach((item) => {
+    items.forEach(item => {
       item.parentId.set(id);
       item.alwaysOpen.set(alwaysOpen);
 
-      const sub = item.statusChange.subscribe((ev) => {
+      const sub = item.statusChange.subscribe(ev => {
         if (!alwaysOpen && (ev === 'show' || ev === 'shown')) {
-          items.forEach((other) => {
+          items.forEach(other => {
             if (other !== item && (other.status === 'show' || other.status === 'shown')) {
               other.close();
             }
@@ -92,17 +97,15 @@ export class AccordionComponent implements OnDestroy {
       return;
     }
 
-    const opened = items.filter(
-      (i) => i.expanded() || i.status === 'show' || i.status === 'shown'
-    );
+    const opened = items.filter(i => i.expanded() || i.status === 'show' || i.status === 'shown');
 
     if (opened.length > 1) {
-      opened.slice(1).forEach((i) => i.close());
+      opened.slice(1).forEach(i => i.close());
     }
   }
 
   private cleanup(): void {
-    this.subs.forEach((s) => s.unsubscribe());
+    this.subs.forEach(s => s.unsubscribe());
     this.subs = [];
   }
 }
