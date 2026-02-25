@@ -266,6 +266,20 @@
               <rlb-spinner [color]="'primary'"></rlb-spinner>
             </rlb-dt-loading>
           </rlb-dt-table>
+          <h4>Table with loading state (Alternative)</h4>
+          <rlb-dt-table [items]="users" [loading]="true">
+            <rlb-dt-header>ID</rlb-dt-header>
+            <rlb-dt-header>Name</rlb-dt-header>
+            <rlb-dt-header>Email</rlb-dt-header>
+
+            <rlb-dt-loading>
+              <rlb-placeholder animation="glow">
+                <rlb-placeholder-line width="100%"/>
+                <rlb-placeholder-line width="80%" color="primary" size="sm"/>
+                <rlb-placeholder-line width="60%" [rounded]="false"/>
+              </rlb-placeholder>
+            </rlb-dt-loading>
+          </rlb-dt-table>
         </div>
       </div>
     </div>

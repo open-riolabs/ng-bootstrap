@@ -1,7 +1,7 @@
 // Lightbox
 //@import "~ngx-lightbox/lightbox.css";
 
-// Select 2 
+// Select 2
 //@import "~@ng-select/ng-select/themes/default.theme.css";
 
 // Date Picker
@@ -451,5 +451,113 @@ a.ck.ck-button.ck-on {
 
   100% {
     left: 100%;
+  }
+}
+
+
+rlb-dt-table.dt-card-style {
+  display: block;
+  margin-bottom: 1.5rem;
+
+  .table-responsive {
+    box-shadow: $card-box-shadow;
+    border-radius: $card-border-radius;
+    background-color: var(--bs-secondary-bg, var(--bs-body-bg));
+    border: 1px solid var(--bs-border-color-translucent);
+  }
+
+  .table {
+    margin-bottom: 0;
+    background-color: transparent;
+
+    > :not(caption) > * > * {
+      background-color: transparent;
+      border-bottom-color: var(--bs-border-color-translucent);
+    }
+
+    // Top corners
+    thead tr:first-child th:first-child {
+      border-top-left-radius: $card-inner-border-radius;
+    }
+    thead tr:first-child th:last-child {
+      border-top-right-radius: $card-inner-border-radius;
+    }
+
+    // Bottom corners
+    tfoot tr:last-child td:first-child,
+    tbody:last-child tr:last-child td:first-child {
+      border-bottom-left-radius: $card-inner-border-radius;
+      border-bottom: 0;
+    }
+
+    tfoot tr:last-child td:last-child,
+    tbody:last-child tr:last-child td:last-child {
+      border-bottom-right-radius: $card-inner-border-radius;
+      border-bottom: 0;
+    }
+  }
+}
+
+rlb-accordion.accordion-card-style {
+  display: block; // Required for the box-shadow to render on a custom element
+
+  // Give the wrapper the card shadow and radius
+  box-shadow: $card-box-shadow;
+  border-radius: $card-border-radius;
+
+  // Feed the Card variables directly into Bootstrap's Accordion Engine!
+  // This automatically calculates the inner corners for the first and last accordion items perfectly.
+  --bs-accordion-border-radius: #{$card-border-radius};
+  --bs-accordion-inner-border-radius: #{$card-inner-border-radius};
+
+  // Sync the backgrounds to match your dark/light theme Cards
+  --bs-accordion-bg: var(--bs-secondary-bg, var(--bs-body-bg));
+  --bs-accordion-border-color: var(--bs-border-color-translucent);
+
+  // slightly different background color when an accordion item is expanded
+  --bs-accordion-active-bg: var(--bs-tertiary-bg, rgba(var(--bs-primary-rgb), 0.05));
+  --bs-accordion-active-color: var(--bs-emphasis-color);
+
+  // Clean up the borders
+  // Since the inner accordion items draw their own borders, we just ensure
+  // they don't look weird inside our shadowed wrapper.
+  > [rlb-accordion-item],
+  > .accordion-item {
+    border-color: var(--bs-accordion-border-color);
+
+    // Ensure the focus ring stays inside the card shape
+    .accordion-button:focus {
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,.125), 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    }
+  }
+}
+
+:root {
+  --bs-scrollbar-bg: #ced4da;
+  --bs-scrollbar-hover: #aeb5bc;
+  --bs-scrollbar-track: transparent;
+}
+
+[data-bs-theme="dark"] {
+  --bs-scrollbar-bg: rgba(255, 255, 255, 0.1);
+  --bs-scrollbar-hover: rgba(255, 255, 255, 0.2);
+  --bs-scrollbar-track: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bs-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bs-scrollbar-bg);
+  border-radius: 10px;
+
+  &:hover {
+    background: var(--bs-scrollbar-hover);
   }
 }
