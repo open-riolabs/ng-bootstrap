@@ -32,6 +32,11 @@ export interface PaginationEvent {
   selector: 'rlb-dt-table',
   templateUrl: './dt-table.component.html',
   standalone: false,
+  host: {
+    // This automatically adds the 'dt-card-style' class to the <rlb-dt-table>
+    // element in the DOM if cardStyle() is true.
+    '[class.dt-card-style]': 'cardStyle()',
+  },
 })
 export class DataTableComponent implements OnInit, OnDestroy {
   title = input<string | undefined>(undefined);
@@ -41,7 +46,7 @@ export class DataTableComponent implements OnInit, OnDestroy {
   paginationMode = input<'none' | 'load-more' | 'pages'>('none', { alias: 'pagination-mode' });
   loading = input(false, { transform: booleanAttribute });
   tableHover = input(false, { alias: 'table-hover', transform: booleanAttribute });
-  tableStriped = input(true, { alias: 'table-striped', transform: booleanAttribute });
+  tableStriped = input(false, { alias: 'table-striped', transform: booleanAttribute });
   tableStripedColumns = input(false, {
     alias: 'table-striped-columns',
     transform: booleanAttribute,
@@ -55,6 +60,7 @@ export class DataTableComponent implements OnInit, OnDestroy {
   pageSize = input(undefined, { alias: 'page-size', transform: numberAttribute });
   showActions = input<'row' | 'head'>('row');
   loadMoreLabel = input('Load more');
+  cardStyle = input(true, { alias: 'card-style', transform: booleanAttribute });
 
   createItem = output<void>({ alias: 'create-item' });
   refreshItem = output<void>({ alias: 'refresh-item' });
