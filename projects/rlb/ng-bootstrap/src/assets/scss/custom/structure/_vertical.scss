@@ -105,20 +105,20 @@ rlb-sidebar {
     li {
       a {
         display: block;
-        padding: .625rem 1.5rem;
+        padding: var(--rlb-item-padding-y) var(--rlb-item-padding-x);
         color: var(--rlb-menu-item-color);
         position: relative;
-        font-size: 13px;
+        font-size: 0.95rem;
         transition: all .4s;
 
         margin: 0.1rem 0.3rem;
-        border-radius: 0.4rem;
+        border-radius: $border-radius;
 
         i {
           display: inline-block;
           min-width: 1.75rem;
           padding-bottom: .125em;
-          font-size: 1.15rem;
+          font-size: 1.25rem;
           line-height: 1.40625rem;
           vertical-align: middle;
           color: inherit;
@@ -176,8 +176,8 @@ rlb-sidebar {
             padding: 0;
             li {
               a {
-                padding: .4rem 1.5rem .4rem 2.5rem;
-                font-size: 13px;
+                padding: 0.4rem 1.5rem 0.4rem 3.75rem;
+                font-size: 0.8125rem;
               }
             }
           }
@@ -240,11 +240,11 @@ rlb-sidebar {
 }
 
 .menu-title {
-  padding: 12px 20px !important;
+  padding: 0.75rem 1.5rem !important;
   letter-spacing: .05em;
   pointer-events: none;
   cursor: default;
-  font-size: 11px;
+  font-size: 0.75rem;
   text-transform: uppercase;
   color: $sidebar-menu-item-icon-color;
   font-weight: $font-weight-semibold;
