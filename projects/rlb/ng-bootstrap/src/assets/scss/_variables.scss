@@ -131,7 +131,7 @@ $red:     #f46a6a;
 $orange:  #f1734f;
 $yellow:  #f1b44c;
 $green:   #34c38f;
-$teal:    #050505;
+$teal:    #20c997;
 $cyan:    #50a5f1;
 // scss-docs-end color-variables
 
@@ -180,7 +180,7 @@ $theme-colors: (
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
 // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
-$min-contrast-ratio:   1.8;
+$min-contrast-ratio:   3;
 
 // Customize the light and dark text colors for use in our color contrast function.
 $color-contrast-dark:      $black;
@@ -454,7 +454,7 @@ $escaped-characters: (
 
 $enable-caret:                false;
 $enable-rounded:              true;
-$enable-shadows:              false;
+$enable-shadows:              true;
 $enable-gradients:            false;
 $enable-transitions:          true;
 $enable-reduced-motion:       true;
@@ -605,7 +605,7 @@ $container-max-widths: (
 // Set the number of columns and specify the width of the gutters.
 
 $grid-columns:                12;
-$grid-gutter-width:           24px;
+$grid-gutter-width:           1.5rem;
 $grid-row-columns:            6;
 
 // Container padding
@@ -632,7 +632,7 @@ $border-color-translucent:    $gray-400;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables
-$border-radius:               .25rem;
+$border-radius:               .375rem;
 $border-radius-sm:            .2rem;
 $border-radius-lg:            .4rem;
 $border-radius-xl:            1rem;
@@ -701,7 +701,7 @@ $font-family-code:            var(--#{$prefix}font-monospace);
 // $font-size-root effects the value of `rem`, which is used for as well font sizes, paddings and margins
 // $font-size-base effects the font size of the body text
 $font-size-root:              null;
-$font-size-base:              0.85rem;
+$font-size-base:              1rem;
 $font-size-sm:                $font-size-base * .875;
 $font-size-lg:                $font-size-base * 1.25;
 
@@ -820,7 +820,7 @@ $table-color:                 var(--#{$prefix}body-color);
 $table-bg:                    var(--#{$prefix}secondary-bg);
 $table-accent-bg:             transparent;
 
-$table-th-font-weight:        null;
+$table-th-font-weight:        600;
 
 $table-striped-color:         $table-color;
 $table-striped-bg-factor:     1;
@@ -1415,16 +1415,16 @@ $placeholder-opacity-min:           .2;
 // Cards
 
 // scss-docs-start card-variables
-$card-spacer-y:                     1.25rem;
-$card-spacer-x:                     1.25rem;
+$card-spacer-y:                     1.5rem;
+$card-spacer-x:                     1.5rem;
 $card-title-spacer-y:               $spacer * .5;
 $card-title-color:                  var(--#{$prefix}emphasis-color);
 $card-subtitle-color:               null;
 $card-border-width:                 0;
 $card-border-color:                 var(--#{$prefix}border-color);
-$card-border-radius:                var(--#{$prefix}border-radius);
-$card-box-shadow:                   null;
-$card-inner-border-radius:          subtract($card-border-radius, $card-border-width);
+$card-border-radius:                1rem; // Soft bubbly cards
+$card-box-shadow:                   0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+$card-inner-border-radius:          calc(#{$card-border-radius} - 1px);
 $card-cap-padding-y:                $card-spacer-y * .5;
 $card-cap-padding-x:                $card-spacer-x;
 $card-cap-bg:                       var(--#{$prefix}tertiary-bg);
@@ -1824,18 +1824,3 @@ $kbd-bg:                            var(--#{$prefix}body-color);
 $nested-kbd-font-weight:            null; // Deprecated in v5.2.0, removing in v6
 
 $pre-color:                         null;
-
-
-// Dimensions and Light Shadows
-$enable-shadows: true;
-$card-border-radius: 1rem;
-$card-inner-border-radius: calc(#{$card-border-radius} - 1px);
-$card-spacer-y: 1.5rem;
-$card-spacer-x: 1.5rem;
-$card-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08); // Soft shadow for light mode
-$badge-border-radius: 0.375rem;
-
-
-$input-border-radius: 0.5rem;
-$input-padding-y: 0.65rem;
-$input-padding-x: 1rem;
