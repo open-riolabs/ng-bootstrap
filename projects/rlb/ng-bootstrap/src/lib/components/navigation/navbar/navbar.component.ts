@@ -20,38 +20,39 @@ import { NavbarItemsComponent } from './navbar-items.component';
 
 @Component({
   selector: 'rlb-navbar',
-  template: ` <ng-template #template>
-    <nav
-      class="navbar px-2 bg-{{ color() }} {{ placement() }} {{
-        _navExpand()
-      }} {{ cssClass() }}"
-      [attr.data-bs-theme]="dark() ? 'dark' : 'light'"
-    >
-      <div class="container-fluid">
-        <ng-content
-          select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator"
-        />
-        <button
-          class="navbar-toggler"
-          [class.d-none]="!enableDropdownToggler()"
-          type="button"
-          rlb-button
-          toggle="collapse"
-          [toggle-target]="navId"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" [id]="navId">
-          <div class="p-3 d-flex w-100 flex-column flex-lg-row">
-            <ng-content
-              select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
-            />
+  template: `
+    <ng-template #template>
+      <nav
+        class="navbar px-2 bg-{{ color() }} {{ placement() }} {{ _navExpand() }} {{ cssClass() }}"
+        [attr.data-bs-theme]="dark() ? 'dark' : 'light'"
+      >
+        <div class="container-fluid">
+          <ng-content select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator" />
+          <button
+            class="navbar-toggler"
+            [class.d-none]="!enableDropdownToggler()"
+            type="button"
+            rlb-button
+            toggle="collapse"
+            [toggle-target]="navId"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse"
+            [id]="navId"
+          >
+            <div class="p-3 d-flex w-100 flex-column flex-lg-row align-items-lg-center">
+              <ng-content
+                select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
-  </ng-template>`,
+      </nav>
+    </ng-template>
+  `,
   standalone: false,
 })
 export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
@@ -73,12 +74,10 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
 
   dark = input(true, { alias: 'dark', transform: booleanAttribute });
   color = input<Color | undefined>(undefined);
-  placement = input<
-    'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom' | undefined
-  >(undefined);
-  expand = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always' | undefined>(
+  placement = input<'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom' | undefined>(
     undefined,
   );
+  expand = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always' | undefined>(undefined);
   cssClass = input('', { alias: 'class' });
   enableDropdownToggler = input(true, {
     alias: 'enable-dropdown-toggler',
@@ -93,7 +92,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
 
     effect(() => {
       const groups = this.navbarItemsGroups();
-      groups.forEach((group) => {
+      groups.forEach(group => {
         // Since output() is not a Signal, we still need to subscribe,
         // but we can manage the subscription here more cleanly.
         // However, output().subscribe returns OutputRefSubscription which we should track.
@@ -103,9 +102,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
