@@ -13,15 +13,16 @@ import { Color } from '../../shared/types';
 @Component({
   selector: 'span[rlb-badge], img[rlb-badge]',
   template: `
-  <ng-template #template>
-    <span [class]="style()">
-      <ng-content></ng-content>
-      @if (hiddenText()) {
-        <span class="visually-hidden">{{ hiddenText() }}</span>
-      }
-    </span>
-  </ng-template>`,
-  standalone: false
+    <ng-template #template>
+      <span [class]="style()">
+        <ng-content></ng-content>
+        @if (hiddenText()) {
+          <span class="visually-hidden">{{ hiddenText() }}</span>
+        }
+      </span>
+    </ng-template>
+  `,
+  standalone: false,
 })
 export class BadgeComponent implements OnInit {
   element!: HTMLElement;
@@ -31,7 +32,9 @@ export class BadgeComponent implements OnInit {
   hiddenText = input<string | undefined>(undefined, { alias: 'hidden-text' });
   border = input(false, { alias: 'border', transform: booleanAttribute });
   cssClass = input<string | undefined>('', { alias: 'class' });
-
+  textColor = input<string | undefined>(undefined, {
+    alias: 'badge-text-color',
+  });
   template = viewChild.required<TemplateRef<any>>('template');
 
   style = computed(() => {
@@ -45,15 +48,17 @@ export class BadgeComponent implements OnInit {
     if (this.border()) {
       style += ` border`;
     }
-    return style += (this.cssClass() ? ` ${this.cssClass()}` : '');
+
+    if (this.textColor()) {
+      style += ` text-${this.textColor()}`;
+    }
+    return (style += this.cssClass() ? ` ${this.cssClass()}` : '');
   });
 
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  constructor(private viewContainerRef: ViewContainerRef) {}
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template(),
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
