@@ -16,14 +16,17 @@
 .rlb-navbar {
   height: $header-height;
   z-index: 1030;
+  background-color: var(--bs-tertiary-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .rlb-sidebar {
-  width: $sidebar-width;
+  width: var(--rlb-sidebar-width);
+  background-color: var(--rlb-sidebar-bg);
+  border-right: 1px solid var(--rlb-sidebar-border);
+  color: var(--rlb-menu-item-color);
   flex-shrink: 0;
   transition: width $sidebar-transition, transform $sidebar-transition;
-  background-color: var(--bs-tertiary-bg);
-  border-right: 1px solid var(--bs-border-color);
   z-index: 1000;
   position: relative;
   overflow: visible !important;

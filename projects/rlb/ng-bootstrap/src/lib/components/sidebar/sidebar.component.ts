@@ -17,24 +17,42 @@ import { SidebarService } from './sidebar.service';
 @Component({
   selector: 'rlb-sidebar',
   template: `
-		<div class="vertical-menu" [class.rounded-2]="rounded()">
-			<div id="sidebar-menu" class="w-100 h-100 overflow-y-auto">
-				<ul class="metismenu list-unstyled" id="side-menu" #sideMenu>
-					<ng-content select="rlb-sidebar-item"></ng-content>
-				</ul>
-			</div>
-		</div>
-		<div role="button"
-				 class="sidebar-toggle"
-				 [tooltip]="!isCollapsed() ? 'Hide' : 'Show'"
-				 [tooltip-placement]="!isCollapsed() ? 'top' : 'left'"
-				 [tooltip-class]="'sidebar-toggler-tooltip'"
-				 (click)="toggleSidebar()">
-			<i [class.bi-chevron-double-left]="!isCollapsed()" [class.bi-chevron-double-right]="isCollapsed()"
-				 class="bi "></i>
-		</div>
-	`,
-  standalone: false
+    <div
+      class="vertical-menu"
+      [class.rounded-2]="rounded()"
+    >
+      <div
+        id="sidebar-menu"
+        class="w-100 h-100 overflow-y-auto"
+      >
+        <ul
+          class="metismenu list-unstyled"
+          id="side-menu"
+          #sideMenu
+        >
+          <ng-content select="rlb-sidebar-item"></ng-content>
+        </ul>
+      </div>
+    </div>
+    <div
+      role="button"
+      class="sidebar-toggle"
+      [tooltip]="!isCollapsed() ? 'Hide' : 'Show'"
+      [tooltip-placement]="!isCollapsed() ? 'top' : 'left'"
+      [tooltip-class]="'sidebar-toggler-tooltip'"
+      (click)="toggleSidebar()"
+    >
+      <i
+        [class.bi-chevron-double-left]="!isCollapsed()"
+        [class.bi-chevron-double-right]="isCollapsed()"
+        class="bi "
+      ></i>
+    </div>
+  `,
+  host: {
+    '[attr.data-bs-theme]': "dark() ? 'dark' : 'light'",
+  },
+  standalone: false,
 })
 
 /**
@@ -45,6 +63,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   data: any;
   @ViewChild('sideMenu') sideMenu!: ElementRef;
   isCollapsed = signal(false);
+  dark = input(true, { alias: 'dark', transform: booleanAttribute });
 
   private subscription: Subscription = new Subscription();
 
@@ -53,7 +72,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private sidebarService: SidebarService,
-    private breakpointService: BreakpointService
+    private breakpointService: BreakpointService,
   ) {
     effect(() => {
       const mobile = this.isMobile();
@@ -69,7 +88,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         if (this.breakpointService.isMobile) {
           this.setCollapsed(true);
         }
-      })
+      }),
     );
   }
 

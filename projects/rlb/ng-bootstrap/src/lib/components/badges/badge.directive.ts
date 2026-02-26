@@ -27,6 +27,9 @@ export class BadgeDirective implements AfterViewInit {
     transform: numberAttribute,
   });
   color = input<Color>('danger', { alias: 'badge-color' });
+  textColor = input<string>('light', {
+    alias: 'badge-text-color',
+  });
   hiddenText = input<string | undefined>(undefined, { alias: 'hidden-text' });
   dot = input(false, { alias: 'badge-dot', transform: booleanAttribute });
 
@@ -73,6 +76,7 @@ export class BadgeDirective implements AfterViewInit {
     const border = this.border();
     const hiddenText = this.hiddenText();
     const badgeValue = this.castToString(this.badge());
+    const textColor = this.textColor();
 
     if (top || start || top === 0 || start === 0) {
       this.renderer.addClass(this.badgeElement, 'position-absolute');
@@ -93,6 +97,9 @@ export class BadgeDirective implements AfterViewInit {
     }
     if (color) {
       this.renderer.addClass(this.badgeElement, `bg-${color}`);
+    }
+    if (textColor) {
+      this.renderer.addClass(this.badgeElement, `text-${textColor}`);
     }
     if (badgeValue) {
       this.badgeContent = this.renderer.createText(badgeValue);
