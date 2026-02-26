@@ -87,7 +87,7 @@ rlb-sidebar {
       right: 1rem;
       top: 50%;
       display: block;
-      font-size: 1rem;
+      font-size: 1.2rem;
 
       // smoothly animate the transform
       transition: transform 0.3s ease-in-out;
@@ -104,7 +104,8 @@ rlb-sidebar {
   ul {
     li {
       a {
-        display: block;
+        display: flex;
+        align-items: center;
         padding: var(--rlb-item-padding-y) var(--rlb-item-padding-x);
         color: var(--rlb-menu-item-color);
         position: relative;
@@ -114,7 +115,16 @@ rlb-sidebar {
         margin: 0.1rem 0.3rem;
         border-radius: $border-radius;
 
+        .menu-text {
+          flex-grow: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-right: 0.5rem;
+        }
+
         i {
+          flex-shrink: 0;
           display: inline-block;
           min-width: 1.75rem;
           padding-bottom: .125em;
@@ -125,6 +135,11 @@ rlb-sidebar {
           transition: all .4s;
         }
 
+        .badge {
+          flex-shrink: 0;
+          margin-left: auto;
+        }
+
         &:hover {
           color: var(--rlb-menu-item-hover-color);
           //background-color: rgba(255,255,255, 0.05);
@@ -133,6 +148,10 @@ rlb-sidebar {
             color: inherit;
           }
         }
+      }
+
+      .has-arrow span {
+        margin-right: 1rem;
       }
 
       .active,

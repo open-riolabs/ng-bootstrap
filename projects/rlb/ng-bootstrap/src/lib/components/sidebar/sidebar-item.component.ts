@@ -26,8 +26,7 @@ import { SidebarService } from './sidebar.service';
         >
           {{ title() }}
         </li>
-      }
-      @if (!title()) {
+      } @else {
         <li>
           @if (children().length) {
             <a
@@ -44,18 +43,18 @@ import { SidebarService } from './sidebar.service';
               @if (icon()) {
                 <i [class]="icon()"></i>
               }
-              <span>{{ label() }}</span>
+              <span class="menu-text">{{ label() }}</span>
             </a>
-          }
-          <rlb-collapse [id]="'side-item' + _id">
-            <ul
-              class="sub-menu"
-              aria-expanded="false"
-            >
-              <ng-content select="rlb-sidebar-item"></ng-content>
-            </ul>
-          </rlb-collapse>
-          @if (!children().length) {
+
+            <rlb-collapse [id]="'side-item' + _id">
+              <ul
+                class="sub-menu"
+                aria-expanded="false"
+              >
+                <ng-content select="rlb-sidebar-item"></ng-content>
+              </ul>
+            </rlb-collapse>
+          } @else {
             <a
               [routerLink]="link()"
               [badge]="badgeCounter() && badgeCounter()! > 0 ? badgeCounter() : undefined"
@@ -66,7 +65,7 @@ import { SidebarService } from './sidebar.service';
               @if (icon()) {
                 <i [class]="icon()"></i>
               }
-              <ng-content></ng-content>
+              <span class="menu-text"><ng-content></ng-content></span>
             </a>
           }
         </li>
@@ -77,6 +76,7 @@ import { SidebarService } from './sidebar.service';
 })
 export class SidebarItemComponent implements OnInit {
   element!: HTMLElement;
+
   title = input<string | undefined>(undefined);
   icon = input<string | undefined>(undefined);
   label = input<string | undefined>(undefined);
@@ -90,14 +90,14 @@ export class SidebarItemComponent implements OnInit {
   collapseComponent = ViewChild(CollapseComponent);
   isExpanded = signal(false);
 
+  _id: string = '';
+
   constructor(
     private viewContainerRef: ViewContainerRef,
     private uniqueIdService: UniqueIdService,
     private router: Router,
     private sidebarService: SidebarService,
   ) {}
-
-  _id: string = '';
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(this.template());
