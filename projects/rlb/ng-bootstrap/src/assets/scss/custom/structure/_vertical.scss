@@ -3,52 +3,67 @@
 // _menu.scss
 //
 
+// ==========================================
+// 1. Sidebar Configuration (The "Bridge")
+// ==========================================
+// We map global theme variables to sidebar specific variables here.
+
+// Spacing
+$sidebar-padding-y:           $spacer;
+$menu-item-padding-y:         $nav-link-padding-y;
+$menu-item-padding-x:         1.5rem;
+$menu-item-margin-y:          2px;
+
+// Typography
+$menu-item-font-size:         $font-size-base;
+$menu-item-icon-size:         $font-size-lg;
+$submenu-font-size:           $font-size-sm;
+$submenu-level-2-font-size:   $font-size-sm;
+
+// Indentation logic
+$submenu-indent-base:         $menu-item-padding-x;
+$submenu-indent-step:         1.25rem; // How much to indent per level
+
 rlb-sidebar {
   --rlb-sidebar-width: #{$sidebar-width};
-  --rlb-item-padding-x: 1.5rem;
-  --rlb-item-padding-y: 0.625rem;
 
-  --bs-body-color: #545a6d;
-  --bs-body-bg: #ffffff;
+  // SYNC: Mapped to variables above
+  --rlb-item-padding-x: #{$menu-item-padding-x};
+  --rlb-item-padding-y: #{$menu-item-padding-y};
+
+  --bs-body-color: #{$body-color}; // SYNC: Use global body color variable
+  --bs-body-bg: #{$white};
+
   color: var(--bs-body-color);
 
   &[data-bs-theme="light"] {
-    --rlb-sidebar-bg: #ffffff;
+    --rlb-sidebar-bg: #{$sidebar-bg};
     --rlb-sidebar-border: #eff0f2;
-
-    --rlb-menu-item-color: #545a6d;
-    --rlb-menu-item-hover-color: #383c40;
-    --rlb-menu-item-active-color: #556ee6;
-
-    --rlb-menu-item-active-bg: #f6f6f6;
-
-    --rlb-submenu-bg: #ffffff;
-
-    --rlb-scrollbar-thumb: #ced4da;
+    --rlb-menu-item-color: #{$sidebar-menu-item-color};
+    --rlb-menu-item-hover-color: #{$sidebar-menu-item-hover-color};
+    --rlb-menu-item-active-color: #{$sidebar-menu-item-active-color};
+    --rlb-menu-item-active-bg: #{$gray-100}; // SYNC: Used $gray-100 instead of hex
+    --rlb-submenu-bg: #{$sidebar-bg};
+    --rlb-scrollbar-thumb: #{$gray-400};
     --rlb-scrollbar-track: transparent;
   }
 
   &[data-bs-theme="dark"] {
-    --rlb-sidebar-bg: #2a3042; // $sidebar-dark-bg
+    --rlb-sidebar-bg: #{$sidebar-dark-bg};
     --rlb-sidebar-border: #32394e;
-
-    --rlb-menu-item-color: #a6b0cf;
-    --rlb-menu-item-hover-color: #ffffff;
-    --rlb-menu-item-active-color: #ffffff;
-
-    --rlb-menu-item-active-bg: #{color.adjust(#2a3042, $lightness: 3%)};
-
-    --rlb-submenu-bg: #2a3042;
-
+    --rlb-menu-item-color: #{$sidebar-dark-menu-item-color};
+    --rlb-menu-item-hover-color: #{$sidebar-dark-menu-item-hover-color};
+    --rlb-menu-item-active-color: #{$sidebar-dark-menu-item-active-color};
+    --rlb-menu-item-active-bg: #{color.adjust($sidebar-dark-bg, $lightness: 3%)};
+    --rlb-submenu-bg: #{$sidebar-dark-bg};
     --rlb-scrollbar-thumb: #5c6276;
     --rlb-scrollbar-track: transparent;
   }
 }
 
 #sidebar-menu {
-  padding: 10px 0 10px 0;
+  padding: $sidebar-padding-y 0;
   scrollbar-gutter: stable;
-
   scrollbar-width: thin;
   scrollbar-color: var(--rlb-scrollbar-thumb) var(--rlb-scrollbar-track);
 
@@ -82,16 +97,12 @@ rlb-sidebar {
     &:after {
       content: "\F0140";
       font-family: 'Material Design Icons';
-
       position: absolute;
       right: 1rem;
       top: 50%;
       display: block;
       font-size: 1.2rem;
-
-      // smoothly animate the transform
       transition: transform 0.3s ease-in-out;
-
       transform: translateY(-50%) rotate(0deg);
     }
 
@@ -109,10 +120,11 @@ rlb-sidebar {
         padding: var(--rlb-item-padding-y) var(--rlb-item-padding-x);
         color: var(--rlb-menu-item-color);
         position: relative;
-        font-size: 0.95rem;
+
+        font-size: $menu-item-font-size;
         transition: all .4s;
 
-        margin: 0.1rem 0.3rem;
+        margin: $menu-item-margin-y ($spacer * 0.3);
         border-radius: $border-radius;
 
         .menu-text {
@@ -120,7 +132,7 @@ rlb-sidebar {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          margin-right: 0.5rem;
+          margin-right: ($spacer * 0.5);
         }
 
         i {
@@ -128,7 +140,8 @@ rlb-sidebar {
           display: inline-block;
           min-width: 1.75rem;
           padding-bottom: .125em;
-          font-size: 1.25rem;
+
+          font-size: $menu-item-icon-size;
           line-height: 1.40625rem;
           vertical-align: middle;
           color: inherit;
@@ -142,8 +155,6 @@ rlb-sidebar {
 
         &:hover {
           color: var(--rlb-menu-item-hover-color);
-          //background-color: rgba(255,255,255, 0.05);
-
           i {
             color: inherit;
           }
@@ -158,7 +169,7 @@ rlb-sidebar {
       &.mm-active > a {
         color: var(--rlb-menu-item-active-color) !important;
         background-color: var(--rlb-menu-item-active-bg);
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
 
         i {
           color: inherit !important;
@@ -176,8 +187,10 @@ rlb-sidebar {
         flex-direction: column;
         li {
           a {
-            padding: .4rem 1.5rem .4rem 2.5rem;
-            font-size: 13px;
+            // Calculate padding based on Base + Step
+            padding: 0.4rem $menu-item-padding-x 0.4rem ($submenu-indent-base + $submenu-indent-step);
+
+            font-size: $submenu-font-size;
             color: var(--rlb-menu-item-color);
             background-color: transparent;
 
@@ -195,8 +208,10 @@ rlb-sidebar {
             padding: 0;
             li {
               a {
-                padding: 0.4rem 1.5rem 0.4rem 3.75rem;
-                font-size: 0.8125rem;
+                // Calculate padding: Base + (Step * 2)
+                padding: 0.4rem $menu-item-padding-x 0.4rem ($submenu-indent-base + ($submenu-indent-step * 2));
+
+                font-size: $submenu-level-2-font-size;
               }
             }
           }
@@ -238,12 +253,8 @@ rlb-sidebar {
 
 .vertical-menu {
   width: inherit;
-  //z-index: 1001;
   background: var(--rlb-sidebar-bg);
-  //bottom: 0;
   margin-top: 0;
-  // position: fixed;
-  //top: $header-height;
   box-shadow: $box-shadow;
   height: 100%;
 }

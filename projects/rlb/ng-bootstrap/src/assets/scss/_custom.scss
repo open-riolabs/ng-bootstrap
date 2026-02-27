@@ -458,12 +458,12 @@ a.ck.ck-button.ck-on {
 rlb-dt-table.dt-card-style {
   display: block;
   margin-bottom: 1.5rem;
-
   .table-responsive {
     box-shadow: $card-box-shadow;
     border-radius: $card-border-radius;
     background-color: var(--bs-secondary-bg, var(--bs-body-bg));
     border: 1px solid var(--bs-border-color-translucent);
+    padding: 1rem;
   }
 
   .table {
@@ -487,13 +487,13 @@ rlb-dt-table.dt-card-style {
     tfoot tr:last-child td:first-child,
     tbody:last-child tr:last-child td:first-child {
       border-bottom-left-radius: $card-inner-border-radius;
-      border-bottom: 0;
+      //border-bottom: 0;
     }
 
     tfoot tr:last-child td:last-child,
     tbody:last-child tr:last-child td:last-child {
       border-bottom-right-radius: $card-inner-border-radius;
-      border-bottom: 0;
+      //border-bottom: 0;
     }
   }
 }
