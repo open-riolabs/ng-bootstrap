@@ -48,7 +48,7 @@ $body-tertiary-color-dark:          #f6f6f6;
 $body-tertiary-bg-dark:             #32394e;
 $body-emphasis-color-dark:          $white;
 $border-color-dark:                 #32394e;
-$border-color-translucent-dark:     #353d55;
+$border-color-translucent-dark:     rgba(255, 255, 255, 0.1);
 $headings-color-dark:               #f6f6f6;
 $link-color-dark:                   $primary;
 $link-hover-color-dark:             shift-color($link-color-dark, -$link-shade-percentage);
@@ -64,6 +64,7 @@ $form-select-indicator-dark:        url("data:image/svg+xml,<svg xmlns='http://w
 
 $form-switch-color-dark:            rgba($white, .25);
 $form-switch-bg-image-dark:         url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-color-dark}'/></svg>");
+$input-border-color:                var(--#{$prefix}border-color-translucent);
 
 // scss-docs-start form-validation-colors-dark
 $form-valid-color-dark:             $green-300;
@@ -105,6 +106,8 @@ $menu-item-active-color-dark:           #556ee6;
 
 $boxed-body-bg-dark:                    #32394f;
 
+// Table
+$table-dark-border-color:                           tint-color($gray-800, 7.5%);
 
 // Display
 $display-none-dark:                                        block;
@@ -112,3 +115,15 @@ $display-block-dark:                                       none;
 
 $card-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.35);
 $input-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+
+// OVERRIDES
+$card-bg:                           var(--#{$prefix}secondary-bg);
+$card-box-shadow:                   0 0.5rem 1rem rgba(0, 0, 0, 0.35); // Stronger shadow for dark mode
+$card-border-width:                 0;
+$table-head-bg:                     $body-tertiary-bg-dark; // Darker header for tables
+$input-bg:                          rgba(255, 255, 255, 0.05); // Glass effect
+$input-border-color:                rgba(255, 255, 255, 0.1);
+
+$sidebar-dark-bg:                   $body-secondary-bg-dark;
+$sidebar-dark-menu-item-color:      #a6b0cf;
+$sidebar-dark-menu-item-active-color: #ffffff;
