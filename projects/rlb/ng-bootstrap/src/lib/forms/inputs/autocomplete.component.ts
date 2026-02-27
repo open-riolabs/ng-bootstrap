@@ -111,7 +111,7 @@ export class AutocompleteComponent
   menuMaxWidth = input(400, { alias: 'menu-max-width', transform: numberAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
-  inputAutocomplete = input('one-time-code');
+  inputAutocomplete = input('off');
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
