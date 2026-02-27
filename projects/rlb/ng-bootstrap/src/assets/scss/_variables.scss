@@ -82,6 +82,8 @@ $apex-grid-color:                                   var(--#{$prefix}border-color
 
 // table
 $table-head-bg:                                     $gray-100;
+$table-head-bg:                                     #eff2f7; // Distinct light gray
+//$table-head-color:  $body-color;
 $table-dark-border-color:                           tint-color($gray-800, 7.5%);
 
 
@@ -522,7 +524,7 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   #f8f8fb;
+$body-bg:                   #f3f4f6;
 $body-color:                $gray-700;
 $body-text-align:           null;
 
@@ -913,7 +915,7 @@ $btn-font-size-lg:            $input-btn-font-size-lg;
 
 $btn-border-width:            $input-btn-border-width;
 
-$btn-font-weight:             $font-weight-normal;
+$btn-font-weight:             $font-weight-medium;
 $btn-box-shadow:              inset 0 1px 0 rgba($white, .15), 0 1px 1px rgba($black, .075);
 $btn-focus-width:             $input-btn-focus-width;
 $btn-focus-box-shadow:        0 0 0 0.15rem rgba(var(--#{$prefix}btn-focus-shadow-rgb), .5);
@@ -956,7 +958,7 @@ $form-text-color:                       var(--#{$prefix}secondary-color);
 $form-label-margin-bottom:              .5rem;
 $form-label-font-size:                  null;
 $form-label-font-style:                 null;
-$form-label-font-weight:                null;
+$form-label-font-weight:                $font-weight-medium;
 $form-label-color:                      null;
 // scss-docs-end form-label-variables
 
@@ -991,10 +993,10 @@ $input-border-radius-sm:                var(--#{$prefix}border-radius-sm);
 $input-border-radius-lg:                var(--#{$prefix}border-radius-lg);
 
 $input-focus-bg:                        $input-bg;
-$input-focus-border-color:              rgb(var(--#{$prefix}body-color-rgb), 0.2);
+$input-focus-border-color:              $primary;
 $input-focus-color:                     $input-color;
 $input-focus-width:                     $input-btn-focus-width;
-$input-focus-box-shadow:                none;
+$input-focus-box-shadow:                0 0 0 0.15rem rgba($primary, 0.25);
 
 $input-placeholder-color:               var(--#{$prefix}secondary-color);
 $input-plaintext-color:                 var(--#{$prefix}body-color);
@@ -1320,11 +1322,11 @@ $dropdown-color:                    var(--#{$prefix}body-color);
 $dropdown-bg:                       var(--#{$prefix}secondary-bg);
 $dropdown-border-color:             var(--#{$prefix}border-color);
 $dropdown-border-radius:            var(--#{$prefix}border-radius);
-$dropdown-border-width:             0;
+$dropdown-border-width:             1px;
 $dropdown-inner-border-radius:      calc(#{$dropdown-border-radius} - #{$dropdown-border-width});
 $dropdown-divider-bg:               $dropdown-border-color;
 $dropdown-divider-margin-y:         $spacer * .5;
-$dropdown-box-shadow:               $box-shadow;
+$dropdown-box-shadow:               0 0.5rem 1rem rgba(0, 0, 0, 0.08);
 
 $dropdown-link-color:               var(--#{$prefix}body-color);
 $dropdown-link-hover-color:         var(--#{$prefix}emphasis-color);
@@ -1420,10 +1422,10 @@ $card-spacer-x:                     1.5rem;
 $card-title-spacer-y:               $spacer * .5;
 $card-title-color:                  var(--#{$prefix}emphasis-color);
 $card-subtitle-color:               null;
-$card-border-width:                 0;
-$card-border-color:                 var(--#{$prefix}border-color);
+$card-border-width:                 1px;
+$card-border-color:                 rgba($gray-200, 0.5);
 $card-border-radius:                1rem; // Soft bubbly cards
-$card-box-shadow:                   0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+$card-box-shadow:                   0 4px 6px rgba(18, 38, 63, 0.03), 0 1px 3px rgba(18, 38, 63, 0.05);
 $card-inner-border-radius:          calc(#{$card-border-radius} - 1px);
 $card-cap-padding-y:                $card-spacer-y * .5;
 $card-cap-padding-x:                $card-spacer-x;
