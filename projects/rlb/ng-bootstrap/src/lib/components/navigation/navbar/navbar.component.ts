@@ -28,15 +28,18 @@ import { SidebarService } from '../../sidebar/sidebar.service';
         [attr.data-bs-theme]="dark() ? 'dark' : 'light'"
       >
         <div class="container-fluid">
-          <button
-            class="sidebar-toggler me-3"
-            type="button"
-            rlb-button
-            aria-label="Toggle sidebar"
-            (click)="toggleSidebar()"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
+          @if (showSideBarToggler()) {
+            <button
+              class="sidebar-toggler me-3"
+              type="button"
+              rlb-button
+              aria-label="Toggle sidebar"
+              (click)="toggleSidebar()"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          }
+
           <ng-content select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator" />
           @if (enableDropdownToggler()) {
             <button
@@ -85,6 +88,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   });
 
   dark = input(true, { alias: 'dark', transform: booleanAttribute });
+  showSideBarToggler = input(true, { transform: booleanAttribute });
   color = input<Color | undefined>(undefined);
   placement = input<'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom' | undefined>(
     undefined,
