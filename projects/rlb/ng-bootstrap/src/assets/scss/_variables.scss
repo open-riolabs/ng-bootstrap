@@ -81,7 +81,7 @@ $boxed-body-bg:                                     #ebebf4;
 $apex-grid-color:                                   var(--#{$prefix}border-color);
 
 // table
-$table-head-bg:                                     $gray-100;
+//$table-head-bg:                                     $gray-100;
 $table-head-bg:                                     #eff2f7; // Distinct light gray
 //$table-head-color:  $body-color;
 $table-dark-border-color:                           tint-color($gray-800, 7.5%);
@@ -634,11 +634,11 @@ $border-color-translucent:    $gray-400;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables
-$border-radius:               .375rem;
-$border-radius-sm:            .2rem;
-$border-radius-lg:            .4rem;
-$border-radius-xl:            1rem;
-$border-radius-xxl:           2rem;
+$border-radius-sm:            .25rem;   // 4px  (Standard small curve)
+$border-radius:               .375rem;  // 6px  (Standard button curve)
+$border-radius-lg:            .625rem;  // 10px (Large button/input curve)
+$border-radius-xl:            1rem;     // 16px (Bubbly card/modal curve)
+$border-radius-xxl:           2rem;     // 32px
 $border-radius-pill:          50rem;
 // scss-docs-end border-radius-variables
 // fusv-disable
@@ -1424,7 +1424,7 @@ $card-title-color:                  var(--#{$prefix}emphasis-color);
 $card-subtitle-color:               null;
 $card-border-width:                 1px;
 $card-border-color:                 rgba($gray-200, 0.5);
-$card-border-radius:                1rem; // Soft bubbly cards
+$card-border-radius:                var(--#{$prefix}border-radius-xl);
 $card-box-shadow:                   0 4px 6px rgba(18, 38, 63, 0.03), 0 1px 3px rgba(18, 38, 63, 0.05);
 $card-inner-border-radius:          calc(#{$card-border-radius} - 1px);
 $card-cap-padding-y:                $card-spacer-y * .5;
@@ -1549,7 +1549,7 @@ $toast-color:                       null;
 $toast-background-color:            var(--#{$prefix}secondary-bg);
 $toast-border-width:                var(--#{$prefix}border-width);
 $toast-border-color:                var(--#{$prefix}border-color);
-$toast-border-radius:               .25rem;
+$toast-border-radius:               var(--#{$prefix}border-radius);
 $toast-box-shadow:                  var(--#{$prefix}box-shadow-lg);
 $toast-spacing:                     $container-padding-x;
 
@@ -1587,7 +1587,7 @@ $modal-content-color:               null;
 $modal-content-bg:                  var(--#{$prefix}secondary-bg);
 $modal-content-border-color:        var(--#{$prefix}border-color);
 $modal-content-border-width:        var(--#{$prefix}border-width);
-$modal-content-border-radius:       var(--#{$prefix}border-radius-lg);
+$modal-content-border-radius:       var(--#{$prefix}border-radius-xl);
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width);
 $modal-content-box-shadow-xs:       $box-shadow-sm;
 $modal-content-box-shadow-sm-up:    $box-shadow;
