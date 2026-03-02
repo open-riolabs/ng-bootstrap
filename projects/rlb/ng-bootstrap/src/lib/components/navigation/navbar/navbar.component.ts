@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 import { NavbarItemsComponent } from './navbar-items.component';
+import { SidebarService } from '../../sidebar/sidebar.service';
 
 @Component({
   selector: 'rlb-navbar',
@@ -27,18 +28,29 @@ import { NavbarItemsComponent } from './navbar-items.component';
         [attr.data-bs-theme]="dark() ? 'dark' : 'light'"
       >
         <div class="container-fluid">
-          <ng-content select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator" />
           <button
-            class="navbar-toggler"
-            [class.d-none]="!enableDropdownToggler()"
+            class="sidebar-toggler me-3"
             type="button"
             rlb-button
-            toggle="collapse"
-            [toggle-target]="navId"
-            aria-label="Toggle navigation"
+            aria-label="Toggle sidebar"
+            (click)="toggleSidebar()"
           >
             <span class="navbar-toggler-icon"></span>
           </button>
+          <ng-content select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator" />
+          @if (enableDropdownToggler()) {
+            <button
+              class="navbar-toggler"
+              [class.d-none]="!enableDropdownToggler()"
+              type="button"
+              rlb-button
+              toggle="collapse"
+              [toggle-target]="navId"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          }
           <div
             class="collapse navbar-collapse"
             [id]="navId"
@@ -79,7 +91,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   );
   expand = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always' | undefined>(undefined);
   cssClass = input('', { alias: 'class' });
-  enableDropdownToggler = input(true, {
+  enableDropdownToggler = input(false, {
     alias: 'enable-dropdown-toggler',
     transform: booleanAttribute,
   });
@@ -87,6 +99,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   constructor(
     private idService: UniqueIdService,
     private viewContainerRef: ViewContainerRef,
+    private sidebarService: SidebarService,
   ) {
     this.navId = `nav${this.idService.id}`;
 
@@ -114,6 +127,11 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  toggleSidebar() {
+    const isSideBarCollapsed = this.sidebarService.isCollapsed();
+    this.sidebarService.setCollapsed(!isSideBarCollapsed);
   }
 
   private closeMobileMenu() {
