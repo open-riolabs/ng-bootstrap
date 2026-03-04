@@ -38,15 +38,15 @@ import { NavbarBrandDirective } from './navigation/navbar/navbar-brand.directive
 import { NavbarFormComponent } from './navigation/navbar/navbar-form.component';
 
 import { AvatarComponent } from './avatar/avatar.component';
-import { RlbFabComponent } from "./buttons/fab/fab.component";
-import { CALENDAR_COMPONENTS } from "./calendar";
+import { RlbFabComponent } from './buttons/fab/fab.component';
+import { CALENDAR_COMPONENTS } from './calendar';
 import { ChatContainerComponent } from './chat/chat-container.component';
 import { ChatItemComponent } from './chat/chat-item.component';
 import { ListItemImageComponent } from './list/list-item-image.component';
 import { ListItemComponent } from './list/list-item.component';
 import { ListComponent } from './list/list.component';
 import { NavbarDropdownItemComponent } from './navigation/navbar/navbar-dropdown-item.component';
-import { NavbarItemComponent } from "./navigation/navbar/navbar-item.component";
+import { NavbarItemComponent } from './navigation/navbar/navbar-item.component';
 import { NavbarItemsComponent } from './navigation/navbar/navbar-items.component';
 import { NavbarSeparatorComponent } from './navigation/navbar/navbar-separator.component';
 import { NavbarTextComponent } from './navigation/navbar/navbar-text.component';
@@ -57,9 +57,9 @@ import { OffcanvasTitleComponent } from './offcanvas/offcanvas-title.component';
 import { OffcanvasComponent } from './offcanvas/offcanvas.component';
 import { PaginationItemComponent } from './pagination/pagination-item.component';
 import { PaginationComponent } from './pagination/pagination.component';
-import { RlbPlaceholderLineComponent } from "./placeholder/placeholder-line.component";
-import { RlbPlaceholderTextComponent } from "./placeholder/placeholder-text.component";
-import { RlbPlaceholderComponent } from "./placeholder/placeholder.component";
+import { RlbPlaceholderLineComponent } from './placeholder/placeholder-line.component';
+import { RlbPlaceholderTextComponent } from './placeholder/placeholder-text.component';
+import { RlbPlaceholderComponent } from './placeholder/placeholder.component';
 import { PlaceholderDirective } from './placeholder/placeholder.directive';
 import { ScrollspyDirective } from './scrollspy/scrollspy.directive';
 import { SidebarItemComponent } from './sidebar/sidebar-item.component';
@@ -71,6 +71,7 @@ import { TabsComponent } from './tabs/tabs.component';
 import { TOASTS } from './toast';
 import { PopoverDirective } from './tooltips/popover.directive';
 import { TooltipDirective } from './tooltips/tooltip.directive';
+import { RlbFabInputComponent } from './buttons/fab-group/fab-group.component';
 
 export * from './accordions/accordion-body.component';
 export * from './accordions/accordion-header.component';
@@ -86,6 +87,7 @@ export * from './buttons/boutton-toolbar.component';
 export * from './buttons/buttons-close.component';
 export * from './buttons/buttons.component';
 export * from './buttons/fab/fab.component';
+export * from './buttons/fab-group/fab-group.component';
 export * from './buttons/toggle.directive';
 export * from './calendar/';
 export * from './cards/card-body.component';
@@ -145,7 +147,6 @@ export * from './toast';
 export * from './tooltips/popover.directive';
 export * from './tooltips/tooltip.directive';
 
-
 export const COMPONENTS = [
   AlertComponent,
   BreadcrumbComponent,
@@ -158,6 +159,7 @@ export const COMPONENTS = [
   ButtonGroupComponent,
   ButtonToolbarComponent,
   RlbFabComponent,
+  RlbFabInputComponent,
   BadgeDirective,
   BadgeComponent,
   CardBodyComponent,
@@ -218,5 +220,5 @@ export const COMPONENTS = [
   RlbPlaceholderTextComponent,
   ...[MODALS],
   ...[TOASTS],
-  ...[CALENDAR_COMPONENTS]
+  ...[CALENDAR_COMPONENTS],
 ];
