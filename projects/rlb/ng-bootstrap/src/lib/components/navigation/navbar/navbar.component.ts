@@ -58,7 +58,7 @@ import { SidebarService } from '../../sidebar/sidebar.service';
             class="collapse navbar-collapse"
             [id]="navId"
           >
-            <div class="p-3 d-flex w-100 flex-column flex-lg-row align-items-lg-center">
+            <div class="d-flex w-100 flex-column flex-lg-row align-items-lg-center">
               <ng-content
                 select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
               />
