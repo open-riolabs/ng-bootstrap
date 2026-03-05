@@ -88,6 +88,7 @@ export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
     const anchor = this.element.querySelector('a');
 
     if (anchor && this.dropdown()) {
+      anchor.setAttribute('data-bs-auto-close', this._autoClose());
       this.dropdownInstance = Dropdown.getOrCreateInstance(anchor);
       this.listeners.push(
         this.renderer.listen(anchor, 'show.bs.dropdown', () => this.statusChanged.emit('show')),
