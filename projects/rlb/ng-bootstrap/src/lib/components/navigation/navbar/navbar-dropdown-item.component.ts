@@ -2,16 +2,18 @@ import {
   booleanAttribute,
   Component,
   computed,
+  DestroyRef,
+  effect,
   inject,
   input,
-  OnDestroy,
-  OnInit,
   output,
   Renderer2,
   TemplateRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+
+import { Dropdown } from 'bootstrap';
 import { VisibilityEventBase } from '../../../shared/types';
 
 @Component({
@@ -34,15 +36,21 @@ import { VisibilityEventBase } from '../../../shared/types';
         >
           <ng-content select=":not(rlb-dropdown-container)"></ng-content>
         </a>
+
         <ng-content select="rlb-dropdown-container"></ng-content>
       </li>
     </ng-template>
   `,
   standalone: false,
 })
-export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
+export class NavbarDropdownItemComponent {
   element!: HTMLElement;
-  private listeners: (() => void)[] = [];
+  private dropdownInstance?: Dropdown;
+  private viewContainerRef = inject(ViewContainerRef);
+  private renderer = inject(Renderer2);
+  private destroyRef = inject(DestroyRef);
+
+  template = viewChild.required<TemplateRef<any>>('template');
 
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
   dropdown = input(false, { alias: 'dropdown', transform: booleanAttribute });
@@ -60,8 +68,6 @@ export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
 
   _autoClose = computed(() => {
     switch (this.autoClose()) {
-      case 'default':
-        return 'true';
       case 'inside':
         return 'inside';
       case 'outside':
@@ -73,30 +79,57 @@ export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
     }
   });
 
-  template = viewChild.required<TemplateRef<any>>('template');
+  constructor() {
+    effect(() => {
+      const template = this.template();
+      const dropdownEnabled = this.dropdown();
 
-  private viewContainerRef = inject(ViewContainerRef);
-  private renderer = inject(Renderer2);
+      const templateView = this.viewContainerRef.createEmbeddedView(template);
+      this.element = templateView.rootNodes[0];
 
-  ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
-    this.element = templateView.rootNodes[0];
-    this.viewContainerRef.element.nativeElement.remove();
+      this.viewContainerRef.element.nativeElement.remove();
 
-    const anchor = this.element.querySelector('a');
+      const anchor = this.element.querySelector('a');
 
-    if (anchor && this.dropdown()) {
-      this.listeners.push(
-        this.renderer.listen(anchor, 'show.bs.dropdown', () => this.statusChanged.emit('show')),
-        this.renderer.listen(anchor, 'shown.bs.dropdown', () => this.statusChanged.emit('shown')),
-        this.renderer.listen(anchor, 'hide.bs.dropdown', () => this.statusChanged.emit('hide')),
-        this.renderer.listen(anchor, 'hidden.bs.dropdown', () => this.statusChanged.emit('hidden')),
+      if (!anchor || !dropdownEnabled) return;
+
+      this.dropdownInstance = Dropdown.getOrCreateInstance(anchor);
+
+      const unsubShow = this.renderer.listen(anchor, 'show.bs.dropdown', () =>
+        this.statusChanged.emit('show'),
       );
-    }
+
+      const unsubShown = this.renderer.listen(anchor, 'shown.bs.dropdown', () =>
+        this.statusChanged.emit('shown'),
+      );
+
+      const unsubHide = this.renderer.listen(anchor, 'hide.bs.dropdown', () =>
+        this.statusChanged.emit('hide'),
+      );
+
+      const unsubHidden = this.renderer.listen(anchor, 'hidden.bs.dropdown', () =>
+        this.statusChanged.emit('hidden'),
+      );
+
+      this.destroyRef.onDestroy(() => {
+        unsubShow();
+        unsubShown();
+        unsubHide();
+        unsubHidden();
+        this.dropdownInstance?.dispose();
+      });
+    });
   }
 
-  ngOnDestroy() {
-    this.listeners.forEach(unsub => unsub());
-    this.listeners = [];
+  open() {
+    this.dropdownInstance?.show();
+  }
+
+  close() {
+    this.dropdownInstance?.hide();
+  }
+
+  toggleDropdown() {
+    this.dropdownInstance?.toggle();
   }
 }
