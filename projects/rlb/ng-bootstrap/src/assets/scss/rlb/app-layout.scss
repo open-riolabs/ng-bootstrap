@@ -8,9 +8,10 @@
 
 .rlb-main-wrapper {
   display: flex;
-  flex-grow: 1;
+  //flex-grow: 1;
   position: relative;
   overflow: hidden;
+  height: calc(100vh - $header-height);
 }
 
 .rlb-navbar {
