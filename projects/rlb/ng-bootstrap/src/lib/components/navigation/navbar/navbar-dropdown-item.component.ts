@@ -2,19 +2,18 @@ import {
   booleanAttribute,
   Component,
   computed,
-  DestroyRef,
-  effect,
   inject,
   input,
+  OnDestroy,
+  OnInit,
   output,
   Renderer2,
   TemplateRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-
-import { Dropdown } from 'bootstrap';
 import { VisibilityEventBase } from '../../../shared/types';
+import { Dropdown } from 'bootstrap';
 
 @Component({
   selector: 'rlb-navbar-dropdown-item',
@@ -36,21 +35,15 @@ import { VisibilityEventBase } from '../../../shared/types';
         >
           <ng-content select=":not(rlb-dropdown-container)"></ng-content>
         </a>
-
         <ng-content select="rlb-dropdown-container"></ng-content>
       </li>
     </ng-template>
   `,
   standalone: false,
 })
-export class NavbarDropdownItemComponent {
+export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
   element!: HTMLElement;
-  private dropdownInstance?: Dropdown;
-  private viewContainerRef = inject(ViewContainerRef);
-  private renderer = inject(Renderer2);
-  private destroyRef = inject(DestroyRef);
-
-  template = viewChild.required<TemplateRef<any>>('template');
+  private listeners: (() => void)[] = [];
 
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
   dropdown = input(false, { alias: 'dropdown', transform: booleanAttribute });
@@ -68,6 +61,8 @@ export class NavbarDropdownItemComponent {
 
   _autoClose = computed(() => {
     switch (this.autoClose()) {
+      case 'default':
+        return 'true';
       case 'inside':
         return 'inside';
       case 'outside':
@@ -79,46 +74,28 @@ export class NavbarDropdownItemComponent {
     }
   });
 
-  constructor() {
-    effect(() => {
-      const template = this.template();
-      const dropdownEnabled = this.dropdown();
+  template = viewChild.required<TemplateRef<any>>('template');
 
-      const templateView = this.viewContainerRef.createEmbeddedView(template);
-      this.element = templateView.rootNodes[0];
+  private viewContainerRef = inject(ViewContainerRef);
+  private renderer = inject(Renderer2);
+  private dropdownInstance?: Dropdown;
 
-      this.viewContainerRef.element.nativeElement.remove();
+  ngOnInit() {
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
+    this.element = templateView.rootNodes[0];
+    this.viewContainerRef.element.nativeElement.remove();
 
-      const anchor = this.element.querySelector('a');
+    const anchor = this.element.querySelector('a');
 
-      if (!anchor || !dropdownEnabled) return;
-
+    if (anchor && this.dropdown()) {
       this.dropdownInstance = Dropdown.getOrCreateInstance(anchor);
-
-      const unsubShow = this.renderer.listen(anchor, 'show.bs.dropdown', () =>
-        this.statusChanged.emit('show'),
+      this.listeners.push(
+        this.renderer.listen(anchor, 'show.bs.dropdown', () => this.statusChanged.emit('show')),
+        this.renderer.listen(anchor, 'shown.bs.dropdown', () => this.statusChanged.emit('shown')),
+        this.renderer.listen(anchor, 'hide.bs.dropdown', () => this.statusChanged.emit('hide')),
+        this.renderer.listen(anchor, 'hidden.bs.dropdown', () => this.statusChanged.emit('hidden')),
       );
-
-      const unsubShown = this.renderer.listen(anchor, 'shown.bs.dropdown', () =>
-        this.statusChanged.emit('shown'),
-      );
-
-      const unsubHide = this.renderer.listen(anchor, 'hide.bs.dropdown', () =>
-        this.statusChanged.emit('hide'),
-      );
-
-      const unsubHidden = this.renderer.listen(anchor, 'hidden.bs.dropdown', () =>
-        this.statusChanged.emit('hidden'),
-      );
-
-      this.destroyRef.onDestroy(() => {
-        unsubShow();
-        unsubShown();
-        unsubHide();
-        unsubHidden();
-        this.dropdownInstance?.dispose();
-      });
-    });
+    }
   }
 
   open() {
@@ -131,5 +108,10 @@ export class NavbarDropdownItemComponent {
 
   toggleDropdown() {
     this.dropdownInstance?.toggle();
+  }
+
+  ngOnDestroy() {
+    this.listeners.forEach(unsub => unsub());
+    this.listeners = [];
   }
 }
