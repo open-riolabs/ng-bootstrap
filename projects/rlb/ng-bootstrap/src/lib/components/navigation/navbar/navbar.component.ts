@@ -62,6 +62,8 @@ import { SidebarService } from '../../sidebar/sidebar.service';
               <ng-content
                 select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
               />
+              <!-- FOR CUSTOM ELEMENTS -->
+              <ng-content select="[rlb-custom-navbar-items]" />
             </div>
           </div>
         </div>

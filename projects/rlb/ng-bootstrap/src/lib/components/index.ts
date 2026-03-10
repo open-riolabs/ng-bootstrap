@@ -35,6 +35,7 @@ import { MODALS } from './modals';
 import { NavItemComponent } from './navigation/nav/nav-item.component';
 import { NavComponent } from './navigation/nav/nav.component';
 import { NavbarBrandDirective } from './navigation/navbar/navbar-brand.directive';
+import { NavbarCustomItemsDirective } from './navigation/navbar/navbar-custom-items.directive';
 import { NavbarFormComponent } from './navigation/navbar/navbar-form.component';
 
 import { AvatarComponent } from './avatar/avatar.component';
@@ -119,6 +120,7 @@ export * from './modals';
 export * from './navigation/nav/nav-item.component';
 export * from './navigation/nav/nav.component';
 export * from './navigation/navbar/navbar-brand.directive';
+export * from './navigation/navbar/navbar-custom-items.directive';
 export * from './navigation/navbar/navbar-dropdown-item.component';
 export * from './navigation/navbar/navbar-form.component';
 export * from './navigation/navbar/navbar-item.component';
@@ -183,6 +185,7 @@ export const COMPONENTS = [
   DropdownMenuItemComponent,
   DropdownDirective,
   NavbarBrandDirective,
+  NavbarCustomItemsDirective,
   NavbarComponent,
   NavbarFormComponent,
   NavbarTextComponent,
