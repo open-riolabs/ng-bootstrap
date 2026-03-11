@@ -33,9 +33,9 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   events = input<CalendarEvent[]>([]);
   layout = input.required<CalendarLayout>();
 
-  eventClick = output<CalendarEvent | undefined>();
-  eventContainerClick = output<CalendarEvent[] | undefined>();
-  eventChange = output<CalendarEvent>();
+  eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });
+  eventContainerClick = output<CalendarEvent[] | undefined>({ alias: 'event-container-click' });
+  eventChange = output<CalendarEvent>({ alias: 'event-change' });
 
   day = signal<IDateTz>(getToday());
   timeSlots = signal<string[]>([]);

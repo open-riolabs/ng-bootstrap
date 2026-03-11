@@ -73,9 +73,9 @@ export class ChatItemComponent {
   reaction = input<string | undefined>(undefined, { alias: 'reaction' });
 
   reply = output<string | undefined>();
-  reactionClick = output<string>();
+  reactionClick = output<string>({ alias: 'reaction-click' });
   canReply = input(false, { alias: 'can-reply', transform: booleanAttribute });
-  reactionSelector = output<VisibilityEventBase>();
+  reactionSelector = output<VisibilityEventBase>({ alias: 'reaction-selector' });
 
   replyClick(event: MouseEvent) {
     event?.stopPropagation();

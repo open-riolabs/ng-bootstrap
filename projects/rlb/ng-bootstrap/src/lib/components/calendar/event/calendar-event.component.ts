@@ -11,8 +11,8 @@ import { CalendarView } from "../interfaces/calendar-view.type";
 export class CalendarEventComponent {
   event = input.required<CalendarEventWithLayout>();
   view = input.required<CalendarView>();
-  eventClick = output<CalendarEvent | undefined>();
-  eventContainerClick = output<CalendarEventWithLayout[] | undefined>();
+  eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });
+  eventContainerClick = output<CalendarEventWithLayout[] | undefined>({ alias: 'event-container-click' });
 
   classes = computed(() => {
     const event = this.event();

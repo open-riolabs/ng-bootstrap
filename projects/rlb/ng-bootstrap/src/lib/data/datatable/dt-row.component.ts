@@ -40,7 +40,7 @@ import { DataTableCellComponent } from './dt-cell.component';
 export class DataTableRowComponent {
   cssClass = input<string | undefined>(undefined, { alias: 'class' });
   cssStyle = input<string | undefined>(undefined, { alias: 'style' });
-  rowClick = output<MouseEvent>();
+  rowClick = output<MouseEvent>({ alias: 'row-click' });
 
   template = viewChild.required<TemplateRef<any>>('template');
 

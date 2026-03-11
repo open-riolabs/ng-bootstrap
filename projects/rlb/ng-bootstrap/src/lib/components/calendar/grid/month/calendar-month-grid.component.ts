@@ -52,9 +52,9 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
   layout = input.required<CalendarLayout>();
 
 
-  eventClick = output<CalendarEvent | undefined>();
-  eventContainerClick = output<CalendarEvent[] | undefined>();
-  eventChange = output<CalendarEvent>();
+  eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });
+  eventContainerClick = output<CalendarEvent[] | undefined>({ alias: 'event-container-click' });
+  eventChange = output<CalendarEvent>({ alias: 'event-change' });
 
   scrollBodyRef = viewChild<ElementRef<HTMLDivElement>>('scrollBody');
   headerRowRef = viewChild<ElementRef<HTMLDivElement>>('headerRow');
