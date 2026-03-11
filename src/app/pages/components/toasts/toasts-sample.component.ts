@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { IToast, ToastData, ToastDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
@@ -28,7 +28,7 @@ import { IToast, ToastData, ToastDirective } from 'projects/rlb/ng-bootstrap/src
   ],
 })
 export class ToastSampleComponent implements IToast<any, any> {
-  data = input.required<ToastData<any>>();
+  data!: Signal<ToastData<any>>;
   valid?: boolean = true;
   result?: any;
 }
