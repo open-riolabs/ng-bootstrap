@@ -20,7 +20,7 @@ import { Dropdown } from 'bootstrap';
   template: `
     <ng-template #template>
       <li
-        class="nav-item"
+        class="nav-item list-unstyled"
         [class.dropdown]="dropdown()"
       >
         <a
