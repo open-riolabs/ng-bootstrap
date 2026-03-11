@@ -1,6 +1,225 @@
+@use "sass:color";
 //
 // _menu.scss
 //
+
+// ==========================================
+// 1. Sidebar Configuration (The "Bridge")
+// ==========================================
+// We map global theme variables to sidebar specific variables here.
+
+// Spacing
+$sidebar-padding-y:           $spacer;
+$menu-item-padding-y:         $nav-link-padding-y;
+$menu-item-padding-x:         1.5rem;
+$menu-item-margin-y:          2px;
+
+// Typography
+$menu-item-font-size:         $font-size-base;
+$menu-item-icon-size:         $font-size-lg;
+$submenu-font-size:           $font-size-sm;
+$submenu-level-2-font-size:   $font-size-sm;
+
+// Indentation logic
+$submenu-indent-base:         $menu-item-padding-x;
+$submenu-indent-step:         1.25rem; // How much to indent per level
+
+rlb-sidebar {
+  --rlb-sidebar-width: #{$sidebar-width};
+
+  // SYNC: Mapped to variables above
+  --rlb-item-padding-x: #{$menu-item-padding-x};
+  --rlb-item-padding-y: #{$menu-item-padding-y};
+
+  --bs-body-color: #{$body-color}; // SYNC: Use global body color variable
+  --bs-body-bg: #{$white};
+
+  color: var(--bs-body-color);
+
+  &[data-bs-theme="light"] {
+    --rlb-sidebar-bg: #{$sidebar-bg};
+    --rlb-sidebar-border: #eff0f2;
+    --rlb-menu-item-color: #{$sidebar-menu-item-color};
+    --rlb-menu-item-hover-color: #{$sidebar-menu-item-hover-color};
+    --rlb-menu-item-active-color: #{$sidebar-menu-item-active-color};
+    --rlb-menu-item-active-bg: #{$gray-100}; // SYNC: Used $gray-100 instead of hex
+    --rlb-submenu-bg: #{$sidebar-bg};
+    --rlb-scrollbar-thumb: #{$gray-400};
+    --rlb-scrollbar-track: transparent;
+  }
+
+  &[data-bs-theme="dark"] {
+    --rlb-sidebar-bg: #{$sidebar-dark-bg};
+    --rlb-sidebar-border: #32394e;
+    --rlb-menu-item-color: #{$sidebar-dark-menu-item-color};
+    --rlb-menu-item-hover-color: #{$sidebar-dark-menu-item-hover-color};
+    --rlb-menu-item-active-color: #{$sidebar-dark-menu-item-active-color};
+    --rlb-menu-item-active-bg: #{color.adjust($sidebar-dark-bg, $lightness: 3%)};
+    --rlb-submenu-bg: #{$sidebar-dark-bg};
+    --rlb-scrollbar-thumb: #5c6276;
+    --rlb-scrollbar-track: transparent;
+  }
+}
+
+#sidebar-menu {
+  padding: $sidebar-padding-y 0;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rlb-scrollbar-thumb) var(--rlb-scrollbar-track);
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--rlb-scrollbar-track);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--rlb-scrollbar-thumb);
+    border-radius: 3px;
+
+    &:hover {
+      background-color: color.adjust($gray-600, $lightness: -10%);
+    }
+  }
+
+  .mm-active {
+    >.has-arrow {
+      &:after {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+
+  .has-arrow {
+    position: relative;
+    &:after {
+      content: "\F0140";
+      font-family: 'Material Design Icons';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      display: block;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease-in-out;
+      transform: translateY(-50%) rotate(0deg);
+    }
+
+    &:not(.collapsed):after,
+    &[aria-expanded="true"]:after {
+      transform: translateY(-50%) rotate(-180deg);
+    }
+  }
+
+  ul {
+    li {
+      a {
+        display: flex;
+        align-items: center;
+        padding: var(--rlb-item-padding-y) var(--rlb-item-padding-x);
+        color: var(--rlb-menu-item-color);
+        position: relative;
+
+        font-size: $menu-item-font-size;
+        transition: all .4s;
+
+        margin: $menu-item-margin-y ($spacer * 0.3);
+        border-radius: $border-radius;
+
+        .menu-text {
+          flex-grow: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-right: ($spacer * 0.5);
+        }
+
+        i {
+          flex-shrink: 0;
+          display: inline-block;
+          min-width: 1.75rem;
+          padding-bottom: .125em;
+
+          font-size: $menu-item-icon-size;
+          line-height: 1.40625rem;
+          vertical-align: middle;
+          color: inherit;
+          transition: all .4s;
+        }
+
+        .badge {
+          flex-shrink: 0;
+          margin-left: auto;
+        }
+
+        &:hover {
+          color: var(--rlb-menu-item-hover-color);
+          i {
+            color: inherit;
+          }
+        }
+      }
+
+      .has-arrow span {
+        margin-right: 1rem;
+      }
+
+      .active,
+      &.mm-active > a {
+        color: var(--rlb-menu-item-active-color) !important;
+        background-color: var(--rlb-menu-item-active-bg);
+        font-weight: $font-weight-semibold;
+
+        i {
+          color: inherit !important;
+        }
+      }
+
+      .badge {
+        margin-left: 4px;
+      }
+
+      ul.sub-menu {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        li {
+          a {
+            // Calculate padding based on Base + Step
+            padding: 0.4rem $menu-item-padding-x 0.4rem ($submenu-indent-base + $submenu-indent-step);
+
+            font-size: $submenu-font-size;
+            color: var(--rlb-menu-item-color);
+            background-color: transparent;
+
+            &:hover {
+              color: var(--rlb-menu-item-hover-color);
+            }
+          }
+
+          a.active {
+            color: var(--rlb-menu-item-active-color) !important;
+            background-color: var(--rlb-menu-item-active-bg);
+          }
+
+          ul.sub-menu {
+            padding: 0;
+            li {
+              a {
+                // Calculate padding: Base + (Step * 2)
+                padding: 0.4rem $menu-item-padding-x 0.4rem ($submenu-indent-base + ($submenu-indent-step * 2));
+
+                font-size: $submenu-level-2-font-size;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 .metismenu {
   margin: 0;
@@ -32,15 +251,10 @@
   }
 }
 
-
 .vertical-menu {
   width: inherit;
-  //z-index: 1001;
-  background: $sidebar-bg;
-  //bottom: 0;
+  background: var(--rlb-sidebar-bg);
   margin-top: 0;
-  // position: fixed;
-  //top: $header-height;
   box-shadow: $box-shadow;
   height: 100%;
 }
@@ -55,130 +269,15 @@
   }
 }
 
-
-#sidebar-menu {
-  padding: 10px 0 10px 0;
-
-  .mm-active {
-    >.has-arrow {
-      &:after {
-        transform: rotate(-180deg);
-      }
-    }
-  }
-
-  .has-arrow {
-    &:after {
-      content: "\F0140";
-      font-family: 'Material Design Icons';
-      display: block;
-      float: right;
-      transition: transform .2s;
-      font-size: 1rem;
-    }
-  }
-
-  ul {
-    li {
-      a {
-        display: block;
-        padding: .625rem 1.5rem;
-        color: $sidebar-menu-item-color;
-        position: relative;
-        font-size: 13px;
-        transition: all .4s;
-
-        i {
-          display: inline-block;
-          min-width: 1.75rem;
-          padding-bottom: .125em;
-          font-size: 1.15rem;
-          line-height: 1.40625rem;
-          vertical-align: middle;
-          color: $sidebar-menu-item-icon-color;
-          transition: all .4s;
-        }
-
-        &:hover {
-          color: $sidebar-menu-item-hover-color;
-
-          i {
-            color: $sidebar-menu-item-hover-color;
-          }
-        }
-      }
-
-      .badge {
-        margin-left: 4px;
-      }
-
-      ul.sub-menu {
-        padding: 0;
-
-        li {
-
-          a {
-            padding: .4rem 1.5rem .4rem 2.5rem;
-            font-size: 13px;
-            color: $sidebar-menu-sub-item-color;
-
-            &:hover {
-              color: $sidebar-menu-item-hover-color;
-            }
-          }
-
-          ul.sub-menu {
-            padding: 0;
-
-            li {
-              a {
-                padding: .4rem 1.5rem .4rem 2.5rem;
-                font-size: 13px;
-
-
-              }
-            }
-          }
-        }
-      }
-    }
-
-  }
-}
-
 .menu-title {
-  padding: 12px 20px !important;
+  padding: 0.75rem 1.5rem !important;
   letter-spacing: .05em;
   pointer-events: none;
   cursor: default;
-  font-size: 11px;
+  font-size: 0.75rem;
   text-transform: uppercase;
   color: $sidebar-menu-item-icon-color;
   font-weight: $font-weight-semibold;
-}
-
-.mm-active {
-  color: $sidebar-menu-item-active-color !important;
-
-  >a {
-    color: $sidebar-menu-item-active-color !important;
-
-    i {
-      color: $sidebar-menu-item-active-color !important;
-    }
-  }
-
-  .active {
-    color: $sidebar-menu-item-active-color !important;
-
-    i {
-      color: $sidebar-menu-item-active-color !important;
-    }
-  }
-
-  >i {
-    color: $sidebar-menu-item-active-color !important;
-  }
 }
 
 @media (max-width: 992px) {
@@ -290,7 +389,7 @@
               position: relative;
               width: calc(190px + #{$sidebar-collapsed-width});
               color: $primary;
-              background-color: darken($sidebar-bg, 4%);
+              background-color: color.adjust($sidebar-bg, $lightness: -4%);
               transition: none;
 
               i {
@@ -370,155 +469,6 @@
   }
 }
 
-
-body[data-sidebar="dark"],
-body[data-bs-theme="dark"],
-html[data-bs-theme="dark"] {
-  .vertical-menu {
-    background: $sidebar-dark-bg;
-  }
-
-  #sidebar-menu {
-
-    .side-nav-link-ref {
-      cursor: pointer;
-    }
-
-    .side-nav-link-ref.active {
-      color: $sidebar-dark-menu-item-active-color !important;
-      background-color: lighten($sidebar-dark-bg, 3%) !important;
-      font-weight: 600;
-      border-radius: 0.375rem;
-
-      i {
-        color: inherit !important;
-      }
-    }
-
-    ul {
-      li {
-        a {
-          color: $sidebar-dark-menu-item-color;
-
-          i {
-            color: $sidebar-dark-menu-item-icon-color;
-          }
-
-          &:hover {
-            color: $sidebar-dark-menu-item-hover-color;
-
-            i {
-              color: $sidebar-dark-menu-item-hover-color;
-            }
-          }
-        }
-
-        ul.sub-menu {
-          li {
-
-            a {
-              color: $sidebar-dark-menu-sub-item-color;
-
-              &:hover {
-                color: $sidebar-dark-menu-item-hover-color;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Enlarge menu
-  &.vertical-collpsed {
-    min-height: 1760px;
-
-    // Side menu
-    .vertical-menu {
-
-      // Sidebar Menu
-      #sidebar-menu {
-
-        >ul {
-          >li {
-
-            &:hover {
-              >a {
-                background: lighten($sidebar-dark-bg, 2%);
-                color: $sidebar-dark-menu-item-hover-color;
-
-                i {
-                  color: $sidebar-dark-menu-item-hover-color;
-                }
-              }
-
-              >ul {
-                a {
-                  color: $sidebar-dark-menu-sub-item-color;
-
-                  &:hover {
-                    color: $sidebar-dark-menu-item-hover-color;
-                  }
-                }
-              }
-            }
-          }
-
-          ul {
-            background-color: $sidebar-dark-bg;
-          }
-
-        }
-
-        ul {
-
-          li {
-            &.mm-active .active {
-              color: $sidebar-dark-menu-item-active-color !important;
-
-              i {
-                color: $sidebar-dark-menu-item-active-color !important;
-              }
-            }
-          }
-        }
-
-      }
-
-
-    }
-  }
-
-  .mm-active {
-    color: $sidebar-dark-menu-item-active-color !important;
-
-    >a {
-      color: $sidebar-dark-menu-item-active-color !important;
-
-      i {
-        color: $sidebar-dark-menu-item-active-color !important;
-      }
-    }
-
-    >i {
-      color: $sidebar-dark-menu-item-active-color !important;
-    }
-
-    .active {
-      color: $sidebar-dark-menu-item-active-color !important;
-
-      i {
-        color: $sidebar-dark-menu-item-active-color !important;
-      }
-    }
-  }
-
-  .menu-title {
-    color: $sidebar-dark-menu-item-icon-color;
-  }
-}
-
-
 body[data-layout="horizontal"] {
   .main-content {
     margin-left: 0 !important;
@@ -557,7 +507,7 @@ body[data-sidebar-size="small"] {
   #sidebar-menu {
     ul li {
       &.menu-title {
-        background-color: lighten($sidebar-dark-bg, 2%);
+        background-color: color.adjust($sidebar-dark-bg, $lightness: 2%);
       }
 
       a {
@@ -697,7 +647,7 @@ body[data-sidebar="colored"] {
         >ul {
           >li {
             &:hover>a {
-              background-color: lighten($primary, 2%);
+              background-color: color.adjust($primary, $lightness: 2%);
               color: $white;
 
               i {

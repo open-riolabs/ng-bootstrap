@@ -1,45 +1,43 @@
 import {
   Component,
-  Input,
-  ViewContainerRef,
   OnInit,
-  ViewChild,
   TemplateRef,
-  QueryList,
-  ContentChildren,
+  ViewChild,
+  ViewContainerRef,
+  contentChildren,
+  input,
 } from '@angular/core';
 import { PaginationItemComponent } from './pagination-item.component';
 
 @Component({
-    selector: 'rlb-pagination',
-    template: ` <ng-template #template>
+  selector: 'rlb-pagination',
+  template: ` <ng-template #template>
     <nav>
       <ul
-        class="pagination {{ cssClass }}"
-        [class.pagination-sm]="size === 'sm'"
-        [class.pagination-lg]="size === 'lg'"
-        [class.justify-content-start]="alignment === 'start'"
-        [class.justify-content-center]="alignment === 'center'"
-        [class.justify-content-end]="alignment === 'end'"
+        class="pagination {{ cssClass() }}"
+        [class.pagination-sm]="size() === 'sm'"
+        [class.pagination-lg]="size() === 'lg'"
+        [class.justify-content-start]="alignment() === 'start'"
+        [class.justify-content-center]="alignment() === 'center'"
+        [class.justify-content-end]="alignment() === 'end'"
       >
         <ng-content select="rlb-pagination-item" />
       </ul>
     </nav>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
 export class PaginationComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'class' }) cssClass?: string = '';
-  @Input() size?: 'sm' | 'md' | 'lg';
-  @Input() alignment?: 'start' | 'center' | 'end';
+  cssClass = input('', { alias: 'class' });
+  size = input<'sm' | 'md' | 'lg' | undefined>(undefined);
+  alignment = input<'start' | 'center' | 'end' | undefined>(undefined);
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  @ContentChildren(PaginationItemComponent)
-  children!: QueryList<PaginationItemComponent>;
+  children = contentChildren(PaginationItemComponent);
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  constructor(private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

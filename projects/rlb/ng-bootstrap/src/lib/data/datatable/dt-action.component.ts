@@ -2,51 +2,50 @@ import {
   booleanAttribute,
   Component,
   EmbeddedViewRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
+  input,
+  output,
   TemplateRef,
-  ViewChild,
-  ViewContainerRef
+  viewChild,
 } from '@angular/core';
 
 @Component({
-    selector: 'rlb-dt-action',
-    template: `
+  selector: 'rlb-dt-action',
+  template: `
     <ng-template #template>
-      <li (click)="onClick($event)" [routerLink]="routerLink">
-        <button class="dropdown-item" type="button" [disabled]="disabled">
+      <li
+        (click)="onClick($event)"
+        [routerLink]="routerLink()"
+      >
+        <button
+          class="dropdown-item"
+          type="button"
+          [disabled]="disabled()"
+        >
           <ng-content />
         </button>
       </li>
-    </ng-template>`,
-    standalone: false
+    </ng-template>
+  `,
+  standalone: false,
 })
-export class DataTableActionComponent implements OnInit {
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean = false;
-  @Input() routerLink?: any[] | string | null | undefined
-  @Output() click: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+export class DataTableActionComponent {
+  disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
+  routerLink = input<any[] | string | null | undefined>(undefined, { alias: 'routerLink' });
+  clicked = output<MouseEvent>({ alias: 'click' });
 
   element!: HTMLElement;
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  template = viewChild.required<TemplateRef<any>>('template');
+
   private temp!: EmbeddedViewRef<any>;
 
   get _view() {
-    return this.temp
+    return this.temp;
   }
 
-  ngOnInit() {
-    this.temp = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
-    this.element = this.temp.rootNodes[0];
-    this.viewContainerRef.element.nativeElement.remove();
-  }
+  constructor() {}
 
   onClick(e: MouseEvent) {
     e?.preventDefault();
-    this.click.emit(e);
+    this.clicked.emit(e);
   }
 }

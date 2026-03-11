@@ -1,74 +1,59 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-button',
-    templateUrl: './button.component.html',
-    standalone: false
+  selector: 'app-button',
+  templateUrl: './button.component.html',
+  standalone: false
 })
 export class ButtonsComponent {
 
-color: string = `<button rlb-button [color]="'primary'">Search</button>
-<button rlb-button [color]="'secondary'">Search</button>
-<button rlb-button [color]="'success'">Search</button>
-<button rlb-button [color]="'danger'">Search</button>
-<button rlb-button [color]="'warning'">Search</button>
-<button rlb-button [color]="'info'">Search</button>
-<button rlb-button [color]="'light'">Search</button>
-<button rlb-button [color]="'dark'">Search</button>`;
+  copyToClipboard(code: string) {
+    navigator.clipboard.writeText(code);
+  }
 
-  size: string = `<button rlb-button [size]="'sm'">Search</button>
-<button rlb-button [size]="'md'">Search</button>
-<button rlb-button [size]="'lg'">Search</button>`;
-
-  disabled: string = `<button rlb-button [disabled]="true">Search</button>`;
-
-  outline: string = `<button rlb-button [outline]="true">Search</button>`;
-
-  isLink: string = `<button rlb-button [isLink]="true">Search</button>`;
-
-  fab: string = `<h4>FAB</h4>
- <div class="d-flex gap-3 flex-wrap align-items-center">
-   <rlb-fab>
-     <i class="bi bi-plus"></i>
-   </rlb-fab>
- </div>
-
- <h4>Colors</h4>
- <div class="d-flex gap-3 flex-wrap align-items-center">
-   <rlb-fab color="primary"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab color="secondary"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab color="success"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab color="danger"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab color="warning"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab color="info"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab color="light"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab color="dark"><i class="bi bi-plus"></i></rlb-fab>
- </div>
-
- <h4>Sizes</h4>
- <div class="d-flex gap-3 flex-wrap align-items-center">
-   <rlb-fab size="xs"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab size="sm"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab size="md"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab size="lg"><i class="bi bi-plus"></i></rlb-fab>
- </div>
-
- <h4>Outline</h4>
- <div class="d-flex gap-3 flex-wrap align-items-center">
-   <rlb-fab outline color="primary"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab outline color="secondary"><i class="bi bi-plus"></i></rlb-fab>
-   <rlb-fab outline color="danger"><i class="bi bi-plus"></i></rlb-fab>
- </div>
-
- <h4>Disabled</h4>
- <div class="d-flex gap-3 flex-wrap align-items-center">
-   <rlb-fab disabled><i class="bi bi-slash-circle"></i></rlb-fab>
- </div>
+  baseDirectiveExample: string = `<button rlb-button>Primary</button>`;
+  variantsExample: string = `
+<button rlb-button color="primary">Primary</button>
+<button rlb-button color="secondary">Secondary</button>
+<button rlb-button color="success">Success</button>
+<button rlb-button color="danger">Danger</button>
+<button rlb-button color="warning">Warning</button>
+<button rlb-button color="info">Info</button>
+<button rlb-button color="light">Light</button>
+<button rlb-button color="dark">Dark</button>
+<button rlb-button isLink>Link</button>
 `;
 
-  ts: string = `@Component({
-  selector: 'app-modal',
-  templateUrl: './button.component.html',
-})
-export class ButtonsComponent {}`;
+  typesExample: string = `
+<a rlb-button href="#" role="button">Link</a>
+<button rlb-button type="button">Button</button>
+<input class="btn btn-primary" type="button" value="Input">
+<button rlb-button type="submit">Submit</button>
+<button rlb-button type="reset">Reset</button>
+`;
+
+  outlineExample: string = `
+<button rlb-button outline color="primary">Primary</button>
+<button rlb-button outline color="secondary">Secondary</button>
+<button rlb-button outline color="success">Success</button>
+<button rlb-button outline color="danger">Danger</button>
+<button rlb-button outline color="warning">Warning</button>
+<button rlb-button outline color="info">Info</button>
+<button rlb-button outline color="light">Light</button>
+<button rlb-button outline color="dark">Dark</button>
+`;
+
+  sizesExample: string = `
+<button rlb-button color="primary" size="sm">Small Button</button>
+<button rlb-button color="secondary" size="md">Normal Button</button>
+<button rlb-button color="info" size="lg">Large Button</button>
+`;
+
+  disableExample: string = `
+<button rlb-button color="primary" disabled>Primary button</button>
+<button rlb-button color="secondary" disabled>Button</button>
+<button rlb-button color="primary" outline disabled>Primary button</button>
+<button rlb-button color="secondary" outline disabled>Button</button>
+`;
+
 }

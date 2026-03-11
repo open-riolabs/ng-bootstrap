@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
 	selector: 'rlb-offcanvas-header',
@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 			type="button"
 			class="btn-close"
 			data-bs-dismiss="offcanvas"
-			[attr.data-bs-target]="_offcanvasId"
+			[attr.data-bs-target]="_offcanvasId()"
 			aria-label="Close"
 		></button>
 	`,
@@ -18,9 +18,7 @@ import { Component, Input } from '@angular/core';
 	standalone: false
 })
 export class OffcanvasHeaderComponent {
-	@Input() set offcanvasId(offcanvasId: string) {
-		this._offcanvasId = `#${offcanvasId}`;
-	}
-	
-	_offcanvasId: string = ''
+	offcanvasId = input<string>('');
+
+	_offcanvasId = computed(() => `#${this.offcanvasId()}`);
 }

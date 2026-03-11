@@ -1,114 +1,139 @@
 import {
   booleanAttribute,
   Component,
+  computed,
   ElementRef,
-  EventEmitter,
   HostListener,
-  Input,
+  input,
+  model,
   numberAttribute,
   Optional,
-  Output,
-  Renderer2,
+  output,
   Self,
-  ViewChild,
+  signal,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { lastValueFrom, Observable } from 'rxjs';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
-import { AutocompleteFn, AutocompleteItem } from "./autocomplete-model";
-
+import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
 
 @Component({
   selector: 'rlb-autocomplete',
   template: `
     <ng-content select="[before]"></ng-content>
-    <div class="input-group has-validation">
+    <div class="input-group has-validation position-relative">
       <input
         #field
-        [id]="id"
         class="form-control"
-        [type]="type"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
-        [attr.placeholder]="placeholder"
-        [class.form-control-lg]="size === 'large'"
-        [class.form-control-sm]="size === 'small'"
         [value]="getText(value)"
-        (blur)="touch()"
-				[ngClass]="{
-        'is-invalid': control?.touched && control?.invalid && enableValidation,
-        'is-valid': control?.touched && control?.valid && enableValidation
-        }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
+        (blur)="touch()"
+        [id]="id"
+        [type]="type()"
+        [attr.disabled]="disabled() ? true : undefined"
+        [class.is-invalid]="control?.touched && control?.invalid && enableValidation()"
+        [attr.autocomplete]="inputAutocomplete()"
+        [attr.readonly]="readonly() ? true : undefined"
+        [attr.placeholder]="placeholder()"
+        [class.form-control-lg]="size() === 'large'"
+        [class.form-control-sm]="size() === 'small'"
+        [ngClass]="{
+          'is-invalid': control?.touched && control?.invalid && enableValidation(),
+          'is-valid': control?.touched && control?.valid && enableValidation(),
+        }"
       />
-      <rlb-input-validation *ngIf="errors && showError && enableValidation" [errors]="errors"/>
-		</div>
-		<rlb-progress
-			*ngIf="loading || acLoading"
-			[height]="2"
-			[infinite]="loading || acLoading"
-			color="primary"
-			class="w-100"
-		/>
+
+      @if (isOpen()) {
+        <div
+          #autocomplete
+          class="dropdown-menu show w-100 position-absolute overflow-y-auto"
+          [style.max-height.px]="maxHeight()"
+          [style.max-width.px]="menuMaxWidth()"
+          style="z-index: 1000; top: 100%;"
+        >
+          @if (acLoading()) {
+            <div class="dropdown-item disabled text-center">Loading...</div>
+          } @else if (!hasSuggestions()) {
+            <a class="dropdown-item disabled text-center">No suggestions</a>
+          } @else {
+            @for (item of suggestions(); track item.value) {
+              <a
+                class="dropdown-item"
+                (click)="selectItem(item, $event)"
+                style="cursor: pointer"
+              >
+                @if (item.iconClass) {
+                  <i
+                    [class]="item.iconClass"
+                    class="me-2"
+                  ></i>
+                }
+                {{ item.text }}
+              </a>
+            }
+          }
+        </div>
+      }
+    </div>
     <ng-content select="[after]"></ng-content>
-    <div
-      #autocomplete
-      [id]="id+'-ac'"
-      class="dropdown-menu overflow-y-auto w-100 position-absolute"
-      aria-labelledby="dropdownMenu"
-      [style.max-height.px]="maxHeight"
-      [style.width]="'fit-content !important'"
-      [style.max-width.px]="menuMaxWidth"></div>
-   `,
+  `,
   standalone: false,
-  host: {
-    style: 'position: relative;',
-  }
 })
 export class AutocompleteComponent
   extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor {
-  acLoading: boolean = false;
-	private typingTimeout: any;
-	isOpen = false;
+  implements ControlValueAccessor
+{
+  acLoading = signal(false);
+  private typingTimeout: any;
 
-	@Input({ transform: booleanAttribute, alias: 'disabled' }) disabled? = false;
-  @Input({ transform: booleanAttribute, alias: 'readonly' }) readonly? = false;
-  @Input({ transform: booleanAttribute, alias: 'loading' }) loading?: boolean = false;
-  @Input({ transform: numberAttribute, alias: 'max-height' }) maxHeight?: number = 200;
-  @Input({ alias: 'placeholder' }) placeholder?: string = '';
-  @Input({ alias: 'autocomplete' }) autocomplete: AutocompleteFn = () => { return []; };
-  @Input({ alias: 'type' }) type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string = 'text';
-  @Input() size?: 'small' | 'large' | undefined;
-  @Input({ alias: 'chars-to-search', transform: numberAttribute }) charsToSearch: number = 3;
-  @Input({ alias: 'menu-max-width', transform: numberAttribute }) menuMaxWidth: number = 400;
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  @Input({ transform: booleanAttribute, alias: 'enable-validation' }) enableValidation? = false;
+  // State
+  isOpen = signal(false);
+  protected suggestions = signal<AutocompleteItem[]>([]);
+  protected hasSuggestions = computed(() => this.suggestions().length > 0);
 
-  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
-  @ViewChild('autocomplete') dropdown!: ElementRef<HTMLElement>;
-  @Output() selected: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
+  // Inputs
+  disabled = model(false);
+  readonly = input(false, { transform: booleanAttribute, alias: 'readonly' });
+  loading = input(false, { transform: booleanAttribute, alias: 'loading' });
+  maxHeight = input(200, { transform: numberAttribute, alias: 'max-height' });
+  placeholder = input('', { alias: 'placeholder' });
+
+  autocomplete = input<AutocompleteFn>(() => [], { alias: 'autocomplete' });
+  type = input<'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' | string>(
+    'text',
+    { alias: 'type' },
+  );
+  size = input<'small' | 'large' | undefined>(undefined);
+  charsToSearch = input(3, { alias: 'chars-to-search', transform: numberAttribute });
+  menuMaxWidth = input(400, { alias: 'menu-max-width', transform: numberAttribute });
+  userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
+  enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
+  inputAutocomplete = input('off');
+
+  el = viewChild<ElementRef<HTMLInputElement>>('field');
+  dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
+  selected = output<AutocompleteItem>();
 
   @HostListener('document:pointerdown', ['$event'])
-	onDocumentPointerDown(event: PointerEvent) {
-		this.handleOutsideEvent(event);
-	}
+  onDocumentPointerDown(event: PointerEvent) {
+    this.handleOutsideEvent(event);
+  }
 
   @HostListener('document:keydown.escape', ['$event'])
-	onEscape(event: KeyboardEvent) {
-		if (this.isOpen) {
-			this.closeDropdown();
-			this.el?.nativeElement?.blur();
-		}
-	}
+  onEscape(event: Event) {
+    if (this.isOpen()) {
+      this.closeDropdown();
+      this.el()?.nativeElement?.blur();
+    }
+  }
 
   constructor(
     idService: UniqueIdService,
-    private readonly renderer: Renderer2,
-		private readonly hostRef: ElementRef<HTMLElement>,
-		@Self() @Optional() override control?: NgControl,
+    private readonly hostRef: ElementRef<HTMLElement>,
+    @Self() @Optional() override control?: NgControl,
   ) {
     super(idService, control);
   }
@@ -118,7 +143,7 @@ export class AutocompleteComponent
       clearTimeout(this.typingTimeout);
     }
     this.typingTimeout = setTimeout(() => {
-      if (!this.disabled) {
+      if (!this.disabled()) {
         const t = ev as HTMLInputElement;
         this.manageSuggestions(t?.value);
       }
@@ -126,133 +151,111 @@ export class AutocompleteComponent
   }
 
   override onWrite(data: AutocompleteItem): void {
-    if (this.el && this.el.nativeElement) {
+    const field = this.el();
+    if (field && field.nativeElement) {
       if (typeof data === 'string') {
-        this.el.nativeElement.value = data;
+        field.nativeElement.value = data;
       } else {
-        this.el.nativeElement.value = data?.text;
+        field.nativeElement.value = data?.text || '';
       }
     }
   }
 
   manageSuggestions(data: string) {
-		this.clearDropdown();
-		if (data && data.length >= this.charsToSearch) {
-			this.openDropdown();
-			const suggestions = this.autocomplete(data);
-			if (suggestions instanceof Promise) {
-				this.acLoading = true;
-				suggestions.then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
-			} else if (suggestions instanceof Observable) {
-				this.acLoading = true;
-				lastValueFrom(suggestions).then(s => this.renderAc(s)).finally(() => (this.acLoading = false));
-			} else {
-				this.renderAc(suggestions);
-			}
-		} else {
-			this.closeDropdown();
-		}
-	}
+    // 1. Reset suggestions but keep dropdown state logic clean
+    this.suggestions.set([]);
 
-  renderAc(suggestions: Array<string | AutocompleteItem>) {
-		this.clearDropdown();
-		if (!suggestions || suggestions.length === 0) {
-			const el = this.renderer.createElement('a');
-			this.renderer.addClass(el, 'dropdown-item');
-			this.renderer.addClass(el, 'disabled');
-			this.renderer.addClass(el, 'text-center');
-			this.renderer.setAttribute(el, 'disabled', 'true');
-			this.renderer.appendChild(el, this.renderer.createText('No suggestions'));
-			this.renderer.appendChild(this.dropdown.nativeElement, el);
-			return;
-		}
+    if (data && data.length >= this.charsToSearch()) {
+      this.openDropdown();
+      try {
+        const result = this.autocomplete()(data);
 
-    for (const suggestion of suggestions) {
-			const itemData: AutocompleteItem = typeof suggestion === 'string'
-				? { text: suggestion, value: suggestion }
-				: suggestion;
+        if (result instanceof Promise) {
+          this.acLoading.set(true);
+          result
+            .then(s => this.handleResults(s))
+            .catch(() => this.handleResults([]))
+            .finally(() => this.acLoading.set(false));
+        } else if (result instanceof Observable) {
+          this.acLoading.set(true);
+          lastValueFrom(result)
+            .then(s => this.handleResults(s))
+            .catch(() => this.handleResults([]))
+            .finally(() => this.acLoading.set(false));
+        } else {
+          this.handleResults(result);
+        }
+      } catch (e) {
+        console.error('Error executing autocomplete function:', e);
+        this.closeDropdown();
+      }
+    } else {
+      this.closeDropdown();
+    }
+  }
 
-      const el = this.renderer.createElement('a');
-			this.renderer.addClass(el, 'dropdown-item');
+  private handleResults(raw: Array<string | AutocompleteItem>) {
+    const normalize = raw.map(r => (typeof r === 'string' ? { text: r, value: r } : r));
+    this.suggestions.set(normalize);
+  }
 
-      if (itemData.iconClass) {
-				const icon = this.renderer.createElement('i');
-
-        const classes = itemData.iconClass.split(/\s+/);
-				for (const cls of classes) {
-					if (cls) {
-						// Angular renderer.addClass() method DOES NOT support expression like this: this.renderer.addClass(icon, 'bi bi-check')
-						// it causes silent runtime error
-						// Instead we should split it, and add one by one
-						this.renderer.addClass(icon, cls);
-					}
-				}
-				this.renderer.addClass(icon, 'me-2');
-				this.renderer.appendChild(el, icon);
-			}
-
-      this.renderer.appendChild(el, this.renderer.createText(itemData.text));
-
-      this.renderer.listen(el, 'click', (ev: Event) => {
-				this.selected.emit(itemData);
-				this.setValue(itemData);
-				this.closeDropdown();
-				ev.stopPropagation();
-			});
-			this.renderer.appendChild(this.dropdown.nativeElement, el);
-		}
-	}
-
+  selectItem(item: AutocompleteItem, ev?: Event) {
+    ev?.stopPropagation();
+    this.selected.emit(item);
+    this.setValue(item);
+    this.closeDropdown();
+  }
 
   onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
-    if (!this.disabled && t && t.value) {
-			const item: AutocompleteItem = {
-				text: t.value,
-				value: t.value
-			};
-			this.setValue(item);
-      this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
+    if (!this.disabled() && t && t.value) {
+      const item: AutocompleteItem = {
+        text: t.value,
+        value: t.value,
+      };
+      this.setValue(item);
+      this.closeDropdown();
     }
   }
 
   getText(d: AutocompleteItem) {
-		if (d == null) return '';
+    if (d == null) return '';
     return typeof d === 'string' ? d : d?.text;
   }
 
   private handleOutsideEvent(event: Event) {
-		const target = event.target as HTMLElement;
+    if (!this.isOpen()) return;
+
+    const target = event.target as HTMLElement;
+    const dropdown = this.dropdown();
 
     const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
 
     const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
-		const clickedInsideDropdown = this.dropdown?.nativeElement?.contains ? this.dropdown.nativeElement.contains(target) : false;
-		const clickedInPath = path.length ? path.some(p => p === this.hostRef.nativeElement || p === this.dropdown.nativeElement) : false;
+    const clickedInsideDropdown = dropdown?.nativeElement?.contains
+      ? dropdown.nativeElement.contains(target)
+      : false;
+
+    // Check path for Shadow DOM support
+    const clickedInPath = path.length
+      ? path.some(
+          p => p === this.hostRef.nativeElement || (dropdown && p === dropdown.nativeElement),
+        )
+      : false;
 
     if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
-			this.closeDropdown();
-		}
-	}
+      this.closeDropdown();
+    }
+  }
 
   openDropdown() {
-		if (!this.dropdown || this.isOpen) return;
-		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'block');
-		this.isOpen = true;
-	}
+    if (this.isOpen()) return;
+    this.isOpen.set(true);
+  }
 
   closeDropdown() {
-		if (!this.dropdown || !this.isOpen) return;
-		this.renderer.setStyle(this.dropdown.nativeElement, 'display', 'none');
-		this.isOpen = false;
-		this.clearDropdown();
-		this.acLoading = false;
-	}
-
-  clearDropdown() {
-		if (!this.dropdown) return;
-		while (this.dropdown.nativeElement.firstChild) {
-			this.dropdown.nativeElement.removeChild(this.dropdown.nativeElement.lastChild!);
-		}
-	}
+    if (!this.isOpen()) return;
+    this.isOpen.set(false);
+    this.acLoading.set(false);
+  }
 }

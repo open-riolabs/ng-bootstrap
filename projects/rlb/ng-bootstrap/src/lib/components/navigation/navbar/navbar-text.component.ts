@@ -1,24 +1,25 @@
 import {
   Component,
-  ViewChild,
+  input,
+  OnInit,
   TemplateRef,
+  ViewChild,
   ViewContainerRef,
-  Input,
 } from '@angular/core';
 
 @Component({
-    selector: 'rlb-navbar-text',
-    template: ` <ng-template #template>
-    <span class="navbar-text {{ cssClass }}">
+  selector: 'rlb-navbar-text',
+  template: ` <ng-template #template>
+    <span class="navbar-text {{ cssClass() }}">
       <ng-content />
     </span>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
-export class NavbarTextComponent {
+export class NavbarTextComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'class' }) cssClass?: string = '';
+  cssClass = input('', { alias: 'class' });
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 

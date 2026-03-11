@@ -1,49 +1,59 @@
 import {
-  AfterContentInit,
   booleanAttribute,
   Component,
-  ContentChild,
-  ContentChildren,
-  Input,
-  QueryList
+  contentChild,
+  contentChildren,
+  effect,
+  input,
 } from '@angular/core';
-import { InputComponent } from './input.component';
 import { ValidationErrors } from '@angular/forms';
 import { InputValidationComponent } from './input-validation.component';
+import { InputComponent } from './input.component';
 
 @Component({
-    selector: 'rlb-input-group',
-    host: {
-        '[class.has-validation]': 'validate',
-        '[class.input-group]': '!text',
-        '[class.input-group-text]': 'text',
-        '[class.input-group-sm]': 'size === "small"',
-        '[class.input-group-lg]': 'size === "large"',
-    },
-    template: `<ng-content></ng-content>`,
-    standalone: false
+  selector: 'rlb-input-group',
+  host: {
+    '[class.has-validation]': 'validate()',
+    '[class.input-group]': '!text()',
+    '[class.input-group-text]': 'text()',
+    '[class.input-group-sm]': 'size() === "small"',
+    '[class.input-group-lg]': 'size() === "large"',
+  },
+  template: `<ng-content></ng-content>`,
+  standalone: false
 })
-export class InputGroupComponent implements AfterContentInit {
+export class InputGroupComponent {
 
-  @Input({ alias: 'text', transform: booleanAttribute }) text?: boolean
-  @Input({ alias: 'validate', transform: booleanAttribute }) validate?: boolean = false
-  @Input({ alias: 'size' }) size?: 'small' | 'large'
+  text = input(false, { alias: 'text', transform: booleanAttribute });
+  validate = input(false, { alias: 'validate', transform: booleanAttribute });
+  size = input<'small' | 'large' | undefined>(undefined);
 
   validations: ValidationErrors = {};
 
-  @ContentChildren(InputComponent) inputs!: QueryList<InputComponent>;
-  @ContentChild(InputValidationComponent) validation!: InputValidationComponent;
-  ngAfterContentInit(): void {
-    if (this.validate) {
-      for (const input of this.inputs.toArray()) {
-        input.extValidation = true;
-        if (input.errors && input.name) {
-          this.validations[input.name] = input.errors;
+  inputs = contentChildren(InputComponent);
+  validation = contentChild(InputValidationComponent);
+
+  constructor() {
+    effect(() => {
+      if (this.validate()) {
+        const inputs = this.inputs();
+        const validation = this.validation();
+
+        const aggregatedErrors: ValidationErrors = {};
+        for (const input of inputs) {
+          input.setExtValidation(true);
+          const name = input.name();
+          const errors = input.errors();
+          if (errors && Object.keys(errors).length > 0 && name) {
+            aggregatedErrors[name] = errors;
+          }
+        }
+        this.validations = aggregatedErrors;
+
+        if (validation) {
+          validation.errors.set(this.validations);
         }
       }
-      if (this.validation) {
-        this.validation.errors = this.validations;
-      }
-    }
+    });
   }
 }

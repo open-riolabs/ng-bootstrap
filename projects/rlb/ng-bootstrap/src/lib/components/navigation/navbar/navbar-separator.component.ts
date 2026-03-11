@@ -1,23 +1,23 @@
 import {
   Component,
-  ViewChild,
-  TemplateRef,
-  ViewContainerRef,
   OnInit,
-  Input,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+  input,
 } from '@angular/core';
 
 @Component({
-    selector: 'rlb-navbar-separator',
-    template: ` <ng-template #template>
-    <li class="nav-item separator {{ cssClass }}"></li>
+  selector: 'rlb-navbar-separator',
+  template: ` <ng-template #template>
+    <li class="nav-item separator {{ cssClass() }}"></li>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
 export class NavbarSeparatorComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'class' }) cssClass?: string = '';
+  cssClass = input('', { alias: 'class' });
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 

@@ -1,20 +1,20 @@
 import {
-  ChangeDetectionStrategy,
+  booleanAttribute,
   Component,
   ElementRef,
-  Input,
+  input,
+  InputSignal,
   Optional,
   Self,
-  ViewChild,
-  booleanAttribute,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
+import { AbstractComponent } from './abstract-field.component';
 
 @Component({
-    selector: 'rlb-color',
-    template: `
+  selector: 'rlb-color',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -22,31 +22,33 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         [id]="id"
         class="form-control form-control-color"
         type="color"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
-        [class.form-control-lg]="size === 'large'"
-        [class.form-control-sm]="size === 'small'"
+        [attr.disabled]="disabled() ? true : undefined"
+        [attr.readonly]="readonly() ? true : undefined"
+        [class.form-control-lg]="size() === 'large'"
+        [class.form-control-sm]="size() === 'small'"
         [value]="value"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       />
       <div class="invalid-feedback">
-        {{ errors | json }}
+        @if (errors() && showError()) {
+        <rlb-input-validation [errors]="errors()"/>
+      }
       </div>
     </div>
     <ng-content select="[after]"></ng-content>`,
-    standalone: false
+  standalone: false
 })
 export class ColorComponent
   extends AbstractComponent<string>
   implements ControlValueAccessor {
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
-  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly?: boolean;
-  @Input({ alias: 'size' }) size?: 'small' | 'large';
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
+  disabled = input(false, { transform: booleanAttribute }) as unknown as InputSignal<boolean | undefined>;
+  readonly = input(false, { transform: booleanAttribute });
+  size = input<'small' | 'large' | undefined>(undefined);
+  userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
 
-  @ViewChild('field') el!: ElementRef<HTMLInputElement>;
+  el = viewChild<ElementRef<HTMLInputElement>>('field');
 
   constructor(
     idService: UniqueIdService,
@@ -56,15 +58,16 @@ export class ColorComponent
   }
 
   update(ev: EventTarget | null) {
-    if (!this.disabled) {
+    if (!this.disabled()) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.value);
     }
   }
 
   override onWrite(data: string): void {
-    if (this.el && this.el.nativeElement) {
-      this.el.nativeElement.value = data;
+    const el = this.el();
+    if (el && el.nativeElement) {
+      el.nativeElement.value = data;
     }
   }
 }

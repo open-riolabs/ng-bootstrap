@@ -1,44 +1,44 @@
 import {
   Component,
-  Input,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
   booleanAttribute,
+  input,
 } from '@angular/core';
 
 @Component({
-    selector: 'rlb-tab',
-    template: ` <ng-template #template>
-    <li class="nav-item {{ cssClass }}" role="presentation">
+  selector: 'rlb-tab',
+  template: ` <ng-template #template>
+    <li class="nav-item {{ cssClass() }}" role="presentation">
       <button
         class="nav-link"
         type="button"
         role="tab"
-        [class.active]="active"
-        [disabled]="disabled"
+        [class.active]="active()"
+        [disabled]="disabled()"
         toggle="tab"
-        [attr.id]="target + '-rlb-tab'"
-        [toggle-target]="target"
-        [attr.aria-selected]="active"
+        [attr.id]="target() + '-rlb-tab'"
+        [toggle-target]="target()"
+        [attr.aria-selected]="active()"
       >
         <ng-content></ng-content>
       </button>
     </li>
   </ng-template>`,
-    host: {
-        '[attr.class]': 'undefined',
-        '[attr.id]': 'undefined',
-    },
-    standalone: false
+  host: {
+    '[attr.class]': 'undefined',
+    '[attr.id]': 'undefined',
+  },
+  standalone: false
 })
 export class TabComponent {
   element!: HTMLElement;
 
-  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;
-  @Input({ transform: booleanAttribute }) disabled?: boolean;
-  @Input({ alias: 'target', required: true }) target!: string;
-  @Input({ alias: 'class' }) cssClass?: string = '';
+  active = input(false, { alias: 'active', transform: booleanAttribute });
+  disabled = input(false, { transform: booleanAttribute });
+  target = input.required<string>({ alias: 'target' });
+  cssClass = input('', { alias: 'class' });
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 

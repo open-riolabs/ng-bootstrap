@@ -1,4 +1,20 @@
+@use "sass:color";
+@use "sass:string";
+
 // Variables
+$prefix: bs- !default;
+$white:  #fff !default;
+$black:  #000 !default;
+
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
 
 //
 // custom-variables
@@ -11,7 +27,8 @@ $sidebar-menu-sub-item-color:                         #545a6d;
 $sidebar-menu-item-icon-color:                        #7f8387;
 $sidebar-menu-item-hover-color:                       #383c40;
 $sidebar-menu-item-active-color:                      #556ee6;
-$sidebar-width:                                       300px;
+$sidebar-width:                                       18.75rem;
+$sidebar-transition:                                  0.3s ease-in-out;
 $sidebar-collapsed-width:                             70px;
 $sidebar-width-sm:                                    160px;
 
@@ -24,7 +41,7 @@ $sidebar-dark-menu-item-hover-color:                  #ffffff;
 $sidebar-dark-menu-item-active-color:                 #ffffff;
 
 // Topbar - Default Light
-$header-height:                                       51px;
+$header-height:                                       3.75rem;
 $header-bg:                                           $white;
 $header-item-color:                                   #555b6d;
 
@@ -53,7 +70,7 @@ $rightbar-width:                                      280px;
 $display-none:                                        none;
 $display-block:                                       block;
 
-// Brand 
+// Brand
 $navbar-brand-box-width:                             250px;
 
 // Boxed layout width
@@ -64,7 +81,9 @@ $boxed-body-bg:                                     #ebebf4;
 $apex-grid-color:                                   var(--#{$prefix}border-color);
 
 // table
-$table-head-bg:                                     $gray-100;
+//$table-head-bg:                                     $gray-100;
+$table-head-bg:                                     #eff2f7; // Distinct light gray
+//$table-head-color:  $body-color;
 $table-dark-border-color:                           tint-color($gray-800, 7.5%);
 
 
@@ -114,7 +133,7 @@ $red:     #f46a6a;
 $orange:  #f1734f;
 $yellow:  #f1b44c;
 $green:   #34c38f;
-$teal:    #050505;
+$teal:    #20c997;
 $cyan:    #50a5f1;
 // scss-docs-end color-variables
 
@@ -163,7 +182,7 @@ $theme-colors: (
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
 // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
-$min-contrast-ratio:   1.8;
+$min-contrast-ratio:   3;
 
 // Customize the light and dark text colors for use in our color contrast function.
 $color-contrast-dark:      $black;
@@ -407,7 +426,7 @@ $success-bg-subtle:       rgba($success, 0.25);
 $info-bg-subtle:          rgba($info, 0.25);
 $warning-bg-subtle:       rgba($warning, 0.25);
 $danger-bg-subtle:        rgba($danger, 0.25);
-$light-bg-subtle:         mix($gray-100, $white);
+$light-bg-subtle:         color.mix($gray-100, $white);
 $dark-bg-subtle:          rgba($dark, 0.25);
 // scss-docs-end theme-bg-subtle-variables
 
@@ -437,7 +456,7 @@ $escaped-characters: (
 
 $enable-caret:                false;
 $enable-rounded:              true;
-$enable-shadows:              false;
+$enable-shadows:              true;
 $enable-gradients:            false;
 $enable-transitions:          true;
 $enable-reduced-motion:       true;
@@ -505,7 +524,7 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   #f8f8fb;
+$body-bg:                   #f3f4f6;
 $body-color:                $gray-700;
 $body-text-align:           null;
 
@@ -588,7 +607,7 @@ $container-max-widths: (
 // Set the number of columns and specify the width of the gutters.
 
 $grid-columns:                12;
-$grid-gutter-width:           24px;
+$grid-gutter-width:           1.5rem;
 $grid-row-columns:            6;
 
 // Container padding
@@ -615,11 +634,11 @@ $border-color-translucent:    $gray-400;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables
-$border-radius:               .25rem;
-$border-radius-sm:            .2rem;
-$border-radius-lg:            .4rem;
-$border-radius-xl:            1rem;
-$border-radius-xxl:           2rem;
+$border-radius-sm:            .25rem;   // 4px  (Standard small curve)
+$border-radius:               .375rem;  // 6px  (Standard button curve)
+$border-radius-lg:            .625rem;  // 10px (Large button/input curve)
+$border-radius-xl:            1rem;     // 16px (Bubbly card/modal curve)
+$border-radius-xxl:           2rem;     // 32px
 $border-radius-pill:          50rem;
 // scss-docs-end border-radius-variables
 // fusv-disable
@@ -684,7 +703,7 @@ $font-family-code:            var(--#{$prefix}font-monospace);
 // $font-size-root effects the value of `rem`, which is used for as well font sizes, paddings and margins
 // $font-size-base effects the font size of the body text
 $font-size-root:              null;
-$font-size-base:              0.8125rem;
+$font-size-base:              0.9rem;
 $font-size-sm:                $font-size-base * .875;
 $font-size-lg:                $font-size-base * 1.25;
 
@@ -803,7 +822,7 @@ $table-color:                 var(--#{$prefix}body-color);
 $table-bg:                    var(--#{$prefix}secondary-bg);
 $table-accent-bg:             transparent;
 
-$table-th-font-weight:        null;
+$table-th-font-weight:        600;
 
 $table-striped-color:         $table-color;
 $table-striped-bg-factor:     1;
@@ -896,7 +915,7 @@ $btn-font-size-lg:            $input-btn-font-size-lg;
 
 $btn-border-width:            $input-btn-border-width;
 
-$btn-font-weight:             $font-weight-normal;
+$btn-font-weight:             $font-weight-medium;
 $btn-box-shadow:              inset 0 1px 0 rgba($white, .15), 0 1px 1px rgba($black, .075);
 $btn-focus-width:             $input-btn-focus-width;
 $btn-focus-box-shadow:        0 0 0 0.15rem rgba(var(--#{$prefix}btn-focus-shadow-rgb), .5);
@@ -939,7 +958,7 @@ $form-text-color:                       var(--#{$prefix}secondary-color);
 $form-label-margin-bottom:              .5rem;
 $form-label-font-size:                  null;
 $form-label-font-style:                 null;
-$form-label-font-weight:                null;
+$form-label-font-weight:                $font-weight-medium;
 $form-label-color:                      null;
 // scss-docs-end form-label-variables
 
@@ -974,10 +993,10 @@ $input-border-radius-sm:                var(--#{$prefix}border-radius-sm);
 $input-border-radius-lg:                var(--#{$prefix}border-radius-lg);
 
 $input-focus-bg:                        $input-bg;
-$input-focus-border-color:              rgb(var(--#{$prefix}body-color-rgb), 0.2);
+$input-focus-border-color:              $primary;
 $input-focus-color:                     $input-color;
 $input-focus-width:                     $input-btn-focus-width;
-$input-focus-box-shadow:                none;
+$input-focus-box-shadow:                0 0 0 0.15rem rgba($primary, 0.25);
 
 $input-placeholder-color:               var(--#{$prefix}secondary-color);
 $input-plaintext-color:                 var(--#{$prefix}body-color);
@@ -1303,11 +1322,11 @@ $dropdown-color:                    var(--#{$prefix}body-color);
 $dropdown-bg:                       var(--#{$prefix}secondary-bg);
 $dropdown-border-color:             var(--#{$prefix}border-color);
 $dropdown-border-radius:            var(--#{$prefix}border-radius);
-$dropdown-border-width:             0;
+$dropdown-border-width:             1px;
 $dropdown-inner-border-radius:      calc(#{$dropdown-border-radius} - #{$dropdown-border-width});
 $dropdown-divider-bg:               $dropdown-border-color;
 $dropdown-divider-margin-y:         $spacer * .5;
-$dropdown-box-shadow:               $box-shadow;
+$dropdown-box-shadow:               0 0.5rem 1rem rgba(0, 0, 0, 0.08);
 
 $dropdown-link-color:               var(--#{$prefix}body-color);
 $dropdown-link-hover-color:         var(--#{$prefix}emphasis-color);
@@ -1398,16 +1417,16 @@ $placeholder-opacity-min:           .2;
 // Cards
 
 // scss-docs-start card-variables
-$card-spacer-y:                     1.25rem;
-$card-spacer-x:                     1.25rem;
+$card-spacer-y:                     1.5rem;
+$card-spacer-x:                     1.5rem;
 $card-title-spacer-y:               $spacer * .5;
 $card-title-color:                  var(--#{$prefix}emphasis-color);
 $card-subtitle-color:               null;
-$card-border-width:                 0;
-$card-border-color:                 var(--#{$prefix}border-color);
-$card-border-radius:                var(--#{$prefix}border-radius);
-$card-box-shadow:                   null;
-$card-inner-border-radius:          subtract($card-border-radius, $card-border-width);
+$card-border-width:                 1px;
+$card-border-color:                 rgba($gray-200, 0.5);
+$card-border-radius:                var(--#{$prefix}border-radius-xl);
+$card-box-shadow:                   0 4px 6px rgba(18, 38, 63, 0.03), 0 1px 3px rgba(18, 38, 63, 0.05);
+$card-inner-border-radius:          calc(#{$card-border-radius} - 1px);
 $card-cap-padding-y:                $card-spacer-y * .5;
 $card-cap-padding-x:                $card-spacer-x;
 $card-cap-bg:                       var(--#{$prefix}tertiary-bg);
@@ -1530,7 +1549,7 @@ $toast-color:                       null;
 $toast-background-color:            var(--#{$prefix}secondary-bg);
 $toast-border-width:                var(--#{$prefix}border-width);
 $toast-border-color:                var(--#{$prefix}border-color);
-$toast-border-radius:               .25rem;
+$toast-border-radius:               var(--#{$prefix}border-radius);
 $toast-box-shadow:                  var(--#{$prefix}box-shadow-lg);
 $toast-spacing:                     $container-padding-x;
 
@@ -1568,7 +1587,7 @@ $modal-content-color:               null;
 $modal-content-bg:                  var(--#{$prefix}secondary-bg);
 $modal-content-border-color:        var(--#{$prefix}border-color);
 $modal-content-border-width:        var(--#{$prefix}border-width);
-$modal-content-border-radius:       var(--#{$prefix}border-radius-lg);
+$modal-content-border-radius:       var(--#{$prefix}border-radius-xl);
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width);
 $modal-content-box-shadow-xs:       $box-shadow-sm;
 $modal-content-box-shadow-sm-up:    $box-shadow;
@@ -1700,7 +1719,7 @@ $breadcrumb-margin-bottom:          1rem;
 $breadcrumb-bg:                     null;
 $breadcrumb-divider-color:          var(--#{$prefix}secondary-color);
 $breadcrumb-active-color:           var(--#{$prefix}secondary-color);
-$breadcrumb-divider:                quote("/");
+$breadcrumb-divider:                string.quote("/");
 $breadcrumb-divider-flipped:        $breadcrumb-divider;
 $breadcrumb-border-radius:          null;
 // scss-docs-end breadcrumb-variables

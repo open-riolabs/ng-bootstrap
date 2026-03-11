@@ -1,77 +1,54 @@
 import {
-  Directive,
-  ElementRef,
-  Renderer2,
-  Input,
-  DoCheck,
-  AfterViewInit,
   booleanAttribute,
-  OnChanges,
-  SimpleChanges,
+  Directive,
+  effect,
+  ElementRef,
+  input,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { Tooltip } from 'bootstrap';
 
 @Directive({
-    selector: '[tooltip]',
-    standalone: false
+  selector: '[tooltip]',
+  standalone: false,
 })
-export class TooltipDirective implements OnInit, OnChanges {
-  static bsInit = false;
+export class TooltipDirective implements OnInit, OnDestroy {
   private _tooltip: Tooltip | undefined;
-  @Input({ alias: 'tooltip', required: true }) tooltip!: string | null | undefined;
-  @Input({ alias: 'tooltip-placement' }) placement!: 'top' | 'bottom' | 'left' | 'right';
-  @Input({ alias: 'tooltip-class' }) customClass!: string;
-  @Input({ alias: 'tooltip-html', transform: booleanAttribute }) html?: boolean;
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-  ) { }
+  tooltip = input<string | null | undefined>(undefined, { alias: 'tooltip' });
+  placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'tooltip-placement' });
+  customClass = input('', { alias: 'tooltip-class' });
+  html = input(false, { alias: 'tooltip-html', transform: booleanAttribute });
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['tooltip']) {
-      if (this.tooltip) {
-        this._tooltip?.enable();
-        this._tooltip?.setContent({ '.tooltip-inner': this.tooltip || '' });
-      } else {
-        this._tooltip?.disable();
+  constructor(private elementRef: ElementRef<HTMLElement>) {
+    // We only need one effect to handle dynamic changes to the title text.
+    effect(() => {
+      const title = this.tooltip();
+
+      if (this._tooltip) {
+        if (title) {
+          this._tooltip.enable();
+          this._tooltip.setContent({ '.tooltip-inner': title });
+        } else {
+          this._tooltip.disable();
+        }
       }
-    }
-    if (changes['placement']) {
-      if (this.placement) {
-        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-placement', this.placement);
-        this._tooltip?.update();
-      }
-    }
-    if (changes['customClass']) {
-      if (this.customClass) {
-        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-custom-class', this.customClass);
-        this._tooltip?.update();
-      }
-    }
-    if (changes['html']) {
-      if (this.html) {
-        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-html', 'true');
-        this._tooltip?.update();
-      }
-    }
+    });
   }
 
   ngOnInit() {
-    this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-toggle', 'tooltip',);
-    if (this.placement) {
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-placement', this.placement);
+    this._tooltip = new Tooltip(this.elementRef.nativeElement, {
+      title: this.tooltip() || '',
+      placement: this.placement(),
+      customClass: this.customClass(),
+      html: this.html(),
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this._tooltip) {
+      this._tooltip.dispose();
     }
-    if (this.customClass) {
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-custom-class', this.customClass);
-    }
-    if (this.tooltip) {
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-title', this.tooltip);
-    }
-    if (this.html) {
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-html', 'true');
-    }
-    this._tooltip = new Tooltip(this.elementRef.nativeElement);
   }
 }

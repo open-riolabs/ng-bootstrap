@@ -1,16 +1,14 @@
-import { ComponentRef, Injectable, Type } from '@angular/core';
+import { ComponentRef, Injectable, Signal, Type } from '@angular/core';
+import { AbstractRegistryService } from '../abstract.registry.service';
 import { ComponentHostDirective } from './component-host.directive';
+import { ComponentCreationOptions } from './data/component-creation-options';
 import { ComponentInfo } from './data/component-info';
 import { GenericComponent } from './generic.component';
-import { AbstractRegistryService } from '../abstract.registry.service';
-import { ComponentCreationOptions } from './data/component-creation-options';
 
 @Injectable()
-export abstract class BuilderComponent<
-  T extends AbstractRegistryService<Function>,
-> {
+export abstract class BuilderComponent<T extends AbstractRegistryService<Function>> {
   abstract component: ComponentHostDirective;
-  abstract builderId: string;
+  abstract builderId: string | Signal<string>;
 
   constructor(protected registryService: T) {}
 
@@ -20,13 +18,9 @@ export abstract class BuilderComponent<
     componentOptions?: Options,
   ): ComponentRef<GenericComponent> | null {
     if (component.name) {
-      const componentType = this.registryService.get(
-        component.name,
-      ) as Type<any>;
+      const componentType = this.registryService.get(component.name) as Type<GenericComponent>;
       const componentRef =
-        this.component.viewContainerRef.createComponent<GenericComponent>(
-          componentType,
-        );
+        this.component.viewContainerRef.createComponent<GenericComponent>(componentType);
       componentRef.instance.data = component.data;
       if (creationOptions?.setInstance === true) {
         componentRef.setInput(

@@ -1,29 +1,34 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 export interface BreadcrumbItem {
+  id: string;
   label: string;
   link?: string;
 }
 
 @Component({
-    selector: 'rlb-breadcrumb',
-    template: ` <nav
+  selector: 'rlb-breadcrumb',
+  template: ` <nav
     aria-label="breadcrumb"
-    style="--bs-breadcrumb-divider: '{{ divider }}';"
+    style="--bs-breadcrumb-divider: '{{ divider() }}';"
   >
-			<ol class="breadcrumb" [ngClass]="cssClasses">
-      <ng-container *ngFor="let item of items; last as last">
-        <li class="breadcrumb-item" [ngClass]="{ active: !last }">
-					<a *ngIf="!last" [routerLink]="item.link">{{ item.label }}</a>
-          <span *ngIf="last">{{ item.label }}</span>
+    <ol class="breadcrumb" [class]="cssClasses()">
+      @for (item of items(); track item.link; let last = $last) {
+        <li class="breadcrumb-item" [class.active]="!last">
+          @if (!last) {
+            <a [routerLink]="item.link">{{ item.label }}</a>
+          }
+          @if (last) {
+            <span>{{ item.label }}</span>
+          }
         </li>
-      </ng-container>
+      }
     </ol>
   </nav>`,
-    standalone: false
+  standalone: false,
 })
 export class BreadcrumbComponent {
-  @Input({ alias: 'divider' }) divider?: string = '>';
-  @Input({ alias: 'items' }) items?: BreadcrumbItem[] = [];
-	@Input({ alias: 'cssClasses' }) cssClasses: string = '';
+  divider = input('>', { alias: 'divider' });
+  items = input<BreadcrumbItem[]>([], { alias: 'items' });
+  cssClasses = input('', { alias: 'cssClasses' });
 }

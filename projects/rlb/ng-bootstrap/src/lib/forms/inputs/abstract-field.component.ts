@@ -1,19 +1,19 @@
-import { Injectable, Optional, Self } from '@angular/core';
-import { ControlValueAccessor, NgControl, ValidationErrors, } from '@angular/forms';
+import { computed, Injectable, ModelSignal, Optional, Self, signal, Signal } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
 @Injectable()
-export abstract class AbstractComponent<T = any>
-  implements ControlValueAccessor {
-  public abstract disabled?: boolean;
-  protected abstract userDefinedId: string;
-  protected onTouched: Function = () => { };
-	protected onChanged: Function = (v: T) => {
-	};
+export abstract class AbstractComponent<T = any> implements ControlValueAccessor {
+  public abstract disabled?: boolean | Signal<boolean | undefined> | ModelSignal<boolean>;
+  protected abstract userDefinedId: string | Signal<string> | ModelSignal<string>;
+  protected onTouched: Function = () => {};
+  protected onChanged: Function = (v: T) => {};
   public value!: T;
   private _id!: string;
   public get id(): string {
-    return this.userDefinedId || this._id;
+    const userDefinedIdValue =
+      typeof this.userDefinedId === 'function' ? (this.userDefinedId as any)() : this.userDefinedId;
+    return (userDefinedIdValue as string) || this._id;
   }
   constructor(
     idService: UniqueIdService,
@@ -38,8 +38,8 @@ export abstract class AbstractComponent<T = any>
     this.value = val;
     this.onWrite(val);
   }
-	
-	registerOnChange(fn: (v: T) => void): void {
+
+  registerOnChange(fn: (v: T) => void): void {
     this.onChanged = fn;
   }
 
@@ -47,23 +47,25 @@ export abstract class AbstractComponent<T = any>
     this.onTouched = fn;
   }
 
+  protected cvaDisabled = signal(false);
+
   setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.cvaDisabled.set(isDisabled);
   }
 
-  get invalid(): boolean {
+  invalid = computed(() => {
     return this.control?.invalid || false;
-  }
+  });
 
-  get showError(): boolean {
+  showError = computed(() => {
     if (!this.control) return false;
     const { dirty, touched } = this.control;
-    return this.invalid ? dirty || touched || false : false;
-  }
+    return this.invalid() ? dirty || touched || false : false;
+  });
 
-  get errors(): ValidationErrors {
+  errors = computed(() => {
     return this.control?.errors || {};
-  }
+  });
 
-  onWrite(data: T) { };
+  onWrite(data: T) {}
 }

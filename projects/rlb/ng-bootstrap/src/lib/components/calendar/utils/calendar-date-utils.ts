@@ -6,7 +6,7 @@ export function isSameDay(a: IDateTz, b: IDateTz): boolean {
     a.dayUTC === b.dayUTC;
 }
 
-export function addDays(date: DateTz, days: number): DateTz {
+export function addDays(date: IDateTz, days: number): IDateTz {
   return new DateTz(date.add!(days, 'day'));
 }
 

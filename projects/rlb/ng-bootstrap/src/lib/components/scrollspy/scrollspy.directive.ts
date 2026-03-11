@@ -2,13 +2,11 @@ import {
   AfterViewInit,
   booleanAttribute,
   Directive,
+  effect,
   ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
+  input,
   OnDestroy,
-  Output,
-  SimpleChanges,
+  output,
 } from '@angular/core';
 import { ScrollSpy } from 'bootstrap';
 
@@ -16,35 +14,44 @@ import { ScrollSpy } from 'bootstrap';
   selector: '[rlb-scrollspy]',
   host: {
     '[attr.data-bs-spy]': "'scroll'",
-    '[attr.data-bs-target]': 'target',
+    '[attr.data-bs-target]': 'target()',
     '[attr.tabindex]': '0',
-    '[attr.data-bs-root-margin]': 'rootMargin',
-    '[attr.data-bs-smooth-scroll]': 'smooth',
-    '[style.height]': "height",
+    '[attr.data-bs-root-margin]': 'rootMargin()',
+    '[attr.data-bs-smooth-scroll]': 'smooth()',
+    '[style.height]': 'height()',
     '[style.overflow-y]': "'auto'"
   },
   standalone: false
 })
-export class ScrollspyDirective implements AfterViewInit, OnDestroy, OnChanges {
-  @Input({ alias: 'rlb-scrollspy-target', required: true }) target?: string;
-  @Input({ alias: 'scroll-smooth', transform: booleanAttribute }) smooth?: boolean = true;
-  @Input({ alias: 'scroll-root-margin' }) rootMargin?: string = '';
-  @Input({ alias: 'height' }) height?: string = '200px';
-  @Input({ alias: 'scroll-threshold' }) threshold?: Array<number> = [];
-  @Output('scroll-change') scroll: EventEmitter<Event> = new EventEmitter<Event>();
-  
+export class ScrollspyDirective implements AfterViewInit, OnDestroy {
+  target = input.required<string>({ alias: 'rlb-scrollspy-target' });
+  smooth = input(true, { alias: 'scroll-smooth', transform: booleanAttribute });
+  rootMargin = input('', { alias: 'scroll-root-margin' });
+  height = input('200px', { alias: 'height' });
+  threshold = input<Array<number>>([], { alias: 'scroll-threshold' });
+  scroll = output<Event>({ alias: 'scroll-change' });
+
   private scrollSpy!: ScrollSpy;
-  
+
   constructor(private elementRef: ElementRef<HTMLElement>) {
+    effect(() => {
+      // Accessing signals to track changes
+      this.target();
+      this.rootMargin();
+      this.threshold();
+
+      // Refresh ScrollSpy if it exists
+      this.scrollSpy?.refresh();
+    });
   }
-  
+
   ngAfterViewInit() {
     this.scrollSpy = ScrollSpy.getOrCreateInstance(
       this.elementRef.nativeElement,
       {
-        target: this.target,
-        rootMargin: this.rootMargin,
-        threshold: this.threshold,
+        target: this.target(),
+        rootMargin: this.rootMargin(),
+        threshold: this.threshold(),
       },
     );
     this.elementRef.nativeElement.addEventListener(
@@ -52,7 +59,7 @@ export class ScrollspyDirective implements AfterViewInit, OnDestroy, OnChanges {
       this.__scroll_handler,
     );
   }
-  
+
   ngOnDestroy() {
     this.elementRef.nativeElement.removeEventListener(
       'activate.bs.scrollspy',
@@ -60,12 +67,8 @@ export class ScrollspyDirective implements AfterViewInit, OnDestroy, OnChanges {
     );
     this.scrollSpy?.dispose();
   }
-  
-  ngOnChanges(changes: SimpleChanges): void {
-    this.scrollSpy?.refresh();
-  }
-  
+
   private __scroll_handler = (event: Event) => {
     this.scroll.emit(event);
-  }
+  };
 }

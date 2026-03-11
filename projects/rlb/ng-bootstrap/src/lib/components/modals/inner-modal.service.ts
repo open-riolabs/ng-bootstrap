@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ComponentRef, Injectable, Type } from '@angular/core';
+import { ComponentRef, Injectable, signal, Type } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { AbstractRegistryService } from '../../shared/abstract.registry.service';
 import { BuilderComponent } from '../../shared/component-builder';
@@ -15,21 +15,22 @@ import { ModalRegistryOptions } from './options/modal-registry.options';
   providedIn: 'root',
 })
 export class InnerModalService extends AbstractRegistryService<Type<any>> {
-
-  private allModals: { id: string; modal: ComponentRef<GenericComponent>, subject: Subject<ModalResult<any>>; }[] = [];
+  private allModals: {
+    id: string;
+    modal: ComponentRef<GenericComponent>;
+    subject: Subject<ModalResult<any>>;
+  }[] = [];
   private builders: BuilderComponent<InnerModalService>[] = [];
 
   registerBuilder(builder: BuilderComponent<InnerModalService>) {
     if (this.builders.length > 0) {
-      throw new Error(
-        'Only one modal builder is supported. Please remove the others.',
-      );
+      throw new Error('Only one modal builder is supported. Please remove the others.');
     }
     this.builders.push(builder);
   }
 
   removeBuilder(builderId: string) {
-    this.builders = this.builders.filter((_) => false);
+    this.builders = this.builders.filter(_ => false);
   }
 
   getBuilder(): BuilderComponent<InnerModalService> {
@@ -48,14 +49,14 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
     if (Array.isArray(options)) {
       const modals = (options as ModalRegistryOptions[])
         .reverse()
-        .map((o) => o.modals)
+        .map(o => o.modals)
         .flat();
       for (const modal of modals) {
-        Object.keys(modal).forEach((k) => this.add(k, modal[k]));
+        Object.keys(modal).forEach(k => this.add(k, modal[k]));
       }
     } else {
       if (options && options.modals) {
-        Object.keys(options.modals).forEach((k) => this.add(k, options.modals[k]));
+        Object.keys(options.modals).forEach(k => this.add(k, options.modals[k]));
       }
     }
   }
@@ -66,13 +67,10 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
     options?: ModalOptions,
   ): Observable<ModalResult<Output>> {
     const modalId = `rlb-modal${this.uniqueIdService.id}`;
-    const modal = this.getBuilder().buildComponent<
-      ModalData<Input>,
-      ModalOptions
-    >(
+    const modal = this.getBuilder().buildComponent<ModalData<Input>, ModalOptions>(
       {
         name,
-        data,
+        data: signal(data),
       },
       {
         inputs: { id: modalId },
@@ -80,25 +78,24 @@ export class InnerModalService extends AbstractRegistryService<Type<any>> {
       },
       options,
     );
-    this.allModals.push({ id: modalId, modal: modal!, subject: new Subject<ModalResult<Output>>() });
-    const subject = this.allModals.find((d) => d.id === modalId)?.subject;
+    this.allModals.push({
+      id: modalId,
+      modal: modal!,
+      subject: new Subject<ModalResult<Output>>(),
+    });
+    const subject = this.allModals.find(d => d.id === modalId)?.subject;
     if (!subject) {
       return of({ reason: 'cancel', result: undefined } as ModalResult<Output>);
     }
     return subject.asObservable();
   }
 
-  public eventModal(
-    event: string,
-    reason: ModalCloseReason,
-    id: string,
-    result: any,
-  ): void {
+  public eventModal(event: string, reason: ModalCloseReason, id: string, result: any): void {
     if (event === 'hidden') {
-      const modal = this.allModals.find((d) => d.id === id);
+      const modal = this.allModals.find(d => d.id === id);
       if (modal) {
         modal.modal.destroy();
-        this.allModals = this.allModals.filter((d) => d.id !== id);
+        this.allModals = this.allModals.filter(d => d.id !== id);
       }
       modal?.subject.next({ reason, result });
       modal?.subject.complete();

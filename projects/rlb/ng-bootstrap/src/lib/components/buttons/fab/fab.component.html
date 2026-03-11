@@ -1,10 +1,4 @@
-<button
-  rlb-button
-  [color]="color"
-  [disabled]="disabled"
-  [outline]="outline"
-  class="fab-button d-flex align-items-center justify-content-center"
-  [ngClass]="[sizeClass, positionClass]"
->
+<button rlb-button [color]="color()" [disabled]="disabled()" [outline]="outline()"
+  class="fab-button d-flex align-items-center justify-content-center" [class]="[sizeClass(), positionClass()]">
   <ng-content></ng-content>
 </button>

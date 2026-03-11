@@ -1,17 +1,20 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, input, OnDestroy, ViewChild } from '@angular/core';
 import { BuilderComponent } from '../../shared/component-builder/builder.component';
-import { InnerModalService } from './inner-modal.service';
 import { ComponentHostDirective } from '../../shared/component-builder/component-host.directive';
+import { InnerModalService } from './inner-modal.service';
+
 @Component({
-    selector: 'rlb-modal-container',
-    template: `<ng-template component-host></ng-template>`,
-    standalone: false
+  selector: 'rlb-modal-container',
+  template: `
+    <ng-template component-host></ng-template>
+  `,
+  standalone: false,
 })
 export class ModalContainerComponent
   extends BuilderComponent<InnerModalService>
-  implements OnDestroy {
-
-  @Input({ alias: 'id' }) builderId!: string;
+  implements OnDestroy
+{
+  builderId = input.required<string>({ alias: 'id' });
 
   @ViewChild(ComponentHostDirective, { static: true }) component!: ComponentHostDirective;
 
@@ -21,6 +24,6 @@ export class ModalContainerComponent
   }
 
   ngOnDestroy(): void {
-    this.modalService.removeBuilder(this.builderId);
+    this.modalService.removeBuilder(this.builderId());
   }
 }

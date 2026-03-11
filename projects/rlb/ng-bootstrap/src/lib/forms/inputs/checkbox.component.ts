@@ -1,20 +1,20 @@
 import {
+  booleanAttribute,
   Component,
+  computed,
   ElementRef,
-  Input,
+  input,
   Optional,
   Self,
-  ViewChild,
-  ViewRef,
-  booleanAttribute,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { AbstractComponent } from './abstract-field.component';
 import { UniqueIdService } from '../../shared/unique-id.service';
+import { AbstractComponent } from './abstract-field.component';
 
 @Component({
-    selector: 'rlb-checkbox',
-    template: `
+  selector: 'rlb-checkbox',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -22,29 +22,38 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         class="form-check-input"
         type="checkbox"
         [id]="id"
-        [attr.disabled]="disabled ? true : undefined"
-        [attr.readonly]="readonly ? true : undefined"
+        [attr.disabled]="isDisabled() ? true : undefined"
+        [attr.readonly]="readonly() ? true : undefined"
         [value]="value"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
       />
-      <div class="invalid-feedback">
-        {{ errors | json }}
-      </div>
+      @if (errors() && (control?.touched || control?.dirty)) {
+        <div class="invalid-feedback d-block">
+          {{ errors() | json }}
+        </div>
+      }
       <ng-content select="[after]"></ng-content>
-    </div>`,
-    standalone: false
+    </div>
+  `,
+  standalone: false,
 })
 export class CheckboxComponent
   extends AbstractComponent<boolean | undefined>
-  implements ControlValueAccessor {
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled? = false;
-  @Input({ alias: 'readonly', transform: booleanAttribute }) readonly? = false;
-  @Input({ alias: 'indeterminate', transform: booleanAttribute }) indeterminate?: boolean = false;
-  @ViewChild('field', { read: ElementRef }) el!: ElementRef<HTMLInputElement>;
-  @Input({ alias: 'id', transform: (v: string) => v || '' }) userDefinedId: string = '';
-  
+  implements ControlValueAccessor
+{
+  disabled = input(false, {
+    transform: booleanAttribute,
+  });
+  readonly = input(false, { transform: booleanAttribute });
+  indeterminate = input(false, { transform: booleanAttribute });
+  userDefinedId = input('', { alias: 'id' });
+
+  el = viewChild.required<ElementRef<HTMLInputElement>>('field');
+
+  isDisabled = computed(() => this.disabled() || this.cvaDisabled());
+
   constructor(
     idService: UniqueIdService,
     @Self() @Optional() override control?: NgControl,
@@ -53,37 +62,38 @@ export class CheckboxComponent
   }
 
   update(ev: EventTarget | null) {
-    if (!this.disabled) {
+    if (!this.isDisabled()) {
       const t = ev as HTMLInputElement;
       this.setValue(t?.checked);
     }
   }
 
   override onWrite(data: boolean | undefined): void {
-    if (this.el && this.el.nativeElement) {
-      if (this.indeterminate && (typeof data === 'undefined' || data === null)) {
-        this.el.nativeElement.indeterminate = true;
+    const el = this.el();
+    if (el && el.nativeElement) {
+      if (this.indeterminate() && (typeof data === 'undefined' || data === null)) {
+        el.nativeElement.indeterminate = true;
       } else {
         if (data === undefined || data === null) return;
         if (typeof data === 'string') {
-          this.el.nativeElement.checked = /^true$/i.test(data);
-        }
-        else {
-          this.el.nativeElement.checked = data;
+          el.nativeElement.checked = /^true$/i.test(data);
+        } else {
+          el.nativeElement.checked = data;
         }
       }
     }
   }
 
   override writeValue(val: boolean | undefined): void {
-    if (this.indeterminate && this.el) {
+    const el = this.el();
+    if (this.indeterminate() && el) {
       if (typeof val === 'undefined' || val === null) {
-        this.el.nativeElement.indeterminate = true;
+        el.nativeElement.indeterminate = true;
       } else {
-        this.el.nativeElement.indeterminate = false;
+        el.nativeElement.indeterminate = false;
       }
     }
-    if (!this.indeterminate) {
+    if (!this.indeterminate()) {
       val = val || false;
     }
     super.writeValue(val);

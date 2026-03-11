@@ -1,29 +1,38 @@
-import { booleanAttribute, Component, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef, } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  input,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 
 @Component({
-    selector: 'rlb-nav-item',
-    template: ` <ng-template #template>
-    <li class="nav-item {{ cssClass }}">
+  selector: 'rlb-nav-item',
+  template: ` <ng-template #template>
+    <li class="nav-item {{ cssClass() }}">
       <a
         class="nav-link"
-        [class.active]="active"
-        [attr.href]="href || '#'"
-				[class.disabled]="disabled"
-        [attr.aria-disabled]="disabled ? 'true' : undefined"
+        [class.active]="active()"
+        [attr.aria-current]="active() ? 'page' : undefined"
+        [class.disabled]="disabled()"
+        [attr.disabled]="disabled() ? true : null"
+        [attr.href]="href() || null"
       >
-        <ng-content />
+        <ng-content></ng-content>
       </a>
     </li>
   </ng-template>`,
-    standalone: false
+  standalone: false
 })
 export class NavItemComponent implements OnInit {
   element!: HTMLElement;
 
-  @Input({ alias: 'href' }) href?: string | any[] | null | undefined = '#';
-  @Input({ alias: 'active', transform: booleanAttribute }) active?: boolean;
-  @Input({ alias: 'disabled', transform: booleanAttribute }) disabled?: boolean;
-  @Input({ alias: 'class' }) cssClass?: string = '';
+  active = input(false, { alias: 'active', transform: booleanAttribute });
+  disabled = input(false, { transform: booleanAttribute });
+  cssClass = input('', { alias: 'class' });
+  href = input<string | undefined>(undefined);
 
   @ViewChild('template', { static: true }) template!: TemplateRef<any>;
 

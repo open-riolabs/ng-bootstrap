@@ -1,9 +1,130 @@
 <div class="container mt-3">
-	<h3>
-		Calendar
+	<h1>Calendar</h1>
+	<h3 class="text-muted fw-light mb-4">
+		A powerful and flexible calendar component for displaying events in Month, Week, or Day views.
 	</h3>
-	<div class="mt-3">
-		<rlb-calendar></rlb-calendar>
-	</div>
+	<h3>Live Example</h3>
+	<p>Interact with the calendar below. You can change views and navigate dates. Click <span (click)="onGenerateTestEvents()" role="button" class="text-primary italic">here</span> to generate dummy events</p>
+
+  <rlb-card id="#examples">
+		<rlb-card-body>
+			<div class="d-flex flex-column">
+				<rlb-calendar
+          [view]="view"
+          [events]="events"
+          [current-date]="currentDate"
+          [loading]="loading"
+					(date-change)="onDateChange($event)"
+					(view-change)="onViewChange($event)"
+          (event-click)="onEventClick($event)"
+        >
+				</rlb-calendar>
+			</div>
+		</rlb-card-body>
+		<rlb-card-footer>
+			<div class="w-full d-flex justify-content-between fs-5 pb-1">
+				<span>HTML</span>
+				<i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
+					(click)="copyToClipboard(calendarHTMLSnippet)"></i>
+			</div>
+
+			<pre class="fs-5"><code language="html" [highlight]="calendarHTMLSnippet" class="bg-transparent"></code>
+    </pre>
+		</rlb-card-footer>
+	</rlb-card>
+
+	<hr>
+
+	<rlb-dt-table>
+		<rlb-dt-header>Parameters</rlb-dt-header>
+		<rlb-dt-header>Type</rlb-dt-header>
+		<rlb-dt-header>Required</rlb-dt-header>
+		<rlb-dt-header>Description</rlb-dt-header>
+		<rlb-dt-header>I/O</rlb-dt-header>
+
+		<!-- Inputs -->
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[view]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">'month' | 'week' | 'day'</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>The current view of the calendar. Default is 'week'.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[events]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">CalendarEvent[]</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>List of events to display.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[current-date]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">IDateTz</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>The current date focused in the calendar.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[loading]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Whether to show a loading state.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[show-toolbar]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Whether to show the top navigation toolbar. Default is true.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[layout]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">CalendarLayout</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Configuration for row heights and header heights.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+
+		<!-- Outputs -->
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">(date-change)</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">CalendarChangeEvent</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Emitted when the current date changes.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="warning">Output</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">(view-change)</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">CalendarChangeEvent</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Emitted when the view changes.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="warning">Output</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">(event-click)</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">CalendarEvent</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Emitted when an event is clicked.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="warning">Output</span></rlb-dt-cell>
+		</rlb-dt-row>
+	</rlb-dt-table>
+
+	<h3>Basic Implementation</h3>
+	<p>
+		Here is a basic example of how to implement the calendar in your TypeScript file.
+	</p>
+	<rlb-card>
+		<rlb-card-header>
+			<div class="w-full d-flex justify-content-between fs-5 pb-1">
+				<span>TypeScript</span>
+				<i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
+					(click)="copyToClipboard(calendarTSSnippet)"></i>
+			</div>
+		</rlb-card-header>
+		<rlb-card-body>
+			<pre><code language="typescript" [highlight]="calendarTSSnippet" class="bg-transparent fs-5"></code></pre>
+		</rlb-card-body>
+	</rlb-card>
 
 </div>
