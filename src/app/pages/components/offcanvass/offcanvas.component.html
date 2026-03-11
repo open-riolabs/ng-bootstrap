@@ -1,5 +1,5 @@
 <div class="container mt-3">
-  
+
   <h3>Offcanvas</h3>
   <p>L’Offcanvas è un componente che crea un pannello nascosto che può scorrere dentro e fuori dallo schermo, tipicamente da un lato (sinistra, destra, alto o basso).</p>
 
@@ -81,7 +81,7 @@
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell> 
+      <rlb-dt-cell></rlb-dt-cell>
     </rlb-dt-row>
   </rlb-dt-table>
 
@@ -99,7 +99,7 @@
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell> 
+      <rlb-dt-cell></rlb-dt-cell>
     </rlb-dt-row>
   </rlb-dt-table>
 
@@ -117,7 +117,7 @@
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell> 
+      <rlb-dt-cell></rlb-dt-cell>
     </rlb-dt-row>
   </rlb-dt-table>
 
@@ -151,6 +151,17 @@
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
       <div rlb-accordion-body>
+        <h4>Offcanvas Fab</h4>
+        <rlb-fab size="sm" outline toggle="offcanvas" toggle-target="test">
+          <i class="bi bi-three-dots-vertical"></i>
+        </rlb-fab>
+        <rlb-offcanvas id="test" [placement]="'end'">
+          <rlb-offcanvas-header>
+            <h5 rlb-offcanvas-title>Offcanvas Header End Placement</h5>
+          </rlb-offcanvas-header>
+          <rlb-offcanvas-body>Offcanvas Body</rlb-offcanvas-body>
+        </rlb-offcanvas>
+
         <h4>Offcanvas Sample</h4>
         <button rlb-button toggle="offcanvas" toggle-target="off-1" class="me-2">Offcanvas</button>
         <rlb-offcanvas id="off-1">
