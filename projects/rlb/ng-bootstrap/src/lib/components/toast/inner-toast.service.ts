@@ -1,4 +1,4 @@
-import { ComponentRef, Injectable, isSignal, Type } from '@angular/core';
+import { ComponentRef, Injectable, isSignal, signal, Type } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { ToastData } from './data/toast-data';
 import { AbstractRegistryService } from '../../shared/abstract.registry.service';
@@ -79,7 +79,7 @@ export class InnerToastService extends AbstractRegistryService<Type<any>> {
     const toast = this.getBuilder(builderId).buildComponent<ToastData<Input>, ToastOptions>(
       {
         name: componentName,
-        data,
+        data: signal<ToastData<Input>>(data),
       },
       {
         inputs: { id: toastId },

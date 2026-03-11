@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, model } from '@angular/core';
+import { Component, model, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IModal } from 'projects/rlb/ng-bootstrap/src/lib/components/modals/data/modal';
-import { ModalData } from 'projects/rlb/ng-bootstrap/src/lib/components/modals/data/modal-data';
 import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: ` <div [class]="'modal-header' + headerColor">
+  template: `
+    <div [class]="'modal-header' + headerColor">
       <h5 class="modal-title">Modal title</h5>
       <button
         type="button"
@@ -32,10 +32,15 @@ import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
       >
         Close
       </button>
-      <button type="button" class="btn btn-primary" data-modal-reason="ok">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-modal-reason="ok"
+      >
         Save changes
       </button>
-    </div>`,
+    </div>
+  `,
   hostDirectives: [
     {
       directive: ModalDirective,
@@ -44,7 +49,7 @@ import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
   ],
 })
 export class ModalSampleComponent implements IModal<any, any> {
-  data = input<ModalData<any>>({} as any);
+  data!: Signal<any>;
   valid = model(true);
   result?: any;
 
@@ -53,6 +58,6 @@ export class ModalSampleComponent implements IModal<any, any> {
   }
 
   click() {
-    this.valid.update((v) => !v);
+    this.valid.update(v => !v);
   }
 }

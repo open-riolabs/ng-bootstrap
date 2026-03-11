@@ -1,5 +1,5 @@
-import { InputSignal, ModelSignal } from '@angular/core';
+import { Signal } from '@angular/core';
 
 export interface ComponentData<T = any> {
-  data: T | InputSignal<T> | ModelSignal<T>;
+  data: Signal<T>;
 }
