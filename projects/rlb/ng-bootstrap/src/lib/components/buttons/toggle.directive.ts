@@ -7,7 +7,7 @@ import {
   input,
   Optional,
   Renderer2,
-  Self
+  Self,
 } from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
 
@@ -16,14 +16,19 @@ import { ButtonToolbarComponent } from './boutton-toolbar.component';
     button[toggle],
     a[toggle],
     rlb-navbar-item[toggle],
-    rlb-button-toolbar[toggle]`,
-  standalone: false
+    rlb-button-toolbar[toggle],
+    rlb-fab[toggle],`,
+  standalone: false,
 })
 export class ToggleDirective {
-  toggle = input.required<'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group'>({ alias: 'toggle' });
+  toggle = input.required<'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group'>(
+    { alias: 'toggle' },
+  );
   target = input.required<string>({ alias: 'toggle-target' });
   collapsed = input(false, { transform: booleanAttribute });
-  autoClose = input<'default' | 'inside' | 'outside' | 'manual'>('default', { alias: 'auto-close' });
+  autoClose = input<'default' | 'inside' | 'outside' | 'manual'>('default', {
+    alias: 'auto-close',
+  });
 
   constructor(
     private elementRef: ElementRef,
