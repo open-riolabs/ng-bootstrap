@@ -27,7 +27,7 @@ export class BadgeDirective implements AfterViewInit {
     transform: numberAttribute,
   });
   color = input<Color>('danger', { alias: 'badge-color' });
-  textColor = input<string>('light', {
+  textColor = input<string>('dark', {
     alias: 'badge-text-color',
   });
   hiddenText = input<string | undefined>(undefined, { alias: 'hidden-text' });
