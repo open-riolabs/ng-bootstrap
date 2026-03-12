@@ -9,6 +9,7 @@ export interface NavigableItem {
 export interface SidebarNavigableItem extends NavigableItem {
   items?: SidebarNavigableItem[];
   title?: string;
-	badgeCounter?: number;
+  badgeCounter?: number;
   externalUrl?: string;
+  action?: string;
 }
