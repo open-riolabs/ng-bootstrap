@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   booleanAttribute,
   Component,
   contentChildren,
@@ -75,7 +76,7 @@ export class SelectComponent
   });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
 
-  el = viewChild.required<ElementRef<HTMLSelectElement>>('select');
+  el = viewChild<ElementRef<HTMLSelectElement>>('select');
   _projectedDisplayOptions = viewChild('projectedDisplayOptions', {
     read: ViewContainerRef,
   });
@@ -86,6 +87,11 @@ export class SelectComponent
     @Self() @Optional() override control?: NgControl,
   ) {
     super(idService, control);
+
+    afterNextRender(() => {
+      // This executes exactly when the DOM is fully painted and bindings are settled
+      this.onWrite(this.value);
+    });
 
     effect(() => {
       const vcr = this._projectedDisplayOptions(); // The ViewContainerRef in the Select
