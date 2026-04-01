@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
   selector: 'rlb-card-body',
@@ -10,7 +10,8 @@ import { Component, signal } from '@angular/core';
     class: 'card-body',
     '[class.card-img-overlay]': 'overlay()',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardBodyComponent {
   overlay = signal(false);

@@ -7,6 +7,7 @@ import {
   TemplateRef,
   viewChild,
   ViewContainerRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 @Component({
@@ -23,11 +24,12 @@ import {
           [style.height.px]="size()"
           [style.border]="'2px solid #cbcbcb'"
           [style.border-radius]="_borderRadius()"
-          />
+        />
       }
     </ng-template>
-    `,
-  standalone: false
+  `,
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvatarComponent implements OnInit {
   element!: HTMLElement;
@@ -39,7 +41,7 @@ export class AvatarComponent implements OnInit {
 
   template = viewChild.required<TemplateRef<any>>('template');
 
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  constructor(private viewContainerRef: ViewContainerRef) {}
 
   _borderRadius = computed(() => {
     switch (this.shape()) {
@@ -55,9 +57,7 @@ export class AvatarComponent implements OnInit {
   });
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template(),
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }

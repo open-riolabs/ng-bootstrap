@@ -1,14 +1,11 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   input,
-  Optional,
-  Self,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
 @Component({
@@ -26,7 +23,7 @@ import { AbstractComponent } from './abstract-field.component';
         [attr.list]="'list-' + id"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
-        [value]="value || ''"
+        [value]="value() || ''"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
@@ -41,8 +38,9 @@ import { AbstractComponent } from './abstract-field.component';
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DatalistComponent extends AbstractComponent<string> implements ControlValueAccessor {
+export class DatalistComponent extends AbstractComponent<string> {
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -53,11 +51,8 @@ export class DatalistComponent extends AbstractComponent<string> implements Cont
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
 
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
@@ -67,10 +62,10 @@ export class DatalistComponent extends AbstractComponent<string> implements Cont
     }
   }
 
-  override onWrite(data: string): void {
+  override onWrite(data: string | undefined): void {
     const el = this.el();
     if (el && el.nativeElement) {
-      el.nativeElement.value = data;
+      el.nativeElement.value = data || '';
     }
   }
 }

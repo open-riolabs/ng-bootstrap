@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
@@ -37,6 +38,7 @@ export interface PaginationEvent {
     // element in the DOM if cardStyle() is true.
     '[class.dt-card-style]': 'cardStyle()',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableComponent implements OnInit, OnDestroy {
   title = input<string | undefined>(undefined);

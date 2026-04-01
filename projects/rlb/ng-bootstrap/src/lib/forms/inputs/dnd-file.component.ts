@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, ElementRef, input, output, viewChild } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, input, output, viewChild } from '@angular/core';
 
 @Component({
   selector: 'rlb-file-dnd',
@@ -6,9 +6,9 @@ import { booleanAttribute, Component, ElementRef, input, output, viewChild } fro
     <div class="rlb-file-dnd" rlb-dnd [multiple]="multiple()" (fileDropped)="onFileDropped($event)">
       <input type="file" #fileDropRef id="fileDropRef" [attr.multiple]="multiple() ? '' : undefined" (change)="fileBrowseHandler($event)" />
       <i class="bi bi-upload"></i>
-      <h3>{{ data().content?.drag }}</h3>
+      <h3>{{ data()?.content?.drag }}</h3>
       <h3>-</h3>
-      <label class="btn btn-primary" for="fileDropRef">{{ data().content?.button }}</label>
+      <label class="btn btn-primary" for="fileDropRef">{{ data()?.content?.button }}</label>
     </div>
     <div class="rlb-file-dnd-list">
       @for (file of files; track file; let i = $index) {
@@ -25,7 +25,8 @@ import { booleanAttribute, Component, ElementRef, input, output, viewChild } fro
         </div>
       }
     </div>`,
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileDndComponent {
   files: File[] = [];

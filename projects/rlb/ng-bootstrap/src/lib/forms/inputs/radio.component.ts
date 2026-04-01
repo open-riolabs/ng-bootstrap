@@ -1,19 +1,15 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   contentChildren,
   effect,
   ElementRef,
   input,
-  InputSignal,
-  Optional,
-  Self,
   viewChild,
   viewChildren,
   ViewContainerRef,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 import { OptionComponent } from './options.component';
 
@@ -34,7 +30,7 @@ import { OptionComponent } from './options.component';
             [name]="id + '-radio'"
             [id]="id + '-radio-' + i"
             [value]="option.value()"
-            [checked]="value === option.value()"
+            [checked]="value() === option.value()"
             (blur)="touch()"
             [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
             (change)="update($event.target)"
@@ -56,8 +52,9 @@ import { OptionComponent } from './options.component';
     </div>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioComponent extends AbstractComponent<string> implements ControlValueAccessor {
+export class RadioComponent extends AbstractComponent<string> {
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -68,11 +65,8 @@ export class RadioComponent extends AbstractComponent<string> implements Control
   contents = viewChildren('content', { read: ViewContainerRef });
   el = viewChild<ElementRef<HTMLInputElement>>('field');
 
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
 
     effect(() => {
       const options = this.options();
@@ -98,10 +92,10 @@ export class RadioComponent extends AbstractComponent<string> implements Control
     }
   }
 
-  override onWrite(data: string): void {
+  override onWrite(data: string | undefined): void {
     const el = this.el();
     if (el && el.nativeElement) {
-      el.nativeElement.value = data;
+      el.nativeElement.value = data || '';
     }
   }
 }

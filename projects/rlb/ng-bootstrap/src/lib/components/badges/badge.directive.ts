@@ -4,6 +4,7 @@ import {
   Directive,
   effect,
   ElementRef,
+  inject,
   input,
   numberAttribute,
   Renderer2,
@@ -36,10 +37,10 @@ export class BadgeDirective implements AfterViewInit {
   private badgeContent!: any;
   private badgeElement!: HTMLElement;
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-  ) {
+  private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
+
+  constructor() {
     effect(() => {
       this.updateBadge();
     });

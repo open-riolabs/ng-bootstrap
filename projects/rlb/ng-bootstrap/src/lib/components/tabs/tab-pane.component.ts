@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'rlb-tab-pane',
@@ -11,8 +11,11 @@ import { booleanAttribute, Component, input } from '@angular/core';
     role: 'tabpanel',
     '[attr.aria-labelledby]': 'id() + "-rlb-tab"',
   },
-  template: `<ng-content />`,
-  standalone: false
+  template: `
+    <ng-content />
+  `,
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabPaneComponent {
   id = input.required<string>({ alias: 'id' });

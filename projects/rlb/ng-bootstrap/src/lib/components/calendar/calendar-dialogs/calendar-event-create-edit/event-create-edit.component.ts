@@ -1,4 +1,12 @@
-import { Component, computed, input, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
@@ -96,6 +104,7 @@ import { CalendarEvent } from '../../interfaces/calendar-event.interface';
       inputs: ['id', 'data-instance', 'data-options'],
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCreateEditComponent
   implements IModal<CalendarEvent | undefined, CalendarEvent>, OnInit, OnDestroy

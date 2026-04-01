@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'rlb-placeholder-line',
@@ -11,6 +11,7 @@ import { Component, computed, input } from '@angular/core';
     '[style.margin-bottom]': '"0.5rem"',
   },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RlbPlaceholderLineComponent {
   size = input<'xs' | 'sm' | 'md' | 'lg'>('md');

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   contentChildren,
   input,
@@ -73,6 +74,7 @@ import { SidebarService } from './sidebar.service';
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarItemComponent implements OnInit {
   element!: HTMLElement;

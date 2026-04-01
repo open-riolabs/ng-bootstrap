@@ -1,18 +1,28 @@
-import { booleanAttribute, Component, computed, input, numberAttribute } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  numberAttribute,
+} from '@angular/core';
 import { Color } from '../../shared/types';
 
 @Component({
   selector: 'rlb-progress',
   template: `
     <div
-      class="progress-bar {{ color() && !infinite()? 'bg-' + color() : '' }} {{ textColor()? 'text-' + textColor() : '' }}"
+      class="progress-bar {{ color() && !infinite() ? 'bg-' + color() : '' }} {{
+        textColor() ? 'text-' + textColor() : ''
+      }}"
       [class.progress-bar-animated]="animated()"
       [class.progress-bar-striped]="striped()"
       [class.infinite-progress]="infinite()"
-      [style.background-color]="infinite()? 'unset' : null"
-      [style.width.%]="infinite()? max() : percentValue()">
+      [style.background-color]="infinite() ? 'unset' : null"
+      [style.width.%]="infinite() ? max() : percentValue()"
+    >
       @if (infinite()) {
-        <div class="inner bg-{{color()}}"></div>
+        <div class="inner bg-{{ color() }}"></div>
       }
       @if (showValue()) {
         <span>
@@ -21,7 +31,8 @@ import { Color } from '../../shared/types';
       } @else {
         <ng-content></ng-content>
       }
-    </div>`,
+    </div>
+  `,
   host: {
     class: 'progress',
     'attr.role': 'progressbar',
@@ -32,14 +43,17 @@ import { Color } from '../../shared/types';
     '[attr.aria-label]': 'ariaLabel()',
     '[style.height.px]': 'height()',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressComponent {
-
   max = input(100, { alias: 'max', transform: numberAttribute });
   min = input(0, { alias: 'min', transform: numberAttribute });
   value = input(0, { alias: 'value', transform: numberAttribute });
-  height = input<number | undefined, unknown>(undefined, { alias: 'height', transform: numberAttribute });
+  height = input<number | undefined, unknown>(undefined, {
+    alias: 'height',
+    transform: numberAttribute,
+  });
   animated = input(false, { alias: 'animated', transform: booleanAttribute });
   striped = input(false, { alias: 'striped', transform: booleanAttribute });
   infinite = input(false, { alias: 'infinite', transform: booleanAttribute });

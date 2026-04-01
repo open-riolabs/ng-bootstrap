@@ -1,10 +1,11 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   input,
   OnInit,
   signal,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IModal, ModalData, ModalDirective } from '../components';
@@ -14,7 +15,8 @@ import { SearchModalInput } from './search-modal.data';
 @Component({
   imports: [RlbBootstrapModule, FormsModule],
   standalone: true,
-  template: ` <div class="modal-header">
+  template: `
+    <div class="modal-header">
       <h5 class="modal-title">{{ data().title }}</h5>
       <button
         type="button"
@@ -42,18 +44,18 @@ import { SearchModalInput } from './search-modal.data';
           <i class="bi bi-search"></i>
         </button>
       </rlb-input>
-    </div>`,
+    </div>
+  `,
   hostDirectives: [
     {
       directive: ModalDirective,
       inputs: ['id', 'data-instance', 'data-options'],
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchModalComponent
-  implements IModal<SearchModalInput, string>, OnInit
-{
-  @ViewChild('btn') btn!: ElementRef<HTMLElement>;
+export class SearchModalComponent implements IModal<SearchModalInput, string>, OnInit {
+  btn = viewChild<ElementRef<HTMLElement>>('btn');
 
   data = input<ModalData<SearchModalInput>>({} as any);
   valid = signal(true);

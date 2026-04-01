@@ -1,20 +1,17 @@
 import {
   afterNextRender,
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   contentChildren,
   effect,
   ElementRef,
   input,
   numberAttribute,
-  Optional,
-  Self,
   untracked,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 import { OptionComponent } from './options.component';
 
@@ -56,10 +53,10 @@ import { OptionComponent } from './options.component';
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent
   extends AbstractComponent<string | string[]>
-  implements ControlValueAccessor
 {
   placeholder = input<string | undefined>(undefined, { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined, { alias: 'size' });
@@ -82,15 +79,12 @@ export class SelectComponent
   });
   options = contentChildren(OptionComponent);
 
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
 
     afterNextRender(() => {
       // This executes exactly when the DOM is fully painted and bindings are settled
-      this.onWrite(this.value);
+      this.onWrite(this.value());
     });
 
     effect(() => {
@@ -106,7 +100,7 @@ export class SelectComponent
       });
 
       untracked(() => {
-        this.onWrite(this.value);
+        this.onWrite(this.value());
       });
     });
   }
@@ -125,20 +119,24 @@ export class SelectComponent
     }
   }
 
-  override onWrite(data: string | string[]): void {
+  override onWrite(data: string | string[] | undefined): void {
     const el = this.el?.();
     if (el && el.nativeElement) {
+      if (data === undefined || data === null) return;
+      
+      const normalizedData = Array.isArray(data) ? data : [data];
+
       if (this.multiple()) {
-        if (!Array.isArray(data)) data = [data];
         const opt = Array.from(el.nativeElement.options);
         opt.forEach(o => {
-          o.selected = data.includes(o.value);
+          o.selected = normalizedData.includes(o.value);
         });
       } else {
-        if (data === undefined || data === null) return;
-        if (Array.isArray(data) && data.length) data = data[0];
+        const singleData = normalizedData.length > 0 ? normalizedData[0] : undefined;
+        if (singleData === undefined) return;
+        
         const opt = Array.from(el.nativeElement.options);
-        const val = opt.find(o => o.value == data);
+        const val = opt.find(o => o.value == singleData);
         if (val) val.selected = true;
       }
     }

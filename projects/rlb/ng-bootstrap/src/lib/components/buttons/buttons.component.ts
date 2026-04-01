@@ -1,6 +1,8 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
+  computed,
   input,
 } from '@angular/core';
 import { Color, Size } from '../../shared/types';
@@ -12,7 +14,8 @@ import { Color, Size } from '../../shared/types';
     '[class]': 'mainClass()',
     '[attr.disabled]': 'disabled() ? true : undefined',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
   color = input<Color | undefined>('primary');
@@ -21,7 +24,7 @@ export class ButtonComponent {
   outline = input(false, { transform: booleanAttribute });
   isLink = input(false, { transform: booleanAttribute });
 
-  mainClass() {
+  mainClass = computed(() => {
     let style = '';
     const isLink = this.isLink();
     const color = this.color();
@@ -47,5 +50,5 @@ export class ButtonComponent {
       }
     }
     return style;
-  }
+  });
 }

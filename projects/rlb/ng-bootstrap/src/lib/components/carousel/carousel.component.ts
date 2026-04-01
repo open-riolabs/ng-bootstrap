@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
@@ -19,57 +20,65 @@ import { CarouselSlideComponent } from './carousel-slide.component';
 @Component({
   selector: 'rlb-carousel',
   template: `
-      @if (!hideIndicators()) {
-        <div class="carousel-indicators">
-          @for (item of items(); track item; let i = $index) {
-            <button
-              type="button"
-              [class.active]="item.active()"
-              [attr.data-bs-target]="'#' + id()"
-              [attr.data-bs-slide-to]="i"
-              [attr.aria-label]="'Slide ' + (i + 1)"
-            ></button>
-          }
-        </div>
-      }
-      <div class="carousel-inner">
-        <ng-content select="rlb-carousel-slide" />
+    @if (!hideIndicators()) {
+      <div class="carousel-indicators">
+        @for (item of items(); track item; let i = $index) {
+          <button
+            type="button"
+            [class.active]="item.active()"
+            [attr.data-bs-target]="'#' + id()"
+            [attr.data-bs-slide-to]="i"
+            [attr.aria-label]="'Slide ' + (i + 1)"
+          ></button>
+        }
       </div>
-      @if (!hideControls()) {
-        <button
-          class="carousel-control-prev"
-          type="button"
-          [attr.data-bs-target]="'#' + id()"
-          data-bs-slide="prev"
-          >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-      }
-      @if (!hideControls()) {
-        <button
-          class="carousel-control-next"
-          type="button"
-          [attr.data-bs-target]="'#' + id()"
-          data-bs-slide="next"
-          >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      }
-      `,
+    }
+    <div class="carousel-inner">
+      <ng-content select="rlb-carousel-slide" />
+    </div>
+    @if (!hideControls()) {
+      <button
+        class="carousel-control-prev"
+        type="button"
+        [attr.data-bs-target]="'#' + id()"
+        data-bs-slide="prev"
+      >
+        <span
+          class="carousel-control-prev-icon"
+          aria-hidden="true"
+        ></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+    }
+    @if (!hideControls()) {
+      <button
+        class="carousel-control-next"
+        type="button"
+        [attr.data-bs-target]="'#' + id()"
+        data-bs-slide="next"
+      >
+        <span
+          class="carousel-control-next-icon"
+          aria-hidden="true"
+        ></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    }
+  `,
   host: {
     class: 'carousel slide',
     '[class.carousel-fade]': 'crossFade()',
     '[id]': 'id()',
-    '[attr.data-bs-ride]': 'autoplay() === "auto" ? "carousel" : autoplay() === "manual" ? "true": undefined',
+    '[attr.data-bs-ride]':
+      'autoplay() === "auto" ? "carousel" : autoplay() === "manual" ? "true": undefined',
     '[attr.data-bs-touch]': 'noTouch() ? undefined : true',
     '[attr.data-bs-interval]': 'interval()',
     '[attr.data-bs-keyboard]': '!keyboard() ? "false" : undefined',
     '[attr.data-bs-wrap]': '!wrap() ? "false" : undefined',
     '[attr.data-bs-pause]': 'pauseProp() === false ? "false" : undefined',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselComponent implements OnDestroy, AfterViewInit {
   items = contentChildren(CarouselSlideComponent);
@@ -123,20 +132,21 @@ export class CarouselComponent implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.carousel = Carousel.getOrCreateInstance(
-      this.elementRef.nativeElement,
-      {
-        interval: this.interval(),
-        keyboard: this.keyboard(),
-        ride: this.adaptRide(this.autoplay()),
-        touch: this.noTouch() ? false : true,
-        wrap: this.wrap(),
-        pause: this.pauseProp() as any,
-      },
-    );
+    this.carousel = Carousel.getOrCreateInstance(this.elementRef.nativeElement, {
+      interval: this.interval(),
+      keyboard: this.keyboard(),
+      ride: this.adaptRide(this.autoplay()),
+      touch: this.noTouch() ? false : true,
+      wrap: this.wrap(),
+      pause: this.pauseProp() as any,
+    });
     this.carousel.to(this.currentSlide());
-    this.elementRef.nativeElement.addEventListener('slid.bs.carousel', e => this.__event_slid_handler(e));
-    this.elementRef.nativeElement.addEventListener('slide.bs.carousel', e => this.__event_slide_handler(e));
+    this.elementRef.nativeElement.addEventListener('slid.bs.carousel', e =>
+      this.__event_slid_handler(e),
+    );
+    this.elementRef.nativeElement.addEventListener('slide.bs.carousel', e =>
+      this.__event_slide_handler(e),
+    );
   }
 
   private __event_slid_handler = (e: any): void => {

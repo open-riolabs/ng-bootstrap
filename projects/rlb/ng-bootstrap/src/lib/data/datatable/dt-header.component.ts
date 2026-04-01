@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   EmbeddedViewRef,
   input,
@@ -20,6 +21,7 @@ import {
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableHeaderComponent {
   field = input<string | undefined>(undefined);

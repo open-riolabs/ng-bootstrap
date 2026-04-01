@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
@@ -36,6 +37,7 @@ import { DataTableCellComponent } from './dt-cell.component';
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableRowComponent {
   cssClass = input<string | undefined>(undefined, { alias: 'class' });

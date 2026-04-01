@@ -1,38 +1,44 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   input,
   OnInit,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
 
 @Component({
   selector: 'rlb-nav',
-  template: ` <ng-template #template>
-    <ul
-      class="nav {{ cssClass() }}"
-      [class.nav-tabs]="effectiveView() === 'tab' || effectiveView() === 'tabs'"
-      [class.nav-pills]="effectiveView() === 'pills'"
-      [class.nav-underline]="effectiveView() === 'underline'"
-      [class.nav-fill]="effectiveFill() === 'fill'"
-      [class.nav-justified]="effectiveFill() === 'justified'"
-      [class.flex-column]="vertical()"
-      [class.justify-content-center]="horizontalAlignment() === 'center'"
-      [class.justify-content-end]="horizontalAlignment() === 'end'"
-    >
-      <ng-content select="rlb-nav-item" />
-    </ul>
-  </ng-template>`,
-  standalone: false
+  template: `
+    <ng-template #template>
+      <ul
+        class="nav {{ cssClass() }}"
+        [class.nav-tabs]="effectiveView() === 'tab' || effectiveView() === 'tabs'"
+        [class.nav-pills]="effectiveView() === 'pills'"
+        [class.nav-underline]="effectiveView() === 'underline'"
+        [class.nav-fill]="effectiveFill() === 'fill'"
+        [class.nav-justified]="effectiveFill() === 'justified'"
+        [class.flex-column]="vertical()"
+        [class.justify-content-center]="horizontalAlignment() === 'center'"
+        [class.justify-content-end]="horizontalAlignment() === 'end'"
+      >
+        <ng-content select="rlb-nav-item" />
+      </ul>
+    </ng-template>
+  `,
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent implements OnInit {
   element!: HTMLElement;
 
-  horizontalAlignment = input<'center' | 'end' | undefined>(undefined, { alias: 'horizontal-alignment' });
+  horizontalAlignment = input<'center' | 'end' | undefined>(undefined, {
+    alias: 'horizontal-alignment',
+  });
   view = input<'tab' | 'tabs' | 'pills' | 'underline' | 'none'>('tab', { alias: 'view' });
   pills = input(false, { transform: booleanAttribute });
   tabs = input(false, { transform: booleanAttribute });
@@ -45,7 +51,7 @@ export class NavComponent implements OnInit {
     transform: (v: any) => {
       if (v === 'fill' || v === 'justified') return v;
       return booleanAttribute(v);
-    }
+    },
   });
 
   cssClass = input('', { alias: 'class' });
@@ -63,7 +69,7 @@ export class NavComponent implements OnInit {
     return val === true ? 'fill' : undefined;
   });
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  template = viewChild.required<TemplateRef<any>>('template');
 
   constructor(
     private viewContainerRef: ViewContainerRef,
@@ -73,9 +79,7 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }

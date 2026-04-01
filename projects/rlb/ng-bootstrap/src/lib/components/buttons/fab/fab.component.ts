@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Color } from "../../../shared/types";
 
 @Component({
@@ -6,6 +6,7 @@ import { Color } from "../../../shared/types";
   templateUrl: './fab.component.html',
   styleUrls: ['./fab.component.scss'],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RlbFabComponent {
   color = input<Color>('primary');

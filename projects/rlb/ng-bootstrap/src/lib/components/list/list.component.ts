@@ -1,12 +1,10 @@
-import {
-  booleanAttribute,
-  Component,
-  input,
-} from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'rlb-list',
-  template: `<ng-content select="rlb-list-item, rlb-list-item-image"></ng-content>`,
+  template: `
+    <ng-content select="rlb-list-item, rlb-list-item-image"></ng-content>
+  `,
   host: {
     class: 'list-group',
     '[class.list-group-numbered]': 'numbered()',
@@ -14,7 +12,8 @@ import {
     '[class.list-group-horizontal]': 'horizontal()',
     '[class.disabled]': 'disabled()',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent {
   disabled = input(false, { transform: booleanAttribute });

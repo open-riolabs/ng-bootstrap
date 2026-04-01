@@ -1,6 +1,7 @@
 import {
   AfterContentChecked,
   ElementRef,
+  inject,
   Injectable,
   OnDestroy,
   OnInit,
@@ -21,14 +22,12 @@ export abstract class ToggleAbstractComponent<T extends _bs_component>
   implements OnInit, OnDestroy, AfterContentChecked {
   protected _component!: T | undefined;
   protected htmlElement!: HTMLElement | Element | undefined;
+  protected elementRef = inject<ElementRef<HTMLElement>>(ElementRef, { optional: true });
   abstract get eventPrefix(): string;
 
   abstract getOrCreateInstance(element: HTMLElement | Element): T;
   abstract statusChange: OutputEmitterRef<VisibilityEvent>;
   abstract status?: VisibilityEvent;
-
-  constructor(protected elementRef?: ElementRef<HTMLElement>) {
-  }
 
   ngOnInit(elemnt?: HTMLElement | Element): void {
     this.htmlElement = elemnt || this.elementRef?.nativeElement;

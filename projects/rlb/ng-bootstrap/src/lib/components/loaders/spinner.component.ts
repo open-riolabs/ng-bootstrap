@@ -1,9 +1,11 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Color } from '../../shared/types';
 
 @Component({
   selector: 'rlb-spinner',
-  template: `<span class="visually-hidden">Loading...</span>`,
+  template: `
+    <span class="visually-hidden">Loading...</span>
+  `,
   host: {
     '[class.spinner-border]': 'style() === "border"',
     '[class.spinner-grow]': 'style() === "grow"',
@@ -14,7 +16,8 @@ import { Color } from '../../shared/types';
     role: 'status',
     '[class]': "'text-'+color()",
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpinnerComponent {
   style = input<'grow' | 'border'>('border', { alias: 'style' });

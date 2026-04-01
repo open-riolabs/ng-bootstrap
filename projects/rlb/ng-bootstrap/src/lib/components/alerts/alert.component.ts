@@ -1,6 +1,8 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
+  inject,
   input,
   OnInit,
   output,
@@ -26,7 +28,8 @@ import { Color } from '../../shared/types';
         }
       </div>
     </ng-template>`,
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnInit {
   element!: HTMLElement;
@@ -39,7 +42,9 @@ export class AlertComponent implements OnInit {
 
   template = viewChild.required<TemplateRef<any>>('template');
 
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  private viewContainerRef = inject(ViewContainerRef);
+
+  constructor() { }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(

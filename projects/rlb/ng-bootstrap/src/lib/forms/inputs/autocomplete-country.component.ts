@@ -1,20 +1,18 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   HostListener,
+  inject,
   input,
   model,
   numberAttribute,
-  Optional,
   output,
-  Self,
   signal,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteItem } from './autocomplete-model';
 
@@ -28,7 +26,7 @@ import { AutocompleteItem } from './autocomplete-model';
         [id]="id"
         class="form-control"
         type="text"
-        [value]="getText(value)"
+        [value]="getText(value())"
         autocomplete="off"
         [attr.disabled]="disabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
@@ -78,11 +76,9 @@ import { AutocompleteItem } from './autocomplete-model';
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompleteCountryComponent
-  extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor
-{
+export class AutocompleteCountryComponent extends AbstractComponent<AutocompleteItem> {
   // State
   isOpen = signal(false);
   protected suggestions = signal<AutocompleteItem[]>([]);
@@ -106,6 +102,8 @@ export class AutocompleteCountryComponent
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
   selected = output<AutocompleteItem>();
 
+  private readonly hostRef = inject(ElementRef<HTMLElement>);
+
   @HostListener('document:pointerdown', ['$event'])
   onDocumentPointerDown(event: PointerEvent) {
     this.handleOutsideEvent(event);
@@ -119,12 +117,8 @@ export class AutocompleteCountryComponent
     }
   }
 
-  constructor(
-    idService: UniqueIdService,
-    private readonly hostRef: ElementRef<HTMLElement>,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
@@ -138,7 +132,7 @@ export class AutocompleteCountryComponent
     }, 200);
   }
 
-  override onWrite(data: AutocompleteItem): void {
+  override onWrite(data: AutocompleteItem | undefined): void {
     const field = this.el();
     if (field && field.nativeElement) {
       if (typeof data === 'string') {
@@ -151,7 +145,7 @@ export class AutocompleteCountryComponent
     }
   }
 
-  getText(d: AutocompleteItem) {
+  getText(d: AutocompleteItem | undefined) {
     if (d == null) return '';
     if (typeof d === 'string') {
       const match = this._countries.find(c => c.value === d);

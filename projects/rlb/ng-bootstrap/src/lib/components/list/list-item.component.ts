@@ -1,15 +1,18 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   inject,
-  input
+  input,
 } from '@angular/core';
 import { ListComponent } from './list.component';
 
 @Component({
   selector: 'rlb-list-item',
-  template: `<ng-content></ng-content>`,
+  template: `
+    <ng-content></ng-content>
+  `,
   host: {
     class: 'list-group-item',
     '[class.disabled]': 'disabled()',
@@ -17,7 +20,8 @@ import { ListComponent } from './list.component';
     '[class.active]': 'active()',
     '[attr.aria-current]': 'active()',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListItemComponent {
   private parent = inject(ListComponent, { optional: true });

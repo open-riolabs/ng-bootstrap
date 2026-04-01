@@ -1,9 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
-    selector: 'rlb-tab-content',
-    host: { class: 'tab-content' },
-    template: `<ng-content select="rlb-tab-pane" />`,
-    standalone: false
+  selector: 'rlb-tab-content',
+  host: { class: 'tab-content' },
+  template: `
+    <ng-content select="rlb-tab-pane" />
+  `,
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabContentComponent {}

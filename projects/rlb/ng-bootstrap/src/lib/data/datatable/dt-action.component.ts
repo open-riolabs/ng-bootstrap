@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   EmbeddedViewRef,
   input,
@@ -27,6 +28,7 @@ import {
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableActionComponent {
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });

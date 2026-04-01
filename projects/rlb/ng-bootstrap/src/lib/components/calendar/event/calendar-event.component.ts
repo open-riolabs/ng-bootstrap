@@ -1,18 +1,21 @@
-import { Component, computed, input, output } from "@angular/core";
-import { CalendarEvent, CalendarEventWithLayout } from "../interfaces/calendar-event.interface";
-import { CalendarView } from "../interfaces/calendar-view.type";
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { CalendarEvent, CalendarEventWithLayout } from '../interfaces/calendar-event.interface';
+import { CalendarView } from '../interfaces/calendar-view.type';
 
 @Component({
   selector: 'rlb-calendar-event',
   templateUrl: 'calendar-event.component.html',
   styleUrls: ['./calendar-event.component.scss'],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarEventComponent {
   event = input.required<CalendarEventWithLayout>();
   view = input.required<CalendarView>();
   eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });
-  eventContainerClick = output<CalendarEventWithLayout[] | undefined>({ alias: 'event-container-click' });
+  eventContainerClick = output<CalendarEventWithLayout[] | undefined>({
+    alias: 'event-container-click',
+  });
 
   classes = computed(() => {
     const event = this.event();
@@ -36,7 +39,6 @@ export class CalendarEventComponent {
     if (event.isContinuedBefore) {
       classes.push('rounded-top-0', 'border-top-0', 'opacity-75');
     }
-
 
     if (event.isOverflowIndicator) {
       classes.push('overflow-indicator', 'bg-light', 'text-dark', 'border');

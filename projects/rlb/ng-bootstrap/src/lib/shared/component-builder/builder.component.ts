@@ -7,7 +7,7 @@ import { GenericComponent } from './generic.component';
 
 @Injectable()
 export abstract class BuilderComponent<T extends AbstractRegistryService<Function>> {
-  abstract component: ComponentHostDirective;
+  abstract component: Signal<ComponentHostDirective>;
   abstract builderId: string | Signal<string>;
 
   constructor(protected registryService: T) {}
@@ -20,7 +20,7 @@ export abstract class BuilderComponent<T extends AbstractRegistryService<Functio
     if (component.name) {
       const componentType = this.registryService.get(component.name) as Type<GenericComponent>;
       const componentRef =
-        this.component.viewContainerRef.createComponent<GenericComponent>(componentType);
+        this.component().viewContainerRef.createComponent<GenericComponent>(componentType);
       componentRef.instance.data = component.data;
       if (creationOptions?.setInstance === true) {
         componentRef.setInput(

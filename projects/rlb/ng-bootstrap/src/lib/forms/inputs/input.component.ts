@@ -1,22 +1,20 @@
 import {
   AfterViewInit,
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
+  inject,
   input,
   numberAttribute,
   OnInit,
-  Optional,
-  Self,
   signal,
   TemplateRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { NgControl } from '@angular/forms';
-import { DateTz, IDateTz } from '@open-rlb/date-tz';
-import { UniqueIdService } from '../../shared/unique-id.service';
+import { DateTz } from '@open-rlb/date-tz';
 import { AbstractComponent } from './abstract-field.component';
 
 @Component({
@@ -44,7 +42,7 @@ import { AbstractComponent } from './abstract-field.component';
         [attr.placeholder]="placeholder()"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
-        [value]="value || ''"
+        [value]="value() || ''"
         (blur)="touch()"
         [ngClass]="{
           'is-invalid': control?.touched && control?.invalid && enableValidation(),
@@ -59,8 +57,11 @@ import { AbstractComponent } from './abstract-field.component';
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent extends AbstractComponent<any> implements OnInit, AfterViewInit {
+  private viewContainerRef = inject(ViewContainerRef);
+
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -76,7 +77,7 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
   max = input(undefined, { transform: numberAttribute });
   min = input(undefined, { transform: numberAttribute });
   step = input(undefined, { transform: numberAttribute });
-  dateType = input<'date' | 'string' | 'number' | 'date-tz' | string | undefined>(undefined, {
+  dateType = input<'date' | 'string' | 'number' | 'date-tz' | string | undefined>('date-tz', {
     alias: 'date-type',
   });
   timezone = input('UTC');
@@ -104,12 +105,8 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   template = viewChild.required<TemplateRef<any>>('template');
 
-  constructor(
-    private viewContainerRef: ViewContainerRef,
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
@@ -158,25 +155,25 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
         }
       } else {
         const t = ev as HTMLInputElement;
-        this.setValue(t?.value || '');
+        this.setValue(t?.value as any);
       }
     }
   }
 
-  override onWrite(data: string): void {
+  override onWrite(data: string | undefined): void {
     const el = this.el();
 
     // If the view isn't ready yet, just store the value and exit.
     // ngAfterViewInit will call this method again once el() is available.
     if (!el || !el.nativeElement) {
-      this.value = data;
+      if (data !== undefined) this.value.set(data);
       return;
     }
 
     if (el && el.nativeElement) {
       if (this.type() === 'number') {
         if (data === '' || data === null || data === undefined) {
-          this.value = '';
+          this.value.set('');
           el.nativeElement.value = '';
           return;
         }
@@ -189,32 +186,35 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
         if (this.min() !== undefined && val < this.min()!) {
           val = this.min()!;
         }
-        this.value = data;
+        this.value.set(data);
         el.nativeElement.value = val.toString();
         return;
       }
       if (this.type() === 'datetime-local') {
         if (this.dateType() === 'string') {
-          this.value = data;
+          this.value.set(data);
           el.nativeElement.value = data || '';
         } else if (this.dateType() === 'date') {
           const d: Date = data as any;
-          this.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-          el.nativeElement.value = this.value;
+          const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+          this.value.set(val);
+          el.nativeElement.value = val;
         } else if (this.dateType() === 'number') {
-          const d: Date = new Date(data);
-          this.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-          el.nativeElement.value = this.value;
+          const d: Date = new Date(data as any);
+          const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+          this.value.set(val);
+          el.nativeElement.value = val;
         } else if (this.dateType() === 'date-tz') {
-          let d: IDateTz = data as any;
+          let d: any = data;
           if (!d?.timestamp) return;
           if (!d?.timezone) d.timezone = this.timezone();
           d = new DateTz(d);
-          this.value = `${d.toString?.('YYYY-MM-DDTHH:mm')}`;
-          el.nativeElement.value = this.value;
+          const val = `${d.toString?.('YYYY-MM-DDTHH:mm')}`;
+          this.value.set(val);
+          el.nativeElement.value = val;
         }
       } else {
-        this.value = data;
+        this.value.set(data);
         el.nativeElement.value = data || '';
       }
     }
@@ -227,7 +227,7 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
   }
 
   ngAfterViewInit() {
-    this.onWrite(this.value || '');
+    this.onWrite(this.value() || '');
   }
 
   removeNonDigits(value: string): string {

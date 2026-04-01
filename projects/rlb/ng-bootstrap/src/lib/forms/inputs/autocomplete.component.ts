@@ -1,21 +1,19 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   HostListener,
+  inject,
   input,
   model,
   numberAttribute,
-  Optional,
   output,
-  Self,
   signal,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { lastValueFrom, Observable } from 'rxjs';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
 
@@ -27,7 +25,7 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
       <input
         #field
         class="form-control"
-        [value]="getText(value)"
+        [value]="getText(value())"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
         (blur)="touch()"
@@ -81,11 +79,9 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompleteComponent
-  extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor
-{
+export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   acLoading = signal(false);
   private typingTimeout: any;
 
@@ -117,6 +113,8 @@ export class AutocompleteComponent
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
   selected = output<AutocompleteItem>();
 
+  private readonly hostRef = inject(ElementRef<HTMLElement>);
+
   @HostListener('document:pointerdown', ['$event'])
   onDocumentPointerDown(event: PointerEvent) {
     this.handleOutsideEvent(event);
@@ -130,12 +128,8 @@ export class AutocompleteComponent
     }
   }
 
-  constructor(
-    idService: UniqueIdService,
-    private readonly hostRef: ElementRef<HTMLElement>,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
@@ -150,7 +144,7 @@ export class AutocompleteComponent
     }, 500);
   }
 
-  override onWrite(data: AutocompleteItem): void {
+  override onWrite(data: AutocompleteItem | undefined): void {
     const field = this.el();
     if (field && field.nativeElement) {
       if (typeof data === 'string') {
@@ -218,7 +212,7 @@ export class AutocompleteComponent
     }
   }
 
-  getText(d: AutocompleteItem) {
+  getText(d: AutocompleteItem | undefined) {
     if (d == null) return '';
     return typeof d === 'string' ? d : d?.text;
   }

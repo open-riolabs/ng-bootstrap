@@ -1,16 +1,13 @@
 import {
   AfterViewInit,
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   input,
-  Optional,
-  Self,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
 @Component({
@@ -42,11 +39,11 @@ import { AbstractComponent } from './abstract-field.component';
     </div>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SwitchComponent
   extends AbstractComponent<boolean>
-  implements ControlValueAccessor, AfterViewInit
-{
+  implements AfterViewInit {
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -58,13 +55,8 @@ export class SwitchComponent
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
-  private data!: boolean;
-
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
@@ -74,8 +66,8 @@ export class SwitchComponent
     }
   }
 
-  override onWrite(data: boolean): void {
-    this.data = data;
+  override onWrite(data: boolean | undefined): void {
+    if (data !== undefined) this.value.set(data);
     this.updateInternalValue();
   }
 
@@ -85,12 +77,13 @@ export class SwitchComponent
 
   private updateInternalValue(): void {
     const el = this.el();
+    const data = this.value();
     if (el && el.nativeElement) {
-      if (this.data === undefined || this.data === null) return;
-      if (typeof this.data === 'string') {
-        el.nativeElement.checked = /^true$/i.test(this.data);
+      if (data === undefined || data === null) return;
+      if (typeof data === 'string') {
+        el.nativeElement.checked = /^true$/i.test(data);
       } else {
-        el.nativeElement.checked = this.data;
+        el.nativeElement.checked = data;
       }
     }
   }

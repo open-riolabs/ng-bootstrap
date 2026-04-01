@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'rlb-button-group',
@@ -10,7 +10,8 @@ import { Component, input } from '@angular/core';
     '[class.btn-group-lg]': 'size() === "lg"',
     'attr.role': 'group',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonGroupComponent {
   orientation = input<'horizontal' | 'vertical'>('horizontal', { alias: 'orientation' });

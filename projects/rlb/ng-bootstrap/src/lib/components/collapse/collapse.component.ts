@@ -1,4 +1,13 @@
-import { Component, ElementRef, input, OnDestroy, OnInit, output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  viewChild,
+} from '@angular/core';
 import { Collapse } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
@@ -6,7 +15,7 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
 @Component({
   selector: 'rlb-collapse',
   template: ` <div
-		#collapseRef
+    #collapseRef
     class="collapse"
     [id]="id()"
     [class.collapse-horizontal]="orientation() === 'horizontal'"
@@ -14,26 +23,31 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
     <ng-content></ng-content>
   </div>`,
   host: { '[attr.id]': 'undefined' },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollapseComponent
   extends ToggleAbstractComponent<Collapse>
-  implements OnInit, OnDestroy {
-
+  implements OnInit, OnDestroy
+{
   id = input.required<string>({ alias: 'id' });
-  orientation = input<'horizontal' | 'vertical'>('vertical', { alias: 'orientation' });
+  orientation = input<'horizontal' | 'vertical'>('vertical', {
+    alias: 'orientation',
+  });
 
   public override status: VisibilityEvent = 'hidden';
-  public override statusChange = output<VisibilityEvent>({ alias: 'statusChange' });
+  public override statusChange = output<VisibilityEvent>({
+    alias: 'statusChange',
+  });
 
-  @ViewChild('collapseRef', { static: true }) collapseRef!: ElementRef<HTMLElement>;
+  collapseRef = viewChild.required<ElementRef<HTMLElement>>('collapseRef');
 
-  constructor(elementRef: ElementRef<HTMLElement>) {
-    super(elementRef);
+  constructor() {
+    super();
   }
 
   override ngOnInit(elemnt?: HTMLElement | Element) {
-    super.ngOnInit(this.collapseRef.nativeElement);
+    super.ngOnInit(this.collapseRef().nativeElement);
   }
 
   override getOrCreateInstance(element: HTMLElement): Collapse {

@@ -1,4 +1,6 @@
-import { booleanAttribute, Component, computed, input, model, output } from '@angular/core';
+import { booleanAttribute, Component, computed, input, model, output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import { filter, map, of, switchMap, take } from 'rxjs';
 import { ModalType } from '../../shared/types';
@@ -17,6 +19,7 @@ import { getToday } from './utils/calendar-date-utils';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent {
   view = model<CalendarView>('week', { alias: 'view' });

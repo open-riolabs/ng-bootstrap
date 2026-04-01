@@ -1,16 +1,13 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   input,
   numberAttribute,
-  Optional,
-  Self,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
 @Component({
@@ -40,8 +37,9 @@ import { AbstractComponent } from './abstract-field.component';
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextAreaComponent extends AbstractComponent<string> implements ControlValueAccessor {
+export class TextAreaComponent extends AbstractComponent<string> {
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -55,24 +53,21 @@ export class TextAreaComponent extends AbstractComponent<string> implements Cont
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
     if (!this.isDisabled()) {
-      const t = ev as HTMLInputElement;
+      const t = ev as HTMLTextAreaElement;
       this.setValue(t?.value);
     }
   }
 
-  override onWrite(data: string): void {
+  override onWrite(data: string | undefined): void {
     const el = this.el();
     if (el && el.nativeElement) {
-      el.nativeElement.value = data;
+      el.nativeElement.value = data || '';
     }
   }
 }

@@ -1,13 +1,14 @@
-import { Component, input, output } from "@angular/core";
-import { DateTz, IDateTz } from "@open-rlb/date-tz";
-import { CalendarView } from "../interfaces/calendar-view.type";
-import { addDays, getToday } from "../utils/calendar-date-utils";
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
+import { CalendarView } from '../interfaces/calendar-view.type';
+import { addDays, getToday } from '../utils/calendar-date-utils';
 
 @Component({
   selector: 'rlb-calendar-header',
   templateUrl: './calendar-header.component.html',
   styleUrls: ['./calendar-header.component.scss'],
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarHeaderComponent {
   view = input<CalendarView>('month');
@@ -22,9 +23,7 @@ export class CalendarHeaderComponent {
         this.dateChange.emit(new DateTz(nextWeek));
         break;
       case 'month':
-        const nextMonth = new DateTz(this.currentDate())
-          .set(1, 'day')
-          .add(1, 'month');
+        const nextMonth = new DateTz(this.currentDate()).set(1, 'day').add(1, 'month');
         this.dateChange.emit(new DateTz(nextMonth));
         break;
       case 'day':
@@ -43,9 +42,7 @@ export class CalendarHeaderComponent {
         this.dateChange.emit(new DateTz(pastWeek));
         break;
       case 'month':
-        const pastMonth = new DateTz(this.currentDate())
-          .set(1, 'day')
-          .add(-1, 'month');
+        const pastMonth = new DateTz(this.currentDate()).set(1, 'day').add(-1, 'month');
         this.dateChange.emit(new DateTz(pastMonth));
         break;
       case 'day':
@@ -53,7 +50,6 @@ export class CalendarHeaderComponent {
         this.dateChange.emit(new DateTz(nextDay));
         break;
       default:
-
         break;
     }
   }

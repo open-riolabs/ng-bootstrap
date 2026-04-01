@@ -1,15 +1,12 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   input,
-  Optional,
-  Self,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
 @Component({
@@ -24,7 +21,7 @@ import { AbstractComponent } from './abstract-field.component';
         [id]="id"
         [attr.disabled]="isDisabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
-        [value]="value"
+        [value]="value()"
         (blur)="touch()"
         [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
         (input)="update($event.target)"
@@ -38,11 +35,9 @@ import { AbstractComponent } from './abstract-field.component';
     </div>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckboxComponent
-  extends AbstractComponent<boolean | undefined>
-  implements ControlValueAccessor
-{
+export class CheckboxComponent extends AbstractComponent<boolean | undefined> {
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -54,11 +49,8 @@ export class CheckboxComponent
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
@@ -96,6 +88,6 @@ export class CheckboxComponent
     if (!this.indeterminate()) {
       val = val || false;
     }
-    super.writeValue(val);
+    super.writeValue(val as any);
   }
 }

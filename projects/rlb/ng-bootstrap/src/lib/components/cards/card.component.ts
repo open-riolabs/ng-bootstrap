@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   contentChild,
   effect,
@@ -39,7 +40,8 @@ import { CardImageComponent } from './card-image.component';
     '[class.border-light]': 'border() === "light"',
     '[class.border-dark]': 'border() === "dark"',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardComponent {
   align = input<TextAlignment | undefined>('left', { alias: 'align' });

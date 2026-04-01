@@ -1,9 +1,9 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   DOCUMENT,
-  ElementRef,
-  Inject,
+  inject,
   input,
   OnDestroy,
   OnInit,
@@ -33,24 +33,39 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
     '[class.offcanvas-top]': 'placement() === "top"',
     '[class.offcanvas-bottom]': 'placement() === "bottom"',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OffcanvasComponent
   extends ToggleAbstractComponent<Offcanvas>
-  implements OnInit, OnDestroy {
-
+  implements OnInit, OnDestroy
+{
   id = input.required<string>({ alias: 'id' });
   bodyScroll = input(false, { alias: 'body-scroll', transform: booleanAttribute });
-  scrollBackup = input(false, { alias: 'scroll-backup', transform: booleanAttribute });
-  closeManual = input(false, { alias: 'close-manual', transform: booleanAttribute });
-  placement = input<'start' | 'end' | 'top' | 'bottom'>('start', { alias: 'placement' });
-  responsive = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | undefined>(undefined, { alias: 'responsive' });
+  scrollBackup = input(false, {
+    alias: 'scroll-backup',
+    transform: booleanAttribute,
+  });
+  closeManual = input(false, {
+    alias: 'close-manual',
+    transform: booleanAttribute,
+  });
+  placement = input<'start' | 'end' | 'top' | 'bottom'>('start', {
+    alias: 'placement',
+  });
+  responsive = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | undefined>(undefined, {
+    alias: 'responsive',
+  });
 
   public override status: VisibilityEvent = 'hidden';
-  public override statusChange = output<VisibilityEvent>({ alias: 'statusChange' });
+  public override statusChange = output<VisibilityEvent>({
+    alias: 'statusChange',
+  });
 
-  constructor(elementRef: ElementRef<HTMLElement>, @Inject(DOCUMENT) private document: Document) {
-    super(elementRef);
+  private document = inject(DOCUMENT);
+
+  constructor() {
+    super();
   }
 
   override ngOnInit(elemnt?: HTMLElement | Element) {

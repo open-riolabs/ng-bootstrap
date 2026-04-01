@@ -1,4 +1,4 @@
-import { computed, Injectable, ModelSignal, Optional, Self, signal, Signal } from '@angular/core';
+import { computed, inject, Injectable, ModelSignal, Optional, Self, signal, Signal } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
@@ -6,27 +6,31 @@ import { UniqueIdService } from '../../shared/unique-id.service';
 export abstract class AbstractComponent<T = any> implements ControlValueAccessor {
   public abstract disabled?: boolean | Signal<boolean | undefined> | ModelSignal<boolean>;
   protected abstract userDefinedId: string | Signal<string> | ModelSignal<string>;
+
+  protected idService = inject(UniqueIdService);
+  @Self() @Optional() public control: NgControl | null = inject(NgControl, { optional: true, self: true });
+
   protected onTouched: Function = () => {};
   protected onChanged: Function = (v: T) => {};
-  public value!: T;
-  private _id!: string;
+
+  public value = signal<T | undefined>(undefined);
+  private _id: string;
+
   public get id(): string {
     const userDefinedIdValue =
       typeof this.userDefinedId === 'function' ? (this.userDefinedId as any)() : this.userDefinedId;
     return (userDefinedIdValue as string) || this._id;
   }
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() public control?: NgControl,
-  ) {
-    this._id = idService.id;
+
+  constructor() {
+    this._id = this.idService.id;
     if (this.control) {
       this.control.valueAccessor = this;
     }
   }
 
   protected setValue(val: T) {
-    this.value = val;
+    this.value.set(val);
     this.onChanged?.(val);
   }
 
@@ -35,7 +39,7 @@ export abstract class AbstractComponent<T = any> implements ControlValueAccessor
   }
 
   writeValue(val: T): void {
-    this.value = val;
+    this.value.set(val);
     this.onWrite(val);
   }
 
@@ -67,5 +71,5 @@ export abstract class AbstractComponent<T = any> implements ControlValueAccessor
     return this.control?.errors || {};
   });
 
-  onWrite(data: T) {}
+  onWrite(data: T | undefined) {}
 }
