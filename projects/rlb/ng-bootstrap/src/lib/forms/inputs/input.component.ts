@@ -24,29 +24,22 @@ import { AbstractComponent } from './abstract-field.component';
       <ng-content select="[before]"></ng-content>
       <input
         #field
-        [id]="id"
+        [id]="id()"
         class="form-control"
         [type]="_type()"
-        [name]="name()"
-        [attr.max]="
-          type() === 'number' && max() !== null && max() !== undefined ? max() : undefined
-        "
-        [attr.min]="
-          type() === 'number' && min() !== null && min() !== undefined ? min() : undefined
-        "
-        [attr.step]="
-          type() === 'number' && step() !== null && step() !== undefined ? step() : undefined
-        "
-        [attr.disabled]="isDisabled() ? true : undefined"
-        [attr.readonly]="readonly() ? true : undefined"
-        [attr.placeholder]="placeholder()"
+        [attr.name]="name() || null"
+        [attr.max]="type() === 'number' && max() != null ? max() : null"
+        [attr.min]="type() === 'number' && min() != null ? min() : null"
+        [attr.step]="type() === 'number' && step() != null ? step() : null"
+        [disabled]="isDisabled()"
+        [readonly]="readonly()"
+        [placeholder]="placeholder() || ''"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
-        [value]="value() || ''"
         (blur)="touch()"
         [ngClass]="{
-          'is-invalid': control?.touched && control?.invalid && enableValidation(),
-          'is-valid': control?.touched && control?.valid && enableValidation(),
+          'is-invalid': controlTouched() && invalid() && enableValidation(),
+          'is-valid': controlTouched() && !invalid() && enableValidation(),
         }"
         (input)="update($event.target)"
       />
@@ -56,20 +49,13 @@ import { AbstractComponent } from './abstract-field.component';
       <ng-content select="[after]"></ng-content>
     </ng-template>
   `,
+  host: { '[attr.id]': 'null' },
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent extends AbstractComponent<any> implements OnInit, AfterViewInit {
-  private viewContainerRef = inject(ViewContainerRef);
-
-  disabled = input(false, {
-    transform: booleanAttribute,
-  });
+  disabled = input(false, { transform: booleanAttribute });
   readonly = input(false, { transform: booleanAttribute });
-  beforeText = input(false, {
-    alias: 'before-text',
-    transform: booleanAttribute,
-  });
   placeholder = input<string | undefined>(undefined);
   type = input<string>('text');
   size = input<'small' | 'large' | undefined>(undefined);
@@ -81,7 +67,7 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
     alias: 'date-type',
   });
   timezone = input('UTC');
-  userDefinedId = input('', { alias: 'id' });
+  userDefinedId = input<string | undefined>(undefined, { alias: 'inputId' });
   extValidation = input(false, { transform: booleanAttribute });
   enableValidation = input(false, {
     alias: 'enable-validation',
@@ -95,151 +81,136 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
     this._forceExtValidation.set(val);
   }
 
-  protected _type = computed(() => {
-    if (this.type() === 'number') return 'text';
-    return this.type() || 'text';
-  });
-
+  protected _type = computed(() => (this.type() === 'number' ? 'text' : this.type() || 'text'));
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   template = viewChild.required<TemplateRef<any>>('template');
+  private viewContainerRef = inject(ViewContainerRef);
+
+  // Directly hold reference to the native input extracted from the embedded view
+  private nativeInputEl: HTMLInputElement | null = null;
 
   constructor() {
     super();
   }
 
-  update(ev: EventTarget | null) {
-    if (!this.isDisabled()) {
-      if (this.type() === 'number') {
-        const t = ev as HTMLInputElement;
-        const val = this.removeNonDigits(t?.value);
-        if (!val) t.value = '';
-        const comma = val.includes('.');
-        let v = parseFloat(val);
-        if (!isNaN(v)) {
-          if (this.max() !== undefined && v > this.max()!) {
-            v = this.max()!;
-          }
-          if (this.min() !== undefined && v < this.min()!) {
-            v = this.min()!;
-          }
-          let text = v.toString() + (comma ? '.' : '');
-          const firstDotIndex = text.indexOf('.');
-          if (firstDotIndex !== -1) {
-            text =
-              (text.match(/\./g) || [])?.length > 1
-                ? text.slice(0, firstDotIndex + 1) +
-                  text.slice(firstDotIndex + 1).replace(/\./g, '')
-                : text;
-          }
-          this.onChanged?.(parseFloat(text));
-          t.value = text;
-          return;
-        }
-      }
-      if (this.type() === 'datetime-local') {
-        if (this.dateType() === 'string') {
-          const t = ev as HTMLInputElement;
-          this.onChanged?.(t?.value || '');
-        } else if (this.dateType() === 'number') {
-          const t = ev as HTMLInputElement;
-          this.onChanged?.(Date.parse(t?.value + ':00'));
-        } else if (this.dateType() === 'date') {
-          const t = ev as HTMLInputElement;
-          this.onChanged?.(new Date(Date.parse(t?.value + ':00')));
-        } else if (this.dateType() === 'date-tz') {
-          const t = ev as HTMLInputElement;
-          const d = DateTz.parse(t?.value, 'YYYY-MM-DDTHH:mm', this.timezone());
-          this.onChanged?.(d);
-        }
-      } else {
-        const t = ev as HTMLInputElement;
-        this.setValue(t?.value as any);
-      }
+  override ngOnInit() {
+    super.ngOnInit();
+    const view = this.viewContainerRef.createEmbeddedView(this.template());
+    const inputNode = view.rootNodes.find(n => n.tagName === 'INPUT' || n.nodeName === 'INPUT');
+    if (inputNode) {
+      this.nativeInputEl = inputNode as HTMLInputElement;
     }
-  }
-
-  override onWrite(data: string | undefined): void {
-    const el = this.el();
-
-    // If the view isn't ready yet, just store the value and exit.
-    // ngAfterViewInit will call this method again once el() is available.
-    if (!el || !el.nativeElement) {
-      if (data !== undefined) this.value.set(data);
-      return;
-    }
-
-    if (el && el.nativeElement) {
-      if (this.type() === 'number') {
-        if (data === '' || data === null || data === undefined) {
-          this.value.set('');
-          el.nativeElement.value = '';
-          return;
-        }
-
-        let val = parseFloat(this.removeNonDigits(data));
-
-        if (this.max() !== undefined && val > this.max()!) {
-          val = this.max()!;
-        }
-        if (this.min() !== undefined && val < this.min()!) {
-          val = this.min()!;
-        }
-        this.value.set(data);
-        el.nativeElement.value = val.toString();
-        return;
-      }
-      if (this.type() === 'datetime-local') {
-        if (this.dateType() === 'string') {
-          this.value.set(data);
-          el.nativeElement.value = data || '';
-        } else if (this.dateType() === 'date') {
-          const d: Date = data as any;
-          const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-          this.value.set(val);
-          el.nativeElement.value = val;
-        } else if (this.dateType() === 'number') {
-          const d: Date = new Date(data as any);
-          const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-          this.value.set(val);
-          el.nativeElement.value = val;
-        } else if (this.dateType() === 'date-tz') {
-          let d: any = data;
-          if (!d?.timestamp) return;
-          if (!d?.timezone) d.timezone = this.timezone();
-          d = new DateTz(d);
-          const val = `${d.toString?.('YYYY-MM-DDTHH:mm')}`;
-          this.value.set(val);
-          el.nativeElement.value = val;
-        }
-      } else {
-        this.value.set(data);
-        el.nativeElement.value = data || '';
-      }
-    }
-  }
-
-  ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
-    //this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
 
+  update(ev: EventTarget | null) {
+    if (this.isDisabled() || !ev) return;
+    const t = ev as HTMLInputElement;
+
+    if (this.type() === 'number') {
+      const val = this.removeNonDigits(t.value);
+      if (!val) {
+        t.value = '';
+        this.setValue('');
+        return;
+      }
+      const comma = val.includes('.');
+      let v = parseFloat(val);
+      if (!isNaN(v)) {
+        if (this.max() != null && v > this.max()!) v = this.max()!;
+        if (this.min() != null && v < this.min()!) v = this.min()!;
+
+        let text = v.toString() + (comma ? '.' : '');
+        const firstDotIndex = text.indexOf('.');
+        if (firstDotIndex !== -1) {
+          text =
+            (text.match(/\./g) || [])?.length > 1
+              ? text.slice(0, firstDotIndex + 1) + text.slice(firstDotIndex + 1).replace(/\./g, '')
+              : text;
+        }
+        t.value = text;
+        this.setValue(parseFloat(text));
+      }
+    } else if (this.type() === 'datetime-local') {
+      if (this.dateType() === 'string') {
+        this.setValue(t.value || '');
+      } else if (this.dateType() === 'number') {
+        this.setValue(Date.parse(t.value + ':00'));
+      } else if (this.dateType() === 'date') {
+        this.setValue(new Date(Date.parse(t.value + ':00')));
+      } else if (this.dateType() === 'date-tz') {
+        const d = DateTz.parse(t.value, 'YYYY-MM-DDTHH:mm', this.timezone());
+        this.setValue(d);
+      }
+    } else {
+      this.setValue(t.value);
+    }
+  }
+
+  override onWrite(data: any): void {
+    if (!this.nativeInputEl) return;
+
+    const nativeEl = this.nativeInputEl;
+
+    if (data == null || data === '') {
+      nativeEl.value = '';
+      return;
+    }
+
+    if (this.type() === 'number') {
+      let val = parseFloat(this.removeNonDigits(String(data)));
+      if (isNaN(val)) {
+        nativeEl.value = '';
+        return;
+      }
+      if (this.max() != null && val > this.max()!) val = this.max()!;
+      if (this.min() != null && val < this.min()!) val = this.min()!;
+      nativeEl.value = val.toString();
+    } else if (this.type() === 'datetime-local') {
+      if (this.dateType() === 'string') {
+        nativeEl.value = data || '';
+      } else if (this.dateType() === 'date') {
+        const d: Date = data as any;
+        if (d && !isNaN(d.getTime())) {
+          nativeEl.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        } else {
+          nativeEl.value = '';
+        }
+      } else if (this.dateType() === 'number') {
+        const d: Date = new Date(data as any);
+        if (d && !isNaN(d.getTime())) {
+          nativeEl.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        } else {
+          nativeEl.value = '';
+        }
+      } else if (this.dateType() === 'date-tz') {
+        let d: any = data;
+        if (!d?.timestamp) return;
+        if (!d?.timezone) d.timezone = this.timezone();
+        d = new DateTz(d);
+        nativeEl.value = `${d.toString?.('YYYY-MM-DDTHH:mm')}` || '';
+      }
+    } else {
+      // Safely assign text value
+      nativeEl.value = data !== undefined ? String(data) : '';
+    }
+  }
+
   ngAfterViewInit() {
-    this.onWrite(this.value() || '');
+    this.onWrite(this.value());
   }
 
   removeNonDigits(value: string): string {
+    if (!value) return '';
     const filtered =
       value
         .toString()
-        .match(/[0-9,.]/g)
+        .match(/[0-9,.-]/g)
         ?.join('') || '';
     const standardized = filtered.replace(/,/g, '.');
     const [integerPart, ...fractionalParts] = standardized.split('.');
-    const result =
-      fractionalParts.length > 0 ? `${integerPart}.${fractionalParts.join('')}` : integerPart;
-    return result;
+    return fractionalParts.length > 0 ? `${integerPart}.${fractionalParts.join('')}` : integerPart;
   }
 }
