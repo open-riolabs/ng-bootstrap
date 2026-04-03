@@ -17,7 +17,7 @@ import { AbstractComponent } from './abstract-field.component';
     <div class="input-group has-validation">
       <textarea
         #field
-        [id]="id"
+        [id]="id()"
         class="form-control"
         [rows]="rows()"
         [attr.rows]="rows()"

@@ -165,4 +165,106 @@
     </div>
   </rlb-accordion>
 
+  <rlb-accordion class="my-3">
+    <div rlb-accordion-item>
+      <rlb-accordion-header>Advanced Autocomplete (Async, Patching & Validation)</rlb-accordion-header>
+      <div rlb-accordion-body>
+
+        <form [formGroup]="advForm" (ngSubmit)="submitForm()" class="row g-3">
+
+          <!--  Country Search (Object-based) -->
+          <div class="col-md-6">
+            <label class="form-label">Country (Generic autocomplete with custom callback)</label>
+            <rlb-autocomplete
+              formControlName="country"
+              [autocomplete]="searchCountries"
+              placeholder="Search country..."
+              enable-validation="true">
+            </rlb-autocomplete>
+          </div>
+
+          <!--  Async User Search with Validation -->
+          <div class="col-md-6">
+            <label class="form-label">
+              Assign to User
+              @if (advForm.get('user')?.pending) {
+                <span class="spinner-border spinner-border-sm text-primary ms-2"></span>
+              }
+            </label>
+            <rlb-autocomplete
+              formControlName="user"
+              [autocomplete]="searchUsers"
+              [chars-to-search]="1"
+              placeholder="Type 'Alice'..."
+              enable-validation="true">
+            </rlb-autocomplete>
+            <div class="form-text">Validation: 'Charlie' is restricted.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Birth Country (Specialized Component)</label>
+            <rlb-autocomplete-country
+              formControlName="birthCountry"
+              placeholder="Type to search countries..."
+              enable-validation="true">
+            </rlb-autocomplete-country>
+          </div>
+
+          <!-- Specialized Dial Code Component -->
+          <div class="col-md-6">
+            <label class="form-label">Phone Prefix</label>
+            <rlb-autocomplete-country-dial-code
+              formControlName="dialCode"
+              placeholder="Search code or country..."
+              [loading]="isSaving"
+              enable-validation="true"
+            >
+            </rlb-autocomplete-country-dial-code>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Preferred Timezone</label>
+            <rlb-autocomplete-timezones
+              formControlName="timezone"
+              placeholder="Search timezone (e.g. Rome)..."
+              enable-validation="true">
+            </rlb-autocomplete-timezones>
+          </div>
+
+          <!-- Actions -->
+          <div class="col-12 mt-4 d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" (click)="patchMockData()">
+              Patch Mock Data
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving || advForm.pending">
+              @if (isSaving) {
+                <span class="spinner-border spinner-border-sm me-2"></span> Saving...
+              } @else {
+                Submit Form
+              }
+            </button>
+          </div>
+        </form>
+
+        <!-- Form State Tracker -->
+        <div class="mt-4 p-3 bg-light border rounded">
+          <h6 class="text-secondary border-bottom pb-2">DEBUG STATE</h6>
+          <div class="row small">
+            <div class="col-md-7">
+              <strong>Value:</strong>
+              <pre class="text-info"><code>{{ advForm.value | json }}</code></pre>
+            </div>
+            <div class="col-md-5 border-start">
+              <strong>Status:</strong><br>
+              Valid: <span rlb-badge [color]="advForm.valid ? 'success' : 'danger'">{{ advForm.valid }}</span><br>
+              Touched: <span rlb-badge [color]="advForm.touched ? 'warning' : 'secondary'">{{ advForm.touched }}</span><br>
+              Pending: <span rlb-badge [color]="advForm.pending ? 'info' : 'secondary'">{{ advForm.pending }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </rlb-accordion>
+
 </div>

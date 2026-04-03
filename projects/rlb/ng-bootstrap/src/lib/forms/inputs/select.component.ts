@@ -23,7 +23,7 @@ import { OptionComponent } from './options.component';
       <select
         #select
         class="form-select d-inline-block"
-        [id]="id"
+        [id]="id()"
         [attr.disabled]="disabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
         [attr.multiple]="multiple() ? true : undefined"
@@ -55,9 +55,7 @@ import { OptionComponent } from './options.component';
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent
-  extends AbstractComponent<string | string[]>
-{
+export class SelectComponent extends AbstractComponent<string | string[]> {
   placeholder = input<string | undefined>(undefined, { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined, { alias: 'size' });
   disabled = input(false, {
@@ -123,7 +121,7 @@ export class SelectComponent
     const el = this.el?.();
     if (el && el.nativeElement) {
       if (data === undefined || data === null) return;
-      
+
       const normalizedData = Array.isArray(data) ? data : [data];
 
       if (this.multiple()) {
@@ -134,7 +132,7 @@ export class SelectComponent
       } else {
         const singleData = normalizedData.length > 0 ? normalizedData[0] : undefined;
         if (singleData === undefined) return;
-        
+
         const opt = Array.from(el.nativeElement.options);
         const val = opt.find(o => o.value == singleData);
         if (val) val.selected = true;

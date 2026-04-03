@@ -26,7 +26,7 @@ import { AbstractComponent } from './abstract-field.component';
           #field
           class="form-check-input"
           type="checkbox"
-          [id]="id"
+          [id]="id()"
           [attr.disabled]="isDisabled() ? true : undefined"
           [attr.readonly]="readonly() ? true : undefined"
           (blur)="touch()"
@@ -41,9 +41,7 @@ import { AbstractComponent } from './abstract-field.component';
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SwitchComponent
-  extends AbstractComponent<boolean>
-  implements AfterViewInit {
+export class SwitchComponent extends AbstractComponent<boolean> implements AfterViewInit {
   disabled = input(false, {
     transform: booleanAttribute,
   });

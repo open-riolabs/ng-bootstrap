@@ -4,7 +4,6 @@ import {
   Component,
   computed,
   ElementRef,
-  HostListener,
   inject,
   input,
   model,
@@ -24,7 +23,7 @@ import { AutocompleteItem } from './autocomplete-model';
     <div class="input-group has-validation position-relative">
       <input
         #field
-        [id]="id"
+        [id]="id()"
         class="form-control"
         type="text"
         [value]="value() || ''"
@@ -36,13 +35,14 @@ import { AutocompleteItem } from './autocomplete-model';
         [class.form-control-sm]="size() === 'small'"
         (blur)="touch()"
         [ngClass]="{
-          'is-invalid': control?.touched && control?.invalid,
-          'is-valid': control?.touched && control?.valid,
+          'is-invalid': controlTouched() && invalid() && enableValidation(),
+          'is-valid': controlTouched() && !invalid() && enableValidation(),
         }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
       />
-      @if (errors() && showError()) {
+
+      @if (showError()) {
         <rlb-input-validation [errors]="errors()" />
       }
 
@@ -50,12 +50,13 @@ import { AutocompleteItem } from './autocomplete-model';
       @if (isOpen()) {
         <div
           #autocomplete
-          class="dropdown-menu show w-100 position-absolute overflow-y-auto"
+          class="dropdown-menu show w-100 position-absolute overflow-y-auto shadow"
           [style.max-height.px]="maxHeight()"
+          [style.max-width.px]="menuMaxWidth()"
           style="z-index: 1000; top: 100%;"
         >
           @if (!hasSuggestions()) {
-            <a class="dropdown-item disabled text-center">No suggestions</a>
+            <a class="dropdown-item disabled text-center italic">No suggestions</a>
           } @else {
             @for (item of suggestions(); track item.value) {
               <a
@@ -63,12 +64,6 @@ import { AutocompleteItem } from './autocomplete-model';
                 (click)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
-                @if (item.iconClass) {
-                  <i
-                    [class]="item.iconClass"
-                    class="me-2"
-                  ></i>
-                }
                 {{ item.text }}
               </a>
             }
@@ -79,47 +74,47 @@ import { AutocompleteItem } from './autocomplete-model';
     @if (loading()) {
       <rlb-progress
         [height]="2"
-        [infinite]="loading()"
+        [infinite]="true"
         color="primary"
         class="w-100"
       />
     }
     <ng-content select="[after]"></ng-content>
   `,
+  host: {
+    '(document:pointerdown)': 'handleOutsideEvent($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
-  // State
   isOpen = signal(false);
   protected suggestions = signal<AutocompleteItem[]>([]);
   protected hasSuggestions = computed(() => this.suggestions().length > 0);
   private typingTimeout: any;
 
-  // Inputs
   disabled = model(false);
   readonly = input(false, { transform: booleanAttribute });
   placeholder = input('', { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined);
   maxHeight = input(200, { transform: numberAttribute, alias: 'max-height' });
-  loading = input(false, { transform: booleanAttribute, alias: 'loading' });
+  menuMaxWidth = input(null, { alias: 'menu-max-width', transform: numberAttribute });
+  loading = input(false, { transform: booleanAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
+  enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
 
-  enableFlagIcons = input(false, { transform: booleanAttribute, alias: 'enable-flag-icons' });
-
-  // View Children
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
   selected = output<string>();
 
   private readonly hostRef = inject(ElementRef<HTMLElement>);
 
-  @HostListener('document:pointerdown', ['$event'])
-  onDocumentPointerDown(event: PointerEvent) {
-    this.handleOutsideEvent(event);
+  constructor() {
+    super();
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: Event) {
     if (this.isOpen()) {
       this.closeDropdown();
@@ -127,45 +122,26 @@ export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
     }
   }
 
-  constructor() {
-    super();
-  }
-
   update(ev: EventTarget | null) {
     if (this.typingTimeout) clearTimeout(this.typingTimeout);
-
     this.typingTimeout = setTimeout(() => {
       if (!this.disabled()) {
-        const t = ev as HTMLInputElement;
-        this.manageSuggestions(t?.value);
+        this.manageSuggestions((ev as HTMLInputElement)?.value);
       }
     }, 200);
   }
 
-  override onWrite(data: string | undefined): void {
-    const field = this.el();
-    if (field && field.nativeElement) {
-      // Timezones are simple strings, so we just set the value
-      field.nativeElement.value = data || '';
-    }
-  }
+  // We leave onWrite empty because [value]="value() || ''" in the template
+  // handles the synchronization automatically in a Zoneless/Signal world.
+  override onWrite(data: string | undefined): void {}
 
   manageSuggestions(query: string) {
-    this.suggestions.set([]);
-
     if (query && query.length > 0) {
       this.openDropdown();
-
       const timezones = DateTz.timezones();
       const filtered = timezones.filter(tz => tz.toLowerCase().includes(query.toLowerCase()));
 
-      // Map string[] to AutocompleteItem[] for the template
-      this.suggestions.set(
-        filtered.map(tz => ({
-          text: tz,
-          value: tz,
-        })),
-      );
+      this.suggestions.set(filtered.map(tz => ({ text: tz, value: tz })));
     } else {
       this.closeDropdown();
     }
@@ -173,55 +149,33 @@ export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
 
   selectItem(item: AutocompleteItem, ev?: Event) {
     ev?.stopPropagation();
-    const val = item.value;
-
+    const val = item.value as string;
     this.selected.emit(val);
     this.setValue(val);
     this.closeDropdown();
-
-    const field = this.el();
-    if (field?.nativeElement) {
-      field.nativeElement.value = val;
-    }
   }
 
   onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
-    if (!this.disabled() && t && t.value) {
+    if (!this.disabled() && t?.value) {
       this.setValue(t.value);
       this.closeDropdown();
     }
   }
 
-  private handleOutsideEvent(event: Event) {
+  handleOutsideEvent(event: Event) {
     if (!this.isOpen()) return;
-
     const target = event.target as HTMLElement;
-    const dropdown = this.dropdown();
-    const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
-
-    const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
-    const clickedInsideDropdown = dropdown?.nativeElement?.contains
-      ? dropdown.nativeElement.contains(target)
-      : false;
-    const clickedInPath = path.length
-      ? path.some(
-          p => p === this.hostRef.nativeElement || (dropdown && p === dropdown.nativeElement),
-        )
-      : false;
-
-    if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
-      this.closeDropdown();
-    }
+    const isInside =
+      this.hostRef.nativeElement.contains(target) ||
+      this.dropdown()?.nativeElement.contains(target);
+    if (!isInside) this.closeDropdown();
   }
 
   openDropdown() {
-    if (this.isOpen()) return;
     this.isOpen.set(true);
   }
-
   closeDropdown() {
-    if (!this.isOpen()) return;
     this.isOpen.set(false);
   }
 }

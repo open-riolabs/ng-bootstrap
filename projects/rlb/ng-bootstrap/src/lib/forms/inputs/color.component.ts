@@ -15,7 +15,7 @@ import { AbstractComponent } from './abstract-field.component';
     <div class="input-group has-validation">
       <input
         #field
-        [id]="id"
+        [id]="id()"
         class="form-control form-control-color"
         type="color"
         [attr.disabled]="disabled() ? true : undefined"

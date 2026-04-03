@@ -4,7 +4,6 @@ import {
   Component,
   computed,
   ElementRef,
-  HostListener,
   inject,
   input,
   model,
@@ -13,9 +12,10 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { lastValueFrom, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, lastValueFrom, Observable, Subject } from 'rxjs';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'rlb-autocomplete',
@@ -25,24 +25,28 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
       <input
         #field
         class="form-control"
+        autocomplete="off"
         [value]="getText(value())"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
         (blur)="touch()"
-        [id]="id"
+        [id]="id()"
         [type]="type()"
         [attr.disabled]="disabled() ? true : undefined"
-        [class.is-invalid]="control?.touched && control?.invalid && enableValidation()"
         [attr.autocomplete]="inputAutocomplete()"
         [attr.readonly]="readonly() ? true : undefined"
         [attr.placeholder]="placeholder()"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
         [ngClass]="{
-          'is-invalid': control?.touched && control?.invalid && enableValidation(),
-          'is-valid': control?.touched && control?.valid && enableValidation(),
+          'is-invalid': controlTouched() && invalid() && enableValidation(),
+          'is-valid': controlTouched() && !invalid() && enableValidation(),
         }"
       />
+
+      @if (showError()) {
+        <rlb-input-validation [errors]="errors()" />
+      }
 
       @if (isOpen()) {
         <div
@@ -59,7 +63,7 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
           } @else {
             @for (item of suggestions(); track item.value) {
               <a
-                class="dropdown-item"
+                class="dropdown-item d-flex align-items-center"
                 (click)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
@@ -78,6 +82,12 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
+  host: {
+    // Modern Angular 21 syntax for global listeners
+    '(document:pointerdown)': 'onDocumentPointerDown($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -104,7 +114,7 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   );
   size = input<'small' | 'large' | undefined>(undefined);
   charsToSearch = input(3, { alias: 'chars-to-search', transform: numberAttribute });
-  menuMaxWidth = input(400, { alias: 'menu-max-width', transform: numberAttribute });
+  menuMaxWidth = input(null, { alias: 'menu-max-width', transform: numberAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
   inputAutocomplete = input('off');
@@ -115,12 +125,10 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
 
   private readonly hostRef = inject(ElementRef<HTMLElement>);
 
-  @HostListener('document:pointerdown', ['$event'])
   onDocumentPointerDown(event: PointerEvent) {
     this.handleOutsideEvent(event);
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: Event) {
     if (this.isOpen()) {
       this.closeDropdown();
@@ -128,31 +136,38 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
     }
   }
 
+  private searchSubject = new Subject<string>();
+
   constructor() {
     super();
+    // Use RxJS for cleaner debouncing
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
+      .subscribe(val => {
+        this.manageSuggestions(val);
+      });
   }
 
   update(ev: EventTarget | null) {
-    if (this.typingTimeout) {
-      clearTimeout(this.typingTimeout);
-    }
-    this.typingTimeout = setTimeout(() => {
-      if (!this.disabled()) {
-        const t = ev as HTMLInputElement;
-        this.manageSuggestions(t?.value);
-      }
-    }, 500);
+    if (this.disabled()) return;
+    const t = ev as HTMLInputElement;
+    const val = t.value;
+
+    this.searchSubject.next(val);
+
+    // OPTIONAL: If you want the form to have the "raw text" before selection:
+    // this.setValue({ text: val, value: val });
   }
 
   override onWrite(data: AutocompleteItem | undefined): void {
-    const field = this.el();
-    if (field && field.nativeElement) {
-      if (typeof data === 'string') {
-        field.nativeElement.value = data;
-      } else {
-        field.nativeElement.value = data?.text || '';
-      }
-    }
+    // const field = this.el();
+    // if (field && field.nativeElement) {
+    //   if (typeof data === 'string') {
+    //     field.nativeElement.value = data;
+    //   } else {
+    //     field.nativeElement.value = data?.text || '';
+    //   }
+    // }
   }
 
   manageSuggestions(data: string) {

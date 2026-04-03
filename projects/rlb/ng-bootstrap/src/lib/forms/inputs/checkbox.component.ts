@@ -18,7 +18,7 @@ import { AbstractComponent } from './abstract-field.component';
         #field
         class="form-check-input"
         type="checkbox"
-        [id]="id"
+        [id]="id()"
         [attr.disabled]="isDisabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
         [value]="value()"

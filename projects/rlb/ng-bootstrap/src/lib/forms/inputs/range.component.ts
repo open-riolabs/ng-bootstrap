@@ -20,7 +20,7 @@ import { AbstractComponent } from './abstract-field.component';
     <div class="input-group has-validation">
       <input
         #field
-        [id]="id"
+        [id]="id()"
         class="form-range"
         type="range"
         [attr.disabled]="isDisabled() ? true : undefined"
