@@ -11,9 +11,9 @@
 			<div class="d-flex flex-column">
 				<rlb-calendar
           [view]="view"
-          [events]="events"
+          [(events)]="events"
           [current-date]="currentDate"
-          [loading]="loading"
+          [loading]="loading()"
 					(date-change)="onDateChange($event)"
 					(view-change)="onViewChange($event)"
           (event-click)="onEventClick($event)"

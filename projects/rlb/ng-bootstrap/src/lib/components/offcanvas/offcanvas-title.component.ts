@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 // TODO
 // Ask if we need this component, RlbOffcanvasTitleDirective should be more flexible and useful
@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
     selector: 'h*[rlb-offcanvas-title]',
     template: `<ng-content></ng-content>`,
     host: { class: 'offcanvas-title' },
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OffcanvasTitleComponent {}

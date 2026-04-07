@@ -1,20 +1,17 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
-  HostListener,
+  inject,
   input,
   model,
   numberAttribute,
-  Optional,
   output,
-  Self,
   signal,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteItem } from './autocomplete-model';
 
@@ -25,10 +22,10 @@ import { AutocompleteItem } from './autocomplete-model';
     <div class="input-group has-validation position-relative">
       <input
         #field
-        [id]="id"
+        [id]="id()"
         class="form-control"
         type="text"
-        [value]="getText(value)"
+        [value]="getText(value())"
         autocomplete="off"
         [attr.disabled]="disabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
@@ -37,13 +34,14 @@ import { AutocompleteItem } from './autocomplete-model';
         [class.form-control-sm]="size() === 'small'"
         (blur)="touch()"
         [ngClass]="{
-          'is-invalid': control?.touched && control?.invalid,
-          'is-valid': control?.touched && control?.valid,
+          'is-invalid': controlTouched() && invalid() && enableValidation(),
+          'is-valid': controlTouched() && !invalid() && enableValidation(),
         }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
       />
-      @if (errors() && showError()) {
+
+      @if (showError()) {
         <rlb-input-validation [errors]="errors()" />
       }
 
@@ -51,16 +49,17 @@ import { AutocompleteItem } from './autocomplete-model';
       @if (isOpen()) {
         <div
           #autocomplete
-          class="dropdown-menu show w-100 position-absolute overflow-y-auto"
+          class="dropdown-menu show w-100 position-absolute overflow-y-auto shadow"
           [style.max-height.px]="maxHeight()"
+          [style.max-width.px]="menuMaxWidth()"
           style="z-index: 1000; top: 100%;"
         >
           @if (!hasSuggestions()) {
-            <a class="dropdown-item disabled text-center">No suggestions</a>
+            <a class="dropdown-item disabled text-center italic">No suggestions</a>
           } @else {
             @for (item of suggestions(); track item.value) {
               <a
-                class="dropdown-item"
+                class="dropdown-item d-flex align-items-center"
                 (click)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
@@ -70,58 +69,62 @@ import { AutocompleteItem } from './autocomplete-model';
                     class="me-2"
                   ></i>
                 }
-                <!-- Display Country Name and Dial Code -->
-                {{ item.text }} ({{ item.value }})
+                <span>
+                  {{ item.text }}
+                  <small class="text-muted">({{ item.value }})</small>
+                </span>
               </a>
             }
           }
         </div>
       }
     </div>
+
     @if (loading()) {
       <rlb-progress
         [height]="2"
-        [infinite]="loading()"
+        [infinite]="true"
         color="primary"
         class="w-100"
       />
     }
     <ng-content select="[after]"></ng-content>
   `,
+  host: {
+    '(document:pointerdown)': 'handleOutsideEvent($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompleteCountryDialCodeComponent
-  extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor
-{
-  // State
+export class AutocompleteCountryDialCodeComponent extends AbstractComponent<AutocompleteItem> {
   isOpen = signal(false);
   protected suggestions = signal<AutocompleteItem[]>([]);
   protected hasSuggestions = computed(() => this.suggestions().length > 0);
   private typingTimeout: any;
 
-  // Inputs
   disabled = model(false);
   readonly = input(false, { transform: booleanAttribute });
   placeholder = input('', { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined);
   maxHeight = input(200, { transform: numberAttribute, alias: 'max-height' });
+  menuMaxWidth = input(null, { alias: 'menu-max-width', transform: numberAttribute });
   loading = input(false, { transform: booleanAttribute, alias: 'loading' });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
-
   enableFlagIcons = input(true, { transform: booleanAttribute, alias: 'enable-flag-icons' });
+  enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
 
-  // View Children
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
   selected = output<AutocompleteItem>();
 
-  @HostListener('document:pointerdown', ['$event'])
-  onDocumentPointerDown(event: PointerEvent) {
-    this.handleOutsideEvent(event);
+  private readonly hostRef = inject(ElementRef<HTMLElement>);
+
+  constructor() {
+    super();
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: Event) {
     if (this.isOpen()) {
       this.closeDropdown();
@@ -129,56 +132,30 @@ export class AutocompleteCountryDialCodeComponent
     }
   }
 
-  constructor(
-    idService: UniqueIdService,
-    private readonly hostRef: ElementRef<HTMLElement>,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
-  }
-
   update(ev: EventTarget | null) {
     if (this.typingTimeout) clearTimeout(this.typingTimeout);
-
     this.typingTimeout = setTimeout(() => {
       if (!this.disabled()) {
-        const t = ev as HTMLInputElement;
-        this.manageSuggestions(t?.value);
+        this.manageSuggestions((ev as HTMLInputElement)?.value);
       }
     }, 200);
-  }
-
-  override onWrite(data: AutocompleteItem | string): void {
-    const field = this.el();
-    if (field && field.nativeElement) {
-      if (typeof data === 'string') {
-        const match = this._countries.find(c => c.value === data);
-        field.nativeElement.value = match ? match.text : data;
-      } else {
-        field.nativeElement.value = data?.text || '';
-      }
-    }
   }
 
   getText(d: AutocompleteItem | string | null | undefined) {
     if (!d) return '';
     if (typeof d === 'string') {
-      const match = this._countries.find(c => c.value === d);
-      return match ? match.text : d;
+      const match = this._countries.find(c => c.value === d || c.data === d);
+      return match ? `${match.text} (${match.value})` : d;
     }
-    return d.text;
+    return `${d.text} (${d.value})`;
   }
 
   manageSuggestions(query: string) {
-    this.suggestions.set([]);
-
     if (query && query.length > 0) {
       this.openDropdown();
-
-      const rawSuggestions = this.getCountries().filter(c =>
-        c.text.toLowerCase().startsWith(query.toLowerCase()),
+      const rawSuggestions = this.getCountries().filter(
+        c => c.text.toLowerCase().includes(query.toLowerCase()) || c.value.includes(query),
       );
-
       this.suggestions.set(rawSuggestions);
     } else {
       this.closeDropdown();
@@ -194,58 +171,37 @@ export class AutocompleteCountryDialCodeComponent
 
   onEnter(ev: EventTarget | null) {
     const t = ev as HTMLInputElement;
-    if (!this.disabled() && t && t.value) {
-      // Try to find exact match by name
-      const match = this._countries.find(c => c.text.toLowerCase() === t.value.toLowerCase());
-      const item: AutocompleteItem = match || { text: t.value, value: t.value };
-
-      this.setValue(item);
+    if (!this.disabled() && t?.value) {
+      const match = this._countries.find(
+        c => c.text.toLowerCase() === t.value.toLowerCase() || c.value === t.value,
+      );
+      this.setValue(match || { text: t.value, value: t.value });
       this.closeDropdown();
     }
   }
 
-  private handleOutsideEvent(event: Event) {
+  handleOutsideEvent(event: Event) {
     if (!this.isOpen()) return;
-
     const target = event.target as HTMLElement;
-    const dropdown = this.dropdown();
-    const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
-
-    const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
-    const clickedInsideDropdown = dropdown?.nativeElement?.contains
-      ? dropdown.nativeElement.contains(target)
-      : false;
-    const clickedInPath = path.length
-      ? path.some(
-          p => p === this.hostRef.nativeElement || (dropdown && p === dropdown.nativeElement),
-        )
-      : false;
-
-    if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
-      this.closeDropdown();
-    }
+    const isInside =
+      this.hostRef.nativeElement.contains(target) ||
+      this.dropdown()?.nativeElement.contains(target);
+    if (!isInside) this.closeDropdown();
   }
 
   openDropdown() {
-    if (this.isOpen()) return;
     this.isOpen.set(true);
   }
-
   closeDropdown() {
-    if (!this.isOpen()) return;
     this.isOpen.set(false);
   }
 
   getCountries(): AutocompleteItem[] {
-    if (this.enableFlagIcons()) {
-      return this._countries.map(country => ({
-        ...country,
-        // Using 'data' (ISO Code) for flag class
-        iconClass: country.data ? `fi fi-${country.data.toLowerCase()}` : undefined,
-      }));
-    } else {
-      return this._countries;
-    }
+    return this._countries.map(country => ({
+      ...country,
+      iconClass:
+        this.enableFlagIcons() && country.data ? `fi fi-${country.data.toLowerCase()}` : undefined,
+    }));
   }
 
   private _countries: AutocompleteItem[] = [

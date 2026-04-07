@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   contentChild,
   contentChildren,
@@ -20,7 +21,8 @@ import { InputComponent } from './input.component';
     '[class.input-group-lg]': 'size() === "large"',
   },
   template: `<ng-content></ng-content>`,
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputGroupComponent {
 

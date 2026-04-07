@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 
 @Component({
   selector: 'img[rlb-card-image]',
@@ -8,7 +8,8 @@ import { Component, input, signal } from '@angular/core';
     '[class.card-img-bottom]': 'position() === "bottom" && !overlay()',
     '[class.card-img]': 'overlay()',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardImageComponent {
   position = input<'top' | 'bottom'>('top', { alias: 'position' });

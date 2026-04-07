@@ -1,23 +1,21 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
-  HostListener,
+  inject,
   input,
   model,
   numberAttribute,
-  Optional,
   output,
-  Self,
   signal,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { lastValueFrom, Observable } from 'rxjs';
-import { UniqueIdService } from '../../shared/unique-id.service';
+import { debounceTime, distinctUntilChanged, lastValueFrom, Observable, Subject } from 'rxjs';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'rlb-autocomplete',
@@ -27,24 +25,28 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
       <input
         #field
         class="form-control"
-        [value]="getText(value)"
+        autocomplete="off"
+        [value]="getText(value())"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
         (blur)="touch()"
-        [id]="id"
+        [id]="id()"
         [type]="type()"
         [attr.disabled]="disabled() ? true : undefined"
-        [class.is-invalid]="control?.touched && control?.invalid && enableValidation()"
         [attr.autocomplete]="inputAutocomplete()"
         [attr.readonly]="readonly() ? true : undefined"
         [attr.placeholder]="placeholder()"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
         [ngClass]="{
-          'is-invalid': control?.touched && control?.invalid && enableValidation(),
-          'is-valid': control?.touched && control?.valid && enableValidation(),
+          'is-invalid': controlTouched() && invalid() && enableValidation(),
+          'is-valid': controlTouched() && !invalid() && enableValidation(),
         }"
       />
+
+      @if (showError()) {
+        <rlb-input-validation [errors]="errors()" />
+      }
 
       @if (isOpen()) {
         <div
@@ -61,7 +63,7 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
           } @else {
             @for (item of suggestions(); track item.value) {
               <a
-                class="dropdown-item"
+                class="dropdown-item d-flex align-items-center"
                 (click)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
@@ -80,12 +82,16 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
+  host: {
+    // Modern Angular 21 syntax for global listeners
+    '(document:pointerdown)': 'onDocumentPointerDown($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompleteComponent
-  extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor
-{
+export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   acLoading = signal(false);
   private typingTimeout: any;
 
@@ -108,7 +114,7 @@ export class AutocompleteComponent
   );
   size = input<'small' | 'large' | undefined>(undefined);
   charsToSearch = input(3, { alias: 'chars-to-search', transform: numberAttribute });
-  menuMaxWidth = input(400, { alias: 'menu-max-width', transform: numberAttribute });
+  menuMaxWidth = input(null, { alias: 'menu-max-width', transform: numberAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
   inputAutocomplete = input('off');
@@ -117,12 +123,12 @@ export class AutocompleteComponent
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
   selected = output<AutocompleteItem>();
 
-  @HostListener('document:pointerdown', ['$event'])
+  private readonly hostRef = inject(ElementRef<HTMLElement>);
+
   onDocumentPointerDown(event: PointerEvent) {
     this.handleOutsideEvent(event);
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: Event) {
     if (this.isOpen()) {
       this.closeDropdown();
@@ -130,35 +136,38 @@ export class AutocompleteComponent
     }
   }
 
-  constructor(
-    idService: UniqueIdService,
-    private readonly hostRef: ElementRef<HTMLElement>,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  private searchSubject = new Subject<string>();
+
+  constructor() {
+    super();
+    // Use RxJS for cleaner debouncing
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
+      .subscribe(val => {
+        this.manageSuggestions(val);
+      });
   }
 
   update(ev: EventTarget | null) {
-    if (this.typingTimeout) {
-      clearTimeout(this.typingTimeout);
-    }
-    this.typingTimeout = setTimeout(() => {
-      if (!this.disabled()) {
-        const t = ev as HTMLInputElement;
-        this.manageSuggestions(t?.value);
-      }
-    }, 500);
+    if (this.disabled()) return;
+    const t = ev as HTMLInputElement;
+    const val = t.value;
+
+    this.searchSubject.next(val);
+
+    // OPTIONAL: If you want the form to have the "raw text" before selection:
+    // this.setValue({ text: val, value: val });
   }
 
-  override onWrite(data: AutocompleteItem): void {
-    const field = this.el();
-    if (field && field.nativeElement) {
-      if (typeof data === 'string') {
-        field.nativeElement.value = data;
-      } else {
-        field.nativeElement.value = data?.text || '';
-      }
-    }
+  override onWrite(data: AutocompleteItem | undefined): void {
+    // const field = this.el();
+    // if (field && field.nativeElement) {
+    //   if (typeof data === 'string') {
+    //     field.nativeElement.value = data;
+    //   } else {
+    //     field.nativeElement.value = data?.text || '';
+    //   }
+    // }
   }
 
   manageSuggestions(data: string) {
@@ -218,7 +227,7 @@ export class AutocompleteComponent
     }
   }
 
-  getText(d: AutocompleteItem) {
+  getText(d: AutocompleteItem | undefined) {
     if (d == null) return '';
     return typeof d === 'string' ? d : d?.text;
   }

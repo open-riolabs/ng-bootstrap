@@ -21,15 +21,10 @@
               "base": "dist/ng-bootstrap"
             },
             "index": "src/index.html",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": [],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
               "projects/rlb/ng-bootstrap/src/assets/scss/app.scss",

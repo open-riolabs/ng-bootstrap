@@ -1,4 +1,4 @@
-<div class="container mt-3">
+<div class="container my-3">
 
     <h3>Input</h3>
     <p>
@@ -118,8 +118,82 @@
     </div>
     <div rlb-accordion-item>
       <rlb-accordion-header>Example</rlb-accordion-header>
-			<div rlb-accordion-body [formGroup]="form">
-				<rlb-input formControlName="input"></rlb-input>
+			<div rlb-accordion-body>
+				<rlb-input [(ngModel)]="input"></rlb-input>
+      </div>
+    </div>
+  </rlb-accordion>
+
+  <rlb-accordion class="mt-3">
+    <div rlb-accordion-item>
+      <rlb-accordion-header>Advanced Examples (Async & Patching)</rlb-accordion-header>
+      <div rlb-accordion-body>
+
+        <form [formGroup]="form" (ngSubmit)="submitForm()" class="row g-3">
+
+          <div class="col-md-6">
+            <rlb-input inputId="demo-basic-text" formControlName="basicText" enable-validation="true">
+              <label for="demo-basic-text" class="form-label d-block w-100 mb-2" before>Basic Text (Required)</label>
+            </rlb-input>
+          </div>
+
+          <div class="col-md-6">
+            <label for="demo-number-input" class="form-label">Number (Min 10, Max 100)</label>
+            <rlb-input inputId="demo-number-input" type="number" formControlName="numberInput" [min]="10" [max]="100" enable-validation="true"></rlb-input>
+          </div>
+
+          <div class="col-md-6">
+            <label for="demo-date-input" class="form-label">Datetime Local (String Output)</label>
+            <rlb-input enable-validation="true" inputId="demo-date-input" type="datetime-local" date-type="string" formControlName="dateInput"></rlb-input>
+          </div>
+
+          <!-- Async Validation Input -->
+          <div class="col-md-6">
+            <label for="demo-email-input" class="form-label">
+              Async Email Validation
+              @if (form.get('asyncEmail')?.pending) {
+                <span class="spinner-border spinner-border-sm text-primary ms-2" role="status"></span>
+              }
+            </label>
+            <rlb-input inputId="demo-email-input" type="email" formControlName="asyncEmail" enable-validation="true"></rlb-input>
+            <div class="form-text">Type <code>taken&#64;test.com</code> to trigger async error (1s delay).</div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="col-12 mt-4 d-flex gap-2">
+            <button rlb-button outline color="secondary" type="button" (click)="patchData()">
+              Patch Mock Data
+            </button>
+            <button rlb-button color="primary" type="submit" [disabled]="isSaving || form.pending">
+              @if (isSaving) {
+                <rlb-spinner class="spinner-border spinner-border-sm me-2" role="status"></rlb-spinner>
+                Saving...
+              } @else {
+                Submit
+              }
+            </button>
+          </div>
+        </form>
+
+        <!-- Debugging State (verifying zoneless behavior) -->
+        <div class="mt-4 p-3 bg-light border rounded">
+          <h5>Form State Tracker</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <strong>Value:</strong>
+              <pre><code>{{ form.value | json }}</code></pre>
+            </div>
+            <div class="col-md-6">
+              <strong>Status:</strong>
+              <p>
+                Valid: <span rlb-badge [color]="form.valid ? 'success' : 'danger'" >{{ form.valid }}</span><br>
+                Touched: <span rlb-badge [color]="form.touched ? 'warning' : 'secondary'">{{ form.touched }}</span><br>
+                Pending: <span rlb-badge [color]="form.pending ? 'info' : 'secondary'">{{ form.pending }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </rlb-accordion>

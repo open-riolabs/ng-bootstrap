@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input, TemplateRef, viewChild } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input, TemplateRef, viewChild } from '@angular/core';
 
 @Component({
   selector: 'rlb-option',
@@ -18,6 +18,7 @@ import { booleanAttribute, Component, input, TemplateRef, viewChild } from '@ang
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OptionComponent {
   value = input<string | number | null | undefined>();

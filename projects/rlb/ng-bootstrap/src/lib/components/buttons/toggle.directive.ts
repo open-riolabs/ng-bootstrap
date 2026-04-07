@@ -3,11 +3,9 @@ import {
   Directive,
   effect,
   ElementRef,
-  Host,
+  inject,
   input,
-  Optional,
   Renderer2,
-  Self,
 } from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
 
@@ -30,11 +28,11 @@ export class ToggleDirective {
     alias: 'auto-close',
   });
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-    @Host() @Self() @Optional() public buttonToolbar: ButtonToolbarComponent,
-  ) {
+  private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
+  public buttonToolbar = inject(ButtonToolbarComponent, { host: true, self: true, optional: true });
+
+  constructor() {
     effect(() => {
       const element = this.elementRef.nativeElement;
       const toggle = this.toggle();

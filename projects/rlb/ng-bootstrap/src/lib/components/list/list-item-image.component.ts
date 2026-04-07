@@ -1,10 +1,11 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   inject,
   input,
-  numberAttribute
+  numberAttribute,
 } from '@angular/core';
 import { Color } from '../../shared/types';
 import { ListComponent } from './list.component';
@@ -14,10 +15,16 @@ import { ListComponent } from './list.component';
   template: `
     <div class="d-flex">
       @if (avatar()) {
-        <rlb-avatar [src]="avatar()!" [size]="avatarSize()" />
+        <rlb-avatar
+          [src]="avatar()!"
+          [size]="avatarSize()"
+        />
       }
       @if (!avatar() && icon()) {
-        <i [class]="icon()" [style.font-size.px]="avatarSize()"></i>
+        <i
+          [class]="icon()"
+          [style.font-size.px]="avatarSize()"
+        ></i>
       }
       <div class="ps-2 flex-grow-1">
         <div class="fw-bold">{{ username() }}</div>
@@ -31,9 +38,23 @@ import { ListComponent } from './list.component';
       @if (counter() !== undefined || counterEmpty()) {
         <div>
           @if (counterEmpty()) {
-            <span rlb-badge [pill]="counterPill()" [color]="counterColor()" [border]="counterBorder()">&nbsp;</span>
+            <span
+              rlb-badge
+              [pill]="counterPill()"
+              [color]="counterColor()"
+              [border]="counterBorder()"
+            >
+              &nbsp;
+            </span>
           } @else {
-            <span rlb-badge [pill]="counterPill()" [color]="counterColor()" [border]="counterBorder()">{{ counter() }}</span>
+            <span
+              rlb-badge
+              [pill]="counterPill()"
+              [color]="counterColor()"
+              [border]="counterBorder()"
+            >
+              {{ counter() }}
+            </span>
           }
         </div>
       }
@@ -42,11 +63,12 @@ import { ListComponent } from './list.component';
   host: {
     class: 'list-group-item',
     '[class.disabled]': 'disabled()',
-    '[class.list-group-item-action]': 'disabled() !== true',
+    '[class.list-group-item-action]': '!disabled()',
     '[class.active]': 'active()',
     '[attr.aria-current]': 'active()',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListItemImageComponent {
   private parent = inject(ListComponent, { optional: true });

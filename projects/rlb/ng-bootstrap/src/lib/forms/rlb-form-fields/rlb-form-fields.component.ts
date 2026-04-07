@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -15,7 +16,8 @@ import { FormField, FormFieldsDefinition, IForm } from './form-fields';
   selector: 'rlb-form-fields',
   templateUrl: './rlb-form-fields.component.html',
   styleUrls: ['./rlb-form-fields.component.scss'],
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormFieldsComponent implements IForm {
   public filterForm = signal<FormGroup | undefined>(undefined);

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
   selector: 'rlb-accordion-header',
@@ -7,7 +7,8 @@ import { Component, signal } from '@angular/core';
       <ng-content></ng-content>
     </button>`,
   host: { class: 'accordion-header' },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionHeaderComponent {
   public parentId = signal<string | undefined>(undefined);

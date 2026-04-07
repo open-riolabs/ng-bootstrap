@@ -1,13 +1,15 @@
-import { Component, ElementRef, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, input } from '@angular/core';
 
 @Component({
   selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
-  template: ` @if (isList) {
-  <ng-content select="li[rlb-dropdown-item]" />
-}
-@if (!isList) {
-  <ng-content />
-}`,
+  template: `
+    @if (isList) {
+      <ng-content select="li[rlb-dropdown-item]" />
+    }
+    @if (!isList) {
+      <ng-content />
+    }
+  `,
   host: {
     class: 'dropdown-menu',
     '[class.dropdown-menu-end]': 'placement() === "right"',
@@ -25,7 +27,8 @@ import { Component, ElementRef, input } from '@angular/core';
     '[style.border]': 'isList ? null : "none"',
     '[style.padding]': 'isList ? null : "0px"',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownContainerComponent {
   isList: boolean = false;
@@ -37,9 +40,7 @@ export class DropdownContainerComponent {
   placementXl = input<'left' | 'right' | undefined>(undefined, { alias: 'placement-xl' });
   placementXxl = input<'left' | 'right' | undefined>(undefined, { alias: 'placement-xxl' });
 
-  constructor(
-    private elementRef: ElementRef,
-  ) {
+  constructor(private elementRef: ElementRef) {
     if (this.elementRef.nativeElement.nodeName.toLowerCase() === 'ul') {
       this.isList = true;
     }

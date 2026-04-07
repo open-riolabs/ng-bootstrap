@@ -1,14 +1,11 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   input,
-  Optional,
-  Self,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
 @Component({
@@ -21,7 +18,7 @@ import { AbstractComponent } from './abstract-field.component';
     <div class="input-group has-validation">
       <input
         #field
-        [id]="id"
+        [id]="id()"
         type="file"
         class="form-control"
         [attr.disabled]="disabled() ? true : undefined"
@@ -35,17 +32,15 @@ import { AbstractComponent } from './abstract-field.component';
         (change)="onFileChange($event)"
       />
       <div class="invalid-feedback">
-        {{ errors | json }}
+        {{ errors() | json }}
       </div>
     </div>
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FileComponent
-  extends AbstractComponent<File | File[] | null>
-  implements ControlValueAccessor
-{
+export class FileComponent extends AbstractComponent<File | File[] | null> {
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -57,11 +52,8 @@ export class FileComponent
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
 
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   onFileChange(ev: Event) {
@@ -75,7 +67,7 @@ export class FileComponent
     }
   }
 
-  override onWrite(data: File | File[] | null): void {
+  override onWrite(data: File | File[] | null | undefined): void {
     const el = this.el();
     if (el && el.nativeElement) {
       el.nativeElement.value = '';

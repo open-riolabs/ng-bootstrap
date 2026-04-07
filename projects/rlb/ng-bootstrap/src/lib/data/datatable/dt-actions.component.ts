@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   contentChildren,
   input,
@@ -33,6 +34,7 @@ import { DataTableActionComponent } from './dt-action.component';
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableActionsComponent {
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });

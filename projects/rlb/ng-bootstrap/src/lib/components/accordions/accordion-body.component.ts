@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
   selector: 'div[rlb-accordion-body]',
@@ -10,7 +10,8 @@ import { Component, signal } from '@angular/core';
     '[class.show]': 'expanded()',
     '[id]': 'itemId()',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionBodyComponent {
   public parentId = signal<string | undefined>(undefined);

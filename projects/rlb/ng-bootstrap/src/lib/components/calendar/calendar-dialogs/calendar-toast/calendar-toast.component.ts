@@ -1,4 +1,4 @@
-import { Component, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, Signal } from '@angular/core';
 import { IToast } from '../../../toast/data/toast';
 import { ToastData } from '../../../toast/data/toast-data';
 import { ToastDirective } from '../../../toast/toast.directive';
@@ -29,6 +29,7 @@ import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
   ],
   standalone: true,
   imports: [RlbBootstrapModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarToastComponent implements IToast<string, void> {
   data!: Signal<ToastData<string>>;

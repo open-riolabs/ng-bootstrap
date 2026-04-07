@@ -1,11 +1,11 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   contentChild,
   ElementRef,
-  EventEmitter,
-  HostListener,
-  Output,
+  inject,
   signal,
+  output,
 } from '@angular/core';
 import { InputComponent } from '../../../forms/inputs';
 
@@ -47,16 +47,22 @@ import { InputComponent } from '../../../forms/inputs';
       }
     `,
   ],
+  host: {
+    '(document:click)': 'onDocumentClick($event)',
+  },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RlbFabInputComponent {
   isOpen = signal(false);
 
   rlbInput = contentChild(InputComponent, { descendants: true });
 
-  @Output() pasteAccepted = new EventEmitter<string>();
+  pasteAccepted = output<string>();
 
-  constructor(private el: ElementRef) {}
+  private el = inject(ElementRef);
+
+  constructor() {}
 
   open() {
     this.isOpen.set(true);
@@ -103,7 +109,6 @@ export class RlbFabInputComponent {
     }
   }
 
-  @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.isOpen()) return;
     const clickedInside = this.el.nativeElement.contains(event.target);

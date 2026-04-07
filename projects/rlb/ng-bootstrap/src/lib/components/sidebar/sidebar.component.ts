@@ -1,12 +1,13 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   effect,
   ElementRef,
   input,
   OnDestroy,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
@@ -38,6 +39,7 @@ import { SidebarService } from './sidebar.service';
     '[attr.data-bs-theme]': "dark() ? 'dark' : 'light'",
   },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 /**
@@ -46,7 +48,7 @@ import { SidebarService } from './sidebar.service';
 export class SidebarComponent implements OnInit, OnDestroy {
   menu: any;
   data: any;
-  @ViewChild('sideMenu') sideMenu!: ElementRef;
+  sideMenu = viewChild<ElementRef>('sideMenu');
   dark = input(true, { alias: 'dark', transform: booleanAttribute });
 
   private subscription: Subscription = new Subscription();

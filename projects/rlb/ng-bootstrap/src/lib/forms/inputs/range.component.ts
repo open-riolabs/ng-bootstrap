@@ -1,29 +1,27 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   input,
   numberAttribute,
-  Optional,
-  Self,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 
 @Component({
   selector: 'rlb-range',
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
+    '[attr.id]': 'null',
   },
   template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
         #field
-        [id]="id"
+        [id]="id()"
         class="form-range"
         type="range"
         [attr.disabled]="isDisabled() ? true : undefined"
@@ -42,8 +40,9 @@ import { AbstractComponent } from './abstract-field.component';
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RangeComponent extends AbstractComponent<string> implements ControlValueAccessor {
+export class RangeComponent extends AbstractComponent<string> {
   disabled = input(false, {
     transform: booleanAttribute,
   });
@@ -57,11 +56,8 @@ export class RangeComponent extends AbstractComponent<string> implements Control
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
-  constructor(
-    idService: UniqueIdService,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
+  constructor() {
+    super();
   }
 
   update(ev: EventTarget | null) {
@@ -71,10 +67,10 @@ export class RangeComponent extends AbstractComponent<string> implements Control
     }
   }
 
-  override onWrite(data: string): void {
+  override onWrite(data: string | undefined): void {
     const el = this.el();
     if (el && el.nativeElement) {
-      el.nativeElement.value = data;
+      el.nativeElement.value = data || '';
     }
   }
 }

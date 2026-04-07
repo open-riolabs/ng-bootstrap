@@ -1,29 +1,33 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   input,
   OnInit,
   output,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
 
 @Component({
   selector: 'rlb-navbar-item',
-  template: ` <ng-template #template>
-    <li class="nav-item">
-      <a
-        class="nav-link {{ cssClass() }}"
-        [routerLink]="routerLink()"
-        routerLinkActive="active"
-        (click)="click.emit($event)"
-      >
-        <ng-content select=":not(rlb-dropdown-container)"></ng-content>
-      </a>
-    </li>
-  </ng-template>`,
-  standalone: false
+  template: `
+    <ng-template #template>
+      <li class="nav-item">
+        <a
+          class="nav-link {{ cssClass() }}"
+          [routerLink]="routerLink()"
+          routerLinkActive="active"
+          (click)="click.emit($event)"
+        >
+          <ng-content select=":not(rlb-dropdown-container)"></ng-content>
+        </a>
+      </li>
+    </ng-template>
+  `,
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarItemComponent implements OnInit {
   element!: HTMLElement;
@@ -34,14 +38,12 @@ export class NavbarItemComponent implements OnInit {
 
   click = output<MouseEvent>();
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  template = viewChild.required<TemplateRef<any>>('template');
 
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  constructor(private viewContainerRef: ViewContainerRef) {}
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }

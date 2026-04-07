@@ -1,19 +1,21 @@
 import {
   AfterContentInit,
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
   effect,
+  inject,
   input,
   OnDestroy,
   OnInit,
+  OutputRefSubscription,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { Collapse } from 'bootstrap';
-import { Subject } from 'rxjs';
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 import { NavbarItemsComponent } from './navbar-items.component';
@@ -24,7 +26,9 @@ import { SidebarService } from '../../sidebar/sidebar.service';
   template: `
     <ng-template #template>
       <nav
-        class="navbar px-2 bg-{{ color() }} {{ placement() }} {{ _navExpand() }} {{ cssClass() }}"
+        class="navbar px-2 bg-{{ color() }} {{ placement() }} {{
+          _navExpand()
+        }} {{ cssClass() }}"
         [attr.data-bs-theme]="dark() ? 'dark' : 'light'"
       >
         <div class="container-fluid">
@@ -40,7 +44,9 @@ import { SidebarService } from '../../sidebar/sidebar.service';
             </button>
           }
 
-          <ng-content select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator" />
+          <ng-content
+            select="[rlb-navbar-brand], [rlb-button][toggle], rlb-navbar-separator"
+          />
           <!-- FOR CUSTOM ELEMENTS -->
           <ng-content select="[rlb-custom-navbar-items]" />
           @if (enableDropdownToggler()) {
@@ -60,7 +66,9 @@ import { SidebarService } from '../../sidebar/sidebar.service';
             class="collapse navbar-collapse"
             [id]="navId"
           >
-            <div class="d-flex w-100 flex-column flex-lg-row align-items-lg-center">
+            <div
+              class="d-flex w-100 flex-column flex-lg-row align-items-lg-center"
+            >
               <ng-content
                 select="rlb-navbar-items, rlb-navbar-form, rlb-navbar-text, rlb-navbar-separator"
               />
@@ -71,11 +79,17 @@ import { SidebarService } from '../../sidebar/sidebar.service';
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   element!: HTMLElement;
-  public readonly navId: string;
-  private destroy$ = new Subject<void>();
+
+  private idService = inject(UniqueIdService);
+  private viewContainerRef = inject(ViewContainerRef);
+  private sidebarService = inject(SidebarService);
+
+  public readonly navId: string = `nav${this.idService.id}`;
+  private groupClickSubs: OutputRefSubscription[] = [];
 
   _navExpand = computed(() => {
     const exp = this.expand();
@@ -84,7 +98,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
     else return `navbar-expand-${exp}`;
   });
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  template = viewChild.required<TemplateRef<any>>('template');
   navbarItemsGroups = contentChildren(NavbarItemsComponent, {
     descendants: true,
   });
@@ -92,36 +106,33 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   dark = input(true, { alias: 'dark', transform: booleanAttribute });
   showSideBarToggler = input(true, { transform: booleanAttribute });
   color = input<Color | undefined>(undefined);
-  placement = input<'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom' | undefined>(
+  placement = input<
+    'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom' | undefined
+  >(undefined);
+  expand = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always' | undefined>(
     undefined,
   );
-  expand = input<'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always' | undefined>(undefined);
   cssClass = input('', { alias: 'class' });
   enableDropdownToggler = input(false, {
     alias: 'enable-dropdown-toggler',
     transform: booleanAttribute,
   });
 
-  constructor(
-    private idService: UniqueIdService,
-    private viewContainerRef: ViewContainerRef,
-    private sidebarService: SidebarService,
-  ) {
-    this.navId = `nav${this.idService.id}`;
-
+  constructor() {
     effect(() => {
+      this.groupClickSubs.forEach(s => s.unsubscribe());
+      this.groupClickSubs = [];
       const groups = this.navbarItemsGroups();
       groups.forEach(group => {
-        // Since output() is not a Signal, we still need to subscribe,
-        // but we can manage the subscription here more cleanly.
-        // However, output().subscribe returns OutputRefSubscription which we should track.
-        group.click.subscribe(() => this.closeMobileMenu());
+        this.groupClickSubs.push(group.click.subscribe(() => this.closeMobileMenu()));
       });
     });
   }
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(this.template);
+    const templateView = this.viewContainerRef.createEmbeddedView(
+      this.template(),
+    );
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
@@ -131,8 +142,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.groupClickSubs.forEach(s => s.unsubscribe());
   }
 
   toggleSidebar() {

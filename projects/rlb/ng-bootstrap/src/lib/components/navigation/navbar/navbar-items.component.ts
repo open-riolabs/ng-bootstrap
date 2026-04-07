@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  ChangeDetectionStrategy,
   Component,
   contentChildren,
   effect,
@@ -7,54 +8,57 @@ import {
   OnDestroy,
   OnInit,
   output,
+  OutputRefSubscription,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Subject } from "rxjs";
-import { NavbarItemComponent } from "./navbar-item.component";
+import { NavbarItemComponent } from './navbar-item.component';
 
 @Component({
   selector: 'rlb-navbar-items',
-  template: ` <ng-template #template>
-    <ul
-      class="navbar-nav {{ cssClass() }}"
-      [class.navbar-nav-scroll]="scroll()"
-      [style.--bs-scroll-height]="scroll()"
-    >
-      <ng-content
-				select="rlb-navbar-item, rlb-navbar-dropdown-item, rlb-navbar-separator, ng-container"
-      />
-    </ul>
-  </ng-template>`,
-  standalone: false
+  template: `
+    <ng-template #template>
+      <ul
+        class="navbar-nav {{ cssClass() }}"
+        [class.navbar-nav-scroll]="scroll()"
+        [style.--bs-scroll-height]="scroll()"
+      >
+        <ng-content
+          select="rlb-navbar-item, rlb-navbar-dropdown-item, rlb-navbar-separator, ng-container"
+        />
+      </ul>
+    </ng-template>
+  `,
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarItemsComponent implements OnInit, AfterContentInit, OnDestroy {
   scroll = input<string | undefined>(undefined);
   cssClass = input('', { alias: 'class' });
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  template = viewChild.required<TemplateRef<any>>('template');
   element!: HTMLElement;
 
   menuItems = contentChildren(NavbarItemComponent, { descendants: true });
 
   click = output<MouseEvent>();
 
-  private destroy$ = new Subject<void>();
+  private itemClickSubs: OutputRefSubscription[] = [];
 
   constructor(private viewContainerRef: ViewContainerRef) {
     effect(() => {
+      this.itemClickSubs.forEach(s => s.unsubscribe());
+      this.itemClickSubs = [];
       const items = this.menuItems();
       items.forEach(item => {
-        item.click.subscribe(event => this.click.emit(event));
+        this.itemClickSubs.push(item.click.subscribe(event => this.click.emit(event)));
       });
     });
   }
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }
@@ -64,7 +68,6 @@ export class NavbarItemsComponent implements OnInit, AfterContentInit, OnDestroy
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.itemClickSubs.forEach(s => s.unsubscribe());
   }
 }

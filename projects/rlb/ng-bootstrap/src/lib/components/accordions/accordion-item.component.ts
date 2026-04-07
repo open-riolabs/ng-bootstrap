@@ -1,10 +1,11 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   contentChild,
   effect,
-  ElementRef,
+  inject,
   input,
   OnDestroy,
   OnInit,
@@ -28,6 +29,7 @@ import { AccordionHeaderComponent } from './accordion-header.component';
   `,
   host: { class: 'accordion-item' },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionItemComponent
   extends ToggleAbstractComponent<Collapse>
@@ -57,12 +59,11 @@ export class AccordionItemComponent
 
   private statusSub?: OutputRefSubscription; // Store subscription
 
-  constructor(
-    elementRef: ElementRef<HTMLElement>,
-    private viewContainerRef: ViewContainerRef,
-    private idService: UniqueIdService,
-  ) {
-    super(elementRef);
+  private viewContainerRef = inject(ViewContainerRef);
+  private idService = inject(UniqueIdService);
+
+  constructor() {
+    super();
     this._internalName.set(`item${this.idService.id}`);
 
     effect(() => {

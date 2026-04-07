@@ -1,7 +1,9 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   OnInit,
   TemplateRef,
@@ -23,6 +25,7 @@ import { Color } from '../../shared/types';
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent implements OnInit {
   element!: HTMLElement;
@@ -31,7 +34,7 @@ export class BadgeComponent implements OnInit {
   color = input<Color | undefined>('primary', { alias: 'color' });
   hiddenText = input<string | undefined>(undefined, { alias: 'hidden-text' });
   border = input(false, { alias: 'border', transform: booleanAttribute });
-  cssClass = input<string | undefined>('', { alias: 'class' });
+  cssClass = input<string | undefined>(undefined, { alias: 'class' });
   textColor = input<string | undefined>(undefined, {
     alias: 'badge-text-color',
   });
@@ -55,7 +58,9 @@ export class BadgeComponent implements OnInit {
     return (style += this.cssClass() ? ` ${this.cssClass()}` : '');
   });
 
-  constructor(private viewContainerRef: ViewContainerRef) {}
+  private viewContainerRef = inject(ViewContainerRef);
+
+  constructor() {}
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(this.template());

@@ -1,20 +1,17 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
-  HostListener,
+  inject,
   input,
   model,
   numberAttribute,
-  Optional,
   output,
-  Self,
   signal,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { UniqueIdService } from '../../shared/unique-id.service';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteItem } from './autocomplete-model';
 
@@ -25,10 +22,10 @@ import { AutocompleteItem } from './autocomplete-model';
     <div class="input-group has-validation position-relative">
       <input
         #field
-        [id]="id"
+        [id]="id()"
         class="form-control"
         type="text"
-        [value]="getText(value)"
+        [value]="getText(value())"
         autocomplete="off"
         [attr.disabled]="disabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
@@ -37,12 +34,16 @@ import { AutocompleteItem } from './autocomplete-model';
         [class.form-control-sm]="size() === 'small'"
         (blur)="touch()"
         [ngClass]="{
-          'is-invalid': control?.touched && control?.invalid && enableValidation(),
-          'is-valid': control?.touched && control?.valid && enableValidation(),
+          'is-invalid': controlTouched() && invalid() && enableValidation(),
+          'is-valid': controlTouched() && !invalid() && enableValidation(),
         }"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
       />
+
+      @if (showError()) {
+        <rlb-input-validation [errors]="errors()" />
+      }
 
       <!-- Dropdown Logic -->
       @if (isOpen()) {
@@ -50,6 +51,7 @@ import { AutocompleteItem } from './autocomplete-model';
           #autocomplete
           class="dropdown-menu show w-100 position-absolute overflow-y-auto"
           [style.max-height.px]="maxHeight()"
+          [style.max-width.px]="menuMaxWidth()"
           style="z-index: 1000; top: 100%;"
         >
           @if (!hasSuggestions()) {
@@ -57,7 +59,7 @@ import { AutocompleteItem } from './autocomplete-model';
           } @else {
             @for (item of suggestions(); track item.value) {
               <a
-                class="dropdown-item"
+                class="dropdown-item d-flex align-items-center"
                 (click)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
@@ -77,41 +79,41 @@ import { AutocompleteItem } from './autocomplete-model';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
+  host: {
+    // Modern Angular 21 syntax for global listeners
+    '(document:pointerdown)': 'handleOutsideEvent($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompleteCountryComponent
-  extends AbstractComponent<AutocompleteItem>
-  implements ControlValueAccessor
-{
-  // State
+export class AutocompleteCountryComponent extends AbstractComponent<AutocompleteItem> {
   isOpen = signal(false);
   protected suggestions = signal<AutocompleteItem[]>([]);
   protected hasSuggestions = computed(() => this.suggestions().length > 0);
   private typingTimeout: any;
 
-  // Inputs
   disabled = model(false);
   readonly = input(false, { transform: booleanAttribute });
   placeholder = input('', { alias: 'placeholder' });
   size = input<'small' | 'large' | undefined>(undefined);
   maxHeight = input(200, { transform: numberAttribute, alias: 'max-height' });
+  menuMaxWidth = input(null, { alias: 'menu-max-width', transform: numberAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
-
-  // Specific inputs for Country
   enableFlagIcons = input(false, { transform: booleanAttribute, alias: 'enable-flag-icons' });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
 
-  // View Children
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
   selected = output<AutocompleteItem>();
 
-  @HostListener('document:pointerdown', ['$event'])
-  onDocumentPointerDown(event: PointerEvent) {
-    this.handleOutsideEvent(event);
+  private readonly hostRef = inject(ElementRef<HTMLElement>);
+
+  constructor() {
+    super();
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: Event) {
     if (this.isOpen()) {
       this.closeDropdown();
@@ -119,39 +121,16 @@ export class AutocompleteCountryComponent
     }
   }
 
-  constructor(
-    idService: UniqueIdService,
-    private readonly hostRef: ElementRef<HTMLElement>,
-    @Self() @Optional() override control?: NgControl,
-  ) {
-    super(idService, control);
-  }
-
   update(ev: EventTarget | null) {
     if (this.typingTimeout) clearTimeout(this.typingTimeout);
-
     this.typingTimeout = setTimeout(() => {
       if (!this.disabled()) {
-        const t = ev as HTMLInputElement;
-        this.manageSuggestions(t?.value);
+        this.manageSuggestions((ev as HTMLInputElement)?.value);
       }
     }, 200);
   }
 
-  override onWrite(data: AutocompleteItem): void {
-    const field = this.el();
-    if (field && field.nativeElement) {
-      if (typeof data === 'string') {
-        // Try to find the full object to display correct text
-        const match = this._countries.find(c => c.value === data || c.text === data);
-        field.nativeElement.value = match ? match.text : data;
-      } else {
-        field.nativeElement.value = data?.text || '';
-      }
-    }
-  }
-
-  getText(d: AutocompleteItem) {
+  getText(d: AutocompleteItem | undefined) {
     if (d == null) return '';
     if (typeof d === 'string') {
       const match = this._countries.find(c => c.value === d);
@@ -161,15 +140,11 @@ export class AutocompleteCountryComponent
   }
 
   manageSuggestions(query: string) {
-    this.suggestions.set([]);
-
     if (query && query.length > 0) {
       this.openDropdown();
-
       const rawSuggestions = this.getCountries().filter(c =>
-        c.text.toLowerCase().startsWith(query.toLowerCase()),
+        c.text.toLowerCase().includes(query.toLowerCase()),
       );
-
       this.suggestions.set(rawSuggestions);
     } else {
       this.closeDropdown();
@@ -188,55 +163,35 @@ export class AutocompleteCountryComponent
     if (!this.disabled() && t && t.value) {
       // Try to find exact match
       const match = this._countries.find(c => c.text.toLowerCase() === t.value.toLowerCase());
-      const item: AutocompleteItem = match || { text: t.value, value: t.value };
-
-      this.setValue(item);
+      this.setValue(match || { text: t.value, value: t.value });
       this.closeDropdown();
     }
   }
 
-  private handleOutsideEvent(event: Event) {
+  handleOutsideEvent(event: Event) {
     if (!this.isOpen()) return;
-
     const target = event.target as HTMLElement;
-    const dropdown = this.dropdown();
-    const path: EventTarget[] = (event as any).composedPath ? (event as any).composedPath() : [];
+    const path: EventTarget[] = (event as any).composedPath?.() || [];
+    const isInside =
+      this.hostRef.nativeElement.contains(target) ||
+      this.dropdown()?.nativeElement.contains(target) ||
+      path.some(p => p === this.hostRef.nativeElement);
 
-    const clickedInsideHost = this.hostRef?.nativeElement?.contains(target);
-    const clickedInsideDropdown = dropdown?.nativeElement?.contains
-      ? dropdown.nativeElement.contains(target)
-      : false;
-    const clickedInPath = path.length
-      ? path.some(
-          p => p === this.hostRef.nativeElement || (dropdown && p === dropdown.nativeElement),
-        )
-      : false;
-
-    if (!(clickedInsideHost || clickedInsideDropdown || clickedInPath)) {
-      this.closeDropdown();
-    }
+    if (!isInside) this.closeDropdown();
   }
 
   openDropdown() {
-    if (this.isOpen()) return;
     this.isOpen.set(true);
   }
-
   closeDropdown() {
-    if (!this.isOpen()) return;
     this.isOpen.set(false);
   }
 
-  // Data Logic
   getCountries(): AutocompleteItem[] {
-    if (this.enableFlagIcons()) {
-      return this._countries.map(country => ({
-        ...country,
-        iconClass: `fi fi-${country.value.toLowerCase()}`,
-      }));
-    } else {
-      return this._countries;
-    }
+    return this._countries.map(c => ({
+      ...c,
+      iconClass: this.enableFlagIcons() ? `fi fi-${c.value.toLowerCase()}` : undefined,
+    }));
   }
 
   private _countries: AutocompleteItem[] = [

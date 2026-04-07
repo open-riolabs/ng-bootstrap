@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'rlb-dropdown',
@@ -14,8 +14,11 @@ import { Component, input } from '@angular/core';
     '[class.dropstart]': 'direction() === "left"',
     '[class.dropend]': 'direction() === "right"',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownComponent {
-  direction = input<'up' | 'down' | 'left' | 'right' | 'up-center' | 'down-center'>('down', { alias: 'direction' });
+  direction = input<'up' | 'down' | 'left' | 'right' | 'up-center' | 'down-center'>('down', {
+    alias: 'direction',
+  });
 }

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'rlb-button-toolbar',
@@ -7,7 +7,8 @@ import { Component, input } from '@angular/core';
     class: 'btn-toolbar',
     'attr.role': 'toolbar',
   },
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonToolbarComponent {
   orientation = input<'horizontal' | 'vertical'>('horizontal', { alias: 'orientation' });

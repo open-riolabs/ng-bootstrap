@@ -1,4 +1,10 @@
-import { Component, EmbeddedViewRef, TemplateRef, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EmbeddedViewRef,
+  TemplateRef,
+  viewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'rlb-dt-loading',
@@ -8,6 +14,7 @@ import { Component, EmbeddedViewRef, TemplateRef, viewChild } from '@angular/cor
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableLoadingComponent {
   element!: HTMLElement;

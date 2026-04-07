@@ -1,4 +1,4 @@
-import { Component, input, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnDestroy, viewChild } from '@angular/core';
 import { BuilderComponent } from '../../shared/component-builder/builder.component';
 import { ComponentHostDirective } from '../../shared/component-builder/component-host.directive';
 import { InnerModalService } from './inner-modal.service';
@@ -9,6 +9,7 @@ import { InnerModalService } from './inner-modal.service';
     <ng-template component-host></ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalContainerComponent
   extends BuilderComponent<InnerModalService>
@@ -16,7 +17,7 @@ export class ModalContainerComponent
 {
   builderId = input.required<string>({ alias: 'id' });
 
-  @ViewChild(ComponentHostDirective, { static: true }) component!: ComponentHostDirective;
+  component = viewChild.required(ComponentHostDirective);
 
   constructor(private modalService: InnerModalService) {
     super(modalService);

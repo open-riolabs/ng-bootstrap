@@ -73,7 +73,7 @@ export abstract class AbstractAutocompleteComponent
     protected readonly renderer: Renderer2, // protected, to gain access to child classes
     control?: NgControl,
   ) {
-    super(idService, control);
+    super();
 
     // This effect runs automatically whenever _el changes (e.g., becomes defined)
     effect(() => {

@@ -1,32 +1,34 @@
 import {
+  ChangeDetectionStrategy,
   Component,
+  input,
   OnInit,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
-  input,
 } from '@angular/core';
 
 @Component({
   selector: 'rlb-navbar-separator',
-  template: ` <ng-template #template>
-    <li class="nav-item separator {{ cssClass() }}"></li>
-  </ng-template>`,
-  standalone: false
+  template: `
+    <ng-template #template>
+      <li class="nav-item separator {{ cssClass() }}"></li>
+    </ng-template>
+  `,
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarSeparatorComponent implements OnInit {
   element!: HTMLElement;
 
   cssClass = input('', { alias: 'class' });
 
-  @ViewChild('template', { static: true }) template!: TemplateRef<any>;
+  template = viewChild.required<TemplateRef<any>>('template');
 
-  constructor(private viewContainerRef: ViewContainerRef) { }
+  constructor(private viewContainerRef: ViewContainerRef) {}
 
   ngOnInit() {
-    const templateView = this.viewContainerRef.createEmbeddedView(
-      this.template,
-    );
+    const templateView = this.viewContainerRef.createEmbeddedView(this.template());
     this.element = templateView.rootNodes[0];
     this.viewContainerRef.element.nativeElement.remove();
   }

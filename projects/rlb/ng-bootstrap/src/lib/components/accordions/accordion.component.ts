@@ -1,9 +1,11 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
   effect,
+  inject,
   input,
   OnDestroy,
   OutputRefSubscription,
@@ -24,6 +26,7 @@ import { AccordionItemComponent } from './accordion-item.component';
     '[id]': 'effectiveId()',
   },
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionComponent implements OnDestroy {
   flush = input(false, { alias: 'flush', transform: booleanAttribute });
@@ -39,7 +42,9 @@ export class AccordionComponent implements OnDestroy {
 
   cardStyle = input(true, { alias: 'card-style', transform: booleanAttribute });
 
-  constructor(private idService: UniqueIdService) {
+  private idService = inject(UniqueIdService);
+
+  constructor() {
     this._internalId.set(`accordion${this.idService.id}`);
 
     effect(() => {

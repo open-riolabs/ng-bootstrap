@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-    selector: 'rlb-card-group',
-    template: `<ng-content select="rlb-card" />`,
-    host: { class: 'card-group' },
-    standalone: false
+  selector: 'rlb-card-group',
+  template: `<ng-content select="rlb-card" />`,
+  host: { class: 'card-group' },
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardGroupComponent {
   overlay: boolean = false;

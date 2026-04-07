@@ -1,4 +1,11 @@
-import { Component, input, numberAttribute, TemplateRef, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  numberAttribute,
+  TemplateRef,
+  viewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'rlb-dt-cell',
@@ -14,6 +21,7 @@ import { Component, input, numberAttribute, TemplateRef, viewChild } from '@angu
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableCellComponent {
   colSpan = input<number, unknown>(undefined, { alias: 'col-span', transform: numberAttribute });

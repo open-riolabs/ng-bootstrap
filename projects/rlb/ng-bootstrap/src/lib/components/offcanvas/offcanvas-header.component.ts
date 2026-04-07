@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 @Component({
 	selector: 'rlb-offcanvas-header',
@@ -15,7 +15,8 @@ import { Component, computed, input } from '@angular/core';
 	host: {
 		class: 'offcanvas-header d-flex justify-content-between align-items-center'
 	},
-	standalone: false
+	standalone: false,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OffcanvasHeaderComponent {
 	offcanvasId = input<string>('');

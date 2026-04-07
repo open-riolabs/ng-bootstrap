@@ -1,11 +1,12 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   input,
   OnInit,
   signal,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IModal, ModalData, ModalDirective } from '../components';
@@ -38,11 +39,20 @@ import { CommonModalData } from './common-modal.data';
     </div>
     <div class="modal-footer">
       @if (data().cancel) {
-        <button class="me-2" rlb-button outline data-modal-reason="cancel">
+        <button
+          class="me-2"
+          rlb-button
+          outline
+          data-modal-reason="cancel"
+        >
           {{ data().cancel }}
         </button>
       }
-      <button rlb-button data-modal-reason="ok" [disabled]="!valid()">
+      <button
+        rlb-button
+        data-modal-reason="ok"
+        [disabled]="!valid()"
+      >
         {{ data().ok }}
       </button>
     </div>
@@ -53,11 +63,10 @@ import { CommonModalData } from './common-modal.data';
       inputs: ['id', 'data-instance', 'data-options'],
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommonModalComponent
-  implements IModal<CommonModalData, void>, OnInit
-{
-  @ViewChild('btn') btn!: ElementRef<HTMLElement>;
+export class CommonModalComponent implements IModal<CommonModalData, void>, OnInit {
+  btn = viewChild<ElementRef<HTMLElement>>('btn');
 
   data = input<ModalData<CommonModalData>>({
     title: '',
@@ -66,9 +75,7 @@ export class CommonModalComponent
   valid = signal(true);
 
   // Computed for header color
-  headerColor = computed(() =>
-    this.data()?.type ? ` bg-${this.data()?.type}` : '',
-  );
+  headerColor = computed(() => (this.data()?.type ? ` bg-${this.data()?.type}` : ''));
 
   searchText?: string;
 

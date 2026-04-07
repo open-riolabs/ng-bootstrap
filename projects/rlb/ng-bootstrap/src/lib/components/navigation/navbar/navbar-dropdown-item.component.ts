@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   computed,
   inject,
@@ -40,6 +41,7 @@ import { Dropdown } from 'bootstrap';
     </ng-template>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
   element!: HTMLElement;
