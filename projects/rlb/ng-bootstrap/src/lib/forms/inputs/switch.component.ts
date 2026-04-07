@@ -38,6 +38,7 @@ import { AbstractComponent } from './abstract-field.component';
       <ng-content select="[after]"></ng-content>
     </div>
   `,
+  host: { '[attr.id]': 'null' },
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

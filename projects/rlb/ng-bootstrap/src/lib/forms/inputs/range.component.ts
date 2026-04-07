@@ -14,6 +14,7 @@ import { AbstractComponent } from './abstract-field.component';
   selector: 'rlb-range',
   host: {
     class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
+    '[attr.id]': 'null',
   },
   template: `
     <ng-content select="[before]"></ng-content>

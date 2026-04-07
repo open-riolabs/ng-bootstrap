@@ -51,6 +51,7 @@ import { OptionComponent } from './options.component';
       </div>
     </div>
   `,
+  host: { '[attr.id]': 'null' },
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

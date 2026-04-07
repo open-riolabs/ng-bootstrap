@@ -20,7 +20,7 @@ import { AbstractComponent } from './abstract-field.component';
         [attr.disabled]="disabled() ? true : undefined"
         [attr.readonly]="readonly() ? true : undefined"
         [attr.placeholder]="placeholder()"
-        [attr.list]="'list-' + id"
+        [attr.list]="'list-' + id()"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
         [value]="value() || ''"

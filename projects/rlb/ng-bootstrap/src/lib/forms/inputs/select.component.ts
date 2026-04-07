@@ -52,6 +52,7 @@ import { OptionComponent } from './options.component';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
+  host: { '[attr.id]': 'null' },
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -66,7 +67,7 @@ export class SelectComponent extends AbstractComponent<string | string[]> {
   multiple = input(false, { alias: 'multiple', transform: booleanAttribute });
   display = input<number, unknown>(undefined, { alias: 'display', transform: numberAttribute });
   userDefinedId = input('', {
-    alias: 'id',
+    alias: 'inputId',
     transform: (v: string | undefined) => v || '',
   });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });

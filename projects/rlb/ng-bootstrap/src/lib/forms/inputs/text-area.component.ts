@@ -37,6 +37,7 @@ import { AbstractComponent } from './abstract-field.component';
     <ng-content select="[after]"></ng-content>
   `,
   standalone: false,
+  host: { '[attr.id]': 'null' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextAreaComponent extends AbstractComponent<string> {
