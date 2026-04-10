@@ -459,7 +459,7 @@ rlb-dt-table.dt-card-style {
   display: block;
   margin-bottom: 1.5rem;
   .table-responsive {
-    box-shadow: $card-box-shadow;
+    box-shadow: var(--#{$prefix}card-box-shadow);
     border-radius: $card-border-radius;
     background-color: var(--bs-secondary-bg, var(--bs-body-bg));
     border: 1px solid var(--bs-border-color-translucent);
@@ -502,7 +502,7 @@ rlb-accordion.accordion-card-style {
   display: block; // Required for the box-shadow to render on a custom element
 
   // Give the wrapper the card shadow and radius
-  box-shadow: $card-box-shadow;
+  box-shadow: var(--#{$prefix}card-box-shadow);
   border-radius: $card-border-radius;
 
   // Feed the Card variables directly into Bootstrap's Accordion Engine!
