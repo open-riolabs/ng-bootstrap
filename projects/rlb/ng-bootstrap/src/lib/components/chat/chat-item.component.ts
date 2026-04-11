@@ -37,7 +37,7 @@ import { VisibilityEventBase } from '../../shared/types';
           <ng-content />
         </div>
         <i class="bi bi-check-all float-end"></i>
-        <span class="time float-end">{{ dateTime() | date: 'dd/MM HH:mm:ss' }}</span>
+        <span class="time float-end">{{ dateTime() }}</span>
         <rlb-dropdown
           direction="up"
           class="reaction"
@@ -96,7 +96,7 @@ export class ChatItemComponent {
   id = input('', { alias: 'id' });
   avatar = input('', { alias: 'avatar' });
   text = input('', { alias: 'text' });
-  dateTime = input<Date | number | undefined>(new Date(), { alias: 'date-time' });
+  dateTime = input<string | undefined>('', { alias: 'date-time' });
 
   replayText = input<string | undefined>(undefined, { alias: 'replay-text' });
   replaySubject = input<string | undefined>(undefined, { alias: 'replay-subject' });
