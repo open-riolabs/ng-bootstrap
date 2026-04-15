@@ -95,11 +95,13 @@ export class SelectComponent extends AbstractComponent<string | string[]> {
       vcr.clear();
 
       options.forEach(opt => {
-        vcr.createEmbeddedView(opt.template());
+        const view = vcr.createEmbeddedView(opt.template());
+        view.detectChanges();
       });
 
       untracked(() => {
         this.onWrite(this.value());
+        this.cdr.markForCheck();
       });
     });
   }
