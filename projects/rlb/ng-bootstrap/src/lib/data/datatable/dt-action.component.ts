@@ -8,10 +8,11 @@ import {
   TemplateRef,
   viewChild,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'rlb-dt-action',
-  template: `
+    selector: 'rlb-dt-action',
+    template: `
     <ng-template #template>
       <li
         (click)="onClick($event)"
@@ -27,8 +28,8 @@ import {
       </li>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RouterLink],
 })
 export class DataTableActionComponent {
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });

@@ -1,8 +1,10 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input, TemplateRef, viewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'rlb-option',
-  template: `
+    selector: 'rlb-option',
+    template: `
     <ng-template #content>
       <ng-content></ng-content>
     </ng-template>
@@ -17,8 +19,8 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input, TemplateRe
       </option>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, NgTemplateOutlet],
 })
 export class OptionComponent {
   value = input<string | number | null | undefined>();

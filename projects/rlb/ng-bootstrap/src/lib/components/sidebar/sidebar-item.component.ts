@@ -11,14 +11,16 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { CollapseComponent } from '../collapse/collapse.component';
 import { SidebarService } from './sidebar.service';
+import { ToggleDirective } from '../buttons/toggle.directive';
+import { BadgeDirective } from '../badges/badge.directive';
 
 @Component({
-  selector: 'rlb-sidebar-item',
-  template: `
+    selector: 'rlb-sidebar-item',
+    template: `
     <ng-template #template>
       @if (title()) {
         <li
@@ -73,8 +75,14 @@ import { SidebarService } from './sidebar.service';
       }
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ToggleDirective,
+        BadgeDirective,
+        CollapseComponent,
+        RouterLinkActive,
+        RouterLink,
+    ],
 })
 export class SidebarItemComponent implements OnInit {
   element!: HTMLElement;

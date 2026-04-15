@@ -1,23 +1,24 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Color } from '../../shared/types';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-spinner',
-  template: `
+    selector: 'rlb-spinner',
+    template: `
     <span class="visually-hidden">Loading...</span>
   `,
-  host: {
-    '[class.spinner-border]': 'style() === "border"',
-    '[class.spinner-grow]': 'style() === "grow"',
-    '[class.spinner-border-sm]': 'size() === "sm" && style() === "border"',
-    '[class.spinner-grow-sm]': 'size() === "sm" && style() === "grow"',
-    '[class.spinner-border-lg]': 'size() === "lg" && style() === "border"',
-    '[class.spinner-grow-lg]': 'size() === "lg" && style() === "grow"',
-    role: 'status',
-    '[class]': "'text-'+color()",
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        '[class.spinner-border]': 'style() === "border"',
+        '[class.spinner-grow]': 'style() === "grow"',
+        '[class.spinner-border-sm]': 'size() === "sm" && style() === "border"',
+        '[class.spinner-grow-sm]': 'size() === "sm" && style() === "grow"',
+        '[class.spinner-border-lg]': 'size() === "lg" && style() === "border"',
+        '[class.spinner-grow-lg]': 'size() === "lg" && style() === "grow"',
+        role: 'status',
+        '[class]': "'text-'+color()",
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class SpinnerComponent {
   style = input<'grow' | 'border'>('border', { alias: 'style' });

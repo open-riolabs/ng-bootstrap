@@ -17,6 +17,12 @@ import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
 import { DataTableNoItemsComponent } from './dt-noitems.component';
 import { DataTableLoadingComponent } from './dt-loading.component';
+import { RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
+import { SelectComponent } from '../../forms/inputs/select.component';
+import { FormsModule } from '@angular/forms';
+import { OptionComponent } from '../../forms/inputs/options.component';
+import { DataTableActionComponent } from './dt-action.component';
 
 export interface TableDataQuery {
   pagination?: { size: number };
@@ -30,15 +36,22 @@ export interface PaginationEvent {
 }
 
 @Component({
-  selector: 'rlb-dt-table',
-  templateUrl: './dt-table.component.html',
-  standalone: false,
-  host: {
-    // This automatically adds the 'dt-card-style' class to the <rlb-dt-table>
-    // element in the DOM if cardStyle() is true.
-    '[class.dt-card-style]': 'cardStyle()',
-  },
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-dt-table',
+    templateUrl: './dt-table.component.html',
+    host: {
+        // This automatically adds the 'dt-card-style' class to the <rlb-dt-table>
+        // element in the DOM if cardStyle() is true.
+        '[class.dt-card-style]': 'cardStyle()',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        RouterLink,
+        NgClass,
+        SelectComponent,
+        FormsModule,
+        OptionComponent,
+        DataTableActionComponent,
+    ],
 })
 export class DataTableComponent implements OnInit, OnDestroy {
   title = input<string | undefined>(undefined);

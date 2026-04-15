@@ -9,10 +9,7 @@ import {
 } from '@angular/core';
 import { Tooltip } from 'bootstrap';
 
-@Directive({
-  selector: '[tooltip]',
-  standalone: false,
-})
+@Directive({ selector: '[tooltip]', })
 export class TooltipDirective implements OnInit, OnDestroy {
   private _tooltip: Tooltip | undefined;
 

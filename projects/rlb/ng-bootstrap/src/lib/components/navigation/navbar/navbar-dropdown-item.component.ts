@@ -17,8 +17,8 @@ import { VisibilityEventBase } from '../../../shared/types';
 import { Dropdown } from 'bootstrap';
 
 @Component({
-  selector: 'rlb-navbar-dropdown-item',
-  template: `
+    selector: 'rlb-navbar-dropdown-item',
+    template: `
     <ng-template #template>
       <li
         class="nav-item list-unstyled"
@@ -40,8 +40,7 @@ import { Dropdown } from 'bootstrap';
       </li>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
   element!: HTMLElement;

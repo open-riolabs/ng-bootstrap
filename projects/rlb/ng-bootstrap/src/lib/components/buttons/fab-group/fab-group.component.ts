@@ -8,10 +8,11 @@ import {
   output,
 } from '@angular/core';
 import { InputComponent } from '../../../forms/inputs';
+import { DataTableActionComponent } from '../../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-fab-input',
-  template: `
+    selector: 'rlb-fab-input',
+    template: `
     <div
       class="rlb-fab-input-wrapper"
       (focusout)="onFocusOut($event)"
@@ -34,8 +35,8 @@ import { InputComponent } from '../../../forms/inputs';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .rlb-fab-input-wrapper {
         display: inline-flex;
         align-items: center;
@@ -46,12 +47,12 @@ import { InputComponent } from '../../../forms/inputs';
         display: none !important;
       }
     `,
-  ],
-  host: {
-    '(document:click)': 'onDocumentClick($event)',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    ],
+    host: {
+        '(document:click)': 'onDocumentClick($event)',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class RlbFabInputComponent {
   isOpen = signal(false);

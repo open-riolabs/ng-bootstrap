@@ -10,19 +10,20 @@ import {
 import { ValidationErrors } from '@angular/forms';
 import { InputValidationComponent } from './input-validation.component';
 import { InputComponent } from './input.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-input-group',
-  host: {
-    '[class.has-validation]': 'validate()',
-    '[class.input-group]': '!text()',
-    '[class.input-group-text]': 'text()',
-    '[class.input-group-sm]': 'size() === "small"',
-    '[class.input-group-lg]': 'size() === "large"',
-  },
-  template: `<ng-content></ng-content>`,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-input-group',
+    host: {
+        '[class.has-validation]': 'validate()',
+        '[class.input-group]': '!text()',
+        '[class.input-group-text]': 'text()',
+        '[class.input-group-sm]': 'size() === "small"',
+        '[class.input-group-lg]': 'size() === "large"',
+    },
+    template: `<ng-content></ng-content>`,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class InputGroupComponent {
 

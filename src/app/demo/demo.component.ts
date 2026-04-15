@@ -4,16 +4,15 @@ import { ModalData } from 'projects/rlb/ng-bootstrap/src/lib/components/modals/d
 import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
 
 @Component({
-    selector: 'app-demo',
-    templateUrl: './demo.component.html',
-    styleUrls: ['./demo.component.scss'],
-    hostDirectives: [
-        {
-            directive: ModalDirective,
-            inputs: ['id', 'data-instance', 'data-options'],
-        },
-    ],
-    standalone: false
+  selector: 'app-demo',
+  templateUrl: './demo.component.html',
+  styleUrls: ['./demo.component.scss'],
+  hostDirectives: [
+    {
+      directive: ModalDirective,
+      inputs: ['id', 'data-instance', 'data-options'],
+    },
+  ],
 })
 export class DemoComponent implements IModal<any, any> {
   data!: ModalData<any>;
@@ -23,5 +22,4 @@ export class DemoComponent implements IModal<any, any> {
   get headerColor() {
     return this.data.type ? ` bg-${this.data.type}` : '';
   }
-
 }

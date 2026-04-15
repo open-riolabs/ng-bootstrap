@@ -7,10 +7,11 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'rlb-navbar-form',
-  template: `
+    selector: 'rlb-navbar-form',
+    template: `
     <ng-template #template>
       <form
         [attr.role]="role()"
@@ -20,8 +21,8 @@ import {
       </form>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule],
 })
 export class NavbarFormComponent implements OnInit {
   element!: HTMLElement;

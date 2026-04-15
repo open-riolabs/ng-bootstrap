@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
 
 @Component({
-    selector: 'app-accordions',
-    templateUrl: './accordions.component.html',
-    styleUrls: ['./accordions.component.scss'],
-    standalone: false
+  selector: 'app-accordions',
+  templateUrl: './accordions.component.html',
+  styleUrls: ['./accordions.component.scss'],
+  imports: [SHARED_IMPORTS],
 })
 export class AccordionsComponent {
-
   message: number = 0;
 
   onStatusChenged(event: any, i: number) {
-     this.message++;
+    this.message++;
   }
 
   sample: string = `<rlb-accordion>
@@ -24,7 +24,7 @@ export class AccordionsComponent {
   </div>
 </rlb-accordion>`;
 
-flush: string = `<rlb-accordion [flush]="true">
+  flush: string = `<rlb-accordion [flush]="true">
   <div rlb-accordion-item>
     <rlb-accordion-header>Accordion Header</rlb-accordion-header>
     <div rlb-accordion-body>
@@ -39,7 +39,7 @@ flush: string = `<rlb-accordion [flush]="true">
   </div>
 </rlb-accordion>`;
 
-ao: string = `<rlb-accordion [always-open]="false">
+  ao: string = `<rlb-accordion [always-open]="false">
   <div rlb-accordion-item>
     <rlb-accordion-header>Accordion Header</rlb-accordion-header>
     <div rlb-accordion-body>
@@ -54,7 +54,7 @@ ao: string = `<rlb-accordion [always-open]="false">
   </div>
 </rlb-accordion`;
 
-expanded: string = `<rlb-accordion>
+  expanded: string = `<rlb-accordion>
   <div rlb-accordion-item [expanded]="true">
     <rlb-accordion-header>Accordion Header</rlb-accordion-header>
     <div rlb-accordion-body>

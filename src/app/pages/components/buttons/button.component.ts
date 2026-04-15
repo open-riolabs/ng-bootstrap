@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   selector: 'app-button',
   templateUrl: './button.component.html',
-  standalone: false
+  imports: [SHARED_IMPORTS],
 })
 export class ButtonsComponent {
-
   copyToClipboard(code: string) {
     navigator.clipboard.writeText(code);
   }
@@ -55,5 +56,4 @@ export class ButtonsComponent {
 <button rlb-button color="primary" outline disabled>Primary button</button>
 <button rlb-button color="secondary" outline disabled>Button</button>
 `;
-
 }

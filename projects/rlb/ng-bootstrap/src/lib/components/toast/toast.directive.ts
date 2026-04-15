@@ -15,7 +15,7 @@ import { InnerToastService } from './inner-toast.service';
 
 @Directive({
   selector: '[rlb-toast]',
-  standalone: true,
+
 })
 export class ToastDirective implements OnDestroy, AfterViewInit {
   id = input.required<string>({ alias: 'id' });

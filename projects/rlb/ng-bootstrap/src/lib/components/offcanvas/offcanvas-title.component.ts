@@ -7,7 +7,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     selector: 'h*[rlb-offcanvas-title]',
     template: `<ng-content></ng-content>`,
     host: { class: 'offcanvas-title' },
-    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OffcanvasTitleComponent {}

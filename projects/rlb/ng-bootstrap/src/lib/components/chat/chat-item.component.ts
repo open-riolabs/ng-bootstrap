@@ -1,9 +1,15 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { VisibilityEventBase } from '../../shared/types';
+import { DropdownComponent } from '../dropdown/dropdown.component';
+import { ButtonComponent } from '../buttons/buttons.component';
+import { DropdownDirective } from '../dropdown/dropdown.directive';
+import { DropdownContainerComponent } from '../dropdown/dropdown-container.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'rlb-chat-item',
-  template: `
+    selector: 'rlb-chat-item',
+    template: `
     <div
       [id]="id()"
       class="chat-bubble-item"
@@ -88,9 +94,16 @@ import { VisibilityEventBase } from '../../shared/types';
       }
     </div>
   `,
-  host: { '[class.ms-auto]': 'position() === "right"' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[class.ms-auto]': 'position() === "right"' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        DropdownComponent,
+        ButtonComponent,
+        DropdownDirective,
+        DropdownContainerComponent,
+        DataTableActionComponent,
+        DatePipe,
+    ],
 })
 export class ChatItemComponent {
   id = input('', { alias: 'id' });

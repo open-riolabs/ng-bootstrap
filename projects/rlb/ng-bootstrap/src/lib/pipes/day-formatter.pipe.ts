@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { IDateTz } from "@open-rlb/date-tz";
 
-@Pipe({
-  name: 'dayOfWeek',
-  standalone: false
-})
+@Pipe({ name: 'dayOfWeek' })
 export class DayOfWeekPipe implements PipeTransform {
 
   /**

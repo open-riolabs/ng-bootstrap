@@ -8,10 +8,11 @@ import {
   viewChild,
 } from '@angular/core';
 import { DataTableActionComponent } from './dt-action.component';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'rlb-dt-actions',
-  template: `
+    selector: 'rlb-dt-actions',
+    template: `
     <ng-template #template>
       <div class="dropdown">
         <button
@@ -33,8 +34,8 @@ import { DataTableActionComponent } from './dt-action.component';
       </div>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgTemplateOutlet],
 })
 export class DataTableActionsComponent {
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });

@@ -4,9 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { IModal } from 'projects/rlb/ng-bootstrap/src/lib/components/modals/data/modal';
 import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [SHARED_IMPORTS],
   template: `
     <div [class]="'modal-header' + headerColor">
       <h5 class="modal-title">Modal title</h5>

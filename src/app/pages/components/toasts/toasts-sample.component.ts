@@ -1,9 +1,11 @@
 import { Component, Signal } from '@angular/core';
 import { IToast, ToastData, ToastDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   standalone: true,
-  imports: [],
+  imports: [SHARED_IMPORTS],
   selector: 'app-toast',
   template: `
     <div class="toast-header">

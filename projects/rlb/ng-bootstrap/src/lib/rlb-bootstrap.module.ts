@@ -12,33 +12,31 @@ import { PIPES } from './pipes';
 import { COMPONENT_BUILDER } from './shared/component-builder';
 
 @NgModule({
-  declarations: [
-    ...TABLE,
-    ...INPUTS,
-    ...COMPONENTS,
-    ...COMPONENT_BUILDER,
-    ...PIPES,
-    FormFieldsComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    RouterModule,
-    CdkDrag,
-    CdkDropListGroup,
-    CdkDropList,
-    CdkDragPlaceholder,
-    CdkDragPreview
-  ],
-  exports: [
-    ...TABLE,
-    ...INPUTS,
-    ...COMPONENTS,
-    ...PIPES,
-    FormFieldsComponent
-  ],
-  providers: [],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        RouterModule,
+        CdkDrag,
+        CdkDropListGroup,
+        CdkDropList,
+        CdkDragPlaceholder,
+        CdkDragPreview,
+        ...TABLE,
+        ...INPUTS,
+        ...COMPONENTS,
+        ...COMPONENT_BUILDER,
+        ...PIPES,
+        FormFieldsComponent
+    ],
+    exports: [
+        ...TABLE,
+        ...INPUTS,
+        ...COMPONENTS,
+        ...PIPES,
+        FormFieldsComponent
+    ],
+    providers: [],
 })
 export class RlbBootstrapModule { }

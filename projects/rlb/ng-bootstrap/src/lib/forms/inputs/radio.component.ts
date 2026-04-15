@@ -12,10 +12,12 @@ import {
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { OptionComponent } from './options.component';
+import { NgClass, JsonPipe } from '@angular/common';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-radio',
-  template: `
+    selector: 'rlb-radio',
+    template: `
     <div class="input-group has-validation">
       <ng-content select="[before]"></ng-content>
 
@@ -51,9 +53,13 @@ import { OptionComponent } from './options.component';
       </div>
     </div>
   `,
-  host: { '[attr.id]': 'null' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[attr.id]': 'null' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        DataTableActionComponent,
+        JsonPipe,
+    ],
 })
 export class RadioComponent extends AbstractComponent<string> {
   disabled = input(false, {

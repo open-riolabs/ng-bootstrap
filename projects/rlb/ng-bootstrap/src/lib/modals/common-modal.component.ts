@@ -15,7 +15,7 @@ import { RlbBootstrapModule } from '../rlb-bootstrap.module';
 import { CommonModalData } from './common-modal.data';
 
 @Component({
-  standalone: true,
+
   imports: [RlbBootstrapModule, FormsModule],
   template: `
     <div [class]="'modal-header' + headerColor()">

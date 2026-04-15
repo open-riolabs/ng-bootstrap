@@ -13,13 +13,20 @@ import { CalendarEvent } from './interfaces/calendar-event.interface';
 import { CalendarLayout, DEFAULT_CALENDAR_LAYOUT } from './interfaces/calendar-layout.interface';
 import { CalendarChangeEvent, CalendarView } from './interfaces/calendar-view.type';
 import { getToday } from './utils/calendar-date-utils';
+import { CalendarHeaderComponent } from './header/calendar-header.component';
+import { ProgressComponent } from '../loaders/progress.component';
+import { CalendarGrid } from './grid/calendar-grid.component';
 
 @Component({
-  selector: 'rlb-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CalendarHeaderComponent,
+        ProgressComponent,
+        CalendarGrid,
+    ],
 })
 export class CalendarComponent {
   view = model<CalendarView>('week', { alias: 'view' });

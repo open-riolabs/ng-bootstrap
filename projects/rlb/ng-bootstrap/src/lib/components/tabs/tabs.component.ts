@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-tabs',
-  template: `
+    selector: 'rlb-tabs',
+    template: `
     <ng-template #template>
       <ul
         role="tablist"
@@ -30,8 +30,7 @@ import {
       </ul>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabsComponent {
   element!: HTMLElement;

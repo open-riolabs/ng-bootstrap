@@ -2,10 +2,12 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { delay, of } from 'rxjs';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   selector: 'app-input',
   templateUrl: './inputs.component.html',
-  standalone: false,
+  imports: [SHARED_IMPORTS],
 })
 export class InputsComponent {
   html: string = `<rlb-input formControlName="myControl"></rlb-input>`;

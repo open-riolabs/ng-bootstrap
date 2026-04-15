@@ -7,13 +7,14 @@ import {
   viewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
+import { NgClass, JsonPipe } from '@angular/common';
 
 @Component({
-  selector: 'rlb-file',
-  host: {
-    class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
-  },
-  template: `
+    selector: 'rlb-file',
+    host: {
+        class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
+    },
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -37,8 +38,8 @@ import { AbstractComponent } from './abstract-field.component';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgClass, JsonPipe],
 })
 export class FileComponent extends AbstractComponent<File | File[] | null> {
   disabled = input(false, {

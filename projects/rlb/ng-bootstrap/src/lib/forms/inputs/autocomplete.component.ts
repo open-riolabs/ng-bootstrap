@@ -16,10 +16,13 @@ import { debounceTime, distinctUntilChanged, lastValueFrom, Observable, Subject 
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgClass } from '@angular/common';
+import { InputValidationComponent } from './input-validation.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-autocomplete',
-  template: `
+    selector: 'rlb-autocomplete',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation position-relative">
       <input
@@ -82,14 +85,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-  host: {
-    // Modern Angular 21 syntax for global listeners
-    '(document:pointerdown)': 'onDocumentPointerDown($event)',
-    '(document:keydown.escape)': 'onEscape($event)',
-    '[attr.id]': 'null',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        // Modern Angular 21 syntax for global listeners
+        '(document:pointerdown)': 'onDocumentPointerDown($event)',
+        '(document:keydown.escape)': 'onEscape($event)',
+        '[attr.id]': 'null',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        InputValidationComponent,
+        DataTableActionComponent,
+    ],
 })
 export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   acLoading = signal(false);

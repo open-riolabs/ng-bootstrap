@@ -12,10 +12,7 @@ import { Dropdown } from 'bootstrap';
 import { ComponentOptions } from "bootstrap/js/dist/base-component";
 import { VisibilityEventBase } from '../../shared/types';
 
-@Directive({
-  selector: 'a[rlb-dropdown], button[rlb-dropdown], span[rlb-badge][rlb-dropdown]',
-  standalone: false
-})
+@Directive({ selector: 'a[rlb-dropdown], button[rlb-dropdown], span[rlb-badge][rlb-dropdown]' })
 export class DropdownDirective implements OnInit, OnDestroy {
   private _dropdown: Dropdown | undefined;
   private listeners: (() => void)[] = [];

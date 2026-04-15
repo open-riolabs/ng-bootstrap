@@ -16,8 +16,8 @@ import {
 import { NavbarItemComponent } from './navbar-item.component';
 
 @Component({
-  selector: 'rlb-navbar-items',
-  template: `
+    selector: 'rlb-navbar-items',
+    template: `
     <ng-template #template>
       <ul
         class="navbar-nav {{ cssClass() }}"
@@ -30,8 +30,7 @@ import { NavbarItemComponent } from './navbar-item.component';
       </ul>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarItemsComponent implements OnInit, AfterContentInit, OnDestroy {
   scroll = input<string | undefined>(undefined);

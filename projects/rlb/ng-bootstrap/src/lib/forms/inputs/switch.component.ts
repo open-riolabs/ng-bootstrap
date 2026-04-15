@@ -9,10 +9,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
+import { NgClass, JsonPipe } from '@angular/common';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-switch',
-  template: `
+    selector: 'rlb-switch',
+    template: `
     <div class="d-flex align-items-center gap-2">
       @if (errors() && showError() && (control?.touched || control?.dirty)) {
         <div class="invalid-feedback d-block">
@@ -38,9 +40,13 @@ import { AbstractComponent } from './abstract-field.component';
       <ng-content select="[after]"></ng-content>
     </div>
   `,
-  host: { '[attr.id]': 'null' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[attr.id]': 'null' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        DataTableActionComponent,
+        JsonPipe,
+    ],
 })
 export class SwitchComponent extends AbstractComponent<boolean> implements AfterViewInit {
   disabled = input(false, {

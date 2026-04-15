@@ -7,10 +7,12 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { ToggleDirective } from '../buttons/toggle.directive';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-tab',
-  template: `
+    selector: 'rlb-tab',
+    template: `
     <ng-template #template>
       <li
         class="nav-item {{ cssClass() }}"
@@ -32,12 +34,12 @@ import {
       </li>
     </ng-template>
   `,
-  host: {
-    '[attr.class]': 'undefined',
-    '[attr.id]': 'undefined',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        '[attr.class]': 'undefined',
+        '[attr.id]': 'undefined',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ToggleDirective, DataTableActionComponent],
 })
 export class TabComponent {
   element!: HTMLElement;

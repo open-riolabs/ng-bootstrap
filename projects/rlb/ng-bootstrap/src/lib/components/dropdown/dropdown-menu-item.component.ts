@@ -1,8 +1,10 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'li[rlb-dropdown-item]',
-  template: `
+    selector: 'li[rlb-dropdown-item]',
+    template: `
     @if (!link() && !divider() && !header()) {
       <span
         class="dropdown-item "
@@ -41,8 +43,8 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@an
     }
     <ng-template #content><ng-content /></ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgTemplateOutlet, RouterLink],
 })
 export class DropdownMenuItemComponent {
   active = input(false, { alias: 'active', transform: booleanAttribute });

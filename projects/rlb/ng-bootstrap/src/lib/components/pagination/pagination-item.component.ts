@@ -8,10 +8,11 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'rlb-pagination-item',
-  template: `
+    selector: 'rlb-pagination-item',
+    template: `
     <ng-template #template>
       <li
         class="page-item {{ cssClass() }}"
@@ -35,8 +36,8 @@ import {
     </ng-template>
     <ng-template #content><ng-content /></ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgTemplateOutlet],
 })
 export class PaginationItemComponent implements OnInit {
   element!: HTMLElement;

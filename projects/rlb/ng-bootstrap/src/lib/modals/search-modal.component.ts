@@ -14,7 +14,7 @@ import { SearchModalInput } from './search-modal.data';
 
 @Component({
   imports: [RlbBootstrapModule, FormsModule],
-  standalone: true,
+
   template: `
     <div class="modal-header">
       <h5 class="modal-title">{{ data().title }}</h5>

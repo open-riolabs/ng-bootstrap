@@ -13,8 +13,8 @@ import {
 import { Color } from '../../shared/types';
 
 @Component({
-  selector: 'span[rlb-badge], img[rlb-badge]',
-  template: `
+    selector: 'span[rlb-badge], img[rlb-badge]',
+    template: `
     <ng-template #template>
       <span [class]="style()">
         <ng-content></ng-content>
@@ -24,8 +24,7 @@ import { Color } from '../../shared/types';
       </span>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent implements OnInit {
   element!: HTMLElement;

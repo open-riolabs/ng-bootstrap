@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-button-group',
-  template: `<ng-content></ng-content>`,
-  host: {
-    '[class.btn-group]': 'orientation() !== "vertical"',
-    '[class.btn-group-vertical]': 'orientation() === "vertical"',
-    '[class.btn-group-sm]': 'size() === "sm"',
-    '[class.btn-group-lg]': 'size() === "lg"',
-    'attr.role': 'group',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-button-group',
+    template: `<ng-content></ng-content>`,
+    host: {
+        '[class.btn-group]': 'orientation() !== "vertical"',
+        '[class.btn-group-vertical]': 'orientation() === "vertical"',
+        '[class.btn-group-sm]': 'size() === "sm"',
+        '[class.btn-group-lg]': 'size() === "lg"',
+        'attr.role': 'group',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class ButtonGroupComponent {
   orientation = input<'horizontal' | 'vertical'>('horizontal', { alias: 'orientation' });

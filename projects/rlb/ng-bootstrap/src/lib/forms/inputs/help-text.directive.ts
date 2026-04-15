@@ -7,10 +7,7 @@ import {
 } from '@angular/core';
 import { UniqueIdService } from '../../shared/unique-id.service';
 
-@Directive({
-  selector: '[helpText]',
-  standalone: false
-})
+@Directive({ selector: '[helpText]' })
 export class HelpText {
   private uniqueId: string;
 

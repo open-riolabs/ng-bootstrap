@@ -8,7 +8,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         'attr.type': 'button',
         'attr.aria-label': 'Close',
     },
-    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonCloseComponent {}

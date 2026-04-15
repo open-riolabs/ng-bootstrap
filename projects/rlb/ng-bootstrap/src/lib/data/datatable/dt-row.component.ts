@@ -10,10 +10,11 @@ import {
 } from '@angular/core';
 import { DataTableActionsComponent } from './dt-actions.component';
 import { DataTableCellComponent } from './dt-cell.component';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'rlb-dt-row',
-  template: `
+    selector: 'rlb-dt-row',
+    template: `
     <ng-template #template>
       <tr
         [class]="cssClass()"
@@ -36,8 +37,8 @@ import { DataTableCellComponent } from './dt-cell.component';
       </tr>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgTemplateOutlet],
 })
 export class DataTableRowComponent {
   cssClass = input<string | undefined>(undefined, { alias: 'class' });

@@ -1,36 +1,29 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HighlightModule, provideHighlightOptions } from 'ngx-highlightjs';
+import { ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
+import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHighlightOptions } from 'ngx-highlightjs';
+
 import {
   CalendarOverflowEventsContainerComponent,
   CalendarToastComponent,
   CommonModalComponent,
   EventCreateEditComponent,
   ModalRegistryOptions,
-  RlbBootstrapModule,
   SearchModalComponent,
   ToastRegistryOptions,
 } from 'projects/rlb/ng-bootstrap/src/public-api';
+
+import { routes } from './routing.module';
 import { ModalSampleComponent } from './pages/components/modals/modal-sample.component';
-import { RoutingModule } from './routing.module';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 
-@NgModule({
-  declarations: [],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    RlbBootstrapModule,
-    FormsModule,
-    RoutingModule,
-    HighlightModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-  ],
+export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
+    provideRouter(routes, withEnabledBlockingInitialNavigation()),
+    provideHttpClient(),
+    provideAnimations(),
     {
       provide: ModalRegistryOptions,
       useValue: {
@@ -64,5 +57,4 @@ import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.co
       themePath: 'assets/styles/github-dark.css',
     }),
   ],
-})
-export class AppModule {}
+};

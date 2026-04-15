@@ -7,14 +7,13 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[rlb-dnd]',
-  standalone: false,
-  host: {
-    '[class.fileover]': 'fileOver()',
-    '(dragover)': 'onDragOver($event)',
-    '(dragleave)': 'onDragLeave($event)',
-    '(drop)': 'onDrop($event)'
-  }
+    selector: '[rlb-dnd]',
+    host: {
+        '[class.fileover]': 'fileOver()',
+        '(dragover)': 'onDragOver($event)',
+        '(dragleave)': 'onDragLeave($event)',
+        '(drop)': 'onDrop($event)'
+    }
 })
 export class DndDirective {
   multi = input(false, { alias: 'multiple', transform: booleanAttribute });

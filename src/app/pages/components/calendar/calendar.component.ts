@@ -10,11 +10,13 @@ import { getToday } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar/
 import { UniqueIdService } from 'projects/rlb/ng-bootstrap/src/lib/shared/unique-id.service';
 import { delay, finalize, of, take, tap } from 'rxjs';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   selector: 'app-calendar',
   templateUrl: `calendar.component.html`,
   styleUrls: ['calendar.component.scss'],
-  standalone: false,
+  imports: [SHARED_IMPORTS],
 })
 export class CalendarComponent {
   view: CalendarView = 'week';
@@ -108,8 +110,8 @@ export class ExampleComponent {
     events.push({
       color: 'primary',
       title: 'Today 1.5h (11:00-12:30)',
-      start: new DateTz(now).convertToTimezone('UTC').set!(11, 'hour').set!(0, 'minute'),
-      end: new DateTz(now).convertToTimezone('UTC').set!(12, 'hour').set!(30, 'minute'),
+      start: new DateTz(now).cloneToTimezone('UTC').set!(11, 'hour').set!(0, 'minute'),
+      end: new DateTz(now).cloneToTimezone('UTC').set!(12, 'hour').set!(30, 'minute'),
     });
 
     events.push({
@@ -196,8 +198,8 @@ export class ExampleComponent {
     events.push({
       color: 'info',
       title: 'Tomorrow 2h (09:00-11:00)',
-      start: new DateTz(tomorrowBase).convertToTimezone('UTC').set!(9, 'hour').set!(0, 'minute'),
-      end: new DateTz(tomorrowBase).convertToTimezone('UTC').set!(11, 'hour').set!(0, 'minute'),
+      start: new DateTz(tomorrowBase).cloneToTimezone('UTC').set!(9, 'hour').set!(0, 'minute'),
+      end: new DateTz(tomorrowBase).cloneToTimezone('UTC').set!(11, 'hour').set!(0, 'minute'),
     });
 
     // === 3. Event after tomorrow (currentDate + 2 days) ===
@@ -205,11 +207,11 @@ export class ExampleComponent {
     events.push({
       color: 'success',
       title: 'After Tomorrow 1h (17:00-18:00)',
-      start: new DateTz(dayAfterTomorrowBase).convertToTimezone('UTC').set!(17, 'hour').set!(
+      start: new DateTz(dayAfterTomorrowBase).cloneToTimezone('UTC').set!(17, 'hour').set!(
         0,
         'minute',
       ),
-      end: new DateTz(dayAfterTomorrowBase).convertToTimezone('UTC').set!(18, 'hour').set!(
+      end: new DateTz(dayAfterTomorrowBase).cloneToTimezone('UTC').set!(18, 'hour').set!(
         0,
         'minute',
       ),
@@ -221,8 +223,8 @@ export class ExampleComponent {
     events.push({
       color: 'warning',
       title: 'Yesterday 2h (14:00-16:00)',
-      start: new DateTz(yesterdayBase).convertToTimezone('UTC').set!(14, 'hour').set!(0, 'minute'),
-      end: new DateTz(yesterdayBase).convertToTimezone('UTC').set!(16, 'hour').set!(0, 'minute'),
+      start: new DateTz(yesterdayBase).cloneToTimezone('UTC').set!(14, 'hour').set!(0, 'minute'),
+      end: new DateTz(yesterdayBase).cloneToTimezone('UTC').set!(16, 'hour').set!(0, 'minute'),
     });
 
     // === 5. Event "Cross day"  ===
@@ -231,11 +233,11 @@ export class ExampleComponent {
     events.push({
       color: 'secondary',
       title: 'Cross Day (22:00 -> 02:00)',
-      start: new DateTz(dayBeforeYesterdayBase).convertToTimezone('UTC').set!(22, 'hour').set!(
+      start: new DateTz(dayBeforeYesterdayBase).cloneToTimezone('UTC').set!(22, 'hour').set!(
         0,
         'minute',
       ).stripSecMillis(),
-      end: new DateTz(dayBeforeYesterdayEndBase).convertToTimezone('UTC').set!(2, 'hour').set!(
+      end: new DateTz(dayBeforeYesterdayEndBase).cloneToTimezone('UTC').set!(2, 'hour').set!(
         0,
         'minute',
       ).stripSecMillis(),

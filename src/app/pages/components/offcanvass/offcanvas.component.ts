@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
-    selector: 'app-offcanvas',
-    templateUrl: './offcanvas.component.html',
-    standalone: false
+  selector: 'app-offcanvas',
+  templateUrl: './offcanvas.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class OffcanvassComponent {
-
   message: number = 0;
 
   onStatusChenged(event: any, i: number) {
-     this.message++;
+    this.message++;
   }
 
   sample: string = `<button rlb-button toggle="offcanvas" toggle-target="off-1" class="me-2">Offcanvas</button>

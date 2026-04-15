@@ -8,10 +8,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
+import { NgClass, JsonPipe } from '@angular/common';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-checkbox',
-  template: `
+    selector: 'rlb-checkbox',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -34,9 +36,13 @@ import { AbstractComponent } from './abstract-field.component';
       <ng-content select="[after]"></ng-content>
     </div>
   `,
-  host: { '[attr.id]': 'null' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[attr.id]': 'null' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        DataTableActionComponent,
+        JsonPipe,
+    ],
 })
 export class CheckboxComponent extends AbstractComponent<boolean | undefined> {
   disabled = input(false, {

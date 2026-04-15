@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
-    selector: 'app-card',
-    templateUrl: './card.component.html',
-    standalone: false
+  selector: 'app-card',
+  templateUrl: './card.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class CardsComponent {
-
   sample: string = `<rlb-card>
   <rlb-card-body>
     <h5>Card Body</h5>

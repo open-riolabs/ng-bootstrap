@@ -14,10 +14,14 @@ import {
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteItem } from './autocomplete-model';
+import { NgClass } from '@angular/common';
+import { InputValidationComponent } from './input-validation.component';
+import { ProgressComponent } from '../../components/loaders/progress.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-autocomplete-country-dial-code',
-  template: `
+    selector: 'rlb-autocomplete-country-dial-code',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation position-relative">
       <input
@@ -90,13 +94,18 @@ import { AutocompleteItem } from './autocomplete-model';
     }
     <ng-content select="[after]"></ng-content>
   `,
-  host: {
-    '(document:pointerdown)': 'handleOutsideEvent($event)',
-    '(document:keydown.escape)': 'onEscape($event)',
-    '[attr.id]': 'null',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        '(document:pointerdown)': 'handleOutsideEvent($event)',
+        '(document:keydown.escape)': 'onEscape($event)',
+        '[attr.id]': 'null',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        InputValidationComponent,
+        ProgressComponent,
+        DataTableActionComponent,
+    ],
 })
 export class AutocompleteCountryDialCodeComponent extends AbstractComponent<AutocompleteItem> {
   isOpen = signal(false);

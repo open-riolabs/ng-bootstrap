@@ -9,10 +9,11 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { RouterLinkActive, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'rlb-navbar-item',
-  template: `
+    selector: 'rlb-navbar-item',
+    template: `
     <ng-template #template>
       <li class="nav-item">
         <a
@@ -26,8 +27,8 @@ import {
       </li>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RouterLinkActive, RouterLink],
 })
 export class NavbarItemComponent implements OnInit {
   element!: HTMLElement;

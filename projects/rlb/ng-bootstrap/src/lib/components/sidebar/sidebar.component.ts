@@ -13,10 +13,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
 import { BreakpointService } from '../../shared/breakpoint.service';
 import { SidebarService } from './sidebar.service';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-sidebar',
-  template: `
+    selector: 'rlb-sidebar',
+    template: `
     <div
       class="vertical-menu"
       [class.rounded-2]="rounded()"
@@ -35,11 +36,11 @@ import { SidebarService } from './sidebar.service';
       </div>
     </div>
   `,
-  host: {
-    '[attr.data-bs-theme]': "dark() ? 'dark' : 'light'",
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        '[attr.data-bs-theme]': "dark() ? 'dark' : 'light'",
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 
 /**

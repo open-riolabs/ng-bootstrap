@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-cell',
-  template: `
+    selector: 'rlb-dt-cell',
+    template: `
     <ng-template #template>
       <td
         [colSpan]="colSpan()"
@@ -20,8 +20,7 @@ import {
       </td>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableCellComponent {
   colSpan = input<number, unknown>(undefined, { alias: 'col-span', transform: numberAttribute });

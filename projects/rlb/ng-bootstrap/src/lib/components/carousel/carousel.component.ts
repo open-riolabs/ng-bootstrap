@@ -16,10 +16,11 @@ import {
 import { Carousel } from 'bootstrap';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { CarouselSlideComponent } from './carousel-slide.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-carousel',
-  template: `
+    selector: 'rlb-carousel',
+    template: `
     @if (!hideIndicators()) {
       <div class="carousel-indicators">
         @for (item of items(); track item; let i = $index) {
@@ -65,20 +66,19 @@ import { CarouselSlideComponent } from './carousel-slide.component';
       </button>
     }
   `,
-  host: {
-    class: 'carousel slide',
-    '[class.carousel-fade]': 'crossFade()',
-    '[id]': 'id()',
-    '[attr.data-bs-ride]':
-      'autoplay() === "auto" ? "carousel" : autoplay() === "manual" ? "true": undefined',
-    '[attr.data-bs-touch]': 'noTouch() ? undefined : true',
-    '[attr.data-bs-interval]': 'interval()',
-    '[attr.data-bs-keyboard]': '!keyboard() ? "false" : undefined',
-    '[attr.data-bs-wrap]': '!wrap() ? "false" : undefined',
-    '[attr.data-bs-pause]': 'pauseProp() === false ? "false" : undefined',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'carousel slide',
+        '[class.carousel-fade]': 'crossFade()',
+        '[id]': 'id()',
+        '[attr.data-bs-ride]': 'autoplay() === "auto" ? "carousel" : autoplay() === "manual" ? "true": undefined',
+        '[attr.data-bs-touch]': 'noTouch() ? undefined : true',
+        '[attr.data-bs-interval]': 'interval()',
+        '[attr.data-bs-keyboard]': '!keyboard() ? "false" : undefined',
+        '[attr.data-bs-wrap]': '!wrap() ? "false" : undefined',
+        '[attr.data-bs-pause]': 'pauseProp() === false ? "false" : undefined',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class CarouselComponent implements OnDestroy, AfterViewInit {
   items = contentChildren(CarouselSlideComponent);

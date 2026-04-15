@@ -8,7 +8,7 @@ import { InnerModalService } from './inner-modal.service';
 
 @Directive({
   selector: '[rlb-modal]',
-  standalone: true,
+
 })
 export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
   private bsModal!: Modal;

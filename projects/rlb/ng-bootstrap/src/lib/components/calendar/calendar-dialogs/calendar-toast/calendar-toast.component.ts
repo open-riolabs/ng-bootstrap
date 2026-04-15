@@ -27,7 +27,7 @@ import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
       inputs: ['id', 'data-instance', 'data-options'],
     },
   ],
-  standalone: true,
+
   imports: [RlbBootstrapModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -12,29 +12,30 @@ import {
 import { Offcanvas } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-offcanvas',
-  template: `
+    selector: 'rlb-offcanvas',
+    template: `
     <ng-content select="rlb-offcanvas-header"></ng-content>
     <ng-content select="rlb-offcanvas-body"></ng-content>
   `,
-  host: {
-    tabindex: '-1',
-    '[id]': 'id()',
-    '[class.offcanvas]': '!responsive()',
-    '[class.offcanvas-sm]': 'responsive() === "sm"',
-    '[class.offcanvas-md]': 'responsive() === "md"',
-    '[class.offcanvas-lg]': 'responsive() === "lg"',
-    '[class.offcanvas-xl]': 'responsive() === "xl"',
-    '[class.offcanvas-xxl]': 'responsive() === "xxl"',
-    '[class.offcanvas-start]': 'placement() === "start"',
-    '[class.offcanvas-end]': 'placement() === "end"',
-    '[class.offcanvas-top]': 'placement() === "top"',
-    '[class.offcanvas-bottom]': 'placement() === "bottom"',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        tabindex: '-1',
+        '[id]': 'id()',
+        '[class.offcanvas]': '!responsive()',
+        '[class.offcanvas-sm]': 'responsive() === "sm"',
+        '[class.offcanvas-md]': 'responsive() === "md"',
+        '[class.offcanvas-lg]': 'responsive() === "lg"',
+        '[class.offcanvas-xl]': 'responsive() === "xl"',
+        '[class.offcanvas-xxl]': 'responsive() === "xxl"',
+        '[class.offcanvas-start]': 'placement() === "start"',
+        '[class.offcanvas-end]': 'placement() === "end"',
+        '[class.offcanvas-top]': 'placement() === "top"',
+        '[class.offcanvas-bottom]': 'placement() === "bottom"',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class OffcanvasComponent
   extends ToggleAbstractComponent<Offcanvas>

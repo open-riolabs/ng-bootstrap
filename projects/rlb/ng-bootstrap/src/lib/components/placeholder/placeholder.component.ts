@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 @Component({
-  selector: 'rlb-placeholder',
-  template: `
+    selector: 'rlb-placeholder',
+    template: `
     <div [class]="containerClass()">
       <ng-content />
     </div>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RlbPlaceholderComponent {
   animation = input<'glow' | 'wave' | 'none'>('none');

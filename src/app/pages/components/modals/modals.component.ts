@@ -2,15 +2,15 @@ import { Component } from '@angular/core';
 import { ModalService } from '@open-rlb/ng-bootstrap';
 import { lastValueFrom } from 'rxjs';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modals.component.html',
-  standalone: false
+  imports: [SHARED_IMPORTS],
 })
 export class ModalsComponent {
-  constructor(private modals: ModalService) {
-  }
+  constructor(private modals: ModalService) {}
 
   dialog: string = `@Component({
 standalone: true,
@@ -88,16 +88,15 @@ export class ModalsComponent {
     },
   ]`;
 
-
   async modal() {
-    const o = await lastValueFrom(this.modals
-      .openModal('sample-dialog', {
+    const o = await lastValueFrom(
+      this.modals.openModal('sample-dialog', {
         title: 'Demo',
         content: 'This is a demo component',
         ok: 'OK',
         type: 'success',
-      }));
+      }),
+    );
     console.log('closed sub', o);
   }
 }
-

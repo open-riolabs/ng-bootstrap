@@ -11,17 +11,16 @@ import {
 import { ScrollSpy } from 'bootstrap';
 
 @Directive({
-  selector: '[rlb-scrollspy]',
-  host: {
-    '[attr.data-bs-spy]': "'scroll'",
-    '[attr.data-bs-target]': 'target()',
-    '[attr.tabindex]': '0',
-    '[attr.data-bs-root-margin]': 'rootMargin()',
-    '[attr.data-bs-smooth-scroll]': 'smooth()',
-    '[style.height]': 'height()',
-    '[style.overflow-y]': "'auto'"
-  },
-  standalone: false
+    selector: '[rlb-scrollspy]',
+    host: {
+        '[attr.data-bs-spy]': "'scroll'",
+        '[attr.data-bs-target]': 'target()',
+        '[attr.tabindex]': '0',
+        '[attr.data-bs-root-margin]': 'rootMargin()',
+        '[attr.data-bs-smooth-scroll]': 'smooth()',
+        '[style.height]': 'height()',
+        '[style.overflow-y]': "'auto'"
+    }
 })
 export class ScrollspyDirective implements AfterViewInit, OnDestroy {
   target = input.required<string>({ alias: 'rlb-scrollspy-target' });

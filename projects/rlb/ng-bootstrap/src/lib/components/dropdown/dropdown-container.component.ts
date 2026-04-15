@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, ElementRef, input } from '@angular/core';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
-  template: `
+    selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
+    template: `
     @if (isList) {
       <ng-content select="li[rlb-dropdown-item]" />
     }
@@ -10,25 +11,25 @@ import { ChangeDetectionStrategy, Component, ElementRef, input } from '@angular/
       <ng-content />
     }
   `,
-  host: {
-    class: 'dropdown-menu',
-    '[class.dropdown-menu-end]': 'placement() === "right"',
-    '[class.dropdown-menu-start]': 'placement() === "left"',
-    '[class.dropdown-menu-sm-end]': 'placementSm() === "right"',
-    '[class.dropdown-menu-sm-start]': 'placementSm() === "left"',
-    '[class.dropdown-menu-md-end]': 'placementMd() === "right"',
-    '[class.dropdown-menu-md-start]': 'placementMd() === "left"',
-    '[class.dropdown-menu-lg-end]': 'placementLg() === "right"',
-    '[class.dropdown-menu-lg-start]': 'placementLg() === "left"',
-    '[class.dropdown-menu-xl-end]': 'placementXl() === "right"',
-    '[class.dropdown-menu-xl-start]': 'placementXl() === "left"',
-    '[class.dropdown-menu-xxl-end]': 'placementXxl() === "right"',
-    '[class.dropdown-menu-xxl-start]': 'placementXxl() === "left"',
-    '[style.border]': 'isList ? null : "none"',
-    '[style.padding]': 'isList ? null : "0px"',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'dropdown-menu',
+        '[class.dropdown-menu-end]': 'placement() === "right"',
+        '[class.dropdown-menu-start]': 'placement() === "left"',
+        '[class.dropdown-menu-sm-end]': 'placementSm() === "right"',
+        '[class.dropdown-menu-sm-start]': 'placementSm() === "left"',
+        '[class.dropdown-menu-md-end]': 'placementMd() === "right"',
+        '[class.dropdown-menu-md-start]': 'placementMd() === "left"',
+        '[class.dropdown-menu-lg-end]': 'placementLg() === "right"',
+        '[class.dropdown-menu-lg-start]': 'placementLg() === "left"',
+        '[class.dropdown-menu-xl-end]': 'placementXl() === "right"',
+        '[class.dropdown-menu-xl-start]': 'placementXl() === "left"',
+        '[class.dropdown-menu-xxl-end]': 'placementXxl() === "right"',
+        '[class.dropdown-menu-xxl-start]': 'placementXxl() === "left"',
+        '[style.border]': 'isList ? null : "none"',
+        '[style.padding]': 'isList ? null : "0px"',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class DropdownContainerComponent {
   isList: boolean = false;

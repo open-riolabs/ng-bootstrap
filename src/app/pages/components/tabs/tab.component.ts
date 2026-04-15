@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
-    selector: 'app-tab',
-    templateUrl: './tab.component.html',
-    standalone: false
+  selector: 'app-tab',
+  templateUrl: './tab.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class TabssComponent {
-
   html: string = `<rlb-tabs>
   <rlb-tab target="pippo">Pippo</rlb-tab>
   <rlb-tab target="pluto">Pluto</rlb-tab>
