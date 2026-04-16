@@ -57,15 +57,22 @@ import { UniqueIdService } from '../../shared/unique-id.service';
         @for (file of files(); track file.name + file.size) {
           <rlb-card>
             <rlb-card-body class="d-flex align-items-center">
-              <div class="fs-3">
+              <div class="fs-3 flex-shrink-0">
                 <i class="bi bi-file-earmark-text"></i>
               </div>
 
-              <div class="mx-3 flex-grow-1">
-                <div class="d-flex justify-content-between align-items-center mb-1">
+              <div
+                class="mx-3 flex-grow-1"
+                style="min-width: 0"
+              >
+                <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
                   <span class="fw-bold text-truncate">{{ file.name }}</span>
-                  <span class="text-secondary">{{ formatBytes(file.size) }}</span>
+
+                  <span class="text-secondary text-nowrap flex-shrink-0">
+                    {{ formatBytes(file.size) }}
+                  </span>
                 </div>
+
                 <rlb-progress
                   [height]="4"
                   [value]="100"
@@ -76,6 +83,7 @@ import { UniqueIdService } from '../../shared/unique-id.service';
                 rlb-button
                 outline
                 color="danger"
+                class="flex-shrink-0 ms-1"
                 (click)="deleteFile(file)"
                 aria-label="Remove file"
               >
