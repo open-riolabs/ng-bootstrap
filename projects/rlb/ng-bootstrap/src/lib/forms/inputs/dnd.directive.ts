@@ -2,7 +2,7 @@ import { booleanAttribute, Directive, input, output, signal } from '@angular/cor
 
 @Directive({
   selector: '[rlb-dnd]',
-  standalone: false,
+  standalone: true,
   host: {
     '[class.rlb-dnd-over]': 'isOver()',
     '(dragover)': 'onDragOver($event)',
