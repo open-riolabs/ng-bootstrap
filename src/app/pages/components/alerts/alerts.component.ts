@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   selector: 'app-alerts',
   templateUrl: './alerts.component.html',
   styleUrls: ['./alerts.component.scss'],
-  standalone: false
+  imports: [SHARED_IMPORTS],
 })
 export class AlertsComponent {
   message: string = '';
@@ -32,46 +34,45 @@ export class AlertsComponent {
 <rlb-alert color='dark'>This is a dark alert—check it out!</rlb-alert>
 `;
 
-
   alertLinkVariants: string = `
 <rlb-alert color='primary'>
-  A simple primary alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple primary alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 <rlb-alert color='secondary'>
-  A simple secondary alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple secondary alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 <rlb-alert color='success'>
-  A simple success alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple success alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 <rlb-alert color='danger'>
-  A simple danger alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple danger alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 <rlb-alert color='warning'>
-  A simple warning alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple warning alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 <rlb-alert color='info'>
-  A simple info alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple info alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 <rlb-alert color='light'>
-  A simple light alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple light alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 <rlb-alert color='dark'>
-  A simple dark alert with 
-  <a href="#" class="alert-link"> an example link</a>. 
+  A simple dark alert with
+  <a href="#" class="alert-link"> an example link</a>.
   Give it a click if you like.
 </rlb-alert>
 `;
@@ -110,7 +111,6 @@ export class AlertsComponent {
   </rlb-alert>
   `;
 
-
   dismissable: string = `<rlb-alert [dismissible]="true">Ciao!</rlb-alert>`;
 
   dismissed: string = `<p>{{message}}</p>
@@ -132,5 +132,4 @@ export class ExampleComponent {
   }
 }
 `;
-
 }

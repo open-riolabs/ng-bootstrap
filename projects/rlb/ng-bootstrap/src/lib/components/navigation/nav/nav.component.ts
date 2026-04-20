@@ -12,8 +12,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-nav',
-  template: `
+    selector: 'rlb-nav',
+    template: `
     <ng-template #template>
       <ul
         class="nav {{ cssClass() }}"
@@ -30,8 +30,7 @@ import {
       </ul>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent implements OnInit {
   element!: HTMLElement;

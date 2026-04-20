@@ -17,15 +17,18 @@ import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { getToday, isToday } from "../../utils/calendar-date-utils";
 
-import { CdkDragDrop } from "@angular/cdk/drag-drop";
+import { CdkDragDrop, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder } from "@angular/cdk/drag-drop";
+import { CalendarEventComponent } from "../../event/calendar-event.component";
+import { DateTzPipe } from "../../../../pipes/date-tz.pipe";
+import { DayOfWeekPipe } from "../../../../pipes/day-formatter.pipe";
 
 
 @Component({
-  selector: 'rlb-calendar-week-grid',
-  templateUrl: './calendar-week-grid.component.html',
-  styleUrls: ['./calendar-week-grid.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'rlb-calendar-week-grid',
+    templateUrl: './calendar-week-grid.component.html',
+    styleUrls: ['./calendar-week-grid.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, DateTzPipe, DayOfWeekPipe]
 })
 export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
   view = input.required<CalendarView>();

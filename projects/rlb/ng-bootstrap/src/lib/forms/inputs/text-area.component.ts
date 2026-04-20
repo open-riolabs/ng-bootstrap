@@ -9,10 +9,13 @@ import {
   viewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
+import { NgClass } from '@angular/common';
+import { InputValidationComponent } from './input-validation.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-textarea',
-  template: `
+    selector: 'rlb-textarea',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <textarea
@@ -36,9 +39,13 @@ import { AbstractComponent } from './abstract-field.component';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-  standalone: false,
-  host: { '[attr.id]': 'null' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[attr.id]': 'null' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        InputValidationComponent,
+        DataTableActionComponent,
+    ],
 })
 export class TextAreaComponent extends AbstractComponent<string> {
   disabled = input(false, {

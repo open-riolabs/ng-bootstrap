@@ -8,11 +8,13 @@ import {
   ToastService,
 } from 'projects/rlb/ng-bootstrap/src/public-api';
 
+import { SHARED_IMPORTS } from '../../shared-imports';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  standalone: false,
+  imports: [SHARED_IMPORTS],
 })
 export class HomeComponent {
   number: number = 0;

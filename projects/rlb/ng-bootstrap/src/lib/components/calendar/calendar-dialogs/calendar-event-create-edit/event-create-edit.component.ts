@@ -17,7 +17,7 @@ import { ModalDirective } from '../../../modals/modal.directive';
 import { CalendarEvent } from '../../interfaces/calendar-event.interface';
 
 @Component({
-  standalone: true,
+
   imports: [RlbBootstrapModule, ReactiveFormsModule],
   template: `
     <div [formGroup]="form">

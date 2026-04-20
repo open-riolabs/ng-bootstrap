@@ -14,10 +14,13 @@ import {
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { OptionComponent } from './options.component';
+import { FormsModule } from '@angular/forms';
+import { InputValidationComponent } from './input-validation.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-select',
-  template: `
+    selector: 'rlb-select',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <select
@@ -52,9 +55,13 @@ import { OptionComponent } from './options.component';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-  host: { '[attr.id]': 'null' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[attr.id]': 'null' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FormsModule,
+        InputValidationComponent,
+        DataTableActionComponent,
+    ],
 })
 export class SelectComponent extends AbstractComponent<string | string[]> {
   placeholder = input<string | undefined>(undefined, { alias: 'placeholder' });

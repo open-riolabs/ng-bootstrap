@@ -9,16 +9,15 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-navbar-text',
-  template: `
+    selector: 'rlb-navbar-text',
+    template: `
     <ng-template #template>
       <span class="navbar-text {{ cssClass() }}">
         <ng-content />
       </span>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarTextComponent implements OnInit {
   element!: HTMLElement;

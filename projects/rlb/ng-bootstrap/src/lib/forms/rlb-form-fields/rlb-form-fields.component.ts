@@ -9,15 +9,27 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormControl, FormGroup, NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormField, FormFieldsDefinition, IForm } from './form-fields';
+import { NgTemplateOutlet, NgClass } from '@angular/common';
+import { InputComponent } from '../inputs/input.component';
+import { SwitchComponent } from '../inputs/switch.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  selector: 'rlb-form-fields',
-  templateUrl: './rlb-form-fields.component.html',
-  styleUrls: ['./rlb-form-fields.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-form-fields',
+    templateUrl: './rlb-form-fields.component.html',
+    styleUrls: ['./rlb-form-fields.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgTemplateOutlet,
+        FormsModule,
+        ReactiveFormsModule,
+        NgClass,
+        InputComponent,
+        SwitchComponent,
+        TranslatePipe,
+    ],
 })
 export class FormFieldsComponent implements IForm {
   public filterForm = signal<FormGroup | undefined>(undefined);

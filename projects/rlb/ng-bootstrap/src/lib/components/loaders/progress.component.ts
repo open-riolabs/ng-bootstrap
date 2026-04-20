@@ -7,10 +7,11 @@ import {
   numberAttribute,
 } from '@angular/core';
 import { Color } from '../../shared/types';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-progress',
-  template: `
+    selector: 'rlb-progress',
+    template: `
     <div
       class="progress-bar {{ color() && !infinite() ? 'bg-' + color() : '' }} {{
         textColor() ? 'text-' + textColor() : ''
@@ -33,18 +34,18 @@ import { Color } from '../../shared/types';
       }
     </div>
   `,
-  host: {
-    class: 'progress',
-    'attr.role': 'progressbar',
-    '[attr.aria-valuenow]': 'percentValue()',
-    'aria-valuemin': '0',
-    '[attr.aria-valuemax]': 'max()',
-    '[attr.aria-valuemin]': 'min()',
-    '[attr.aria-label]': 'ariaLabel()',
-    '[style.height.px]': 'height()',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'progress',
+        'attr.role': 'progressbar',
+        '[attr.aria-valuenow]': 'percentValue()',
+        'aria-valuemin': '0',
+        '[attr.aria-valuemax]': 'max()',
+        '[attr.aria-valuemin]': 'min()',
+        '[attr.aria-label]': 'ariaLabel()',
+        '[style.height.px]': 'height()',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class ProgressComponent {
   max = input(100, { alias: 'max', transform: numberAttribute });

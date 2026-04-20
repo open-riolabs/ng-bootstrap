@@ -1,10 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
 
-@Pipe({
-  name: 'dtz',
-  standalone: false
-})
+@Pipe({ name: 'dtz' })
 export class DateTzPipe implements PipeTransform {
 
   transform(value?: IDateTz, ...args: (string | boolean)[]): string {

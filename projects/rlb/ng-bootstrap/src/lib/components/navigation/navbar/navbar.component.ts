@@ -20,10 +20,12 @@ import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 import { NavbarItemsComponent } from './navbar-items.component';
 import { SidebarService } from '../../sidebar/sidebar.service';
+import { ButtonComponent } from '../../buttons/buttons.component';
+import { ToggleDirective } from '../../buttons/toggle.directive';
 
 @Component({
-  selector: 'rlb-navbar',
-  template: `
+    selector: 'rlb-navbar',
+    template: `
     <ng-template #template>
       <nav
         class="navbar px-2 bg-{{ color() }} {{ placement() }} {{
@@ -78,8 +80,8 @@ import { SidebarService } from '../../sidebar/sidebar.service';
       </nav>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ButtonComponent, ToggleDirective],
 })
 export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   element!: HTMLElement;

@@ -6,7 +6,7 @@ import { GettingStartedComponent } from './pages/getting-started/getting-started
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RoutingInputsModule } from './pages/inputs/routing.module';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', redirectTo: '' },
   { path: 'getting-started', component: GettingStartedComponent },

@@ -1,21 +1,22 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from "@angular/forms";
+import { FormControl, Validators } from '@angular/forms';
+
+import { SHARED_IMPORTS } from '../../../shared-imports';
 
 @Component({
-    selector: 'app-input-group',
-    templateUrl: './input-group.component.html',
-    standalone: false
+  selector: 'app-input-group',
+  templateUrl: './input-group.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class InputGroupsComponent {
-
-	html: string = `
+  html: string = `
 <rlb-input-group validate>
   <rlb-input name="email" [formControl]="emailControl" placeholder="Email"></rlb-input>
   <rlb-input name="phone" [formControl]="phoneControl" placeholder="Phone"></rlb-input>
   <rlb-input-validation></rlb-input-validation>
 </rlb-input-group>`;
 
-	ts = `
+  ts = `
 @Component({
 selector: 'app-alerts',
 templateUrl: './alerts.component.html',
@@ -24,9 +25,8 @@ templateUrl: './alerts.component.html',
 export class AlertsComponent {
     emailControl = new FormControl('', [Validators.required]);
 	phoneControl = new FormControl('', [Validators.required]);
-}`
+}`;
 
-	emailControl = new FormControl('', [Validators.required]);
-	phoneControl = new FormControl('', [Validators.required]);
-
+  emailControl = new FormControl('', [Validators.required]);
+  phoneControl = new FormControl('', [Validators.required]);
 }

@@ -13,20 +13,21 @@ import {
 } from '@angular/core';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AccordionItemComponent } from './accordion-item.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-accordion',
-  template: `
+    selector: 'rlb-accordion',
+    template: `
     <ng-content select="[rlb-accordion-item]"></ng-content>
   `,
-  host: {
-    class: 'accordion',
-    '[class.accordion-flush]': 'flush()',
-    '[class.accordion-card-style]': 'cardStyle()',
-    '[id]': 'effectiveId()',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'accordion',
+        '[class.accordion-flush]': 'flush()',
+        '[class.accordion-card-style]': 'cardStyle()',
+        '[id]': 'effectiveId()',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class AccordionComponent implements OnDestroy {
   flush = input(false, { alias: 'flush', transform: booleanAttribute });

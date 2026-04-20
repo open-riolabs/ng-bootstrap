@@ -2,13 +2,30 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import { CalendarView } from '../interfaces/calendar-view.type';
 import { addDays, getToday } from '../utils/calendar-date-utils';
+import { ButtonComponent } from '../../buttons/buttons.component';
+import { DropdownComponent } from '../../dropdown/dropdown.component';
+import { DropdownDirective } from '../../dropdown/dropdown.directive';
+import { DropdownContainerComponent } from '../../dropdown/dropdown-container.component';
+import { DropdownMenuItemComponent } from '../../dropdown/dropdown-menu-item.component';
+import { TitleCasePipe } from '@angular/common';
+import { DateTzPipe } from '../../../pipes/date-tz.pipe';
+import { MonthFormatterPipe } from '../../../pipes/month-formatter.pipe';
 
 @Component({
-  selector: 'rlb-calendar-header',
-  templateUrl: './calendar-header.component.html',
-  styleUrls: ['./calendar-header.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-calendar-header',
+    templateUrl: './calendar-header.component.html',
+    styleUrls: ['./calendar-header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ButtonComponent,
+        DropdownComponent,
+        DropdownDirective,
+        DropdownContainerComponent,
+        DropdownMenuItemComponent,
+        TitleCasePipe,
+        DateTzPipe,
+        MonthFormatterPipe,
+    ],
 })
 export class CalendarHeaderComponent {
   view = input<CalendarView>('month');

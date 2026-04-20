@@ -7,21 +7,22 @@ import {
   input,
 } from '@angular/core';
 import { ListComponent } from './list.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-list-item',
-  template: `
+    selector: 'rlb-list-item',
+    template: `
     <ng-content></ng-content>
   `,
-  host: {
-    class: 'list-group-item',
-    '[class.disabled]': 'disabled()',
-    '[class.list-group-item-action]': 'action()',
-    '[class.active]': 'active()',
-    '[attr.aria-current]': 'active()',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'list-group-item',
+        '[class.disabled]': 'disabled()',
+        '[class.list-group-item-action]': 'action()',
+        '[class.active]': 'active()',
+        '[attr.aria-current]': 'active()',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class ListItemComponent {
   private parent = inject(ListComponent, { optional: true });

@@ -9,14 +9,16 @@ import {
   viewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
+import { NgClass, JsonPipe } from '@angular/common';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-range',
-  host: {
-    class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
-    '[attr.id]': 'null',
-  },
-  template: `
+    selector: 'rlb-range',
+    host: {
+        class: 'd-flex flex-grow-1 flex-shrink-1 flex-auto',
+        '[attr.id]': 'null',
+    },
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -39,8 +41,12 @@ import { AbstractComponent } from './abstract-field.component';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        DataTableActionComponent,
+        JsonPipe,
+    ],
 })
 export class RangeComponent extends AbstractComponent<string> {
   disabled = input(false, {

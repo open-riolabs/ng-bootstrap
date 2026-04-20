@@ -8,10 +8,7 @@ import {
 } from '@angular/core';
 import { Popover } from 'bootstrap';
 
-@Directive({
-  selector: '[popover]',
-  standalone: false
-})
+@Directive({ selector: '[popover]' })
 export class PopoverDirective implements AfterViewInit {
   static bsInit = false;
   private _popover: Popover | undefined;

@@ -11,10 +11,7 @@ import {
 } from '@angular/core';
 import { Color } from '../../shared/types';
 
-@Directive({
-  selector: '[badge]',
-  standalone: false,
-})
+@Directive({ selector: '[badge]', })
 export class BadgeDirective implements AfterViewInit {
   badge = input<string | number | undefined>(undefined, { alias: 'badge' });
   pill = input(false, { alias: 'badge-pill', transform: booleanAttribute });

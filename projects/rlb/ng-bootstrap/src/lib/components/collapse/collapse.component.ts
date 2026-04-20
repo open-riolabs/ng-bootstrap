@@ -11,10 +11,11 @@ import {
 import { Collapse } from 'bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-collapse',
-  template: ` <div
+    selector: 'rlb-collapse',
+    template: ` <div
     #collapseRef
     class="collapse"
     [id]="id()"
@@ -22,9 +23,9 @@ import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
   >
     <ng-content></ng-content>
   </div>`,
-  host: { '[attr.id]': 'undefined' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[attr.id]': 'undefined' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class CollapseComponent
   extends ToggleAbstractComponent<Collapse>

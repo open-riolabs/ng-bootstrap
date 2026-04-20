@@ -6,16 +6,17 @@ import {
   input,
 } from '@angular/core';
 import { Color, Size } from '../../shared/types';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'button[rlb-button], a[rlb-button]',
-  template: `<ng-content></ng-content>`,
-  host: {
-    '[class]': 'mainClass()',
-    '[attr.disabled]': 'disabled() ? true : undefined',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'button[rlb-button], a[rlb-button]',
+    template: `<ng-content></ng-content>`,
+    host: {
+        '[class]': 'mainClass()',
+        '[attr.disabled]': 'disabled() ? true : undefined',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DataTableActionComponent],
 })
 export class ButtonComponent {
   color = input<Color | undefined>('primary');

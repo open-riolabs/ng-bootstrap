@@ -9,15 +9,12 @@ import {
 } from '@angular/core';
 import { ButtonToolbarComponent } from './boutton-toolbar.component';
 
-@Directive({
-  selector: `
+@Directive({ selector: `
     button[toggle],
     a[toggle],
     rlb-navbar-item[toggle],
     rlb-button-toolbar[toggle],
-    rlb-fab[toggle],`,
-  standalone: false,
-})
+    rlb-fab[toggle],`, })
 export class ToggleDirective {
   toggle = input.required<'offcanvas' | 'collapse' | 'tab' | 'pill' | 'dropdown' | 'buttons-group'>(
     { alias: 'toggle' },

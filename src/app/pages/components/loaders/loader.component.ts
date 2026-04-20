@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
-    selector: 'app-loader',
-    templateUrl: './loader.component.html',
-    standalone: false
+  selector: 'app-loader',
+  templateUrl: './loader.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class LoadersComponent {
-
   mmv: string = `<rlb-progress [min]="0" [max]="100" [value]="50"></rlb-progress>`;
   height: string = `<rlb-progress [height]="3"></rlb-progress>`;
   stripped: string = `<rlb-progress [striped]="true" [value]="50"></rlb-progress>`;

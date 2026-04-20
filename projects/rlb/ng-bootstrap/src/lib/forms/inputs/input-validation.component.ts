@@ -3,9 +3,9 @@ import { ValidationErrors } from '@angular/forms';
 import { RLB_TRANSLATION_SERVICE } from '../../shared/i18-abstraction';
 
 @Component({
-  selector: 'rlb-input-validation',
-  host: { class: 'invalid-feedback' },
-  template: `
+    selector: 'rlb-input-validation',
+    host: { class: 'invalid-feedback' },
+    template: `
     @if (errors()) {
       @for (errorKey of getErrorKeys(errors()); track errorKey) {
         <span>
@@ -14,8 +14,7 @@ import { RLB_TRANSLATION_SERVICE } from '../../shared/i18-abstraction';
       }
     }
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputValidationComponent {
   private translationService = inject(RLB_TRANSLATION_SERVICE, { optional: true });

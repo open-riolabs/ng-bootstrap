@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { RlbPlaceholderComponent } from './placeholder.component';
+import { RlbPlaceholderLineComponent } from './placeholder-line.component';
 
 @Component({
-  selector: 'rlb-placeholder-text',
-  standalone: false,
-  template: `
+    selector: 'rlb-placeholder-text',
+    template: `
     <rlb-placeholder [animation]="animation()">
       @for (w of computedWidths(); track w) {
         <rlb-placeholder-line
@@ -16,7 +17,8 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
       }
     </rlb-placeholder>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RlbPlaceholderComponent, RlbPlaceholderLineComponent],
 })
 export class RlbPlaceholderTextComponent {
   lines = input(1);

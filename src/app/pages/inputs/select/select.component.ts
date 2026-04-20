@@ -1,11 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, delay, EMPTY, map, Observable, of, tap } from 'rxjs';
+import { SHARED_IMPORTS } from '../../../shared-imports';
 
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',
-  standalone: false,
+  imports: [SHARED_IMPORTS],
 })
 export class SelectsComponent implements OnInit {
   // Test Properties (ngModel + Async load)

@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-avatar',
-  template: `
+    selector: 'rlb-avatar',
+    template: `
     <ng-template #template>
       @if (src()) {
         <img
@@ -28,8 +28,7 @@ import {
       }
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvatarComponent implements OnInit {
   element!: HTMLElement;

@@ -16,7 +16,7 @@ export interface CalendarOverflowEventsDialogResult {
 }
 
 @Component({
-  standalone: true,
+
   template: `
     <div [class]="'modal-header' + headerColor()">
       <h5 class="modal-title">{{ data().title }}</h5>

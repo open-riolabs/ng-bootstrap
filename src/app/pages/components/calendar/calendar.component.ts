@@ -10,11 +10,13 @@ import { getToday } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar/
 import { UniqueIdService } from 'projects/rlb/ng-bootstrap/src/lib/shared/unique-id.service';
 import { delay, finalize, of, take, tap } from 'rxjs';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   selector: 'app-calendar',
   templateUrl: `calendar.component.html`,
   styleUrls: ['calendar.component.scss'],
-  standalone: false,
+  imports: [SHARED_IMPORTS],
 })
 export class CalendarComponent {
   view: CalendarView = 'week';

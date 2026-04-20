@@ -1,6 +1,6 @@
 import {
-  DoCheck,
   Component,
+  DoCheck,
   EmbeddedViewRef,
   OnDestroy,
   TemplateRef,
@@ -9,13 +9,12 @@ import {
 import { DynamicWrapper } from './dynamic-wrapper';
 
 @Component({
-    selector: 'rlb-wrapped-component',
-    template: `
+  selector: 'rlb-wrapped-component',
+  template: `
     <ng-template #portal>
       <ng-content></ng-content>
     </ng-template>
   `,
-    standalone: false
 })
 export class WrappedComponent implements DynamicWrapper, DoCheck, OnDestroy {
   _dynamic = false;

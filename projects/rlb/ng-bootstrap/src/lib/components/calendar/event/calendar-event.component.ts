@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CalendarEvent, CalendarEventWithLayout } from '../interfaces/calendar-event.interface';
 import { CalendarView } from '../interfaces/calendar-view.type';
+import { NgClass } from '@angular/common';
+import { DateTzPipe } from '../../../pipes/date-tz.pipe';
 
 @Component({
-  selector: 'rlb-calendar-event',
-  templateUrl: 'calendar-event.component.html',
-  styleUrls: ['./calendar-event.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-calendar-event',
+    templateUrl: 'calendar-event.component.html',
+    styleUrls: ['./calendar-event.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgClass, DateTzPipe],
 })
 export class CalendarEventComponent {
   event = input.required<CalendarEventWithLayout>();

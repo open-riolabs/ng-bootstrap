@@ -1,12 +1,13 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Color } from "../../../shared/types";
+import { ButtonComponent } from '../buttons.component';
 
 @Component({
-  selector: 'rlb-fab',
-  templateUrl: './fab.component.html',
-  styleUrls: ['./fab.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-fab',
+    templateUrl: './fab.component.html',
+    styleUrls: ['./fab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ButtonComponent],
 })
 export class RlbFabComponent {
   color = input<Color>('primary');

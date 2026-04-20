@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { ToastService } from '@open-rlb/ng-bootstrap';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
 
 @Component({
   selector: 'app-toasts',
   templateUrl: './toasts.component.html',
-  standalone: false
+  imports: [SHARED_IMPORTS],
 })
 export class ToastsComponent {
-  constructor(private toasts: ToastService) {
-  }
+  constructor(private toasts: ToastService) {}
 
   openToast(): void {
     this.toasts
@@ -20,7 +20,7 @@ export class ToastsComponent {
         subtitle: 'This is a subtitle',
         type: 'error',
       })
-      .subscribe((o) => {
+      .subscribe(o => {
         console.log('closed sub', o);
       });
   }
@@ -86,7 +86,4 @@ export class ToastSampleComponent implements IToast<any, any> {
   result?: any;
 }
 `;
-
-
 }
-

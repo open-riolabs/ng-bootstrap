@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
-    selector: 'app-pagionations',
-    templateUrl: './pagionation.component.html',
-    standalone: false
+  selector: 'app-pagionations',
+  templateUrl: './pagionation.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class PaginationsComponent {
-
   align = `<rlb-pagination [alignment]="'center'">
   <rlb-pagination-item isIcon>
     <span>&laquo;</span>
@@ -56,13 +57,13 @@ export class PaginationsComponent {
   </rlb-pagination-item>
 </rlb-pagination>`;
   isIcon = `<rlb-pagination>
-    <rlb-pagination-item isIcon>1</rlb-pagination-item> 
+    <rlb-pagination-item isIcon>1</rlb-pagination-item>
   </rlb-pagination>`;
   disabled = `<rlb-pagination>
-  <rlb-pagination-item isIcon [disabled]="true">1</rlb-pagination-item> 
+  <rlb-pagination-item isIcon [disabled]="true">1</rlb-pagination-item>
 </rlb-pagination>`;
   active = `<rlb-pagination>
-  <rlb-pagination-item isIcon [active]="true">1</rlb-pagination-item> 
+  <rlb-pagination-item isIcon [active]="true">1</rlb-pagination-item>
 </rlb-pagination>`;
 
   ts: string = `@Component({

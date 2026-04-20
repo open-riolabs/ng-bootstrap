@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'rlb-carousel-caption',
-  template: `
+    selector: 'rlb-carousel-caption',
+    template: `
     <ng-content></ng-content>
   `,
-  host: { class: 'carousel-caption' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { class: 'carousel-caption' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselCaptionComponent {}

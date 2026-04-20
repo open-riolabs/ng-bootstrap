@@ -1,6 +1,7 @@
 import { Component, input,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 export interface BreadcrumbItem {
   id: string;
@@ -9,9 +10,9 @@ export interface BreadcrumbItem {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'rlb-breadcrumb',
-  template: ` <nav
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'rlb-breadcrumb',
+    template: ` <nav
     aria-label="breadcrumb"
     style="--bs-breadcrumb-divider: '{{ divider() }}';"
   >
@@ -28,7 +29,7 @@ export interface BreadcrumbItem {
       }
     </ol>
   </nav>`,
-  standalone: false,
+    imports: [RouterLink],
 })
 export class BreadcrumbComponent {
   divider = input('>', { alias: 'divider' });

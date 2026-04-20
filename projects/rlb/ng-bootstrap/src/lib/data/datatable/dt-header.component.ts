@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-header',
-  template: `
+    selector: 'rlb-dt-header',
+    template: `
     <ng-template #template>
       <th
         [class]="cssClass()"
@@ -20,8 +20,7 @@ import {
       </th>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableHeaderComponent {
   field = input<string | undefined>(undefined);

@@ -4,13 +4,13 @@ import { ComponentHostDirective } from '../../shared/component-builder/component
 import { InnerToastService } from './inner-toast.service';
 
 @Component({
-  selector: 'rlb-toast-container',
-  template: `
+    selector: 'rlb-toast-container',
+    template: `
     <ng-template component-host></ng-template>
   `,
-  host: { class: 'toast-container' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { class: 'toast-container' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ComponentHostDirective],
 })
 export class ToastContainerComponent
   extends BuilderComponent<InnerToastService>

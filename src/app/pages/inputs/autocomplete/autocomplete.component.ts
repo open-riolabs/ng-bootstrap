@@ -3,10 +3,12 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { AutocompleteFn, AutocompleteItem } from '@open-rlb/ng-bootstrap';
 import { delay, Observable, of } from 'rxjs';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
   selector: 'app-autocomplete',
   templateUrl: './autocomplete.component.html',
-  standalone: false,
+  imports: [SHARED_IMPORTS],
 })
 export class AutocompletesComponent {
   advForm: FormGroup;

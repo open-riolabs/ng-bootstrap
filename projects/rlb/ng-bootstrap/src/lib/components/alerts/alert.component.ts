@@ -13,8 +13,8 @@ import {
 import { Color } from '../../shared/types';
 
 @Component({
-  selector: 'rlb-alert',
-  template: ` <ng-template #template>
+    selector: 'rlb-alert',
+    template: ` <ng-template #template>
       <div class="alert alert-{{ color() }} {{ cssClass() }}" role="alert">
         <ng-content></ng-content>
         @if (dismissible()) {
@@ -28,8 +28,7 @@ import { Color } from '../../shared/types';
         }
       </div>
     </ng-template>`,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnInit {
   element!: HTMLElement;

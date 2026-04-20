@@ -1,4 +1,4 @@
-import { CdkDragDrop } from "@angular/cdk/drag-drop";
+import { CdkDragDrop, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder } from "@angular/cdk/drag-drop";
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -17,15 +17,17 @@ import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calenda
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { getToday, isToday } from "../../utils/calendar-date-utils";
+import { CalendarEventComponent } from "../../event/calendar-event.component";
+import { DayOfWeekPipe } from "../../../../pipes/day-formatter.pipe";
 
 
 
 @Component({
-  selector: 'rlb-calendar-day-grid',
-  templateUrl: './calendar-day-grid.component.html',
-  styleUrls: ['./calendar-day-grid.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'rlb-calendar-day-grid',
+    templateUrl: './calendar-day-grid.component.html',
+    styleUrls: ['./calendar-day-grid.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, DayOfWeekPipe]
 })
 export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   view = input.required<CalendarView>();

@@ -7,14 +7,13 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-dt-noitems',
-  template: `
+    selector: 'rlb-dt-noitems',
+    template: `
     <ng-template #template>
       <ng-content></ng-content>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableNoItemsComponent {
   element!: HTMLElement;

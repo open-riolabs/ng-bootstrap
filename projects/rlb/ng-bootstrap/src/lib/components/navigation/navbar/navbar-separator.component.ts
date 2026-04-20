@@ -9,14 +9,13 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-navbar-separator',
-  template: `
+    selector: 'rlb-navbar-separator',
+    template: `
     <ng-template #template>
       <li class="nav-item separator {{ cssClass() }}"></li>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarSeparatorComponent implements OnInit {
   element!: HTMLElement;

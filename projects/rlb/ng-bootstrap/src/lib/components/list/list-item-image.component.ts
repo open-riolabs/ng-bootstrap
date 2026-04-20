@@ -9,10 +9,13 @@ import {
 } from '@angular/core';
 import { Color } from '../../shared/types';
 import { ListComponent } from './list.component';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { BadgeComponent } from '../badges/badge.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-list-item-image',
-  template: `
+    selector: 'rlb-list-item-image',
+    template: `
     <div class="d-flex">
       @if (avatar()) {
         <rlb-avatar
@@ -60,15 +63,19 @@ import { ListComponent } from './list.component';
       }
     </div>
   `,
-  host: {
-    class: 'list-group-item',
-    '[class.disabled]': 'disabled()',
-    '[class.list-group-item-action]': '!disabled()',
-    '[class.active]': 'active()',
-    '[attr.aria-current]': 'active()',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'list-group-item',
+        '[class.disabled]': 'disabled()',
+        '[class.list-group-item-action]': '!disabled()',
+        '[class.active]': 'active()',
+        '[attr.aria-current]': 'active()',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AvatarComponent,
+        BadgeComponent,
+        DataTableActionComponent,
+    ],
 })
 export class ListItemImageComponent {
   private parent = inject(ListComponent, { optional: true });

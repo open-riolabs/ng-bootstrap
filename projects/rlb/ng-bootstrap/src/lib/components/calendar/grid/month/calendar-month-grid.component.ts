@@ -1,4 +1,4 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragPreview } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -16,6 +16,9 @@ import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calenda
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { isToday } from "../../utils/calendar-date-utils";
+import { CalendarEventComponent } from '../../event/calendar-event.component';
+import { DateTzPipe } from '../../../../pipes/date-tz.pipe';
+import { DayOfWeekPipe } from '../../../../pipes/day-formatter.pipe';
 
 
 // Extend the layout interface for internal rendering logic
@@ -38,11 +41,11 @@ const MAX_EVENTS_PER_CELL = 3;
 const DAYS_IN_GRID = 42; // 6 weeks * 7 days
 
 @Component({
-  selector: 'rlb-calendar-month-grid',
-  templateUrl: './calendar-month-grid.component.html',
-  styleUrls: ['./calendar-month-grid.component.scss'],
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'rlb-calendar-month-grid',
+    templateUrl: './calendar-month-grid.component.html',
+    styleUrls: ['./calendar-month-grid.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, CdkDragPreview, DateTzPipe, DayOfWeekPipe]
 })
 export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
 

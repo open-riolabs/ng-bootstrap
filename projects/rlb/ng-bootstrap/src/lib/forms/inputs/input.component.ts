@@ -16,10 +16,13 @@ import {
 } from '@angular/core';
 import { DateTz } from '@open-rlb/date-tz';
 import { AbstractComponent } from './abstract-field.component';
+import { NgClass } from '@angular/common';
+import { InputValidationComponent } from './input-validation.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-input',
-  template: `
+    selector: 'rlb-input',
+    template: `
     <ng-template #template>
       <ng-content select="[before]"></ng-content>
       <input
@@ -49,9 +52,13 @@ import { AbstractComponent } from './abstract-field.component';
       <ng-content select="[after]"></ng-content>
     </ng-template>
   `,
-  host: { '[attr.id]': 'null' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { '[attr.id]': 'null' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        InputValidationComponent,
+        DataTableActionComponent,
+    ],
 })
 export class InputComponent extends AbstractComponent<any> implements OnInit, AfterViewInit {
   disabled = input(false, { transform: booleanAttribute });

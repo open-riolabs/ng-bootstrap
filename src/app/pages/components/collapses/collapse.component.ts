@@ -1,29 +1,30 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
-    selector: 'app-collapse',
-    templateUrl: './collapse.component.html',
-    standalone: false
+  selector: 'app-collapse',
+  templateUrl: './collapse.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class CollapesesComponent {
-
   message: number = 0;
 
-  onStatusChange(event: any, i: number){
+  onStatusChange(event: any, i: number) {
     this.message++;
   }
 
-sample: string = `<button rlb-button toggle="collapse" toggle-target="collapse-id">Collapse</button>
+  sample: string = `<button rlb-button toggle="collapse" toggle-target="collapse-id">Collapse</button>
 <rlb-collapse id="collapse-id">
   <span>Collapse Content</span>
 </rlb-collapse>`;
 
-orientation: string = `<button rlb-button toggle="collapse" toggle-target="collapse-id2">Collapse</button>
+  orientation: string = `<button rlb-button toggle="collapse" toggle-target="collapse-id2">Collapse</button>
 <rlb-collapse id="collapse-id2" [orientation]="'horizontal'">
   <span>Collapse Content</span>
 </rlb-collapse>`;
 
-sc: string = `<p>{{message}}</p>
+  sc: string = `<p>{{message}}</p>
 <button rlb-button toggle="collapse" toggle-target="collapse-id3">Collapse</button>
 <rlb-collapse id="collapse-id3" (statusChange)="onStatusChange($event, 0)">
   <span>Collapse Content</span>

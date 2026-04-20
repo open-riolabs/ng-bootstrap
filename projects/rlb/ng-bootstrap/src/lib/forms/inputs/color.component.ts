@@ -7,10 +7,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
+import { NgClass } from '@angular/common';
+import { InputValidationComponent } from './input-validation.component';
 
 @Component({
-  selector: 'rlb-color',
-  template: `
+    selector: 'rlb-color',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -35,8 +37,8 @@ import { AbstractComponent } from './abstract-field.component';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgClass, InputValidationComponent],
 })
 export class ColorComponent extends AbstractComponent<string> {
   disabled = input(false, { transform: booleanAttribute });

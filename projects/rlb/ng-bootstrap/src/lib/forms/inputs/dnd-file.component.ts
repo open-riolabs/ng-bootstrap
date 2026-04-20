@@ -8,11 +8,18 @@ import {
   signal,
 } from '@angular/core';
 import { UniqueIdService } from '../../shared/unique-id.service';
+import { DndDirective } from './dnd.directive';
+import {
+  ButtonComponent,
+  CardBodyComponent,
+  CardComponent,
+  ProgressComponent,
+} from '../../components';
 
 @Component({
   selector: 'rlb-file-dnd',
-  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DndDirective, CardComponent, CardBodyComponent, ProgressComponent, ButtonComponent],
   template: `
     <div
       class="rlb-dnd-container"

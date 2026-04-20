@@ -22,14 +22,13 @@ import { AccordionBodyComponent } from './accordion-body.component';
 import { AccordionHeaderComponent } from './accordion-header.component';
 
 @Component({
-  selector: 'div[rlb-accordion-item]',
-  template: `
+    selector: 'div[rlb-accordion-item]',
+    template: `
     <ng-content select="rlb-accordion-header"></ng-content>
     <ng-content select="[rlb-accordion-body]"></ng-content>
   `,
-  host: { class: 'accordion-item' },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { class: 'accordion-item' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionItemComponent
   extends ToggleAbstractComponent<Collapse>

@@ -14,10 +14,13 @@ import {
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { AutocompleteItem } from './autocomplete-model';
+import { NgClass } from '@angular/common';
+import { InputValidationComponent } from './input-validation.component';
+import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-  selector: 'rlb-autocomplete-country',
-  template: `
+    selector: 'rlb-autocomplete-country',
+    template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation position-relative">
       <input
@@ -79,14 +82,18 @@ import { AutocompleteItem } from './autocomplete-model';
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-  host: {
-    // Modern Angular 21 syntax for global listeners
-    '(document:pointerdown)': 'handleOutsideEvent($event)',
-    '(document:keydown.escape)': 'onEscape($event)',
-    '[attr.id]': 'null',
-  },
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        // Modern Angular 21 syntax for global listeners
+        '(document:pointerdown)': 'handleOutsideEvent($event)',
+        '(document:keydown.escape)': 'onEscape($event)',
+        '[attr.id]': 'null',
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        InputValidationComponent,
+        DataTableActionComponent,
+    ],
 })
 export class AutocompleteCountryComponent extends AbstractComponent<AutocompleteItem> {
   isOpen = signal(false);

@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'rlb-nav-item',
-  template: `
+    selector: 'rlb-nav-item',
+    template: `
     <ng-template #template>
       <li class="nav-item {{ cssClass() }}">
         <a
@@ -27,8 +27,7 @@ import {
       </li>
     </ng-template>
   `,
-  standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavItemComponent implements OnInit {
   element!: HTMLElement;

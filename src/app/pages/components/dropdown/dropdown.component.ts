@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 
+import { SHARED_IMPORTS } from '../../../shared-imports';
+
 @Component({
-    selector: 'app-dropdown',
-    templateUrl: './dropdown.component.html',
-    standalone: false
+  selector: 'app-dropdown',
+  templateUrl: './dropdown.component.html',
+  imports: [SHARED_IMPORTS],
 })
 export class DropdownsComponent {
   message: number = 0;
-  
+
   onStatus(event: 'show' | 'shown' | 'hide' | 'hidden') {
     console.log('Dropdown status:', event);
-    this.message++
+    this.message++;
   }
-  
+
   sample: string = `<rlb-dropdown>
   <button rlb-button rlb-dropdown>Dropdown Button</button>
   <rlb-dropdown-container>
@@ -26,7 +28,7 @@ export class DropdownsComponent {
     <p>Dropdown Container</p>
   </rlb-dropdown-container>
 </rlb-dropdown>`;
-  
+
   autoclose: string = `<rlb-dropdown>
   <button rlb-button rlb-dropdown [auto-close]="'manual'">
     Manual Dropdown
@@ -34,8 +36,8 @@ export class DropdownsComponent {
   <rlb-dropdown-container>
     <p>This dropdown won’t auto-close.</p>
   </rlb-dropdown-container>
-</rlb-dropdown>`
-  
+</rlb-dropdown>`;
+
   items: string = `<rlb-dropdown>
   <button rlb-button rlb-dropdown>Dropdown List</button>
   <ul rlb-dropdown-menu>
@@ -45,9 +47,9 @@ export class DropdownsComponent {
     <li rlb-dropdown-item divider></li>
     <li rlb-dropdown-item header>Header</li>
   </ul>
-</rlb-dropdown>`
-	
-	links: string = `<rlb-dropdown>
+</rlb-dropdown>`;
+
+  links: string = `<rlb-dropdown>
  <button rlb-button rlb-dropdown>Dropdown Links</button>
  <ul rlb-dropdown-menu>
   <li rlb-dropdown-item link="/">Home (root path)</li>
@@ -55,8 +57,8 @@ export class DropdownsComponent {
   <li rlb-dropdown-item link="not-found">Not found (Relative path)</li>
  </ul>
 </rlb-dropdown>
-	`
-  
+	`;
+
   offset: string = `<rlb-dropdown>
  <button rlb-button rlb-dropdown [offset]="[10, 25]">
   Dropdown Button
@@ -64,20 +66,20 @@ export class DropdownsComponent {
  <rlb-dropdown-container>
   <p>Custom content inside dropdown</p>
  </rlb-dropdown-container>
-</rlb-dropdown>`
-  
+</rlb-dropdown>`;
+
   placement: string = `<rlb-dropdown>
  <button rlb-button rlb-dropdown>Dropdown Button responsive placement</button>
  <rlb-dropdown-container [placement]="'right'" [placement-lg]="'left'">
   <p>Custom content inside dropdown</p>
  </rlb-dropdown-container>
 </rlb-dropdown>
-  `
-  
+  `;
+
   statusChange: string = `<rlb-dropdown>
  <button rlb-button rlb-dropdown (status-changed)="onStatus($event)">Dropdown</button>
  <rlb-dropdown-container>Content</rlb-dropdown-container>
-</rlb-dropdown>`
+</rlb-dropdown>`;
 
   ts: string = `@Component({
   selector: 'app-modal',
