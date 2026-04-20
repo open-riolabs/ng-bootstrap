@@ -28,6 +28,16 @@
 
     --#{$prefix}display-none:                           #{$display-none};
     --#{$prefix}display-block:                          #{$display-block};
+
+    --#{$prefix}card-box-shadow:                        #{$card-box-shadow};
+    --#{$prefix}input-box-shadow:                       #{$input-box-shadow};
+
+    // Sidebar
+    --rlb-sidebar-width:                                #{$sidebar-width};
+    --rlb-sidebar-bg:                                   #{$sidebar-bg};
+    --rlb-menu-item-color:                              #{$sidebar-menu-item-color};
+    --rlb-menu-item-hover-color:                        #{$sidebar-menu-item-hover-color};
+    --rlb-menu-item-active-color:                       #{$sidebar-menu-item-active-color};
 }
 
 //theme dark
@@ -62,6 +72,15 @@
 
         --#{$prefix}display-none:                           #{$display-none-dark};
         --#{$prefix}display-block:                          #{$display-block-dark};
+
+        --#{$prefix}card-box-shadow:                        #{$card-box-shadow};
+        --#{$prefix}input-box-shadow:                       #{$input-box-shadow};
+
+        // Sidebar
+        --rlb-sidebar-bg:                               #{$sidebar-dark-bg};
+        --rlb-menu-item-color:                          #{$sidebar-dark-menu-item-color};
+        --rlb-menu-item-hover-color:                    #{$sidebar-dark-menu-item-hover-color};
+        --rlb-menu-item-active-color:                   #{$sidebar-dark-menu-item-active-color};
 
         .btn-light {
             --#{$prefix}btn-color:                                         #{$body-secondary-color-dark};

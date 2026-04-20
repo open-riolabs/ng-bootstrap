@@ -1,53 +1,42 @@
-import {
-  booleanAttribute,
-  Directive,
-  input,
-  output,
-  signal
-} from '@angular/core';
+import { booleanAttribute, Directive, input, output, signal } from '@angular/core';
 
 @Directive({
-    selector: '[rlb-dnd]',
-    host: {
-        '[class.fileover]': 'fileOver()',
-        '(dragover)': 'onDragOver($event)',
-        '(dragleave)': 'onDragLeave($event)',
-        '(drop)': 'onDrop($event)'
-    }
+  selector: '[rlb-dnd]',
+  standalone: false,
+  host: {
+    '[class.rlb-dnd-over]': 'isOver()',
+    '(dragover)': 'onDragOver($event)',
+    '(dragleave)': 'onDragLeave($event)',
+    '(drop)': 'onDrop($event)',
+  },
 })
 export class DndDirective {
-  multi = input(false, { alias: 'multiple', transform: booleanAttribute });
-
+  multiple = input(false, { transform: booleanAttribute });
   fileDropped = output<File[]>();
-
-  fileOver = signal(false);
+  isOver = signal(false);
 
   onDragOver(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver.set(true);
+    this.isOver.set(true);
   }
 
   onDragLeave(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver.set(false);
+    this.isOver.set(false);
   }
 
   onDrop(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver.set(false);
-    let files = evt.dataTransfer?.files;
+    this.isOver.set(false);
+
+    const files = evt.dataTransfer?.files;
     if (files && files.length > 0) {
-      const _f: File[] = [];
-      if (files.length > 1 && !this.multi()) {
-        _f.push(files[0]);
-      }
-      else {
-        for (let i = 0; i < files.length; i++) _f.push(files[i]);
-      }
-      this.fileDropped.emit(_f);
+      const fileArray = Array.from(files);
+      const result = this.multiple() ? fileArray : [fileArray[0]];
+      this.fileDropped.emit(result);
     }
   }
 }
