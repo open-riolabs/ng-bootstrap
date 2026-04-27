@@ -5,15 +5,16 @@ import {
   computed,
   ElementRef,
   input,
+  signal,
   viewChild,
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
-import { NgClass, JsonPipe } from '@angular/common';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
+import { NgClass } from '@angular/common';
+import { InputValidationComponent } from './input-validation.component';
 
 @Component({
-    selector: 'rlb-checkbox',
-    template: `
+  selector: 'rlb-checkbox',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation">
       <input
@@ -25,24 +26,21 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         [attr.readonly]="readonly() ? true : undefined"
         [value]="value()"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        [ngClass]="{
+          'is-invalid': controlTouched() && invalid() && enableValidation(),
+          'is-valid': controlTouched() && !invalid() && enableValidation(),
+        }"
         (input)="update($event.target)"
       />
-      @if (errors() && (control?.touched || control?.dirty)) {
-        <div class="invalid-feedback d-block">
-          {{ errors() | json }}
-        </div>
+      @if (!_extValidation() && showError()) {
+        <rlb-input-validation [errors]="errors()" />
       }
       <ng-content select="[after]"></ng-content>
     </div>
   `,
-    host: { '[attr.id]': 'null' },
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        NgClass,
-        DataTableActionComponent,
-        JsonPipe,
-    ],
+  host: { '[attr.id]': 'null' },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgClass, InputValidationComponent],
 })
 export class CheckboxComponent extends AbstractComponent<boolean | undefined> {
   disabled = input(false, {
@@ -55,6 +53,19 @@ export class CheckboxComponent extends AbstractComponent<boolean | undefined> {
   el = viewChild.required<ElementRef<HTMLInputElement>>('field');
 
   isDisabled = computed(() => this.disabled() || this.cvaDisabled());
+
+  extValidation = input(false, { transform: booleanAttribute });
+  enableValidation = input(false, {
+    alias: 'enable-validation',
+    transform: booleanAttribute,
+  });
+
+  protected _forceExtValidation = signal(false);
+  protected _extValidation = computed(() => this.extValidation() || this._forceExtValidation());
+
+  setExtValidation(val: boolean) {
+    this._forceExtValidation.set(val);
+  }
 
   constructor() {
     super();
