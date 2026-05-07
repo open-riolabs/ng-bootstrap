@@ -17,11 +17,10 @@ import { AutocompleteItem } from './autocomplete-model';
 import { NgClass } from '@angular/common';
 import { InputValidationComponent } from './input-validation.component';
 import { ProgressComponent } from '../../components/loaders/progress.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-    selector: 'rlb-autocomplete-country-dial-code',
-    template: `
+  selector: 'rlb-autocomplete-country-dial-code',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation position-relative">
       <input
@@ -53,10 +52,13 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
       @if (isOpen()) {
         <div
           #autocomplete
-          class="dropdown-menu show w-100 position-absolute overflow-y-auto shadow"
+          class="dropdown-menu show overflow-y-auto shadow"
           [style.max-height.px]="maxHeight()"
           [style.max-width.px]="menuMaxWidth()"
-          style="z-index: 1000; top: 100%;"
+          [style.top.px]="dropdownTop()"
+          [style.left.px]="dropdownLeft()"
+          [style.width.px]="dropdownWidth()"
+          style="z-index: 1050; position: fixed;"
         >
           @if (!hasSuggestions()) {
             <a class="dropdown-item disabled text-center italic">No suggestions</a>
@@ -94,21 +96,19 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     }
     <ng-content select="[after]"></ng-content>
   `,
-    host: {
-        '(document:pointerdown)': 'handleOutsideEvent($event)',
-        '(document:keydown.escape)': 'onEscape($event)',
-        '[attr.id]': 'null',
-    },
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        NgClass,
-        InputValidationComponent,
-        ProgressComponent,
-        DataTableActionComponent,
-    ],
+  host: {
+    '(document:pointerdown)': 'handleOutsideEvent($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgClass, InputValidationComponent, ProgressComponent],
 })
 export class AutocompleteCountryDialCodeComponent extends AbstractComponent<AutocompleteItem> {
   isOpen = signal(false);
+  dropdownTop = signal(0);
+  dropdownLeft = signal(0);
+  dropdownWidth = signal(0);
   protected suggestions = signal<AutocompleteItem[]>([]);
   protected hasSuggestions = computed(() => this.suggestions().length > 0);
   private typingTimeout: any;
@@ -199,6 +199,12 @@ export class AutocompleteCountryDialCodeComponent extends AbstractComponent<Auto
   }
 
   openDropdown() {
+    const rect = this.el()?.nativeElement.getBoundingClientRect();
+    if (rect) {
+      this.dropdownTop.set(rect.bottom);
+      this.dropdownLeft.set(rect.left);
+      this.dropdownWidth.set(rect.width);
+    }
     this.isOpen.set(true);
   }
   closeDropdown() {

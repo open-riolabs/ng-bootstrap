@@ -236,7 +236,14 @@ export abstract class AbstractAutocompleteComponent
     const dropdown = this.dropdownEl();
     if (!dropdown) return;
 
-    // Always ensure the display is set, even if isOpen was already true
+    const rect = this.el?.nativeElement.getBoundingClientRect();
+    if (rect) {
+      this.renderer.setStyle(dropdown.nativeElement, 'position', 'fixed');
+      this.renderer.setStyle(dropdown.nativeElement, 'top', `${rect.bottom}px`);
+      this.renderer.setStyle(dropdown.nativeElement, 'left', `${rect.left}px`);
+      this.renderer.setStyle(dropdown.nativeElement, 'width', `${rect.width}px`);
+      this.renderer.setStyle(dropdown.nativeElement, 'z-index', '1050');
+    }
     this.renderer.setStyle(dropdown.nativeElement, 'display', 'block');
     this.isOpen = true;
   }
