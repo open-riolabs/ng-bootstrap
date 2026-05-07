@@ -18,11 +18,10 @@ import { AutocompleteFn, AutocompleteItem } from './autocomplete-model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgClass } from '@angular/common';
 import { InputValidationComponent } from './input-validation.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-    selector: 'rlb-autocomplete',
-    template: `
+  selector: 'rlb-autocomplete',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation position-relative">
       <input
@@ -54,10 +53,13 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
       @if (isOpen()) {
         <div
           #autocomplete
-          class="dropdown-menu show w-100 position-absolute overflow-y-auto"
+          class="dropdown-menu show overflow-y-auto"
           [style.max-height.px]="maxHeight()"
           [style.max-width.px]="menuMaxWidth()"
-          style="z-index: 1000; top: 100%;"
+          [style.top.px]="dropdownTop()"
+          [style.left.px]="dropdownLeft()"
+          [style.width.px]="dropdownWidth()"
+          style="z-index: 1050; position: fixed;"
         >
           @if (acLoading()) {
             <div class="dropdown-item disabled text-center">Loading...</div>
@@ -85,18 +87,13 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     </div>
     <ng-content select="[after]"></ng-content>
   `,
-    host: {
-        // Modern Angular 21 syntax for global listeners
-        '(document:pointerdown)': 'onDocumentPointerDown($event)',
-        '(document:keydown.escape)': 'onEscape($event)',
-        '[attr.id]': 'null',
-    },
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        NgClass,
-        InputValidationComponent,
-        DataTableActionComponent,
-    ],
+  host: {
+    '(document:pointerdown)': 'onDocumentPointerDown($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgClass, InputValidationComponent],
 })
 export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   acLoading = signal(false);
@@ -104,6 +101,9 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
 
   // State
   isOpen = signal(false);
+  dropdownTop = signal(0);
+  dropdownLeft = signal(0);
+  dropdownWidth = signal(0);
   protected suggestions = signal<AutocompleteItem[]>([]);
   protected hasSuggestions = computed(() => this.suggestions().length > 0);
 
@@ -266,6 +266,12 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
 
   openDropdown() {
     if (this.isOpen()) return;
+    const rect = this.el()?.nativeElement.getBoundingClientRect();
+    if (rect) {
+      this.dropdownTop.set(rect.bottom);
+      this.dropdownLeft.set(rect.left);
+      this.dropdownWidth.set(rect.width);
+    }
     this.isOpen.set(true);
   }
 
