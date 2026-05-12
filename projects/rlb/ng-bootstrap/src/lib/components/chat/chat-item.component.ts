@@ -4,12 +4,10 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 import { ButtonComponent } from '../buttons/buttons.component';
 import { DropdownDirective } from '../dropdown/dropdown.directive';
 import { DropdownContainerComponent } from '../dropdown/dropdown-container.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
-import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'rlb-chat-item',
-    template: `
+  selector: 'rlb-chat-item',
+  template: `
     <div
       [id]="id()"
       class="chat-bubble-item"
@@ -48,11 +46,11 @@ import { DatePipe } from '@angular/common';
           direction="up"
           class="reaction"
         >
-          @if (!reaction()) {
+          @if (!reaction() && !hideReactionPicker()) {
             <a
               rlb-button
               rlb-dropdown
-              autoClose="manual"
+              [auto-close]="'manual'"
               class="reaction add p-1"
               [class.right]="position() === 'right'"
               [class.left]="position() === 'left'"
@@ -94,16 +92,9 @@ import { DatePipe } from '@angular/common';
       }
     </div>
   `,
-    host: { '[class.ms-auto]': 'position() === "right"' },
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        DropdownComponent,
-        ButtonComponent,
-        DropdownDirective,
-        DropdownContainerComponent,
-        DataTableActionComponent,
-        DatePipe,
-    ],
+  host: { '[class.ms-auto]': 'position() === "right"' },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DropdownComponent, ButtonComponent, DropdownDirective, DropdownContainerComponent],
 })
 export class ChatItemComponent {
   id = input('', { alias: 'id' });
@@ -117,6 +108,7 @@ export class ChatItemComponent {
 
   position = input<'left' | 'right'>('left', { alias: 'position' });
   reaction = input<string | undefined>(undefined, { alias: 'reaction' });
+  hideReactionPicker = input(false, { alias: 'hide-reaction-picker', transform: booleanAttribute });
 
   reply = output<string | undefined>();
   reactionClick = output<string>({ alias: 'reaction-click' });
