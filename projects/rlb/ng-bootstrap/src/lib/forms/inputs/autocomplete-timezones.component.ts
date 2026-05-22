@@ -18,11 +18,10 @@ import { AutocompleteItem } from './autocomplete-model';
 import { NgClass } from '@angular/common';
 import { InputValidationComponent } from './input-validation.component';
 import { ProgressComponent } from '../../components/loaders/progress.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
-    selector: 'rlb-autocomplete-timezones',
-    template: `
+  selector: 'rlb-autocomplete-timezones',
+  template: `
     <ng-content select="[before]"></ng-content>
     <div class="input-group has-validation position-relative">
       <input
@@ -65,7 +64,7 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
             @for (item of suggestions(); track item.value) {
               <a
                 class="dropdown-item"
-                (click)="selectItem(item, $event)"
+                (mousedown)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
                 {{ item.text }}
@@ -85,18 +84,13 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     }
     <ng-content select="[after]"></ng-content>
   `,
-    host: {
-        '(document:pointerdown)': 'handleOutsideEvent($event)',
-        '(document:keydown.escape)': 'onEscape($event)',
-        '[attr.id]': 'null',
-    },
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        NgClass,
-        InputValidationComponent,
-        ProgressComponent,
-        DataTableActionComponent,
-    ],
+  host: {
+    '(document:pointerdown)': 'handleOutsideEvent($event)',
+    '(document:keydown.escape)': 'onEscape($event)',
+    '[attr.id]': 'null',
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgClass, InputValidationComponent, ProgressComponent],
 })
 export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
   isOpen = signal(false);
@@ -157,6 +151,7 @@ export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
   }
 
   selectItem(item: AutocompleteItem, ev?: Event) {
+    ev?.preventDefault();
     ev?.stopPropagation();
     const val = item.value as string;
     this.selected.emit(val);
