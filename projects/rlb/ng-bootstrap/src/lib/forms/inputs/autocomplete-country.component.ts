@@ -65,7 +65,7 @@ import { InputValidationComponent } from './input-validation.component';
             @for (item of suggestions(); track item.value) {
               <a
                 class="dropdown-item d-flex align-items-center"
-                (click)="selectItem(item, $event)"
+                (mousedown)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
                 <!-- Flag Icon Support -->
@@ -160,6 +160,7 @@ export class AutocompleteCountryComponent extends AbstractComponent<Autocomplete
   }
 
   selectItem(item: AutocompleteItem, ev?: Event) {
+    ev?.preventDefault();
     ev?.stopPropagation();
     this.selected.emit(item);
     this.setValue(item);
