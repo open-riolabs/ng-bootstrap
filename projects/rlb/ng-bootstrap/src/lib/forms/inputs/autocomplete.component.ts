@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -31,6 +32,7 @@ import { InputValidationComponent } from './input-validation.component';
         [value]="getText(value())"
         (input)="update($event.target)"
         (keyup.enter)="onEnter($event.target)"
+        (focus)="onFocus()"
         (blur)="touch()"
         [id]="id()"
         [type]="type()"
@@ -125,6 +127,7 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
   inputAutocomplete = input('off');
+  openOnFocus = input(false, { transform: booleanAttribute, alias: 'open-on-focus' });
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
@@ -147,12 +150,25 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
 
   constructor() {
     super();
-    // Use RxJS for cleaner debouncing
     this.searchSubject
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(val => {
         this.manageSuggestions(val);
       });
+    const destroyRef = inject(DestroyRef);
+    const onScroll = (event: Event) => {
+      if (!this.isOpen()) return;
+      if (this.dropdown()?.nativeElement.contains(event.target as Node)) return;
+      this.closeDropdown();
+    };
+    document.addEventListener('scroll', onScroll, { capture: true });
+    destroyRef.onDestroy(() => document.removeEventListener('scroll', onScroll, { capture: true }));
+  }
+
+  onFocus() {
+    if (this.openOnFocus() && !this.isOpen()) {
+      this.manageSuggestions('', true);
+    }
   }
 
   update(ev: EventTarget | null) {
@@ -177,11 +193,11 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
     // }
   }
 
-  manageSuggestions(data: string) {
+  manageSuggestions(data: string, showAll = false) {
     // 1. Reset suggestions but keep dropdown state logic clean
     this.suggestions.set([]);
 
-    if (data && data.length >= this.charsToSearch()) {
+    if (showAll || (data && data.length >= this.charsToSearch())) {
       this.openDropdown();
       try {
         const result = this.autocomplete()(data);
@@ -281,4 +297,5 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
     this.isOpen.set(false);
     this.acLoading.set(false);
   }
+
 }
