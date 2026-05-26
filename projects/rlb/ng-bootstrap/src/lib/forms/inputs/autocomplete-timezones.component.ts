@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -36,6 +37,7 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
         [attr.placeholder]="placeholder()"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
+        (focus)="onFocus()"
         (blur)="touch()"
         [ngClass]="{
           'is-invalid': controlTouched() && invalid() && enableValidation(),
@@ -53,10 +55,13 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
       @if (isOpen()) {
         <div
           #autocomplete
-          class="dropdown-menu show w-100 position-absolute overflow-y-auto shadow"
+          class="dropdown-menu show overflow-y-auto shadow"
           [style.max-height.px]="maxHeight()"
           [style.max-width.px]="menuMaxWidth()"
-          style="z-index: 1000; top: 100%;"
+          [style.top.px]="dropdownTop()"
+          [style.left.px]="dropdownLeft()"
+          [style.width.px]="dropdownWidth()"
+          style="z-index: 1050; position: fixed;"
         >
           @if (!hasSuggestions()) {
             <a class="dropdown-item disabled text-center italic">No suggestions</a>
@@ -94,6 +99,9 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
 })
 export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
   isOpen = signal(false);
+  dropdownTop = signal(0);
+  dropdownLeft = signal(0);
+  dropdownWidth = signal(0);
   protected suggestions = signal<AutocompleteItem[]>([]);
   protected hasSuggestions = computed(() => this.suggestions().length > 0);
   private typingTimeout: any;
@@ -107,6 +115,7 @@ export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
   loading = input(false, { transform: booleanAttribute });
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
+  openOnFocus = input(false, { transform: booleanAttribute, alias: 'open-on-focus' });
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
@@ -116,12 +125,26 @@ export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
 
   constructor() {
     super();
+    const destroyRef = inject(DestroyRef);
+    const onScroll = (event: Event) => {
+      if (!this.isOpen()) return;
+      if (this.dropdown()?.nativeElement.contains(event.target as Node)) return;
+      this.closeDropdown();
+    };
+    document.addEventListener('scroll', onScroll, { capture: true });
+    destroyRef.onDestroy(() => document.removeEventListener('scroll', onScroll, { capture: true }));
   }
 
   onEscape(event: Event) {
     if (this.isOpen()) {
       this.closeDropdown();
       this.el()?.nativeElement?.blur();
+    }
+  }
+
+  onFocus() {
+    if (this.openOnFocus() && !this.isOpen()) {
+      this.manageSuggestions('', true);
     }
   }
 
@@ -138,12 +161,13 @@ export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
   // handles the synchronization automatically in a Zoneless/Signal world.
   override onWrite(data: string | undefined): void {}
 
-  manageSuggestions(query: string) {
-    if (query && query.length > 0) {
+  manageSuggestions(query: string, showAll = false) {
+    if (showAll || (query && query.length > 0)) {
       this.openDropdown();
       const timezones = DateTz.timezones();
-      const filtered = timezones.filter(tz => tz.toLowerCase().includes(query.toLowerCase()));
-
+      const filtered = showAll && !query
+        ? timezones
+        : timezones.filter(tz => tz.toLowerCase().includes(query.toLowerCase()));
       this.suggestions.set(filtered.map(tz => ({ text: tz, value: tz })));
     } else {
       this.closeDropdown();
@@ -177,6 +201,12 @@ export class AutocompleteTimezonesComponent extends AbstractComponent<string> {
   }
 
   openDropdown() {
+    const rect = this.el()?.nativeElement.getBoundingClientRect();
+    if (rect) {
+      this.dropdownTop.set(rect.bottom);
+      this.dropdownLeft.set(rect.left);
+      this.dropdownWidth.set(rect.width);
+    }
     this.isOpen.set(true);
   }
   closeDropdown() {
