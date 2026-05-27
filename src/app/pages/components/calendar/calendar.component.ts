@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
-import { CalendarEvent } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar';
+import { CalendarEvent, CalendarInterval } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar';
 import { CalendarLayout } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar/interfaces/calendar-layout.interface';
 import {
   CalendarChangeEvent,
@@ -25,10 +25,27 @@ export class CalendarComponent {
   loading = signal(false);
   layout: Partial<CalendarLayout> = {};
 
+  // Business hours intervals in seconds from midnight
+  // Mon-Fri 09:00-13:00 (32400-46800) and 14:00-18:00 (50400-64800), Sat 09:00-13:00
+  intervals: CalendarInterval[] = [
+    { dayWeek: 1, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 1, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 2, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 2, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 3, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 3, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 4, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 4, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 5, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 5, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 6, hourStart: 32400, hourStop: 46800, color: 'info' },
+  ];
+
   calendarHTMLSnippet = `
 <rlb-calendar
   [view]="view"
   [events]="events"
+  [intervals]="intervals"
   [current-date]="currentDate"
   (date-change)="onDateChange($event)"
   (view-change)="onViewChange($event)"
@@ -38,7 +55,7 @@ export class CalendarComponent {
 
   calendarTSSnippet = `
 import { Component } from '@angular/core';
-import { CalendarEvent, CalendarView } from '@open-rlb/ng-bootstrap';
+import { CalendarEvent, CalendarInterval, CalendarView } from '@open-rlb/ng-bootstrap';
 import { DateTz, getToday } from '@open-rlb/date-tz';
 
 @Component({
@@ -56,6 +73,21 @@ export class ExampleComponent {
       end: new DateTz(getToday()).set(11, 'hour'),
       color: 'primary'
     }
+  ];
+
+  // Business hours (seconds from midnight): Mon-Fri 09:00-13:00 / 14:00-18:00, Sat 09:00-13:00
+  intervals: CalendarInterval[] = [
+    { dayWeek: 1, hourStart: 32400, hourStop: 46800, color: 'success' },  // 09:00-13:00
+    { dayWeek: 1, hourStart: 50400, hourStop: 64800, color: 'success' },  // 14:00-18:00
+    { dayWeek: 2, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 2, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 3, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 3, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 4, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 4, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 5, hourStart: 32400, hourStop: 46800, color: 'success' },
+    { dayWeek: 5, hourStart: 50400, hourStop: 64800, color: 'success' },
+    { dayWeek: 6, hourStart: 32400, hourStop: 46800, color: 'info' },     // Sat morning only
   ];
 
   onDateChange(event: any) {

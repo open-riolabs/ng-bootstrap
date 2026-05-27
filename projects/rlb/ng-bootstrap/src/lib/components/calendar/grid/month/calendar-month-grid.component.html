@@ -21,7 +21,10 @@
         <div class="d-flex border-bottom min-h-row" style="flex: 1 0 auto;" [style.min-height.px]="layout().rowHeight">
           @for (slot of week; track slot) {
           <div class="flex-fill border-end p-1 d-flex flex-column position-relative" style="width: 0"
-            [class.bg-light]="!isCurrentMonth(slot.date)" cdkDropList [cdkDropListData]="slot.date"
+            [class.bg-light]="!isCurrentMonth(slot.date)"
+            [class.has-interval]="hasInterval(slot.date)"
+            [style.--interval-color]="getIntervalColor(slot.date)"
+            cdkDropList [cdkDropListData]="slot.date"
             (cdkDropListDropped)="onEventDrop($event)" (click)="eventClick.emit(undefined)">
             <!-- Date Number -->
             <div class="d-flex justify-content-center mb-1">

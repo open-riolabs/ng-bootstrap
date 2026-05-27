@@ -176,6 +176,7 @@
           <div class="col-md-6">
             <label class="form-label">Country (Generic autocomplete with custom callback)</label>
             <rlb-autocomplete
+              open-on-focus
               formControlName="country"
               [autocomplete]="searchCountries"
               placeholder="Search country..."
@@ -204,6 +205,9 @@
           <div class="col-md-6">
             <label class="form-label">Birth Country (Specialized Component)</label>
             <rlb-autocomplete-country
+              open-on-focus
+              enable-flag-icons
+              detect-locale
               formControlName="birthCountry"
               placeholder="Type to search countries..."
               enable-validation="true">
@@ -215,6 +219,7 @@
             <label class="form-label">Phone Prefix</label>
             <rlb-autocomplete-country-dial-code
               formControlName="dialCode"
+              open-on-focus
               placeholder="Search code or country..."
               [loading]="isSaving"
               enable-validation="true"
@@ -226,6 +231,7 @@
             <label class="form-label">Preferred Timezone</label>
             <rlb-autocomplete-timezones
               formControlName="timezone"
+              open-on-focus
               placeholder="Search timezone (e.g. Rome)..."
               enable-validation="true">
             </rlb-autocomplete-timezones>

@@ -121,6 +121,24 @@ $min-day-width: 120px;
   }
 }
 
+.calendar-interval {
+  opacity: 0.10;
+  pointer-events: none;
+  border-radius: 0;
+}
+
+.intervals-container {
+  .day-column {
+    flex: 1 1 0px;
+    width: 0;
+    min-width: $min-day-width;
+
+    &:last-child {
+      border-right: none !important;
+    }
+  }
+}
+
 .z-0 {
   z-index: 0;
 }

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, OnDestroy, output } from '@angular/core';
 import { IDateTz } from '@open-rlb/date-tz';
 import { CalendarEvent } from '../interfaces/calendar-event.interface';
+import { CalendarInterval } from '../interfaces/calendar-interval.interface';
 import { CalendarLayout } from '../interfaces/calendar-layout.interface';
 import { CalendarView } from '../interfaces/calendar-view.type';
 import { CalendarWeekGridComponent } from './week/calendar-week-grid.component';
@@ -22,6 +23,7 @@ export class CalendarGrid implements OnDestroy {
   view = input.required<CalendarView>();
   currentDate = input.required<IDateTz>();
   events = input<CalendarEvent[]>([]);
+  intervals = input<CalendarInterval[]>([]);
   layout = input.required<CalendarLayout>();
 
   eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });

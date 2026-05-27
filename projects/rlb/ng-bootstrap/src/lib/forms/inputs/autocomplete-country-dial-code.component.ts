@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -35,6 +36,7 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
         [attr.placeholder]="placeholder()"
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
+        (focus)="onFocus()"
         (blur)="touch()"
         [ngClass]="{
           'is-invalid': controlTouched() && invalid() && enableValidation(),
@@ -66,7 +68,7 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
             @for (item of suggestions(); track item.value) {
               <a
                 class="dropdown-item d-flex align-items-center"
-                (click)="selectItem(item, $event)"
+                (mousedown)="selectItem(item, $event)"
                 style="cursor: pointer"
               >
                 @if (item.iconClass) {
@@ -123,6 +125,8 @@ export class AutocompleteCountryDialCodeComponent extends AbstractComponent<Auto
   userDefinedId = input('', { alias: 'id', transform: (v: string) => v || '' });
   enableFlagIcons = input(true, { transform: booleanAttribute, alias: 'enable-flag-icons' });
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
+  openOnFocus = input(false, { transform: booleanAttribute, alias: 'open-on-focus' });
+  detectLocale = input(false, { transform: booleanAttribute, alias: 'detect-locale' });
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
@@ -132,12 +136,26 @@ export class AutocompleteCountryDialCodeComponent extends AbstractComponent<Auto
 
   constructor() {
     super();
+    const destroyRef = inject(DestroyRef);
+    const onScroll = (event: Event) => {
+      if (!this.isOpen()) return;
+      if (this.dropdown()?.nativeElement.contains(event.target as Node)) return;
+      this.closeDropdown();
+    };
+    document.addEventListener('scroll', onScroll, { capture: true });
+    destroyRef.onDestroy(() => document.removeEventListener('scroll', onScroll, { capture: true }));
   }
 
   onEscape(event: Event) {
     if (this.isOpen()) {
       this.closeDropdown();
       this.el()?.nativeElement?.blur();
+    }
+  }
+
+  onFocus() {
+    if (this.openOnFocus() && !this.isOpen()) {
+      this.manageSuggestions('', true);
     }
   }
 
@@ -159,19 +177,36 @@ export class AutocompleteCountryDialCodeComponent extends AbstractComponent<Auto
     return `${d.text} (${d.value})`;
   }
 
-  manageSuggestions(query: string) {
-    if (query && query.length > 0) {
+  manageSuggestions(query: string, showAll = false) {
+    if (showAll || (query && query.length > 0)) {
       this.openDropdown();
-      const rawSuggestions = this.getCountries().filter(
-        c => c.text.toLowerCase().includes(query.toLowerCase()) || c.value.includes(query),
-      );
-      this.suggestions.set(rawSuggestions);
+      let results = showAll && !query
+        ? this.getCountries()
+        : this.getCountries().filter(
+            c => c.text.toLowerCase().includes(query.toLowerCase()) || c.value.includes(query),
+          );
+      if (this.detectLocale()) {
+        const code = this._localeCountryCode();
+        if (code) {
+          const idx = results.findIndex(c => c.data === code);
+          if (idx > 0) results = [results[idx], ...results.filter((_, i) => i !== idx)];
+        }
+      }
+      this.suggestions.set(results);
     } else {
       this.closeDropdown();
     }
   }
 
+  private _localeCountryCode(): string | null {
+    const lang = navigator.languages?.[0] ?? navigator.language;
+    if (!lang) return null;
+    const parts = lang.split('-');
+    return parts.length > 1 ? parts[parts.length - 1].toUpperCase() : null;
+  }
+
   selectItem(item: AutocompleteItem, ev?: Event) {
+    ev?.preventDefault();
     ev?.stopPropagation();
     this.selected.emit(item);
     this.setValue(item);

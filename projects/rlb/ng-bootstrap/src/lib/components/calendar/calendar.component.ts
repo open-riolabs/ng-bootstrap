@@ -1,32 +1,35 @@
-import { booleanAttribute, Component, computed, input, model, output,
+import {
+  booleanAttribute,
   ChangeDetectionStrategy,
+  Component, computed, input, model, output,
 } from '@angular/core';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 import { filter, map, of, switchMap, take } from 'rxjs';
 import { ModalType } from '../../shared/types';
 import { UniqueIdService } from '../../shared/unique-id.service';
+import { ProgressComponent } from '../loaders/progress.component';
 import { ModalResult } from '../modals';
 import { ModalService } from '../modals/modal.service';
 import { ToastService } from '../toast';
 import { CalendarOverflowEventsDialogResult } from './calendar-dialogs';
+import { CalendarGrid } from './grid/calendar-grid.component';
+import { CalendarHeaderComponent } from './header/calendar-header.component';
 import { CalendarEvent } from './interfaces/calendar-event.interface';
+import { CalendarInterval } from './interfaces/calendar-interval.interface';
 import { CalendarLayout, DEFAULT_CALENDAR_LAYOUT } from './interfaces/calendar-layout.interface';
 import { CalendarChangeEvent, CalendarView } from './interfaces/calendar-view.type';
 import { getToday } from './utils/calendar-date-utils';
-import { CalendarHeaderComponent } from './header/calendar-header.component';
-import { ProgressComponent } from '../loaders/progress.component';
-import { CalendarGrid } from './grid/calendar-grid.component';
 
 @Component({
-    selector: 'rlb-calendar',
-    templateUrl: './calendar.component.html',
-    styleUrls: ['./calendar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CalendarHeaderComponent,
-        ProgressComponent,
-        CalendarGrid,
-    ],
+  selector: 'rlb-calendar',
+  templateUrl: './calendar.component.html',
+  styleUrls: ['./calendar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CalendarHeaderComponent,
+    ProgressComponent,
+    CalendarGrid,
+  ],
 })
 export class CalendarComponent {
   view = model<CalendarView>('week', { alias: 'view' });
@@ -46,6 +49,9 @@ export class CalendarComponent {
     transform: booleanAttribute,
   });
 
+  intervals = input<CalendarInterval[]>([], { alias: 'intervals' });
+  manageEvents = input(true, { alias: 'manage-events', transform: booleanAttribute });
+
   layout = input<Partial<CalendarLayout>>({}, { alias: 'layout' });
 
   mergedLayout = computed(() => ({
@@ -56,12 +62,13 @@ export class CalendarComponent {
   dateChange = output<CalendarChangeEvent>({ alias: 'date-change' });
   viewChange = output<CalendarChangeEvent>({ alias: 'view-change' });
   eventClick = output<CalendarEvent>({ alias: 'event-click' });
+  containerEventClick = output<CalendarEvent[]>({ alias: 'container-event-click' });
 
   constructor(
     private modals: ModalService,
     private unique: UniqueIdService,
     private toasts: ToastService,
-  ) {}
+  ) { }
 
   // DnD event
   onEventChange(eventToEdit: CalendarEvent) {
@@ -82,6 +89,10 @@ export class CalendarComponent {
   }
 
   onEventContainerClick(events: CalendarEvent[] | undefined) {
+    if (events) {
+      this.containerEventClick.emit(events);
+    }
+    if (!this.manageEvents()) return;
     this.modals
       .openModal('rlb-calendar-overlow-events-container', {
         title: 'Overflow events',
@@ -174,6 +185,8 @@ export class CalendarComponent {
     if (eventToEdit) {
       this.eventClick.emit(eventToEdit);
     }
+
+    if (!this.manageEvents()) return;
 
     this.openEditEventDialog(eventToEdit)
       .pipe(

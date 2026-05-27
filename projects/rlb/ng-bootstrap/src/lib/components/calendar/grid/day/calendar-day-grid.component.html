@@ -39,6 +39,17 @@
           </div>
           }
         </div>
+        <!-- Layer 1.5: Intervals (background highlights) -->
+        <div class="intervals-container position-absolute w-100 h-100 top-0 start-0" style="z-index: 0; pointer-events: none;">
+          @for (interval of getIntervalsForDay(); track $index) {
+          <div class="calendar-interval position-absolute w-100"
+            [style.top.px]="getIntervalTop(interval)"
+            [style.height.px]="getIntervalHeight(interval)"
+            [style.background-color]="getIntervalColor(interval)">
+          </div>
+          }
+        </div>
+
         <!-- Layer 2: Events -->
         <div class="events-container d-flex h-100 w-100 position-relative z-1" cdkDropListGroup>
           <div class="day-column position-relative h-100 w-100" cdkDropList [cdkDropListSortingDisabled]="true"
