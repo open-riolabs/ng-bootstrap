@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
+import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { isToday } from "../../utils/calendar-date-utils";
@@ -52,6 +53,7 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
   view = input.required<CalendarView>();
   currentDate = input.required<IDateTz>();
   events = input<CalendarEvent[]>([]);
+  intervals = input<CalendarInterval[]>([]);
   layout = input.required<CalendarLayout>();
 
 
@@ -112,6 +114,17 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
 
   isToday(date: IDateTz): boolean {
     return isToday(date);
+  }
+
+  hasInterval(date: IDateTz): boolean {
+    const dayOfWeek = new DateTz(date).dayOfWeek as number;
+    return this.intervals().some(interval => interval.dayWeek === dayOfWeek);
+  }
+
+  getIntervalColor(date: IDateTz): string {
+    const dayOfWeek = new DateTz(date).dayOfWeek as number;
+    const interval = this.intervals().find(i => i.dayWeek === dayOfWeek);
+    return interval ? `var(--bs-${interval.color || 'success'})` : '';
   }
 
   isCurrentMonth(date: IDateTz): boolean {

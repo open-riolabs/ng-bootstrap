@@ -12,6 +12,7 @@
 				<rlb-calendar
           [view]="view"
           [(events)]="events"
+          [intervals]="intervals"
           [current-date]="currentDate"
           [loading]="loading()"
 					(date-change)="onDateChange($event)"
@@ -76,6 +77,20 @@
 			<rlb-dt-cell><span class="text-white">boolean</span></rlb-dt-cell>
 			<rlb-dt-cell>No</rlb-dt-cell>
 			<rlb-dt-cell>Whether to show the top navigation toolbar. Default is true.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[manage-events]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">boolean</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Enable built-in event CRUD (modals, toasts, DnD updates). Set to false to disable. Default is true. (event-click) still fires when disabled.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[intervals]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">CalendarInterval[]</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>Background time intervals (e.g. business hours). Each interval specifies a dayWeek (0-6), optional hourStart/hourStop in seconds from midnight (0-86400), and optional color.</rlb-dt-cell>
 			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
 		</rlb-dt-row>
 		<rlb-dt-row>

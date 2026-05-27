@@ -15,6 +15,7 @@ export * from './grid/week/calendar-week-grid.component';
 export * from './header/calendar-header.component';
 
 export * from './interfaces/calendar-event.interface';
+export * from './interfaces/calendar-interval.interface';
 
 
 export const CALENDAR_COMPONENTS = [

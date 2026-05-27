@@ -14,6 +14,7 @@ import {
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
+import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { getToday, isToday } from "../../utils/calendar-date-utils";
@@ -33,6 +34,7 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   view = input.required<CalendarView>();
   currentDate = input.required<IDateTz>();
   events = input<CalendarEvent[]>([]);
+  intervals = input<CalendarInterval[]>([]);
   layout = input.required<CalendarLayout>();
 
   eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });
@@ -160,6 +162,26 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
     if (this.nowInterval) {
       clearInterval(this.nowInterval);
     }
+  }
+
+  getIntervalsForDay(): CalendarInterval[] {
+    const dayOfWeek = new DateTz(this.day()).dayOfWeek as number;
+    return this.intervals().filter(interval => interval.dayWeek === dayOfWeek);
+  }
+
+  getIntervalTop(interval: CalendarInterval): number {
+    const seconds = interval.hourStart ?? 0;
+    return (seconds / 3600) * this.layout().rowHeight;
+  }
+
+  getIntervalHeight(interval: CalendarInterval): number {
+    const start = interval.hourStart ?? 0;
+    const stop = interval.hourStop ?? 86400;
+    return ((stop - start) / 3600) * this.layout().rowHeight;
+  }
+
+  getIntervalColor(interval: CalendarInterval): string {
+    return `var(--bs-${interval.color || 'success'})`;
   }
 
   private buildDayGrid(currentDate: IDateTz) {

@@ -93,6 +93,12 @@ $time-col-width: 60px;
   }
 }
 
+.calendar-interval {
+  opacity: 0.10;
+  pointer-events: none;
+  border-radius: 0;
+}
+
 .z-0 {
   z-index: 0;
 }

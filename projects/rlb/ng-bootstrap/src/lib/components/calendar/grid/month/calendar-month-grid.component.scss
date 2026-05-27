@@ -39,6 +39,15 @@
   cursor: pointer;
 }
 
+.has-interval {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--interval-color) 12%, transparent) 0%,
+    transparent 100%
+  );
+  border-left: 3px solid var(--interval-color) !important;
+}
+
 .cdk-drag-preview {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
   border-radius: var(--bs-border-radius-sm);

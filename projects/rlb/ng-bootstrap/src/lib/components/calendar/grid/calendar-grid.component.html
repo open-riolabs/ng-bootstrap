@@ -1,16 +1,16 @@
 @switch (view()) {
 @case ('week') {
-<rlb-calendar-week-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [layout]="layout()"
+<rlb-calendar-week-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [intervals]="intervals()" [layout]="layout()"
   (event-click)="eventClick.emit($event)" (event-container-click)="eventContainerClick.emit($event)"
   (event-change)="eventChange.emit($event)" />
 }
 @case ('month') {
-<rlb-calendar-month-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [layout]="layout()"
+<rlb-calendar-month-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [intervals]="intervals()" [layout]="layout()"
   (event-click)="eventClick.emit($event)" (event-container-click)="eventContainerClick.emit($event)"
   (event-change)="eventChange.emit($event)" />
 }
 @case ('day') {
-<rlb-calendar-day-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [layout]="layout()"
+<rlb-calendar-day-grid [view]="view()" [currentDate]="currentDate()" [events]="events()" [intervals]="intervals()" [layout]="layout()"
   (event-click)="eventClick.emit($event)" (event-container-click)="eventContainerClick.emit($event)"
   (event-change)="eventChange.emit($event)" />
 }
