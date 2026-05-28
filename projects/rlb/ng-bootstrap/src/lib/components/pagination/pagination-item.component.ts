@@ -22,7 +22,6 @@ import { NgTemplateOutlet } from '@angular/common';
         <a
           class="page-link d-block"
           [style.cursor]="disabled() ? 'default' : 'pointer'"
-          [attr.disabled]="disabled() ? true : null"
         >
           <ng-container *ngTemplateOutlet="content"></ng-container>
         </a>
