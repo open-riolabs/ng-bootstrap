@@ -11,33 +11,27 @@ import {
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-    selector: 'rlb-pagination-item',
-    template: `
+  selector: 'rlb-pagination-item',
+  template: `
     <ng-template #template>
       <li
         class="page-item {{ cssClass() }}"
         [class.disabled]="disabled()"
         [class.active]="active()"
       >
-        @if (isIcon()) {
-          <a
-            class="page-link d-block"
-            [attr.disabled]="disabled() ? true : null"
-          >
-            <ng-container *ngTemplateOutlet="content"></ng-container>
-          </a>
-        } @else {
+        <a
+          class="page-link d-block"
+          [style.cursor]="disabled() ? 'default' : 'pointer'"
+          [attr.disabled]="disabled() ? true : null"
+        >
           <ng-container *ngTemplateOutlet="content"></ng-container>
-        }
-        <ng-template #e>
-          <ng-container *ngTemplateOutlet="content"></ng-container>
-        </ng-template>
+        </a>
       </li>
     </ng-template>
     <ng-template #content><ng-content /></ng-template>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NgTemplateOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgTemplateOutlet],
 })
 export class PaginationItemComponent implements OnInit {
   element!: HTMLElement;
