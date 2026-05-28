@@ -4,6 +4,7 @@ export interface AutocompleteItem<T = any> {
 	text: string;
 	value: string;
 	iconClass?: string;
+	disabled?: boolean;
 	data?: T
 }
 

@@ -208,6 +208,74 @@ export class AutocompletesComponent {
 
   /*OBSERVABLE SOURCE END*/
 
+  /*INITIAL SUGGESTIONS BEGIN*/
+  initialSuggestionsHtml: string = `<rlb-autocomplete
+ [placeholder]="'Focus to see suggestions...'"
+ [initial-suggestions]="recentCities"
+ [autocomplete]="searchCities"
+ (selected)="onCitySelect($event)">
+</rlb-autocomplete>`;
+
+  initialSuggestionsTs: string = `// Pre-loaded items shown on focus when the field is empty.
+// Once the user types, the autocomplete fn takes over.
+recentCities: AutocompleteItem[] = [
+  { text: 'Rome (recent)', value: 'RM' },
+  { text: 'Milan (recent)', value: 'MI' },
+];
+
+cities = ['Rome', 'Milan', 'Naples', 'Turin', 'Florence'];
+
+searchCities: AutocompleteFn = (q?: string) => {
+  if (!q) return [];
+  return this.cities.filter(c =>
+    c.toLowerCase().includes(q.toLowerCase())
+  );
+};`;
+
+  recentCities: AutocompleteItem[] = [
+    { text: 'Rome (recent)', value: 'RM' },
+    { text: 'Milan (recent)', value: 'MI' },
+  ];
+  /*INITIAL SUGGESTIONS END*/
+
+  /*DISABLED ITEMS BEGIN*/
+  disabledItemsHtml: string = `<rlb-autocomplete
+ [placeholder]="'Focus to see items...'"
+ [initial-suggestions]="productsWithDisabled"
+ [autocomplete]="searchDisabledItems"
+ (selected)="onProductSelect($event)">
+</rlb-autocomplete>`;
+
+  disabledItemsTs: string = `// Items with disabled: true are visible but cannot be selected.
+productsWithDisabled: AutocompleteItem[] = [
+  { text: 'Laptop', value: 'p1' },
+  { text: 'Phone (out of stock)', value: 'p2', disabled: true },
+  { text: 'Headphones', value: 'p3' },
+  { text: 'Tablet (discontinued)', value: 'p4', disabled: true },
+];
+
+searchDisabledItems: AutocompleteFn = (q?: string) => {
+  if (!q) return this.productsWithDisabled;
+  return this.productsWithDisabled.filter(p =>
+    p.text.toLowerCase().includes(q.toLowerCase())
+  );
+};`;
+
+  productsWithDisabled: AutocompleteItem[] = [
+    { text: 'Laptop', value: 'p1' },
+    { text: 'Phone (out of stock)', value: 'p2', disabled: true },
+    { text: 'Headphones', value: 'p3' },
+    { text: 'Tablet (discontinued)', value: 'p4', disabled: true },
+  ];
+
+  searchDisabledItems: AutocompleteFn = (q?: string) => {
+    if (!q) return this.productsWithDisabled;
+    return this.productsWithDisabled.filter(p =>
+      typeof p !== 'string' && p.text.toLowerCase().includes((q ?? '').toLowerCase()),
+    );
+  };
+  /*DISABLED ITEMS END*/
+
   // Async Validator: Checks if selected user is "Charlie" (Forbidden)
   userAllowedValidator(control: AbstractControl) {
     const val = control.value as AutocompleteItem;

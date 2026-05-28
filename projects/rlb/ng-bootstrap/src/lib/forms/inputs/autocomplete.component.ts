@@ -71,8 +71,10 @@ import { InputValidationComponent } from './input-validation.component';
             @for (item of suggestions(); track item.value) {
               <a
                 class="dropdown-item d-flex align-items-center"
+                [class.text-secondary]="item.disabled"
+                [style.cursor]="item.disabled ? 'not-allowed' : 'pointer'"
+                [attr.aria-disabled]="item.disabled ? 'true' : null"
                 (mousedown)="selectItem(item, $event)"
-                style="cursor: pointer"
               >
                 @if (item.iconClass) {
                   <i
@@ -128,6 +130,7 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   enableValidation = input(false, { transform: booleanAttribute, alias: 'enable-validation' });
   inputAutocomplete = input('off');
   openOnFocus = input(false, { transform: booleanAttribute, alias: 'open-on-focus' });
+  initialSuggestions = input<AutocompleteItem[]>([], { alias: 'initial-suggestions' });
 
   el = viewChild<ElementRef<HTMLInputElement>>('field');
   dropdown = viewChild<ElementRef<HTMLElement>>('autocomplete');
@@ -166,7 +169,7 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   }
 
   onFocus() {
-    if (this.openOnFocus() && !this.isOpen()) {
+    if ((this.openOnFocus() || this.initialSuggestions().length > 0) && !this.isOpen()) {
       this.manageSuggestions('', true);
     }
   }
@@ -194,11 +197,16 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
   }
 
   manageSuggestions(data: string, showAll = false) {
-    // 1. Reset suggestions but keep dropdown state logic clean
     this.suggestions.set([]);
 
     if (showAll || (data && data.length >= this.charsToSearch())) {
       this.openDropdown();
+
+      if (!data && this.initialSuggestions().length > 0) {
+        this.handleResults(this.initialSuggestions());
+        return;
+      }
+
       try {
         const result = this.autocomplete()(data);
 
@@ -233,6 +241,7 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
 
   selectItem(item: AutocompleteItem, ev?: Event) {
     ev?.preventDefault();
+    if (item.disabled) return;
     ev?.stopPropagation();
     this.selected.emit(item);
     this.setValue(item);
@@ -297,5 +306,4 @@ export class AutocompleteComponent extends AbstractComponent<AutocompleteItem> {
     this.isOpen.set(false);
     this.acLoading.set(false);
   }
-
 }
