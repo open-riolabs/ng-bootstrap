@@ -1,4 +1,4 @@
-import { CdkDragDrop, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragPreview } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -12,14 +12,14 @@ import {
   viewChild
 } from '@angular/core';
 import { DateTz, IDateTz } from "@open-rlb/date-tz";
+import { DateTzPipe } from '../../../../pipes/date-tz.pipe';
+import { DayOfWeekPipe } from '../../../../pipes/day-formatter.pipe';
+import { CalendarEventComponent } from '../../event/calendar-event.component';
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
 import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { isToday } from "../../utils/calendar-date-utils";
-import { CalendarEventComponent } from '../../event/calendar-event.component';
-import { DateTzPipe } from '../../../../pipes/date-tz.pipe';
-import { DayOfWeekPipe } from '../../../../pipes/day-formatter.pipe';
 
 
 // Extend the layout interface for internal rendering logic
@@ -42,11 +42,11 @@ const MAX_EVENTS_PER_CELL = 3;
 const DAYS_IN_GRID = 42; // 6 weeks * 7 days
 
 @Component({
-    selector: 'rlb-calendar-month-grid',
-    templateUrl: './calendar-month-grid.component.html',
-    styleUrls: ['./calendar-month-grid.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, CdkDragPreview, DateTzPipe, DayOfWeekPipe]
+  selector: 'rlb-calendar-month-grid',
+  templateUrl: './calendar-month-grid.component.html',
+  styleUrls: ['./calendar-month-grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, CdkDragPreview, DateTzPipe, DayOfWeekPipe]
 })
 export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
 
@@ -54,6 +54,7 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
   currentDate = input.required<IDateTz>();
   events = input<CalendarEvent[]>([]);
   intervals = input<CalendarInterval[]>([]);
+  timezone = input.required<string>();
   layout = input.required<CalendarLayout>();
 
 
@@ -113,7 +114,7 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
   // --- Helpers ---
 
   isToday(date: IDateTz): boolean {
-    return isToday(date);
+    return isToday(date, this.timezone());
   }
 
   hasInterval(date: IDateTz): boolean {
@@ -313,16 +314,19 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
         const isFirstRenderDay = (i === 0);
         const isLastRenderDay = (i === daysIndices.length - 1);
 
+        // `dayInTz` is the grid cell, already in the calendar timezone.
+        const dayInTz = days[idx];
+        const currentDayEnd = new DateTz(dayInTz).add!(1, 'day');
+
         // Visual flags for rounding corners
         const isContinuedBefore = !isFirstRenderDay || (evtStart.timestamp < days[daysIndices[0]].timestamp);
-        const currentDayEndTs = new DateTz(dTs).add(1, 'day').timestamp;
-        const isContinuedAfter = !isLastRenderDay || (evtEnd.timestamp > currentDayEndTs);
+        const isContinuedAfter = !isLastRenderDay || (evtEnd.timestamp > currentDayEnd.timestamp);
 
         const eventView: MonthViewEvent = {
           ...event,
           // Override start/end for the specific cell (crucial for DnD to know the cell context)
-          start: new DateTz(dTs),
-          end: new DateTz(currentDayEndTs),
+          start: new DateTz(dayInTz),
+          end: new DateTz(currentDayEnd),
           originalStart: event.start,
           originalEnd: event.end,
           isContinuedBefore,

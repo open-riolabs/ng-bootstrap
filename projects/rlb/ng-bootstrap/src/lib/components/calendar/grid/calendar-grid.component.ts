@@ -24,6 +24,7 @@ export class CalendarGrid implements OnDestroy {
   currentDate = input.required<IDateTz>();
   events = input<CalendarEvent[]>([]);
   intervals = input<CalendarInterval[]>([]);
+  timezone = input.required<string>();
   layout = input.required<CalendarLayout>();
 
   eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });

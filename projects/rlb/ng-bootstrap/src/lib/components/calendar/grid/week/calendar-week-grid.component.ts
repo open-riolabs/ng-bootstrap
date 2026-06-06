@@ -18,24 +18,25 @@ import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { getToday, isToday } from "../../utils/calendar-date-utils";
 
-import { CdkDragDrop, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder } from "@angular/cdk/drag-drop";
-import { CalendarEventComponent } from "../../event/calendar-event.component";
+import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
 import { DateTzPipe } from "../../../../pipes/date-tz.pipe";
 import { DayOfWeekPipe } from "../../../../pipes/day-formatter.pipe";
+import { CalendarEventComponent } from "../../event/calendar-event.component";
 
 
 @Component({
-    selector: 'rlb-calendar-week-grid',
-    templateUrl: './calendar-week-grid.component.html',
-    styleUrls: ['./calendar-week-grid.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, DateTzPipe, DayOfWeekPipe]
+  selector: 'rlb-calendar-week-grid',
+  templateUrl: './calendar-week-grid.component.html',
+  styleUrls: ['./calendar-week-grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, DateTzPipe, DayOfWeekPipe]
 })
 export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
   view = input.required<CalendarView>();
   currentDate = input.required<IDateTz>();
   events = input<CalendarEvent[]>([]);
   intervals = input<CalendarInterval[]>([]);
+  timezone = input.required<string>();
   layout = input.required<CalendarLayout>();
 
   eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });
@@ -68,6 +69,11 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
 
     effect(() => {
       this.processAllEvents(this.events());
+    });
+
+    // Keep the "now" line in the calendar timezone.
+    effect(() => {
+      this.now.set(getToday(this.timezone()));
     });
   }
 
@@ -125,7 +131,7 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
       .stripSecMillis!();
 
     const durationMs = movedEvent.end.timestamp - movedEvent.start.timestamp;
-    const newEnd = new DateTz(newStart.timestamp + durationMs).stripSecMillis();
+    const newEnd = new DateTz(newStart.timestamp + durationMs, newStart.timezone).stripSecMillis();
 
     if (newStart.timestamp !== movedEvent.start.timestamp) {
       const updatedEvent: CalendarEvent = {
@@ -139,7 +145,7 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
   }
 
   getEventsForDay(day: IDateTz): CalendarEventWithLayout[] {
-    const dayTs = new DateTz(day.timestamp, 'UTC').set(0, 'hour').set(0, 'minute').stripSecMillis().timestamp;
+    const dayTs = new DateTz(day).set(0, 'hour').set(0, 'minute').stripSecMillis().timestamp;
     return this.processedEvents().get(dayTs) || [];
   }
 
@@ -167,13 +173,13 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
 
 
   isToday(date: IDateTz): boolean {
-    return isToday(date);
+    return isToday(date, this.timezone());
   }
 
   private startNowTimer() {
     if (this.nowInterval) return;
     this.nowInterval = setInterval(() => {
-      this.now.set(getToday());
+      this.now.set(getToday(this.timezone()));
     }, 60 * 1000); // every minute
   }
 
@@ -208,7 +214,7 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
     const dayOfWeek = currentDate.dayOfWeek!; // 0 = Sunday, 1 = Monday ...
 
     // Week init (monday)
-    const start = new DateTz(currentDate.timestamp, 'UTC')
+    const start = new DateTz(currentDate)
       .add!(-(dayOfWeek - 1), 'day') // clone or create new for start date
       .set!(0, 'hour')
       .set!(0, 'minute')
@@ -216,7 +222,7 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
 
     const newDays: IDateTz[] = [];
     for (let i = 0; i < 7; i++) {
-      newDays.push(new DateTz(start.timestamp, 'UTC').add(i, 'day'));
+      newDays.push(new DateTz(start).add!(i, 'day'));
     }
     this.days.set(newDays);
     this.startNowTimer();
@@ -406,8 +412,8 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
         resultEvents.push({
           id: -9999,
           title: `+${hiddenEvents.length} more`,
-          start: new DateTz(minStart),
-          end: new DateTz(maxEnd),
+          start: new DateTz(minStart, this.timezone()),
+          end: new DateTz(maxEnd, this.timezone()),
           color: 'light',
           left: visibleColsCount * colWidth,
           width: colWidth,

@@ -4,6 +4,7 @@
     <rlb-calendar-header
       [view]="view()"
       [currentDate]="currentDate()"
+      [timezone]="timezone()"
       (viewChange)="setView($event)"
       (dateChange)="setDate($event)"
     >
@@ -19,6 +20,7 @@
       [intervals]="intervals()"
       [view]="view()"
       [currentDate]="currentDate()"
+      [timezone]="timezone()"
       [layout]="mergedLayout()"
       (event-click)="onEventClick($event)"
       (event-container-click)="onEventContainerClick($event)"

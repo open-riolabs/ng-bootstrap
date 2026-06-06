@@ -20,7 +20,10 @@ import { SHARED_IMPORTS } from '../../../shared-imports';
 })
 export class CalendarComponent {
   view: CalendarView = 'week';
-  currentDate: IDateTz = getToday();
+  // IANA timezone the calendar renders in. All events are displayed/positioned
+  // in this timezone regardless of the timezone they were created with.
+  timezone = 'Europe/Rome';
+  currentDate: IDateTz = getToday(this.timezone);
   events = signal<CalendarEvent[]>([]);
   loading = signal(false);
   layout: Partial<CalendarLayout> = {};
@@ -47,6 +50,7 @@ export class CalendarComponent {
   [events]="events"
   [intervals]="intervals"
   [current-date]="currentDate"
+  [timezone]="timezone"
   (date-change)="onDateChange($event)"
   (view-change)="onViewChange($event)"
   (event-click)="onEventClick($event)">
@@ -64,13 +68,16 @@ import { DateTz, getToday } from '@open-rlb/date-tz';
 })
 export class ExampleComponent {
   view: CalendarView = 'week';
-  currentDate = getToday();
+  // IANA timezone the calendar is rendered in. Every event is displayed and
+  // positioned in this timezone, whatever timezone it was created with.
+  timezone = 'Europe/Rome';
+  currentDate = getToday(this.timezone);
   events: CalendarEvent[] = [
     {
       id: '1',
       title: 'Meeting',
-      start: new DateTz(getToday()).set(10, 'hour'),
-      end: new DateTz(getToday()).set(11, 'hour'),
+      start: new DateTz(getToday(this.timezone)).set(10, 'hour'),
+      end: new DateTz(getToday(this.timezone)).set(11, 'hour'),
       color: 'primary'
     }
   ];
@@ -137,76 +144,76 @@ export class ExampleComponent {
   private generateTestEvents(): CalendarEvent[] {
     const events: any[] = [];
 
-    const now = getToday();
+    const now = getToday(this.timezone);
 
     events.push({
       color: 'primary',
       title: 'Today 1.5h (11:00-12:30)',
-      start: new DateTz(now).cloneToTimezone('UTC').set!(11, 'hour').set!(0, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set!(12, 'hour').set!(30, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set!(11, 'hour').set!(0, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set!(12, 'hour').set!(30, 'minute'),
     });
 
     events.push({
       color: 'danger',
       title: 'Today 1h (11:00-12:00)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(11, 'hour').set(0, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(0, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(11, 'hour').set(0, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(0, 'minute'),
     });
 
     events.push({
       color: 'success',
       title: 'Today 1.5h (11:30-12:30)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(11, 'hour').set(30, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(30, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(11, 'hour').set(30, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(30, 'minute'),
     });
 
     events.push({
       color: 'info',
       title: 'Today 1.5h (11:00-12:30)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(11, 'hour').set(0, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(30, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(11, 'hour').set(0, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(30, 'minute'),
     });
 
     events.push({
       color: 'warning',
       title: 'Today 1.75h (11:15-12:30)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(11, 'hour').set(15, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(30, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(11, 'hour').set(15, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(30, 'minute'),
     });
 
     events.push({
       color: 'secondary',
       title: 'Today 1.75h (10:45-12:30)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(10, 'hour').set(45, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(30, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(10, 'hour').set(45, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(30, 'minute'),
     });
 
     events.push({
       color: 'danger',
       title: 'Today 0.5h test 2 (11:30-12:00)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(11, 'hour').set(30, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(0, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(11, 'hour').set(30, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(0, 'minute'),
     });
 
     events.push({
       color: 'success',
       title: 'Today 1.75h test 3 (10:15-12:00)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(10, 'hour').set(15, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(0, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(10, 'hour').set(15, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(0, 'minute'),
     });
 
     events.push({
       color: 'warning',
       title: 'Today 1.5h test 4 (12:00-13:30)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(12, 'hour').set(0, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(13, 'hour').set(30, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(12, 'hour').set(0, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(13, 'hour').set(30, 'minute'),
     });
 
     events.push({
       color: 'primary',
       title: 'Today 0.5h test 4 (13:30-14:00)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(13, 'hour').set(30, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(14, 'hour').set(0, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(13, 'hour').set(30, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(14, 'hour').set(0, 'minute'),
     });
 
     // Today from 15:15 to 16:00
@@ -214,15 +221,15 @@ export class ExampleComponent {
     events.push({
       color: 'danger',
       title: 'Today 45min (15:15-16:00)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(15, 'hour').set(15, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(16, 'hour').set(0, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(15, 'hour').set(15, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(16, 'hour').set(0, 'minute'),
     });
 
     events.push({
       color: 'primary',
       title: 'Today 45min 2 (15:15-16:00)',
-      start: new DateTz(now).cloneToTimezone('UTC').set(15, 'hour').set(15, 'minute'),
-      end: new DateTz(now).cloneToTimezone('UTC').set(16, 'hour').set(0, 'minute'),
+      start: new DateTz(now).cloneToTimezone(this.timezone).set(15, 'hour').set(15, 'minute'),
+      end: new DateTz(now).cloneToTimezone(this.timezone).set(16, 'hour').set(0, 'minute'),
     });
 
     // === 2. Event "Tomorrow" (currentDate + 1 day) ===
@@ -230,8 +237,8 @@ export class ExampleComponent {
     events.push({
       color: 'info',
       title: 'Tomorrow 2h (09:00-11:00)',
-      start: new DateTz(tomorrowBase).cloneToTimezone('UTC').set!(9, 'hour').set!(0, 'minute'),
-      end: new DateTz(tomorrowBase).cloneToTimezone('UTC').set!(11, 'hour').set!(0, 'minute'),
+      start: new DateTz(tomorrowBase).cloneToTimezone(this.timezone).set!(9, 'hour').set!(0, 'minute'),
+      end: new DateTz(tomorrowBase).cloneToTimezone(this.timezone).set!(11, 'hour').set!(0, 'minute'),
     });
 
     // === 3. Event after tomorrow (currentDate + 2 days) ===
@@ -239,11 +246,11 @@ export class ExampleComponent {
     events.push({
       color: 'success',
       title: 'After Tomorrow 1h (17:00-18:00)',
-      start: new DateTz(dayAfterTomorrowBase).cloneToTimezone('UTC').set!(17, 'hour').set!(
+      start: new DateTz(dayAfterTomorrowBase).cloneToTimezone(this.timezone).set!(17, 'hour').set!(
         0,
         'minute',
       ),
-      end: new DateTz(dayAfterTomorrowBase).cloneToTimezone('UTC').set!(18, 'hour').set!(
+      end: new DateTz(dayAfterTomorrowBase).cloneToTimezone(this.timezone).set!(18, 'hour').set!(
         0,
         'minute',
       ),
@@ -255,8 +262,8 @@ export class ExampleComponent {
     events.push({
       color: 'warning',
       title: 'Yesterday 2h (14:00-16:00)',
-      start: new DateTz(yesterdayBase).cloneToTimezone('UTC').set!(14, 'hour').set!(0, 'minute'),
-      end: new DateTz(yesterdayBase).cloneToTimezone('UTC').set!(16, 'hour').set!(0, 'minute'),
+      start: new DateTz(yesterdayBase).cloneToTimezone(this.timezone).set!(14, 'hour').set!(0, 'minute'),
+      end: new DateTz(yesterdayBase).cloneToTimezone(this.timezone).set!(16, 'hour').set!(0, 'minute'),
     });
 
     // === 5. Event "Cross day"  ===
@@ -265,14 +272,24 @@ export class ExampleComponent {
     events.push({
       color: 'secondary',
       title: 'Cross Day (22:00 -> 02:00)',
-      start: new DateTz(dayBeforeYesterdayBase).cloneToTimezone('UTC').set!(22, 'hour').set!(
+      start: new DateTz(dayBeforeYesterdayBase).cloneToTimezone(this.timezone).set!(22, 'hour').set!(
         0,
         'minute',
       ).stripSecMillis(),
-      end: new DateTz(dayBeforeYesterdayEndBase).cloneToTimezone('UTC').set!(2, 'hour').set!(
+      end: new DateTz(dayBeforeYesterdayEndBase).cloneToTimezone(this.timezone).set!(2, 'hour').set!(
         0,
         'minute',
       ).stripSecMillis(),
+    });
+
+    // === 6. Event authored in a DIFFERENT timezone (UTC) ===
+    // Demonstrates that the calendar translates it into its own timezone:
+    // 08:00 UTC is shown at the corresponding wall-clock time in `timezone`.
+    events.push({
+      color: 'dark',
+      title: 'Authored 08:00 UTC (shown in calendar tz)',
+      start: new DateTz(now).cloneToTimezone('UTC').set(8, 'hour').set(0, 'minute').stripSecMillis(),
+      end: new DateTz(now).cloneToTimezone('UTC').set(9, 'hour').set(0, 'minute').stripSecMillis(),
     });
 
     return events.map(event => {

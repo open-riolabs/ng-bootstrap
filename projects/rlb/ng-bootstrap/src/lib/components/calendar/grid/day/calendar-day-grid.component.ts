@@ -1,4 +1,4 @@
-import { CdkDragDrop, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder } from "@angular/cdk/drag-drop";
+import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -13,28 +13,29 @@ import {
 } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
 import { DateTz } from "@open-rlb/date-tz/date-tz";
+import { DayOfWeekPipe } from "../../../../pipes/day-formatter.pipe";
+import { CalendarEventComponent } from "../../event/calendar-event.component";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
 import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
 import { getToday, isToday } from "../../utils/calendar-date-utils";
-import { CalendarEventComponent } from "../../event/calendar-event.component";
-import { DayOfWeekPipe } from "../../../../pipes/day-formatter.pipe";
 
 
 
 @Component({
-    selector: 'rlb-calendar-day-grid',
-    templateUrl: './calendar-day-grid.component.html',
-    styleUrls: ['./calendar-day-grid.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, DayOfWeekPipe]
+  selector: 'rlb-calendar-day-grid',
+  templateUrl: './calendar-day-grid.component.html',
+  styleUrls: ['./calendar-day-grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CdkDropListGroup, CdkDropList, CalendarEventComponent, CdkDrag, CdkDragPlaceholder, DayOfWeekPipe]
 })
 export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   view = input.required<CalendarView>();
   currentDate = input.required<IDateTz>();
   events = input<CalendarEvent[]>([]);
   intervals = input<CalendarInterval[]>([]);
+  timezone = input.required<string>();
   layout = input.required<CalendarLayout>();
 
   eventClick = output<CalendarEvent | undefined>({ alias: 'event-click' });
@@ -66,6 +67,11 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
 
     effect(() => {
       this.processAllEvents(this.events(), this.currentDate());
+    });
+
+    // Keep the "now" line in the calendar timezone.
+    effect(() => {
+      this.now.set(getToday(this.timezone()));
     });
   }
 
@@ -100,7 +106,7 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
       .stripSecMillis!();
 
     const durationMs = movedEvent.end.timestamp - movedEvent.start.timestamp;
-    const newEnd = new DateTz(newStart.timestamp + durationMs).stripSecMillis();
+    const newEnd = new DateTz(newStart.timestamp + durationMs, newStart.timezone).stripSecMillis();
 
     if (newStart.timestamp !== movedEvent.start.timestamp) {
       const updatedEvent: CalendarEvent = {
@@ -119,7 +125,7 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
     // If event starts on previous day, we should clamp?
     // Logic from week grid handles "chunks", here we assume processAllEvents has given us the chunk for this day.
 
-    let eventStart = event.start;
+    let eventStart: IDateTz = new DateTz(event.start);
     if (eventStart.timestamp < startOfDay.timestamp) {
       eventStart = startOfDay;
     }
@@ -148,13 +154,13 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
 
 
   isToday(date: IDateTz): boolean {
-    return isToday(date);
+    return isToday(date, this.timezone());
   }
 
   private startNowTimer() {
     this.stopNowTimer(); // clear existing if any
     this.nowInterval = setInterval(() => {
-      this.now.set(getToday());
+      this.now.set(getToday(this.timezone()));
     }, 60 * 1000); // every minute
   }
 
@@ -185,7 +191,7 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   }
 
   private buildDayGrid(currentDate: IDateTz) {
-    this.day.set(new DateTz(currentDate.timestamp, 'UTC'));
+    this.day.set(currentDate);
     this.startNowTimer();
   }
 

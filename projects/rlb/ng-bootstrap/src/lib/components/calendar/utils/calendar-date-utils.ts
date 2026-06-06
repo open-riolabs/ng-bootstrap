@@ -1,9 +1,17 @@
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 
-export function isSameDay(a: IDateTz, b: IDateTz): boolean {
-  return a.yearUTC === b.yearUTC &&
-    a.monthUTC === b.monthUTC &&
-    a.dayUTC === b.dayUTC;
+/** Returns the IANA timezone resolved from the browser/runtime. */
+export function getBrowserTimezone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+export function isSameDay(a: IDateTz, b: IDateTz, timezone?: string): boolean {
+  const tz = timezone ?? getBrowserTimezone();
+  const da: IDateTz = a.cloneToTimezone!(tz);
+  const db: IDateTz = b.cloneToTimezone!(tz);
+  return da.year === db.year &&
+    da.month === db.month &&
+    da.day === db.day;
 }
 
 export function addDays(date: IDateTz, days: number): IDateTz {
@@ -20,16 +28,16 @@ export function startOfMonth(date: IDateTz): DateTz {
 // 	return d.add(1, 'month').set(1, 'day').add(-1, 'day');
 // }
 
-export function isToday(date: IDateTz): boolean {
-  const today = getToday()
+export function isToday(date: IDateTz, timezone?: string): boolean {
+  const tz = timezone ?? getBrowserTimezone();
+  const d: IDateTz = date.cloneToTimezone!(tz);
+  const today: IDateTz = getToday(tz);
 
-  return date.yearUTC === today.yearUTC &&
-    date.monthUTC === today.monthUTC &&
-    date.dayUTC === today.dayUTC;
+  return d.year === today.year &&
+    d.month === today.month &&
+    d.day === today.day;
 }
 
-export function getToday(): DateTz {
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const today = DateTz.now(timezone);
-	return today
+export function getToday(timezone?: string): DateTz {
+  return DateTz.now(timezone ?? getBrowserTimezone());
 }

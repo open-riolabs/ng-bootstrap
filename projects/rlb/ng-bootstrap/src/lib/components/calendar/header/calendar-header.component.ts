@@ -30,6 +30,7 @@ import { MonthFormatterPipe } from '../../../pipes/month-formatter.pipe';
 export class CalendarHeaderComponent {
   view = input<CalendarView>('month');
   currentDate = input.required<IDateTz>();
+  timezone = input.required<string>();
   dateChange = output<DateTz>();
   viewChange = output<CalendarView>();
 
@@ -75,7 +76,7 @@ export class CalendarHeaderComponent {
     switch (this.view()) {
       case 'week':
       default:
-        const today = getToday();
+        const today = getToday(this.timezone());
         this.dateChange.emit(today);
         break;
     }

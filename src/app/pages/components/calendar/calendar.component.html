@@ -14,6 +14,7 @@
           [(events)]="events"
           [intervals]="intervals"
           [current-date]="currentDate"
+          [timezone]="timezone"
           [loading]="loading()"
 					(date-change)="onDateChange($event)"
 					(view-change)="onViewChange($event)"
@@ -63,6 +64,13 @@
 			<rlb-dt-cell><span class="text-white">IDateTz</span></rlb-dt-cell>
 			<rlb-dt-cell>No</rlb-dt-cell>
 			<rlb-dt-cell>The current date focused in the calendar.</rlb-dt-cell>
+			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
+		</rlb-dt-row>
+		<rlb-dt-row>
+			<rlb-dt-cell><span class="text-danger-emphasis">[timezone]</span></rlb-dt-cell>
+			<rlb-dt-cell><span class="text-white">string</span></rlb-dt-cell>
+			<rlb-dt-cell>No</rlb-dt-cell>
+			<rlb-dt-cell>IANA timezone the calendar is rendered in (e.g. 'Europe/Rome'). Day boundaries, time-slot positions, the "now" line and every event are normalized to this timezone, regardless of the timezone the events were created with. Defaults to the browser timezone.</rlb-dt-cell>
 			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
 		</rlb-dt-row>
 		<rlb-dt-row>

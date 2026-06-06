@@ -18,7 +18,7 @@ import { CalendarEvent } from './interfaces/calendar-event.interface';
 import { CalendarInterval } from './interfaces/calendar-interval.interface';
 import { CalendarLayout, DEFAULT_CALENDAR_LAYOUT } from './interfaces/calendar-layout.interface';
 import { CalendarChangeEvent, CalendarView } from './interfaces/calendar-view.type';
-import { getToday } from './utils/calendar-date-utils';
+import { getBrowserTimezone, getToday } from './utils/calendar-date-utils';
 
 @Component({
   selector: 'rlb-calendar',
@@ -41,6 +41,8 @@ export class CalendarComponent {
     alias: 'current-date',
   });
   // currentDateChange = output<IDateTz>({ alias: 'current-date-change' });
+
+  timezone = input<string>(getBrowserTimezone(), { alias: 'timezone' });
 
   loading = input(false, { alias: 'loading', transform: booleanAttribute });
 
