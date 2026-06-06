@@ -19,7 +19,7 @@ import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calenda
 import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
-import { isToday } from "../../utils/calendar-date-utils";
+import { dayAt, isToday, minutesSinceMidnight, startOfDayTs } from "../../utils/calendar-date-utils";
 
 
 // Extend the layout interface for internal rendering logic
@@ -144,25 +144,20 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
   // --- Core Logic ---
 
   private buildMonthGrid() {
-    // 1. Calculate Grid Boundaries
-    const current = new DateTz(this.currentDate());
-    // Find the first day of the month
-    const startOfMonth = new DateTz(current).set(1, 'day').set(0, 'hour').set(0, 'minute').stripSecMillis();
+    const tz = this.timezone();
+    // 1. Calculate Grid Boundaries (tz-aware; set()/add() would be UTC-naive)
+    const current = this.currentDate().cloneToTimezone!(tz);
+    // First day of the month at local midnight
+    const firstOfMonth = dayAt(current, tz, -(current.day! - 1));
 
-    // Calculate offset to find the start of the grid (e.g. Monday)
-    const dayOfWeek = startOfMonth.dayOfWeek as number; // 0 = Sun, 1 = Mon...
-    // Adjust logic based on your locale start of week (assuming Monday start here)
+    // Calculate offset to find the start of the grid (Monday-first)
+    const dayOfWeek = firstOfMonth.dayOfWeek as number; // 0 = Sun, 1 = Mon...
     const offset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-
-    const gridStart = new DateTz(startOfMonth).add(-offset, 'day');
 
     // 2. Generate Days
     const days: IDateTz[] = [];
-    let iter: IDateTz = new DateTz(gridStart);
-
     for (let i = 0; i < DAYS_IN_GRID; i++) {
-      days.push(iter);
-      iter = new DateTz(iter).add(1, 'day');
+      days.push(dayAt(firstOfMonth, tz, i - offset));
     }
 
     // Header is just the first week
@@ -228,6 +223,7 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
    * Places events into rows so that long events maintain their vertical position across days.
    */
   private calculateEventSlots(days: IDateTz[], events: CalendarEvent[]): Map<number, MonthViewEvent[]> {
+    const tz = this.timezone();
     const dayMap = new Map<number, MonthViewEvent[]>();
     days.forEach(d => dayMap.set(d.timestamp, []));
 
@@ -242,28 +238,21 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
     const gridStartTs = days[0].timestamp;
     const lastDay = days[days.length - 1];
     // End of grid is the start of the next day after the last cell
-    const gridEndTs = new DateTz(lastDay).add(1, 'day').timestamp;
+    const gridEndTs = dayAt(lastDay, tz, 1).timestamp;
 
     for (const event of sortedEvents) {
-      // Normalize start to beginning of day
-      const evtStart = new DateTz(event.start).set(0, 'hour').set(0, 'minute').stripSecMillis();
-      const evtEndRaw = new DateTz(event.end).stripSecMillis();
+      // tz-aware day-floors (set()/add() would be UTC-naive).
+      const evtStartTs = startOfDayTs(event.start, tz);
 
-      // Normalize end.
-      // If ends at 00:00, it effectively ends at the previous day visually.
-      // Else, round up to the end of that day.
-      let evtEnd: IDateTz;
-      const isMidnight = evtEndRaw.hour === 0 && evtEndRaw.minute === 0;
-
-      if (evtEndRaw.timestamp > evtStart.timestamp && isMidnight) {
-        evtEnd = evtEndRaw; // Keeps it clean for comparison, effectively 00:00 of next day
-      } else {
-        // Round to start of next day to cover full day
-        evtEnd = new DateTz(evtEndRaw).set(0, 'hour').set(0, 'minute').add(1, 'day').stripSecMillis!();
-      }
+      // Normalize end. If it ends exactly at local 00:00, it visually ends on the
+      // previous day; otherwise round up to the start of the next day.
+      const endsAtMidnight = minutesSinceMidnight(event.end, tz) === 0;
+      const evtEndTs = (event.end.timestamp > evtStartTs && endsAtMidnight)
+        ? startOfDayTs(event.end, tz)
+        : dayAt(event.end, tz, 1).timestamp;
 
       // Skip if completely outside grid
-      if (evtEnd.timestamp <= gridStartTs || evtStart.timestamp >= gridEndTs) {
+      if (evtEndTs <= gridStartTs || evtStartTs >= gridEndTs) {
         continue;
       }
 
@@ -272,7 +261,7 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
       for (let i = 0; i < days.length; i++) {
         const dTs = days[i].timestamp;
         // Check intersection: [DayStart, DayEnd) overlaps [EventStart, EventEnd)
-        if (dTs >= evtStart.timestamp && dTs < evtEnd.timestamp) {
+        if (dTs >= evtStartTs && dTs < evtEndTs) {
           daysIndices.push(i);
         }
       }
@@ -316,11 +305,11 @@ export class CalendarMonthGridComponent implements AfterViewInit, OnDestroy {
 
         // `dayInTz` is the grid cell, already in the calendar timezone.
         const dayInTz = days[idx];
-        const currentDayEnd = new DateTz(dayInTz).add!(1, 'day');
+        const currentDayEnd = dayAt(dayInTz, tz, 1);
 
         // Visual flags for rounding corners
-        const isContinuedBefore = !isFirstRenderDay || (evtStart.timestamp < days[daysIndices[0]].timestamp);
-        const isContinuedAfter = !isLastRenderDay || (evtEnd.timestamp > currentDayEnd.timestamp);
+        const isContinuedBefore = !isFirstRenderDay || (evtStartTs < days[daysIndices[0]].timestamp);
+        const isContinuedAfter = !isLastRenderDay || (evtEndTs > currentDayEnd.timestamp);
 
         const eventView: MonthViewEvent = {
           ...event,

@@ -155,9 +155,45 @@ d.toString!('hh:mm AA')               // '09:30 AM'
 
 ---
 
+## ⚠️ Critical: getters are timezone-aware, mutators are NOT
+
+This is the single most important gotcha in this library. In the current `@open-rlb/date-tz` implementation:
+
+- **Timezone-aware** (compute on `timestamp + timezoneOffset`): the getters `.year`, `.month`, `.day`, `.hour`, `.minute`, `.dayOfWeek`, and `toString()`.
+- **Timezone-NAIVE** (operate on the raw UTC `timestamp`, ignoring the offset): the mutators `set()`, `add()`, `stripSecMillis()`.
+
+So `d.set(0, 'hour')` zeroes the **UTC** hour, **not** the local one. For an event at 09:00 Europe/Rome (07:00 UTC), `d.toString('HH:mm')` correctly returns `'09:00'`, but `d.set(0,'hour')` lands on UTC midnight, so:
+
+```typescript
+// WRONG – yields the UTC time-of-day (off by the tz offset), NOT the local one
+const minutesFromMidnight =
+  (d.timestamp - new DateTz(d).set(0,'hour').set(0,'minute').timestamp) / 60000;
+// for 09:00 Rome this returns 420 (07:00), while the label shows 09:00 → mismatch
+```
+
+**Consequence:** never use `set('hour'/'minute'/'day')` or `add('day')` to derive a **local** day boundary or time-of-day. Use the timezone-aware getters instead:
+
+```typescript
+// CORRECT – tz-aware, matches what toString() shows
+const minutesFromMidnight = d.hour! * 60 + d.minute!;
+
+// CORRECT – epoch ms of LOCAL midnight (the day containing d, in its own tz)
+const MS_PER_DAY = 86_400_000;
+const localMidnightTs =
+  Math.floor((d.timestamp + d.timezoneOffset!) / MS_PER_DAY) * MS_PER_DAY - d.timezoneOffset!;
+```
+
+`add('hour'/'minute'/'second'/'millisecond')` is fine (a fixed ms delta is timezone-independent). The trap is specifically: `set` of any calendar field, `add('day'/'month'/'year')`, and `stripSecMillis` when you expect them to respect the local wall clock — they don't, they act in UTC.
+
+> In this repo the calendar already wraps this correctly: see
+> `projects/rlb/ng-bootstrap/src/lib/components/calendar/utils/calendar-date-utils.ts`
+> (`startOfDayTs`, `minutesSinceMidnight`, `dayAt`). Reuse those instead of re-deriving the math.
+
+---
+
 ## `add` – arithmetic
 
-Returns `IDateTz` (mutates the instance in place).
+Returns `IDateTz` (mutates the instance in place). **`add('day'/'month'/'year')` is timezone-naive** — it shifts the raw UTC timestamp, so it does not respect local-midnight/DST. See the critical section above.
 
 ```typescript
 let d: IDateTz = new DateTz(ts, 'Europe/Rome');
@@ -175,7 +211,7 @@ d = d.add!(10, 'second');
 
 ## `set` – override a component
 
-Returns `IDateTz` (mutates the instance in place).
+Returns `IDateTz` (mutates the instance in place). **`set` is timezone-naive** — it sets the component in **UTC**, not in the instance's local timezone. `set(0,'hour')` is UTC midnight, not local midnight. See the critical section above before using it for day/time boundaries.
 
 ```typescript
 let d: IDateTz = new DateTz(ts, 'Europe/Rome');
@@ -199,6 +235,8 @@ d = d.set!(0,    'millisecond'); // 0–999
 let d: IDateTz = new DateTz(ts, 'Europe/Rome');
 d = d.stripSecMillis!(); // seconds and milliseconds become 0
 ```
+
+> Like `set`/`add`, this truncates on the raw UTC timestamp. Seconds/millis are the same in every timezone, so the result is fine — but don't assume any *hour/day* alignment from it.
 
 ---
 
@@ -317,4 +355,16 @@ d.set!(5, 'month'); // would set to May (set expects 1-based)
 
 // CORRECT – set('month') is 1-based
 d.set!(6, 'month'); // June
+
+// WRONG – set/add are UTC-naive: this is the UTC hour, not the local one
+const minutes = (d.timestamp - new DateTz(d).set!(0,'hour').set!(0,'minute').timestamp) / 60000;
+
+// CORRECT – tz-aware getters match toString()
+const minutesLocal = d.hour! * 60 + d.minute!;
+
+// WRONG – building from a raw timestamp without a tz silently defaults to Etc/UTC
+const end = new DateTz(someTimestampNumber); // label/getters will be UTC!
+
+// CORRECT – pass the intended timezone explicitly
+const endTz = new DateTz(someTimestampNumber, 'Europe/Rome');
 ```

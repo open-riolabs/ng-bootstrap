@@ -16,7 +16,7 @@ import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calenda
 import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
-import { getToday, isToday } from "../../utils/calendar-date-utils";
+import { dayAt, getToday, isToday, minutesSinceMidnight, startOfDayTs } from "../../utils/calendar-date-utils";
 
 import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
 import { DateTzPipe } from "../../../../pipes/date-tz.pipe";
@@ -124,14 +124,13 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
     const snappedMinutes = Math.round(rawMinutesFromStart / this.SNAP_MINUTES) * this.SNAP_MINUTES;
     const validMinutes = Math.max(0, snappedMinutes);
 
-    const newStart = new DateTz(newDay)
-      .set(0, 'hour')
-      .set(0, 'minute')
-      .add(validMinutes, 'minute')
-      .stripSecMillis!();
+    // Local midnight of the target day + dropped offset (tz-aware).
+    const tz = this.timezone();
+    const newStartTs = startOfDayTs(newDay, tz) + validMinutes * 60 * 1000;
+    const newStart = new DateTz(newStartTs, tz).stripSecMillis!();
 
     const durationMs = movedEvent.end.timestamp - movedEvent.start.timestamp;
-    const newEnd = new DateTz(newStart.timestamp + durationMs, newStart.timezone).stripSecMillis();
+    const newEnd = new DateTz(newStart.timestamp + durationMs, tz).stripSecMillis();
 
     if (newStart.timestamp !== movedEvent.start.timestamp) {
       const updatedEvent: CalendarEvent = {
@@ -145,14 +144,11 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
   }
 
   getEventsForDay(day: IDateTz): CalendarEventWithLayout[] {
-    const dayTs = new DateTz(day).set(0, 'hour').set(0, 'minute').stripSecMillis().timestamp;
-    return this.processedEvents().get(dayTs) || [];
+    return this.processedEvents().get(startOfDayTs(day, this.timezone())) || [];
   }
 
   calculateEventTop(event: CalendarEventWithLayout): number {
-    const startOfDay = new DateTz(event.start).set(0, 'hour').set(0, 'minute').stripSecMillis();
-    const diffMs = event.start.timestamp - startOfDay.timestamp;
-    const diffMinutes = diffMs / (1000 * 60);
+    const diffMinutes = minutesSinceMidnight(event.start, this.timezone());
     return (diffMinutes / 60) * this.layout().rowHeight;
   }
 
@@ -211,18 +207,14 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
   }
 
   private buildWeekGrid(currentDate: IDateTz) {
-    const dayOfWeek = currentDate.dayOfWeek!; // 0 = Sunday, 1 = Monday ...
-
-    // Week init (monday)
-    const start = new DateTz(currentDate)
-      .add!(-(dayOfWeek - 1), 'day') // clone or create new for start date
-      .set!(0, 'hour')
-      .set!(0, 'minute')
-      .stripSecMillis!();
+    const tz = this.timezone();
+    const dayOfWeek = currentDate.cloneToTimezone!(tz).dayOfWeek!; // 0 = Sunday, 1 = Monday ...
+    // Offset (in days) from currentDate back to the week's Monday.
+    const mondayOffset = 1 - dayOfWeek; // Sun(0) -> +1, Mon(1) -> 0, Tue(2) -> -1 ...
 
     const newDays: IDateTz[] = [];
     for (let i = 0; i < 7; i++) {
-      newDays.push(new DateTz(start).add!(i, 'day'));
+      newDays.push(dayAt(currentDate, tz, mondayOffset + i));
     }
     this.days.set(newDays);
     this.startNowTimer();
@@ -247,46 +239,39 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
   private processAllEvents(events: CalendarEvent[]) {
     const eventsByDay = new Map<number, CalendarEventWithLayout[]>();
 
+    const tz = this.timezone();
+
     for (const event of events) {
-      const originalStart = new DateTz(event.start).stripSecMillis!();
-      const originalEnd = new DateTz(event.end).stripSecMillis!();
+      const originalStartTs = new DateTz(event.start).stripSecMillis!().timestamp;
+      const originalEndTs = new DateTz(event.end).stripSecMillis!().timestamp;
 
-      let currentChunkStart: IDateTz = new DateTz(originalStart);
+      let chunkStartTs = originalStartTs;
 
-      while (currentChunkStart.timestamp < originalEnd.timestamp) {
-        const startOfNextDay = new DateTz(currentChunkStart)
-          .set(0, 'hour')
-          .set(0, 'minute')
-          .add(1, 'day')
-          .stripSecMillis!();
-
-        const chunkEndTimestamp = Math.min(originalEnd.timestamp, startOfNextDay.timestamp);
-        const chunkEnd = new DateTz(chunkEndTimestamp);
-
-        const currentDayStart = new DateTz(currentChunkStart)
-          .set(0, 'hour')
-          .set(0, 'minute')
-          .stripSecMillis!();
-
-        const dayTimestamp = currentDayStart.timestamp;
+      while (chunkStartTs < originalEndTs) {
+        const chunkInst: IDateTz = new DateTz(chunkStartTs, tz);
+        // tz-aware day boundaries (set()/add() would be UTC-naive here).
+        const dayStartTs = startOfDayTs(chunkInst, tz);
+        const startOfNextDayTs = dayAt(chunkInst, tz, 1).timestamp;
+        const chunkEndTs = Math.min(originalEndTs, startOfNextDayTs);
 
         const visualEvent: CalendarEventWithLayout = {
           ...event,
-          start: currentChunkStart,
-          end: chunkEnd,
-          isContinuedBefore: currentChunkStart.timestamp > originalStart.timestamp,
-          isContinuedAfter: chunkEnd.timestamp < originalEnd.timestamp,
+          // Chunks live in the calendar timezone, so labels and positions agree.
+          start: new DateTz(chunkStartTs, tz),
+          end: new DateTz(chunkEndTs, tz),
+          isContinuedBefore: chunkStartTs > originalStartTs,
+          isContinuedAfter: chunkEndTs < originalEndTs,
           left: 0,
           width: 0
         };
 
-        if (!eventsByDay.has(dayTimestamp)) {
-          eventsByDay.set(dayTimestamp, []);
+        if (!eventsByDay.has(dayStartTs)) {
+          eventsByDay.set(dayStartTs, []);
         }
 
-        eventsByDay.get(dayTimestamp)!.push(visualEvent);
+        eventsByDay.get(dayStartTs)!.push(visualEvent);
 
-        currentChunkStart = startOfNextDay;
+        chunkStartTs = startOfNextDayTs;
       }
     }
 

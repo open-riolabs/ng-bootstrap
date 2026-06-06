@@ -19,7 +19,7 @@ import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calenda
 import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";
 import { CalendarView } from "../../interfaces/calendar-view.type";
-import { getToday, isToday } from "../../utils/calendar-date-utils";
+import { dayAt, getToday, isToday, minutesSinceMidnight, startOfDayTs } from "../../utils/calendar-date-utils";
 
 
 
@@ -99,14 +99,13 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
 
     const validMinutes = Math.max(0, snappedMinutes);
 
-    const newStart = new DateTz(newDay)
-      .set(0, 'hour')
-      .set(0, 'minute')
-      .add(validMinutes, 'minute')
-      .stripSecMillis!();
+    // Local midnight of the target day + dropped offset (tz-aware).
+    const tz = this.timezone();
+    const newStartTs = startOfDayTs(newDay, tz) + validMinutes * 60 * 1000;
+    const newStart = new DateTz(newStartTs, tz).stripSecMillis!();
 
     const durationMs = movedEvent.end.timestamp - movedEvent.start.timestamp;
-    const newEnd = new DateTz(newStart.timestamp + durationMs, newStart.timezone).stripSecMillis();
+    const newEnd = new DateTz(newStart.timestamp + durationMs, tz).stripSecMillis();
 
     if (newStart.timestamp !== movedEvent.start.timestamp) {
       const updatedEvent: CalendarEvent = {
@@ -120,18 +119,9 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   }
 
   calculateEventTop(event: CalendarEventWithLayout): number {
-    const startOfDay = new DateTz(this.day()).set(0, 'hour').set(0, 'minute').stripSecMillis();
-    // Use event.start directly, but ensure we are calculating relative to THIS day
-    // If event starts on previous day, we should clamp?
-    // Logic from week grid handles "chunks", here we assume processAllEvents has given us the chunk for this day.
-
-    let eventStart: IDateTz = new DateTz(event.start);
-    if (eventStart.timestamp < startOfDay.timestamp) {
-      eventStart = startOfDay;
-    }
-
-    const diffMs = eventStart.timestamp - startOfDay.timestamp;
-    const diffMinutes = diffMs / (1000 * 60);
+    // processAllEvents already clamped the event to this day, so its start is
+    // within [00:00, 24:00) of the day. Minutes-since-local-midnight is tz-aware.
+    const diffMinutes = minutesSinceMidnight(event.start, this.timezone());
     return (diffMinutes / 60) * this.layout().rowHeight;
   }
 
@@ -191,7 +181,8 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   }
 
   private buildDayGrid(currentDate: IDateTz) {
-    this.day.set(currentDate);
+    // Anchor the day to local midnight in the calendar timezone.
+    this.day.set(dayAt(currentDate, this.timezone(), 0));
     this.startNowTimer();
   }
 
@@ -214,34 +205,28 @@ export class CalendarDayGridComponent implements OnDestroy, AfterViewInit {
   private processAllEvents(events: CalendarEvent[], day: IDateTz) {
     if (!day) return;
 
-    // Filter events for this day
-    const dayStart = new DateTz(day).set(0, 'hour').set(0, 'minute').stripSecMillis!();
-    const dayEnd = new DateTz(day).set(0, 'hour').set(0, 'minute').add(1, 'day').stripSecMillis!();
+    const tz = this.timezone();
+
+    // tz-aware day boundaries (set()/add() would be UTC-naive here).
+    const dayStartTs = startOfDayTs(day, tz);
+    const dayEndTs = dayAt(day, tz, 1).timestamp;
 
     const dayEvents: CalendarEventWithLayout[] = [];
 
     for (const event of events) {
       // Check overlap with the day
-      if (event.end.timestamp > dayStart.timestamp && event.start.timestamp < dayEnd.timestamp) {
+      if (event.end.timestamp > dayStartTs && event.start.timestamp < dayEndTs) {
 
-        let visualStart = event.start;
-        let visualEnd = event.end;
-        let isContinuedBefore = false;
-        let isContinuedAfter = false;
-
-        if (visualStart.timestamp < dayStart.timestamp) {
-          visualStart = dayStart;
-          isContinuedBefore = true;
-        }
-        if (visualEnd.timestamp > dayEnd.timestamp) {
-          visualEnd = dayEnd;
-          isContinuedAfter = true;
-        }
+        const isContinuedBefore = event.start.timestamp < dayStartTs;
+        const isContinuedAfter = event.end.timestamp > dayEndTs;
+        const visualStartTs = Math.max(event.start.timestamp, dayStartTs);
+        const visualEndTs = Math.min(event.end.timestamp, dayEndTs);
 
         dayEvents.push({
           ...event,
-          start: visualStart,
-          end: visualEnd,
+          // Chunks live in the calendar timezone, so labels and positions agree.
+          start: new DateTz(visualStartTs, tz),
+          end: new DateTz(visualEndTs, tz),
           isContinuedBefore,
           isContinuedAfter,
           left: 0,
