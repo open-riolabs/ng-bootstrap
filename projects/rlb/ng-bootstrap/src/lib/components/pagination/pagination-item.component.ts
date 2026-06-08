@@ -4,6 +4,7 @@ import {
   Component,
   input,
   OnInit,
+  output,
   TemplateRef,
   viewChild,
   ViewContainerRef,
@@ -21,7 +22,13 @@ import { NgTemplateOutlet } from '@angular/common';
       >
         <a
           class="page-link d-block"
+          role="button"
+          [attr.tabindex]="disabled() ? -1 : 0"
+          [attr.aria-disabled]="disabled() ? true : null"
+          [attr.aria-current]="active() ? 'page' : null"
           [style.cursor]="disabled() ? 'default' : 'pointer'"
+          (click)="onActivate($event)"
+          (keydown)="onKeydown($event)"
         >
           <ng-container *ngTemplateOutlet="content"></ng-container>
         </a>
@@ -41,7 +48,28 @@ export class PaginationItemComponent implements OnInit {
   active = input(false, { alias: 'active', transform: booleanAttribute });
   cssClass = input('', { alias: 'class' });
 
+  itemClick = output<void>();
+
   constructor(private viewContainerRef: ViewContainerRef) {}
+
+  onActivate(event: Event) {
+    if (this.disabled()) {
+      event.preventDefault();
+      return;
+    }
+    this.itemClick.emit();
+  }
+
+  onKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') {
+      return;
+    }
+    event.preventDefault();
+    if (this.disabled()) {
+      return;
+    }
+    this.itemClick.emit();
+  }
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(this.template());

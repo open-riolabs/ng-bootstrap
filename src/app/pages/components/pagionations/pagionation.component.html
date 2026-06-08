@@ -69,6 +69,13 @@
       <rlb-dt-cell></rlb-dt-cell>
       <rlb-dt-cell>Input</rlb-dt-cell>
     </rlb-dt-row>
+    <rlb-dt-row>
+      <rlb-dt-cell>itemClick</rlb-dt-cell>
+      <rlb-dt-cell><span rlb-badge color='success'>void</span></rlb-dt-cell>
+      <rlb-dt-cell>False</rlb-dt-cell>
+      <rlb-dt-cell>Emesso quando l'item viene attivato con click o tastiera (Invio/Spazio). Non emette se disabled.</rlb-dt-cell>
+      <rlb-dt-cell>Output</rlb-dt-cell>
+    </rlb-dt-row>
   </rlb-dt-table>
 
   <rlb-accordion>
@@ -91,6 +98,8 @@
             <pre><code [highlight]="disabled" language="html"></code></pre>
             <h4>Active</h4>
             <pre><code [highlight]="active" language="html"></code></pre>
+            <h4>ItemClick</h4>
+            <pre><code [highlight]="itemClick" language="html"></code></pre>
           </rlb-tab-pane>
           <rlb-tab-pane id="ex-1-ts">
             <pre><code [highlight]="ts" language="ts"></code></pre>
@@ -161,7 +170,19 @@
         </rlb-pagination>
         <h4>Pagination Item active</h4>
         <rlb-pagination>
-          <rlb-pagination-item isIcon [active]="true">1</rlb-pagination-item> 
+          <rlb-pagination-item isIcon [active]="true">1</rlb-pagination-item>
+        </rlb-pagination>
+        <h4>ItemClick</h4>
+        <p>Pagina selezionata: {{ selectedPage() }}</p>
+        <rlb-pagination [alignment]="'center'">
+          @for (p of [1, 2, 3, 4, 5]; track p) {
+            <rlb-pagination-item
+              isIcon
+              [active]="p === selectedPage()"
+              (itemClick)="selectedPage.set(p)">
+              {{ p }}
+            </rlb-pagination-item>
+          }
         </rlb-pagination>
       </div>
     </div>

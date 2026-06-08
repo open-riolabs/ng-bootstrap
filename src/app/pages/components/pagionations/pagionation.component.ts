@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
 
@@ -8,6 +8,8 @@ import { SHARED_IMPORTS } from '../../../shared-imports';
   imports: [SHARED_IMPORTS],
 })
 export class PaginationsComponent {
+  selectedPage = signal(1);
+
   align = `<rlb-pagination [alignment]="'center'">
   <rlb-pagination-item isIcon>
     <span>&laquo;</span>
@@ -64,6 +66,16 @@ export class PaginationsComponent {
 </rlb-pagination>`;
   active = `<rlb-pagination>
   <rlb-pagination-item isIcon [active]="true">1</rlb-pagination-item>
+</rlb-pagination>`;
+  itemClick = `<rlb-pagination [alignment]="'center'">
+  @for (p of [1, 2, 3, 4, 5]; track p) {
+    <rlb-pagination-item
+      isIcon
+      [active]="p === selectedPage()"
+      (itemClick)="selectedPage.set(p)">
+      {{ p }}
+    </rlb-pagination-item>
+  }
 </rlb-pagination>`;
 
   ts: string = `@Component({
