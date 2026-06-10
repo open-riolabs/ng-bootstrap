@@ -1,0 +1,17 @@
+.rlb-hero {
+  background: linear-gradient(180deg, var(--bs-tertiary-bg) 0%, var(--bs-body-bg) 100%);
+
+  &__lead {
+    max-width: 720px;
+  }
+}
+
+.rlb-install {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+
+  code {
+    color: inherit;
+    background: transparent;
+  }
+}

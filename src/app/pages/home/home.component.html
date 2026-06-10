@@ -1,66 +1,132 @@
-<div class="p-3">
-	<rlb-input type="number" min="0" max="10" step="0.1" [(ngModel)]="number"></rlb-input>
-	{{ number }}
+<!-- Hero -->
+<section class="rlb-hero text-center border-bottom">
+  <div class="container-xxl py-5">
+    <span rlb-badge color="primary" badge-pill class="mb-3 px-3 py-2">Angular 21 · Bootstrap 5.3</span>
+    <h1 class="display-3 fw-bold mb-3">&#64;open-rlb/ng-bootstrap</h1>
+    <p class="fs-4 text-body-secondary mx-auto mb-4 rlb-hero__lead">
+      A modern Angular component library built on Bootstrap 5.3 — standalone components,
+      signals and OnPush everywhere, with timezone-aware dates out of the box.
+    </p>
+    <div class="d-flex gap-2 justify-content-center flex-wrap">
+      <a rlb-button color="primary" size="lg" routerLink="/getting-started">Get started</a>
+      <a rlb-button outline color="primary" size="lg" routerLink="/components">Browse components</a>
+      <a rlb-button outline color="dark" size="lg"
+        href="https://github.com/open-riolabs/ng-bootstrap" target="_blank" rel="noopener">
+        <i class="bi bi-github me-1"></i> GitHub
+      </a>
+    </div>
+  </div>
+</section>
 
-	<rlb-input type="datetime-local" min="0" max="10" step="0.1" [(ngModel)]="dtz" date-type="date-tz"></rlb-input>
-	{{ dtz | dtz }} {{ dtz | dayOfWeek: 'short' }}
+<div class="container-xxl py-5">
 
-	<rlb-input type="text" [(ngModel)]="str"></rlb-input>
-	{{ str }}
+  <!-- Install -->
+  <div class="row g-4 align-items-center mb-5">
+    <div class="col-lg-6">
+      <h2 class="h3 mb-3">Add it to your app</h2>
+      <p class="text-body-secondary mb-3">
+        A single command installs the library, registers the Bootstrap and Bootstrap Icons styles,
+        wires up <code>provideRlbBootstrap()</code> and scaffolds a starter component.
+      </p>
+      <div class="rlb-install d-flex align-items-center justify-content-between rounded-3 px-3 py-2">
+        <code class="text-nowrap overflow-auto">{{ installCmd }}</code>
+        <button rlb-button size="sm" outline color="light" class="ms-3 flex-shrink-0"
+          [attr.aria-label]="copied ? 'Copied' : 'Copy command'" (click)="copy()">
+          <i class="bi" [class.bi-clipboard]="!copied" [class.bi-check2]="copied"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <rlb-card class="shadow-sm">
+        <rlb-card-body>
+          <h3 class="card-titleh5 mb-3">Looks like Bootstrap, feels like Angular</h3>
+          <div class="d-flex gap-2 flex-wrap mb-3">
+            <button rlb-button color="primary">Primary</button>
+            <button rlb-button outline color="success">Success</button>
+            <button rlb-button color="danger" size="sm">Danger</button>
+            <span rlb-badge color="info" badge-pill class="align-self-center">New</span>
+          </div>
+          <p class="card-texttext-body-secondary mb-0">
+            Every component is a thin, typed Angular wrapper over Bootstrap 5.3 markup — no jQuery,
+            no surprises.
+          </p>
+        </rlb-card-body>
+      </rlb-card>
+    </div>
+  </div>
 
-	<hr>
+  <!-- Features -->
+  <h2 class="h3 text-center mb-4">Why ng-bootstrap?</h2>
+  <div class="row g-4 mb-5">
+    <div class="col-md-6 col-lg-3">
+      <rlb-card class="h-100 text-center">
+        <rlb-card-body>
+          <div class="fs-1 text-primary mb-2"><i class="bi bi-lightning-charge-fill"></i></div>
+          <h3 class="card-titleh6">Signals &amp; OnPush</h3>
+          <p class="card-texttext-body-secondary small mb-0">
+            Built on Angular 21 signals and OnPush change detection for fast, predictable rendering.
+          </p>
+        </rlb-card-body>
+      </rlb-card>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <rlb-card class="h-100 text-center">
+        <rlb-card-body>
+          <div class="fs-1 text-primary mb-2"><i class="bi bi-bootstrap-fill"></i></div>
+          <h3 class="card-titleh6">Bootstrap 5.3</h3>
+          <p class="card-texttext-body-secondary small mb-0">
+            Familiar utilities and theming, including light/dark mode via <code>data-bs-theme</code>.
+          </p>
+        </rlb-card-body>
+      </rlb-card>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <rlb-card class="h-100 text-center">
+        <rlb-card-body>
+          <div class="fs-1 text-primary mb-2"><i class="bi bi-clock-history"></i></div>
+          <h3 class="card-titleh6">Timezone-aware</h3>
+          <p class="card-texttext-body-secondary small mb-0">
+            Calendar and date inputs use <code>&#64;open-rlb/date-tz</code> for correct timezone handling.
+          </p>
+        </rlb-card-body>
+      </rlb-card>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <rlb-card class="h-100 text-center">
+        <rlb-card-body>
+          <div class="fs-1 text-primary mb-2"><i class="bi bi-grid-1x2-fill"></i></div>
+          <h3 class="card-titleh6">25+ components</h3>
+          <p class="card-texttext-body-secondary small mb-0">
+            Buttons, cards, modals, toasts, calendar, datatable and a full set of form inputs.
+          </p>
+        </rlb-card-body>
+      </rlb-card>
+    </div>
+  </div>
 
-	<rlb-carousel autoplay="none" [(current-slide)]="carouselPage" (slide-count)="carouselCount = $event" id="pippo">
-		<rlb-carousel-slide active>
-			<img src="https://placehold.co/100x400" alt="slide 1">
-		</rlb-carousel-slide>
-		<rlb-carousel-slide>
-			<img src="https://placehold.co/200x401" alt="slide 2">
-		</rlb-carousel-slide>
-		<rlb-carousel-slide>
-			<img src="https://placehold.co/300x401" alt="slide 2">
-		</rlb-carousel-slide>
-		<rlb-carousel-slide>
-			<img src="https://placehold.co/400x401" alt="slide 2">
-		</rlb-carousel-slide>
-		<rlb-carousel-slide>
-			<img src="https://placehold.co/500x401" alt="slide 2">
-		</rlb-carousel-slide>
+  <!-- Quick links -->
+  <h2 class="h3 text-center mb-4">Explore</h2>
+  <div class="row g-3 justify-content-center">
+    <div class="col-6 col-md-3">
+      <a routerLink="/components/buttons" class="btn btn-outline-secondary w-100 py-3">
+        <i class="bi bi-ui-checks-grid d-block fs-4 mb-1"></i> Components
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a routerLink="/inputs/input" class="btn btn-outline-secondary w-100 py-3">
+        <i class="bi bi-input-cursor-text d-block fs-4 mb-1"></i> Form inputs
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a routerLink="/components/calendar" class="btn btn-outline-secondary w-100 py-3">
+        <i class="bi bi-calendar4-week d-block fs-4 mb-1"></i> Calendar
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a routerLink="/getting-started" class="btn btn-outline-secondary w-100 py-3">
+        <i class="bi bi-rocket-takeoff d-block fs-4 mb-1"></i> Getting started
+      </a>
+    </div>
+  </div>
 
-	</rlb-carousel>
-
-	<rlb-input type="number" [(ngModel)]="carouselPage" min="0" [max]="carouselCount"></rlb-input>
-	{{ carouselPage }} / {{ carouselCount }}
-
-
-	<form [formGroup]="profileForm" (submit)="updateProfile()">
-		<rlb-input formControlName="firstName" size="small" type="text" name="firstName" id="lastName">
-			<label before for="lastName" class="mt-2 mb-1">
-				{{ "affiliates.userProfile.profile.firstName" }}
-			</label>
-		</rlb-input>
-	</form>
-
-	<br>
-
-	<button rlb-button outline (click)="test()">log form value</button>
-	<button rlb-button outline (click)="testPatch()">test patch value</button>
-
-	<div [formGroup]="profileForm" class="mt-3">
-		<label for="country">Country autocomplete</label>
-		<rlb-autocomplete-country id="country" enable-flag-icons formControlName="country" />
-	</div>
-
-	<br>
-	<div [formGroup]="profileForm" class="mt-3">
-		<label for="timezone">Timezone autocomplete</label>
-		<rlb-autocomplete-timezones id="timezone"
-			[formControl]="profileForm.controls.profile.controls.culture.controls.timezone" />
-	</div>
-	<br>
-	<div [formGroup]="profileForm" class="mt-3">
-		<label for="dial-code">Dial code autocomplete</label>
-		<rlb-autocomplete-country-dial-code enable-flag-icons id="dial-code" formControlName="dialCode" />
-	</div>
-	<br>
 </div>

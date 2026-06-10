@@ -35,35 +35,53 @@
   <div class="rlb-main-wrapper">
     <rlb-sidebar class="rlb-sidebar" id="sidebar">
       <rlb-sidebar-item title="RLB bootstrap" />
-      <rlb-sidebar-item [badgeCounter]="1234" label="Components">
-        <rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-exclamation-triangle" [badgeCounter]="54321" link="/components/alerts">Alerts
-        </rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-chevron-bar-expand" link="/components/accordions">Accordions</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-window" link="/components/modals">Modals</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-bell" link="/components/toasts">Toasts</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-menu-button-fill" link="/components/dropdowns">Dropdowns</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-arrows-collapse" link="/components/collapses">Collapses</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-person-bounding-box" link="/components/avatars">Avatars</rlb-sidebar-item>
+      <rlb-sidebar-item title="Components" />
+
+      <rlb-sidebar-item label="Actions" [badgeCounter]="3">
+        <rlb-sidebar-item icon="bi bi-hand-index" link="/components/buttons">Button</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-person-badge" link="/components/badges">Badge</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-box" link="/components/breadcrumbs">Breadcrumb</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-box" link="/components/buttons">Button</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-menu-button-fill" link="/components/dropdowns">Dropdowns</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Layout &amp; containers" [badgeCounter]="5">
         <rlb-sidebar-item icon="bi bi-card-heading" link="/components/cards">Card</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-images" link="/components/carousels">Carousel</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-chat-dots" link="/components/chats">Chat</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-layout-sidebar-inset" link="/components/sidebars">Sidebar</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-list-ul" link="/components/lists">List</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-table" link="/components/tables">Tables</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-arrow-clockwise" link="/components/loaders">Loader</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-layout-sidebar" link="/components/offcanvass">Offcanvas</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-box" link="/components/paginations">Pagination</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-box" link="/components/placeholders">Placeholder</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-box" link="/components/scrollspys">Scrollspy</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/tabs">Tab</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-question-circle" link="/components/tooltips">Tooltips</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navs">Nav</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navbars">Navbar</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-bounding-box" link="/components/placeholders">Placeholder</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-layout-sidebar-inset" link="/components/sidebars">Sidebar</rlb-sidebar-item>
       </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Navigation" [badgeCounter]="6">
+        <rlb-sidebar-item icon="bi bi-window-sidebar" link="/components/navigation/navbars">Navbar</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navs">Nav</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-menu-button-wide" link="/components/tabs">Tab</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-signpost-split" link="/components/breadcrumbs">Breadcrumb</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-three-dots" link="/components/paginations">Pagination</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-binoculars" link="/components/scrollspys">Scrollspy</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Overlays &amp; feedback" [badgeCounter]="6">
+        <rlb-sidebar-item icon="bi bi-exclamation-triangle" link="/components/alerts">Alerts</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-bell" link="/components/toasts">Toasts</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-window" link="/components/modals">Modals</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-layout-sidebar" link="/components/offcanvass">Offcanvas</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-question-circle" link="/components/tooltips">Tooltips</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-arrow-clockwise" link="/components/loaders">Loader</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Disclosure" [badgeCounter]="2">
+        <rlb-sidebar-item icon="bi bi-chevron-bar-expand" link="/components/accordions">Accordions</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-arrows-collapse" link="/components/collapses">Collapses</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Media &amp; content" [badgeCounter]="4">
+        <rlb-sidebar-item icon="bi bi-person-bounding-box" link="/components/avatars">Avatars</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-images" link="/components/carousels">Carousel</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-chat-dots" link="/components/chats">Chat</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item title="Forms" />
       <rlb-sidebar-item label="Inputs">
         <rlb-sidebar-item icon="bi bi-menu-button" link="/inputs/autocomplete">Autocomplete</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-check2-square" link="/inputs/checkbox">Checkbox</rlb-sidebar-item>
