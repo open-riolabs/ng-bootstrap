@@ -1,1 +1,86 @@
-<p>getting-started works!</p>
+<docs-page
+  title="Getting started"
+  lead="Add @open-rlb/ng-bootstrap to an Angular 21 app in a minute — install, register the providers and styles, then drop in your first component.">
+
+  <h2 class="h4 mt-5 mb-2">Installation</h2>
+  <p class="text-body-secondary">Requires Angular 21 and Bootstrap 5.3. The schematic does the wiring for you.</p>
+
+  <h3 class="h5 mt-4">Option 1 — ng add <span rlb-badge color="success" class="ms-1">recommended</span></h3>
+  <p class="text-body-secondary">One command installs the dependencies, registers the styles, wires the providers and scaffolds a starter component.</p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'ngadd' ? 'Copied' : 'Copy'" (click)="copy(ngAddCmd, 'ngadd')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'ngadd'" [class.bi-check2]="copiedKey() === 'ngadd'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="ngAddCmd" language="bash"></code></pre>
+  </div>
+  <ul class="text-body-secondary">
+    <li>Installs <code>bootstrap</code>, <code>bootstrap-icons</code>, <code>&#64;open-rlb/date-tz</code>, <code>&#64;ngx-translate/core</code> and <code>&#64;angular/cdk</code>.</li>
+    <li>Registers the Bootstrap and Bootstrap Icons stylesheets in <code>angular.json</code>.</li>
+    <li>Adds <code>provideRlbBootstrap()</code> to your application providers.</li>
+    <li>Scaffolds a starter component you can render to verify the setup.</li>
+  </ul>
+
+  <h3 class="h5 mt-4">Option 2 — manual</h3>
+  <p class="text-body-secondary">Install the package (npm 7+ pulls the peer dependencies automatically):</p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'npm' ? 'Copied' : 'Copy'" (click)="copy(npmCmd, 'npm')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'npm'" [class.bi-check2]="copiedKey() === 'npm'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="npmCmd" language="bash"></code></pre>
+  </div>
+
+  <p class="text-body-secondary mb-2">Register the providers:</p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'prov' ? 'Copied' : 'Copy'" (click)="copy(providersCode, 'prov')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'prov'" [class.bi-check2]="copiedKey() === 'prov'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="providersCode" language="typescript"></code></pre>
+  </div>
+
+  <p class="text-body-secondary mb-2">Add the global styles:</p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'styles' ? 'Copied' : 'Copy'" (click)="copy(stylesCode, 'styles')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'styles'" [class.bi-check2]="copiedKey() === 'styles'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="stylesCode" language="json"></code></pre>
+  </div>
+
+  <docs-example
+    heading="Your first component"
+    description="Import RlbBootstrapModule (or the standalone components) and use the rlb-* selectors in your template."
+    [code]="usageExample">
+    <rlb-card>
+      <rlb-card-body>
+        <h5 class="card-title">Hello ng-bootstrap</h5>
+        <p class="card-text text-body-secondary">Your first component is ready.</p>
+        <button rlb-button color="primary">Get started</button>
+      </rlb-card-body>
+    </rlb-card>
+  </docs-example>
+
+  <h2 class="h4 mt-5 mb-2">Theming &amp; dark mode</h2>
+  <p class="text-body-secondary">
+    Components follow Bootstrap 5.3 theming. Switch between light and dark by setting the
+    <code>data-bs-theme</code> attribute on <code>&lt;html&gt;</code> (or any subtree) — no extra
+    configuration needed.
+  </p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'theme' ? 'Copied' : 'Copy'" (click)="copy(themeCode, 'theme')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'theme'" [class.bi-check2]="copiedKey() === 'theme'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="themeCode" language="html"></code></pre>
+  </div>
+
+  <h2 class="h4 mt-5 mb-3">Next steps</h2>
+  <div class="d-flex gap-2 flex-wrap">
+    <a rlb-button color="primary" routerLink="/components">Browse components</a>
+    <a rlb-button outline color="primary" routerLink="/inputs/input">Form inputs</a>
+    <a rlb-button outline color="primary" routerLink="/components/calendar">Calendar</a>
+  </div>
+
+</docs-page>

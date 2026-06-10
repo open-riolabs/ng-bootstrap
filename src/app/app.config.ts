@@ -53,6 +53,8 @@ export const appConfig: ApplicationConfig = {
         typescript: () => import('highlight.js/lib/languages/typescript'),
         html: () => import('highlight.js/lib/languages/xml'),
         scss: () => import('highlight.js/lib/languages/scss'),
+        bash: () => import('highlight.js/lib/languages/bash'),
+        json: () => import('highlight.js/lib/languages/json'),
       },
       themePath: 'assets/styles/github-dark.css',
     }),

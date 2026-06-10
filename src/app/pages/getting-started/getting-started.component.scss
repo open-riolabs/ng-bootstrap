@@ -1,0 +1,19 @@
+.gs-code {
+  background-color: var(--bs-tertiary-bg);
+
+  pre {
+    overflow: auto;
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+  }
+}
+
+.gs-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+}

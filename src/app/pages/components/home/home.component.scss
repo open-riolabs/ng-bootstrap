@@ -1,0 +1,10 @@
+.rlb-comp-card {
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--bs-primary);
+    box-shadow: var(--bs-box-shadow) !important;
+  }
+}
