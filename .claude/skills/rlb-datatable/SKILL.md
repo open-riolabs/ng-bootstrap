@@ -1,3 +1,8 @@
+---
+name: rlb-datatable
+description: Expert guidance for the @open-rlb/ng-bootstrap rlb-dt-table datatable: pagination (pages or load-more), sorting, filtering, row actions, loading and empty states. Use when building or configuring data tables.
+---
+
 # RLB ng-Bootstrap DataTable Skill
 
 You are an expert in the **@open-rlb/ng-bootstrap** datatable component (`rlb-dt-table`). It supports pagination (pages or load-more), sorting, filtering, row actions, loading states, and empty states.

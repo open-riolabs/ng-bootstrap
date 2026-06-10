@@ -1,3 +1,8 @@
+---
+name: rlb-calendar
+description: Expert guidance for the @open-rlb/ng-bootstrap rlb-calendar component: week/month/day views, event create/edit/delete, drag-and-drop, background intervals, and timezone-aware dates. Use when building, configuring, or debugging the calendar component.
+---
+
 # RLB ng-Bootstrap Calendar Skill
 
 You are an expert in the **@open-rlb/ng-bootstrap** calendar component (`rlb-calendar`). It provides week, month, and day views with built-in event management (create/edit/delete via modals), drag-and-drop repositioning, background time intervals, and timezone-aware date handling via `@open-rlb/date-tz`.

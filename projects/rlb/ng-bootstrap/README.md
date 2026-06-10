@@ -1,24 +1,74 @@
-# NgBootstrap
+# @open-rlb/ng-bootstrap
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.0.
+Angular 21 component library built on Bootstrap 5.3 (signals, OnPush), with timezone-aware
+date handling via [`@open-rlb/date-tz`](https://www.npmjs.com/package/@open-rlb/date-tz).
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name --project ng-bootstrap` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ng-bootstrap`.
-> Note: Don't forget to add `--project ng-bootstrap` or else it will be added to the default project in your `angular.json` file. 
+### Recommended — `ng add`
 
-## Build
+```bash
+ng add @open-rlb/ng-bootstrap
+```
 
-Run `ng build ng-bootstrap` to build the project. The build artifacts will be stored in the `dist/` directory.
+The schematic will:
+
+- install the required dependencies (`bootstrap`, `bootstrap-icons`, `@open-rlb/date-tz`,
+  `@ngx-translate/core`, `@angular/cdk`, and `@types/bootstrap`) at compatible versions;
+- register the Bootstrap and Bootstrap Icons stylesheets in `angular.json`;
+- add `provideRlbBootstrap()` to your application providers;
+- scaffold a `RlbStarterComponent` (`src/app/rlb-starter/`) you can render to verify the setup
+  (pass `--skip-starter` to opt out).
+
+### Manual
+
+```bash
+npm install @open-rlb/ng-bootstrap
+```
+
+When installed this way, npm pulls the declared peer dependencies automatically (npm 7+).
+Then register the providers and styles yourself:
+
+```typescript
+// app.config.ts
+import { provideRlbBootstrap } from '@open-rlb/ng-bootstrap';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideRlbBootstrap()],
+};
+```
+
+```jsonc
+// angular.json → projects.<app>.architect.build.options.styles
+"styles": [
+  "node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+  "src/styles.scss"
+]
+```
+
+## Usage
+
+```html
+<rlb-card>
+  <rlb-card-header>Hello</rlb-card-header>
+  <rlb-card-body>
+    <button rlb-button color="primary">Click me</button>
+  </rlb-card-body>
+</rlb-card>
+```
+
+## Development
+
+- `npm run lib:build` — builds the library **and** its `ng-add` schematics into `dist/rlb/ng-bootstrap`.
+- `npm run lib:test:ng-add` — runs an isolated, in-memory check of the `ng-add` schematic
+  (requires a prior `lib:build`).
+- `npm run lib:pack` — builds and packs a publishable tarball.
 
 ## Publishing
 
-After building your library with `ng build ng-bootstrap`, go to the dist folder `cd dist/ng-bootstrap` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test ng-bootstrap` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+npm run lib:build
+cd dist/rlb/ng-bootstrap
+npm publish
+```

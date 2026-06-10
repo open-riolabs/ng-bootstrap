@@ -1,0 +1,7 @@
+<rlb-card>
+  <rlb-card-header>@open-rlb/ng-bootstrap is ready 🎉</rlb-card-header>
+  <rlb-card-body>
+    <p class="mb-3">You clicked the button {{ clicks() }} times.</p>
+    <button rlb-button color="primary" (click)="increment()">Click me</button>
+  </rlb-card-body>
+</rlb-card>

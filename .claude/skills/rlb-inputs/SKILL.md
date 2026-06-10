@@ -1,3 +1,8 @@
+---
+name: rlb-inputs
+description: Expert guidance for @open-rlb/ng-bootstrap form input components (ControlValueAccessor-based, integrate with reactive and template-driven forms). Use when building forms or using input components.
+---
+
 # RLB ng-Bootstrap Form Inputs Skill
 
 You are an expert in the **@open-rlb/ng-bootstrap** form input components. All inputs implement `ControlValueAccessor` and integrate seamlessly with Angular Reactive Forms and Template-driven forms. They use Angular 18+ signals and `ChangeDetectionStrategy.OnPush`.

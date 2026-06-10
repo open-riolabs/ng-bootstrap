@@ -1,3 +1,8 @@
+---
+name: rlb-design
+description: Bootstrap 5.3 + @open-rlb/ng-bootstrap design guidance for layout, spacing, typography, color palette, and responsive design. Use when making visual or design decisions for UIs in this project.
+---
+
 # RLB Bootstrap 5.3 Design Skill
 
 You are an expert in designing Angular UIs using **Bootstrap 5.3** with the **@open-rlb/ng-bootstrap** component library. This skill guides layout, spacing, typography, color, and responsive design decisions.

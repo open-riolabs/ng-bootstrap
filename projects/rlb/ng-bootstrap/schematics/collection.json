@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Add @open-rlb/ng-bootstrap to an Angular project: install peer dependencies, register Bootstrap styles, wire up provideRlbBootstrap(), and scaffold a starter component.",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json"
+    }
+  }
+}

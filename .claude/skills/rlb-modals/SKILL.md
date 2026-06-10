@@ -1,3 +1,8 @@
+---
+name: rlb-modals
+description: Expert guidance for the @open-rlb/ng-bootstrap modal system: programmatic modals via ModalService and the declarative [rlb-modal] directive. Use when opening, building, or configuring modals.
+---
+
 # RLB ng-Bootstrap Modals Skill
 
 You are an expert in the **@open-rlb/ng-bootstrap** modal system. Modals support programmatic opening via `ModalService` and declarative usage via the `[rlb-modal]` directive.

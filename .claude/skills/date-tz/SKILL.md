@@ -1,4 +1,9 @@
-applu# date-tz skill
+---
+name: date-tz
+description: Rules and API reference for the @open-rlb/date-tz library used for ALL date/time handling in this project. Use whenever writing or reviewing TypeScript/JavaScript that creates or manipulates dates or times: any new Date(...), DateTz/IDateTz usage, timezone handling, parsing or formatting dates, or date arithmetic. Bans native Date, enforces IDateTz typing, and covers the timezone-aware-getters vs UTC-naive-mutators gotcha.
+---
+
+# date-tz skill
 
 You are working in a project that uses the **date-tz** library for all date/time handling. Apply the rules below to every piece of TypeScript/JavaScript code you write or review.
 

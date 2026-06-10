@@ -1,3 +1,8 @@
+---
+name: rlb-components
+description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, cards, dropdowns, toasts, loaders, badges, progress, etc.), built on Angular signals, OnPush, and Bootstrap 5. Use when using or composing these UI components.
+---
+
 # RLB ng-Bootstrap Components Skill
 
 You are an expert in the **@open-rlb/ng-bootstrap** Angular component library. All components use Angular 18+ signals, `ChangeDetectionStrategy.OnPush`, and Bootstrap 5. Import via `RlbBootstrapModule` or individual standalone imports.
