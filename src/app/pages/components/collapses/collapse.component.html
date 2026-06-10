@@ -1,87 +1,46 @@
-<div class="container mt-3">
-  
-  <h3>Collapse</h3>
-  <p>Il Collapse è un componente che consente di nascondere o mostrare contenuti in modo dinamico, come sezioni di testo, immagini o liste, con un'animazione fluida.</p>
+<docs-page
+  title="Collapse"
+  lead="Use rlb-collapse to toggle the visibility of content with a smooth animation. A trigger button using the toggle directive wires everything together with no extra code.">
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>id</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell>Aggiungi per impostare un id per il tuo Collapse</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>orientation</rlb-dt-cell>
-      <rlb-dt-cell>'horizontal' | 'vertical'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>status</rlb-dt-cell>
-      <rlb-dt-cell>VisibilityEvent</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to apply change state VisibilityEvent</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>statusChange</rlb-dt-cell>
-      <rlb-dt-cell>EventEmitter&lt;VisibilityEvent&gt;</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Take to receive a VisibilityEvent status change</rlb-dt-cell>
-      <rlb-dt-cell>Output</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <docs-example
+    heading="Basic collapse"
+    description="Apply the toggle directive with toggle=&quot;collapse&quot; and toggle-target pointing to the rlb-collapse id. The panel animates open and closed on each click."
+    [code]="basicExample">
+    <button rlb-button toggle="collapse" toggle-target="collapse-basic">Toggle</button>
+    <rlb-collapse id="collapse-basic">
+      <div class="mt-2 p-3 border rounded">
+        This is the collapsible content. It can be any HTML you like.
+      </div>
+    </rlb-collapse>
+  </docs-example>
 
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <h4>Collapse Sample</h4>
-            <pre><code [highlight]="sample" language="html"></code></pre>
-            <h4>Orientation</h4>
-            <pre><code [highlight]="orientation" language="html"></code></pre>
-            <h4>Status Change</h4>
-            <pre><code [highlight]="sc" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
+  <docs-example
+    heading="Horizontal orientation"
+    description="Set orientation=&quot;horizontal&quot; to animate the panel width instead of height."
+    [code]="horizontalExample">
+    <button rlb-button toggle="collapse" toggle-target="collapse-horizontal">Toggle horizontal</button>
+    <rlb-collapse id="collapse-horizontal" orientation="horizontal">
+      <div class="p-3 border rounded" style="width: 14rem;">
+        This panel collapses horizontally.
       </div>
-    </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <h4>Collapse Sample</h4>
-        <button rlb-button toggle="collapse" toggle-target="collapse-id">Collapse</button>
-        <rlb-collapse id="collapse-id">
-          <span>Collapse Content</span>
-        </rlb-collapse>
-				<h4>Orientation Horizontal</h4>
-        <button rlb-button toggle="collapse" toggle-target="collapse-id2">Collapse</button>
-        <rlb-collapse id="collapse-id2" [orientation]="'horizontal'">
-					<div class="p-1" style="width: 10rem">Collapse Content</div>
-        </rlb-collapse>
-        <h4>Status Change</h4>
-        <p>{{message}}</p>
-        <button rlb-button toggle="collapse" toggle-target="collapse-id3">Collapse</button>
-        <rlb-collapse id="collapse-id3" (statusChange)="onStatusChange($event, 0)">
-          <span>Collapse Content</span>
-        </rlb-collapse>
+    </rlb-collapse>
+  </docs-example>
+
+  <docs-example
+    heading="Status change events"
+    description="Bind (statusChange) to react to Bootstrap lifecycle events: show, shown, hide, hidden, and hidePrevented."
+    [code]="statusChangeExample">
+    <p class="mb-2">Events received: {{ message }}</p>
+    <button rlb-button toggle="collapse" toggle-target="collapse-status">Toggle</button>
+    <rlb-collapse id="collapse-status" (statusChange)="onStatusChange($event)">
+      <div class="mt-2 p-3 border rounded">
+        Toggle me to see statusChange events fire.
       </div>
-    </div>
-  </rlb-accordion>
-</div>
+    </rlb-collapse>
+  </docs-example>
+
+  <docs-api selector="rlb-collapse" [rows]="collapseApi" />
+
+  <docs-api heading="Toggle directive" selector="button[toggle], a[toggle]" [rows]="toggleDirectiveApi" />
+
+</docs-page>

@@ -1,106 +1,102 @@
-<div class="container mt-3">
+<docs-page
+  title="Badges"
+  lead="Small count and labeling components. Use the rlb-badge element for inline labels, or attach a floating badge to any host element with the [badge] directive.">
 
-  <h3>Badge</h3>
-  <p>Un Badge è un piccolo elemento di interfaccia usato per mostrare informazioni aggiuntive, come conteggi o notifiche, accanto a un altro elemento</p>
-
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>badge</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to define the badge text</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>badge-pill</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Set badge-pill true to make badges more rounded</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>badge-border</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Set badge-border true to add a border to the badge</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>badge-top</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to define the top position of the badge</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>badge-start</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to define the left position of the badge</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>badge-color</rlb-dt-cell>
-      <rlb-dt-cell>Color</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to define the color of the badge</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>hidden-text</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
-
-  <rlb-accordion>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs>
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <h4>Badge Sample</h4>
-            <pre><code [highlight]="sample" language="html"></code></pre>
-            <h4>Pill</h4>
-            <pre><code [highlight]="pill" language="html"></code></pre>
-            <h4>start</h4>
-            <pre><code [highlight]="start" language="html"></code></pre>
-            <h4>top</h4>
-            <pre><code [highlight]="top" language="html"></code></pre>
-            <h4>border</h4>
-            <pre><code [highlight]="border" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Inline badge"
+    description="Apply rlb-badge to a span or img element. The color input controls the Bootstrap background variant."
+    [code]="inlineExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <span rlb-badge>Default</span>
+      <span rlb-badge color="primary">Primary</span>
+      <span rlb-badge color="secondary">Secondary</span>
+      <span rlb-badge color="success">Success</span>
+      <span rlb-badge color="danger">Danger</span>
+      <span rlb-badge color="warning">Warning</span>
+      <span rlb-badge color="info">Info</span>
+      <span rlb-badge color="light">Light</span>
+      <span rlb-badge color="dark">Dark</span>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <h4>Badge Sample</h4>
-        <button rlb-button class="position-relative" badge="pippo">Toggle</button>
-        <h4>Pill</h4>
-        <button rlb-button class="position-relative" badge="pippo" badge-pill>Toggle</button>
-        <h4>Start</h4>
-        <button rlb-button class="position-relative" badge="pippo" badge-start="100">Toggle</button>
-        <h4>Top</h4>
-        <button rlb-button class="position-relative" badge="pippo" badge-top="100">Toggle</button>
-        <h4>Border</h4>
-        <button rlb-button class="position-relative" badge="pippo" badge-border>Toggle</button>
-      </div>
+  </docs-example>
+
+  <docs-example
+    heading="Pill badges"
+    description="Add the pill boolean attribute to give badges a more rounded appearance using Bootstrap's rounded-pill utility."
+    [code]="pillExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <span rlb-badge color="primary" pill>Primary</span>
+      <span rlb-badge color="secondary" pill>Secondary</span>
+      <span rlb-badge color="success" pill>Success</span>
+      <span rlb-badge color="danger" pill>Danger</span>
     </div>
-  </rlb-accordion>
-</div>
+  </docs-example>
+
+  <docs-example
+    heading="Border"
+    description="Use the border attribute to add a border outline to the badge."
+    [code]="borderExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <span rlb-badge color="primary" border>Primary</span>
+      <span rlb-badge color="success" border>Success</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Text color"
+    description="Override the default text color with badge-text-color to ensure readable contrast on light backgrounds."
+    [code]="textColorExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <span rlb-badge color="warning" badge-text-color="dark">Warning dark text</span>
+      <span rlb-badge color="light" badge-text-color="dark">Light dark text</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Attached badge"
+    description="Apply the badge attribute directly to any host element to attach a floating badge. Add position-relative to the host so the badge positions itself correctly."
+    [code]="attachedExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <button rlb-button class="position-relative" badge="New">Inbox</button>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Attached pill badge"
+    description="Combine badge with badge-pill to get a rounded floating badge on the host element."
+    [code]="attachedPillExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <button rlb-button class="position-relative" badge="99" badge-pill>Alerts</button>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Badge positioning"
+    description="Use badge-top and badge-start with Bootstrap spacing tokens to anchor the badge relative to the host element."
+    [code]="attachedPositionExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <button rlb-button class="position-relative" badge="2" badge-top="0" badge-start="100">Messages</button>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Badge with border"
+    description="Add badge-border to give the floating badge a visible border."
+    [code]="attachedBorderExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <button rlb-button class="position-relative" badge="5" badge-border>Settings</button>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Dot indicator"
+    description="Use badge-dot instead of badge to render a small dot indicator. Combine with badge-top and badge-start for positioning, and always add hidden-text for screen readers."
+    [code]="attachedDotExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <button rlb-button class="position-relative" badge-dot badge-top="0" badge-start="100" hidden-text="unread notifications">Notifications</button>
+    </div>
+  </docs-example>
+
+  <docs-api selector="span[rlb-badge], img[rlb-badge]" [rows]="badgeComponentApi" />
+
+  <docs-api heading="[badge] directive" selector="[badge]" [rows]="badgeDirectiveApi" />
+</docs-page>

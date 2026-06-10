@@ -1,26 +1,41 @@
-<div class="container mt-3">
-  
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
+<docs-page
+  title="Option"
+  lead="rlb-option is the child element used inside rlb-select (and rlb-radio) to declare individual choices. Each option carries a value and an optional disabled state.">
 
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
-    </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-option [value]="'text'">text</rlb-option>
-      </div>
-    </div>
-  </rlb-accordion>
+  <docs-example
+    heading="Basic usage"
+    description="Place one or more rlb-option elements inside rlb-select. The text content becomes the visible label."
+    [code]="basicExample">
+    <rlb-select placeholder="Select an option">
+      <rlb-option value="angular">Angular</rlb-option>
+      <rlb-option value="react">React</rlb-option>
+      <rlb-option value="vue">Vue</rlb-option>
+    </rlb-select>
+  </docs-example>
 
-</div>
+  <docs-example
+    heading="Disabled options"
+    description="Add the disabled attribute to any rlb-option to prevent it from being selected."
+    [code]="disabledExample">
+    <rlb-select placeholder="Select an option">
+      <rlb-option value="angular">Angular</rlb-option>
+      <rlb-option value="react" disabled>React (disabled)</rlb-option>
+      <rlb-option value="vue">Vue</rlb-option>
+    </rlb-select>
+  </docs-example>
+
+  <docs-example
+    heading="Dynamic options"
+    description="Render options with @for, binding value and disabled from your component data."
+    [code]="dynamicExample">
+    <rlb-select placeholder="Select a technology">
+      @for (item of items; track item.value) {
+        <rlb-option [value]="item.value" [disabled]="item.disabled">
+          {{ item.label }}
+        </rlb-option>
+      }
+    </rlb-select>
+  </docs-example>
+
+  <docs-api selector="rlb-option" [rows]="api" />
+</docs-page>

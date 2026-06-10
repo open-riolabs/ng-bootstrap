@@ -1,0 +1,40 @@
+<docs-page
+  title="Carousel"
+  lead="A slideshow component for cycling through elements — images or slides of content — built on Bootstrap 5.3. Supports autoplay, fade transitions, keyboard control and a two-way bound active slide.">
+
+  <docs-example
+    heading="Basic carousel"
+    description="Use rlb-carousel with rlb-carousel-slide children. Bind [(current-slide)] for two-way sync of the active slide index. Add rlb-carousel-caption inside a slide for an overlaid caption."
+    [code]="basicExample">
+    <p class="text-body-secondary mb-2">
+      Current slide index: <span rlb-badge color="primary">{{ current }}</span>
+    </p>
+    <rlb-carousel [interval]="4000" [(current-slide)]="current">
+      <rlb-carousel-slide [active]="true">
+        <div class="ratio ratio-21x9 bg-primary text-white d-flex align-items-center justify-content-center">
+          <span class="display-6">Slide one</span>
+        </div>
+        <rlb-carousel-caption>
+          <h5>First slide</h5>
+          <p>Some representative placeholder content.</p>
+        </rlb-carousel-caption>
+      </rlb-carousel-slide>
+
+      <rlb-carousel-slide>
+        <div class="ratio ratio-21x9 bg-success text-white d-flex align-items-center justify-content-center">
+          <span class="display-6">Slide two</span>
+        </div>
+      </rlb-carousel-slide>
+
+      <rlb-carousel-slide>
+        <div class="ratio ratio-21x9 bg-dark text-white d-flex align-items-center justify-content-center">
+          <span class="display-6">Slide three</span>
+        </div>
+      </rlb-carousel-slide>
+    </rlb-carousel>
+  </docs-example>
+
+  <docs-api selector="rlb-carousel" [rows]="carouselApi" />
+  <docs-api selector="rlb-carousel-slide" [rows]="slideApi" />
+  <docs-api selector="rlb-carousel-caption" [rows]="captionApi" />
+</docs-page>

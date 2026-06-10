@@ -1,153 +1,37 @@
-<div class="container mt-3">
-	<h1>Calendar</h1>
-	<h3 class="text-muted fw-light mb-4">
-		A powerful and flexible calendar component for displaying events in Month, Week, or Day views.
-	</h3>
-	<h3>Live Example</h3>
-	<p>Interact with the calendar below. You can change views and navigate dates. Click <span (click)="onGenerateTestEvents()" role="button" class="text-primary italic">here</span> to generate dummy events</p>
+<docs-page
+  title="Calendar"
+  lead="A powerful and flexible calendar component for displaying and managing events in Month, Week, or Day views, with timezone-aware rendering, drag-and-drop, and built-in CRUD modals.">
 
-  <rlb-card id="#examples">
-		<rlb-card-body>
-			<div class="d-flex flex-column">
-				<rlb-calendar
-          [view]="view"
-          [(events)]="events"
-          [intervals]="intervals"
-          [current-date]="currentDate"
-          [timezone]="timezone"
-          [loading]="loading()"
-					(date-change)="onDateChange($event)"
-					(view-change)="onViewChange($event)"
-          (event-click)="onEventClick($event)"
-        >
-				</rlb-calendar>
-			</div>
-		</rlb-card-body>
-		<rlb-card-footer>
-			<div class="w-full d-flex justify-content-between fs-5 pb-1">
-				<span>HTML</span>
-				<i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-					(click)="copyToClipboard(calendarHTMLSnippet)"></i>
-			</div>
+  <docs-example
+    heading="Live example"
+    description="Interact with the calendar below. Switch views and navigate dates with the toolbar. Click 'Generate events' to populate dummy events across the current week."
+    [code]="calendarExample">
+    <div class="d-flex flex-column gap-3">
+      <div>
+        <button rlb-button color="primary" size="sm" (click)="onGenerateTestEvents()">
+          Generate events
+        </button>
+      </div>
+      <rlb-calendar
+        [view]="view"
+        [(events)]="events"
+        [intervals]="intervals"
+        [current-date]="currentDate"
+        [timezone]="timezone"
+        [loading]="loading()"
+        (date-change)="onDateChange($event)"
+        (view-change)="onViewChange($event)"
+        (event-click)="onEventClick($event)">
+      </rlb-calendar>
+    </div>
+  </docs-example>
 
-			<pre class="fs-5"><code language="html" [highlight]="calendarHTMLSnippet" class="bg-transparent"></code>
-    </pre>
-		</rlb-card-footer>
-	</rlb-card>
+  <docs-example
+    heading="TypeScript setup"
+    description="Typical component class wiring: declare a view, timezone, currentDate and events array, define background intervals in seconds from midnight, and handle the output events."
+    [code]="calendarTSSnippet"
+    language="typescript">
+  </docs-example>
 
-	<hr>
-
-	<rlb-dt-table>
-		<rlb-dt-header>Parameters</rlb-dt-header>
-		<rlb-dt-header>Type</rlb-dt-header>
-		<rlb-dt-header>Required</rlb-dt-header>
-		<rlb-dt-header>Description</rlb-dt-header>
-		<rlb-dt-header>I/O</rlb-dt-header>
-
-		<!-- Inputs -->
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[view]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">'month' | 'week' | 'day'</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>The current view of the calendar. Default is 'week'.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[events]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">CalendarEvent[]</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>List of events to display.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[current-date]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">IDateTz</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>The current date focused in the calendar.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[timezone]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">string</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>IANA timezone the calendar is rendered in (e.g. 'Europe/Rome'). Day boundaries, time-slot positions, the "now" line and every event are normalized to this timezone, regardless of the timezone the events were created with. Defaults to the browser timezone.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[loading]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Whether to show a loading state.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[show-toolbar]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Whether to show the top navigation toolbar. Default is true.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[manage-events]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Enable built-in event CRUD (modals, toasts, DnD updates). Set to false to disable. Default is true. (event-click) still fires when disabled.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[intervals]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">CalendarInterval[]</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Background time intervals (e.g. business hours). Each interval specifies a dayWeek (0-6), optional hourStart/hourStop in seconds from midnight (0-86400), and optional color.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">[layout]</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">CalendarLayout</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Configuration for row heights and header heights.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="info">Input</span></rlb-dt-cell>
-		</rlb-dt-row>
-
-		<!-- Outputs -->
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">(date-change)</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">CalendarChangeEvent</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Emitted when the current date changes.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="warning">Output</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">(view-change)</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">CalendarChangeEvent</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Emitted when the view changes.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="warning">Output</span></rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell><span class="text-danger-emphasis">(event-click)</span></rlb-dt-cell>
-			<rlb-dt-cell><span class="text-white">CalendarEvent</span></rlb-dt-cell>
-			<rlb-dt-cell>No</rlb-dt-cell>
-			<rlb-dt-cell>Emitted when an event is clicked.</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="warning">Output</span></rlb-dt-cell>
-		</rlb-dt-row>
-	</rlb-dt-table>
-
-	<h3>Basic Implementation</h3>
-	<p>
-		Here is a basic example of how to implement the calendar in your TypeScript file.
-	</p>
-	<rlb-card>
-		<rlb-card-header>
-			<div class="w-full d-flex justify-content-between fs-5 pb-1">
-				<span>TypeScript</span>
-				<i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-					(click)="copyToClipboard(calendarTSSnippet)"></i>
-			</div>
-		</rlb-card-header>
-		<rlb-card-body>
-			<pre><code language="typescript" [highlight]="calendarTSSnippet" class="bg-transparent fs-5"></code></pre>
-		</rlb-card-body>
-	</rlb-card>
-
-</div>
+  <docs-api selector="rlb-calendar" [rows]="api" />
+</docs-page>

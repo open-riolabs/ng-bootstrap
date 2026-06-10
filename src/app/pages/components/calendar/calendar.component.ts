@@ -11,12 +11,13 @@ import { UniqueIdService } from 'projects/rlb/ng-bootstrap/src/lib/shared/unique
 import { delay, finalize, of, take, tap } from 'rxjs';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
+import { DOCS_IMPORTS, DocApiRow } from '../../../shared/docs';
 
 @Component({
   selector: 'app-calendar',
-  templateUrl: `calendar.component.html`,
+  templateUrl: './calendar.component.html',
   styleUrls: ['calendar.component.scss'],
-  imports: [SHARED_IMPORTS],
+  imports: [SHARED_IMPORTS, DOCS_IMPORTS],
 })
 export class CalendarComponent {
   view: CalendarView = 'week';
@@ -44,21 +45,19 @@ export class CalendarComponent {
     { dayWeek: 6, hourStart: 32400, hourStop: 46800, color: 'info' },
   ];
 
-  calendarHTMLSnippet = `
-<rlb-calendar
+  calendarExample = `<rlb-calendar
   [view]="view"
-  [events]="events"
+  [(events)]="events"
   [intervals]="intervals"
   [current-date]="currentDate"
   [timezone]="timezone"
+  [loading]="loading()"
   (date-change)="onDateChange($event)"
   (view-change)="onViewChange($event)"
   (event-click)="onEventClick($event)">
-</rlb-calendar>
-`;
+</rlb-calendar>`;
 
-  calendarTSSnippet = `
-import { Component } from '@angular/core';
+  calendarTSSnippet = `import { Component } from '@angular/core';
 import { CalendarEvent, CalendarInterval, CalendarView } from '@open-rlb/ng-bootstrap';
 import { DateTz, getToday } from '@open-rlb/date-tz';
 
@@ -97,25 +96,110 @@ export class ExampleComponent {
     { dayWeek: 6, hourStart: 32400, hourStop: 46800, color: 'info' },     // Sat morning only
   ];
 
-  onDateChange(event: any) {
+  onDateChange(event: CalendarChangeEvent) {
     console.log('Date changed', event);
   }
 
-  onViewChange(event: any) {
+  onViewChange(event: CalendarChangeEvent) {
     console.log('View changed', event);
   }
 
-  onEventClick(event: any) {
+  onEventClick(event: CalendarEvent) {
     console.log('Event clicked', event);
   }
-}
-`;
+}`;
+
+  api: DocApiRow[] = [
+    {
+      name: 'view',
+      type: "'month' | 'week' | 'day'",
+      default: "'week'",
+      description: "The active calendar view. Supports two-way binding with [(view)].",
+      kind: 'Two-way',
+    },
+    {
+      name: 'events',
+      type: 'CalendarEvent[]',
+      default: '[]',
+      description: 'List of events to display. Supports two-way binding with [(events)] so the calendar can update the list internally (create, edit, delete via built-in modals and drag-and-drop).',
+      kind: 'Two-way',
+    },
+    {
+      name: 'current-date',
+      type: 'IDateTz',
+      default: 'getToday()',
+      description: 'The date the calendar is currently focused on. Supports two-way binding with [(current-date)].',
+      kind: 'Two-way',
+    },
+    {
+      name: 'timezone',
+      type: 'string',
+      default: 'browser timezone',
+      description: "IANA timezone the calendar renders in (e.g. 'Europe/Rome'). Day boundaries, time-slot positions, the now-line and every event are normalized to this timezone regardless of the timezone they were created with.",
+      kind: 'Input',
+    },
+    {
+      name: 'loading',
+      type: 'boolean',
+      default: 'false',
+      description: 'When true an indeterminate progress bar is shown across the calendar grid.',
+      kind: 'Input',
+    },
+    {
+      name: 'show-toolbar',
+      type: 'boolean',
+      default: 'true',
+      description: 'Show or hide the top navigation toolbar (view switcher and date navigation).',
+      kind: 'Input',
+    },
+    {
+      name: 'manage-events',
+      type: 'boolean',
+      default: 'true',
+      description: 'Enable built-in event CRUD: create/edit/delete modals, toast notifications and drag-and-drop updates. Set to false to disable all built-in interactions; (event-click) still fires.',
+      kind: 'Input',
+    },
+    {
+      name: 'intervals',
+      type: 'CalendarInterval[]',
+      default: '[]',
+      description: 'Background time intervals shown as colored bands in week and day views (e.g. business hours). Each entry specifies dayWeek (0 = Sunday … 6 = Saturday), optional hourStart/hourStop in seconds from midnight (0–86400), an optional Bootstrap color, and an optional label.',
+      kind: 'Input',
+    },
+    {
+      name: 'layout',
+      type: 'Partial<CalendarLayout>',
+      default: '{}',
+      description: 'Override the default layout dimensions: rowHeight (px, default 110), maxBodyHeight (rem, default 30), minHeaderHeight (rem, default 3.5).',
+      kind: 'Input',
+    },
+    {
+      name: 'date-change',
+      type: 'CalendarChangeEvent',
+      description: 'Emitted whenever the focused date changes. The payload contains the new date and the current view.',
+      kind: 'Output',
+    },
+    {
+      name: 'view-change',
+      type: 'CalendarChangeEvent',
+      description: 'Emitted whenever the active view changes. The payload contains the current date and the new view.',
+      kind: 'Output',
+    },
+    {
+      name: 'event-click',
+      type: 'CalendarEvent',
+      description: 'Emitted when the user clicks an event chip. Fires even when manage-events is false.',
+      kind: 'Output',
+    },
+    {
+      name: 'container-event-click',
+      type: 'CalendarEvent[]',
+      description: 'Emitted when the user clicks an overflow indicator that groups multiple events. Payload is the list of overflowing events.',
+      kind: 'Output',
+    },
+  ];
 
   constructor(private unique: UniqueIdService) {}
-
-  copyToClipboard(code: string) {
-    navigator.clipboard.writeText(code);
-  }
 
   onGenerateTestEvents() {
     this.loading.set(true);
@@ -215,8 +299,6 @@ export class ExampleComponent {
       start: new DateTz(now).cloneToTimezone(this.timezone).set(13, 'hour').set(30, 'minute'),
       end: new DateTz(now).cloneToTimezone(this.timezone).set(14, 'hour').set(0, 'minute'),
     });
-
-    // Today from 15:15 to 16:00
 
     events.push({
       color: 'danger',

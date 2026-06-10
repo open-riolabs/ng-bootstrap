@@ -1,355 +1,196 @@
-<div class="container mt-3">
+<docs-page
+  title="Autocomplete"
+  lead="A text input paired with a dynamic suggestion dropdown. The autocomplete function can return a plain array, a Promise, or an Observable, making it easy to integrate with both local data and remote APIs.">
 
-  <h3>Autocomplete</h3>
-  <p>Autocomplete è un componente che combina un input di testo con una casella di riepilogo, consentendo agli utenti di filtrare
-    un elenco di opzioni in base agli elementi che corrispondono a una query.</p>
+  <!-- ── Static source ──────────────────────────────────────────────────── -->
+  <docs-example
+    heading="Static source"
+    description="Pass a synchronous function that filters a local array. Results appear after the minimum chars-to-search threshold (default 3) is reached."
+    [code]="staticExample">
+    <rlb-autocomplete
+      [placeholder]="'Search city...'"
+      [autocomplete]="searchCities"
+      (selected)="onCitySelect($event)">
+    </rlb-autocomplete>
+  </docs-example>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>disabled</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Specifies whether the component is disabled (default is false).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>readonly</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Specifies whether the component is read-only (default is false).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>loading</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Indicates whether a loading spinner is displayed. Used for asynchronous operations (default is false).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>max-height</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>number</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Sets the maximum height of the dropdown list (default is 200px).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placeholder</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Text displayed in the input field when it is empty.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>autocomplete</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='dark'>AutocompleteFn</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>A function that returns an array of autocomplete options, taking a query string as an argument (can return a Promise or Observable).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>type</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Specifies the input field type: `text`, `email`, `number`, `password`, `search`, `tel`, `url` (default is `text`).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>size</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>small | large</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Specifies the size of the input field: `small`, `large`, or `undefined` (default).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>chars-to-search</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>number</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Minimum number of characters required in the query before search starts (default is 3).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>menu-max-width</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>number</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Maximum width of the autocomplete dropdown menu (default is 400px).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>id</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>User-defined ID for the component, automatically generated if not provided.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>open-on-focus</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>When true, opens the dropdown on input focus even if the field is empty (default is false).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>initial-suggestions</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='dark'>AutocompleteItem[]</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Pre-loaded suggestions shown on focus when the field is empty. Once the user starts typing, the <code>autocomplete</code> function takes over (default is []).</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>selected</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>EventEmitter</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Event emitted when an item is selected from the autocomplete list.</rlb-dt-cell>
-      <rlb-dt-cell>Output</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <!-- ── Promise source ─────────────────────────────────────────────────── -->
+  <docs-example
+    heading="Promise source"
+    description="The autocomplete function may return a Promise. A loading indicator is displayed inside the dropdown while the promise is pending."
+    [code]="promiseExample">
+    <rlb-autocomplete
+      [placeholder]="'Search product...'"
+      [autocomplete]="searchProducts"
+      (selected)="onProductSelect($event)">
+    </rlb-autocomplete>
+  </docs-example>
 
-  <h5 class="mt-3">AutocompleteItem interface</h5>
-  <rlb-dt-table>
-    <rlb-dt-header>Property</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>text</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell>Label displayed in the dropdown and filled into the input on selection.</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>value</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell>Unique identifier stored as the form control value.</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>iconClass</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>CSS class for an icon rendered before the label (e.g. flag icons).</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>disabled</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>When true, the item is visible in the dropdown but cannot be selected (rendered with Bootstrap's <code>.disabled</code> style and <code>cursor: not-allowed</code>).</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>data</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='dark'>T</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Arbitrary extra payload attached to the item, accessible from the <code>selected</code> output.</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <!-- ── Observable source ──────────────────────────────────────────────── -->
+  <docs-example
+    heading="Observable source"
+    description="An Observable return value is also supported. Here chars-to-search is lowered to 2 so the search fires sooner."
+    [code]="observableExample">
+    <rlb-autocomplete
+      [placeholder]="'Search user...'"
+      [autocomplete]="searchUsers"
+      [chars-to-search]="2"
+      (selected)="onUserSelect($event)">
+    </rlb-autocomplete>
+  </docs-example>
 
+  <!-- ── Reactive Forms ─────────────────────────────────────────────────── -->
+  <docs-example
+    heading="Reactive Forms"
+    description="rlb-autocomplete implements ControlValueAccessor and works with both formControlName and ngModel. The control value is an AutocompleteItem object (or a plain string if strings are returned)."
+    [code]="reactiveExample">
+    <form [formGroup]="form">
+      <rlb-autocomplete
+        formControlName="country"
+        [placeholder]="'Search country...'"
+        [autocomplete]="searchCountries">
+      </rlb-autocomplete>
+    </form>
+    <p class="mt-2 mb-0 small text-body-secondary">Form value: {{ form.value | json }}</p>
+  </docs-example>
 
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-					<rlb-tab target="ex-1-ts">TS</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-						<h3>Basic usage with a static source</h3>
-            <pre><code [highlight]="html" language="html"></code></pre>
-						<h3>Basic usage with a promise</h3>
-						<pre><code [highlight]="promiseHtml" language="html"></code></pre>
-						<h3>Basic usage with an observable</h3>
-						<pre><code [highlight]="observableHtml" language="html"></code></pre>
-						<h3>Basic usage with Reactive Forms</h3>
-						<pre><code [highlight]="reactiveFormsHtml" language="html"></code></pre>
-						<h3>Pre-loaded suggestions</h3>
-						<pre><code [highlight]="initialSuggestionsHtml" language="html"></code></pre>
-						<h3>Disabled items</h3>
-						<pre><code [highlight]="disabledItemsHtml" language="html"></code></pre>
-					</rlb-tab-pane>
-					<rlb-tab-pane id="ex-1-ts">
-						<h3>Basic usage with a static source</h3>
-						<pre><code [highlight]="ts" language="html"></code></pre>
-						<h3>Basic usage with a promise</h3>
-						<pre><code [highlight]="promiseTs" language="html"></code></pre>
-						<h3>Basic usage with an observable</h3>
-						<pre><code [highlight]="observableTs" language="html"></code></pre>
-						<h3>Basic usage with Reactive Forms</h3>
-						<pre><code [highlight]="reactiveFormsTs" language="html"></code></pre>
-						<h3>Pre-loaded suggestions</h3>
-						<pre><code [highlight]="initialSuggestionsTs" language="typescript"></code></pre>
-						<h3>Disabled items</h3>
-						<pre><code [highlight]="disabledItemsTs" language="typescript"></code></pre>
-					</rlb-tab-pane>
-        </rlb-tab-content>
+  <!-- ── Initial suggestions ────────────────────────────────────────────── -->
+  <docs-example
+    heading="Initial suggestions"
+    description="Use initial-suggestions to pre-load items shown on focus when the field is empty. Once the user starts typing, the autocomplete function takes over."
+    [code]="initialSuggestionsExample">
+    <rlb-autocomplete
+      [placeholder]="'Focus to see suggestions...'"
+      [initial-suggestions]="recentCities"
+      [autocomplete]="searchCities"
+      (selected)="onCitySelect($event)">
+    </rlb-autocomplete>
+  </docs-example>
+
+  <!-- ── Disabled items ─────────────────────────────────────────────────── -->
+  <docs-example
+    heading="Disabled items"
+    description="Set disabled: true on individual AutocompleteItem objects to make them visible in the list but impossible to select. They are rendered with Bootstrap's disabled style and cursor: not-allowed."
+    [code]="disabledItemsExample">
+    <rlb-autocomplete
+      [placeholder]="'Focus to see items...'"
+      [initial-suggestions]="productsWithDisabled"
+      [autocomplete]="searchDisabledItems"
+      (selected)="onProductSelect($event)">
+    </rlb-autocomplete>
+  </docs-example>
+
+  <!-- ── Advanced form ──────────────────────────────────────────────────── -->
+  <docs-example
+    heading="Advanced form — validation, patching and specialised components"
+    description="A complete form using rlb-autocomplete with async validation, rlb-autocomplete-country with flag icons and locale detection, rlb-autocomplete-country-dial-code for international phone prefixes, and rlb-autocomplete-timezones for IANA timezone selection. Use Patch Mock Data to simulate an API response that patches complex object values."
+    [code]="advancedExample">
+
+    <form [formGroup]="advForm" (ngSubmit)="submitForm()" class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Country (generic autocomplete with custom callback)</label>
+        <rlb-autocomplete
+          open-on-focus
+          formControlName="country"
+          [autocomplete]="searchCountries"
+          placeholder="Search country..."
+          enable-validation="true">
+        </rlb-autocomplete>
       </div>
-    </div>
-    <div rlb-accordion-item>
-			<rlb-accordion-header>Examples</rlb-accordion-header>
-      <div rlb-accordion-body>
-				<h2>Basic usage with a static source</h2>
-				<rlb-autocomplete
-					[placeholder]="'Search city...'"
-					[autocomplete]="searchCities"
-					(selected)="onCitySelect($event)">
-				</rlb-autocomplete>
-				<h2>Basic usage with a promise</h2>
-				<rlb-autocomplete
-					[placeholder]="'Search product...'"
-					[autocomplete]="searchProducts"
-					(selected)="onProductSelect($event)">
-				</rlb-autocomplete>
-				<h2>Basic usage with observable</h2>
-				<rlb-autocomplete
-					[placeholder]="'Search user...'"
-					[autocomplete]="searchUsers"
-					[chars-to-search]="2"
-					(selected)="onUserSelect($event)">
-				</rlb-autocomplete>
-				<h2>Basic usage with a Reactive Forms</h2>
-				<form [formGroup]="form">
-					<rlb-autocomplete
-						formControlName="country"
-						[placeholder]="'Search country...'"
-						[autocomplete]="searchCountries">
-					</rlb-autocomplete>
-				</form>
 
-				<p>Form value: {{ form.value | json }}</p>
-
-				<h2>Pre-loaded suggestions</h2>
-				<p class="text-muted">Focus the field to see pre-loaded items. Start typing to switch to the live search.</p>
-				<rlb-autocomplete
-					[placeholder]="'Focus to see suggestions...'"
-					[initial-suggestions]="recentCities"
-					[autocomplete]="searchCities"
-					(selected)="onCitySelect($event)">
-				</rlb-autocomplete>
-
-				<h2 class="mt-3">Disabled items</h2>
-				<p class="text-muted">Greyed-out items are visible but cannot be selected.</p>
-				<rlb-autocomplete
-					[placeholder]="'Focus to see items...'"
-					[initial-suggestions]="productsWithDisabled"
-					[autocomplete]="searchDisabledItems"
-					(selected)="onProductSelect($event)">
-				</rlb-autocomplete>
+      <div class="col-md-6">
+        <label class="form-label">
+          Assign to User
+          @if (advForm.get('user')?.pending) {
+            <span class="spinner-border spinner-border-sm text-primary ms-2"></span>
+          }
+        </label>
+        <rlb-autocomplete
+          formControlName="user"
+          [autocomplete]="searchUsers"
+          [chars-to-search]="1"
+          placeholder="Type 'Alice'..."
+          enable-validation="true">
+        </rlb-autocomplete>
+        <div class="form-text">Validation: &apos;Charlie&apos; is restricted.</div>
       </div>
-    </div>
-  </rlb-accordion>
 
-  <rlb-accordion class="my-3">
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Advanced Autocomplete (Async, Patching & Validation)</rlb-accordion-header>
-      <div rlb-accordion-body>
+      <div class="col-md-6">
+        <label class="form-label">Birth Country (specialised component)</label>
+        <rlb-autocomplete-country
+          open-on-focus
+          enable-flag-icons
+          detect-locale
+          formControlName="birthCountry"
+          placeholder="Type to search countries..."
+          enable-validation="true">
+        </rlb-autocomplete-country>
+      </div>
 
-        <form [formGroup]="advForm" (ngSubmit)="submitForm()" class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Phone Prefix</label>
+        <rlb-autocomplete-country-dial-code
+          formControlName="dialCode"
+          open-on-focus
+          placeholder="Search code or country..."
+          [loading]="isSaving"
+          enable-validation="true">
+        </rlb-autocomplete-country-dial-code>
+      </div>
 
-          <!--  Country Search (Object-based) -->
-          <div class="col-md-6">
-            <label class="form-label">Country (Generic autocomplete with custom callback)</label>
-            <rlb-autocomplete
-              open-on-focus
-              formControlName="country"
-              [autocomplete]="searchCountries"
-              placeholder="Search country..."
-              enable-validation="true">
-            </rlb-autocomplete>
-          </div>
+      <div class="col-md-12">
+        <label class="form-label">Preferred Timezone</label>
+        <rlb-autocomplete-timezones
+          formControlName="timezone"
+          open-on-focus
+          placeholder="Search timezone (e.g. Rome)..."
+          enable-validation="true">
+        </rlb-autocomplete-timezones>
+      </div>
 
-          <!--  Async User Search with Validation -->
-          <div class="col-md-6">
-            <label class="form-label">
-              Assign to User
-              @if (advForm.get('user')?.pending) {
-                <span class="spinner-border spinner-border-sm text-primary ms-2"></span>
-              }
-            </label>
-            <rlb-autocomplete
-              formControlName="user"
-              [autocomplete]="searchUsers"
-              [chars-to-search]="1"
-              placeholder="Type 'Alice'..."
-              enable-validation="true">
-            </rlb-autocomplete>
-            <div class="form-text">Validation: 'Charlie' is restricted.</div>
-          </div>
+      <div class="col-12 mt-4 d-flex gap-2">
+        <button type="button" class="btn btn-outline-secondary" (click)="patchMockData()">
+          Patch Mock Data
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSaving || advForm.pending">
+          @if (isSaving) {
+            <span class="spinner-border spinner-border-sm me-2"></span> Saving...
+          } @else {
+            Submit Form
+          }
+        </button>
+      </div>
+    </form>
 
-          <div class="col-md-6">
-            <label class="form-label">Birth Country (Specialized Component)</label>
-            <rlb-autocomplete-country
-              open-on-focus
-              enable-flag-icons
-              detect-locale
-              formControlName="birthCountry"
-              placeholder="Type to search countries..."
-              enable-validation="true">
-            </rlb-autocomplete-country>
-          </div>
-
-
-          <!-- Specialized Dial Code Component -->
-          <div class="col-md-6">
-            <label class="form-label">Phone Prefix</label>
-            <rlb-autocomplete-country-dial-code
-              formControlName="dialCode"
-              open-on-focus
-              placeholder="Search code or country..."
-              [loading]="isSaving"
-              enable-validation="true"
-            >
-            </rlb-autocomplete-country-dial-code>
-          </div>
-
-          <div class="col-md-12">
-            <label class="form-label">Preferred Timezone</label>
-            <rlb-autocomplete-timezones
-              formControlName="timezone"
-              open-on-focus
-              placeholder="Search timezone (e.g. Rome)..."
-              enable-validation="true">
-            </rlb-autocomplete-timezones>
-          </div>
-
-          <!-- Actions -->
-          <div class="col-12 mt-4 d-flex gap-2">
-            <button type="button" class="btn btn-outline-secondary" (click)="patchMockData()">
-              Patch Mock Data
-            </button>
-            <button type="submit" class="btn btn-primary" [disabled]="isSaving || advForm.pending">
-              @if (isSaving) {
-                <span class="spinner-border spinner-border-sm me-2"></span> Saving...
-              } @else {
-                Submit Form
-              }
-            </button>
-          </div>
-        </form>
-
-        <!-- Form State Tracker -->
-        <div class="mt-4 p-3 bg-light border rounded">
-          <h6 class="text-secondary border-bottom pb-2">DEBUG STATE</h6>
-          <div class="row small">
-            <div class="col-md-7">
-              <strong>Value:</strong>
-              <pre class="text-info"><code>{{ advForm.value | json }}</code></pre>
-            </div>
-            <div class="col-md-5 border-start">
-              <strong>Status:</strong><br>
-              Valid: <span rlb-badge [color]="advForm.valid ? 'success' : 'danger'">{{ advForm.valid }}</span><br>
-              Touched: <span rlb-badge [color]="advForm.touched ? 'warning' : 'secondary'">{{ advForm.touched }}</span><br>
-              Pending: <span rlb-badge [color]="advForm.pending ? 'info' : 'secondary'">{{ advForm.pending }}</span>
-            </div>
-          </div>
+    <div class="mt-4 p-3 bg-body-tertiary border rounded">
+      <h6 class="text-secondary border-bottom pb-2">Form state</h6>
+      <div class="row small">
+        <div class="col-md-7">
+          <strong>Value:</strong>
+          <pre class="text-info-emphasis mb-0"><code>{{ advForm.value | json }}</code></pre>
         </div>
-
+        <div class="col-md-5 border-start">
+          <strong>Status:</strong><br>
+          Valid: <span rlb-badge [color]="advForm.valid ? 'success' : 'danger'">{{ advForm.valid }}</span><br>
+          Touched: <span rlb-badge [color]="advForm.touched ? 'warning' : 'secondary'">{{ advForm.touched }}</span><br>
+          Pending: <span rlb-badge [color]="advForm.pending ? 'info' : 'secondary'">{{ advForm.pending }}</span>
+        </div>
       </div>
     </div>
-  </rlb-accordion>
 
-</div>
+  </docs-example>
+
+  <!-- ── API: rlb-autocomplete ──────────────────────────────────────────── -->
+  <docs-api selector="rlb-autocomplete" [rows]="autocompleteApi" />
+
+  <!-- ── API: rlb-autocomplete-country ─────────────────────────────────── -->
+  <docs-api selector="rlb-autocomplete-country" [rows]="autocompleteCountryApi" />
+
+  <!-- ── API: rlb-autocomplete-country-dial-code ───────────────────────── -->
+  <docs-api selector="rlb-autocomplete-country-dial-code" [rows]="autocompleteDialCodeApi" />
+
+  <!-- ── API: rlb-autocomplete-timezones ───────────────────────────────── -->
+  <docs-api selector="rlb-autocomplete-timezones" [rows]="autocompleteTimezonesApi" />
+
+</docs-page>

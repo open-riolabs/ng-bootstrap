@@ -1,77 +1,33 @@
-<div class="container mt-3">
+<docs-page
+  title="Toasts"
+  lead="Toasts are lightweight, non-intrusive notifications that appear temporarily to give the user quick feedback without interrupting their current workflow. Use ToastService to open them programmatically into any rlb-toast-container placed in your layout.">
 
-  <h3>Toast</h3>
-  <p>Un componente toast è un messaggio breve e non invasivo che appare temporaneamente
-    per fornire un feedback rapido all'utente, senza interrompere l'attività in corso.</p>
+  <docs-example
+    heading="Basic usage"
+    description="Place an rlb-toast-container somewhere in your layout (typically fixed to a corner) and call ToastService.openToast() with a matching container id, a registered toast component name, and the toast data."
+    [code]="basicExample">
+    <rlb-toast-container id="toast-c-1" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" />
+    <button rlb-button (click)="openToast()">Open Toast</button>
+  </docs-example>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>containerId</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell>Specifies a unique toast's container identifier, which should be defined in <b>rlb-toast-container</b> component</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>name</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell>Specifies a unique toast identifier, which should be defined in the app module's providers.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>data</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>ToastData</span></rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell>Basic configuration required for the toast.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>options</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'>ToastOptions</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Optional advanced configuration for the toast.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <docs-example
+    heading="Registering toast components"
+    description="Each named toast is a standalone Angular component that implements IToast. Register it in your application providers via ToastRegistryOptions so the service can look it up by name."
+    [code]="registrationExample"
+    language="typescript">
+  </docs-example>
 
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-          <rlb-tab target="ex-1-init">Init</rlb-tab>
-          <rlb-tab target="ex-1-dialog">Toast</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-init">
-            <pre><code [highlight]="init" language="ts"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-dialog">
-            <pre><code [highlight]="toast" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
-    </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <button rlb-button (click)="openToast()" class="me-2">Open Toast</button>
-      </div>
-    </div>
-  </rlb-accordion>
+  <docs-example
+    heading="Creating a toast component"
+    description="A toast component uses hostDirectives to attach ToastDirective, which manages the Bootstrap toast lifecycle. Implement IToast and expose a data signal to access the title, subtitle and content passed by the caller."
+    [code]="toastComponentExample"
+    language="typescript">
+  </docs-example>
 
-</div>
+  <docs-api selector="rlb-toast-container" [rows]="containerApi" />
+
+  <docs-api heading="ToastService" [rows]="serviceApi" />
+
+  <docs-api heading="ToastDirective" selector="[rlb-toast]" [rows]="directiveApi" />
+
+</docs-page>

@@ -1,60 +1,81 @@
-<div class="container mt-3">
-  <h3>Navbar</h3>
-  <p>Navbar è un componente che offre agli utenti un modo intuitivo e coerente per navigare all'interno di un sito web o di un'applicazione.
-    In genere, appare nella parte superiore della pagina e contiene link alle sezioni o pagine principali del sito.</p>
+<docs-page
+  title="Navbar"
+  lead="A responsive navigation header with built-in support for branding, navigation links, dropdowns, forms, and sidebar toggling.">
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>dark (boolean)</rlb-dt-cell>
-      <rlb-dt-cell>dark mode</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>color (Color)</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>placement</rlb-dt-cell>
-      <rlb-dt-cell>it can be: 'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom'</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>expand</rlb-dt-cell>
-      <rlb-dt-cell>it can be: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always'</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>class (string)</rlb-dt-cell>
-      <rlb-dt-cell>Css Class</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <docs-example
+    heading="Basic navbar"
+    description="Combine rlb-navbar with rlb-navbar-brand and rlb-navbar-items to create a standard navigation bar. Set expand to control the breakpoint at which the navbar collapses."
+    [code]="basicExample">
+    <rlb-navbar color="primary" [dark]="true" expand="lg" [showSideBarToggler]="false">
+      <a rlb-navbar-brand href="#">My App</a>
+      <rlb-navbar-items>
+        <rlb-navbar-item router-link="/home">Home</rlb-navbar-item>
+        <rlb-navbar-item router-link="/about">About</rlb-navbar-item>
+      </rlb-navbar-items>
+    </rlb-navbar>
+  </docs-example>
 
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
-    </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-navbar color="primary" dark="true" expand="lg" class="my-custom-navbar">
-          <rlb-navbar-text>
-            <span class="navbar-text">This is a Navbar</span>
-          </rlb-navbar-text>
-        </rlb-navbar>
-      </div>
-    </div>
-  </rlb-accordion>
-</div>
+  <docs-example
+    heading="Navbar text"
+    description="Use rlb-navbar-text to place inline text inside the collapsible section of the navbar, useful for showing the signed-in user or a status label."
+    [code]="textExample">
+    <rlb-navbar color="secondary" [dark]="true" expand="lg" [showSideBarToggler]="false">
+      <a rlb-navbar-brand href="#">Brand</a>
+      <rlb-navbar-text>Signed in as Admin</rlb-navbar-text>
+    </rlb-navbar>
+  </docs-example>
+
+  <docs-example
+    heading="Dropdown item"
+    description="Use rlb-navbar-dropdown-item with the dropdown attribute to create a Bootstrap-powered dropdown inside the navbar. Enable the collapse toggler with enable-dropdown-toggler for mobile support."
+    [code]="dropdownExample">
+    <rlb-navbar color="dark" [dark]="true" expand="lg" [enable-dropdown-toggler]="true" [showSideBarToggler]="false">
+      <a rlb-navbar-brand href="#">Brand</a>
+      <rlb-navbar-items>
+        <rlb-navbar-item router-link="/home">Home</rlb-navbar-item>
+        <rlb-navbar-dropdown-item [dropdown]="true">
+          Dropdown
+          <rlb-dropdown-container>
+            <li rlb-dropdown-item>Action</li>
+            <li rlb-dropdown-item>Another action</li>
+          </rlb-dropdown-container>
+        </rlb-navbar-dropdown-item>
+      </rlb-navbar-items>
+    </rlb-navbar>
+  </docs-example>
+
+  <docs-example
+    heading="Navbar form"
+    description="Place a rlb-navbar-form inside the navbar to add an inline search or filter form. It aligns to the right on large screens."
+    [code]="formExample">
+    <rlb-navbar color="light" [dark]="false" expand="lg" [showSideBarToggler]="false">
+      <a rlb-navbar-brand href="#">Brand</a>
+      <rlb-navbar-form>
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button rlb-button color="primary" type="submit">Search</button>
+      </rlb-navbar-form>
+    </rlb-navbar>
+  </docs-example>
+
+  <docs-example
+    heading="Separator"
+    description="Use rlb-navbar-separator inside rlb-navbar-items to visually divide groups of nav items."
+    [code]="separatorExample">
+    <rlb-navbar color="primary" [dark]="true" expand="lg" [showSideBarToggler]="false">
+      <a rlb-navbar-brand href="#">Brand</a>
+      <rlb-navbar-items>
+        <rlb-navbar-item router-link="/home">Home</rlb-navbar-item>
+        <rlb-navbar-separator />
+        <rlb-navbar-item router-link="/settings">Settings</rlb-navbar-item>
+      </rlb-navbar-items>
+    </rlb-navbar>
+  </docs-example>
+
+  <docs-api selector="rlb-navbar" [rows]="navbarApi" />
+  <docs-api heading="API — rlb-navbar-items" selector="rlb-navbar-items" [rows]="navbarItemsApi" />
+  <docs-api heading="API — rlb-navbar-item" selector="rlb-navbar-item" [rows]="navbarItemApi" />
+  <docs-api heading="API — rlb-navbar-dropdown-item" selector="rlb-navbar-dropdown-item" [rows]="navbarDropdownItemApi" />
+  <docs-api heading="API — rlb-navbar-form" selector="rlb-navbar-form" [rows]="navbarFormApi" />
+  <docs-api heading="API — rlb-navbar-brand" selector="[rlb-navbar-brand]" [rows]="navbarBrandApi" />
+  <docs-api heading="API — rlb-navbar-separator" selector="rlb-navbar-separator" [rows]="navbarSeparatorApi" />
+</docs-page>

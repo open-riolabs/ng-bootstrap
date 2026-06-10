@@ -1,30 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
+import { DOCS_IMPORTS, DocApiRow } from '../../../shared/docs';
 
 @Component({
   selector: 'app-accordions',
   templateUrl: './accordions.component.html',
-  styleUrls: ['./accordions.component.scss'],
-  imports: [SHARED_IMPORTS],
+  imports: [SHARED_IMPORTS, DOCS_IMPORTS],
 })
 export class AccordionsComponent {
-  message: number = 0;
+  message = signal(0);
 
-  onStatusChenged(event: any, i: number) {
-    this.message++;
+  onStatusChanged(_event: unknown, _i: number): void {
+    this.message.update(n => n + 1);
   }
 
-  sample: string = `<rlb-accordion>
+  basicExample = `<rlb-accordion>
   <div rlb-accordion-item>
     <rlb-accordion-header>Accordion Header</rlb-accordion-header>
     <div rlb-accordion-body>
       <span>Accordion Body</span>
+    </div>
+  </div>
+  <div rlb-accordion-item>
+    <rlb-accordion-header>Second Header</rlb-accordion-header>
+    <div rlb-accordion-body>
+      <span>Second Body</span>
     </div>
   </div>
 </rlb-accordion>`;
 
-  flush: string = `<rlb-accordion [flush]="true">
+  flushExample = `<rlb-accordion [flush]="true">
   <div rlb-accordion-item>
     <rlb-accordion-header>Accordion Header</rlb-accordion-header>
     <div rlb-accordion-body>
@@ -32,14 +38,14 @@ export class AccordionsComponent {
     </div>
   </div>
   <div rlb-accordion-item>
-    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <rlb-accordion-header>Second Header</rlb-accordion-header>
     <div rlb-accordion-body>
-      <span>Accordion Body</span>
+      <span>Second Body</span>
     </div>
   </div>
 </rlb-accordion>`;
 
-  ao: string = `<rlb-accordion [always-open]="false">
+  alwaysOpenExample = `<rlb-accordion [always-open]="true">
   <div rlb-accordion-item>
     <rlb-accordion-header>Accordion Header</rlb-accordion-header>
     <div rlb-accordion-body>
@@ -47,55 +53,59 @@ export class AccordionsComponent {
     </div>
   </div>
   <div rlb-accordion-item>
-    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <rlb-accordion-header>Second Header</rlb-accordion-header>
     <div rlb-accordion-body>
-      <span>Accordion Body</span>
+      <span>Second Body</span>
     </div>
   </div>
-</rlb-accordion`;
+</rlb-accordion>`;
 
-  expanded: string = `<rlb-accordion>
+  expandedExample = `<rlb-accordion>
   <div rlb-accordion-item [expanded]="true">
-    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <rlb-accordion-header>Expanded by default</rlb-accordion-header>
     <div rlb-accordion-body>
-      <span>Accordion Body</span>
+      <span>This item starts open.</span>
     </div>
   </div>
   <div rlb-accordion-item>
-    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <rlb-accordion-header>Collapsed by default</rlb-accordion-header>
     <div rlb-accordion-body>
-      <span>Accordion Body</span>
+      <span>This item starts closed.</span>
     </div>
   </div>
 </rlb-accordion>`;
 
-  sc: string = `<p>{{message}}</p>
+  statusChangeExample = `<p>Status change count: {{ message() }}</p>
 <rlb-accordion>
-  <div rlb-accordion-item (statusChange)="onStatusChenged($event, 0)">
+  <div rlb-accordion-item (statusChange)="onStatusChanged($event, 0)">
     <rlb-accordion-header>Accordion Header</rlb-accordion-header>
     <div rlb-accordion-body>
-      <span>Accordion Body</span>
+      <span>Toggle me to fire statusChange events.</span>
     </div>
   </div>
   <div rlb-accordion-item>
-    <rlb-accordion-header>Accordion Header</rlb-accordion-header>
+    <rlb-accordion-header>Second Header</rlb-accordion-header>
     <div rlb-accordion-body>
       <span>Accordion Body</span>
     </div>
   </div>
 </rlb-accordion>`;
 
-  ts: string = `@Component({
-  selector: 'app-accordions',
-  templateUrl: './accordions.component.html',
-  styleUrls: ['./accordions.component.scss'],
-})
-export class AccordionsComponent {
+  accordionApi: DocApiRow[] = [
+    { name: 'flush', type: 'boolean', default: 'false', description: 'Remove borders and rounded corners so the accordion renders edge-to-edge with its parent container.', kind: 'Input' },
+    { name: 'always-open', type: 'boolean', default: 'false', description: 'Allow multiple items to be open simultaneously; opening one item will not collapse others.', kind: 'Input' },
+    { name: 'id', type: 'string', description: 'Custom HTML id for the accordion element. An auto-generated id is used when omitted.', kind: 'Input' },
+    { name: 'card-style', type: 'boolean', default: 'true', description: 'Apply the card-style appearance class to the accordion wrapper.', kind: 'Input' },
+  ];
 
-  message: number = 0;
-
-  onStatusChenged(event: any, i: number) {
-    this.message++;
-  }
-}`;
+  accordionItemApi: DocApiRow[] = [
+    { name: 'name', type: 'string', description: 'Custom identifier for the accordion item used to link the header toggle and body panel. Auto-generated when omitted.', kind: 'Input' },
+    { name: 'expanded', type: 'boolean', default: 'false', description: 'Set to true to expand this item on initial render.', kind: 'Input' },
+    { name: 'class', type: 'string', default: "''", description: 'Additional CSS class(es) applied to the accordion item host element.', kind: 'Input' },
+    { name: 'style', type: 'string', description: 'Inline style string applied to the accordion item host element.', kind: 'Input' },
+    { name: 'statusChange', type: "EventEmitter<'hide' | 'hidden' | 'show' | 'shown' | 'hidePrevented'>", description: 'Emitted on every Bootstrap collapse lifecycle transition of this item.', kind: 'Output' },
+    { name: 'open()', type: 'void', description: 'Programmatically expand the accordion item.', kind: 'Method' },
+    { name: 'close()', type: 'void', description: 'Programmatically collapse the accordion item.', kind: 'Method' },
+    { name: 'toggle()', type: 'void', description: 'Programmatically toggle the expanded/collapsed state of the accordion item.', kind: 'Method' },
+  ];
 }

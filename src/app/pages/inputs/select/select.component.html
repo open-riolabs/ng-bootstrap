@@ -1,226 +1,230 @@
-<div class="container my-3">
+<docs-page
+  title="Select"
+  lead="Use rlb-select and rlb-option to build single or multi-select controls that integrate seamlessly with Angular Reactive and Template-driven forms.">
 
-	<h3>Select</h3>
-	<p>
-		Select è un component che permette all'utente di scegliere un'opzione da un elenco. Funziona come un menu a
-		tendina o un dropdown,
-		offrendo una lista di opzioni tra cui l'utente può selezionare.
-	</p>
+  <!-- Basic usage -->
+  <docs-example
+    heading="Basic usage"
+    description="Bind rlb-select with formControlName or ngModel. Nest rlb-option elements as children to populate the list."
+    [code]="basicExample">
+    <div [formGroup]="basicForm" style="max-width: 320px;">
+      <rlb-select formControlName="select" placeholder="Select option">
+        <rlb-option value="1">Option 1</rlb-option>
+        <rlb-option value="2">Option 2</rlb-option>
+        <rlb-option value="3">Option 3</rlb-option>
+      </rlb-select>
+    </div>
+  </docs-example>
 
-	<rlb-dt-table>
-		<rlb-dt-header>Parameter</rlb-dt-header>
-		<rlb-dt-header>Type</rlb-dt-header>
-		<rlb-dt-header>Required</rlb-dt-header>
-		<rlb-dt-header>Description</rlb-dt-header>
-		<rlb-dt-header>I/O</rlb-dt-header>
-
-		<rlb-dt-row>
-			<rlb-dt-cell>placeholder</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">string</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Placeholder text shown when no option is selected (used only in single-select mode).
-			</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-
-		<rlb-dt-row>
-			<rlb-dt-cell>size</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">"small" | "large"</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Visual size of the select component (CSS class-based).</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-
-		<rlb-dt-row>
-			<rlb-dt-cell>disabled</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Disables the select input.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-
-		<rlb-dt-row>
-			<rlb-dt-cell>readonly</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Prevents changes to selection but still allows scrolling and interaction (note: HTML native
-				<code>readonly</code> is not fully supported on <code>&lt;select&gt;</code> elements).
-			</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-
-		<rlb-dt-row>
-			<rlb-dt-cell>multiple</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Allows multiple selection if <code>true</code>.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-
-		<rlb-dt-row>
-			<rlb-dt-cell>display</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">number</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Sets the <code>size</code> attribute of the <code>&lt;select&gt;</code> element (number of
-				visible options).
-			</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-
-		<rlb-dt-row>
-			<rlb-dt-cell>id</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">string</span></rlb-dt-cell>
-			<rlb-dt-cell>False</rlb-dt-cell>
-			<rlb-dt-cell>Custom identifier for the select element. Auto-generated if not provided.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-	</rlb-dt-table>
-
-
-	<rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
+  <!-- Multiple selection -->
+  <docs-example
+    heading="Multiple selection"
+    description="Add the multiple attribute to allow selecting more than one option at a time. The bound value becomes a string array."
+    [code]="multipleExample">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <rlb-select placeholder="Select skills" multiple enable-validation="true">
+          <rlb-option value="ts">TypeScript</rlb-option>
+          <rlb-option value="rxjs">RxJS</rlb-option>
+          <rlb-option value="ngrx">NgRx</rlb-option>
+          <rlb-option value="signals">Signals</rlb-option>
+        </rlb-select>
       </div>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-			<div rlb-accordion-body [formGroup]="basicForm">
-				<rlb-select formControlName="select" [placeholder]="'Select option'">
-			  <rlb-option value="1">Option 1</rlb-option>
-			  <rlb-option value="2">Option 2</rlb-option>
-			  <rlb-option value="3">Option 3</rlb-option>
-		  </rlb-select>
+  </docs-example>
+
+  <!-- Sizes -->
+  <docs-example
+    heading="Sizes"
+    description="Use the size input with &quot;small&quot; or &quot;large&quot; to adjust the visual size of the control."
+    [code]="sizesExample">
+    <div class="d-flex flex-column gap-3" style="max-width: 320px;">
+      <rlb-select placeholder="Default size">
+        <rlb-option value="a">Option A</rlb-option>
+      </rlb-select>
+      <rlb-select size="small" placeholder="Small size">
+        <rlb-option value="a">Option A</rlb-option>
+      </rlb-select>
+      <rlb-select size="large" placeholder="Large size">
+        <rlb-option value="a">Option A</rlb-option>
+      </rlb-select>
+    </div>
+  </docs-example>
+
+  <!-- Disabled state -->
+  <docs-example
+    heading="Disabled state"
+    description="Use the disabled input on rlb-select to disable the whole control, or on a single rlb-option to prevent selection of that item."
+    [code]="disabledExample">
+    <div class="d-flex flex-column gap-3" style="max-width: 320px;">
+      <rlb-select disabled placeholder="Disabled select">
+        <rlb-option value="1">Option 1</rlb-option>
+      </rlb-select>
+      <rlb-select placeholder="Option 2 disabled">
+        <rlb-option value="1">Option 1</rlb-option>
+        <rlb-option value="2" disabled>Option 2 (disabled)</rlb-option>
+        <rlb-option value="3">Option 3</rlb-option>
+      </rlb-select>
+    </div>
+  </docs-example>
+
+  <!-- Validation -->
+  <docs-example
+    heading="Validation"
+    description="Add enable-validation=&quot;true&quot; so the component adds Bootstrap is-valid / is-invalid classes and shows inline error messages based on the reactive form control state."
+    [code]="validationExample">
+    <div class="row g-3" [formGroup]="form">
+      <div class="col-md-6">
+        <label class="form-label">Framework (required)</label>
+        <rlb-select formControlName="basicSelect" placeholder="Choose a framework" enable-validation="true">
+          <rlb-option value="angular">Angular</rlb-option>
+          <rlb-option value="react">React</rlb-option>
+          <rlb-option value="vue">Vue</rlb-option>
+        </rlb-select>
       </div>
     </div>
+  </docs-example>
 
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Advanced Examples (Async & Patching)</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <form [formGroup]="form" (ngSubmit)="submitForm()" class="row g-3">
+  <!-- Async options -->
+  <docs-example
+    heading="Async options"
+    description="Options can be rendered dynamically from a signal or observable. The select automatically reflects updated options when they arrive."
+    [code]="asyncExample">
+    <div class="row g-3" [formGroup]="form">
+      <div class="col-md-6">
+        <label class="form-label">
+          User
+          @if (isLoadingOptions()) {
+            <span class="spinner-border spinner-border-sm text-primary ms-2"
+                  role="status" aria-label="Loading options"></span>
+          }
+        </label>
+        <rlb-select formControlName="asyncSelect" placeholder="Select a user" enable-validation="true">
+          @for (user of asyncOptions(); track user.id) {
+            <rlb-option [value]="user.id">{{ user.name }}</rlb-option>
+          }
+        </rlb-select>
+        <div class="form-text">Options load dynamically after 1.5 seconds.</div>
+      </div>
+    </div>
+  </docs-example>
 
-          <!-- Basic Select -->
-          <div class="col-md-6">
-            <label for="demo-basic-select" class="form-label d-block w-100 mb-2">Basic Select (Required)</label>
-            <rlb-select inputId="demo-basic-select" formControlName="basicSelect" placeholder="Choose a framework" enable-validation="true">
-              <rlb-option value="angular">Angular</rlb-option>
-              <rlb-option value="react">React</rlb-option>
-              <rlb-option value="vue">Vue</rlb-option>
-            </rlb-select>
-          </div>
+  <!-- Advanced form with patch + submit -->
+  <docs-example
+    heading="Advanced form (patch &amp; submit)"
+    description="A complete reactive form combining single select, multi-select, and async select with patch support, loading state, and form status tracking."
+    [code]="basicExample">
+    <form [formGroup]="form" (ngSubmit)="submitForm()" class="row g-3">
 
-          <!-- Multiple Select -->
-          <div class="col-md-6">
-            <label for="demo-multi-select" class="form-label">Multiple Select</label>
-            <rlb-select inputId="demo-multi-select" formControlName="multiSelect" multiple placeholder="Select skills" enable-validation="true">
-              <rlb-option value="ts">TypeScript</rlb-option>
-              <rlb-option value="rxjs">RxJS</rlb-option>
-              <rlb-option value="ngrx">NgRx</rlb-option>
-              <rlb-option value="signals">Signals</rlb-option>
-            </rlb-select>
-          </div>
+      <div class="col-md-6">
+        <label class="form-label">Basic Select (Required)</label>
+        <rlb-select formControlName="basicSelect" placeholder="Choose a framework" enable-validation="true">
+          <rlb-option value="angular">Angular</rlb-option>
+          <rlb-option value="react">React</rlb-option>
+          <rlb-option value="vue">Vue</rlb-option>
+        </rlb-select>
+      </div>
 
-          <!-- Async Options Select -->
-          <div class="col-md-6">
-            <label for="demo-async-select" class="form-label">
-              Async Options
-              @if (isLoadingOptions()) {
-                <span class="spinner-border spinner-border-sm text-primary ms-2" role="status" aria-label="Loading options"></span>
-              }
-            </label>
-            <rlb-select inputId="demo-async-select" formControlName="asyncSelect" placeholder="Select a user" enable-validation="true">
-              @for (user of asyncOptions(); track user.id) {
-                <rlb-option [value]="user.id">{{ user.name }}</rlb-option>
-              }
-            </rlb-select>
-            <div class="form-text">Options load dynamically after 1.5 seconds.</div>
-          </div>
+      <div class="col-md-6">
+        <label class="form-label">Multiple Select (Required)</label>
+        <rlb-select formControlName="multiSelect" multiple placeholder="Select skills" enable-validation="true">
+          <rlb-option value="ts">TypeScript</rlb-option>
+          <rlb-option value="rxjs">RxJS</rlb-option>
+          <rlb-option value="ngrx">NgRx</rlb-option>
+          <rlb-option value="signals">Signals</rlb-option>
+        </rlb-select>
+      </div>
 
-          <!-- Form Actions -->
-          <div class="col-12 mt-4 d-flex gap-2">
-            <button rlb-button outline color="secondary" type="button" (click)="patchData()">
-              Patch Mock Data
-            </button>
-            <button rlb-button color="primary" type="submit" [disabled]="isSaving() || form.pending">
-              @if (isSaving()) {
-                <rlb-spinner class="spinner-border spinner-border-sm me-2" role="status"></rlb-spinner>
-                Saving...
-              } @else {
-                Submit
-              }
-            </button>
-          </div>
-        </form>
+      <div class="col-md-6">
+        <label class="form-label">
+          Async Options
+          @if (isLoadingOptions()) {
+            <span class="spinner-border spinner-border-sm text-primary ms-2"
+                  role="status" aria-label="Loading options"></span>
+          }
+        </label>
+        <rlb-select formControlName="asyncSelect" placeholder="Select a user" enable-validation="true">
+          @for (user of asyncOptions(); track user.id) {
+            <rlb-option [value]="user.id">{{ user.name }}</rlb-option>
+          }
+        </rlb-select>
+        <div class="form-text">Options load dynamically after 1.5 seconds.</div>
+      </div>
 
-        <!-- Debugging State -->
-        <div class="mt-4 p-3 bg-light border rounded">
-          <h5>Form State Tracker</h5>
-          <div class="row">
-            <div class="col-md-6">
-              <strong>Value:</strong>
-              <pre><code>{{ form.value | json }}</code></pre>
-            </div>
-            <div class="col-md-6">
-              <strong>Status:</strong>
-              <p>
-                Valid: <span rlb-badge [color]="form.valid ? 'success' : 'danger'">{{ form.valid }}</span><br>
-                Touched: <span rlb-badge [color]="form.touched ? 'warning' : 'secondary'">{{ form.touched }}</span><br>
-                Pending: <span rlb-badge [color]="form.pending ? 'info' : 'secondary'">{{ form.pending }}</span>
-              </p>
-            </div>
-          </div>
+      <div class="col-12 mt-2 d-flex gap-2">
+        <button rlb-button outline color="secondary" type="button" (click)="patchData()">
+          Patch Mock Data
+        </button>
+        <button rlb-button color="primary" type="submit" [disabled]="isSaving() || form.pending">
+          @if (isSaving()) {
+            <rlb-spinner class="spinner-border spinner-border-sm me-2" role="status"></rlb-spinner>
+            Saving...
+          } @else {
+            Submit
+          }
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-4 p-3 bg-light border rounded">
+      <h5>Form State Tracker</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <strong>Value:</strong>
+          <pre><code>{{ form.value | json }}</code></pre>
         </div>
-
-      </div>
-    </div>
-
-    <!-- ngModel & Async RxJS Stream (Regression Test) -->
-    <div rlb-accordion-item>
-      <rlb-accordion-header>ngModel & Async RxJS (Regression Test)</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <rlb-select size="small" [(ngModel)]="result.nextIntentId">
-              <label before class="form-label d-block w-100 mb-2">
-                Next Intent
-                @if (intentLoading) {
-                  <span class="spinner-border spinner-border-sm text-primary ms-2" role="status" aria-label="Loading intents..."></span>
-                }
-              </label>
-
-              @for (intent of intents; track intent._id) {
-                <rlb-option [value]="intent._id">
-                  {{ intent.name }}
-                </rlb-option>
-              }
-            </rlb-select>
-          </div>
-
-          <div class="col-md-6 d-flex align-items-center">
-            <div class="p-3 bg-light border rounded w-100">
-              <strong>NgModel Target:</strong> <code>result.nextIntentId</code><br/>
-              <strong>Current Value:</strong>
-              <span rlb-badge [color]="result.nextIntentId ? 'success' : 'secondary'">
-              {{ result.nextIntentId | json }}
-            </span>
-            </div>
-          </div>
-        </div>
-        <div class="form-text mt-2">
-          Simulates legacy <code>Zone.js</code> behavior: pre-selecting an ID before the async options resolve.
+        <div class="col-md-6">
+          <strong>Status:</strong>
+          <p>
+            Valid: <span rlb-badge [color]="form.valid ? 'success' : 'danger'">{{ form.valid }}</span><br>
+            Touched: <span rlb-badge [color]="form.touched ? 'warning' : 'secondary'">{{ form.touched }}</span><br>
+            Pending: <span rlb-badge [color]="form.pending ? 'info' : 'secondary'">{{ form.pending }}</span>
+          </p>
         </div>
       </div>
     </div>
+  </docs-example>
 
-  </rlb-accordion>
+  <!-- ngModel + async RxJS stream -->
+  <docs-example
+    heading="ngModel with async RxJS stream"
+    description="Demonstrates pre-selecting an id before the async options resolve — simulates legacy Zone.js behavior where ngModel is set before rlb-option elements are available."
+    [code]="ngModelExample">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <rlb-select size="small" [(ngModel)]="result.nextIntentId">
+          <label before class="form-label d-block w-100 mb-2">
+            Next Intent
+            @if (intentLoading) {
+              <span class="spinner-border spinner-border-sm text-primary ms-2"
+                    role="status" aria-label="Loading intents..."></span>
+            }
+          </label>
+          @for (intent of intents; track intent._id) {
+            <rlb-option [value]="intent._id">{{ intent.name }}</rlb-option>
+          }
+        </rlb-select>
+      </div>
 
-</div>
+      <div class="col-md-6 d-flex align-items-center">
+        <div class="p-3 bg-light border rounded w-100">
+          <strong>NgModel target:</strong> <code>result.nextIntentId</code><br>
+          <strong>Current value:</strong>
+          <span rlb-badge [color]="result.nextIntentId ? 'success' : 'secondary'">
+            {{ result.nextIntentId | json }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-text mt-2">
+      Simulates legacy <code>Zone.js</code> behavior: pre-selecting an id before the async options resolve.
+    </div>
+  </docs-example>
+
+  <!-- API: rlb-select -->
+  <docs-api selector="rlb-select" [rows]="selectApi" />
+
+  <!-- API: rlb-option -->
+  <docs-api selector="rlb-option" [rows]="optionApi" />
+
+</docs-page>

@@ -1,26 +1,74 @@
-<div class="container mt-3">
-  
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
+<docs-page
+  title="Input Validation"
+  lead="rlb-input-validation renders inline error messages for Angular reactive form controls. Pair it with the helpText directive to add accessible hint text beneath any input field.">
 
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Required field"
+    description="Add enable-validation to rlb-input to show a green valid or red invalid border once the field is touched. rlb-input-validation is rendered automatically inside the component when errors are present."
+    [code]="basicExample">
+    <div style="max-width: 320px;">
+      <rlb-input
+        name="username"
+        [formControl]="requiredControl"
+        enable-validation
+        placeholder="Username">
+      </rlb-input>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-input-validation></rlb-input-validation>
-      </div>
-    </div>
-  </rlb-accordion>
+  </docs-example>
 
-</div>
+  <docs-example
+    heading="Multiple validators"
+    description="Combine Validators.required and Validators.email; the component iterates every failing key and displays a translated message for each one."
+    [code]="multipleValidatorsExample">
+    <div style="max-width: 320px;">
+      <rlb-input
+        name="email"
+        [formControl]="emailControl"
+        enable-validation
+        placeholder="Email address">
+      </rlb-input>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Min-length validator"
+    description="Validators.minLength populates a minlength key in ValidationErrors. Touch the field and clear it to see the message appear."
+    [code]="minLengthExample">
+    <div style="max-width: 320px;">
+      <rlb-input
+        name="password"
+        [formControl]="minLengthControl"
+        enable-validation
+        placeholder="Min 5 characters">
+      </rlb-input>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Standalone usage"
+    description="You can use rlb-input-validation independently by binding ValidationErrors directly via [errors]. This is useful when integrating with custom form wrappers or displaying server-side errors."
+    [code]="standaloneExample">
+    <rlb-input-validation [errors]="{ required: true }" />
+  </docs-example>
+
+  <docs-example
+    heading="Help text"
+    description="Apply the helpText directive to any rlb-input host element to inject an accessible hint beneath the field. The directive adds the Bootstrap form-text class and wires aria-labelledby automatically."
+    [code]="helpTextExample">
+    <div style="max-width: 320px;">
+      <rlb-input
+        name="search"
+        helpText="Enter at least 3 characters to search."
+        placeholder="Search...">
+      </rlb-input>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-input-validation" [rows]="validationApi" />
+
+  <docs-api
+    heading="helpText directive"
+    selector="[helpText]"
+    [rows]="helpTextApi" />
+
+</docs-page>

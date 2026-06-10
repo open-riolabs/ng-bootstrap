@@ -1,288 +1,183 @@
-<div class="container mt-3">
+<docs-page
+  title="Cards"
+  lead="Cards provide a flexible and extensible content container with multiple variants and options for headers, footers, images, and contextual background colors.">
 
-  <h3>Card</h3>
-  <p>Una Card è un contenitore flessibile e versatile usato per raggruppare contenuti e informazioni, come testi, immagini, link e pulsanti, in un formato visivamente strutturato</p>
+  <docs-example
+    heading="Basic card"
+    description="A card is built around a central rlb-card-body. Use the rlb-card-title attribute on a heading element and rlb-card-text on a paragraph for structured content."
+    [code]="basicExample">
+    <rlb-card style="max-width: 18rem;">
+      <rlb-card-body>
+        <h5 rlb-card-title>Card title</h5>
+        <p rlb-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </rlb-card-body>
+    </rlb-card>
+  </docs-example>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>align</rlb-dt-cell>
-      <rlb-dt-cell>TextAlignment</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to apply text alignment. Default: 'left'</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>overlay</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to Transform an image into the background of a card and overlay the text of your card.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>background</rlb-dt-cell>
-      <rlb-dt-cell>Color</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to apply a color to the background.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>border</rlb-dt-cell>
-      <rlb-dt-cell>Color</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to apply a color to the border.</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <docs-example
+    heading="Header and footer"
+    description="Wrap content with rlb-card-header and rlb-card-footer to add a header and footer section to any card."
+    [code]="headerFooterExample">
+    <rlb-card style="max-width: 18rem;">
+      <rlb-card-header>Featured</rlb-card-header>
+      <rlb-card-body>
+        <h5 rlb-card-title>Special title treatment</h5>
+        <p rlb-card-text>With supporting text below as a natural lead-in to additional content.</p>
+      </rlb-card-body>
+      <rlb-card-footer>
+        <small class="text-body-secondary">Last updated 3 mins ago</small>
+      </rlb-card-footer>
+    </rlb-card>
+  </docs-example>
 
-  <h4>Card Body</h4>
-  <p>Inserisci un Card Body all'interno della tua Card per definire il corpo principale del componente.</p>
-
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>Nessun Parametro</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell> 
-    </rlb-dt-row>
-  </rlb-dt-table>
-
-  <h4>Card Image</h4>
-  <p>Inserisci una Card Image all'interno della tua Card per definire il corpo principale del componente che avrà un immagine principale come background e testo sovrapposto.</p>
-
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>position</rlb-dt-cell>
-      <rlb-dt-cell>'top' | 'bottom'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to define the position of the image. Default: 'top'</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell> 
-    </rlb-dt-row>
-  </rlb-dt-table>
-
-  <h4>Card Footer</h4>
-  <p>Inserisci un Card Footer all'interno della tua Card per definire un footer.</p>
-
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>Nessun Parametro</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell> 
-    </rlb-dt-row>
-  </rlb-dt-table>
-  
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <h4>Card Sample</h4>
-            <pre><code [highlight]="sample" language="html"></code></pre>
-            <h4>Align</h4>
-            <pre><code [highlight]="align" language="html"></code></pre>
-            <h4>Overlay</h4>
-            <pre><code [highlight]="overlay" language="html"></code></pre>
-            <h4>Background</h4>
-            <pre><code [highlight]="background" language="html"></code></pre>
-            <h4>Border</h4>
-            <pre><code [highlight]="border" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Text alignment"
+    description="Use the align input with 'left' (default), 'center', or 'right' to control the text alignment of all content inside the card."
+    [code]="alignExample">
+    <div class="d-flex flex-column gap-3" style="max-width: 18rem;">
+      <rlb-card align="left">
+        <rlb-card-body>
+          <h5 rlb-card-title>Left aligned (default)</h5>
+          <p rlb-card-text>Card body content aligned to the left.</p>
+        </rlb-card-body>
+      </rlb-card>
+      <rlb-card align="center">
+        <rlb-card-body>
+          <h5 rlb-card-title>Center aligned</h5>
+          <p rlb-card-text>Card body content aligned to the center.</p>
+        </rlb-card-body>
+      </rlb-card>
+      <rlb-card align="right">
+        <rlb-card-body>
+          <h5 rlb-card-title>Right aligned</h5>
+          <p rlb-card-text>Card body content aligned to the right.</p>
+        </rlb-card-body>
+      </rlb-card>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <h4>Card Sample</h4>
-        <rlb-card>
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <h4>Align</h4>
-        <rlb-card [align]="'right'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <h4>Overlay</h4>
-        <rlb-card [overlay]="true">
-          <div rlb-card-image>
-            <h5>Card Image</h5>
-          </div>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <h4>Background</h4>
-        <rlb-card [background]="'primary'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [background]="'secondary'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [background]="'success'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [background]="'danger'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [background]="'warning'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [background]="'info'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [background]="'light'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [background]="'dark'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <h4>Border</h4>
-        <rlb-card [border]="'primary'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [border]="'secondary'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [border]="'success'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [border]="'danger'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [border]="'warning'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [border]="'info'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [border]="'light'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-        <rlb-card [border]="'dark'">
-          <rlb-card-body>
-            <h5>Card Body</h5>
-          </rlb-card-body>
-          <rlb-card-footer>
-            <p>Card Footer</p>
-          </rlb-card-footer>
-        </rlb-card>
-      </div>
+  </docs-example>
+
+  <docs-example
+    heading="Image overlay"
+    description="Set overlay to true on the card and place an img[rlb-card-image] inside it. The image becomes a full-card background and the card body is rendered on top of it."
+    [code]="overlayExample">
+    <rlb-card [overlay]="true" style="max-width: 18rem;">
+      <img rlb-card-image src="https://placehold.co/600x200" alt="Card image">
+      <rlb-card-body>
+        <h5 rlb-card-title>Card image overlay</h5>
+        <p rlb-card-text>This text is rendered on top of the card image.</p>
+      </rlb-card-body>
+    </rlb-card>
+  </docs-example>
+
+  <docs-example
+    heading="Background colors"
+    description="Use the background input to apply a Bootstrap contextual color as the card background using the text-bg-* utility classes."
+    [code]="backgroundExample">
+    <div class="d-flex flex-wrap gap-2">
+      <rlb-card background="primary" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Primary</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card background="secondary" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Secondary</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card background="success" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Success</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card background="danger" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Danger</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card background="warning" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Warning</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card background="info" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Info</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card background="light" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Light</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card background="dark" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Dark</h5></rlb-card-body>
+      </rlb-card>
     </div>
-  </rlb-accordion>
-  <br>
-  <br>
-</div>
+  </docs-example>
+
+  <docs-example
+    heading="Border colors"
+    description="Use the border input to apply a Bootstrap contextual border color using the border-* utility classes."
+    [code]="borderExample">
+    <div class="d-flex flex-wrap gap-2">
+      <rlb-card border="primary" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Primary</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card border="secondary" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Secondary</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card border="success" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Success</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card border="danger" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Danger</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card border="warning" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Warning</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card border="info" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Info</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card border="light" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Light</h5></rlb-card-body>
+      </rlb-card>
+      <rlb-card border="dark" style="min-width: 8rem;">
+        <rlb-card-body><h5 rlb-card-title>Dark</h5></rlb-card-body>
+      </rlb-card>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Card group"
+    description="Use rlb-card-group to render multiple cards side-by-side with equal width and height. Cards are connected without spacing between them."
+    [code]="groupExample">
+    <rlb-card-group>
+      <rlb-card>
+        <rlb-card-body>
+          <h5 rlb-card-title>Card title</h5>
+          <p rlb-card-text>This is a wider card with supporting text below.</p>
+        </rlb-card-body>
+        <rlb-card-footer>
+          <small class="text-body-secondary">Last updated 3 mins ago</small>
+        </rlb-card-footer>
+      </rlb-card>
+      <rlb-card>
+        <rlb-card-body>
+          <h5 rlb-card-title>Card title</h5>
+          <p rlb-card-text>This card has supporting text below as a natural lead-in to additional content.</p>
+        </rlb-card-body>
+        <rlb-card-footer>
+          <small class="text-body-secondary">Last updated 8 mins ago</small>
+        </rlb-card-footer>
+      </rlb-card>
+      <rlb-card>
+        <rlb-card-body>
+          <h5 rlb-card-title>Card title</h5>
+          <p rlb-card-text>This is a wider card with supporting text below as a natural lead-in.</p>
+        </rlb-card-body>
+        <rlb-card-footer>
+          <small class="text-body-secondary">Last updated 5 mins ago</small>
+        </rlb-card-footer>
+      </rlb-card>
+    </rlb-card-group>
+  </docs-example>
+
+  <docs-api selector="rlb-card" [rows]="cardApi" />
+
+  <docs-api heading="rlb-card-body" selector="rlb-card-body" [rows]="cardBodyApi" />
+
+  <docs-api heading="img[rlb-card-image]" selector="img[rlb-card-image]" [rows]="cardImageApi" />
+
+  <docs-api heading="rlb-card-header" selector="rlb-card-header" [rows]="[]" />
+
+  <docs-api heading="rlb-card-footer" selector="rlb-card-footer" [rows]="[]" />
+
+  <docs-api heading="rlb-card-group" selector="rlb-card-group" [rows]="[]" />
+
+</docs-page>

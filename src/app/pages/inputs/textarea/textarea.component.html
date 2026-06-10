@@ -1,83 +1,84 @@
-<div class="container mt-3">
+<docs-page
+  title="Textarea"
+  lead="A multi-line text input built on ControlValueAccessor — works with Reactive and Template-driven forms, with built-in validation display.">
 
-	<h3>Textarea</h3>
-	<p>
-		Textarea è un componente UI che permette di inserire testo a più righe in un campo,
-		spesso utilizzato in moduli web per input di testo più lunghi, come commenti, descrizioni o messaggi.
-	</p>
+  <docs-example
+    heading="Basic"
+    description="Drop rlb-textarea into a form. Without any configuration it renders a three-row textarea."
+    [code]="basicExample">
+    <rlb-textarea></rlb-textarea>
+  </docs-example>
 
-	<rlb-dt-table>
-		<rlb-dt-header>Parameter</rlb-dt-header>
-		<rlb-dt-header>Type</rlb-dt-header>
-		<rlb-dt-header>Required</rlb-dt-header>
-		<rlb-dt-header>Description</rlb-dt-header>
-		<rlb-dt-header>I/O</rlb-dt-header>
-		<rlb-dt-row>
-			<rlb-dt-cell>disabled</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>false</rlb-dt-cell>
-			<rlb-dt-cell>Disables the textarea, making it non-interactive.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell>readonly</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">boolean</span></rlb-dt-cell>
-			<rlb-dt-cell>false</rlb-dt-cell>
-			<rlb-dt-cell>Makes the textarea read-only, preventing user edits while keeping it focusable.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell>placeholder</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">string</span></rlb-dt-cell>
-			<rlb-dt-cell>false</rlb-dt-cell>
-			<rlb-dt-cell>Text shown when the textarea is empty.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell>size</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">'small' | 'large'</span></rlb-dt-cell>
-			<rlb-dt-cell>false</rlb-dt-cell>
-			<rlb-dt-cell>Changes the visual size of the textarea using Bootstrap's sizing classes.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell>rows</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">number</span></rlb-dt-cell>
-			<rlb-dt-cell>false</rlb-dt-cell>
-			<rlb-dt-cell>Specifies the number of visible text lines. Default is 3.</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-		<rlb-dt-row>
-			<rlb-dt-cell>id</rlb-dt-cell>
-			<rlb-dt-cell><span rlb-badge color="success">string</span></rlb-dt-cell>
-			<rlb-dt-cell>false</rlb-dt-cell>
-			<rlb-dt-cell>Custom identifier for the textarea element. If not provided, an auto-generated ID is used.
-			</rlb-dt-cell>
-			<rlb-dt-cell>Input</rlb-dt-cell>
-		</rlb-dt-row>
-	</rlb-dt-table>
-  
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
+  <docs-example
+    heading="Placeholder"
+    description="Use the placeholder input to show hint text when the field is empty."
+    [code]="placeholderExample">
+    <rlb-textarea placeholder="Write your message here..."></rlb-textarea>
+  </docs-example>
 
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Row count"
+    description="Control the visible height with the rows input. The default is 3."
+    [code]="rowsExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-textarea [rows]="2" placeholder="2 rows"></rlb-textarea>
+      <rlb-textarea [rows]="5" placeholder="5 rows"></rlb-textarea>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-textarea></rlb-textarea>
-      </div>
-    </div>
-  </rlb-accordion>
+  </docs-example>
 
-</div>
+  <docs-example
+    heading="Sizes"
+    description="Pass size=&quot;small&quot; or size=&quot;large&quot; to apply Bootstrap sizing classes. Omit size for the default medium height."
+    [code]="sizeExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-textarea size="small" placeholder="Small textarea"></rlb-textarea>
+      <rlb-textarea placeholder="Default textarea"></rlb-textarea>
+      <rlb-textarea size="large" placeholder="Large textarea"></rlb-textarea>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Disabled and readonly"
+    description="Set [disabled]=&quot;true&quot; to make the field non-interactive, or [readonly]=&quot;true&quot; to allow focus but prevent edits."
+    [code]="disabledReadonlyExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-textarea [disabled]="true" placeholder="Disabled textarea"></rlb-textarea>
+      <rlb-textarea [readonly]="true" placeholder="Readonly textarea"></rlb-textarea>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Reactive form with validation"
+    description="rlb-textarea integrates with Angular Reactive Forms via formControlName. Validation errors are displayed automatically when the control is touched and invalid."
+    [code]="reactiveFormExample">
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+      <label class="form-label" for="bio">Bio (required, min 10 chars)</label>
+      <rlb-textarea id="bio" formControlName="bio" placeholder="Tell us about yourself..."></rlb-textarea>
+
+      <label class="form-label mt-3" for="notes">Notes (optional)</label>
+      <rlb-textarea id="notes" formControlName="notes" [rows]="5" placeholder="Additional notes..."></rlb-textarea>
+
+      <div class="mt-3 d-flex gap-2 align-items-center">
+        <button rlb-button color="primary" type="submit" [disabled]="isSaving">
+          @if (isSaving) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Saving...
+          } @else {
+            Submit
+          }
+        </button>
+        <button rlb-button outline color="secondary" type="button" (click)="resetForm()">Reset</button>
+      </div>
+
+      <div class="mt-3 p-3 bg-body-tertiary border rounded small">
+        <strong>Form value:</strong>
+        <pre class="mb-0 mt-1">{{ form.value | json }}</pre>
+        <strong class="mt-2 d-block">Status:</strong>
+        <span rlb-badge [color]="form.valid ? 'success' : 'danger'">{{ form.valid ? 'Valid' : 'Invalid' }}</span>
+        <span rlb-badge [color]="form.touched ? 'warning' : 'secondary'" class="ms-2">{{ form.touched ? 'Touched' : 'Untouched' }}</span>
+      </div>
+    </form>
+  </docs-example>
+
+  <docs-api selector="rlb-textarea" [rows]="api" />
+</docs-page>

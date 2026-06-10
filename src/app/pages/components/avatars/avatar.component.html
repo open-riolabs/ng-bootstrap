@@ -1,77 +1,35 @@
-<div class="container mt-3">
-  
-  <h3>Avatar</h3>
-  <p>Un Avatar è un'immagine o un'icona usata per rappresentare una persona o un profilo utente all'interno di un'interfaccia</p>
+<docs-page
+  title="Avatar"
+  lead="Display a user profile image with configurable size, shape and custom CSS classes using the rlb-avatar component.">
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>size</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to set a size for the avatar. Default: 50</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>shape</rlb-dt-cell>
-      <rlb-dt-cell>'circle' | 'round' | 'square'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to set a shape for the avatar. Default: 'circle'</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>src</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to define the avatar image</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>class</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell>Add to cause a CSS class to be applied to the avatar</rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <docs-example
+    heading="Basic usage"
+    description="Provide a src URL to render a circular avatar at the default size of 50 px."
+    [code]="basicExample">
+    <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" />
+  </docs-example>
 
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <h4>Avatar Sample</h4>
-            <pre><code [highlight]="sample" language="html"></code></pre>
-            <h4>Size</h4>
-            <pre><code [highlight]="size" language="html"></code></pre>
-            <h4>Shape</h4>
-            <pre><code [highlight]="shape" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Sizes"
+    description="Use the size input to control the width and height in pixels. The default is 50."
+    [code]="sizeExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" [size]="30" />
+      <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" />
+      <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" [size]="80" />
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <h4>Avatar Sample</h4>
-        <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png"/>
-        <h4>Size</h4>
-        <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" [size]="30"/>
-        <h4>Shape</h4>
-        <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" [shape]="'square'"/>
-      </div>
+  </docs-example>
+
+  <docs-example
+    heading="Shapes"
+    description="Choose between circle (fully round, default), round (slight corner radius) and square (no rounding)."
+    [code]="shapeExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" shape="circle" />
+      <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" shape="round" />
+      <rlb-avatar src="https://www.w3schools.com/howto/img_avatar.png" shape="square" />
     </div>
-  </rlb-accordion>
-</div>
+  </docs-example>
+
+  <docs-api selector="rlb-avatar" [rows]="api" />
+</docs-page>

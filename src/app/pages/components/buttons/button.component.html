@@ -1,206 +1,77 @@
-<div class="container mt-3">
+<docs-page
+  title="Buttons"
+  lead="Use the rlb-button directive for actions in forms, dialogs and more, with support for multiple colors, sizes and states.">
 
-  <h1>Buttons</h1>
-  <h3 class="text-muted fw-light mb-4">
-    Use Bootstrap’s custom button styles for actions in forms, dialogs, and more with support for multiple sizes,
-    states, and more.
-  </h3>
+  <docs-example
+    heading="Base directive"
+    description="Apply the rlb-button directive to a native button. Without any extra configuration it renders a primary button."
+    [code]="baseDirectiveExample">
+    <button rlb-button>Primary</button>
+  </docs-example>
 
-  <!-- base directive -->
-  <h4>
-    Base directive.
-  </h4>
-  <p>
-    You can use the <code>rlb-button</code> directive to create a button with different colors and sizes.
-    Without any additional configuration, it will render a primary button.
-  </p>
+  <docs-example
+    heading="Variants"
+    description="Each contextual color maps to a Bootstrap button variant; use isLink to render a link-styled button."
+    [code]="variantsExample">
+    <div class="d-flex gap-2 flex-wrap">
+      <button rlb-button color="primary">Primary</button>
+      <button rlb-button color="secondary">Secondary</button>
+      <button rlb-button color="success">Success</button>
+      <button rlb-button color="danger">Danger</button>
+      <button rlb-button color="warning">Warning</button>
+      <button rlb-button color="info">Info</button>
+      <button rlb-button color="light">Light</button>
+      <button rlb-button color="dark">Dark</button>
+      <button rlb-button isLink>Link</button>
+    </div>
+  </docs-example>
 
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <button rlb-button>Primary</button>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(baseDirectiveExample)"></i>
-      </div>
-      <pre class="fs-5"><code language="html" [highlight]="baseDirectiveExample" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
+  <docs-example
+    heading="Button types"
+    description="The directive works on <button>, <a> and <input> elements. Add role=&quot;button&quot; on anchors that trigger in-page actions."
+    [code]="typesExample">
+    <div class="d-flex gap-2 flex-wrap">
+      <a rlb-button href="#" role="button">Link</a>
+      <button rlb-button type="button">Button</button>
+      <input class="btn btn-primary" type="button" value="Input">
+      <button rlb-button type="submit">Submit</button>
+      <button rlb-button type="reset">Reset</button>
+    </div>
+  </docs-example>
 
-  <!-- variants -->
-  <h4>
-    Variants.
-  </h4>
-  <p>
-    Bootstrap includes several button variants, each serving its own semantic purpose, with a few extras thrown in for
-    more control.
-  </p>
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <div class="d-flex column-gap-2 flex-wrap">
-        <button rlb-button color="primary">Primary</button>
-        <button rlb-button color="secondary">Secondary</button>
-        <button rlb-button color="success">Success</button>
-        <button rlb-button color="danger">Danger</button>
-        <button rlb-button color="warning">Warning</button>
-        <button rlb-button color="info">Info</button>
-        <button rlb-button color="light">Light</button>
-        <button rlb-button color="dark">Dark</button>
-        <button rlb-button isLink>Link</button>
-      </div>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(variantsExample)"></i>
-      </div>
-      <pre class="fs-5"><code language="html" [highlight]="variantsExample" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
+  <docs-example
+    heading="Outline buttons"
+    description="Add the outline attribute to keep only the border and text color, removing the solid background."
+    [code]="outlineExample">
+    <div class="d-flex gap-2 flex-wrap">
+      <button rlb-button outline color="primary">Primary</button>
+      <button rlb-button outline color="secondary">Secondary</button>
+      <button rlb-button outline color="success">Success</button>
+      <button rlb-button outline color="danger">Danger</button>
+    </div>
+  </docs-example>
 
-  <!-- button types -->
-  <h4>
-    Button Types.
-  </h4>
-  <p>
-    The <code>rlb-button</code> directive is primarily intended to be used with the native
-    <code>&lt;button&gt;</code> element.
-    However, it can also be applied to <code>&lt;a&gt;</code> and <code>&lt;input&gt;</code>
-    elements to ensure consistent styling across different types of interactive controls.
-    Be aware that some browsers may apply slightly different rendering depending on the
-    element used.
-  </p>
+  <docs-example
+    heading="Sizes"
+    description="Use the size attribute with sm, md (default) or lg."
+    [code]="sizesExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <button rlb-button color="primary" size="sm">Small Button</button>
+      <button rlb-button color="secondary" size="md">Normal Button</button>
+      <button rlb-button color="info" size="lg">Large Button</button>
+    </div>
+  </docs-example>
 
-  <p>
-    When using an <code>&lt;a&gt;</code> element styled as a button to trigger in-page actions
-    (such as toggling content, opening modals, or executing JavaScript logic), rather than
-    navigating to a different page or section, you should add <code>role="button"</code>.
-    This helps assistive technologies, such as screen readers, correctly interpret the
-    element’s purpose.
-  </p>
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <div class="d-flex column-gap-2 flex-wrap">
-        <a rlb-button href="#" role="button">Link</a>
-        <button rlb-button type="button">Button</button>
-        <input class="btn btn-primary" type="button" value="Input">
-        <button rlb-button type="submit">Submit</button>
-        <button rlb-button type="reset">Reset</button>
-      </div>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(typesExample)"></i>
-      </div>
-      <pre class="fs-5"><code language="html" [highlight]="typesExample" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
+  <docs-example
+    heading="Disabled state"
+    description="Add the disabled boolean attribute to make a button inactive; pointer events are blocked."
+    [code]="disableExample">
+    <div class="d-flex gap-2 flex-wrap">
+      <button rlb-button color="primary" disabled>Primary button</button>
+      <button rlb-button color="secondary" disabled>Button</button>
+      <button rlb-button color="primary" outline disabled>Primary button</button>
+    </div>
+  </docs-example>
 
-  <!-- outline buttons -->
-  <h4>
-    Outline buttons
-  </h4>
-
-  <p>
-    Need a button without the default background colors?
-    You can use the <code>outline</code> directive to display a button with an outlined style
-    instead of a solid background.
-  </p>
-
-  <p>
-    When the <code>outline</code> directive is applied, the button is rendered without
-    background colors or background images, keeping only the border and text color.
-    This works with all buttons using the <code>rlb-button</code> directive.
-  </p>
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <div class="d-flex column-gap-2 flex-wrap">
-        <button rlb-button outline color="primary">Primary</button>
-        <button rlb-button outline color="secondary">Secondary</button>
-        <button rlb-button outline color="success">Success</button>
-        <button rlb-button outline color="danger">Danger</button>
-        <button rlb-button outline color="warning">Warning</button>
-        <button rlb-button outline color="info">Info</button>
-        <button rlb-button outline color="light">Light</button>
-        <button rlb-button outline color="dark">Dark</button>
-      </div>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(outlineExample)"></i>
-      </div>
-      <pre class="fs-5"><code language="html" [highlight]="outlineExample" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
-
-  <!-- sizes -->
-  <h4>
-    Sizes
-  </h4>
-  <p>
-    Use the <code>size</code> attribute to control the button size.
-    Supported values are <code>sm</code>, <code>md</code>, and <code>lg</code>.
-    If <code>size</code> is not provided, <code>md</code> is applied by default.
-  </p>
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <div class="">
-        <button rlb-button color="primary" size="sm">Small Button</button>
-        <button rlb-button color="secondary" size="md" class="mx-2">Normal Button</button>
-        <button rlb-button color="info" size="lg">Large Button</button>
-
-      </div>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(sizesExample)"></i>
-      </div>
-      <pre class="fs-5"><code language="html" [highlight]="sizesExample" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
-
-  <!-- disable state -->
-  <h4>
-    Disabled state
-  </h4>
-  <p>
-
-  <p>
-    Make buttons appear inactive by adding the <code>disabled</code> boolean attribute.
-    Disabled buttons have <code>pointer-events: none</code> applied, preventing hover and
-    active states from being triggered.
-  </p>
-  <rlb-card id="#examples">
-    <rlb-card-body>
-      <div class="d-flex gap-2 flex-wrap">
-        <button rlb-button color="primary" disabled>Primary button</button>
-        <button rlb-button color="secondary" disabled>Button</button>
-        <button rlb-button color="primary" outline disabled>Primary button</button>
-        <button rlb-button color="secondary" outline disabled>Button</button>
-      </div>
-    </rlb-card-body>
-    <rlb-card-footer>
-      <div class="w-full d-flex justify-content-between fs-5 pb-1">
-        <span>HTML</span>
-        <i class="bi bi-clipboard cursor-pointer" [tooltip]="'Click to copy the code!'"
-          (click)="copyToClipboard(disableExample)"></i>
-      </div>
-      <pre class="fs-5"><code language="html" [highlight]="disableExample" class="bg-transparent"></code>
-    </pre>
-    </rlb-card-footer>
-  </rlb-card>
-</div>
+  <docs-api selector="button[rlb-button], a[rlb-button]" [rows]="api" />
+</docs-page>

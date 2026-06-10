@@ -1,0 +1,27 @@
+<docs-page
+  title="Sidebar"
+  lead="A vertical navigation menu built from rlb-sidebar and nested rlb-sidebar-item elements. Items can be section titles, collapsible parents with a badge counter, or leaf links integrated with the Angular router.">
+
+  <docs-example
+    heading="Basic sidebar"
+    description="Wrap rlb-sidebar-item elements inside rlb-sidebar. Use title for section headers, label with nested children for collapsible groups, and link for router-connected leaf items."
+    [code]="basicExample">
+    <div style="max-width: 320px;">
+      <rlb-sidebar [rounded]="true">
+        <rlb-sidebar-item title="Example menu" />
+
+        <rlb-sidebar-item label="Components" [badgeCounter]="3">
+          <rlb-sidebar-item icon="bi bi-card-heading" link="/components/cards">Cards</rlb-sidebar-item>
+          <rlb-sidebar-item icon="bi bi-bell" link="/components/toasts">Toasts</rlb-sidebar-item>
+          <rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
+        </rlb-sidebar-item>
+
+        <rlb-sidebar-item icon="bi bi-house" link="/">Home</rlb-sidebar-item>
+      </rlb-sidebar>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-sidebar" heading="API — rlb-sidebar" [rows]="sidebarApi" />
+  <docs-api selector="rlb-sidebar-item" heading="API — rlb-sidebar-item" [rows]="sidebarItemApi" />
+
+</docs-page>

@@ -8,6 +8,8 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumb.component';
 import { ButtonsComponent } from './buttons/button.component';
 import { CalendarComponent } from "./calendar/calendar.component";
 import { CardsComponent } from './cards/card.component';
+import { CarouselsComponent } from './carousels/carousel.component';
+import { ChatsComponent } from './chats/chat.component';
 import { CollapesesComponent } from './collapses/collapse.component';
 import { DropdownsComponent } from './dropdown/dropdown.component';
 import { HomeComponent } from './home/home.component';
@@ -20,6 +22,7 @@ import { OffcanvassComponent } from './offcanvass/offcanvas.component';
 import { PaginationsComponent } from './pagionations/pagionation.component';
 import { PlaceholdersComponent } from './placeholders/placeholder.component';
 import { ScrollspysComponent } from './scrollspys/scrollspy.component';
+import { SidebarsComponent } from './sidebars/sidebar.component';
 import { TablesComponent } from "./tables/tables.component";
 import { TabssComponent } from './tabs/tab.component';
 import { ToastsComponent } from './toasts/toasts.component';
@@ -38,6 +41,9 @@ const routes: Routes = [
   { path: 'breadcrumbs', component: BreadcrumbsComponent },
   { path: 'buttons', component: ButtonsComponent },
   { path: 'cards', component: CardsComponent },
+  { path: 'carousels', component: CarouselsComponent },
+  { path: 'chats', component: ChatsComponent },
+  { path: 'sidebars', component: SidebarsComponent },
   { path: 'lists', component: ListsComponent },
   { path: 'tables', component: TablesComponent },
   { path: 'loaders', component: LoadersComponent },

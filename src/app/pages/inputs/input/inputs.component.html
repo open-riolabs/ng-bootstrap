@@ -1,201 +1,117 @@
-<div class="container my-3">
+<docs-page
+  title="Input"
+  lead="A universal, form-friendly text input component that supports all standard HTML input types, reactive and template-driven forms, validation display, and timezone-aware datetime handling.">
 
-    <h3>Input</h3>
-    <p>
-        Si tratta di un input Angular universale ed estensibile, racchiuso in un componente form-friendly.
-        Supporta tutti i tipi di input HTML (testo, email, numero, password, datetime-local, ecc.)
-    </p>
+  <docs-example
+    heading="Basic usage"
+    description="Bind rlb-input with ngModel for template-driven forms, or with formControlName inside a FormGroup for reactive forms."
+    [code]="basicExample">
+    <rlb-input [(ngModel)]="input" placeholder="Type something..."></rlb-input>
+  </docs-example>
 
-    <rlb-dt-table>
-        <rlb-dt-header>Parameters</rlb-dt-header>
-        <rlb-dt-header>Type</rlb-dt-header>
-        <rlb-dt-header>Required</rlb-dt-header>
-        <rlb-dt-header>Description</rlb-dt-header>
-        <rlb-dt-header>I/O</rlb-dt-header>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>type</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>
-                Input type: <code>text</code>, <code>email</code>, <code>number</code>, <code>password</code>,
-                <code>search</code>, <code>tel</code>, <code>url</code>, etc.
-            </rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>disabled</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>Disables the input field</rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>readonly</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='success'>boolean</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>Makes the input read-only</rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>placeholder</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>Placeholder text</rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>name</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>HTML input name attribute</rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>size</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell><code>'small'</code> or <code>'large'</code> to control input size</rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>max / min / step</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='primary'>number</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>Constraints for numeric inputs</rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>dateType</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>
-                For <code>datetime-local</code> input:<br>
-                <code>'string'</code>, <code>'number'</code>, <code>'date'</code>, or <code>'date-tz'</code> to define
-                the output format.
-            </rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>timezone</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>Timezone used for parsing <code>date-tz</code> inputs (default: <code>'UTC'</code>)
-            </rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-
-        <rlb-dt-row>
-            <rlb-dt-cell>id</rlb-dt-cell>
-            <rlb-dt-cell><span rlb-badge color='primary'>string</span></rlb-dt-cell>
-            <rlb-dt-cell>False</rlb-dt-cell>
-            <rlb-dt-cell>User-defined ID for the input element</rlb-dt-cell>
-            <rlb-dt-cell>Input</rlb-dt-cell>
-        </rlb-dt-row>
-    </rlb-dt-table>
-    <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Input types"
+    description="Pass the type attribute to select any standard HTML input type. For number inputs use [min] and [max] to constrain the value; for datetime-local use date-type to control the output format."
+    [code]="typesExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-input type="text" placeholder="Text input"></rlb-input>
+      <rlb-input type="email" placeholder="Email input"></rlb-input>
+      <rlb-input type="password" placeholder="Password input"></rlb-input>
+      <rlb-input type="number" placeholder="Number input" [min]="0" [max]="100"></rlb-input>
+      <rlb-input type="datetime-local"></rlb-input>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-			<div rlb-accordion-body>
-				<rlb-input [(ngModel)]="input"></rlb-input>
-      </div>
+  </docs-example>
+
+  <docs-example
+    heading="Sizes"
+    description="Use the size attribute with &quot;small&quot; or &quot;large&quot;; omit it for the default Bootstrap input size."
+    [code]="sizesExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-input size="small" placeholder="Small input"></rlb-input>
+      <rlb-input placeholder="Default input"></rlb-input>
+      <rlb-input size="large" placeholder="Large input"></rlb-input>
     </div>
-  </rlb-accordion>
+  </docs-example>
 
-  <rlb-accordion class="mt-3">
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Advanced Examples (Async & Patching)</rlb-accordion-header>
-      <div rlb-accordion-body>
+  <docs-example
+    heading="Disabled and readonly"
+    description="Set [disabled]=&quot;true&quot; to block all interaction, or [readonly]=&quot;true&quot; to allow reading but not editing."
+    [code]="disabledReadonlyExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-input [disabled]="true" placeholder="Disabled input"></rlb-input>
+      <rlb-input [readonly]="true" placeholder="Readonly input"></rlb-input>
+    </div>
+  </docs-example>
 
-        <form [formGroup]="form" (ngSubmit)="submitForm()" class="row g-3">
+  <docs-example
+    heading="Advanced form — validation, async validators &amp; patching"
+    description="A complete reactive form showing sync and async validation, enable-validation feedback classes, datetime-local with date-type=&quot;string&quot;, and form-level patch/submit actions."
+    [code]="advancedFormExample">
+    <form [formGroup]="form" (ngSubmit)="submitForm()" class="row g-3">
 
-          <div class="col-md-6">
-            <rlb-input inputId="demo-basic-text" formControlName="basicText" enable-validation="true">
-              <label for="demo-basic-text" class="form-label d-block w-100 mb-2" before>Basic Text (Required)</label>
-            </rlb-input>
-          </div>
+      <div class="col-md-6">
+        <rlb-input inputId="demo-basic-text" formControlName="basicText" enable-validation="true">
+          <label for="demo-basic-text" class="form-label d-block w-100 mb-2" before>Basic Text (Required)</label>
+        </rlb-input>
+      </div>
 
-          <div class="col-md-6">
-            <label for="demo-number-input" class="form-label">Number (Min 10, Max 100)</label>
-            <rlb-input inputId="demo-number-input" type="number" formControlName="numberInput" [min]="10" [max]="100" enable-validation="true"></rlb-input>
-          </div>
+      <div class="col-md-6">
+        <label for="demo-number-input" class="form-label">Number (Min 10, Max 100)</label>
+        <rlb-input inputId="demo-number-input" type="number" formControlName="numberInput"
+          [min]="10" [max]="100" enable-validation="true"></rlb-input>
+      </div>
 
-          <div class="col-md-6">
-            <label for="demo-date-input" class="form-label">Datetime Local (String Output)</label>
-            <rlb-input enable-validation="true" inputId="demo-date-input" type="datetime-local" date-type="string" formControlName="dateInput"></rlb-input>
-          </div>
+      <div class="col-md-6">
+        <label for="demo-date-input" class="form-label">Datetime Local (String Output)</label>
+        <rlb-input enable-validation="true" inputId="demo-date-input"
+          type="datetime-local" date-type="string" formControlName="dateInput"></rlb-input>
+      </div>
 
-          <!-- Async Validation Input -->
-          <div class="col-md-6">
-            <label for="demo-email-input" class="form-label">
-              Async Email Validation
-              @if (form.get('asyncEmail')?.pending) {
-                <span class="spinner-border spinner-border-sm text-primary ms-2" role="status"></span>
-              }
-            </label>
-            <rlb-input inputId="demo-email-input" type="email" formControlName="asyncEmail" enable-validation="true"></rlb-input>
-            <div class="form-text">Type <code>taken&#64;test.com</code> to trigger async error (1s delay).</div>
-          </div>
+      <div class="col-md-6">
+        <label for="demo-email-input" class="form-label">
+          Async Email Validation
+          @if (form.get('asyncEmail')?.pending) {
+            <span class="spinner-border spinner-border-sm text-primary ms-2" role="status"></span>
+          }
+        </label>
+        <rlb-input inputId="demo-email-input" type="email"
+          formControlName="asyncEmail" enable-validation="true"></rlb-input>
+        <div class="form-text">Type <code>taken&#64;test.com</code> to trigger async error (1s delay).</div>
+      </div>
 
-          <!-- Form Actions -->
-          <div class="col-12 mt-4 d-flex gap-2">
-            <button rlb-button outline color="secondary" type="button" (click)="patchData()">
-              Patch Mock Data
-            </button>
-            <button rlb-button color="primary" type="submit" [disabled]="isSaving || form.pending">
-              @if (isSaving) {
-                <rlb-spinner class="spinner-border spinner-border-sm me-2" role="status"></rlb-spinner>
-                Saving...
-              } @else {
-                Submit
-              }
-            </button>
-          </div>
-        </form>
+      <div class="col-12 mt-4 d-flex gap-2">
+        <button rlb-button outline color="secondary" type="button" (click)="patchData()">
+          Patch Mock Data
+        </button>
+        <button rlb-button color="primary" type="submit" [disabled]="isSaving || form.pending">
+          @if (isSaving) {
+            <rlb-spinner class="spinner-border spinner-border-sm me-2" role="status"></rlb-spinner>
+            Saving...
+          } @else {
+            Submit
+          }
+        </button>
+      </div>
+    </form>
 
-        <!-- Debugging State (verifying zoneless behavior) -->
-        <div class="mt-4 p-3 bg-light border rounded">
-          <h5>Form State Tracker</h5>
-          <div class="row">
-            <div class="col-md-6">
-              <strong>Value:</strong>
-              <pre><code>{{ form.value | json }}</code></pre>
-            </div>
-            <div class="col-md-6">
-              <strong>Status:</strong>
-              <p>
-                Valid: <span rlb-badge [color]="form.valid ? 'success' : 'danger'" >{{ form.valid }}</span><br>
-                Touched: <span rlb-badge [color]="form.touched ? 'warning' : 'secondary'">{{ form.touched }}</span><br>
-                Pending: <span rlb-badge [color]="form.pending ? 'info' : 'secondary'">{{ form.pending }}</span>
-              </p>
-            </div>
-          </div>
+    <div class="mt-4 p-3 bg-body-tertiary border rounded">
+      <h5 class="h6">Form State Tracker</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <strong>Value:</strong>
+          <pre class="mt-1"><code>{{ form.value | json }}</code></pre>
         </div>
-
+        <div class="col-md-6">
+          <strong>Status:</strong>
+          <p class="mt-1">
+            Valid: <span rlb-badge [color]="form.valid ? 'success' : 'danger'">{{ form.valid }}</span><br>
+            Touched: <span rlb-badge [color]="form.touched ? 'warning' : 'secondary'">{{ form.touched }}</span><br>
+            Pending: <span rlb-badge [color]="form.pending ? 'info' : 'secondary'">{{ form.pending }}</span>
+          </p>
+        </div>
       </div>
     </div>
-  </rlb-accordion>
+  </docs-example>
 
-</div>
+  <docs-api selector="rlb-input" [rows]="api" />
+</docs-page>

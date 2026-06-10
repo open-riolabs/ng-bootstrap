@@ -1,222 +1,107 @@
-<div class="container mt-3">
-  
-  <h3>Loader</h3>
-  <p>Un Loader è un componente visivo che indica che un processo è in corso, come il caricamento di dati o l'elaborazione di un'azione.</p>
+<docs-page
+  title="Loaders"
+  lead="Visual indicators for in-progress operations. Use rlb-progress for determinate or indeterminate progress bars, and rlb-spinner for compact loading spinners.">
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>Nessun Parametro</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell> 
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <!-- ─────────────────────────────────────────────────────────────
+       Progress
+  ───────────────────────────────────────────────────────────────── -->
 
-  <h4>Progress</h4>
-  <p>La progress bar è un componente visivo che mostra l'avanzamento di un'operazione, come il caricamento di un file o il completamento di una procedura.</p>
+  <docs-example
+    heading="Min, Max and Value"
+    description="Set min, max, and value to control how much of the bar is filled. The displayed percentage is computed automatically."
+    [code]="mmvExample">
+    <rlb-progress [min]="0" [max]="100" [value]="50"></rlb-progress>
+  </docs-example>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>max</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>min</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>value</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>height</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='success'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>animated</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>striped</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>infinite</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>aria-label</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>showValue</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>color</rlb-dt-cell>
-      <rlb-dt-cell>Color</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>text-color</rlb-dt-cell>
-      <rlb-dt-cell>Color</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <docs-example
+    heading="Height"
+    description="Use the height input to set an explicit bar height in pixels."
+    [code]="heightExample">
+    <rlb-progress [height]="3"></rlb-progress>
+  </docs-example>
 
-  <h4>Spinner</h4>
-  <p>Lo spinner è un indicatore visivo che segnala un processo in corso, come il caricamento di contenuti o l'attesa per una risposta.</p>
+  <docs-example
+    heading="Animated"
+    description="Add animated to make the stripes move. The striped pattern is applied automatically when animated is set."
+    [code]="animatedExample">
+    <rlb-progress [animated]="true" [value]="50"></rlb-progress>
+  </docs-example>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>style</rlb-dt-cell>
-      <rlb-dt-cell>'grow' | 'border'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell> 
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>color</rlb-dt-cell>
-      <rlb-dt-cell>Color</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell> 
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>size</rlb-dt-cell>
-      <rlb-dt-cell>'sm' | 'md' | 'lg'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell> 
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <docs-example
+    heading="Striped"
+    description="Add a static stripe overlay to the progress bar fill."
+    [code]="strippedExample">
+    <rlb-progress [striped]="true" [value]="50"></rlb-progress>
+  </docs-example>
 
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html-progress">HTML Progress</rlb-tab>
-          <rlb-tab target="ex-1-html-spinner">HTML Spinner</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html-progress">
-            <h4>Min, Max e Value</h4>
-            <pre><code [highlight]="mmv" language="html"></code></pre>
-            <h4>Height</h4>
-            <pre><code [highlight]="height" language="html"></code></pre>
-            <h4>Stripped</h4>
-            <pre><code [highlight]="stripped" language="html"></code></pre>
-            <h4>Infinite</h4>
-            <pre><code [highlight]="infinite" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-html-spinner">
-            <h4>Style</h4>
-            <pre><code [highlight]="style" language="html"></code></pre>
-            <h4>Color</h4>
-            <pre><code [highlight]="color" language="html"></code></pre>
-            <h4>Size</h4>
-            <pre><code [highlight]="size" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Infinite"
+    description="Use infinite for indeterminate operations where the total duration is unknown. Combine with color to style the animated fill."
+    [code]="infiniteExample">
+    <rlb-progress [infinite]="true" color="danger"></rlb-progress>
+  </docs-example>
+
+  <docs-example
+    heading="Show value"
+    description="Set showValue to display the computed percentage as text inside the bar."
+    [code]="showValueExample">
+    <rlb-progress [showValue]="true" [value]="50"></rlb-progress>
+  </docs-example>
+
+  <docs-example
+    heading="Colors"
+    description="Use the color input to apply any Bootstrap contextual color to the progress fill."
+    [code]="progressColorExample">
+    <div class="d-flex flex-column gap-2">
+      <rlb-progress [value]="75" color="success"></rlb-progress>
+      <rlb-progress [value]="50" color="warning"></rlb-progress>
+      <rlb-progress [value]="25" color="danger"></rlb-progress>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example Progress</rlb-accordion-header>
-      <div rlb-accordion-body>
-          <h4>Min, Max e Value</h4>
-          <rlb-progress [min]="0" [max]="100" [value]="50"></rlb-progress>
-          <h4>Height</h4>
-          <rlb-progress [height]="3"></rlb-progress>
-          <h4>Animated</h4>
-          <rlb-progress [animated]="true" [value]="50"></rlb-progress>
-          <h4>Striped</h4>
-          <rlb-progress [striped]="true" [value]="50"></rlb-progress>
-          <h4>Infinite</h4>
-          <rlb-progress [infinite]="true" color="danger"></rlb-progress>
-          <h4>Aria-Label</h4>
-          <rlb-progress [aria-label]="'label'"></rlb-progress>
-          <h4>Show Value</h4>
-          <rlb-progress [showValue]="true" [value]="50"></rlb-progress>
-          <h4>Color</h4>
-          <rlb-progress [value]="50"></rlb-progress>
-          <h4>Text Color</h4>
-          <rlb-progress aria-label="'label'" [text-color]="'primary'"></rlb-progress>
-      </div>
+  </docs-example>
+
+  <docs-api selector="rlb-progress" [rows]="progressApi" />
+
+  <!-- ─────────────────────────────────────────────────────────────
+       Spinner
+  ───────────────────────────────────────────────────────────────── -->
+
+  <docs-example
+    heading="Spinner styles"
+    description="Choose between the border (spinning ring) and grow (pulsing dot) animation styles."
+    [code]="spinnerStyleExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-spinner [style]="'border'"></rlb-spinner>
+      <rlb-spinner [style]="'grow'"></rlb-spinner>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example Spinner</rlb-accordion-header>
-      <div rlb-accordion-body>
-          <h4>Style</h4>
-          <rlb-spinner [style]="'grow'"></rlb-spinner>
-          <rlb-spinner [style]="'border'"></rlb-spinner>
-          <h4>Color</h4>
-          <rlb-spinner [color]="'primary'"></rlb-spinner>
-          <rlb-spinner [color]="'secondary'"></rlb-spinner>
-          <rlb-spinner [color]="'success'"></rlb-spinner>
-          <rlb-spinner [color]="'danger'"></rlb-spinner>
-          <rlb-spinner [color]="'warning'"></rlb-spinner>
-          <rlb-spinner [color]="'info'"></rlb-spinner>
-          <rlb-spinner [color]="'light'"></rlb-spinner>
-          <rlb-spinner [color]="'dark'"></rlb-spinner>
-          <h4>Size</h4>
-          <rlb-spinner [size]="'sm'"></rlb-spinner>
-          <rlb-spinner [size]="'md'"></rlb-spinner>
-          <rlb-spinner [size]="'lg'"></rlb-spinner>
-      </div>
+  </docs-example>
+
+  <docs-example
+    heading="Colors"
+    description="Apply any Bootstrap contextual color to the spinner with the color input."
+    [code]="spinnerColorExample">
+    <div class="d-flex gap-3 flex-wrap align-items-center">
+      <rlb-spinner [color]="'primary'"></rlb-spinner>
+      <rlb-spinner [color]="'secondary'"></rlb-spinner>
+      <rlb-spinner [color]="'success'"></rlb-spinner>
+      <rlb-spinner [color]="'danger'"></rlb-spinner>
+      <rlb-spinner [color]="'warning'"></rlb-spinner>
+      <rlb-spinner [color]="'info'"></rlb-spinner>
+      <rlb-spinner [color]="'light'"></rlb-spinner>
+      <rlb-spinner [color]="'dark'"></rlb-spinner>
     </div>
-  </rlb-accordion>
-  <br>
-  <br>
-</div>
+  </docs-example>
+
+  <docs-example
+    heading="Sizes"
+    description="Three sizes are available: sm, md (default), and lg."
+    [code]="spinnerSizeExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-spinner [size]="'sm'"></rlb-spinner>
+      <rlb-spinner [size]="'md'"></rlb-spinner>
+      <rlb-spinner [size]="'lg'"></rlb-spinner>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-spinner" [rows]="spinnerApi" />
+
+</docs-page>

@@ -1,0 +1,54 @@
+<docs-page
+  title="Chat"
+  lead="A pair of components to build chat conversations: rlb-chat-container wraps the thread and rlb-chat-item renders individual message bubbles with avatar, timestamp, reply context, emoji reactions and left/right alignment.">
+
+  <docs-example
+    heading="Basic conversation"
+    description="Wrap rlb-chat-item elements inside rlb-chat-container. Use position=&quot;left&quot; for incoming messages and position=&quot;right&quot; for outgoing ones."
+    [code]="basicExample">
+    <rlb-chat-container>
+      <rlb-chat-item [avatar]="avatarA" position="left" date-time="10:30">
+        Hi! How are you doing today?
+      </rlb-chat-item>
+
+      <rlb-chat-item [avatar]="avatarB" position="right" date-time="10:31">
+        Great, thanks! Working on the new docs.
+      </rlb-chat-item>
+    </rlb-chat-container>
+  </docs-example>
+
+  <docs-example
+    heading="Reactions, replies and reply context"
+    description="Add can-reply to show a reply button and bind (reply) to capture the event. Use reaction to display an emoji badge, and replay-subject + replay-text to render a quoted-message block."
+    [code]="reactionReplyExample">
+    @if (lastReply !== undefined) {
+      <p class="text-body-secondary mb-3">
+        Last reply target id: <code>{{ lastReply || '(none)' }}</code>
+      </p>
+    }
+    <rlb-chat-container>
+      <rlb-chat-item
+        [avatar]="avatarA"
+        position="left"
+        date-time="10:30"
+        replay-subject="You"
+        replay-text="Great, thanks! Working on the new docs.">
+        Nice, can't wait to see them!
+      </rlb-chat-item>
+
+      <rlb-chat-item
+        [avatar]="avatarB"
+        position="right"
+        date-time="10:31"
+        reaction="❤️"
+        can-reply
+        (reply)="onReply($event)">
+        Great, thanks! Working on the new docs.
+      </rlb-chat-item>
+    </rlb-chat-container>
+  </docs-example>
+
+  <docs-api selector="rlb-chat-container" [rows]="containerApi" />
+
+  <docs-api selector="rlb-chat-item" [rows]="itemApi" />
+</docs-page>

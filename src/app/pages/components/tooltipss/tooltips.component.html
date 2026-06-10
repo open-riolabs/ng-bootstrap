@@ -1,108 +1,72 @@
-<div class="container mt-3">
-  
-  <h3>Tooltip</h3>
-  <p>Il Tooltip è un piccolo riquadro informativo che appare quando l'utente passa il cursore o si sofferma su un elemento, fornendo dettagli aggiuntivi o suggerimenti contestuali.</p>
+<docs-page
+  title="Tooltips &amp; Popovers"
+  lead="Lightweight contextual overlays powered by Bootstrap. Use the [tooltip] directive for brief labels on hover, and [popover] for richer click-triggered overlays with an optional title.">
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>tooltip</rlb-dt-cell>
-      <rlb-dt-cell>string | null | undefined</rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>tooltip-placement</rlb-dt-cell>
-      <rlb-dt-cell>'top' | 'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>tooltip-class</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>tootltip-html</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='primary'> boolean</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
+  <!-- ===================== TOOLTIP SECTION ===================== -->
 
-  <h3>Popover</h3>
-  <p>Il Popover è un elemento di interfaccia simile al Tooltip, ma più ampio e configurabile, che appare sopra un elemento quando l'utente ci clicca o passa il mouse.</p>
+  <docs-example
+    heading="Basic tooltip"
+    description="Apply the [tooltip] attribute to any element to show a tooltip on hover. Pass a string binding or a plain attribute value."
+    [code]="basicTooltipExample">
+    <button rlb-button color="primary" [tooltip]="'Hello, I am a tooltip!'">Hover me</button>
+  </docs-example>
 
-  <rlb-dt-table>
-    <rlb-dt-header>Parameters</rlb-dt-header>
-    <rlb-dt-header>Type</rlb-dt-header>
-    <rlb-dt-header>Required</rlb-dt-header>
-    <rlb-dt-header>Description</rlb-dt-header>
-    <rlb-dt-header>I/O</rlb-dt-header>
-    <rlb-dt-row>
-      <rlb-dt-cell>popover</rlb-dt-cell>
-      <rlb-dt-cell>string | undefined</rlb-dt-cell>
-      <rlb-dt-cell>True</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>popover-placement</rlb-dt-cell>
-      <rlb-dt-cell>'top' | 'bottom' | 'left' | 'right'</rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>popover-class</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-    <rlb-dt-row>
-      <rlb-dt-cell>popover-title</rlb-dt-cell>
-      <rlb-dt-cell><span rlb-badge color='info'>string</span></rlb-dt-cell>
-      <rlb-dt-cell>False</rlb-dt-cell>
-      <rlb-dt-cell></rlb-dt-cell>
-      <rlb-dt-cell>Input</rlb-dt-cell>
-    </rlb-dt-row>
-  </rlb-dt-table>
-
-  <rlb-accordion>
-    <div rlb-accordion-item >
-      <rlb-accordion-header>Code</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <rlb-tabs >
-          <rlb-tab target="ex-1-html">HTML</rlb-tab>
-          <rlb-tab target="ex-1-ts">Ts</rlb-tab>
-        </rlb-tabs>
-        <rlb-tab-content>
-          <rlb-tab-pane id="ex-1-html">
-            <pre><code [highlight]="html" language="html"></code></pre>
-          </rlb-tab-pane>
-          <rlb-tab-pane id="ex-1-ts">
-            <pre><code [highlight]="ts" language="ts"></code></pre>
-          </rlb-tab-pane>
-        </rlb-tab-content>
-      </div>
+  <docs-example
+    heading="Placement"
+    description="Control which side the tooltip appears on with the tooltip-placement attribute. Accepts top (default), bottom, left, or right."
+    [code]="placementExample">
+    <div class="d-flex gap-2 flex-wrap">
+      <button rlb-button color="secondary" tooltip="Top tooltip" tooltip-placement="top">Top</button>
+      <button rlb-button color="secondary" tooltip="Bottom tooltip" tooltip-placement="bottom">Bottom</button>
+      <button rlb-button color="secondary" tooltip="Left tooltip" tooltip-placement="left">Left</button>
+      <button rlb-button color="secondary" tooltip="Right tooltip" tooltip-placement="right">Right</button>
     </div>
-    <div rlb-accordion-item>
-      <rlb-accordion-header>Example</rlb-accordion-header>
-      <div rlb-accordion-body>
-        <button rlb-button color="primary" [tooltip]="'Ciao'">Show Tooltips</button>
-        <br><br>
-        <button rlb-button color="primary" [popover]="'Ciao'">Show Popover</button>
-      </div>
+  </docs-example>
+
+  <docs-example
+    heading="HTML content"
+    description="Add the tooltip-html boolean attribute to render the tooltip value as HTML markup instead of plain text."
+    [code]="htmlTooltipExample">
+    <button rlb-button color="info" tooltip="<strong>Bold</strong> and <em>italic</em> content" tooltip-html>HTML tooltip</button>
+  </docs-example>
+
+  <docs-example
+    heading="Custom CSS class"
+    description="Use tooltip-class to attach one or more CSS classes to the generated tooltip element for custom visual styles."
+    [code]="customClassExample">
+    <button rlb-button color="dark" tooltip="Styled tooltip" tooltip-class="my-custom-tooltip">Custom class</button>
+  </docs-example>
+
+  <docs-api selector="[tooltip]" [rows]="tooltipApi" />
+
+  <!-- ===================== POPOVER SECTION ===================== -->
+
+  <docs-example
+    heading="Basic popover"
+    description="Apply the [popover] attribute to show a Bootstrap popover on click. The directive initialises itself after the view is ready."
+    [code]="basicPopoverExample">
+    <button rlb-button color="primary" [popover]="'This is a popover body.'">Click me</button>
+  </docs-example>
+
+  <docs-example
+    heading="Popover with title"
+    description="Add the popover-title attribute to display a header above the popover body."
+    [code]="popoverTitleExample">
+    <button rlb-button color="success" popover="Popover content goes here." popover-title="Popover title">With title</button>
+  </docs-example>
+
+  <docs-example
+    heading="Popover placement"
+    description="Use popover-placement to control which side the popover opens on — top (default), bottom, left, or right."
+    [code]="popoverPlacementExample">
+    <div class="d-flex gap-2 flex-wrap">
+      <button rlb-button color="secondary" popover="Top popover" popover-placement="top">Top</button>
+      <button rlb-button color="secondary" popover="Bottom popover" popover-placement="bottom">Bottom</button>
+      <button rlb-button color="secondary" popover="Left popover" popover-placement="left">Left</button>
+      <button rlb-button color="secondary" popover="Right popover" popover-placement="right">Right</button>
     </div>
-  </rlb-accordion>
-</div>
+  </docs-example>
+
+  <docs-api selector="[popover]" [rows]="popoverApi" />
+
+</docs-page>
