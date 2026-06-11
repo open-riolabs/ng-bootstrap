@@ -2,34 +2,12 @@
 
   <rlb-navbar class="rlb-navbar border-bottom" expand="lg">
     <a rlb-navbar-brand href="#">Navbar</a>
-    <rlb-navbar-form>
-      <rlb-input-group class="my-1 mx-3" validate>
-        <rlb-input type="search" class="search-input" placeholder="Search" name="search" >
-          <button after rlb-button outline type="submit" >
-            <i class="bi bi-search"></i>
-          </button>
-        </rlb-input>
-      </rlb-input-group>
-    </rlb-navbar-form>
     <rlb-navbar-items>
       <rlb-navbar-item [router-link]="'/'">Home</rlb-navbar-item>
       <rlb-navbar-item [router-link]="'/getting-started'">Getting
         started
       </rlb-navbar-item>
-      <rlb-navbar-separator />
-      <rlb-navbar-dropdown-item dropdown auto-close="inside">Components
-        <rlb-dropdown-container placement="right">
-          <rlb-card>
-            <rlb-card-body>
-              <h5 rlb-card-title>Card title</h5>
-              <p rlb-card-text>
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-            </rlb-card-body>
-          </rlb-card>
-        </rlb-dropdown-container>
-      </rlb-navbar-dropdown-item>
+      <rlb-navbar-item [router-link]="'/components'">Components</rlb-navbar-item>
     </rlb-navbar-items>
   </rlb-navbar>
   <div class="rlb-main-wrapper">
@@ -74,9 +52,10 @@
         <rlb-sidebar-item icon="bi bi-arrows-collapse" link="/components/collapses">Collapses</rlb-sidebar-item>
       </rlb-sidebar-item>
 
-      <rlb-sidebar-item label="Media &amp; content" [badgeCounter]="4">
+      <rlb-sidebar-item label="Media &amp; content" [badgeCounter]="5">
         <rlb-sidebar-item icon="bi bi-person-bounding-box" link="/components/avatars">Avatars</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-images" link="/components/carousels">Carousel</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-ui-checks" link="/components/wizards">Wizard</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-chat-dots" link="/components/chats">Chat</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
       </rlb-sidebar-item>

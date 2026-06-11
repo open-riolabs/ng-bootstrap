@@ -178,6 +178,40 @@ export class EditModalComponent {
 
 ---
 
+## Multi-step (wizard) modal
+
+For a multi-step form inside a modal, put a **carousel driven as a controlled stepper** in the
+`modal-body` and Back / Next / Finish buttons in the `modal-footer`. The carousel runs in manual mode
+(`autoplay="none" no-touch hide-controls hide-indicators`); bind `[current-slide]` to a signal and
+update it from the buttons, gate `Next` on the current step's validity, and call `modal.hide('ok')`
+on finish. See the **Wizard pattern** in the `rlb-components` skill for the full carousel details.
+
+```html
+<div rlb-modal id="wizard-modal" [data-instance]="modal">
+  <div class="modal-header"><h5 class="modal-title">Create</h5>
+    <button class="btn-close" data-modal-reason="close"></button>
+  </div>
+  <div class="modal-body" [formGroup]="form">
+    <rlb-carousel autoplay="none" no-touch hide-controls hide-indicators
+      [current-slide]="page()" (current-slideChange)="page.set($event)"
+      (slide-count)="count.set($event)" id="wizard">
+      <rlb-carousel-slide active><div formGroupName="step1"><!-- … --></div></rlb-carousel-slide>
+      <rlb-carousel-slide><div formGroupName="step2"><!-- … --></div></rlb-carousel-slide>
+    </rlb-carousel>
+  </div>
+  <div class="modal-footer">
+    <button rlb-button [disabled]="page() === 0" (click)="prev()">Back</button>
+    @if (page() < count() - 1) {
+      <button rlb-button color="primary" [disabled]="currentStepInvalid()" (click)="next()">Next</button>
+    } @else {
+      <button rlb-button color="primary" [disabled]="form.invalid" (click)="onFinish()">Finish</button>
+    }
+  </div>
+</div>
+```
+
+---
+
 ## ModalOptions Reference
 
 | Option | Type | Default | Description |

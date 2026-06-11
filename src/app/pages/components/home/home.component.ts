@@ -75,6 +75,7 @@ export class HomeComponent {
       items: [
         { name: 'Avatar', icon: 'bi-person-bounding-box', desc: 'User avatars with sizes and shapes.', link: '/components/avatars' },
         { name: 'Carousel', icon: 'bi-images', desc: 'Slideshow for cycling through content.', link: '/components/carousels' },
+        { name: 'Wizard', icon: 'bi-ui-checks', desc: 'Multi-step forms built on the carousel.', link: '/components/wizards' },
         { name: 'Chat', icon: 'bi-chat-dots', desc: 'Conversation bubbles with replies and reactions.', link: '/components/chats' },
         { name: 'Calendar', icon: 'bi-calendar4-range', desc: 'Timezone-aware month, week and day calendar.', link: '/components/calendar' },
       ],

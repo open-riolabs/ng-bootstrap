@@ -1,0 +1,127 @@
+<docs-page
+  title="Wizard"
+  lead="Build multi-step forms by driving the carousel programmatically. Disable autoplay, controls, indicators and touch, then move between steps with your own Back / Next buttons.">
+
+  <p class="text-body-secondary">
+    There is no dedicated wizard component — a wizard is just a <code>rlb-carousel</code> used as a
+    controlled stepper. Each <code>rlb-carousel-slide</code> is one step; you bind
+    <code>[current-slide]</code> to a signal and update it from the footer buttons, while
+    <code>(slide-count)</code> tells you how many steps there are. Validate one step at a time to gate
+    the <em>Next</em> button. See the full <a routerLink="/components/carousels">Carousel</a> API for all options.
+  </p>
+
+  <docs-example
+    heading="Carousel-driven wizard"
+    description="A three-step sign-up wizard. The carousel runs in manual mode; Next is disabled until the current step is valid, and Finish until the whole form is valid."
+    [code]="htmlSnippet">
+
+    <div class="border rounded-3 mx-auto" style="max-width: 540px;">
+
+      <!-- Step header + progress -->
+      <div class="p-3 border-bottom">
+        <div class="d-flex justify-content-between mb-2">
+          @for (s of steps; track s; let i = $index) {
+            <span class="badge rounded-pill"
+              [class.text-bg-primary]="i === page()"
+              [class.text-bg-success]="i < page()"
+              [class.text-bg-secondary]="i > page()">
+              {{ i + 1 }}. {{ s }}
+            </span>
+          }
+        </div>
+        <div class="progress" role="progressbar" style="height: 6px;">
+          <div class="progress-bar" [style.width.%]="count() ? ((page() + 1) / count()) * 100 : 0"></div>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="p-3" [formGroup]="form">
+        <rlb-carousel
+          autoplay="none"
+          no-touch
+          hide-controls
+          hide-indicators
+          [current-slide]="page()"
+          (current-slideChange)="page.set($event)"
+          (slide-count)="count.set($event)"
+          id="wizard-carousel">
+
+          <rlb-carousel-slide active>
+            <div formGroupName="account">
+              <div class="mb-3">
+                <rlb-select formControlName="type" aria-label="Account type">
+                  <label before>Account type</label>
+                  <rlb-option [value]="''" disabled>—</rlb-option>
+                  <rlb-option value="personal">Personal</rlb-option>
+                  <rlb-option value="business">Business</rlb-option>
+                </rlb-select>
+              </div>
+              <div class="mb-3">
+                <rlb-input formControlName="username" aria-label="Username">
+                  <label before>Username</label>
+                </rlb-input>
+              </div>
+              <div class="mb-3">
+                <rlb-input type="email" formControlName="email" aria-label="Email">
+                  <label before>Email</label>
+                </rlb-input>
+              </div>
+            </div>
+          </rlb-carousel-slide>
+
+          <rlb-carousel-slide>
+            <div formGroupName="profile">
+              <div class="mb-3">
+                <rlb-input formControlName="firstName" aria-label="First name">
+                  <label before>First name</label>
+                </rlb-input>
+              </div>
+              <div class="mb-3">
+                <rlb-input formControlName="lastName" aria-label="Last name">
+                  <label before>Last name</label>
+                </rlb-input>
+              </div>
+              <div class="mb-3">
+                <rlb-input formControlName="city" aria-label="City">
+                  <label before>City</label>
+                </rlb-input>
+              </div>
+            </div>
+          </rlb-carousel-slide>
+
+          <rlb-carousel-slide>
+            <p class="text-body-secondary">Review your details and confirm to finish.</p>
+            <pre class="bg-body-tertiary rounded-3 p-2 small mb-3">{{ form.getRawValue() | json }}</pre>
+            <div formGroupName="confirm">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="wz-agree" formControlName="agree">
+                <label class="form-check-label" for="wz-agree">I confirm the information is correct</label>
+              </div>
+            </div>
+          </rlb-carousel-slide>
+        </rlb-carousel>
+      </div>
+
+      <!-- Footer -->
+      <div class="d-flex justify-content-between p-3 border-top">
+        <button rlb-button outline [disabled]="page() === 0" (click)="prev()">Back</button>
+        @if (!isLast()) {
+          <button rlb-button color="primary" [disabled]="currentStepInvalid()" (click)="next()">Next</button>
+        } @else {
+          <button rlb-button color="success" [disabled]="form.invalid" (click)="finish()">Finish</button>
+        }
+      </div>
+    </div>
+  </docs-example>
+
+  <h2 class="h4 mt-5 mb-3">Key carousel options for a wizard</h2>
+  <docs-api selector="rlb-carousel" [rows]="optionsApi" />
+
+  <h2 class="h4 mt-5 mb-2">Component logic</h2>
+  <p class="text-body-secondary">
+    The active step lives in a signal bound one-way to <code>[current-slide]</code>; Back / Next clamp it
+    between <code>0</code> and <code>count - 1</code>.
+  </p>
+  <pre class="border rounded-3 p-3 bg-body-tertiary"><code [highlight]="tsSnippet" language="typescript"></code></pre>
+
+</docs-page>

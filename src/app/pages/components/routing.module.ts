@@ -24,6 +24,7 @@ import { PlaceholdersComponent } from './placeholders/placeholder.component';
 import { ScrollspysComponent } from './scrollspys/scrollspy.component';
 import { SidebarsComponent } from './sidebars/sidebar.component';
 import { TablesComponent } from "./tables/tables.component";
+import { WizardsComponent } from './wizards/wizard.component';
 import { TabssComponent } from './tabs/tab.component';
 import { ToastsComponent } from './toasts/toasts.component';
 import { TooltipssComponent } from './tooltipss/tooltips.component';
@@ -44,6 +45,7 @@ const routes: Routes = [
   { path: 'carousels', component: CarouselsComponent },
   { path: 'chats', component: ChatsComponent },
   { path: 'sidebars', component: SidebarsComponent },
+  { path: 'wizards', component: WizardsComponent },
   { path: 'lists', component: ListsComponent },
   { path: 'tables', component: TablesComponent },
   { path: 'loaders', component: LoadersComponent },

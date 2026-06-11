@@ -148,15 +148,73 @@ type TextAlignment = 'left' | 'center' | 'right';
   [(current-slide)]="currentSlide"
   (slid)="onSlid($event)"
 >
-  <rlb-carousel-item>Slide 1</rlb-carousel-item>
-  <rlb-carousel-item>Slide 2</rlb-carousel-item>
+  <rlb-carousel-slide active>
+    Slide 1
+    <rlb-carousel-caption>
+      <h5>First slide</h5>
+    </rlb-carousel-caption>
+  </rlb-carousel-slide>
+  <rlb-carousel-slide>Slide 2</rlb-carousel-slide>
 </rlb-carousel>
 ```
 
-**Inputs:** `autoplay`, `interval`, `pause`, `wrap`, `cross-fade`, `hide-indicators`, `hide-controls`, `no-touch`, `keyboard`, `id`
+**Children:** `rlb-carousel-slide` (input `active`, `id`), `rlb-carousel-caption`
+**Inputs:** `autoplay` (`'auto' | 'manual' | 'none'`), `interval`, `pause`, `wrap`, `cross-fade`, `hide-indicators`, `hide-controls`, `no-touch`, `keyboard`, `id`
 **Two-way:** `current-slide`
 **Outputs:** `slid`, `slide`, `slide-count`
 **Methods (via viewChild):** `prev()`, `next()`, `to(index)`, `pause()`, `cycle()`
+
+### Wizard pattern (multi-step form)
+
+There is no separate wizard component — a wizard **is** a carousel used as a controlled stepper.
+Disable autoplay/controls/indicators/touch, drive `current-slide` from your own Back / Next buttons,
+and gate `Next` on the current step's validity. Often embedded in a modal (see the `rlb-modals` skill).
+
+```html
+<div [formGroup]="form">
+  <rlb-carousel
+    autoplay="none"
+    no-touch
+    hide-controls
+    hide-indicators
+    [current-slide]="page()"
+    (current-slideChange)="page.set($event)"
+    (slide-count)="count.set($event)"
+    id="wizard"
+  >
+    <rlb-carousel-slide active>
+      <div formGroupName="account"><!-- step 1 fields --></div>
+    </rlb-carousel-slide>
+    <rlb-carousel-slide>
+      <div formGroupName="profile"><!-- step 2 fields --></div>
+    </rlb-carousel-slide>
+  </rlb-carousel>
+</div>
+
+<button rlb-button outline [disabled]="page() === 0" (click)="prev()">Back</button>
+@if (page() < count() - 1) {
+  <button rlb-button color="primary" [disabled]="currentStepInvalid()" (click)="next()">Next</button>
+} @else {
+  <button rlb-button color="success" [disabled]="form.invalid" (click)="onFinish()">Finish</button>
+}
+```
+
+```typescript
+readonly page = signal(0);   // bound one-way to [current-slide]
+readonly count = signal(0);  // set from (slide-count)
+readonly groupNames = ['account', 'profile'];
+
+// Validate one step at a time to gate the Next button.
+currentStepInvalid(): boolean {
+  return !!this.form.get(this.groupNames[this.page()])?.invalid;
+}
+prev() { this.page.update(p => Math.max(0, p - 1)); }
+next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
+```
+
+> Key points: bind `[current-slide]` **one-way** and update the signal yourself (don't use `[(...)]`
+> two-way when you drive navigation manually); use `(slide-count)` to detect the last step; keep each
+> step in its own nested `FormGroup` so `currentStepInvalid()` can validate steps independently.
 
 ---
 

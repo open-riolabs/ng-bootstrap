@@ -39,4 +39,15 @@ for (const [src, dest] of assets) {
   cpSync(from, to, { recursive: true });
 }
 
+// Bundle the repo-root Claude skills so `ng add` can copy them into consumers.
+const skillsSrc = join(root, '.claude', 'skills');
+if (existsSync(skillsSrc)) {
+  const skillsDest = join(distSchematics, 'ng-add', 'claude-skills');
+  mkdirSync(skillsDest, { recursive: true });
+  cpSync(skillsSrc, skillsDest, { recursive: true });
+  console.log('• Bundled Claude skills from', skillsSrc);
+} else {
+  console.warn('⚠ No .claude/skills found at repo root — ng-add will ship without skills.');
+}
+
 console.log('✓ Schematics built →', distSchematics);

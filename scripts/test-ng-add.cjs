@@ -69,6 +69,9 @@ tree.create('/src/app/app.component.ts', [
   console.log(result.files.filter(f => f.includes('rlb-starter')).join('\n') || '(none)');
   console.log('\n--- rlb-starter.component.ts ---');
   console.log(result.readContent('/src/app/rlb-starter/rlb-starter.component.ts'));
+
+  console.log('\n=== Claude skills copied to .claude/skills ===');
+  console.log(result.files.filter(f => f.startsWith('/.claude/skills')).join('\n') || '(none)');
 })().catch(err => {
   console.error('SCHEMATIC FAILED:\n', err);
   process.exit(1);

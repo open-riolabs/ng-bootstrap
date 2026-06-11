@@ -4,4 +4,6 @@ export interface Schema {
   project?: string;
   /** When true, the starter example component is not generated. */
   skipStarter?: boolean;
+  /** When true, the bundled Claude skills are not copied into .claude/skills. */
+  skipSkills?: boolean;
 }

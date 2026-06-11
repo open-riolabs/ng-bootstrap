@@ -55,8 +55,10 @@ export function ngAdd(options: Schema): Rule {
       ),
       // 4. Optionally scaffold a starter component.
       options.skipStarter ? noop : scaffoldStarter(tree, project),
-      // 5. Print next steps.
-      logNextSteps(project, options.skipStarter),
+      // 5. Optionally copy the bundled Claude skills into .claude/skills.
+      options.skipSkills ? noop : copyClaudeSkills(),
+      // 6. Print next steps.
+      logNextSteps(project, options),
     ]);
   };
 }
@@ -120,7 +122,17 @@ function scaffoldStarter(tree: Tree, project: string): Rule {
   };
 }
 
-function logNextSteps(project: string, skipStarter?: boolean): Rule {
+/**
+ * Copies the Claude skills bundled with the package into the consumer's
+ * `.claude/skills` folder. Library-authored skills are authoritative, so existing
+ * copies are overwritten to stay in sync with the installed version.
+ */
+function copyClaudeSkills(): Rule {
+  const skills = apply(url('./claude-skills'), [move('.claude/skills')]);
+  return mergeWith(skills, MergeStrategy.Overwrite);
+}
+
+function logNextSteps(project: string, options: Schema): Rule {
   return (_tree: Tree, context: SchematicContext) => {
     const log = context.logger;
     log.info('');
@@ -128,9 +140,12 @@ function logNextSteps(project: string, skipStarter?: boolean): Rule {
     log.info(`   • Dependencies installed and added to package.json`);
     log.info(`   • Bootstrap + Bootstrap Icons styles registered in angular.json`);
     log.info(`   • provideRlbBootstrap() wired into the "${project}" app providers`);
-    if (!skipStarter) {
+    if (!options.skipStarter) {
       log.info('   • Starter component generated at src/app/rlb-starter/');
       log.info('     Render it to verify the setup, e.g. add <app-rlb-starter /> to a template.');
+    }
+    if (!options.skipSkills) {
+      log.info('   • Claude skills copied to .claude/skills/ (date-tz, rlb-* component guides)');
     }
     log.info('');
   };

@@ -15,6 +15,11 @@
       "type": "boolean",
       "default": false,
       "description": "Do not scaffold the RlbStarterComponent example."
+    },
+    "skipSkills": {
+      "type": "boolean",
+      "default": false,
+      "description": "Do not copy the bundled Claude skills into .claude/skills."
     }
   },
   "required": []

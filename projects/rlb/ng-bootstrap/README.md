@@ -18,7 +18,9 @@ The schematic will:
 - register the Bootstrap and Bootstrap Icons stylesheets in `angular.json`;
 - add `provideRlbBootstrap()` to your application providers;
 - scaffold a `RlbStarterComponent` (`src/app/rlb-starter/`) you can render to verify the setup
-  (pass `--skip-starter` to opt out).
+  (pass `--skip-starter` to opt out);
+- copy the bundled Claude skills into `.claude/skills/` — `date-tz` plus the `rlb-*` component
+  guides (pass `--skip-skills` to opt out).
 
 ### Manual
 
