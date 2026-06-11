@@ -1,7 +1,8 @@
 # @open-rlb/ng-bootstrap
 
-Angular 21 component library built on Bootstrap 5.3 (signals, OnPush), with timezone-aware
+Angular component library built on Bootstrap 5.3 (signals, OnPush), with timezone-aware
 date handling via [`@open-rlb/date-tz`](https://www.npmjs.com/package/@open-rlb/date-tz).
+Supports **Angular 17.2+** (built with Angular 21).
 
 ## Installation
 
