@@ -27,7 +27,7 @@ import { Schema } from './schema';
  */
 const DEPENDENCIES: ReadonlyArray<{ name: string; version: string; type: DependencyType }> = [
   { name: '@open-rlb/date-tz', version: '^2.1.1', type: DependencyType.Default },
-  { name: '@ngx-translate/core', version: '^16.0.0', type: DependencyType.Default },
+  { name: '@ngx-translate/core', version: '^17.0.0', type: DependencyType.Default },
   { name: '@angular/cdk', version: '^21.0.0', type: DependencyType.Default },
   { name: 'bootstrap', version: '^5.3.0', type: DependencyType.Default },
   { name: 'bootstrap-icons', version: '^1.11.0', type: DependencyType.Default },
@@ -50,8 +50,10 @@ export function ngAdd(options: Schema): Rule {
       // 2. Register Bootstrap + Bootstrap Icons global styles in angular.json.
       addBootstrapStyles(project),
       // 3. Wire up the library providers (modals/toasts registry, etc.).
-      addRootProvider(project, ({ code, external }) =>
-        code`${external('provideRlbBootstrap', '@open-rlb/ng-bootstrap')}()`,
+      addRootProvider(
+        project,
+        ({ code, external }) =>
+          code`${external('provideRlbBootstrap', '@open-rlb/ng-bootstrap')}()`,
       ),
       // 4. Optionally scaffold a starter component.
       options.skipStarter ? noop : scaffoldStarter(tree, project),
@@ -82,7 +84,9 @@ async function resolveProject(tree: Tree, name?: string): Promise<string> {
 
   const first = workspace.projects.keys().next().value;
   if (!first) {
-    throw new SchematicsException('No project found in the workspace to add @open-rlb/ng-bootstrap to.');
+    throw new SchematicsException(
+      'No project found in the workspace to add @open-rlb/ng-bootstrap to.',
+    );
   }
   return first;
 }

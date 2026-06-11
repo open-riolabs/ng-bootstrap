@@ -56,7 +56,7 @@ This library requires Angular 20+ and the following packages:
 
 ```bash
 npm install @angular/core@^20.1.0 @angular/common@^20.1.0 @angular/forms@^20.1.0 @angular/router@^20.1.0
-npm install @ngx-translate/core@^16.0.4
+npm install @ngx-translate/core@^17.0.0
 npm install bootstrap-icons@^1.13.1
 ```
 
