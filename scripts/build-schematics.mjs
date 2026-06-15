@@ -2,7 +2,7 @@
 // non-TS assets (collection.json, schema.json, template files) alongside them.
 // Run AFTER `ng build @open-rlb/ng-bootstrap` (ng-packagr cleans the dist dir).
 import { execSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -49,5 +49,16 @@ if (existsSync(skillsSrc)) {
 } else {
   console.warn('⚠ No .claude/skills found at repo root — ng-add will ship without skills.');
 }
+
+// `npm pack` strips nested package.json files from subfolders unless they are
+// listed explicitly in `files`. The CommonJS marker (schematics/package.json)
+// is exactly such a file: without it the CJS schematics load as ESM under the
+// package's `"type": "module"` and `ng add` fails. Force it back into the pack.
+const pkgPath = join(root, 'dist', 'rlb', 'ng-bootstrap', 'package.json');
+const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+if (!Array.isArray(pkg.files)) pkg.files = ['**/*'];
+if (!pkg.files.includes('schematics/package.json')) pkg.files.push('schematics/package.json');
+writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+console.log('• Patched dist package.json "files" to retain schematics/package.json');
 
 console.log('✓ Schematics built →', distSchematics);

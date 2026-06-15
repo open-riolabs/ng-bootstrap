@@ -14,7 +14,7 @@
     "lib:test": "ng test @open-rlb/ng-bootstrap",
     "lib:test-ci": "ng test --karma-config=./karma.conf.js --no-watch --no-progress --browsers=ChromeHeadless @open-rlb/ng-bootstrap",
     "lib:lint": "ng lint @open-rlb/ng-bootstrap",
-    "lib:pack": "npm run lib:build && npm pack ./dist/rlb/ng-bootstrap",
+    "lib:pack": "npm run lib:build && npm pack ./dist/rlb/ng-bootstrap && node scripts/verify-pack.cjs",
     "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,html}\"",
     "http": "http-server ./dist/ng-bootstrap -p 4001 -c-1 --cors -U --log-ip"
   },
