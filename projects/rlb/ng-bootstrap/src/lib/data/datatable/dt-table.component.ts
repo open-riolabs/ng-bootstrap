@@ -22,7 +22,6 @@ import { NgClass } from '@angular/common';
 import { SelectComponent } from '../../forms/inputs/select.component';
 import { FormsModule } from '@angular/forms';
 import { OptionComponent } from '../../forms/inputs/options.component';
-import { DataTableActionComponent } from './dt-action.component';
 
 export interface TableDataQuery {
   pagination?: { size: number };
@@ -36,22 +35,15 @@ export interface PaginationEvent {
 }
 
 @Component({
-    selector: 'rlb-dt-table',
-    templateUrl: './dt-table.component.html',
-    host: {
-        // This automatically adds the 'dt-card-style' class to the <rlb-dt-table>
-        // element in the DOM if cardStyle() is true.
-        '[class.dt-card-style]': 'cardStyle()',
-    },
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        RouterLink,
-        NgClass,
-        SelectComponent,
-        FormsModule,
-        OptionComponent,
-        DataTableActionComponent,
-    ],
+  selector: 'rlb-dt-table',
+  templateUrl: './dt-table.component.html',
+  host: {
+    // This automatically adds the 'dt-card-style' class to the <rlb-dt-table>
+    // element in the DOM if cardStyle() is true.
+    '[class.dt-card-style]': 'cardStyle()',
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, NgClass, SelectComponent, FormsModule, OptionComponent],
 })
 export class DataTableComponent implements OnInit, OnDestroy {
   title = input<string | undefined>(undefined);
@@ -202,7 +194,7 @@ export class DataTableComponent implements OnInit, OnDestroy {
       classes.push('table-striped-columns');
     }
 
-    if (this.tableHover()) {
+    if (this.tableHover() && this.items().length > 0) {
       classes.push('table-hover');
     }
 
