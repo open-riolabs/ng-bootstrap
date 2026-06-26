@@ -20,6 +20,7 @@ export class SelectsComponent implements OnInit {
   // Forms
   basicForm: FormGroup;
   form: FormGroup;
+  chipsForm: FormGroup;
 
   // State via signals
   isSaving = signal(false);
@@ -74,6 +75,16 @@ export class SelectsComponent implements OnInit {
     <rlb-option [value]="user.id">{{ user.name }}</rlb-option>
   }
 </rlb-select>`;
+
+  languageChipsExample = `<!-- Default options: EN, IT, DE, FR, ES, PT -->
+<rlb-language-chips formControlName="languages"></rlb-language-chips>
+
+<!-- Custom option set + placeholder -->
+<rlb-language-chips
+  formControlName="languages"
+  [options]="['EN', 'IT', 'DE', 'FR']"
+  placeholder="Add language...">
+</rlb-language-chips>`;
 
   ngModelExample = `<rlb-select size="small" [(ngModel)]="result.nextIntentId">
   <label before class="form-label d-block w-100 mb-2">
@@ -173,6 +184,36 @@ export class SelectsComponent implements OnInit {
     },
   ];
 
+  languageChipsApi: DocApiRow[] = [
+    {
+      name: 'options',
+      type: 'string[]',
+      default: "['EN', 'IT', 'DE', 'FR', 'ES', 'PT']",
+      description: 'The full set of selectable values. The dropdown lists only those not yet chosen.',
+      kind: 'Input',
+    },
+    {
+      name: 'placeholder',
+      type: 'string',
+      default: "'Add...'",
+      description: 'Placeholder shown on the add dropdown.',
+      kind: 'Input',
+    },
+    {
+      name: 'disabled',
+      type: 'boolean',
+      default: 'false',
+      description: 'Hides the add dropdown and the per-chip remove buttons. Also toggled automatically when the form control is disabled.',
+      kind: 'Input',
+    },
+    {
+      name: 'id',
+      type: 'string',
+      description: 'Custom id for the control. An auto-generated id is used when omitted.',
+      kind: 'Input',
+    },
+  ];
+
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   constructor() {
@@ -184,6 +225,10 @@ export class SelectsComponent implements OnInit {
       basicSelect: ['', Validators.required],
       multiSelect: [[], Validators.required],
       asyncSelect: ['', Validators.required],
+    });
+
+    this.chipsForm = this.fb.group({
+      languages: [['EN', 'IT']],
     });
   }
 

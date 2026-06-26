@@ -17,6 +17,7 @@ export * from './help-text.directive';
 export * from './input-group.component';
 export * from './input-validation.component';
 export * from './input.component';
+export * from './language-chips.component';
 export * from './options.component';
 export * from './radio.component';
 export * from './range.component';
@@ -38,6 +39,7 @@ import { HelpText } from './help-text.directive';
 import { InputGroupComponent } from './input-group.component';
 import { InputValidationComponent } from './input-validation.component';
 import { InputComponent } from './input.component';
+import { LanguageChipsComponent } from './language-chips.component';
 import { OptionComponent } from './options.component';
 import { RadioComponent } from './radio.component';
 import { RangeComponent } from './range.component';
@@ -59,6 +61,7 @@ export const INPUTS = [
   OptionComponent,
   FileComponent,
   InputGroupComponent,
+  LanguageChipsComponent,
   HelpText,
   DndDirective,
   FileDndComponent,

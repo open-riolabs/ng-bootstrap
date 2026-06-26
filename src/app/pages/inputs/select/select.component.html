@@ -221,10 +221,32 @@
     </div>
   </docs-example>
 
+  <!-- Language chips (select-based multi-pick) -->
+  <docs-example
+    heading="Language chips"
+    description="rlb-language-chips builds on rlb-select to pick several values from a fixed list. Choosing an option appends a removable pill; the dropdown only lists options not already chosen and disappears once all are selected. The bound value is a string[]."
+    [code]="languageChipsExample">
+    <div class="row g-3" [formGroup]="chipsForm">
+      <div class="col-md-6">
+        <label class="form-label">Spoken languages</label>
+        <rlb-language-chips formControlName="languages" placeholder="Add language..."></rlb-language-chips>
+      </div>
+      <div class="col-md-6 d-flex align-items-center">
+        <div class="p-3 bg-light border rounded w-100">
+          <strong>Value:</strong>
+          <pre class="mb-0"><code>{{ chipsForm.value.languages | json }}</code></pre>
+        </div>
+      </div>
+    </div>
+  </docs-example>
+
   <!-- API: rlb-select -->
   <docs-api selector="rlb-select" [rows]="selectApi" />
 
   <!-- API: rlb-option -->
   <docs-api selector="rlb-option" [rows]="optionApi" />
+
+  <!-- API: rlb-language-chips -->
+  <docs-api selector="rlb-language-chips" [rows]="languageChipsApi" />
 
 </docs-page>
