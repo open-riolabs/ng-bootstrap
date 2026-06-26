@@ -12,19 +12,20 @@ import { filter } from 'rxjs';
 import { AbstractComponent } from './abstract-field.component';
 import { SelectComponent } from './select.component';
 import { OptionComponent } from './options.component';
+import { BadgeComponent } from '../../components/badges/badge.component';
 
 @Component({
   selector: 'rlb-language-chips',
   template: `
     <div class="d-flex flex-column gap-2">
-      @if (!isDisabled() && available().length > 0) {
+      @if (!isDisabled()) {
         @for (_ of [selectKey()]; track _) {
           <div class="lang-add-select">
             <rlb-select
               [formControl]="addControl"
               [placeholder]="placeholder()"
             >
-              @for (lang of available(); track lang) {
+              @for (lang of options(); track lang) {
                 <rlb-option [value]="lang">{{ lang }}</rlb-option>
               }
             </rlb-select>
@@ -32,14 +33,19 @@ import { OptionComponent } from './options.component';
         }
       }
       @if (chips().length > 0) {
-        <div class="d-flex flex-wrap align-items-center gap-2">
+        <div class="chips-box form-control d-flex flex-wrap align-items-center gap-2">
           @for (lang of chips(); track lang) {
-            <span class="badge rounded-pill bg-secondary d-inline-flex align-items-center gap-1">
-              {{ lang }}
+            <span
+              rlb-badge
+              pill
+              color="secondary"
+              class="chip d-inline-flex align-items-center gap-1 mw-100"
+            >
+              <span class="chip-label">{{ lang }}</span>
               @if (!isDisabled()) {
                 <button
                   type="button"
-                  class="btn-close btn-close-white btn-close-sm"
+                  class="btn-close btn-close-white btn-close-sm flex-shrink-0"
                   (click)="remove(lang)"
                   [attr.aria-label]="'Remove ' + lang"
                 ></button>
@@ -54,10 +60,21 @@ import { OptionComponent } from './options.component';
     .lang-add-select {
       min-width: 130px;
     }
+    .chips-box {
+      height: auto;
+      max-height: 7.5rem;
+      overflow-y: auto;
+    }
+    .chip-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 12rem;
+    }
   `,
   host: { '[attr.id]': 'null' },
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, SelectComponent, OptionComponent],
+  imports: [ReactiveFormsModule, SelectComponent, OptionComponent, BadgeComponent],
 })
 export class LanguageChipsComponent extends AbstractComponent<string[]> {
   readonly options = input<string[]>(['EN', 'IT', 'DE', 'FR', 'ES', 'PT']);
@@ -67,7 +84,6 @@ export class LanguageChipsComponent extends AbstractComponent<string[]> {
 
   readonly selectKey = signal(0);
   readonly chips = computed(() => this.value() ?? []);
-  readonly available = computed(() => this.options().filter(l => !this.chips().includes(l)));
   readonly isDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
   readonly addControl = new FormControl<string | null>(null);
@@ -78,6 +94,10 @@ export class LanguageChipsComponent extends AbstractComponent<string[]> {
     this.addControl.valueChanges.pipe(filter(Boolean), takeUntilDestroyed()).subscribe(lang => {
       this.add(lang);
       this.addControl.setValue(null, { emitEvent: false });
+      // Reset the dropdown back to its placeholder after every pick, even when
+      // the value was ignored as a duplicate, so the already-selected option
+      // doesn't stay stuck as the visible selection.
+      this.selectKey.update(k => k + 1);
     });
   }
 
@@ -85,7 +105,6 @@ export class LanguageChipsComponent extends AbstractComponent<string[]> {
     if (this.chips().includes(lang)) return;
     const next = [...this.chips(), lang];
     this.setValue(next);
-    this.selectKey.update(k => k + 1);
     this.touch();
   }
 
