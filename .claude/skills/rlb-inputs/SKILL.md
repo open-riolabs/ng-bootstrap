@@ -126,9 +126,11 @@ All inputs bind via `formControlName` or `[(ngModel)]`.
 
 ## rlb-language-chips — Multi-select Chips
 
-A tag/chip input for picking several values from a fixed list. A dropdown offers the
-still-available options; picking one appends a removable pill. Backed by a `rlb-select`
-internally; the chosen values are stored as a `string[]`.
+A compact multi-select for picking several values from a fixed list. Selected values are
+rendered as chips **inside** the control and collapse to `(+N others)` once more than
+`maxVisible` are chosen, so the selection never spills onto multiple lines. Clicking the
+control opens a dropdown that lists every option with a checkbox to toggle it on/off. The
+chosen values are stored as a `string[]`.
 
 ```html
 <!-- Default options: EN, IT, DE, FR, ES, PT -->

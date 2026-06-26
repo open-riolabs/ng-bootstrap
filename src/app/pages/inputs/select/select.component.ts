@@ -196,14 +196,21 @@ export class SelectsComponent implements OnInit {
       name: 'placeholder',
       type: 'string',
       default: "'Add...'",
-      description: 'Placeholder shown on the add dropdown.',
+      description: 'Placeholder shown in the control when nothing is selected.',
+      kind: 'Input',
+    },
+    {
+      name: 'maxVisible',
+      type: 'number',
+      default: '2',
+      description: "How many chips to render inline before collapsing the remainder into a '(+N others)' label.",
       kind: 'Input',
     },
     {
       name: 'disabled',
       type: 'boolean',
       default: 'false',
-      description: 'Hides the add dropdown and the per-chip remove buttons. Also toggled automatically when the form control is disabled.',
+      description: 'Disables the control so the dropdown cannot be opened and the selection cannot be changed. Also toggled automatically when the form control is disabled.',
       kind: 'Input',
     },
     {

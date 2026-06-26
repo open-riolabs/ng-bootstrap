@@ -224,7 +224,7 @@
   <!-- Language chips (select-based multi-pick) -->
   <docs-example
     heading="Language chips"
-    description="rlb-language-chips builds on rlb-select to pick several values from a fixed list. Choosing an option appends a removable pill; the dropdown only lists options not already chosen and disappears once all are selected. The bound value is a string[]."
+    description="rlb-language-chips is a compact multi-select: selected values are shown as chips inside the control, collapsing to '(+N others)' so the selection never spills onto multiple lines. The dropdown lists every option with a checkbox to toggle it on or off. The bound value is a string[]."
     [code]="languageChipsExample">
     <div class="row g-3" [formGroup]="chipsForm">
       <div class="col-md-6">
