@@ -221,15 +221,15 @@
     </div>
   </docs-example>
 
-  <!-- Language chips (select-based multi-pick) -->
+  <!-- Select chips (select-based multi-pick) -->
   <docs-example
-    heading="Language chips"
-    description="rlb-language-chips is a compact multi-select: selected values are shown as chips inside the control, collapsing to '(+N others)' so the selection never spills onto multiple lines. The dropdown lists every option with a checkbox to toggle it on or off. The bound value is a string[]."
-    [code]="languageChipsExample">
+    heading="Select chips"
+    description="rlb-select-chips is a compact multi-select: selected values are shown as chips inside the control, collapsing to '(+N others)' so the selection never spills onto multiple lines. The dropdown lists every option with a checkbox to toggle it on or off. The bound value is a string[]."
+    [code]="selectChipsExample">
     <div class="row g-3" [formGroup]="chipsForm">
       <div class="col-md-6">
         <label class="form-label">Spoken languages</label>
-        <rlb-language-chips formControlName="languages" placeholder="Add language..."></rlb-language-chips>
+        <rlb-select-chips formControlName="languages" [options]="['EN', 'IT', 'DE', 'FR', 'ES', 'PT']" placeholder="Add language..."></rlb-select-chips>
       </div>
       <div class="col-md-6 d-flex align-items-center">
         <div class="p-3 bg-light border rounded w-100">
@@ -246,7 +246,7 @@
   <!-- API: rlb-option -->
   <docs-api selector="rlb-option" [rows]="optionApi" />
 
-  <!-- API: rlb-language-chips -->
-  <docs-api selector="rlb-language-chips" [rows]="languageChipsApi" />
+  <!-- API: rlb-select-chips -->
+  <docs-api selector="rlb-select-chips" [rows]="selectChipsApi" />
 
 </docs-page>

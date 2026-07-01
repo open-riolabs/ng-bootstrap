@@ -124,7 +124,7 @@ All inputs bind via `formControlName` or `[(ngModel)]`.
 
 ---
 
-## rlb-language-chips — Multi-select Chips
+## rlb-select-chips — Multi-select Chips
 
 A compact multi-select for picking several values from a fixed list. Selected values are
 rendered as chips **inside** the control and collapse to `(+N others)` once more than
@@ -133,21 +133,23 @@ control opens a dropdown that lists every option with a checkbox to toggle it on
 chosen values are stored as a `string[]`.
 
 ```html
-<!-- Default options: EN, IT, DE, FR, ES, PT -->
-<rlb-language-chips formControlName="languages"></rlb-language-chips>
+<rlb-select-chips
+  formControlName="languages"
+  [options]="['EN', 'IT', 'DE', 'FR', 'ES', 'PT']"
+></rlb-select-chips>
 
 <!-- Custom option set + placeholder -->
-<rlb-language-chips
+<rlb-select-chips
   formControlName="languages"
   [options]="['EN', 'IT', 'DE']"
   placeholder="Add language..."
-></rlb-language-chips>
+></rlb-select-chips>
 ```
 
 **Inputs:**
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
-| `options` | `string[]` | `['EN','IT','DE','FR','ES','PT']` | Selectable values |
+| `options` | `string[]` | — | Selectable values |
 | `placeholder` | `string` | `'Add...'` | Dropdown placeholder |
 | `disabled` | `boolean` | `false` | Hides the dropdown and remove buttons |
 | `id` | `string` | auto | HTML id |

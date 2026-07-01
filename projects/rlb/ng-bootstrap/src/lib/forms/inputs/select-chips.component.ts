@@ -11,9 +11,9 @@ import { AbstractComponent } from './abstract-field.component';
 import { BadgeComponent } from '../../components/badges/badge.component';
 
 @Component({
-  selector: 'rlb-language-chips',
+  selector: 'rlb-select-chips',
   template: `
-    <div class="rlb-language-chips position-relative">
+    <div class="rlb-select-chips position-relative">
       <div
         class="form-select chips-control d-flex align-items-center gap-1"
         [class.disabled]="isDisabled()"
@@ -52,7 +52,7 @@ import { BadgeComponent } from '../../components/badges/badge.component';
           (click)="close()"
         ></div>
         <div class="dropdown-menu show w-100 chips-menu">
-          @for (lang of options(); track lang) {
+          @for (lang of options() ?? []; track lang) {
             <button
               type="button"
               class="dropdown-item d-flex align-items-center gap-2"
@@ -108,8 +108,8 @@ import { BadgeComponent } from '../../components/badges/badge.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [BadgeComponent],
 })
-export class LanguageChipsComponent extends AbstractComponent<string[]> {
-  readonly options = input<string[]>(['EN', 'IT', 'DE', 'FR', 'ES', 'PT']);
+export class SelectChipsComponent extends AbstractComponent<string[]> {
+  readonly options = input<string[]>();
   readonly placeholder = input('Add...');
   /** How many chips to render inline before collapsing the rest into "(+N others)". */
   readonly maxVisible = input(4, { transform: numberAttribute });

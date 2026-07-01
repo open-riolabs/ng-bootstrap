@@ -76,15 +76,16 @@ export class SelectsComponent implements OnInit {
   }
 </rlb-select>`;
 
-  languageChipsExample = `<!-- Default options: EN, IT, DE, FR, ES, PT -->
-<rlb-language-chips formControlName="languages"></rlb-language-chips>
+  selectChipsExample = `<rlb-select-chips
+  formControlName="languages"
+  [options]="['EN', 'IT', 'DE', 'FR', 'ES', 'PT']"></rlb-select-chips>
 
 <!-- Custom option set + placeholder -->
-<rlb-language-chips
+<rlb-select-chips
   formControlName="languages"
   [options]="['EN', 'IT', 'DE', 'FR']"
   placeholder="Add language...">
-</rlb-language-chips>`;
+</rlb-select-chips>`;
 
   ngModelExample = `<rlb-select size="small" [(ngModel)]="result.nextIntentId">
   <label before class="form-label d-block w-100 mb-2">
@@ -184,11 +185,10 @@ export class SelectsComponent implements OnInit {
     },
   ];
 
-  languageChipsApi: DocApiRow[] = [
+  selectChipsApi: DocApiRow[] = [
     {
       name: 'options',
       type: 'string[]',
-      default: "['EN', 'IT', 'DE', 'FR', 'ES', 'PT']",
       description: 'The full set of selectable values. The dropdown lists only those not yet chosen.',
       kind: 'Input',
     },
