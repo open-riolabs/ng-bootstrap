@@ -21,19 +21,60 @@ type TextAlignment = 'left' | 'center' | 'right';
 
 ```html
 <!-- Basic button -->
-<button rlb-button color="primary" size="md">Click me</button>
-<button rlb-button color="danger" outline>Delete</button>
-<button rlb-button color="secondary" [disabled]="true">Disabled</button>
-<a rlb-button color="info" isLink>Link</a>
+<button
+  rlb-button
+  color="primary"
+  size="md"
+>
+  Click me
+</button>
+<button
+  rlb-button
+  color="danger"
+  outline
+>
+  Delete
+</button>
+<button
+  rlb-button
+  color="secondary"
+  [disabled]="true"
+>
+  Disabled
+</button>
+<a
+  rlb-button
+  color="info"
+  isLink
+>
+  Link
+</a>
 
 <!-- Button group -->
-<rlb-button-group orientation="horizontal" size="md">
-  <button rlb-button color="primary">A</button>
-  <button rlb-button color="primary">B</button>
+<rlb-button-group
+  orientation="horizontal"
+  size="md"
+>
+  <button
+    rlb-button
+    color="primary"
+  >
+    A
+  </button>
+  <button
+    rlb-button
+    color="primary"
+  >
+    B
+  </button>
 </rlb-button-group>
 
 <!-- FAB (Floating Action Button) -->
-<rlb-fab color="primary" size="md" position="br">
+<rlb-fab
+  color="primary"
+  size="md"
+  position="br"
+>
   <i class="bi bi-plus"></i>
 </rlb-fab>
 ```
@@ -47,7 +88,11 @@ type TextAlignment = 'left' | 'center' | 'right';
 
 ```html
 <rlb-alert color="success">Operation successful.</rlb-alert>
-<rlb-alert color="danger" [dismissible]="true" (dismissed)="onDismiss()">
+<rlb-alert
+  color="danger"
+  [dismissible]="true"
+  (dismissed)="onDismiss()"
+>
   An error occurred!
 </rlb-alert>
 ```
@@ -60,9 +105,26 @@ type TextAlignment = 'left' | 'center' | 'right';
 ## Badges
 
 ```html
-<span rlb-badge color="primary">New</span>
-<span rlb-badge color="success" [pill]="true">Active</span>
-<span rlb-badge color="danger" [border]="true">3</span>
+<span
+  rlb-badge
+  color="primary"
+>
+  New
+</span>
+<span
+  rlb-badge
+  color="success"
+  [pill]="true"
+>
+  Active
+</span>
+<span
+  rlb-badge
+  color="danger"
+  [border]="true"
+>
+  3
+</span>
 ```
 
 **Inputs:** `color`, `pill`, `border`, `hidden-text`, `class`, `badge-text-color`
@@ -72,9 +134,22 @@ type TextAlignment = 'left' | 'center' | 'right';
 ## Avatar
 
 ```html
-<rlb-avatar [size]="48" shape="circle" src="/assets/user.png"></rlb-avatar>
-<rlb-avatar [size]="40" shape="round">AB</rlb-avatar>
-<rlb-avatar [size]="56" shape="square" src="/assets/logo.png"></rlb-avatar>
+<rlb-avatar
+  [size]="48"
+  shape="circle"
+  src="/assets/user.png"
+></rlb-avatar>
+<rlb-avatar
+  [size]="40"
+  shape="round"
+>
+  AB
+</rlb-avatar>
+<rlb-avatar
+  [size]="56"
+  shape="square"
+  src="/assets/logo.png"
+></rlb-avatar>
 ```
 
 **Inputs:** `size` (px number), `shape` ('circle'|'round'|'square'), `src`, `class`
@@ -84,7 +159,10 @@ type TextAlignment = 'left' | 'center' | 'right';
 ## Cards
 
 ```html
-<rlb-card align="left" background="light">
+<rlb-card
+  align="left"
+  background="light"
+>
   <rlb-card-header>Card Title</rlb-card-header>
   <rlb-card-image src="/img.png"></rlb-card-image>
   <rlb-card-body>
@@ -105,7 +183,11 @@ type TextAlignment = 'left' | 'center' | 'right';
 ## Accordion
 
 ```html
-<rlb-accordion [flush]="false" [always-open]="false" [card-style]="true">
+<rlb-accordion
+  [flush]="false"
+  [always-open]="false"
+  [card-style]="true"
+>
   <rlb-accordion-item>
     <ng-template rlb-accordion-header>Section 1</ng-template>
     <ng-template rlb-accordion-body>Content 1</ng-template>
@@ -124,10 +206,19 @@ type TextAlignment = 'left' | 'center' | 'right';
 ## Tabs
 
 ```html
-<rlb-tabs view="tab" [vertical]="false" fill="fill">
+<rlb-tabs
+  view="tab"
+  [vertical]="false"
+  fill="fill"
+>
   <rlb-tab title="Tab 1">Content for tab 1</rlb-tab>
   <rlb-tab title="Tab 2">Content for tab 2</rlb-tab>
-  <rlb-tab title="Tab 3" [disabled]="true">Disabled</rlb-tab>
+  <rlb-tab
+    title="Tab 3"
+    [disabled]="true"
+  >
+    Disabled
+  </rlb-tab>
 </rlb-tabs>
 ```
 
@@ -191,11 +282,32 @@ and gate `Next` on the current step's validity. Often embedded in a modal (see t
   </rlb-carousel>
 </div>
 
-<button rlb-button outline [disabled]="page() === 0" (click)="prev()">Back</button>
+<button
+  rlb-button
+  outline
+  [disabled]="page() === 0"
+  (click)="prev()"
+>
+  Back
+</button>
 @if (page() < count() - 1) {
-  <button rlb-button color="primary" [disabled]="currentStepInvalid()" (click)="next()">Next</button>
+<button
+  rlb-button
+  color="primary"
+  [disabled]="currentStepInvalid()"
+  (click)="next()"
+>
+  Next
+</button>
 } @else {
-  <button rlb-button color="success" [disabled]="form.invalid" (click)="onFinish()">Finish</button>
+<button
+  rlb-button
+  color="success"
+  [disabled]="form.invalid"
+  (click)="onFinish()"
+>
+  Finish
+</button>
 }
 ```
 
@@ -240,10 +352,26 @@ next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
 
 ```html
 <rlb-dropdown direction="down">
-  <button rlb-button color="primary" rlb-dropdown>Actions</button>
+  <button
+    rlb-button
+    color="primary"
+    rlb-dropdown
+  >
+    Actions
+  </button>
   <div rlb-dropdown-menu>
-    <a class="dropdown-item" href="#">Option 1</a>
-    <a class="dropdown-item" href="#">Option 2</a>
+    <a
+      class="dropdown-item"
+      href="#"
+    >
+      Option 1
+    </a>
+    <a
+      class="dropdown-item"
+      href="#"
+    >
+      Option 2
+    </a>
   </div>
 </rlb-dropdown>
 ```
@@ -255,7 +383,10 @@ next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
 ## Pagination
 
 ```html
-<rlb-pagination size="md" alignment="center">
+<rlb-pagination
+  size="md"
+  alignment="center"
+>
   <rlb-pagination-item [active]="true">1</rlb-pagination-item>
   <rlb-pagination-item>2</rlb-pagination-item>
 </rlb-pagination>
@@ -268,14 +399,32 @@ next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
 ## Navigation (Navbar + Sidebar)
 
 ```html
-<rlb-navbar color="primary" [dark]="true" expand="lg" placement="fixed-top">
-  <a rlb-navbar-brand href="/">MyApp</a>
+<rlb-navbar
+  color="primary"
+  [dark]="true"
+  expand="lg"
+  placement="fixed-top"
+>
+  <a
+    rlb-navbar-brand
+    href="/"
+  >
+    MyApp
+  </a>
   <rlb-navbar-items>
-    <a class="nav-link" routerLink="/home">Home</a>
+    <a
+      class="nav-link"
+      routerLink="/home"
+    >
+      Home
+    </a>
   </rlb-navbar-items>
 </rlb-navbar>
 
-<rlb-sidebar [dark]="true" [rounded]="false">
+<rlb-sidebar
+  [dark]="true"
+  [rounded]="false"
+>
   <rlb-sidebar-item routerLink="/dashboard">Dashboard</rlb-sidebar-item>
   <rlb-sidebar-item routerLink="/settings">Settings</rlb-sidebar-item>
 </rlb-sidebar>
@@ -290,8 +439,16 @@ next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
 
 ```html
 <!-- Spinner -->
-<rlb-spinner style="border" color="primary" size="md"></rlb-spinner>
-<rlb-spinner style="grow" color="success" size="sm"></rlb-spinner>
+<rlb-spinner
+  style="border"
+  color="primary"
+  size="md"
+></rlb-spinner>
+<rlb-spinner
+  style="grow"
+  color="success"
+  size="sm"
+></rlb-spinner>
 
 <!-- Progress bar -->
 <rlb-progress
@@ -304,11 +461,93 @@ next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
 ></rlb-progress>
 
 <!-- Infinite progress -->
-<rlb-progress [infinite]="true" color="info"></rlb-progress>
+<rlb-progress
+  [infinite]="true"
+  color="info"
+></rlb-progress>
 ```
 
 **Spinner inputs:** `style` ('border'|'grow'), `color`, `size`
 **Progress inputs:** `value`, `max`, `min`, `height`, `animated`, `striped`, `infinite`, `showValue`, `color`, `text-color`, `aria-label`
+
+---
+
+## Placeholders (skeletons)
+
+Skeleton loading state for content that hasn't loaded yet. Use `rlb-placeholder-text` for
+quick multi-line text blocks, or `rlb-placeholder` + `rlb-placeholder-line` for custom layouts
+(cards, stat rows). Toggle with an `@if (loading())` block — render the skeleton while loading,
+the real content otherwise.
+
+```html
+<!-- Quick multi-line text skeleton -->
+<rlb-placeholder-text
+  [lines]="3"
+  animation="glow"
+/>
+
+<!-- Per-line widths: pass a string[] (falls back to 100% past the end) -->
+<rlb-placeholder-text
+  [lines]="3"
+  [width]="['80%', '100%', '60%']"
+  animation="glow"
+/>
+
+<!-- Custom layout: container + individual lines for full control -->
+<rlb-placeholder animation="glow">
+  <rlb-placeholder-line
+    width="40%"
+    height="28px"
+  />
+  <rlb-placeholder-line width="100%" />
+  <rlb-placeholder-line
+    width="80%"
+    color="primary"
+    size="sm"
+  />
+  <rlb-placeholder-line
+    width="60%"
+    [rounded]="false"
+  />
+</rlb-placeholder>
+
+<!-- Skeleton-style any element via the directive -->
+<span
+  rlb-placeholder
+  placeholder-animation="glow"
+  style="width: 6rem"
+>
+  &nbsp;
+</span>
+```
+
+Common pattern — a fixed number of skeleton rows (e.g. matching a table page size):
+
+```html
+<rlb-placeholder animation="glow">
+  @for (line of [].constructor(pageSize()); track $index) {
+  <rlb-placeholder-line width="100%" />
+  }
+</rlb-placeholder>
+```
+
+**`rlb-placeholder`** (container, applies the animation to children)
+Inputs: `animation` ('glow' | 'wave' | 'none', default 'none')
+
+**`rlb-placeholder-line`** (one skeleton bar; renders as a block with bottom margin)
+Inputs: `width` (CSS string, default '100%'), `height` (CSS string, default '1.5rem'),
+`size` ('xs' | 'sm' | 'md' | 'lg', default 'md'), `color` (Bootstrap bg name, default 'secondary'),
+`rounded` (boolean, default `true`)
+
+**`rlb-placeholder-text`** (convenience: N lines in a `rlb-placeholder` for you)
+Inputs: `lines` (default 1), `width` (string **or** string[] for per-line widths, default '100%'),
+`animation`, `size`, `color`, `height`, `rounded` — same meaning/defaults as above
+
+**`[rlb-placeholder]`** (directive to skeletonize any element)
+Inputs (aliased): `placeholder-color` (Color), `placeholder-size` ('xs'|'sm'|'md'|'lg'),
+`placeholder-animation` ('glow' | 'fade' | 'none')
+
+> Boolean inputs like `rounded` need a binding: `[rounded]="false"`, not a bare `rounded` attribute.
 
 ---
 
@@ -328,7 +567,14 @@ showSuccess() {
 ## Tooltip
 
 ```html
-<button rlb-button rlb-tooltip title="Helpful tip" placement="top">Hover me</button>
+<button
+  rlb-button
+  rlb-tooltip
+  title="Helpful tip"
+  placement="top"
+>
+  Hover me
+</button>
 ```
 
 ---
@@ -337,12 +583,29 @@ showSuccess() {
 
 ```html
 <!-- Collapse -->
-<button rlb-button rlb-collapse-toggle target="myCollapse">Toggle</button>
+<button
+  rlb-button
+  rlb-collapse-toggle
+  target="myCollapse"
+>
+  Toggle
+</button>
 <rlb-collapse id="myCollapse">Hidden content</rlb-collapse>
 
 <!-- Offcanvas -->
-<button rlb-button rlb-offcanvas-toggle target="myPanel">Open Panel</button>
-<rlb-offcanvas id="myPanel" placement="start">Panel content</rlb-offcanvas>
+<button
+  rlb-button
+  rlb-offcanvas-toggle
+  target="myPanel"
+>
+  Open Panel
+</button>
+<rlb-offcanvas
+  id="myPanel"
+  placement="start"
+>
+  Panel content
+</rlb-offcanvas>
 ```
 
 ---
@@ -353,12 +616,13 @@ showSuccess() {
 import { RlbBootstrapModule } from '@open-rlb/ng-bootstrap';
 
 @NgModule({
-  imports: [RlbBootstrapModule]
+  imports: [RlbBootstrapModule],
 })
 export class AppModule {}
 ```
 
 Or import individual components for standalone:
+
 ```typescript
 import { ButtonComponent, AlertComponent, CardComponent } from '@open-rlb/ng-bootstrap';
 ```
