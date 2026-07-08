@@ -24,7 +24,7 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     >
       <div
         id="sidebar-menu"
-        class="w-100 h-100 overflow-y-auto"
+        class="w-100 h-100 overflow-y-auto d-flex flex-column"
       >
         <ul
           class="metismenu list-unstyled"
@@ -33,6 +33,7 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         >
           <ng-content select="rlb-sidebar-item"></ng-content>
         </ul>
+        <ng-content select="[rlb-sidebar-footer]"></ng-content>
       </div>
     </div>
   `,
