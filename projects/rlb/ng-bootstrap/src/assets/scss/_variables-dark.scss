@@ -116,7 +116,7 @@ $display-block-dark:                                       none !default;
 
 // OVERRIDES
 $card-bg:                           var(--#{$prefix}secondary-bg);
-$card-box-shadow:                   0 0.5rem 1rem rgba(0, 0, 0, 0.35); // Stronger shadow for dark mode
+$card-box-shadow-dark:              0 0.5rem 1rem rgba(0, 0, 0, 0.35); // Stronger shadow for dark mode
 $card-border-width:                 0;
 $table-head-bg:                     $body-tertiary-bg-dark; // Darker header for tables
 $input-bg:                          rgba(255, 255, 255, 0.05); // Glass effect

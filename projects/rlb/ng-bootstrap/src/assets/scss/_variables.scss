@@ -1425,7 +1425,7 @@ $card-subtitle-color:               null !default;
 $card-border-width:                 1px !default;
 $card-border-color:                 rgba($gray-200, 0.5) !default;
 $card-border-radius:                var(--#{$prefix}border-radius-xl) !default;
-$card-box-shadow:                   0 4px 6px rgba(18, 38, 63, 0.03), 0 1px 3px rgba(18, 38, 63, 0.05) !default;
+$card-box-shadow:                   0 4px 6px rgba(18, 38, 63, 0.06), 0 1px 3px rgba(18, 38, 63, 0.10) !default;
 $card-inner-border-radius:          calc(#{$card-border-radius} - 1px) !default;
 $card-cap-padding-y:                $card-spacer-y * .5 !default;
 $card-cap-padding-x:                $card-spacer-x !default;

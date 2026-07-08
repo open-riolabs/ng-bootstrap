@@ -4,7 +4,18 @@
 
 .card {
   margin-bottom: $grid-gutter-width;
-  box-shadow: $card-box-shadow;
+  // Consume the theme-aware custom property (set per-theme in `_root.scss`) so cards
+  // stay in sync with `rlb-dt-table.dt-card-style` / `rlb-accordion.accordion-card-style`,
+  // which also read `--#{$prefix}card-box-shadow`.
+  box-shadow: var(--#{$prefix}card-box-shadow);
+}
+
+// Bootstrap's `.card` redefines `--#{$prefix}card-box-shadow` locally from the
+// compile-time `$card-box-shadow` (the light value), which shadows the theme-level
+// value from `_root.scss`. Re-point the local property to the dark value under the
+// dark theme so card shadows match the tables/accordions above.
+[data-bs-theme="dark"] .card {
+  --#{$prefix}card-box-shadow: #{$card-box-shadow-dark};
 }
 
 .card-drop {
