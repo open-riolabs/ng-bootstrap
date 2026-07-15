@@ -1,8 +1,7 @@
-@use "sass:color";
-// 
+@use 'sass:color';
+//
 // _badge.scss
-// 
-
+//
 
 .badge {
   &[href] {
@@ -30,42 +29,58 @@
 
 @each $color, $value in $theme-colors {
   .badge {
-  &.bg-#{$color} {
-    &[href] {
-      &:hover,
-      &:focus {
-        background-color: color.adjust($value, $lightness: -4%) !important;
+    &.bg-#{$color} {
+      &[href] {
+        &:hover,
+        &:focus {
+          background-color: color.adjust($value, $lightness: -4%) !important;
+        }
       }
     }
   }
-}
 
-.badge{
-  &.bg-light{
-    color: var(--#{$prefix}body-color);
+  .badge {
+    &.bg-light {
+      color: var(--#{$prefix}body-color);
 
-    &[href] {
-      &:hover,
-      &:focus {
-        color: var(--#{$prefix}body-color);
+      &[href] {
+        &:hover,
+        &:focus {
+          color: var(--#{$prefix}body-color);
+        }
       }
     }
   }
-}
 
-.badge-soft-#{$color} {
-      @include badge-variant-soft($value);
+  .badge-soft-#{$color} {
+    @include badge-variant-soft($value);
   }
-  
 }
 
-.rounded-pill{
-   padding-right: .6em;
-    padding-left: .6em;
+.rounded-pill {
+  padding-right: 0.6em;
+  padding-left: 0.6em;
 }
 
 // Dark badge
 
-.badge.bg-dark{
+.badge.bg-dark {
   color: var(--#{$prefix}light);
+}
+
+// Bootstrap sizes the badge around the font's em box (line-height: 1 plus symmetric padding) and
+// places text on the baseline, so the box always reserves descender room below the baseline. Digits
+// and capitals never use it, leaving the glyphs visibly high in the pill — by 2.8px at a 10.8px font
+// size. Trimming to cap-height..baseline makes the padding wrap the real glyph box instead, so every
+// badge centres identically regardless of its content or its rendered size.
+//
+// Firefox has not shipped text-box-trim: without the @supports guard it would take the padding bump
+// without the trim, which is worse than the status quo.
+@supports (text-box: trim-both cap alphabetic) {
+  .badge {
+    text-box: trim-both cap alphabetic;
+    // Drive Bootstrap's own custom property rather than padding-top/bottom, so consumer overrides
+    // and py-* utilities still compose.
+    --#{$prefix}badge-padding-y: #{$badge-padding-y-trimmed};
+  }
 }

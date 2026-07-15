@@ -205,24 +205,55 @@ type TextAlignment = 'left' | 'center' | 'right';
 
 ## Tabs
 
+`rlb-tabs` holds the tab strip; `rlb-tab-content` holds the panes. Each `rlb-tab`'s `target`
+must equal its `rlb-tab-pane`'s `id`. Seed the initially-open tab/pane with `active`. The tab
+label is projected content, so you can put a `rlb-badge` count inside it.
+
 ```html
-<rlb-tabs
-  view="tab"
-  [vertical]="false"
-  fill="fill"
->
-  <rlb-tab title="Tab 1">Content for tab 1</rlb-tab>
-  <rlb-tab title="Tab 2">Content for tab 2</rlb-tab>
+<rlb-tabs view="tab">
   <rlb-tab
-    title="Tab 3"
+    target="home"
+    active
+  >
+    Home
+  </rlb-tab>
+  <rlb-tab target="profile">
+    Profile
+    <span
+      rlb-badge
+      color="secondary"
+      [pill]="true"
+    >
+      3
+    </span>
+  </rlb-tab>
+  <rlb-tab
+    target="messages"
     [disabled]="true"
   >
-    Disabled
+    Messages
   </rlb-tab>
 </rlb-tabs>
+
+<rlb-tab-content>
+  <rlb-tab-pane
+    id="home"
+    active
+  >
+    Home content.
+  </rlb-tab-pane>
+  <rlb-tab-pane id="profile">Profile content.</rlb-tab-pane>
+  <rlb-tab-pane id="messages">Messages content.</rlb-tab-pane>
+</rlb-tab-content>
 ```
 
-**Inputs:** `view` ('tab'|'pills'|'underline'|'none'), `vertical`, `fill` ('fill'|'justified'), `horizontal-alignment` ('center'|'end'), `id`, `class`
+**`rlb-tabs` inputs:** `view` ('tab'|'pills'|'underline'|'none'), `vertical`, `fill` ('fill'|'justified'), `horizontal-alignment` ('center'|'end'), `id`, `class`
+**`rlb-tab` inputs:** `target` (**required** — matches a pane `id`), `active`, `disabled`, `class`
+**`rlb-tab-pane` inputs:** `id` (**required**), `active`, `fade`
+
+> Switching is driven by Bootstrap's tab plugin — there is **no select/change output**, and
+> `active` only seeds the initial tab. For router-controlled or deep-linked tabs (active state
+> lives in the URL), drive the markup yourself with plain `nav-tabs` instead.
 
 ---
 
