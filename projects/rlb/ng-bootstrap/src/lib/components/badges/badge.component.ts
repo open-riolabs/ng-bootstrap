@@ -13,8 +13,8 @@ import {
 import { Color } from '../../shared/types';
 
 @Component({
-    selector: 'span[rlb-badge], img[rlb-badge]',
-    template: `
+  selector: 'span[rlb-badge], img[rlb-badge]',
+  template: `
     <ng-template #template>
       <span [class]="style()">
         <ng-content></ng-content>
@@ -24,7 +24,7 @@ import { Color } from '../../shared/types';
       </span>
     </ng-template>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent implements OnInit {
   element!: HTMLElement;
@@ -33,6 +33,7 @@ export class BadgeComponent implements OnInit {
   color = input<Color | undefined>('primary', { alias: 'color' });
   hiddenText = input<string | undefined>(undefined, { alias: 'hidden-text' });
   border = input(false, { alias: 'border', transform: booleanAttribute });
+  soft = input(false, { transform: booleanAttribute });
   cssClass = input<string | undefined>(undefined, { alias: 'class' });
   textColor = input<string | undefined>(undefined, {
     alias: 'badge-text-color',
@@ -44,8 +45,9 @@ export class BadgeComponent implements OnInit {
     if (this.pill()) {
       style += ` rounded-pill`;
     }
-    if (this.color()) {
-      style += ` bg-${this.color()}`;
+    const color = this.color();
+    if (color) {
+      style += this.soft() ? ` badge-soft-${color}` : ` bg-${color}`;
     }
     if (this.border()) {
       style += ` border`;

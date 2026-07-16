@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { Color } from '../../shared/types';
 
-@Directive({ selector: '[badge]', })
+@Directive({ selector: '[badge]' })
 export class BadgeDirective implements AfterViewInit {
   badge = input<string | number | undefined>(undefined, { alias: 'badge' });
   pill = input(false, { alias: 'badge-pill', transform: booleanAttribute });
@@ -30,6 +30,7 @@ export class BadgeDirective implements AfterViewInit {
   });
   hiddenText = input<string | undefined>(undefined, { alias: 'hidden-text' });
   dot = input(false, { alias: 'badge-dot', transform: booleanAttribute });
+  soft = input(false, { alias: 'badge-soft', transform: booleanAttribute });
 
   private badgeContent!: any;
   private badgeElement!: HTMLElement;
@@ -93,10 +94,13 @@ export class BadgeDirective implements AfterViewInit {
     if (border) {
       this.renderer.addClass(this.badgeElement, 'rounded-border');
     }
+    // A dot is pure color with no text — keep it solid.
+    const useSoft = this.soft() && !this.dot();
     if (color) {
-      this.renderer.addClass(this.badgeElement, `bg-${color}`);
+      this.renderer.addClass(this.badgeElement, useSoft ? `badge-soft-${color}` : `bg-${color}`);
     }
-    if (textColor) {
+    // textColor defaults to 'dark', and .text-dark is !important — it would beat the soft color.
+    if (textColor && !useSoft) {
       this.renderer.addClass(this.badgeElement, `text-${textColor}`);
     }
     if (badgeValue) {

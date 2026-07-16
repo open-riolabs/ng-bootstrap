@@ -1,4 +1,5 @@
 @use 'sass:color';
+@use 'sass:map';
 //
 // _badge.scss
 //
@@ -12,17 +13,34 @@
   }
 }
 
-// Soft badge
-@mixin badge-variant-soft($bg) {
-  color: $bg;
-  background-color: rgba($bg, 0.18);
+// Soft badge — tinted surface + emphasis text. Driven by the subtle custom properties so it
+// re-derives under [data-bs-theme] and follows tenant re-points of --bs-*-bg-subtle (see the
+// partner accent overrides). The previous version pinned `color: $value` on an rgba() tint,
+// which is theme-blind: 1.66:1 for warning on a light surface.
+@mixin badge-variant-soft($color) {
+  color: var(--#{$prefix}#{$color}-text-emphasis);
+  background-color: var(--#{$prefix}#{$color}-bg-subtle);
+  border: $border-width solid var(--#{$prefix}#{$color}-border-subtle);
 
   &[href] {
     &:hover,
     &:focus {
-      color: $bg;
+      color: var(--#{$prefix}#{$color}-text-emphasis);
       text-decoration: none;
-      background-color: rgba($bg, 0.4);
+      background-color: var(--#{$prefix}#{$color}-border-subtle);
+    }
+  }
+}
+
+.badge {
+  &.bg-light {
+    color: var(--#{$prefix}body-color);
+
+    &[href] {
+      &:hover,
+      &:focus {
+        color: var(--#{$prefix}body-color);
+      }
     }
   }
 }
@@ -39,21 +57,17 @@
     }
   }
 
-  .badge {
-    &.bg-light {
-      color: var(--#{$prefix}body-color);
-
-      &[href] {
-        &:hover,
-        &:focus {
-          color: var(--#{$prefix}body-color);
-        }
-      }
+  @if map.has-key($theme-colors-bg-subtle, $color) {
+    .badge-soft-#{$color} {
+      @include badge-variant-soft($color);
     }
-  }
-
-  .badge-soft-#{$color} {
-    @include badge-variant-soft($value);
+  } @else {
+    // No subtle palette exists for this color. Fall back to an accessible solid so the class is
+    // never silently transparent.
+    .badge-soft-#{$color} {
+      color: color-contrast($value);
+      background-color: $value;
+    }
   }
 }
 

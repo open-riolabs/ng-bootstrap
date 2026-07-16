@@ -1,102 +1,308 @@
 <docs-page
   title="Badges"
-  lead="Small count and labeling components. Use the rlb-badge element for inline labels, or attach a floating badge to any host element with the [badge] directive.">
-
+  lead="Small count and labeling components. Use the rlb-badge element for inline labels, or attach a floating badge to any host element with the [badge] directive."
+>
   <docs-example
     heading="Inline badge"
     description="Apply rlb-badge to a span or img element. The color input controls the Bootstrap background variant."
-    [code]="inlineExample">
+    [code]="inlineExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
       <span rlb-badge>Default</span>
-      <span rlb-badge color="primary">Primary</span>
-      <span rlb-badge color="secondary">Secondary</span>
-      <span rlb-badge color="success">Success</span>
-      <span rlb-badge color="danger">Danger</span>
-      <span rlb-badge color="warning">Warning</span>
-      <span rlb-badge color="info">Info</span>
-      <span rlb-badge color="light">Light</span>
-      <span rlb-badge color="dark">Dark</span>
+      <span
+        rlb-badge
+        color="primary"
+      >
+        Primary
+      </span>
+      <span
+        rlb-badge
+        color="secondary"
+      >
+        Secondary
+      </span>
+      <span
+        rlb-badge
+        color="success"
+      >
+        Success
+      </span>
+      <span
+        rlb-badge
+        color="danger"
+      >
+        Danger
+      </span>
+      <span
+        rlb-badge
+        color="warning"
+      >
+        Warning
+      </span>
+      <span
+        rlb-badge
+        color="info"
+      >
+        Info
+      </span>
+      <span
+        rlb-badge
+        color="light"
+      >
+        Light
+      </span>
+      <span
+        rlb-badge
+        color="dark"
+      >
+        Dark
+      </span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Soft badges"
+    description="Add the soft boolean attribute for a tinted surface with emphasis text instead of a solid fill. Driven by the subtle theme custom properties, so it re-derives under [data-bs-theme] and stays AA-legible in both light and dark."
+    [code]="softExample"
+  >
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <span
+        rlb-badge
+        color="primary"
+        [soft]="true"
+      >
+        Primary
+      </span>
+      <span
+        rlb-badge
+        color="secondary"
+        [soft]="true"
+      >
+        Secondary
+      </span>
+      <span
+        rlb-badge
+        color="success"
+        [soft]="true"
+      >
+        Success
+      </span>
+      <span
+        rlb-badge
+        color="danger"
+        [soft]="true"
+      >
+        Danger
+      </span>
+      <span
+        rlb-badge
+        color="warning"
+        [soft]="true"
+      >
+        Warning
+      </span>
+      <span
+        rlb-badge
+        color="info"
+        [soft]="true"
+      >
+        Info
+      </span>
+      <span
+        rlb-badge
+        color="light"
+        [soft]="true"
+      >
+        Light
+      </span>
+      <span
+        rlb-badge
+        color="dark"
+        [soft]="true"
+      >
+        Dark
+      </span>
     </div>
   </docs-example>
 
   <docs-example
     heading="Pill badges"
     description="Add the pill boolean attribute to give badges a more rounded appearance using Bootstrap's rounded-pill utility."
-    [code]="pillExample">
+    [code]="pillExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <span rlb-badge color="primary" pill>Primary</span>
-      <span rlb-badge color="secondary" pill>Secondary</span>
-      <span rlb-badge color="success" pill>Success</span>
-      <span rlb-badge color="danger" pill>Danger</span>
+      <span
+        rlb-badge
+        color="primary"
+        pill
+      >
+        Primary
+      </span>
+      <span
+        rlb-badge
+        color="secondary"
+        pill
+      >
+        Secondary
+      </span>
+      <span
+        rlb-badge
+        color="success"
+        pill
+      >
+        Success
+      </span>
+      <span
+        rlb-badge
+        color="danger"
+        pill
+      >
+        Danger
+      </span>
     </div>
   </docs-example>
 
   <docs-example
     heading="Border"
     description="Use the border attribute to add a border outline to the badge."
-    [code]="borderExample">
+    [code]="borderExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <span rlb-badge color="primary" border>Primary</span>
-      <span rlb-badge color="success" border>Success</span>
+      <span
+        rlb-badge
+        color="primary"
+        border
+      >
+        Primary
+      </span>
+      <span
+        rlb-badge
+        color="success"
+        border
+      >
+        Success
+      </span>
     </div>
   </docs-example>
 
   <docs-example
     heading="Text color"
     description="Override the default text color with badge-text-color to ensure readable contrast on light backgrounds."
-    [code]="textColorExample">
+    [code]="textColorExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <span rlb-badge color="warning" badge-text-color="dark">Warning dark text</span>
-      <span rlb-badge color="light" badge-text-color="dark">Light dark text</span>
+      <span
+        rlb-badge
+        color="warning"
+        badge-text-color="dark"
+      >
+        Warning dark text
+      </span>
+      <span
+        rlb-badge
+        color="light"
+        badge-text-color="dark"
+      >
+        Light dark text
+      </span>
     </div>
   </docs-example>
 
   <docs-example
     heading="Attached badge"
     description="Apply the badge attribute directly to any host element to attach a floating badge. Add position-relative to the host so the badge positions itself correctly."
-    [code]="attachedExample">
+    [code]="attachedExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <button rlb-button class="position-relative" badge="New">Inbox</button>
+      <button
+        rlb-button
+        class="position-relative"
+        badge="New"
+      >
+        Inbox
+      </button>
     </div>
   </docs-example>
 
   <docs-example
     heading="Attached pill badge"
     description="Combine badge with badge-pill to get a rounded floating badge on the host element."
-    [code]="attachedPillExample">
+    [code]="attachedPillExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <button rlb-button class="position-relative" badge="99" badge-pill>Alerts</button>
+      <button
+        rlb-button
+        class="position-relative"
+        badge="99"
+        badge-pill
+      >
+        Alerts
+      </button>
     </div>
   </docs-example>
 
   <docs-example
     heading="Badge positioning"
     description="Use badge-top and badge-start with Bootstrap spacing tokens to anchor the badge relative to the host element."
-    [code]="attachedPositionExample">
+    [code]="attachedPositionExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <button rlb-button class="position-relative" badge="2" badge-top="0" badge-start="100">Messages</button>
+      <button
+        rlb-button
+        class="position-relative"
+        badge="2"
+        badge-top="0"
+        badge-start="100"
+      >
+        Messages
+      </button>
     </div>
   </docs-example>
 
   <docs-example
     heading="Badge with border"
     description="Add badge-border to give the floating badge a visible border."
-    [code]="attachedBorderExample">
+    [code]="attachedBorderExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <button rlb-button class="position-relative" badge="5" badge-border>Settings</button>
+      <button
+        rlb-button
+        class="position-relative"
+        badge="5"
+        badge-border
+      >
+        Settings
+      </button>
     </div>
   </docs-example>
 
   <docs-example
     heading="Dot indicator"
     description="Use badge-dot instead of badge to render a small dot indicator. Combine with badge-top and badge-start for positioning, and always add hidden-text for screen readers."
-    [code]="attachedDotExample">
+    [code]="attachedDotExample"
+  >
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <button rlb-button class="position-relative" badge-dot badge-top="0" badge-start="100" hidden-text="unread notifications">Notifications</button>
+      <button
+        rlb-button
+        class="position-relative"
+        badge-dot
+        badge-top="0"
+        badge-start="100"
+        hidden-text="unread notifications"
+      >
+        Notifications
+      </button>
     </div>
   </docs-example>
 
-  <docs-api selector="span[rlb-badge], img[rlb-badge]" [rows]="badgeComponentApi" />
+  <docs-api
+    selector="span[rlb-badge], img[rlb-badge]"
+    [rows]="badgeComponentApi"
+  />
 
-  <docs-api heading="[badge] directive" selector="[badge]" [rows]="badgeDirectiveApi" />
+  <docs-api
+    heading="[badge] directive"
+    selector="[badge]"
+    [rows]="badgeDirectiveApi"
+  />
 </docs-page>

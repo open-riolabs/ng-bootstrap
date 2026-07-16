@@ -125,9 +125,21 @@ type TextAlignment = 'left' | 'center' | 'right';
 >
   3
 </span>
+<span
+  rlb-badge
+  color="warning"
+  [soft]="true"
+>
+  Pending
+</span>
 ```
 
-**Inputs:** `color`, `pill`, `border`, `hidden-text`, `class`, `badge-text-color`
+**Inputs:** `color`, `pill`, `border`, `soft`, `hidden-text`, `class`, `badge-text-color`
+
+`soft` (default `false`) swaps the solid fill for a tinted surface with emphasis text. It is
+theme-aware (re-derives under `[data-bs-theme]`) and AA-legible in both light and dark, unlike the
+solid variants whose fixed text colour fails on several colours. Also on the `[badge]` directive as
+`badge-soft` — ignored for `badge-dot`, which stays solid.
 
 ---
 
