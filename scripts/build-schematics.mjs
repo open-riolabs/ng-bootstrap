@@ -30,6 +30,7 @@ const assets = [
   ['schematics/collection.json', 'collection.json'],
   ['schematics/ng-add/schema.json', 'ng-add/schema.json'],
   ['schematics/ng-add/files', 'ng-add/files'],
+  ['schematics/sync-skills/schema.json', 'sync-skills/schema.json'],
 ];
 
 for (const [src, dest] of assets) {
@@ -39,15 +40,16 @@ for (const [src, dest] of assets) {
   cpSync(from, to, { recursive: true });
 }
 
-// Bundle the repo-root Claude skills so `ng add` can copy them into consumers.
+// Bundle the repo-root Claude skills next to the `sync-skills` schematic that copies them into
+// consumers. `ng-add` reaches them by delegating to that schematic, so there is only one copy.
 const skillsSrc = join(root, '.claude', 'skills');
 if (existsSync(skillsSrc)) {
-  const skillsDest = join(distSchematics, 'ng-add', 'claude-skills');
+  const skillsDest = join(distSchematics, 'sync-skills', 'claude-skills');
   mkdirSync(skillsDest, { recursive: true });
   cpSync(skillsSrc, skillsDest, { recursive: true });
   console.log('• Bundled Claude skills from', skillsSrc);
 } else {
-  console.warn('⚠ No .claude/skills found at repo root — ng-add will ship without skills.');
+  console.warn('⚠ No .claude/skills found at repo root — the package will ship without skills.');
 }
 
 // `npm pack` strips nested package.json files from subfolders unless they are

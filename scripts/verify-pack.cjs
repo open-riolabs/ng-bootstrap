@@ -21,4 +21,19 @@ if (!entries.includes('package/schematics/package.json')) {
   process.exit(1);
 }
 
+// The bundled skills are the whole point of the sync-skills schematic: consumers re-run it from
+// their postinstall to pick up skill updates. If they silently stop shipping, sync-skills becomes
+// a no-op and nobody finds out until the guidance is stale.
+const skillFiles = entries
+  .split('\n')
+  .filter(entry => entry.startsWith('package/schematics/sync-skills/claude-skills/'));
+if (skillFiles.length === 0) {
+  console.error(`✗ ${tarball} is missing schematics/sync-skills/claude-skills/.`);
+  console.error(
+    '  sync-skills would copy nothing. Build with `npm run lib:build`, not `ng build`.',
+  );
+  process.exit(1);
+}
+
 console.log(`✓ ${tarball} retains schematics/package.json — ng add will load correctly.`);
+console.log(`✓ ${tarball} ships ${skillFiles.length} Claude skill file(s) for sync-skills.`);

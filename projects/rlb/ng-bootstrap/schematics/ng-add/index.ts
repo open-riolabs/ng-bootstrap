@@ -7,6 +7,7 @@ import {
   mergeWith,
   move,
   Rule,
+  schematic,
   SchematicContext,
   SchematicsException,
   Tree,
@@ -34,6 +35,9 @@ const DEPENDENCIES: ReadonlyArray<{ name: string; version: string; type: Depende
   { name: '@types/bootstrap', version: '^5.2.0', type: DependencyType.Dev },
 ];
 
+/** Keeps `.claude/skills` in step with the installed library version on every `npm install`. */
+const SYNC_SKILLS_COMMAND = 'ng g @open-rlb/ng-bootstrap:sync-skills';
+
 /** Global styles required for the Bootstrap look & feel. */
 const STYLE_PATHS: ReadonlyArray<string> = [
   'node_modules/bootstrap/dist/css/bootstrap.min.css',
@@ -58,8 +62,10 @@ export function ngAdd(options: Schema): Rule {
       // 4. Optionally scaffold a starter component.
       options.skipStarter ? noop : scaffoldStarter(tree, project),
       // 5. Optionally copy the bundled Claude skills into .claude/skills.
-      options.skipSkills ? noop : copyClaudeSkills(),
-      // 6. Print next steps.
+      options.skipSkills ? noop : schematic('sync-skills', {}),
+      // 6. Optionally keep them in sync on every future `npm install`.
+      options.skipSkills || options.skipSkillsAutoSync ? noop : addSkillsPostinstall(),
+      // 7. Print next steps.
       logNextSteps(project, options),
     ]);
   };
@@ -127,13 +133,40 @@ function scaffoldStarter(tree: Tree, project: string): Rule {
 }
 
 /**
- * Copies the Claude skills bundled with the package into the consumer's
- * `.claude/skills` folder. Library-authored skills are authoritative, so existing
- * copies are overwritten to stay in sync with the installed version.
+ * Adds a `postinstall` script that re-runs the sync-skills schematic, so `npm update` alone
+ * refreshes `.claude/skills` to match the newly installed library version.
+ *
+ * The script deliberately lives in the consumer's package.json rather than the library's: a
+ * library-side install script is silently skipped under `--ignore-scripts`, has to guess the
+ * app root via INIT_CWD, and would fire in unrelated repos on transitive installs.
  */
-function copyClaudeSkills(): Rule {
-  const skills = apply(url('./claude-skills'), [move('.claude/skills')]);
-  return mergeWith(skills, MergeStrategy.Overwrite);
+function addSkillsPostinstall(): Rule {
+  return (tree: Tree, context: SchematicContext) => {
+    const raw = tree.read('/package.json');
+    if (!raw) {
+      return tree;
+    }
+
+    const pkg = JSON.parse(raw.toString('utf-8')) as { scripts?: Record<string, string> };
+    const existing = pkg.scripts?.['postinstall'];
+
+    if (existing?.includes(SYNC_SKILLS_COMMAND)) {
+      return tree;
+    }
+
+    // Never rewrite a postinstall the consumer already relies on — tell them what to append.
+    if (existing) {
+      context.logger.warn(
+        `⚠ A "postinstall" script already exists. To keep the Claude skills up to date, append:\n` +
+          `    && ${SYNC_SKILLS_COMMAND}`,
+      );
+      return tree;
+    }
+
+    pkg.scripts = { ...pkg.scripts, postinstall: SYNC_SKILLS_COMMAND };
+    tree.overwrite('/package.json', JSON.stringify(pkg, null, 2) + '\n');
+    return tree;
+  };
 }
 
 function logNextSteps(project: string, options: Schema): Rule {
@@ -150,6 +183,11 @@ function logNextSteps(project: string, options: Schema): Rule {
     }
     if (!options.skipSkills) {
       log.info('   • Claude skills copied to .claude/skills/ (date-tz, rlb-* component guides)');
+      if (!options.skipSkillsAutoSync) {
+        log.info(`   • "postinstall": "${SYNC_SKILLS_COMMAND}" added to package.json`);
+        log.info('     Skills refresh on every `npm install`. Note `npm update <pkg>` skips');
+        log.info('     root lifecycle scripts — follow it with a bare `npm install`.');
+      }
     }
     log.info('');
   };

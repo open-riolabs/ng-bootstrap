@@ -15,6 +15,7 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 - [Publishing](#-publishing)
 - [Styling](#-styling)
 - [Configuration](#-configuration)
+- [Claude Skills](#-claude-skills)
 - [Additional Resources](#-additional-resources)
 - [Author](#-author)
 - [Contributors](#-contributors)
@@ -36,7 +37,15 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 
 ## 📦 Installation
 
-Install the package via npm:
+The fastest way is the `ng add` schematic. It installs the peer dependencies, registers the
+Bootstrap styles in `angular.json`, wires `provideRlbBootstrap()` into your root providers,
+scaffolds a starter component, and sets up the [Claude skills](#-claude-skills):
+
+```bash
+ng add @open-rlb/ng-bootstrap
+```
+
+Or install the package manually:
 
 ```bash
 npm install @open-rlb/ng-bootstrap
@@ -73,9 +82,9 @@ import { RlbBootstrapModule } from '@open-rlb/ng-bootstrap';
   imports: [
     RlbBootstrapModule,
     // ... other modules
-  ]
+  ],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 Or using the standalone provider function:
@@ -87,7 +96,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideRlbBootstrap(),
     // ... other providers
-  ]
+  ],
 });
 ```
 
@@ -105,7 +114,10 @@ Add Bootstrap CSS to your `angular.json` or import in your main styles file:
 ```html
 <rlb-button [variant]="'primary'">Click Me</rlb-button>
 <rlb-alert [variant]="'success'">Success message</rlb-alert>
-<rlb-input [label]="'Username'" [(ngModel)]="username"></rlb-input>
+<rlb-input
+  [label]="'Username'"
+  [(ngModel)]="username"
+></rlb-input>
 ```
 
 ## 🧩 Components
@@ -176,17 +188,20 @@ Add Bootstrap CSS to your `angular.json` or import in your main styles file:
 ### Setup
 
 1. Clone the repository:
+
 ```bash
 git clone https://gitlab.com/riolabs/common/libraries/rlb-ng-bootstrap.git
 cd rlb-ng-bootstrap
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm start
 ```
@@ -292,12 +307,12 @@ providers: [
     provide: ModalRegistryOptions,
     useValue: {
       modals: {
-        'my-custom-modal': MyCustomModalComponent
-      }
+        'my-custom-modal': MyCustomModalComponent,
+      },
     },
-    multi: true
-  }
-]
+    multi: true,
+  },
+];
 ```
 
 ### Toast Registry
@@ -312,13 +327,69 @@ providers: [
     provide: ToastRegistryOptions,
     useValue: {
       toasts: {
-        'my-custom-toast': MyCustomToastComponent
-      }
+        'my-custom-toast': MyCustomToastComponent,
+      },
     },
-    multi: true
-  }
-]
+    multi: true,
+  },
+];
 ```
+
+## 🤖 Claude Skills
+
+The library ships the [Claude Code](https://claude.ai/code) skills that document its components
+(`date-tz`, `rlb-components`, `rlb-inputs`, `rlb-modals`, `rlb-datatable`, `rlb-calendar`,
+`rlb-design`). They travel inside the npm package, so every version you install carries the
+guidance that matches it.
+
+`ng add` copies them into your `.claude/skills/` and adds a `postinstall` script so they stay
+current:
+
+```json
+{
+  "scripts": {
+    "postinstall": "ng g @open-rlb/ng-bootstrap:sync-skills"
+  }
+}
+```
+
+With that in place, any plain `npm install` — a fresh clone, a CI job, or pulling a teammate's
+lockfile change — refreshes the skills to match the installed library version.
+
+⚠️ **`npm update` does not trigger it.** npm only runs a project's own `postinstall` on a bare
+`npm install`; targeted commands such as `npm update <pkg>` and `npm install <pkg>` skip root
+lifecycle scripts. Follow an update with a bare install (which is a no-op for dependencies but does
+run the script), or wrap it in a script:
+
+```json
+{
+  "scripts": {
+    "update:rlb": "npm update @open-rlb/ng-bootstrap && npm install"
+  }
+}
+```
+
+You can also run the schematic directly at any time:
+
+```bash
+ng g @open-rlb/ng-bootstrap:sync-skills
+```
+
+The sync is re-runnable and conservative:
+
+- Skills the library ships are overwritten, so they always match the installed version.
+- Skills you wrote yourself in `.claude/skills/` are never touched.
+- Skills the library used to ship but no longer does are deleted. The list of library-owned folders
+  is tracked in `.claude/skills/.rlb-skills.json`, which you should commit. Pass `--prune=false` to
+  keep them instead.
+
+**CI note:** the `postinstall` runs on every install, including in CI. It is idempotent, so an
+up-to-date checkout produces no diff — but if someone bumps the library and forgets to commit the
+refreshed skills, the install leaves a dirty working tree. If your pipeline asserts a clean tree,
+set `RLB_SKIP_SKILL_SYNC=1` there and the schematic becomes a no-op.
+
+Prefer to opt out entirely? `ng add @open-rlb/ng-bootstrap --skip-skills-auto-sync` installs the
+skills once without the `postinstall`, and `--skip-skills` skips them altogether.
 
 ## 📚 Additional Resources
 
