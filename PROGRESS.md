@@ -15,6 +15,42 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 
 ---
 
+## ▶ Resume here
+
+**Last session ended:** 2026-08-31. Phase 0 complete and committed as `8c28184`.
+Working tree clean apart from an untracked `CLAUDE.md` that predates this work.
+
+**Blocking decision before Phase 1 starts** — see *Open finding* below:
+fix the Bootstrap teardown race in `toggle-abstract.component.ts` properly, or keep it
+as a logged follow-up? Everything else in Phase 1 can proceed either way.
+
+**Then Phase 1, in order:**
+
+1. Add `engines` to root `package.json` + an `.nvmrc` — neither exists.
+   Use `"node": "^22.22.3 || ^24.15.0 || >=26.0.0"` to match Angular's own constraint.
+2. Bump `typescript` `~5.9.3` → `~6.0.x`. **This is the real cost of the upgrade, not Angular 22.**
+   Angular 22's ng-packagr pins `typescript: ">=6.0 <6.1"` exactly.
+3. Fix the TS 6 fallout, in this order:
+   - `projects/rlb/ng-bootstrap/tsconfig.schematics.json` — `moduleResolution: "node"` is deprecated
+     in TS 6 → `node16`. This file does not extend the root config, so it is easy to miss.
+   - Root `tsconfig.json` — drop the leftover `experimentalDecorators`; re-evaluate `baseUrl`
+     (deprecated as a resolution root). Keep `useDefineForClassFields: false`.
+   - Re-check `projects/rlb/ng-bootstrap/tsconfig.lib.json` path aliases — they currently resolve
+     against the *workspace* root rather than the library, a latent bug that changed `baseUrl`
+     semantics may surface.
+4. Re-run the six-command sweep in `plan.md` → Verification. It should be green on **TS 6 + Angular 21**
+   before any Angular package is touched.
+
+**Do not skip:** re-read the two ⚠️ findings under Phase 0 in `plan.md` before editing any tsconfig.
+Both `include` globs and both `providersFile` entries are now load-bearing.
+
+**Baseline to compare against** (all exit 0 today):
+`test-ci` 7 files / 8 tests · `lib:test-ci` 2 files / 2 tests · `lib:build` · `lib:test:ng-add` ·
+`build:docs` · `lib:pack`. Watch the counts, not just exit codes — uncompilable specs vanish from
+the count instead of failing.
+
+---
+
 ## Phase 0 — Baseline + toolchain consolidation
 
 ### Recorded baseline (Angular 21.2.19, TypeScript 5.9.3, Node v24.16.0)
@@ -78,7 +114,7 @@ That last pair calls `setupZoneTestRunner()`, which contradicts the zoneless app
 - [x] Fix every pre-existing compile error and test failure
 - [x] Delete dead code: `src/app/app.module.ts`, `src/app/demo/`
 - [x] All targets green, still on Angular 21
-- [ ] Commit — awaiting review
+- [x] Commit — `8c28184`
 
 ### Notes / decisions
 

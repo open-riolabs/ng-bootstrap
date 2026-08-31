@@ -1,5 +1,9 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
+> **Status:** Phase 0 ✅ done (`8c28184`) · Phase 1 ⏸️ next · Phases 2–4 not started.
+> Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
+> One decision is open before Phase 1 — see the end of Phase 0.
+
 ## Context
 
 The repo is on Angular **21.1.2 declared / 21.2.19 installed**. Angular **22** shipped 2026-06-03; latest is 22.1.4 (CLI 22.1.6). We want to move the library and its demo/docs app to v22.
@@ -49,29 +53,74 @@ Angular's partial-compilation linker is **forward-compatible only**. A library c
 
 ---
 
-## Phase 0 — Establish a baseline (do this first, on Angular 21)
+## Phase 0 — Establish a baseline ✅ DONE (commit `8c28184`)
 
-This phase changes no Angular versions. Its whole purpose is that after it, a red test means something.
+Completed on branch `chore/angular-22-upgrade`. No Angular versions changed. Full write-up in
+[`PROGRESS.md`](./PROGRESS.md); summary and the corrections it forced on the rest of this plan below.
 
-**The problem:** `angular.json` `test` targets set only `tsConfig`. Per `node_modules/@angular/build/src/builders/unit-test/schema.json`, `runner` defaults to `vitest` and **`runnerConfig` defaults to `false`** — verified. Therefore:
-- `vitest.config.mts` (root) and `projects/rlb/ng-bootstrap/vitest.config.mts` are **never loaded**.
-- Consequently `src/test-setup.ts` and `projects/rlb/ng-bootstrap/src/test-setup.ts` never execute — including their `setupZoneTestRunner()` call, which contradicts the zoneless app anyway.
-- `lib:test-ci` passes `--karma-config`, and the `unit-test` builder has **no such option** (the schema exposes `runnerConfig`, not `karmaConfig`). This is the script GitLab CI runs.
-- `src/app/app.component.spec.ts:7` uses `declarations: [AppComponent]` on a standalone component — invalid in modern Angular — and asserts the stock CLI string `'ng-bootstrap app is running!'`.
+**Result — every target green on Angular 21:**
 
-**Steps:**
+| Command | Before | After |
+|---|---|---|
+| `lib:build` | 0 | 0 |
+| `lib:test-ci` | **1** — `Unknown argument: karma-config` | **0** (2 files, 2 tests) |
+| `test-ci` *(new script)* | n/a — demo specs never compiled | **0** (7 files, 8 tests) |
+| `lib:test:ng-add` · `build:docs` · `lib:pack` | not run | **0** · **0** · **0** |
 
-1. Run `npm run lib:test-ci` and `npm test` as-is and **record the actual output**. Do not assume anything is green.
-2. Consolidate on Vitest (already the de-facto runner):
-   - Add `"runnerConfig"` pointing at the respective `vitest.config.mts` in both `test` targets in `angular.json:79-84` and `angular.json:108-113`, **or** delete both `vitest.config.mts` files and move `setupFiles` into the builder options. Pick one; do not keep both.
-   - Fix the library's `vitest.config.mts` — its `setupFiles`/`include` are workspace-root-relative despite the file living in the library folder.
-   - Replace `setupZoneTestRunner()` in both `test-setup.ts` files with the zoneless setup, matching `provideZonelessChangeDetection()` in `src/app/app.config.ts:23`.
-   - Rewrite `lib:test-ci` to drop `--karma-config`.
-   - Delete `karma.conf.js` and the `karma`, `karma-*`, `jasmine-core`, `@types/jasmine` devDeps. This also lets `@angular-devkit/build-angular` go — it is referenced by nothing else in `angular.json` and is the heaviest package to drag across a major.
-   - Update `types: ["jasmine"]` in both `tsconfig.spec.json` files accordingly.
-3. Fix `src/app/app.component.spec.ts` (`declarations` → `imports`, correct the title assertion).
-4. Delete confirmed dead code — verified unreachable from `src/main.ts`, which uses `bootstrapApplication`: **`src/app/app.module.ts`** and **`src/app/routing.module.ts`**. Grep confirms `AppModule` is referenced only by its own declaration. This single deletion removes `BrowserModule`, `BrowserAnimationsModule`, and `HttpClientModule` from the type-check graph in one move, and eliminates the demo app's entire deprecated-API surface.
-5. **Commit here, green, still on Angular 21.** This is the baseline.
+`npm test` previously exited **1** with 5 compile errors while printing `2 passed` — the demo app's
+specs never compiled, so they were absent from the count rather than reported as failures.
+
+**The config was not merely unwired — it was inert.** `@angular/build` exposes only `.`, `./private`
+and `./package.json`; there is **no `./vitest` subpath**. Both `vitest.config.mts` files and both
+`test-setup.ts` files imported `angularVitestPlugin` / `setupZoneTestRunner` from it, so they would
+have thrown on load had anything loaded them. All four were deleted rather than repaired, along with
+`karma.conf.js`. Replaced with the builder's native options: `include` (scoping each project's specs)
+and `providersFile` (supplying `provideZonelessChangeDetection()`, finally matching the test
+environment to the zoneless app). Dropping `karma*`, `jasmine-core`, `@types/jasmine`,
+`@angular-devkit/build-angular` and `@vitest/browser` removed **502 packages**.
+
+### Two findings that change the rest of this plan
+
+1. **`include` resolves against `sourceRoot`, not project root** — contradicting the builder schema's
+   own description. `src/**/*.spec.ts` matched nothing for the library; `**/*.spec.ts` works. **If v22
+   corrects this to match the docs, both `include` globs in `angular.json` break.** Check this early
+   in Phase 2.
+2. **`providersFile` must also appear in the spec `tsConfig`'s `include`**, or the build fails with
+   `File '…test-providers.ts' not found in TypeScript compilation`. Both spec tsconfigs now list it —
+   keep that in mind if TypeScript 6's `rootDir`/`include` changes shift anything in Phase 1.
+
+### Corrections to what this plan originally assumed
+
+- **`src/app/routing.module.ts` was NOT dead.** `src/app/app.config.ts:17` imports its `routes` const.
+  Only the `RoutingModule` class and its `RouterModule.forRoot` were dead; those were stripped and
+  `routes` kept. `RoutingComponentsModule` / `RoutingInputsModule` are live `loadChildren` targets.
+- **`src/app/demo/` was dead and was removed** (4 files, zero references repo-wide). Its stale
+  non-signal `IModal` implementation was one of the original 5 compile errors. `ModalSampleComponent`
+  is the live modal sample, registered as `'sample-dialog'`.
+- `src/app/app.module.ts` was deleted as planned, removing `BrowserModule`,
+  `BrowserAnimationsModule` and `HttpClientModule` from the compilation in one step.
+
+### Pre-existing defects fixed (none upgrade-related)
+
+All were latent behind specs that never compiled: a wrong import path in `home.component.spec.ts`
+(`'../inputs/home.component'` → `'./home.component'`); `declarations:` used for standalone components
+in six specs; a stock CLI assertion against markup the template no longer contains; and missing
+`provideHighlightOptions` in the test environment (now in `src/test-providers.ts`).
+
+### ⚠️ Open decision carried into Phase 1
+
+Tearing down an accordion mid-transition throws
+`TypeError: Cannot read properties of null (reading 'classList')` at `bootstrap/js/src/collapse.js:151`.
+`ToggleAbstractComponent.ngOnDestroy` disposes correctly, but Bootstrap's own queued `transitionend`
+callback then dereferences the element `dispose()` nulled. Real in the browser too, just rarely seen.
+
+Worked around in `accordions.component.spec.ts` (let the ~350ms transition settle before
+`fixture.destroy()`) and **deliberately not fixed** — it is a library runtime behavior change, and
+Phase 0 was meant to establish a baseline, not alter behavior. **Decide before Phase 1:** fix it
+properly in `projects/rlb/ng-bootstrap/src/lib/components/abstract/toggle-abstract.component.ts`
+(guard/cancel pending transition callbacks before `dispose()`), or keep it as a logged follow-up.
+Related smell in the same file: `ngAfterContentChecked` calls `show()`/`hide()` on *every* check while
+`status` is `'show'`/`'hide'`, rather than only on transition.
 
 ---
 
@@ -82,7 +131,10 @@ This phase changes no Angular versions. Its whole purpose is that after it, a re
    - `projects/rlb/ng-bootstrap/tsconfig.schematics.json` — `moduleResolution: "node"` → `node16`.
    - Root `tsconfig.json` — remove `experimentalDecorators`; re-evaluate `baseUrl`; keep `useDefineForClassFields: false` (still the Angular-recommended value for an ES2022 target).
    - Re-verify `projects/rlb/ng-bootstrap/tsconfig.lib.json` path aliases now that `baseUrl` semantics changed.
-8. `npm run lib:build && npm test` — confirm green on **TS 6 + Angular 21** before touching Angular.
+8. Re-run the full sweep (see Verification) — confirm green on **TS 6 + Angular 21** before touching
+   Angular. Phase 0 makes this meaningful: a red run now points at TypeScript 6, nothing else.
+9. Watch two spots that Phase 0 made load-bearing: the `providersFile` entries in both
+   `tsconfig.spec.json` `include` arrays, and the `types: ["vitest/globals"]` those files now use.
 
 ---
 
@@ -92,7 +144,11 @@ This phase changes no Angular versions. Its whole purpose is that after it, a re
 10. Review every automated migration diff, especially the `ChangeDetectionStrategy.Eager` stamping. Prefer removing the stamp where the component is genuinely OnPush-safe.
 11. Bump remaining Angular packages in root `package.json:32-40, 50-57, 70`: `@angular/build`, `@angular-devkit/*`, `@schematics/angular`, `ng-packagr`, `@angular/localize`.
 12. **Drop `@angular/animations` and `@angular/platform-browser-dynamic`** from root `package.json`. Both are npm-deprecated and — verified — entirely unused: zero `trigger(`/`animate(`/`state(`/`transition(` calls anywhere, no `platformBrowserDynamic()`, no `bootstrapModule()`. The only references are `provideAnimations()` at `src/app/app.config.ts:4,26` and the dead `app.module.ts` deleted in Phase 0. This is a no-behavior-change removal that also clears the v23 landmine early at zero cost.
-13. Rebuild and re-run the demo app; exercise the Bootstrap-JS-backed components by hand (see Verification).
+13. **Check the `include` globs in `angular.json` first.** Phase 0 established that `include` resolves
+    against `sourceRoot` despite the schema documenting project root. If v22 fixes that discrepancy,
+    the library's `**/*.spec.ts` and the app's `src/**/*.spec.ts` both need revisiting — and the
+    failure mode is `No tests found`, not a compile error, so it is easy to mistake for success.
+14. Rebuild and re-run the demo app; exercise the Bootstrap-JS-backed components by hand (see Verification).
 
 ---
 
@@ -133,18 +189,28 @@ This phase changes no Angular versions. Its whole purpose is that after it, a re
 
 ## Verification
 
-**Automated:**
+**Automated** — this is the sweep Phase 0 made trustworthy. All six exit 0 on Angular 21 as of `8c28184`;
+any red after this point is caused by the change under test.
+
 ```bash
 node --version              # must satisfy ^22.22.3 || ^24.15.0 || >=26
 npm ci
-npm test                    # demo app specs
-npm run lib:test-ci         # library specs, post-rewrite
+npm run test-ci             # demo app specs   (7 files,  8 tests)
+npm run lib:test-ci         # library specs    (2 files,  2 tests)
 npm run lib:build           # ng-packagr + schematics compile
 npm run lib:test:ng-add     # schematic smoke test (requires lib:build first)
 npm run lib:pack            # runs verify-pack.cjs: asserts the CommonJS marker
                             # and bundled skills survive npm pack
 npm run build:docs          # exercises prepare-pages.mjs
 ```
+
+`test-ci` and `lib:test-ci` are the non-watch CI forms. Bare `npm test` runs both projects in watch
+mode; `npm test -- --no-watch` is the one-shot equivalent.
+
+**Read the counts, not just the exit code.** The pre-Phase-0 failure mode was Vitest printing
+`2 passed` while the process exited 1, because uncompilable specs are omitted from the count rather
+than failed. A sudden drop in file/test count means specs stopped compiling — treat it as a failure
+even if the summary looks green.
 
 Note `scripts/test-ng-add.cjs` builds a synthetic workspace hardcoded to today's generated-app shape (`architect`, `@angular/build:application`, `bootstrapApplication` + `ApplicationConfig`). If v22 changed that shape, this harness fails even when the schematic is fine — read its assertions before believing a failure.
 
