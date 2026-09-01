@@ -1,5 +1,5 @@
 import { Component, Signal } from '@angular/core';
-import { IToast, ToastData, ToastDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
+import { IToast, ToastData, ToastDirective } from '@open-rlb/ng-bootstrap';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
 

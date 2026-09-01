@@ -12,7 +12,7 @@ import {
   ModalRegistryOptions,
   SearchModalComponent,
   ToastRegistryOptions,
-} from 'projects/rlb/ng-bootstrap/src/public-api';
+} from '@open-rlb/ng-bootstrap';
 
 import { routes } from './routing.module';
 import { ModalSampleComponent } from './pages/components/modals/modal-sample.component';

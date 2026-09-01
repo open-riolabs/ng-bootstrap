@@ -8,8 +8,8 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | Phase | Scope | Status |
 |---|---|---|
 | 0 | Baseline + toolchain consolidation (still on Angular 21) | ✅ |
-| 1 | Node + TypeScript 6.0 | ⏸️ next |
-| 2 | Angular 22 | ⬜ |
+| 1 | Node + TypeScript 6.0 | ✅ |
+| 2 | Angular 22 | ⏸️ next |
 | 3 | Library packaging & published metadata | ⬜ |
 | 4 | CI | ⬜ |
 
@@ -17,34 +17,27 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-08-31. Phase 0 complete and committed as `8c28184`.
-Working tree clean apart from an untracked `CLAUDE.md` that predates this work.
+**Last session ended:** 2026-09-01. Phase 1 complete, **not yet committed** — working tree carries
+the Phase 1 diff (9 files) plus a new untracked `.nvmrc` and the untracked `CLAUDE.md` that
+predates this work.
 
-**Blocking decision before Phase 1 starts** — see *Open finding* below:
-fix the Bootstrap teardown race in `toggle-abstract.component.ts` properly, or keep it
-as a logged follow-up? Everything else in Phase 1 can proceed either way.
+Running on **TypeScript 6.0.3 + Angular 21.2.19**, all six targets green with counts unchanged
+from the Phase 0 baseline. The accordion teardown race was **kept as a follow-up** by decision,
+not fixed.
 
-**Then Phase 1, in order:**
+**Next: Phase 2 — Angular 22.** Before starting, note two things Phase 1 established:
 
-1. Add `engines` to root `package.json` + an `.nvmrc` — neither exists.
-   Use `"node": "^22.22.3 || ^24.15.0 || >=26.0.0"` to match Angular's own constraint.
-2. Bump `typescript` `~5.9.3` → `~6.0.x`. **This is the real cost of the upgrade, not Angular 22.**
-   Angular 22's ng-packagr pins `typescript: ">=6.0 <6.1"` exactly.
-3. Fix the TS 6 fallout, in this order:
-   - `projects/rlb/ng-bootstrap/tsconfig.schematics.json` — `moduleResolution: "node"` is deprecated
-     in TS 6 → `node16`. This file does not extend the root config, so it is easy to miss.
-   - Root `tsconfig.json` — drop the leftover `experimentalDecorators`; re-evaluate `baseUrl`
-     (deprecated as a resolution root). Keep `useDefineForClassFields: false`.
-   - Re-check `projects/rlb/ng-bootstrap/tsconfig.lib.json` path aliases — they currently resolve
-     against the *workspace* root rather than the library, a latent bug that changed `baseUrl`
-     semantics may surface.
-4. Re-run the six-command sweep in `plan.md` → Verification. It should be green on **TS 6 + Angular 21**
-   before any Angular package is touched.
+1. **The TS 6 peer conflict is expected and resolves itself in Phase 2.** `@angular/build@21.2.20`
+   and `ng-packagr@21.2.7` both pin `typescript: ">=5.9 <6.0"`, so `npm install` warns
+   (`Could not resolve dependency: peer typescript@">=5.9 <6.0"`). It is a warning, not an error —
+   the install succeeded and every target is green. `@angular/compiler-cli@21.2.19` already accepts
+   `>=5.9 <6.1`. The v22 packages pin `>=6.0 <6.1`, so the warning disappears once Angular is bumped.
+   **Do not "fix" it by downgrading TypeScript.**
+2. `baseUrl` is gone from the root `tsconfig.json`, so **no file can use a workspace-root-relative
+   specifier any more** (`from 'projects/rlb/...'`). Anything reaching into the library must use the
+   `@open-rlb/ng-bootstrap` alias. If an `ng update` migration writes such a path, it will not resolve.
 
-**Do not skip:** re-read the two ⚠️ findings under Phase 0 in `plan.md` before editing any tsconfig.
-Both `include` globs and both `providersFile` entries are now load-bearing.
-
-**Baseline to compare against** (all exit 0 today):
+**Baseline to compare against** (all exit 0 on TS 6 + Angular 21):
 `test-ci` 7 files / 8 tests · `lib:test-ci` 2 files / 2 tests · `lib:build` · `lib:test:ng-add` ·
 `build:docs` · `lib:pack`. Watch the counts, not just exit codes — uncompilable specs vanish from
 the count instead of failing.
@@ -213,3 +206,136 @@ behavior. Related smell spotted in the same file: `ngAfterContentChecked` calls 
 
 `provideAnimations()` at `src/app/app.config.ts:26` and the `@angular/animations` +
 `@angular/platform-browser-dynamic` dependencies are still present. Removing them is plan step 12.
+
+---
+
+## Phase 1 — Node + TypeScript 6.0 ✅
+
+Ran on Node v24.16.0, **TypeScript 5.9.3 → 6.0.3**, Angular untouched at 21.2.19.
+`typescript@6.0.3` is the newest 6.0.x on the registry (7.0.2 is latest overall, irrelevant here —
+Angular 22 pins `>=6.0 <6.1`).
+
+### Work items
+
+- [x] Add `engines` `"node": "^22.22.3 || ^24.15.0 || >=26.0.0"` to root `package.json`
+- [x] Add `.nvmrc` (`24.16.0`) — matches the local toolchain and satisfies Angular 22's range
+- [x] Bump `typescript` `~5.9.3` → `~6.0.3`
+- [x] `tsconfig.schematics.json` — `moduleResolution: "node"` → `node16` (and `module` with it)
+- [x] Root `tsconfig.json` — drop `experimentalDecorators`, drop `baseUrl`
+- [x] Fix the fallout `baseUrl` removal exposed (below)
+- [x] Full six-command sweep green, counts identical to the Phase 0 baseline
+
+### `module` had to move with `moduleResolution`
+
+TypeScript rejects `moduleResolution: "node16"` alongside `module: "commonjs"` — the two must agree.
+So `tsconfig.schematics.json` is now `module: "node16"` + `moduleResolution: "node16"`.
+
+**This does not change the emitted format.** Under `node16`, TypeScript picks the module format from
+the nearest `package.json` to the *source*, which is `projects/rlb/ng-bootstrap/package.json` — it has
+no `"type"` field, so CommonJS is the default. Verified on the built output:
+
+```js
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ngAdd = ngAdd;
+const core_1 = require("@angular-devkit/core");
+```
+
+`lib:pack` → `verify-pack.cjs` still passes, so the `{"type":"commonjs"}` marker
+(`schematics/package.json`) that lets `ng add` load these files survives.
+
+### Removing `baseUrl` broke `build:docs` — and that was the point
+
+`baseUrl: "./"` was letting four demo-app files import the library by **workspace-root-relative path**
+instead of the alias. With `baseUrl` gone, `build:docs` failed with nine
+`Could not resolve "projects/rlb/ng-bootstrap/..."` errors.
+
+The demo app was already inconsistent before this: **6 files on `@open-rlb/ng-bootstrap`, 4 on
+`projects/rlb/...`**. Both spellings resolve to the same file — `tsconfig.json` maps the alias to
+`./projects/rlb/ng-bootstrap/src/public-api.ts` — so this was purely a spelling split. All nine
+imports now use the alias, which is the entry point `CLAUDE.md` documents.
+
+| File | Was | Now |
+|---|---|---|
+| `src/app/app.config.ts` | `projects/…/src/public-api` | `@open-rlb/ng-bootstrap` |
+| `src/app/pages/components/modals/modal-sample.component.ts` | 2 imports (public-api + deep) | 1 import |
+| `src/app/pages/components/toasts/toasts-sample.component.ts` | `projects/…/src/public-api` | `@open-rlb/ng-bootstrap` |
+| `src/app/pages/components/calendar/calendar.component.ts` | 5 deep imports | 1 import |
+
+Nothing published is affected — `src/` is the demo app and is not in the tarball, which contains only
+`fesm2022/`, `types/`, `assets/`, `schematics/`, `README.md`, `package.json`. Audited at the same time:
+the library source and the schematic templates contain **zero** workspace-alias or `projects/…`
+specifiers, so the "workspace path leaks into shipped code" failure mode does not exist here.
+
+### Public-API gap the reach-in was hiding ⚠️ library change
+
+Three of the calendar's own input/output types were **never exported from the package**:
+
+```ts
+view       = model<CalendarView>('week', { alias: 'view' });
+layout     = input<Partial<CalendarLayout>>({}, { alias: 'layout' });
+dateChange = output<CalendarChangeEvent>({ alias: 'date-change' });
+```
+
+A consumer could not type a `(date-change)` handler. The demo never noticed because `baseUrl` let it
+reach into `src/lib/` directly. Fixed by exporting the two interface files from the calendar barrel
+(`src/lib/components/calendar/index.ts`):
+
+```ts
+export * from './interfaces/calendar-layout.interface';
+export * from './interfaces/calendar-view.type';
+```
+
+Adds four names — `CalendarView`, `CalendarLayout`, `CalendarChangeEvent` (types, zero runtime) and
+`DEFAULT_CALENDAR_LAYOUT` (a const). Purely **additive**; nothing renamed or removed. This is the only
+Phase 1 change that reaches consumers.
+
+### `getToday` — one call the alias could not reach
+
+`src/app/pages/components/calendar/calendar.component.ts` imported `getToday` from the calendar's
+internal `utils/calendar-date-utils`, which is not on the public API. Rather than widen the surface
+further, the two live call sites now use the library's own one-line implementation directly:
+
+```ts
+export function getToday(timezone?: string): DateTz {
+  return DateTz.now(timezone ?? getBrowserTimezone());
+}
+```
+
+The demo always passes `this.timezone`, so `DateTz.now(this.timezone)` is exactly equivalent.
+`DateTz` was already imported in that file.
+
+### Verified green on TS 6.0.3 + Angular 21
+
+| Command | Exit | Counts |
+|---|---|---|
+| `npm run lib:build` | **0** | — |
+| `npm run test-ci` | **0** | 7 files, 8 tests |
+| `npm run lib:test-ci` | **0** | 2 files, 2 tests |
+| `npm run lib:test:ng-add` | **0** | all schematic assertions |
+| `npm run lib:pack` | **0** | CJS marker + 7 skills in tarball |
+| `npm run build:docs` | **0** | — |
+
+Identical to the Phase 0 baseline. A red run from here on points at Angular 22, nothing else.
+
+### Non-issues, checked and dismissed
+
+- **`noUncheckedSideEffectImports` (now defaults `true`)** — the repo has **zero** bare side-effect
+  imports (`grep "^import '"` across `src` and `projects` returns nothing). No exposure.
+- **`types` now defaults to `[]`** — every leaf tsconfig already sets `types` explicitly. Nothing
+  relied on ambient auto-inclusion.
+- **`tsconfig.lib.json` path aliases** (`@shared/*`, `@/*`, `~/*`) — the latent bug is real: they
+  resolved against the workspace root, and removing `baseUrl` silently repointed them at the library
+  folder. It changed nothing because **they are unused** (verified by grep). See follow-ups.
+
+### Follow-ups logged in Phase 1
+
+1. **Accordion teardown race** — decided: keep as a follow-up, not fixed. See the Phase 0
+   *Open finding* for the reproduction and the intended fix.
+2. **The calendar docs snippet is wrong.** `calendar.component.ts:62` renders
+   `import { DateTz, getToday } from '@open-rlb/date-tz';` to users, but `@open-rlb/date-tz` does not
+   export `getToday` — it is the library's own helper. The `default: 'getToday()'` API-table entry
+   (line 130) has the same problem. Pre-existing; untouched to keep Phase 1 scoped.
+3. **Delete the unused `@shared/*`, `@/*`, `~/*` aliases** from `tsconfig.lib.json:10-14`. They have
+   no consumers and only exist to be misconfigured.
+4. **TS 6 peer warning from `@angular/build@21` / `ng-packagr@21`** — expected, resolves in Phase 2.

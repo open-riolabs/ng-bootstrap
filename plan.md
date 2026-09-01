@@ -1,8 +1,8 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status:** Phase 0 ✅ done (`8c28184`) · Phase 1 ⏸️ next · Phases 2–4 not started.
+> **Status:** Phase 0 ✅ done (`8c28184`) · Phase 1 ✅ done (uncommitted) · Phase 2 ⏸️ next · Phases 3–4 not started.
 > Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
-> One decision is open before Phase 1 — see the end of Phase 0.
+> Now on **TypeScript 6.0.3 + Angular 21.2.19**, all six targets green.
 
 ## Context
 
@@ -107,7 +107,7 @@ All were latent behind specs that never compiled: a wrong import path in `home.c
 in six specs; a stock CLI assertion against markup the template no longer contains; and missing
 `provideHighlightOptions` in the test environment (now in `src/test-providers.ts`).
 
-### ⚠️ Open decision carried into Phase 1
+### ⚠️ Open decision carried into Phase 1 — RESOLVED: kept as a follow-up
 
 Tearing down an accordion mid-transition throws
 `TypeError: Cannot read properties of null (reading 'classList')` at `bootstrap/js/src/collapse.js:151`.
@@ -116,25 +116,48 @@ callback then dereferences the element `dispose()` nulled. Real in the browser t
 
 Worked around in `accordions.component.spec.ts` (let the ~350ms transition settle before
 `fixture.destroy()`) and **deliberately not fixed** — it is a library runtime behavior change, and
-Phase 0 was meant to establish a baseline, not alter behavior. **Decide before Phase 1:** fix it
-properly in `projects/rlb/ng-bootstrap/src/lib/components/abstract/toggle-abstract.component.ts`
-(guard/cancel pending transition callbacks before `dispose()`), or keep it as a logged follow-up.
-Related smell in the same file: `ngAfterContentChecked` calls `show()`/`hide()` on *every* check while
-`status` is `'show'`/`'hide'`, rather than only on transition.
+Phase 0 was meant to establish a baseline, not alter behavior.
+
+**Decision (2026-09-01): keep as a logged follow-up.** Not fixed in Phase 1. The proper fix belongs in
+`projects/rlb/ng-bootstrap/src/lib/components/abstract/toggle-abstract.component.ts` — guard or cancel
+pending transition callbacks before `dispose()`. Related smell in the same file:
+`ngAfterContentChecked` calls `show()`/`hide()` on *every* check while `status` is `'show'`/`'hide'`,
+rather than only on transition.
 
 ---
 
-## Phase 1 — Node and TypeScript
+## Phase 1 — Node and TypeScript ✅ DONE (uncommitted)
 
-6. Add an `engines` field to root `package.json` and an `.nvmrc` — neither exists today. Use `"node": "^22.22.3 || ^24.15.0 || >=26.0.0"` to match Angular's own constraint.
-7. Bump `typescript` to `~6.0.x`. Address the fallout listed above, in this order:
-   - `projects/rlb/ng-bootstrap/tsconfig.schematics.json` — `moduleResolution: "node"` → `node16`.
-   - Root `tsconfig.json` — remove `experimentalDecorators`; re-evaluate `baseUrl`; keep `useDefineForClassFields: false` (still the Angular-recommended value for an ES2022 target).
-   - Re-verify `projects/rlb/ng-bootstrap/tsconfig.lib.json` path aliases now that `baseUrl` semantics changed.
-8. Re-run the full sweep (see Verification) — confirm green on **TS 6 + Angular 21** before touching
-   Angular. Phase 0 makes this meaningful: a red run now points at TypeScript 6, nothing else.
-9. Watch two spots that Phase 0 made load-bearing: the `providersFile` entries in both
-   `tsconfig.spec.json` `include` arrays, and the `types: ["vitest/globals"]` those files now use.
+All items below are complete on **TypeScript 6.0.3**, Angular untouched at 21.2.19. Full write-up in
+[`PROGRESS.md`](./PROGRESS.md); what it changed for the rest of this plan is summarised after the list.
+
+6. ✅ `engines` `"node": "^22.22.3 || ^24.15.0 || >=26.0.0"` added to root `package.json`; `.nvmrc` added (`24.16.0`).
+7. ✅ `typescript` bumped `~5.9.3` → `~6.0.3` (newest 6.0.x; Angular 22 pins `>=6.0 <6.1`).
+   - ✅ `tsconfig.schematics.json` — `moduleResolution: "node"` → `node16`. **`module` had to move with it**
+     (TypeScript rejects `node16` resolution alongside `module: "commonjs"`). Emitted output is still
+     CommonJS, because `node16` reads the format from `projects/rlb/ng-bootstrap/package.json`, which has
+     no `"type"` field. `verify-pack.cjs` confirms the marker survives.
+   - ✅ Root `tsconfig.json` — `experimentalDecorators` and `baseUrl` both removed.
+     `useDefineForClassFields: false` kept.
+   - ✅ `tsconfig.lib.json` aliases re-verified: `@shared/*`, `@/*`, `~/*` are genuinely **unused**, so the
+     latent misresolution changed nothing. Deleting them is a logged follow-up.
+8. ✅ Full sweep green on **TS 6 + Angular 21**, counts identical to the Phase 0 baseline.
+9. ✅ Both `providersFile` entries and `types: ["vitest/globals"]` survived the TS 6 bump untouched.
+
+### What Phase 1 changed for Phase 2
+
+- **A TS 6 peer warning is expected and is not a failure.** `@angular/build@21.2.20` and `ng-packagr@21.2.7`
+  pin `typescript: ">=5.9 <6.0"`, so `npm install` warns. It is a warning, not an error; every target is
+  green. `@angular/compiler-cli@21.2.19` already allows `>=5.9 <6.1`. The v22 packages pin `>=6.0 <6.1`,
+  so the warning clears when Angular is bumped. **Do not resolve it by downgrading TypeScript.**
+- **No workspace-root-relative specifiers can survive any more.** With `baseUrl` gone, `from 'projects/rlb/…'`
+  no longer resolves. Nine such imports in the demo app were rewritten to the `@open-rlb/ng-bootstrap`
+  alias. If an `ng update` migration emits such a path in Phase 2, it will fail to resolve — check for it.
+- **The library's public API grew by four names.** `CalendarView`, `CalendarLayout`, `CalendarChangeEvent`
+  and `DEFAULT_CALENDAR_LAYOUT` are now exported from the calendar barrel. They are the types of
+  `<rlb-calendar>`'s own `view` / `layout` inputs and `date-change` / `view-change` outputs, and were
+  previously unreachable by consumers — the demo only compiled because `baseUrl` let it reach into
+  `src/lib/`. Purely additive. Relevant to Phase 3, which touches published metadata.
 
 ---
 
@@ -177,6 +200,14 @@ Related smell in the same file: `ngAfterContentChecked` calls `show()`/`hide()` 
 
 ## Deliberately out of scope (log as follow-ups)
 
+- **The Bootstrap accordion teardown race** in `toggle-abstract.component.ts` — decided in Phase 1 to
+  keep as a follow-up. See the Phase 0 open finding for the reproduction and the intended fix.
+- **The calendar docs snippet is wrong** (found in Phase 1). `src/app/pages/components/calendar/calendar.component.ts:62`
+  renders `import { DateTz, getToday } from '@open-rlb/date-tz';` to readers, but `@open-rlb/date-tz`
+  exports no `getToday` — it is the library's own internal helper. The `default: 'getToday()'` API-table
+  entry at line 130 has the same problem.
+- **Delete the unused `@shared/*`, `@/*`, `~/*` aliases** from `tsconfig.lib.json:10-14` (found in Phase 1).
+  Nothing imports them; they exist only to be misconfigured.
 - 16 `[ngClass]` bindings in the library (~7 are single-key `is-invalid` toggles trivially convertible to `[class.is-invalid]`).
 - 3 remaining decorators: `@ViewChild` (`shared/wrapped.component.ts:22`), `@HostListener` (`forms/inputs/abstract-autocomplete.component.ts:149`), and `@Self() @Optional()` param decorators on a field alongside `inject()` (`forms/inputs/abstract-field.component.ts:28`).
 - ~40 constructor-injected params that could be `inject()`.
