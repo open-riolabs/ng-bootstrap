@@ -1,6 +1,6 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ✅ (`d3a1a76`) · Phase 4 ✅ (uncommitted). **Upgrade complete.**
+> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ✅ (`d3a1a76`) · Phase 4 ✅ (`5eacb84`). **Upgrade complete.**
 > Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
 > Now on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green plus a browser pass.
 
@@ -249,7 +249,7 @@ packed the tarball, `ng add`-ed it into a fresh `@angular/cli@22` app, and confi
 7 skills and added the `postinstall`. Rendering the starter and building the consumer app succeeded
 (830.66 kB initial) — which is the only proof that v22 partial-compilation output links in a v22 app.
 
-## Phase 4 — CI ✅ DONE (uncommitted)
+## Phase 4 — CI ✅ DONE (commit `5eacb84`)
 
 19. ✅ `production.yaml` rewritten. The **musl→glibc `node_modules` artifact** was the real defect:
     a `node:alpine` job tarred `node_modules` for a `node:lts-bullseye` job, and this tree pulls
