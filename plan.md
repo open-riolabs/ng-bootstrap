@@ -206,19 +206,48 @@ and by the browser logging `view change {date, view: month}`. Worth a release-no
 **Functionally fine** — verified the popover still opens. Renaming the selector would be a breaking
 change, so it is a follow-up, not version-bump work.
 
-## Phase 3 — Library packaging and published metadata
+## Phase 3 — Library packaging and published metadata ✅ DONE (uncommitted)
 
-14. **`projects/rlb/ng-bootstrap/package.json:5-9`** — peer ranges `>=21.0.0 <22.0.0` → `>=22.0.0 <23.0.0` for `@angular/{cdk,common,core,forms,router}`.
-15. **`projects/rlb/ng-bootstrap/schematics/ng-add/index.ts:32`** — `{ name: '@angular/cdk', version: '^21.0.0' }` → `'^22.0.0'`. This is the second, easy-to-miss place the Angular major is encoded, and `^21.0.0` will not resolve a v22 CDK into a consumer app. While in this array (lines 29-36), also align `bootstrap-icons` (`^1.11.0` here vs `^1.13.1` in root `package.json:43`).
-16. **Reconcile the `@open-rlb/date-tz` floor** — it is currently stated three different ways: `>=2.0.1` (root `package.json:42` and `README.md:59`), `>=2.1.1` (library peer, line 11), `^2.1.1` (schematic, line 30). Installed is 2.1.4, which is why the drift is invisible in-workspace. Pick one floor and apply it to all four.
-17. **Fix the READMEs, which are already wrong today and will now be two majors stale:**
-    - `README.md:65` — "requires Angular 20+"
-    - `README.md:67` — `npm install @angular/core@^20.1.0 …`, which *contradicts* the current `>=21.0.0` peer range and produces an unsatisfiable install
-    - `projects/rlb/ng-bootstrap/README.md:5` — "Supports **Angular 17.2+** (built with Angular 21)" — this is the README that ships in the npm tarball
-    - `CLAUDE.md:7` — "An Angular 21 component library"
-18. Also correct `CLAUDE.md:61`, which claims the library "does not depend on a concrete translation implementation." That is not true: `rlb-bootstrap.module.ts:6,19` imports `TranslateModule` and `rlb-form-fields.component.ts:17,31` imports `TranslatePipe` (used 5× in its template). Both are exported from `public-api.ts`, so `@ngx-translate/core` is a genuine hard peer dep, not an optional one. The `RLB_TRANSLATION_SERVICE` abstraction is only honored in `input-validation.component.ts`.
+14. ✅ Library peer ranges `>=21.0.0 <22.0.0` → `>=22.0.0 <23.0.0` for `@angular/{cdk,common,core,forms,router}`.
+15. ✅ Schematic `@angular/cdk` pin `^21.0.0` → `^22.0.0`; `bootstrap-icons` aligned `^1.11.0` → `^1.13.1`.
+16. ✅ **`@open-rlb/date-tz` floor unified at `2.1.1`.** Raised the two declarations that said `>=2.0.1`
+    (root `package.json`, `README.md:59`) rather than lowering the library peer — lowering would let an
+    install through that the peer check then rejects. Range *shapes* were left alone (`>=` in the peers,
+    `^` in the schematic); only the floor was reconciled.
+17. ✅ READMEs corrected. The root README was worse than the plan recorded — beyond "Angular 20+" and
+    the unsatisfiable `@angular/core@^20.1.0` install line, it also claimed **Node.js v18+** and
+    **Angular CLI 20+** in Prerequisites, and an "Angular 20+ compatible" feature bullet. All four fixed,
+    plus `@angular/cdk` added to the install snippet (it is a peer dep but was never mentioned) and a
+    note that the linker's forward-only compatibility is why v21 apps must stay on a v21-built release.
+18. ✅ `CLAUDE.md` corrected on both counts — "Angular 21 component library" → 22, and the i18n claim.
 
----
+### Also found and fixed in Phase 3 (not in the original list)
+
+The **shipped skills** carried stale version claims, which matters because they land in consumer
+projects via `ng add` / `sync-skills`: `rlb-components/SKILL.md:8` and `rlb-inputs/SKILL.md:8` both
+said "Angular 18+ signals". Rewritten to state the actual requirement (Angular 22). Also dropped a
+stale "Modern Angular 21 syntax" comment in `autocomplete-country.component.ts:90`.
+
+### The i18n correction, verified rather than assumed
+
+`CLAUDE.md` claimed the library "does not depend on a concrete translation implementation". Checked:
+`rlb-bootstrap.module.ts:6` imports `TranslateModule`, `rlb-form-fields.component.ts:17` imports
+`TranslatePipe` (5 uses in its template), and both are re-exported from `public-api.ts`.
+`RLB_TRANSLATION_SERVICE` is honored in exactly one file, `input-validation.component.ts`. So
+`@ngx-translate/core` is a hard peer dep — which the library's `package.json` already stated correctly
+(it is not in `peerDependenciesMeta`); only the prose was wrong.
+
+### Verified in the built artifact, and as a real consumer
+
+`dist/rlb/ng-bootstrap/package.json` carries the `>=22.0.0 <23.0.0` peers, the compiled
+`schematics/ng-add/index.js` carries `@angular/cdk ^22.0.0` and `bootstrap-icons ^1.13.1`, and the
+README inside the tarball reads "Requires **Angular 22**". Full sweep green, counts unchanged.
+
+The consumer check in Verification below was also run, since Phase 3 is what changed the peer ranges:
+packed the tarball, `ng add`-ed it into a fresh `@angular/cli@22` app, and confirmed it resolved
+**CDK 22.1.4**, registered the styles, wired `provideRlbBootstrap()`, scaffolded the starter, synced
+7 skills and added the `postinstall`. Rendering the starter and building the consumer app succeeded
+(830.66 kB initial) — which is the only proof that v22 partial-compilation output links in a v22 app.
 
 ## Phase 4 — CI
 

@@ -25,7 +25,7 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 ## ✨ Features
 
 - **Bootstrap 5** based components
-- **Angular 20+** compatible
+- **Angular 22** compatible
 - **TypeScript** support
 - **i18n** ready with `@ngx-translate/core`
 - **Accessible** components following Bootstrap patterns
@@ -56,18 +56,22 @@ npm install @open-rlb/ng-bootstrap
 Make sure you have the following peer dependencies installed:
 
 ```bash
-npm install bootstrap@>=5.3.0 @types/bootstrap@>5.2.0 @open-rlb/date-tz@>=2.0.1
+npm install bootstrap@>=5.3.0 @types/bootstrap@>5.2.0 @open-rlb/date-tz@>=2.1.1
 ```
 
 ### Required Angular Dependencies
 
-This library requires Angular 20+ and the following packages:
+This library requires **Angular 22** (`>=22.0.0 <23.0.0`) and the following packages:
 
 ```bash
-npm install @angular/core@^20.1.0 @angular/common@^20.1.0 @angular/forms@^20.1.0 @angular/router@^20.1.0
+npm install @angular/core@^22.0.0 @angular/common@^22.0.0 @angular/forms@^22.0.0 @angular/router@^22.0.0
+npm install @angular/cdk@^22.0.0
 npm install @ngx-translate/core@^17.0.0
 npm install bootstrap-icons@^1.13.1
 ```
+
+Angular's partial-compilation linker is forward-compatible only, so a build of this library cannot be
+linked by an older Angular. Applications still on Angular 21 should stay on the last 21-built release.
 
 ## 🚀 Getting Started
 
@@ -181,9 +185,9 @@ Add Bootstrap CSS to your `angular.json` or import in your main styles file:
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js `^22.22.3 || ^24.15.0 || >=26.0.0` (matches Angular 22's own constraint; see `.nvmrc`)
 - npm or yarn
-- Angular CLI 20+
+- Angular CLI 22+
 
 ### Setup
 

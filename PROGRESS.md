@@ -10,22 +10,25 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | 0 | Baseline + toolchain consolidation (still on Angular 21) | ✅ |
 | 1 | Node + TypeScript 6.0 | ✅ |
 | 2 | Angular 22 | ✅ |
-| 3 | Library packaging & published metadata | ⏸️ next |
-| 4 | CI | ⬜ |
+| 3 | Library packaging & published metadata | ✅ |
+| 4 | CI | ⏸️ next |
 
 ---
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. Phase 2 complete and committed as `595c4c1`.
-Working tree clean apart from the untracked `CLAUDE.md` that predates this work.
-Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green with counts
-unchanged, plus a browser pass over the Bootstrap-JS components (below).
+**Last session ended:** 2026-09-01. Phase 3 complete, **not yet committed**.
+The library now advertises **Angular 22** everywhere it is published: peer ranges, the `ng-add`
+schematic pins, both READMEs, and the bundled skills.
 
-**Next: Phase 3 — library packaging and published metadata.** The library's own
-`projects/rlb/ng-bootstrap/package.json` peer ranges still say `>=21.0.0 <22.0.0` — deliberately
-untouched, that is Phase 3 step 14. Phase 2 added one item to Phase 3's list: the calendar's
-`[(view)]` decision below is worth a line in the release notes even though it is not a break.
+**Next: Phase 4 — CI**, and it is the last phase. Nothing in it depends on the library code;
+it is `.github/workflows/production.yaml` (no test job, three unpinned Node images sharing a
+`node_modules` artifact across a musl→glibc boundary, and `npm link husky` / `npm link @nestjs/cli`
+that are not dependencies of this repo), `.github/workflows/pages.yaml` (`npm install` → `npm ci`),
+and a decision on whether `.gitlab-ci.yml` is still alive — it still runs the Karma path that
+Phase 0 deleted.
+
+Pin CI Node to something satisfying `^22.22.3 || ^24.15.0 || >=26.0.0`; `.nvmrc` says `24.16.0`.
 
 **Baseline to compare against** (all exit 0 on Angular 22 + TS 6):
 `test-ci` 7 files / 8 tests · `lib:test-ci` 2 files / 2 tests · `lib:build` · `lib:test:ng-add` ·
@@ -483,3 +486,114 @@ whose only valid values are `auto` / `manual` / `hint` / empty, and warns on any
 **Not broken** — verified in the browser: the trigger stays visible and the popover opens correctly.
 But every consumer using popovers will now see console warnings. Renaming the selector would be a
 breaking API change, so it is out of scope for a version bump. Logged as a follow-up.
+
+---
+
+## Phase 3 — Library packaging and published metadata ✅
+
+Everything the library *advertises* now says Angular 22. No library code changed except one stale
+comment; this phase is entirely about what consumers see.
+
+### Work items
+
+- [x] Peer ranges → `>=22.0.0 <23.0.0` for `@angular/{cdk,common,core,forms,router}`
+- [x] `ng-add` schematic: `@angular/cdk` `^21.0.0` → `^22.0.0`; `bootstrap-icons` `^1.11.0` → `^1.13.1`
+- [x] Reconcile the three-way `@open-rlb/date-tz` drift
+- [x] Fix both READMEs
+- [x] Fix `CLAUDE.md` — the Angular version *and* the i18n claim
+- [x] Fix the stale version claims in the bundled skills (not in the original plan)
+- [x] Verify the changes reached the built artifact, not just the source
+
+### `date-tz`: raised the floor rather than lowering it
+
+The floor was stated three different ways — `>=2.0.1` (root `package.json:44`, `README.md:59`),
+`>=2.1.1` (library peer), `^2.1.1` (schematic) — invisible in-workspace because 2.1.4 was installed.
+
+Unified on **2.1.1**, raising the two that said `2.0.1`. Lowering the peer to `2.0.1` instead would
+have been the wrong direction: it would let an install succeed that the peer check then rejects.
+Range *shapes* were deliberately left alone — `>=` in the peer deps, `^` in the schematic. The plan
+said reconcile the floor, and turning the peer into `^2.1.1` would additionally cap it below 3.0,
+which is a real semantic change nobody asked for.
+
+### The root README was worse than the plan recorded
+
+The plan listed two problems. There were five:
+
+| Line | Was | Now |
+|---|---|---|
+| 28 | "**Angular 20+** compatible" feature bullet | Angular 22 |
+| 64 | "requires Angular 20+" | requires Angular 22 (`>=22.0.0 <23.0.0`) |
+| 67 | `npm install @angular/core@^20.1.0 …` — unsatisfiable against the peer range | `^22.0.0` |
+| 188 | Prerequisites: "Node.js (v18 or higher)" | `^22.22.3 \|\| ^24.15.0 \|\| >=26.0.0` |
+| 190 | Prerequisites: "Angular CLI 20+" | Angular CLI 22+ |
+
+Also added `@angular/cdk` to the install snippet — it is a peer dependency and the README never
+mentioned it — and a note that Angular's linker is forward-compatible only, which is *why* v21
+applications have to stay on a v21-built release rather than just installing the latest.
+
+### The bundled skills were stale too — and they ship
+
+Not in the original plan, and they matter more than the READMEs because `ng add` / `sync-skills`
+copies them into consumer projects, where they become the guidance Claude follows:
+
+- `.claude/skills/rlb-components/SKILL.md:8` — "All components use Angular 18+ signals"
+- `.claude/skills/rlb-inputs/SKILL.md:8` — "They use Angular 18+ signals"
+
+Both now state the actual requirement instead of the version an API first appeared in. Also dropped
+a "Modern Angular 21 syntax" comment in `autocomplete-country.component.ts:90`.
+
+### The i18n correction — checked, not assumed
+
+`CLAUDE.md` claimed the library "does not depend on a concrete translation implementation in code
+paths that translate at runtime". Verified against the source, and it is false:
+
+- `rlb-bootstrap.module.ts:6` imports `TranslateModule`
+- `rlb-form-fields.component.ts:17` imports `TranslatePipe`, used 5× in its template
+- both are re-exported from `public-api.ts`, so a consumer cannot avoid them
+- `RLB_TRANSLATION_SERVICE` is honored in exactly one file — `input-validation.component.ts`
+
+So `@ngx-translate/core` is a hard peer dependency. The library's `package.json` already had this
+right (it is *not* in `peerDependenciesMeta`); only the prose was wrong. Rewritten to describe the
+abstraction as the direction of travel rather than a property the library already has.
+
+### Verified in the artifact, not just the source
+
+Source edits are not the deliverable here — what `npm publish` would upload is.
+
+```
+dist/rlb/ng-bootstrap/package.json      →  "@angular/core": ">=22.0.0 <23.0.0"  (all five)
+dist/…/schematics/ng-add/index.js       →  '@angular/cdk', version: '^22.0.0'
+                                           'bootstrap-icons', version: '^1.13.1'
+tarball package/README.md               →  "Requires **Angular 22**"
+```
+
+Full sweep green with counts unchanged: `lib:build`, `test-ci` (7 files / 8 tests), `lib:test-ci`
+(2 / 2), `lib:test:ng-add`, `lib:pack`, `build:docs`.
+
+### Verified as a real consumer — the only test of the peer ranges
+
+The plan flags this as the one thing that actually exercises the peer ranges and schematic pins,
+and Phase 3 is exactly the phase that changed them. Ran the whole flow against a scratch app:
+
+```bash
+npx @angular/cli@22 new scratch-app --defaults      # real v22 app: core ^22.0.0, cli ^22.0.1
+npm run lib:pack                                    # in this repo
+npx ng add ../lib.tgz --skip-confirmation           # in the scratch app
+```
+
+`ng add` completed with exit 0 and did everything it advertises:
+
+| Check | Result |
+|---|---|
+| `@angular/cdk` installed at a v22-compatible version | ✅ resolved **22.1.4** (from the new `^22.0.0` pin) |
+| `bootstrap-icons` pin | ✅ `^1.13.1`, matching root — the drift is gone |
+| `@open-rlb/date-tz` pin | ✅ `^2.1.1`, matching the unified floor |
+| Bootstrap + Bootstrap Icons styles in `angular.json` | ✅ |
+| `provideRlbBootstrap()` in the app providers | ✅ |
+| Starter component scaffolded | ✅ `src/app/rlb-starter/` |
+| `.claude/skills` synced | ✅ 7 skills + `.rlb-skills.json` manifest |
+| `postinstall` added to the consumer | ✅ `ng g @open-rlb/ng-bootstrap:sync-skills` |
+
+Then rendered `<app-rlb-starter />` and built the consumer app: **clean, 830.66 kB initial bundle.**
+That is the part worth having — it proves the v22-built partial-compilation output links inside a
+v22 consumer, which no test in this repo can cover.
