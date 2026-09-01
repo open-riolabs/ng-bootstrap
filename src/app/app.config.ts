@@ -1,7 +1,10 @@
-import { ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 
 import {
@@ -22,8 +25,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
-    provideHttpClient(),
-    provideAnimations(),
+    provideHttpClient(withXhr()),
     {
       provide: ModalRegistryOptions,
       useValue: {

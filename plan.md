@@ -1,8 +1,8 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status:** Phase 0 ✅ done (`8c28184`) · Phase 1 ✅ done (uncommitted) · Phase 2 ⏸️ next · Phases 3–4 not started.
+> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (uncommitted) · Phase 3 ⏸️ next · Phase 4 not started.
 > Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
-> Now on **TypeScript 6.0.3 + Angular 21.2.19**, all six targets green.
+> Now on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green plus a browser pass.
 
 ## Context
 
@@ -126,7 +126,7 @@ rather than only on transition.
 
 ---
 
-## Phase 1 — Node and TypeScript ✅ DONE (uncommitted)
+## Phase 1 — Node and TypeScript ✅ DONE (commit `1421f58`)
 
 All items below are complete on **TypeScript 6.0.3**, Angular untouched at 21.2.19. Full write-up in
 [`PROGRESS.md`](./PROGRESS.md); what it changed for the rest of this plan is summarised after the list.
@@ -161,19 +161,50 @@ All items below are complete on **TypeScript 6.0.3**, Angular untouched at 21.2.
 
 ---
 
-## Phase 2 — Angular 22
+## Phase 2 — Angular 22 ✅ DONE (uncommitted)
 
-9. `npx ng update @angular/core@22 @angular/cli@22 @angular/cdk@22`. Note the CLI is currently pinned `~21.1.2` (resolving 21.1.5) while `@angular/build` floated to 21.2.20 — reconcile that skew first or `ng update` will complain.
-10. Review every automated migration diff, especially the `ChangeDetectionStrategy.Eager` stamping. Prefer removing the stamp where the component is genuinely OnPush-safe.
-11. Bump remaining Angular packages in root `package.json:32-40, 50-57, 70`: `@angular/build`, `@angular-devkit/*`, `@schematics/angular`, `ng-packagr`, `@angular/localize`.
-12. **Drop `@angular/animations` and `@angular/platform-browser-dynamic`** from root `package.json`. Both are npm-deprecated and — verified — entirely unused: zero `trigger(`/`animate(`/`state(`/`transition(` calls anywhere, no `platformBrowserDynamic()`, no `bootstrapModule()`. The only references are `provideAnimations()` at `src/app/app.config.ts:4,26` and the dead `app.module.ts` deleted in Phase 0. This is a no-behavior-change removal that also clears the v23 landmine early at zero cost.
-13. **Check the `include` globs in `angular.json` first.** Phase 0 established that `include` resolves
-    against `sourceRoot` despite the schema documenting project root. If v22 fixes that discrepancy,
-    the library's `**/*.spec.ts` and the app's `src/**/*.spec.ts` both need revisiting — and the
-    failure mode is `No tests found`, not a compile error, so it is easy to mistake for success.
-14. Rebuild and re-run the demo app; exercise the Bootstrap-JS-backed components by hand (see Verification).
+**Angular 21.2.19 → 22.1.4**, CLI → 22.1.6, CDK → 22.1.4, ng-packagr → 22.1.1, `@schematics/angular` → 22.1.6.
+Full write-up in [`PROGRESS.md`](./PROGRESS.md). Outcome per original step:
 
----
+9. ⚠️ **Reconciling the CLI skew first was impossible and was skipped.** On TS 6 + Angular 21,
+   `npm i -D @angular/cli@~21.2` fails outright — `Conflicting peer dependency: typescript@5.9.3`
+   from `@angular/build@21.2.20`. Phase 1's *warning* becomes an *error* for any new install.
+   Going straight to `ng update @angular/core@22 @angular/cli@22 @angular/cdk@22` resolved CLI and
+   build together and cleared the conflict. `--allow-dirty` was needed only because `ng update`
+   counts the untracked `CLAUDE.md` as a dirty tree.
+10. ✅ **All 52 `Eager` stamps reverted.** The migration also reformatted every file it touched with
+    its own printer (6024 insertions / 3835 deletions, and not Prettier-clean either way), so
+    `git checkout HEAD --` removed stamp and churn together. Since OnPush is v22's default, reverting
+    is what lands these on OnPush; keeping the stamp would have opted them back into the old behavior
+    and shipped two non-OnPush components in the library. See Phase 2's ⚠️ calendar decision below.
+11. ✅ `@schematics/angular` was the one `ng update` left behind (still `^21.1.5`). All Angular
+    ranges in root `package.json` are now 22.
+12. ✅ `@angular/animations` and `@angular/platform-browser-dynamic` removed, along with the single
+    `provideAnimations()` call. Re-verified unused before removing, not taken on faith.
+13. ✅ **The `include` globs did not need revisiting** — v22 did not correct the `sourceRoot`
+    discrepancy. Proven by the counts (7/8 and 2/2), since the failure mode is `No tests found`.
+14. ✅ Rebuilt and exercised by hand in the browser: zero console errors across 11 pages, with
+    modals, calendar events/view-switch, accordion `statusChange` and popovers actually interacted
+    with. **Not covered:** calendar drag-and-drop, scrollspy, navbar dropdowns, opening an offcanvas.
+
+### ⚠️ Calendar `[(view)]` — decided, preserved
+
+`view = model({alias:'view'})` generates an implicit `viewChange` output that collided with the
+explicit `viewChange = output({alias:'view-change'})` property. v22 rejects this. Angular's automatic
+fix rewrites `view` to `input()` + `linkedSignal`, which **drops `[(view)]`** — documented as two-way
+and used in 4 places in the shipped `rlb-calendar` skill.
+
+**Chosen instead:** rename only the explicit output property to `viewChangeEvent`. The template-facing
+surface is unchanged (`view`, `[(view)]`, `view-change`), and `view` becomes symmetric with how
+`currentDate`/`dateChange` already avoid the collision. Verified by compiling the demo with `[(view)]`
+and by the browser logging `view change {date, view: month}`. Worth a release-note line in Phase 3.
+
+### ⚠️ New in v22: `popover` is a native HTML attribute
+
+`PopoverDirective`'s `[popover]` selector now collides with the native attribute, producing
+`Found a 'popover' attribute with an invalid value.` warnings in every consumer console.
+**Functionally fine** — verified the popover still opens. Renaming the selector would be a breaking
+change, so it is a follow-up, not version-bump work.
 
 ## Phase 3 — Library packaging and published metadata
 
@@ -208,6 +239,11 @@ All items below are complete on **TypeScript 6.0.3**, Angular untouched at 21.2.
   entry at line 130 has the same problem.
 - **Delete the unused `@shared/*`, `@/*`, `~/*` aliases** from `tsconfig.lib.json:10-14` (found in Phase 1).
   Nothing imports them; they exist only to be misconfigured.
+- **`PopoverDirective`'s `[popover]` selector collides with the native HTML `popover` attribute** in
+  Angular 22 (found in Phase 2), warning in every consumer console. Works, but noisy. Renaming the
+  selector is a breaking change and needs its own major.
+- **Re-enable the `nullishCoalescingNotNullable` / `optionalChainNotNullable` extended diagnostics**
+  that the v22 migration suppressed across all five tsconfigs, and fix what they flag.
 - 16 `[ngClass]` bindings in the library (~7 are single-key `is-invalid` toggles trivially convertible to `[class.is-invalid]`).
 - 3 remaining decorators: `@ViewChild` (`shared/wrapped.component.ts:22`), `@HostListener` (`forms/inputs/abstract-autocomplete.component.ts:149`), and `@Self() @Optional()` param decorators on a field alongside `inject()` (`forms/inputs/abstract-field.component.ts:28`).
 - ~40 constructor-injected params that could be `inject()`.

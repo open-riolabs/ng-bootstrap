@@ -62,7 +62,7 @@ export class CalendarComponent {
   }));
 
   dateChange = output<CalendarChangeEvent>({ alias: 'date-change' });
-  viewChange = output<CalendarChangeEvent>({ alias: 'view-change' });
+  viewChangeEvent = output<CalendarChangeEvent>({ alias: 'view-change' });
   eventClick = output<CalendarEvent>({ alias: 'event-click' });
   containerEventClick = output<CalendarEvent[]>({ alias: 'container-event-click' });
 
@@ -262,7 +262,7 @@ export class CalendarComponent {
 
   setView(view: CalendarView) {
     this.view.set(view);
-    this.viewChange.emit({ date: this.currentDate(), view });
+    this.viewChangeEvent.emit({ date: this.currentDate(), view });
   }
 
   private openEditEventDialog(eventToEdit?: CalendarEvent) {

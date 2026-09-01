@@ -9,35 +9,24 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 |---|---|---|
 | 0 | Baseline + toolchain consolidation (still on Angular 21) | ✅ |
 | 1 | Node + TypeScript 6.0 | ✅ |
-| 2 | Angular 22 | ⏸️ next |
-| 3 | Library packaging & published metadata | ⬜ |
+| 2 | Angular 22 | ✅ |
+| 3 | Library packaging & published metadata | ⏸️ next |
 | 4 | CI | ⬜ |
 
 ---
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. Phase 1 complete, **not yet committed** — working tree carries
-the Phase 1 diff (9 files) plus a new untracked `.nvmrc` and the untracked `CLAUDE.md` that
-predates this work.
+**Last session ended:** 2026-09-01. Phase 2 complete, **not yet committed**.
+Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green with counts
+unchanged, plus a browser pass over the Bootstrap-JS components (below).
 
-Running on **TypeScript 6.0.3 + Angular 21.2.19**, all six targets green with counts unchanged
-from the Phase 0 baseline. The accordion teardown race was **kept as a follow-up** by decision,
-not fixed.
+**Next: Phase 3 — library packaging and published metadata.** The library's own
+`projects/rlb/ng-bootstrap/package.json` peer ranges still say `>=21.0.0 <22.0.0` — deliberately
+untouched, that is Phase 3 step 14. Phase 2 added one item to Phase 3's list: the calendar's
+`[(view)]` decision below is worth a line in the release notes even though it is not a break.
 
-**Next: Phase 2 — Angular 22.** Before starting, note two things Phase 1 established:
-
-1. **The TS 6 peer conflict is expected and resolves itself in Phase 2.** `@angular/build@21.2.20`
-   and `ng-packagr@21.2.7` both pin `typescript: ">=5.9 <6.0"`, so `npm install` warns
-   (`Could not resolve dependency: peer typescript@">=5.9 <6.0"`). It is a warning, not an error —
-   the install succeeded and every target is green. `@angular/compiler-cli@21.2.19` already accepts
-   `>=5.9 <6.1`. The v22 packages pin `>=6.0 <6.1`, so the warning disappears once Angular is bumped.
-   **Do not "fix" it by downgrading TypeScript.**
-2. `baseUrl` is gone from the root `tsconfig.json`, so **no file can use a workspace-root-relative
-   specifier any more** (`from 'projects/rlb/...'`). Anything reaching into the library must use the
-   `@open-rlb/ng-bootstrap` alias. If an `ng update` migration writes such a path, it will not resolve.
-
-**Baseline to compare against** (all exit 0 on TS 6 + Angular 21):
+**Baseline to compare against** (all exit 0 on Angular 22 + TS 6):
 `test-ci` 7 files / 8 tests · `lib:test-ci` 2 files / 2 tests · `lib:build` · `lib:test:ng-add` ·
 `build:docs` · `lib:pack`. Watch the counts, not just exit codes — uncompilable specs vanish from
 the count instead of failing.
@@ -339,3 +328,157 @@ Identical to the Phase 0 baseline. A red run from here on points at Angular 22, 
 3. **Delete the unused `@shared/*`, `@/*`, `~/*` aliases** from `tsconfig.lib.json:10-14`. They have
    no consumers and only exist to be misconfigured.
 4. **TS 6 peer warning from `@angular/build@21` / `ng-packagr@21`** — expected, resolves in Phase 2.
+
+---
+
+## Phase 2 — Angular 22 ✅
+
+**Angular 21.2.19 → 22.1.4**, CLI 21.1.5 → 22.1.6, CDK → 22.1.4, ng-packagr → 22.1.1,
+`@schematics/angular` → 22.1.6. TypeScript stayed at 6.0.3 from Phase 1.
+
+### Work items
+
+- [x] `ng update @angular/core@22 @angular/cli@22 @angular/cdk@22`
+- [x] Review every automated migration diff (below)
+- [x] Bump the packages `ng update` left behind — `@schematics/angular` was still on `^21.1.5`
+- [x] Drop `@angular/animations` and `@angular/platform-browser-dynamic`
+- [x] Re-check the `angular.json` `include` globs (unchanged, see below)
+- [x] Full sweep green, counts identical to the Phase 0/1 baseline
+- [x] Browser pass over the Bootstrap-JS-backed components
+
+### The TS 6 peer conflict became a hard error, so the CLI skew was skipped
+
+Plan step 9 said to reconcile the CLI (`~21.1.2`, resolving 21.1.5) against `@angular/build`
+(floated to 21.2.20) *before* updating. That turned out to be impossible: on TS 6 + Angular 21,
+`npm i -D @angular/cli@~21.2` fails with
+
+```
+npm error Conflicting peer dependency: typescript@5.9.3
+npm error   peer typescript@">=5.9 <6.0" from @angular/build@21.2.20
+```
+
+Phase 1's warning becomes an **error** for any *new* install, because npm re-resolves the tree.
+Going straight to 22 was the way through — `ng update` resolved CLI and build together, and the
+conflict disappeared once every package was on v22. Nothing needed `--legacy-peer-deps`.
+
+`ng update` also refuses to run on a dirty tree, and counts the untracked `CLAUDE.md` as dirty.
+Used `--allow-dirty` rather than committing a file that predates this work.
+
+### The `Eager` stamping was reverted — 52 files, 6000 lines of churn
+
+`ng update` stamped `changeDetection: ChangeDetectionStrategy.Eager` onto every component without an
+explicit strategy: **50 demo-app files and 2 library files**
+(`shared/empty-anchor.component.ts`, `shared/wrapped.component.ts`).
+
+Worse, the migration **reformatted every file it touched** with its own printer. That is where 6024
+insertions / 3835 deletions came from — `autocomplete.component.ts` alone reflowed 410 lines. It is
+not the repo's style either: checked with `npx prettier --check`, and neither the original nor the
+migrated file is Prettier-clean, so the churn buys nothing.
+
+All 52 stamp-only files were reverted with `git checkout HEAD --`, which removes the stamp *and* the
+reformatting in one step. Since **OnPush is the default in v22**, reverting is what actually lands
+these components on OnPush — keeping the stamp would have opted them back into the old behavior, and
+would have shipped two non-OnPush components in the published library, against its own convention.
+
+Low risk here specifically because the app is zoneless: nothing triggers a change-detection pass
+spontaneously, so a component relying on `Eager` traversal would already be broken today.
+
+The diff after reverting is 9 files, and readable.
+
+### Duplicate `viewChange` output on the calendar ⚠️ decision
+
+`ng update`'s "migrate broken duplicate outputs" fired on the library's `calendar.component.ts`.
+The cause is genuine: `view = model({ alias: 'view' })` generates an implicit `viewChange` output,
+and line 65 declared an explicit `viewChange = output({ alias: 'view-change' })` — the same class
+property name. v21 tolerated it; v22 rejects it. Note `currentDate` + `dateChange` already avoid
+this by not sharing a property name, and there is a commented-out `// currentDateChange = output(...)`
+in the same file showing someone hit this before.
+
+Angular's automatic fix rewrote `view` into an `input()` plus a `linkedSignal`, which **silently drops
+`[(view)]`** — documented as two-way in the demo API table and used in **4 places in the shipped skill**
+`.claude/skills/rlb-calendar/SKILL.md`, which lands in consumer projects.
+
+**Decision: preserve the public API instead.** Reverted the migration and renamed only the explicit
+output property:
+
+```ts
+view = model<CalendarView>('week', { alias: 'view' });                     // unchanged
+viewChangeEvent = output<CalendarChangeEvent>({ alias: 'view-change' });   // was: viewChange
+
+setView(view: CalendarView) {
+  this.view.set(view);
+  this.viewChangeEvent.emit({ date: this.currentDate(), view });
+}
+```
+
+The template-facing surface is **identical** — input `view`, two-way `[(view)]`, output `view-change`.
+Only an internal property name changed, and `view` is now symmetric with how `currentDate`/`dateChange`
+already work. Verified both ways: `build:docs` compiles with the demo template switched to `[(view)]`,
+and clicking the view switcher in the browser logs `view change {date: DateTz, view: month}`.
+
+### Other migrations, kept
+
+- **`provideHttpClient()` → `provideHttpClient(withXhr())`** in the demo's `app.config.ts`. Preserves
+  pre-v22 behavior (v22 defaults to fetch). Demo-only; the library never calls `HttpClient`.
+- **`extendedDiagnostics` suppression** for `nullishCoalescingNotNullable` and `optionalChainNotNullable`
+  added to all five tsconfigs. This is the official migration preserving pre-v22 diagnostics. Re-enabling
+  them and fixing what they flag is a follow-up, not a version-bump task.
+
+### `@angular/animations` and `@angular/platform-browser-dynamic` removed
+
+Re-verified before removing, not just taken from the plan: zero `trigger(`/`animate(`/`state(`/
+`transition(`/`keyframes(` calls, zero `@angular/animations` imports, no `platformBrowserDynamic()`,
+no `bootstrapModule()`. The only reference was `provideAnimations()` at `app.config.ts:8,30`, now
+deleted. Both packages are npm-deprecated, so this clears a v23 landmine at zero cost.
+
+### The `include` globs did not need revisiting
+
+Phase 0's ⚠️ finding was that `include` resolves against `sourceRoot` rather than the documented
+project root, and that a v22 fix would break both globs. **v22 did not change this** — both projects
+report the same counts as before (7 files / 8 tests, 2 files / 2 tests). Since the failure mode is
+`No tests found` rather than a compile error, the counts are the only thing that proves it.
+
+### Verified green on Angular 22.1.4 + TS 6.0.3
+
+| Command | Exit | Counts |
+|---|---|---|
+| `npm run lib:build` | **0** | — |
+| `npm run test-ci` | **0** | 7 files, 8 tests |
+| `npm run lib:test-ci` | **0** | 2 files, 2 tests |
+| `npm run lib:test:ng-add` | **0** | all schematic assertions |
+| `npm run lib:pack` | **0** | CJS marker + 7 skills in tarball |
+| `npm run build:docs` | **0** | — |
+
+`scripts/test-ng-add.cjs` still passes, so v22 did not change the generated-app shape it hardcodes.
+
+### Browser pass — the Bootstrap JS coupling
+
+`npm start` on 4201, **zero console errors** across every page visited and every interaction.
+
+| Exercised | Result |
+|---|---|
+| Modal via `ModalService` — open, edit, close | ✓ round-trip logged `{reason: ok, result: …}` |
+| Calendar — generate events, overlap layout, `+N more` overflow, timezone conversion | ✓ |
+| Calendar view switcher (Bootstrap dropdown + the renamed output) | ✓ logged `view change {date, view: month}` |
+| Accordion / Collapse — `statusChange` lifecycle | ✓ count 0 → 2 (show + shown) |
+| Popover — click to open | ✓ renders (see warning below) |
+| Pages loading clean | home, accordions, carousels, modals, toasts, dropdowns, offcanvass, tooltips, calendar, inputs/autocomplete, inputs/select |
+
+**Not covered by this pass, still worth a human look:** calendar drag-and-drop (the only
+`@angular/cdk/drag-drop` consumer), scrollspy, navbar dropdowns, and actually opening an offcanvas.
+
+### ⚠️ New in v22: `popover` is now a native HTML attribute
+
+The tooltips page logs five warnings:
+
+```
+Found a 'popover' attribute with an invalid value.   (@angular/platform-browser)
+```
+
+`PopoverDirective` uses selector `[popover]` with `popover = input<string>({ alias: 'popover' })`, so
+consumers write `popover="Some content"`. v22 now recognises `popover` as the **native** HTML attribute,
+whose only valid values are `auto` / `manual` / `hint` / empty, and warns on anything else.
+
+**Not broken** — verified in the browser: the trigger stays visible and the popover opens correctly.
+But every consumer using popovers will now see console warnings. Renaming the selector would be a
+breaking API change, so it is out of scope for a version bump. Logged as a follow-up.
