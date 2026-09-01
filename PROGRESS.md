@@ -13,6 +13,8 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | 3 | Library packaging & published metadata | ✅ |
 | 4 | CI | ✅ |
 | — | Import cycles (separate branch, Tiers 1-2) | ✅ — 0 cycles; Tier 3 open |
+| — | `date-tz` deep import (consumer test blocker) | ✅ |
+| — | `bootstrap` CJS named imports | ⬜ open, Vitest-only exposure |
 
 ---
 
@@ -914,3 +916,61 @@ drops provider collection from `CommonModule`, `FormsModule`, `ReactiveFormsModu
 
 **Tier 3 — the guardrail.** Cycles are at zero but nothing keeps them there. Still no ESLint at all
 despite a `lib:lint` script. Either `import/no-cycle`, or a cycle-detection script wired into CI.
+
+### Bonus fix — the `@open-rlb/date-tz` deep import (found by testing a real consumer)
+
+Found while running a DI probe inside the scratch Angular 22 consumer app. It never showed up in this
+repo, because in-workspace the path alias and the bundler both resolve it happily.
+
+Two calendar grid components imported `DateTz` from `"@open-rlb/date-tz/date-tz"` — reaching past the
+package root into a submodule. `@open-rlb/date-tz` ships **no `exports` map**, `main: index.js`, and no
+`module` field, so:
+
+- the consumer's `ng build` **works** — esbuild resolves the extensionless deep path
+- the consumer's `ng test` **fails** — Node ESM resolution is stricter:
+
+```
+Cannot find module '.../node_modules/@open-rlb/date-tz/date-tz'
+  imported from '.../node_modules/@open-rlb/ng-bootstrap/fesm2022/open-rlb-ng-bootstrap.mjs'
+```
+
+`plan.md` had this logged as a follow-up phrased as "they will break the day it adds an `exports` map".
+That understated it — **it already broke consumer unit tests**, and any consumer spec touching the
+library would hit it.
+
+The maintainer confirmed `DateTz` is meant to come from the package root; the deep path is an artifact
+of `date-tz` having been extracted into its own package. Both imports now use `@open-rlb/date-tz`.
+
+Provably equivalent: the package root does `export * from './date-tz'`, and
+`require('@open-rlb/date-tz').DateTz === require('@open-rlb/date-tz/date-tz').DateTz` is `true` — the
+same class identity. Verified zero deep `@open-rlb/date-tz/` imports remain anywhere in the repo, and
+zero survive into the built FESM.
+
+Worth noting the second-order benefit: while both spellings existed, an ESM bundler could legitimately
+treat them as two module records and produce **two distinct `DateTz` classes**, breaking `instanceof`
+in ways that would be very hard to diagnose. One specifier removes that class of bug too.
+
+### ⚠️ Still open — named imports from `bootstrap` (CommonJS)
+
+The same probe then hit a second, deeper instance of the same family:
+
+```
+SyntaxError: Named export 'Carousel' not found. The requested module 'bootstrap'
+is a CommonJS module, which may not support all module.exports as named exports.
+```
+
+**12 library files** use named imports from `bootstrap` (`Collapse`, `Carousel`, `Dropdown`, `Modal`,
+`Offcanvas`, `ScrollSpy`, `Toast`, `Popover`, `Tooltip`). Bootstrap's `main` is CJS and it ships no
+`exports` map, so Node ESM ignores its `module` field and named exports are unavailable. Bundlers
+interop this fine, which is why it is invisible here and in a consumer's `ng build`.
+
+**Who this actually affects:** only consumers running the **Node-ESM/Vitest** test runner. `ng-app` is
+on `@angular/build:karma`, which runs in a real browser through a bundler, so it is **not affected
+today**. It would become a problem the moment `ng-app` takes the optional `migrate-karma-to-vitest`
+migration — which `ng-app/task.md` already recommends against during the upgrade. That recommendation
+is now load-bearing for a second, independent reason.
+
+The library-side fix is `import bootstrap from 'bootstrap'; const { Collapse } = bootstrap;` across the
+12 files — a default import always yields `module.exports` for a CJS module. Not done: this is the
+Bootstrap-JS plumbing that no test in this repo covers, so it wants its own branch and a full browser
+pass over every Bootstrap-backed component.

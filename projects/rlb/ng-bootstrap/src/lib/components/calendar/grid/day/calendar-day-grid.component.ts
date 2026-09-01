@@ -12,7 +12,7 @@ import {
   viewChild
 } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
-import { DateTz } from "@open-rlb/date-tz/date-tz";
+import { DateTz } from "@open-rlb/date-tz";
 import { DayOfWeekPipe } from "../../../../pipes/day-formatter.pipe";
 import { CalendarEventComponent } from "../../event/calendar-event.component";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";

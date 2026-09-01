@@ -468,7 +468,9 @@ Nothing stops the cycles coming back. There is still no ESLint at all despite a 
 - 16 `[ngClass]` bindings in the library (~7 are single-key `is-invalid` toggles trivially convertible to `[class.is-invalid]`).
 - 3 remaining decorators: `@ViewChild` (`shared/wrapped.component.ts:22`), `@HostListener` (`forms/inputs/abstract-autocomplete.component.ts:149`), and `@Self() @Optional()` param decorators on a field alongside `inject()` (`forms/inputs/abstract-field.component.ts:28`).
 - ~40 constructor-injected params that could be `inject()`.
-- Two deep imports `from "@open-rlb/date-tz/date-tz"` (`calendar-week-grid.component.ts:14`, `calendar-day-grid.component.ts:15`) that resolve only because that package ships no `exports` map — they will break the day it adds one.
+- ~~Two deep imports `from "@open-rlb/date-tz/date-tz"`~~ — **FIXED** on `refactor/remove-import-cycles`.
+  This turned out to be worse than logged: it did not merely risk breaking "the day date-tz adds an
+  `exports` map", it already broke **consumer unit tests today**. See the import-cycles workstream above.
 - `highlight.js` is dynamically imported in `src/app/app.config.ts:51-57` but is **not** in root `package.json`; it resolves only transitively through `ngx-highlightjs`.
 - No ESLint at all, despite a `lib:lint` script and an `eslint-disable` comment in `sync-skills/index.ts:153`.
 - Signal Forms / `resource()` / Angular Aria adoption — explicitly deferred; the forms layer is the library's core.
