@@ -1,6 +1,6 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ⏸️ next · Phase 4 not started.
+> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ✅ (`d3a1a76`) · Phase 4 ⏸️ next.
 > Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
 > Now on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green plus a browser pass.
 
@@ -206,7 +206,7 @@ and by the browser logging `view change {date, view: month}`. Worth a release-no
 **Functionally fine** — verified the popover still opens. Renaming the selector would be a breaking
 change, so it is a follow-up, not version-bump work.
 
-## Phase 3 — Library packaging and published metadata ✅ DONE (uncommitted)
+## Phase 3 — Library packaging and published metadata ✅ DONE (commit `d3a1a76`)
 
 14. ✅ Library peer ranges `>=21.0.0 <22.0.0` → `>=22.0.0 <23.0.0` for `@angular/{cdk,common,core,forms,router}`.
 15. ✅ Schematic `@angular/cdk` pin `^21.0.0` → `^22.0.0`; `bootstrap-icons` aligned `^1.11.0` → `^1.13.1`.

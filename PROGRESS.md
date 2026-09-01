@@ -17,7 +17,9 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. Phase 3 complete, **not yet committed**.
+**Last session ended:** 2026-09-01. Phase 3 complete and committed as `d3a1a76`.
+Working tree clean apart from the untracked `CLAUDE.md` that predates this work — note its
+Phase 3 corrections are on disk but, being untracked, are not in any commit.
 The library now advertises **Angular 22** everywhere it is published: peer ranges, the `ng-add`
 schematic pins, both READMEs, and the bundled skills.
 
