@@ -1,9 +1,17 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ✅ (`d3a1a76`) · Phase 4 ✅ (`5eacb84`). **Upgrade complete.**
-> Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
-> Now on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green plus a browser pass.
-> **Unpushed and unpublished.** Consumers are blocked until they reach v22 — see *Release readiness*.
+> **Status: COMPLETE and unpushed.** Phases 0-4 all done, plus a follow-on import-cycle workstream.
+> **14 commits across two branches. Nothing pushed, merged or published.**
+>
+> ```
+> develop
+>   └── chore/angular-22-upgrade            Phases 0-4  (8c28184 1421f58 595c4c1 d3a1a76 5eacb84)
+>         └── refactor/remove-import-cycles Tiers 1-3   (a198505 5a2d70b 6469c4e 887312d)
+> ```
+>
+> Verified on **Angular 22.1.4 · CLI 22.1.6 · TypeScript 6.0.3 · Node v24.16.0**.
+> Live progress log and the resume point: [`PROGRESS.md`](./PROGRESS.md) — **start there.**
+> Three open decisions remain; see *Release readiness* below. Nothing else is pending.
 
 ## Context
 
@@ -278,16 +286,38 @@ most likely to break the pipeline. `versioning` was left untouched to contain th
 **Status: the upgrade is complete and unpushed.** All five phases are committed on
 `chore/angular-22-upgrade`; nothing is merged or published.
 
-### Before merging
+### Before merging — three open decisions
 
-1. The workflows rewritten in Phase 4 are **reviewed, not executed** — the first run on `master` is
-   the real test. Highest risk is `npm install` -> `npm ci` (verified locally, exit 0) and the removal
-   of the cross-libc `node_modules` artifact. `versioning` was left untouched to contain that risk.
-2. `CLAUDE.md` is **untracked in git**, so its Phase 3 corrections live on disk but in no commit and
-   would vanish on a fresh clone. Decide whether to track it.
-3. Release notes should mention the two API-surface changes from Phase 2 and 3: the calendar's
-   `viewChange` -> `viewChangeEvent` property rename (template surface unchanged, `[(view)]` still
-   works), and the four names newly exported from the calendar barrel.
+Everything else is finished. These are the only items that need a person.
+
+**1. Tier 2b — drop `RlbBootstrapModule` from `provideRlbBootstrap()`'s providers array.**
+Worth a measured **~58 kB raw / ~12 kB gzipped** to every consumer. The module declares
+`providers: []`, so it contributes nothing while retaining the whole library. Safe for declarables —
+a providers array cannot supply template declarables, and both known consumers already import
+components explicitly. The one unconfirmed point: whether a bare NgModule class in a providers array
+collects providers from its imported module graph. Reasoning says no (a bare class is a `TypeProvider`;
+collection requires `importProvidersFrom`), but that was **not** verified empirically — the probe built
+to settle it was blocked by the two defects it found instead. Changes the published entry point, so it
+needs a decision plus a browser pass.
+
+**2. `bootstrap` CJS named imports — 12 files.** `import { Collapse } from 'bootstrap'` fails under
+Node ESM, because bootstrap's `main` is CJS and it ships no `exports` map. Bundlers interop it, so it
+is invisible here and in a consumer's `ng build`. **`ng-app` is on Karma and is not affected today** —
+this only bites the Vitest/Node runner, which is a second independent reason `ng-app/task.md`
+recommends against the optional `migrate-karma-to-vitest` migration. Fix is
+`import bootstrap from 'bootstrap'; const { Collapse } = bootstrap;` across all 12; wants its own
+branch and a full browser pass, since this is the Bootstrap-JS plumbing no test covers.
+
+**3. `CLAUDE.md` is untracked.** Its Phase 3 corrections are on disk but in no commit, so a fresh clone
+loses them.
+
+Also worth knowing before the first `master` run: the Phase 4 workflows are **reviewed, not executed**.
+Highest risk is `npm install` → `npm ci` (verified locally, exit 0) and the removal of the
+`node_modules` artifact. `versioning` was left untouched on purpose.
+
+Release notes should mention the API-surface changes: the calendar's `viewChange` → `viewChangeEvent`
+property rename (template surface unchanged, `[(view)]` still works) and the four names newly exported
+from the calendar barrel.
 
 ### Consumers cannot take this release yet — verified
 

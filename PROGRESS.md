@@ -20,68 +20,104 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. **All five upgrade phases complete** on `chore/angular-22-upgrade`,
-plus the **complete import-cycle workstream (Tiers 1-3)** on `refactor/remove-import-cycles`
-(branched off `53032bc`) — the library is at **zero import cycles**, and `npm run check:imports`
-now guards that in CI.
-Nothing pushed, nothing merged, nothing published.
+**Last session:** 2026-09-01. Read this section and you have everything; the rest of this file is the
+detailed record, and [`plan.md`](./plan.md) is the reasoning.
 
-Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**. Six targets green from a clean
-`npm ci`, a browser pass over the Bootstrap-JS components, and a full `ng add` + build against a
-real Angular 22 consumer app.
+### State in one line
 
-| Phase | Commit |
-|---|---|
-| 0 — baseline + toolchain | `8c28184` |
-| 1 — Node + TypeScript 6 | `1421f58` |
-| 2 — Angular 22 | `595c4c1` |
-| 3 — published metadata | `d3a1a76` |
-| 4 — CI | `5eacb84` |
-
-### Open items before merging
-
-1. **The workflows are reviewed, not executed.** The first run on `master` is the real test. Highest
-   risk is `npm install` → `npm ci` (checked locally, exits 0) and the removal of the `node_modules`
-   artifact. `versioning` was left untouched on purpose.
-2. **`CLAUDE.md` is untracked.** Its Phase 3 corrections exist on disk but in no commit, so they
-   vanish on a fresh clone. Decide whether to track it.
-3. **Consumers are blocked until they reach Angular 22** — see below. This is the forward-only linker
-   constraint working as designed, not a defect.
-
-### Consumer status — verified, not assumed
-
-Attempted the real-consumer install into `D:/git/work/ng-app` with a **dry run**, so nothing was
-written to that repo:
+The Angular 22 upgrade is **complete**, and a follow-on import-cycle cleanup is **complete**.
+**14 commits across two branches, nothing pushed, nothing merged, nothing published.**
 
 ```
-npm error ERESOLVE unable to resolve dependency tree
-npm error Found: @angular/cdk@21.2.14
-npm error Could not resolve dependency:
-npm error peer @angular/cdk@">=22.0.0 <23.0.0" from @open-rlb/ng-bootstrap@0.0.0
+develop
+  └── chore/angular-22-upgrade      10 commits — the upgrade (Phases 0-4)
+        └── refactor/remove-import-cycles   4 commits — cycles + guard  ← checked out
 ```
 
-`ng-app` is still on **Angular 21 / TypeScript 5.9.2**, and its `@open-rlb/date-tz ^2.0.5` is below
-the new `>=2.1.1` floor. Forcing it with `--legacy-peer-deps` would only relocate the failure to link
-time and leave that workspace broken, so it was not done.
+`refactor/remove-import-cycles` is stacked **on top of** the upgrade branch, so merging it brings both.
+Merge the upgrade branch alone if you want them separate.
 
-**A handoff brief for a separate agent is written to `D:/git/work/ng-app/task.md`.** It contains the
-dependency research already done — every Angular-coupled third party there has a v22 release
-(NgRx 22, `ngx-cookie-service` 22, `angular-auth-oidc-client` 22), `@ngx-translate/core@17` already
-peers `>=16` so it must **not** go to 18 (that would break this library's `<18.0.0` peer), and
-`@angular/build:karma` still exists in v22 so its 47 specs are not forced onto Vitest.
+Environment as verified: **Angular 22.1.4 · CLI 22.1.6 · TypeScript 6.0.3 · Node v24.16.0**.
 
-`D:/git/work/sicily-action.fe.transfeero` consumes this library too and is also on Angular 21; it
-is blocked on the same upgrade and cannot move until this release ships.
+### Commits
 
-The equivalent proof that the library itself is sound is in Phase 3: this exact tarball was
-`ng add`-ed into a fresh `@angular/cli@22` app and built clean.
+| Branch | Commit | What |
+|---|---|---|
+| `chore/angular-22-upgrade` | `8c28184` | Phase 0 — Vitest baseline, still Angular 21 |
+| | `1421f58` | Phase 1 — TypeScript 6.0 on Angular 21 |
+| | `595c4c1` | Phase 2 — Angular 22 |
+| | `d3a1a76` | Phase 3 — published metadata |
+| | `5eacb84` | Phase 4 — CI test gate + cross-libc fix |
+| | `53032bc` | docs — release readiness + consumer handoff |
+| `refactor/remove-import-cycles` | `a198505` | Tier 1 — 5 cycles → 1 |
+| | `5a2d70b` | Tier 2 — 1 cycle → **0** |
+| | `6469c4e` | fix — `date-tz` deep import (broke consumer tests) |
+| | `887312d` | Tier 3 — `check:imports` guard in CI |
 
-The follow-up list lives at the end of [`plan.md`](./plan.md).
+(Plus four small `docs:` commits recording each phase's hash.)
 
-**Baseline** (all exit 0 on Angular 22 + TS 6):
-`test-ci` 7 files / 8 tests · `lib:test-ci` 2 files / 2 tests · `lib:build` · `lib:test:ng-add` ·
-`build:docs` · `lib:pack`. Watch the counts, not just exit codes — uncompilable specs vanish from
-the count instead of failing.
+### Verify the tree in one go
+
+```bash
+cd D:/git/work/ng-bootstrap
+git checkout refactor/remove-import-cycles
+npm ci
+npm run check:imports    # 184 files, 0 cycles
+npm run lib:build
+npm run test-ci          # MUST be 7 files / 8 tests
+npm run lib:test-ci      # MUST be 2 files / 2 tests
+npm run lib:test:ng-add
+npm run lib:pack
+npm run build:docs
+```
+
+**Read the counts, not just the exit codes.** Specs that fail to *compile* are omitted from the total
+rather than reported as failures, so a silent drop from 7/8 or 2/2 is a failure even if it looks green.
+
+### Three open decisions — nothing else is pending
+
+1. **Tier 2b — drop `RlbBootstrapModule` from `provideRlbBootstrap()`'s providers array.**
+   Measured worth: **~58 kB raw / ~12 kB gzipped** for every consumer. `RlbBootstrapModule` declares
+   `providers: []`, so it contributes nothing while retaining the whole library. Confirmed safe for
+   declarables — a providers array cannot supply template declarables, and both known consumers already
+   import components explicitly. Residual unknown: whether a bare NgModule class in a providers array
+   collects providers from its imported module graph. Reasoning says no (a bare class is a
+   `TypeProvider`, and collection needs `importProvidersFrom`); this was **not** confirmed empirically.
+   Changes the published entry point, so it wants a maintainer decision and a browser pass.
+
+2. **`bootstrap` CJS named imports — 12 files.** `import { Collapse } from 'bootstrap'` fails under
+   Node ESM because bootstrap's `main` is CJS with no `exports` map. **`ng-app` is on Karma and is NOT
+   affected today**; this only bites the Vitest/Node runner. Fix is
+   `import bootstrap from 'bootstrap'; const { Collapse } = bootstrap;` across all 12. Wants its own
+   branch and a full browser pass — this is the Bootstrap-JS plumbing no test here covers.
+
+3. **`CLAUDE.md` is untracked.** Its Phase 3 corrections (Angular 22, and the i18n claim) exist on disk
+   but in **no commit**, so they vanish on a fresh clone. Decide whether to `git add` it.
+
+### Things that will bite a fresh session
+
+- **Orphaned `ng serve` survives the task killer.** It keeps port 4201 and locks
+  `node_modules/@lmdb/…/node.napi.node` and `@esbuild/…/esbuild.exe`, which makes `npm ci` fail with
+  `EPERM … unlink`. Fix: `Get-NetTCPConnection -LocalPort 4201 -State Listen` → `Stop-Process -Force`.
+  Do **not** blanket-kill `node.exe` — the Claude session is itself a node process.
+- **The scratch consumer app is gone.** It lived in the session scratchpad. Recreate when needed:
+  ```bash
+  npx @angular/cli@22 new scratch-app --skip-git --defaults --style=scss --ssr=false
+  cd D:/git/work/ng-bootstrap && npm run lib:pack
+  cd <scratch-app> && npx ng add ../open-rlb-ng-bootstrap-0.0.0.tgz --skip-confirmation
+  ```
+  This is the only way to test peer ranges, the schematic pins, and Node-ESM resolution — every defect
+  in items 1 and 2 above was found this way and is invisible from inside this repo.
+- **One-shot codemod scripts are gone too** (they were scratchpad-only). The work is committed; only
+  `scripts/check-imports.mjs` was worth keeping and it is in the repo.
+- `ng update` counts untracked files as a dirty tree, hence `--allow-dirty` in Phase 2.
+
+### Downstream
+
+Consumers cannot take this release until they are on Angular 22 — verified by dry run, see below.
+**`D:/git/work/ng-app/task.md`** is a self-contained brief for a separate agent to upgrade that repo.
+`D:/git/work/sicily-action.fe.transfeero` consumes both libraries, is also on Angular 21, and is
+blocked behind `ng-app`.
 
 ---
 
