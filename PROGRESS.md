@@ -17,23 +17,58 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. **All five phases complete.** The upgrade is done on
-`chore/angular-22-upgrade`; nothing has been pushed or merged.
+**Last session ended:** 2026-09-01. **All five phases complete** on `chore/angular-22-upgrade`.
+Nothing pushed, nothing merged, nothing published.
 
 Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**. Six targets green from a clean
 `npm ci`, a browser pass over the Bootstrap-JS components, and a full `ng add` + build against a
 real Angular 22 consumer app.
 
-**Before merging:**
+| Phase | Commit |
+|---|---|
+| 0 — baseline + toolchain | `8c28184` |
+| 1 — Node + TypeScript 6 | `1421f58` |
+| 2 — Angular 22 | `595c4c1` |
+| 3 — published metadata | `d3a1a76` |
+| 4 — CI | `5eacb84` |
 
-1. The workflows are reviewed, not executed — the first run on `master` is the real test. Highest
-   risk is `npm install` → `npm ci` (checked locally, exits 0) and the removal of the
-   `node_modules` artifact. `versioning` was left untouched on purpose.
-2. `CLAUDE.md` is **untracked** — its Phase 3 corrections exist on disk but in no commit, so they
+### Open items before merging
+
+1. **The workflows are reviewed, not executed.** The first run on `master` is the real test. Highest
+   risk is `npm install` → `npm ci` (checked locally, exits 0) and the removal of the `node_modules`
+   artifact. `versioning` was left untouched on purpose.
+2. **`CLAUDE.md` is untracked.** Its Phase 3 corrections exist on disk but in no commit, so they
    vanish on a fresh clone. Decide whether to track it.
-3. Consumers cannot take this release until they are on Angular 22 themselves — verified: `ng-app`
-   is still on Angular 21 / TypeScript 5.9.2, and its `@open-rlb/date-tz ^2.0.5` is below the new
-   `>=2.1.1` floor. This is the forward-only linker constraint working as designed, not a defect.
+3. **Consumers are blocked until they reach Angular 22** — see below. This is the forward-only linker
+   constraint working as designed, not a defect.
+
+### Consumer status — verified, not assumed
+
+Attempted the real-consumer install into `D:/git/work/ng-app` with a **dry run**, so nothing was
+written to that repo:
+
+```
+npm error ERESOLVE unable to resolve dependency tree
+npm error Found: @angular/cdk@21.2.14
+npm error Could not resolve dependency:
+npm error peer @angular/cdk@">=22.0.0 <23.0.0" from @open-rlb/ng-bootstrap@0.0.0
+```
+
+`ng-app` is still on **Angular 21 / TypeScript 5.9.2**, and its `@open-rlb/date-tz ^2.0.5` is below
+the new `>=2.1.1` floor. Forcing it with `--legacy-peer-deps` would only relocate the failure to link
+time and leave that workspace broken, so it was not done.
+
+**A handoff brief for a separate agent is written to `D:/git/work/ng-app/task.md`.** It contains the
+dependency research already done — every Angular-coupled third party there has a v22 release
+(NgRx 22, `ngx-cookie-service` 22, `angular-auth-oidc-client` 22), `@ngx-translate/core@17` already
+peers `>=16` so it must **not** go to 18 (that would break this library's `<18.0.0` peer), and
+`@angular/build:karma` still exists in v22 so its 47 specs are not forced onto Vitest.
+
+`D:/git/work/sicily-action.fe.transfeero` consumes this library too and is also on Angular 21; it
+is blocked on the same upgrade and cannot move until this release ships.
+
+The equivalent proof that the library itself is sound is in Phase 3: this exact tarball was
+`ng add`-ed into a fresh `@angular/cli@22` app and built clean.
 
 The follow-up list lives at the end of [`plan.md`](./plan.md).
 

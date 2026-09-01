@@ -3,6 +3,7 @@
 > **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ✅ (`d3a1a76`) · Phase 4 ✅ (`5eacb84`). **Upgrade complete.**
 > Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
 > Now on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green plus a browser pass.
+> **Unpushed and unpublished.** Consumers are blocked until they reach v22 — see *Release readiness*.
 
 ## Context
 
@@ -271,6 +272,56 @@ Also fixed: root `package.json` `repository.url` still pointed at GitLab.
 **Not verified:** workflows cannot run locally. Both files parse, have no tabs, and the `needs:` graph
 is complete. `npm ci` was run locally against the current lockfile (exit 0) since that is the change
 most likely to break the pipeline. `versioning` was left untouched to contain the risk.
+
+## Release readiness and downstream consumers
+
+**Status: the upgrade is complete and unpushed.** All five phases are committed on
+`chore/angular-22-upgrade`; nothing is merged or published.
+
+### Before merging
+
+1. The workflows rewritten in Phase 4 are **reviewed, not executed** — the first run on `master` is
+   the real test. Highest risk is `npm install` -> `npm ci` (verified locally, exit 0) and the removal
+   of the cross-libc `node_modules` artifact. `versioning` was left untouched to contain that risk.
+2. `CLAUDE.md` is **untracked in git**, so its Phase 3 corrections live on disk but in no commit and
+   would vanish on a fresh clone. Decide whether to track it.
+3. Release notes should mention the two API-surface changes from Phase 2 and 3: the calendar's
+   `viewChange` -> `viewChangeEvent` property rename (template surface unchanged, `[(view)]` still
+   works), and the four names newly exported from the calendar barrel.
+
+### Consumers cannot take this release yet — verified
+
+Attempted the install into `D:/git/work/ng-app` as a **dry run** (nothing written there):
+
+```
+npm error ERESOLVE unable to resolve dependency tree
+npm error Found: @angular/cdk@21.2.14
+npm error Could not resolve dependency:
+npm error peer @angular/cdk@">=22.0.0 <23.0.0" from @open-rlb/ng-bootstrap@0.0.0
+```
+
+That is the `>=22 <23` peer decision working exactly as intended: a clean install-time refusal rather
+than a link-time crash inside the consumer's build. `ng-app` is on Angular 21 / TypeScript 5.9.2, and
+its `@open-rlb/date-tz ^2.0.5` is below the new `>=2.1.1` floor. It was **not** forced through with
+`--legacy-peer-deps`, which would only move the failure to link time and leave that repo broken.
+
+Two known consumers are blocked until they upgrade themselves:
+
+| Repo | State | Note |
+|---|---|---|
+| `D:/git/work/ng-app` | Angular 21, TS 5.9.2, 47 specs on `@angular/build:karma` | brief written to its `task.md` |
+| `D:/git/work/sicily-action.fe.transfeero` | Angular 21 | consumes **both** libraries; blocked behind `ng-app` |
+
+**A handoff brief for a separate agent is at `D:/git/work/ng-app/task.md`**, carrying the dependency
+research already done: every Angular-coupled third party there has a v22 release (NgRx 22,
+`ngx-cookie-service` 22, `angular-auth-oidc-client` 22); `@ngx-translate/core@17` already peers
+`>=16` and must **not** move to 18, since that would violate this library's `<18.0.0` peer; and
+`@angular/build:karma` still exists in v22, so those 47 specs are not forced onto Vitest.
+
+The proof that this library itself is sound is Phase 3's consumer check: this exact tarball was
+`ng add`-ed into a fresh `@angular/cli@22` app, which then built clean with a library component rendered.
+
+---
 
 ## Deliberately out of scope (log as follow-ups)
 
