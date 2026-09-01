@@ -12,12 +12,14 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | 2 | Angular 22 | ✅ |
 | 3 | Library packaging & published metadata | ✅ |
 | 4 | CI | ✅ |
+| — | Import cycles (separate branch, Tier 1) | ✅ |
 
 ---
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. **All five phases complete** on `chore/angular-22-upgrade`.
+**Last session ended:** 2026-09-01. **All five upgrade phases complete** on `chore/angular-22-upgrade`,
+plus **Tier 1 of the import-cycle cleanup** on `refactor/remove-import-cycles` (branched off `53032bc`).
 Nothing pushed, nothing merged, nothing published.
 
 Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**. Six targets green from a clean
@@ -721,3 +723,107 @@ switch will not fail the pipeline — that is the one change with a real chance 
 
 The first run on `master` is still the real test, and `versioning` (GitVersion in a dotnet container)
 was left completely untouched to keep that risk contained.
+
+---
+
+## Import cycles — Tier 1 ✅ (branch `refactor/remove-import-cycles`)
+
+Separate workstream, branched off `53032bc` so the five upgrade phases stay bisectable. Prompted by
+a maintainer report of "a lot of problems related to barrel exports", and a long-standing team
+workaround of importing by deep relative path rather than by the package alias.
+
+### What the scan found
+
+A cycle scan across all **184** library source files:
+
+```
+=== SELF-IMPORTS ===
+  public-api.ts            <- the library entry point imports from './public-api'
+
+=== MULTI-FILE CYCLES ===  4 distinct
+  components/index.ts -> calendar/index.ts -> calendar.component.ts
+    -> calendar-dialogs/index.ts -> event-create-edit.component.ts
+    -> rlb-bootstrap.module.ts -> components/index.ts
+  ...
+```
+
+The self-import survives only because `provideRlbBootstrap()` is a **function** — its bindings are not
+dereferenced until call time, by which point the module graph has resolved. It is a latent fault
+rather than a working pattern, and the most plausible source of the reported flakiness.
+
+### The team workaround was aimed one level too far out
+
+Consumers importing `@open-rlb/ng-bootstrap` were never the problem — every cycle is *inside* the
+library. The rule that actually holds has two halves:
+
+| Context | Rule |
+|---|---|
+| Inside the library | Never import a barrel or `rlb-bootstrap.module`. Import the concrete file. |
+| Outside the library | Always import the package name / path alias. |
+
+Deep relative paths are the fragile half for consumers: a published package can add an `exports` map
+at any time and every deep path breaks. That exact hazard is already logged for the two
+`@open-rlb/date-tz/date-tz` imports.
+
+### What Tier 1 changed
+
+13 leaf-to-barrel imports across 11 files rewritten to concrete file paths, plus the `public-api.ts`
+self-import. Done with a codemod that resolves each imported symbol to its declaring file, dry-run
+first, rather than by hand.
+
+Deliberately **not** touched: imports of the aggregate arrays `COMPONENTS`, `INPUTS`, `TABLE`,
+`PIPES`, `MODALS`, `TOASTS`, `CALENDAR_COMPONENTS`, `COMPONENT_BUILDER`. Those are *defined inside*
+their barrels, so barrel-composing-barrel is the intended composition root — not the bug. The codemod
+detects this (the symbol resolves to no non-barrel file) and skips it.
+
+**Result: self-import gone, 4 multi-file cycles down to 1.**
+
+### Evidence this was risk-free
+
+| Check | Before | After |
+|---|---|---|
+| `export` statements changed | — | **0** |
+| Non-`import` lines changed | — | **0** (the 14 removed lines are continuations of two collapsed multi-line imports) |
+| Public exports in the `.d.ts` | 140 | **140** |
+| FESM bundle | 773,451 bytes | **773,451 bytes — byte-identical** |
+
+A byte-identical FESM means ng-packagr emitted literally the same library. Full sweep green with
+counts unchanged: `lib:build`, `test-ci` (7 files / 8 tests), `lib:test-ci` (2 / 2),
+`lib:test:ng-add`, `lib:pack`, `build:docs`.
+
+No tree-shaking improvement was expected here and none was observed — that is Tier 2's job.
+
+### What remains — Tier 2 and Tier 3, not started
+
+One cycle survives, and it is the architectural one:
+
+```
+rlb-bootstrap.module.ts -> components/index.ts -> calendar/index.ts
+  -> calendar.component.ts -> calendar-overflow-events-container.component.ts
+  -> rlb-bootstrap.module.ts
+```
+
+**Five leaf components import `RlbBootstrapModule`** — the aggregate that imports and exports the
+entire library. This is the NgModule-era habit ("import the module to get its declarations")
+surviving into standalone components:
+
+```
+lib/modals/common-modal.component.ts
+lib/modals/search-modal.component.ts
+lib/components/calendar/calendar-dialogs/.../event-create-edit.component.ts
+lib/components/calendar/calendar-dialogs/.../calendar-overflow-events-container.component.ts
+lib/components/calendar/calendar-dialogs/.../calendar-toast.component.ts
+```
+
+Those five are exactly the components `provideRlbBootstrap()` registers into the modal and toast
+registries — so the documented standalone entry point transitively pulls in the whole library. The
+Phase 3 scratch consumer built at **830 kB** rendering a starter that uses a handful of components,
+against a ~110 kB stock Angular 22 app and a 773 kB FESM. `sideEffects: false` cannot help; these
+are genuine references.
+
+Tier 2 replaces `RlbBootstrapModule` in those five components with the specific components each
+template uses. Compiler-checked (`NG8001`, `NG8113`, `strictTemplates`), but it changes what each
+component declares, so it wants a browser pass over modals, toasts and the calendar dialogs.
+
+Tier 3 is the guardrail — `import/no-cycle` via ESLint (still absent entirely, despite a `lib:lint`
+script) or a cycle-detection script in CI. Without it the cycles can silently return.

@@ -8,7 +8,9 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IModal, ModalData, ModalDirective } from '../components';
+import { IModal } from '../components/modals/data/modal';
+import { ModalData } from '../components/modals/data/modal-data';
+import { ModalDirective } from '../components/modals/modal.directive';
 import { RlbBootstrapModule } from '../rlb-bootstrap.module';
 import { SearchModalInput } from './search-modal.data';
 

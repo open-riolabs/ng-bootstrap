@@ -7,7 +7,7 @@ import {
   signal,
   output,
 } from '@angular/core';
-import { InputComponent } from '../../../forms/inputs';
+import { InputComponent } from '../../../forms/inputs/input.component';
 import { DataTableActionComponent } from '../../../data/datatable/dt-action.component';
 
 @Component({

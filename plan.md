@@ -323,6 +323,97 @@ The proof that this library itself is sound is Phase 3's consumer check: this ex
 
 ---
 
+## Follow-on workstream — import cycles (branch `refactor/remove-import-cycles`)
+
+**Separate from the upgrade.** Branched off `53032bc` so the five upgrade phases stay bisectable.
+Motivated by a maintainer report of "a lot of problems related to barrel exports", and a standing
+team workaround of importing by deep relative path instead of the package alias.
+
+### The finding: the workaround was aimed one level too far out
+
+A cycle scan over all 184 library source files found **5 import cycles**, all inside the library:
+
+```
+SELF-IMPORT:  public-api.ts  imports from './public-api'      <- the entry point imports itself
+CYCLES (4):   all routed through a barrel or through rlb-bootstrap.module.ts
+```
+
+The self-import only "works" because `provideRlbBootstrap()` is a function — its bindings are not
+dereferenced until call time, by which point the module graph has resolved. It is a latent fault,
+not a working pattern, and it is the single most likely source of the reported flakiness.
+
+**Consumers importing `@open-rlb/ng-bootstrap` were never the problem.** The correct rule has two halves:
+
+| Context | Rule |
+|---|---|
+| Inside the library | Never import a barrel or `rlb-bootstrap.module`. Import the concrete file. |
+| Outside the library | Always import the package name / path alias. |
+
+Deep relative paths are the *fragile* half for consumers: a published package can add an `exports`
+map at any time and they all break — the same hazard already logged below for `@open-rlb/date-tz/date-tz`.
+
+### Tier 1 ✅ DONE — mechanical, provably zero-risk
+
+13 leaf-to-barrel imports across 11 files rewritten to concrete file paths, plus the `public-api.ts`
+self-import. Aggregate arrays (`COMPONENTS`, `INPUTS`, `TABLE`, `PIPES`, `MODALS`, `TOASTS`,
+`CALENDAR_COMPONENTS`, `COMPONENT_BUILDER`) are **defined inside their barrels**, so barrel-composing-barrel
+imports were deliberately left alone — that is the intended composition root, not the bug.
+
+Result: **self-import gone, 4 multi-file cycles reduced to 1.**
+
+Evidence the public surface is untouched:
+
+| Check | Before | After |
+|---|---|---|
+| `export` statements changed | — | **0** (every changed line is part of an `import`) |
+| Public exports in the `.d.ts` | 140 | **140** |
+| FESM bundle | 773,451 bytes | **773,451 bytes — byte-identical** |
+
+A byte-identical FESM means the emitted library is literally the same file. Full sweep green.
+
+### Tier 2 — not started: the god-module import
+
+One cycle remains, and it is the architecturally interesting one:
+
+```
+rlb-bootstrap.module.ts -> components/index.ts -> calendar/index.ts
+  -> calendar.component.ts -> calendar-overflow-events-container.component.ts
+  -> rlb-bootstrap.module.ts
+```
+
+**Five leaf components import `RlbBootstrapModule`**, the aggregate that imports *and exports* the
+whole library — the NgModule-era habit surviving into standalone components:
+
+```
+lib/modals/common-modal.component.ts
+lib/modals/search-modal.component.ts
+lib/components/calendar/calendar-dialogs/.../event-create-edit.component.ts
+lib/components/calendar/calendar-dialogs/.../calendar-overflow-events-container.component.ts
+lib/components/calendar/calendar-dialogs/.../calendar-toast.component.ts
+```
+
+Those five are **exactly** the components `provideRlbBootstrap()` registers into the modal and toast
+registries. So the documented standalone entry point transitively references the entire library:
+
+> `provideRlbBootstrap()` -> 5 registry components -> `RlbBootstrapModule` -> `...COMPONENTS,
+> ...INPUTS, ...TABLE, ...PIPES` -> everything
+
+Measured consequence: the FESM is 773 kB, and the Phase 3 scratch consumer app built at **830 kB**
+while rendering a starter that uses a handful of components (a stock Angular 22 app is ~110 kB).
+Effectively the whole library is retained. `sideEffects: false` cannot help — these are real references.
+
+The fix is to replace `RlbBootstrapModule` in those five components' `imports:` arrays with the
+specific components each template uses. Compiler-checked (`NG8001` for a missing import, `NG8113`
+for an unused one, `strictTemplates` on), so mistakes surface at build time — but it changes what
+each component declares, so it wants a browser pass over modals, toasts and the calendar dialogs.
+
+### Tier 3 — not started: the guardrail
+
+Nothing stops the cycles coming back. There is still no ESLint at all despite a `lib:lint` script
+(logged below). Either add `import/no-cycle`, or add a small cycle-detection script to CI.
+
+---
+
 ## Deliberately out of scope (log as follow-ups)
 
 - **The Bootstrap accordion teardown race** in `toggle-abstract.component.ts` — decided in Phase 1 to
