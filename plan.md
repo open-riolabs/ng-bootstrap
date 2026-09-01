@@ -371,41 +371,77 @@ Evidence the public surface is untouched:
 
 A byte-identical FESM means the emitted library is literally the same file. Full sweep green.
 
-### Tier 2 — not started: the god-module import
+### Tier 2 ✅ DONE — the god-module import removed; the bundle prediction was wrong
 
-One cycle remains, and it is the architecturally interesting one:
+**Five leaf components imported `RlbBootstrapModule`**, the aggregate that imports and exports the
+whole library — the NgModule-era habit surviving into standalone components. Each now imports only
+what its template actually uses, determined by matching every template against every selector the
+library declares rather than by eye:
 
+| Component | `RlbBootstrapModule` replaced with |
+|---|---|
+| `modals/common-modal.component.ts` | `ButtonComponent` |
+| `modals/search-modal.component.ts` | `ButtonComponent`, `InputComponent` |
+| `calendar-dialogs/.../calendar-toast.component.ts` | **nothing** — its template used no library declarable at all |
+| `calendar-dialogs/.../calendar-overflow-events-container.component.ts` | `CalendarEventComponent` |
+| `calendar-dialogs/.../event-create-edit.component.ts` | `InputComponent`, `OptionComponent`, `SelectComponent`, `SwitchComponent` |
+
+**Result: zero import cycles in the library.** `RlbBootstrapModule` is now referenced only by its own
+definition and by `provideRlbBootstrap()`.
+
+Compiler-verified: build green (a missing import would be `NG8001`), and the NG8113 "unused import"
+count is **30 before and 30 after**, with none of the five files among them — so nothing unused was
+introduced either. All 30 are pre-existing.
+
+#### ⚠️ The predicted tree-shaking win did not materialise — and the earlier diagnosis was wrong
+
+Measured against the Phase 3 scratch consumer (a real Angular 22 app whose starter uses four
+components): **830.66 kB before, 830.63 kB after.** No meaningful change.
+
+The five components were a genuine *cycle* problem, but they were never the *bundle* problem. The
+actual retainer is `provideRlbBootstrap()` itself, in `public-api.ts`:
+
+```ts
+export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
+  return [
+    RlbBootstrapModule,   // <- retains the entire library
+    ...
 ```
-rlb-bootstrap.module.ts -> components/index.ts -> calendar/index.ts
-  -> calendar.component.ts -> calendar-overflow-events-container.component.ts
-  -> rlb-bootstrap.module.ts
-```
 
-**Five leaf components import `RlbBootstrapModule`**, the aggregate that imports *and exports* the
-whole library — the NgModule-era habit surviving into standalone components:
+`RlbBootstrapModule` declares `providers: []`. Putting it in a providers array collects providers
+from its whole imported module graph — which contributes essentially nothing — while retaining
+references to `...COMPONENTS, ...INPUTS, ...TABLE, ...PIPES`. Every consumer calling the documented
+standalone entry point therefore keeps the whole library.
 
-```
-lib/modals/common-modal.component.ts
-lib/modals/search-modal.component.ts
-lib/components/calendar/calendar-dialogs/.../event-create-edit.component.ts
-lib/components/calendar/calendar-dialogs/.../calendar-overflow-events-container.component.ts
-lib/components/calendar/calendar-dialogs/.../calendar-toast.component.ts
-```
+Measured by removing that one line as a throwaway experiment (**reverted, not committed**):
+**830.63 kB -> 772.15 kB raw, 163.37 kB -> 151.12 kB transfer.** So about **58 kB raw / 12 kB gzipped**.
 
-Those five are **exactly** the components `provideRlbBootstrap()` registers into the modal and toast
-registries. So the documented standalone entry point transitively references the entire library:
+Real, but an order of magnitude less than the earlier "~700 kB" framing in this document implied.
+The remainder is retained by the five components the modal and toast registries legitimately
+reference, plus their transitive dependencies — `InputComponent` alone pulls
+`InputValidationComponent` and `DataTableActionComponent`. That is inherent to the registry design,
+not something an import cleanup can reach.
 
-> `provideRlbBootstrap()` -> 5 registry components -> `RlbBootstrapModule` -> `...COMPONENTS,
-> ...INPUTS, ...TABLE, ...PIPES` -> everything
+#### Tier 2b — proposed, not done
 
-Measured consequence: the FESM is 773 kB, and the Phase 3 scratch consumer app built at **830 kB**
-while rendering a starter that uses a handful of components (a stock Angular 22 app is ~110 kB).
-Effectively the whole library is retained. `sideEffects: false` cannot help — these are real references.
+Dropping `RlbBootstrapModule` from `provideRlbBootstrap()`'s return array is worth ~12 kB gzipped for
+every consumer. It looks behaviour-neutral for standalone apps, since the module has no providers of
+its own and standalone components are imported per-component rather than via a module. But it is a
+change to the published entry point's behaviour, and `importProvidersFrom` semantics mean it also
+drops provider collection from `CommonModule`, `FormsModule`, `ReactiveFormsModule`, `TranslateModule`,
+`RouterModule` and the CDK drag-drop directives. **Needs the maintainer's call**, and a browser pass.
 
-The fix is to replace `RlbBootstrapModule` in those five components' `imports:` arrays with the
-specific components each template uses. Compiler-checked (`NG8001` for a missing import, `NG8113`
-for an unused one, `strictTemplates` on), so mistakes surface at build time — but it changes what
-each component declares, so it wants a browser pass over modals, toasts and the calendar dialogs.
+### Browser verification
+
+All five changed components were exercised in the running demo, zero console errors:
+
+| Component | How |
+|---|---|
+| `EventCreateEditComponent` | clicked a calendar event — title input, datetime inputs, All Day switch and Color select with options all render |
+| `CalendarOverflowEventsContainerComponent` | clicked "+N more" — the `rlb-calendar-event` chips render inside the dialog |
+| `CommonModalComponent` | deleted an event — the "Event delete" confirm dialog renders with its `rlb-button` Cancel/Ok |
+| `CalendarToastComponent` | confirmed the delete — "Event deleted successfully." toast fired |
+| `SearchModalComponent` | no demo button exists, so driven directly via `ModalService.openModal('rlb-search', …)` in the page — the `rlb-input` and its projected `rlb-button` render |
 
 ### Tier 3 — not started: the guardrail
 

@@ -12,14 +12,16 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | 2 | Angular 22 | ✅ |
 | 3 | Library packaging & published metadata | ✅ |
 | 4 | CI | ✅ |
-| — | Import cycles (separate branch, Tier 1) | ✅ |
+| — | Import cycles (separate branch, Tiers 1-2) | ✅ — 0 cycles; Tier 3 open |
 
 ---
 
 ## ▶ Resume here
 
 **Last session ended:** 2026-09-01. **All five upgrade phases complete** on `chore/angular-22-upgrade`,
-plus **Tier 1 of the import-cycle cleanup** on `refactor/remove-import-cycles` (branched off `53032bc`).
+plus **Tiers 1 and 2 of the import-cycle cleanup** on `refactor/remove-import-cycles`
+(branched off `53032bc`) — the library is now at **zero import cycles**. Tier 3, the guardrail
+that stops them returning, is still open.
 Nothing pushed, nothing merged, nothing published.
 
 Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**. Six targets green from a clean
@@ -827,3 +829,88 @@ component declares, so it wants a browser pass over modals, toasts and the calen
 
 Tier 3 is the guardrail — `import/no-cycle` via ESLint (still absent entirely, despite a `lib:lint`
 script) or a cycle-detection script in CI. Without it the cycles can silently return.
+
+---
+
+## Import cycles — Tier 2 ✅ (branch `refactor/remove-import-cycles`)
+
+**The library now has zero import cycles.**
+
+### What changed
+
+Five leaf components imported `RlbBootstrapModule` — the aggregate that imports *and exports* the
+entire library. Each now imports only what its template actually uses. Rather than eyeball five
+templates, every template was matched against every selector the library declares (including
+attribute selectors like `button[rlb-button]` and pipe names), then cross-checked by hand:
+
+| Component | `RlbBootstrapModule` replaced with |
+|---|---|
+| `modals/common-modal.component.ts` | `ButtonComponent` |
+| `modals/search-modal.component.ts` | `ButtonComponent`, `InputComponent` |
+| `calendar-dialogs/.../calendar-toast.component.ts` | **nothing** — its template uses no library declarable at all |
+| `calendar-dialogs/.../calendar-overflow-events-container.component.ts` | `CalendarEventComponent` |
+| `calendar-dialogs/.../event-create-edit.component.ts` | `InputComponent`, `OptionComponent`, `SelectComponent`, `SwitchComponent` |
+
+`RlbBootstrapModule` is now referenced only by its own definition and by `provideRlbBootstrap()`.
+
+### Verified
+
+- **Cycles: 0** (was 5 before Tier 1, 1 after Tier 1)
+- Build green — a missing import would be `NG8001`
+- **NG8113 "unused import" count: 30 before, 30 after**, and none of the five files appear in the
+  list, so nothing unused was introduced. All 30 are pre-existing.
+- Full sweep green, counts unchanged.
+
+### ⚠️ Correction: the predicted tree-shaking win did not happen
+
+Measured against the Phase 3 scratch consumer (a real Angular 22 app whose starter uses four
+components): **830.66 kB before, 830.63 kB after.** Essentially no change.
+
+The Tier 2 write-up in `plan.md` had claimed this would unlock tree-shaking. That diagnosis was
+wrong. The five components were a real *cycle* problem but never the *bundle* problem.
+
+The actual retainer is `provideRlbBootstrap()` in `public-api.ts`:
+
+```ts
+return [
+  RlbBootstrapModule,   // <- retains the entire library
+  ...
+```
+
+`RlbBootstrapModule` declares `providers: []`. Putting it in a providers array collects providers from
+its imported module graph — contributing essentially nothing — while retaining references to
+`...COMPONENTS, ...INPUTS, ...TABLE, ...PIPES`. So every consumer calling the documented standalone
+entry point keeps the whole library.
+
+Removing that single line, as a throwaway experiment that was **reverted and not committed**:
+
+| | Raw | Transfer |
+|---|---|---|
+| with `RlbBootstrapModule` | 830.63 kB | 163.37 kB |
+| without | **772.15 kB** | **151.12 kB** |
+
+So roughly **58 kB raw / 12 kB gzipped** — real, but an order of magnitude smaller than the earlier
+"~700 kB" framing implied. The rest is retained by the five components the modal and toast registries
+legitimately reference plus their transitive dependencies (`InputComponent` alone pulls
+`InputValidationComponent` and `DataTableActionComponent`). That is inherent to the registry design.
+
+**Tier 2b, proposed and not done:** drop `RlbBootstrapModule` from `provideRlbBootstrap()`. It looks
+behaviour-neutral for standalone apps — the module has no providers of its own, and standalone
+components are imported per-component — but it changes the published entry point's behaviour and also
+drops provider collection from `CommonModule`, `FormsModule`, `ReactiveFormsModule`, `TranslateModule`,
+`RouterModule` and the CDK drag-drop directives. Maintainer's call.
+
+### Browser pass — all five components exercised, zero console errors
+
+| Component | How it was reached |
+|---|---|
+| `EventCreateEditComponent` | clicked a calendar event; title input, datetime inputs, All Day switch and Color select with options all render |
+| `CalendarOverflowEventsContainerComponent` | clicked "+N more"; the `rlb-calendar-event` chips render inside the dialog |
+| `CommonModalComponent` | deleted an event; the "Event delete" confirm renders with its `rlb-button` Cancel/Ok |
+| `CalendarToastComponent` | confirmed the delete; "Event deleted successfully." toast fired |
+| `SearchModalComponent` | no demo button exists for it, so it was driven directly via `ModalService.openModal('rlb-search', …)` from the page; the `rlb-input` and its projected `rlb-button` render |
+
+### Still open
+
+**Tier 3 — the guardrail.** Cycles are at zero but nothing keeps them there. Still no ESLint at all
+despite a `lib:lint` script. Either `import/no-cycle`, or a cycle-detection script wired into CI.
