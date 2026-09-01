@@ -11,28 +11,33 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | 1 | Node + TypeScript 6.0 | ✅ |
 | 2 | Angular 22 | ✅ |
 | 3 | Library packaging & published metadata | ✅ |
-| 4 | CI | ⏸️ next |
+| 4 | CI | ✅ |
 
 ---
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. Phase 3 complete and committed as `d3a1a76`.
-Working tree clean apart from the untracked `CLAUDE.md` that predates this work — note its
-Phase 3 corrections are on disk but, being untracked, are not in any commit.
-The library now advertises **Angular 22** everywhere it is published: peer ranges, the `ng-add`
-schematic pins, both READMEs, and the bundled skills.
+**Last session ended:** 2026-09-01. **All five phases complete.** The upgrade is done on
+`chore/angular-22-upgrade`; nothing has been pushed or merged.
 
-**Next: Phase 4 — CI**, and it is the last phase. Nothing in it depends on the library code;
-it is `.github/workflows/production.yaml` (no test job, three unpinned Node images sharing a
-`node_modules` artifact across a musl→glibc boundary, and `npm link husky` / `npm link @nestjs/cli`
-that are not dependencies of this repo), `.github/workflows/pages.yaml` (`npm install` → `npm ci`),
-and a decision on whether `.gitlab-ci.yml` is still alive — it still runs the Karma path that
-Phase 0 deleted.
+Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**. Six targets green from a clean
+`npm ci`, a browser pass over the Bootstrap-JS components, and a full `ng add` + build against a
+real Angular 22 consumer app.
 
-Pin CI Node to something satisfying `^22.22.3 || ^24.15.0 || >=26.0.0`; `.nvmrc` says `24.16.0`.
+**Before merging:**
 
-**Baseline to compare against** (all exit 0 on Angular 22 + TS 6):
+1. The workflows are reviewed, not executed — the first run on `master` is the real test. Highest
+   risk is `npm install` → `npm ci` (checked locally, exits 0) and the removal of the
+   `node_modules` artifact. `versioning` was left untouched on purpose.
+2. `CLAUDE.md` is **untracked** — its Phase 3 corrections exist on disk but in no commit, so they
+   vanish on a fresh clone. Decide whether to track it.
+3. Consumers cannot take this release until they are on Angular 22 themselves — verified: `ng-app`
+   is still on Angular 21 / TypeScript 5.9.2, and its `@open-rlb/date-tz ^2.0.5` is below the new
+   `>=2.1.1` floor. This is the forward-only linker constraint working as designed, not a defect.
+
+The follow-up list lives at the end of [`plan.md`](./plan.md).
+
+**Baseline** (all exit 0 on Angular 22 + TS 6):
 `test-ci` 7 files / 8 tests · `lib:test-ci` 2 files / 2 tests · `lib:build` · `lib:test:ng-add` ·
 `build:docs` · `lib:pack`. Watch the counts, not just exit codes — uncompilable specs vanish from
 the count instead of failing.
@@ -599,3 +604,85 @@ npx ng add ../lib.tgz --skip-confirmation           # in the scratch app
 Then rendered `<app-rlb-starter />` and built the consumer app: **clean, 830.66 kB initial bundle.**
 That is the part worth having — it proves the v22-built partial-compilation output links inside a
 v22 consumer, which no test in this repo can cover.
+
+---
+
+## Phase 4 — CI ✅
+
+The publish pipeline had a defect that would have shipped broken artifacts regardless of this
+upgrade, plus no test gate at all. Both fixed.
+
+### Work items
+
+- [x] Rewrite `.github/workflows/production.yaml` — pin Node, kill the libc mismatch, drop the cruft
+- [x] Add a test job ahead of the publish job
+- [x] `.github/workflows/pages.yaml` — pin Node, `npm install` → `npm ci`
+- [x] Delete `.gitlab-ci.yml` (decided: dead)
+- [x] Fix `repository.url`, which still pointed at GitLab
+
+### The `node_modules` artifact crossed a libc boundary
+
+This was the real bug. The `dependencies` job ran in `node:alpine` (**musl**), tarred `node_modules`,
+and handed it to a `build` job running `node:lts-bullseye` (**glibc**) and a `deploy` job on
+`ubuntu-latest`. Native binaries do not survive that: this tree pulls `esbuild`, `lmdb`,
+`@parcel/watcher` and `msgpackr-extract`, all of which ship or build platform-specific binaries.
+Alpine-built ones are not loadable on Debian.
+
+Rather than pin the two images to the same libc, the artifact-passing was **removed entirely**. Every
+job now runs on `ubuntu-latest` with `actions/setup-node@v4`, `cache: npm`, and its own `npm ci`.
+That is faster than tarring and uploading `node_modules`, and the class of bug disappears.
+
+### One Node version, from one source of truth
+
+All three Node declarations (`node:alpine`, `node:lts-bullseye`, `node-version: "22.x"`) are replaced
+by `node-version-file: .nvmrc` in both workflows. `.nvmrc` was added in Phase 1 and satisfies Angular
+22's `^22.22.3 || ^24.15.0 || >=26.0.0`, so the constraint is now declared once and CI follows it.
+
+### A test gate, finally
+
+`production.yaml` published without running a single test. It now has a `test` job that `build`
+depends on, and `deploy` still depends on `build`:
+
+```
+versioning ─┐
+test → build ─┴→ deploy
+```
+
+`test` runs both suites (`lib:test-ci` and `test-ci`); `build` additionally runs `lib:test:ng-add`,
+the schematic smoke test, since that needs the build output anyway. A red test now blocks the publish.
+
+### Removed cruft
+
+- `npm link husky` and `npm link @nestjs/cli` — neither is a dependency of this repo. Template
+  leftovers sitting in the publish path.
+- `cp ./package.json ./dist`, `cp ./package-lock.json ./dist`, `cp ./README.md ./dist` in `deploy`.
+  These copied the *root* files into `dist/`, while the publish then ran from `dist/rlb/ng-bootstrap/`
+  — so they never affected the published package. ng-packagr already puts the correct
+  `package.json` and the library README there.
+- `npm install` → `npm ci` in both workflows, so the lockfile is actually enforced.
+
+### `.gitlab-ci.yml` deleted
+
+Decided with the user. The evidence it was dead:
+
+- `origin` is `github.com/open-riolabs/ng-bootstrap`; the GitHub workflows are the live publish path
+- its `deploy` publishes to a GitLab package registry under the **`@rlb:`** scope — the library has
+  been `@open-rlb/` and published to npmjs for some time
+- its `test` stage runs `npm run lib:test-ci` against Karma + Chrome, a path Phase 0 deleted
+- it installs Chrome with `apt-key add` (removed from apt) and a key from `dl-ssl.google.com`
+  (dead host) — that stage could not have passed in years
+
+It remains in git history if it is ever wanted back.
+
+Also fixed while here: root `package.json` `repository.url` still pointed at
+`gitlab.com/riolabs/common/libraries/rlb-ng-bootstrap`. Now the GitHub URL.
+
+### What is *not* verified
+
+These workflows cannot be executed locally, so they are reviewed, not tested. What was checked:
+both files parse, contain no tab characters, and the `needs:` graph is acyclic and complete.
+`npm ci` was run locally against the current lockfile to confirm the `npm install` → `npm ci`
+switch will not fail the pipeline — that is the one change with a real chance of breaking CI.
+
+The first run on `master` is still the real test, and `versioning` (GitVersion in a dotnet container)
+was left completely untouched to keep that risk contained.

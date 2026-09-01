@@ -1,6 +1,6 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ✅ (`d3a1a76`) · Phase 4 ⏸️ next.
+> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ✅ (`d3a1a76`) · Phase 4 ✅ (uncommitted). **Upgrade complete.**
 > Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
 > Now on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green plus a browser pass.
 
@@ -249,14 +249,28 @@ packed the tarball, `ng add`-ed it into a fresh `@angular/cli@22` app, and confi
 7 skills and added the `postinstall`. Rendering the starter and building the consumer app succeeded
 (830.66 kB initial) — which is the only proof that v22 partial-compilation output links in a v22 app.
 
-## Phase 4 — CI
+## Phase 4 — CI ✅ DONE (uncommitted)
 
-19. `.github/workflows/production.yaml` is the publish path and needs attention regardless: it has **no test job**, uses three different unpinned Node images (`node:alpine`, `node:lts-bullseye`, `22.x`) across jobs that share a `node_modules` artifact **across libc boundaries** (musl → glibc), and runs `npm link husky` / `npm link @nestjs/cli` — neither is a dependency of this repo; both are template cruft in the publish path.
-20. Pin all CI Node versions to one value satisfying Angular 22's engines. Switch `npm install` → `npm ci` in `.github/workflows/pages.yaml` so the lockfile is actually enforced.
-21. Add a test job to the GitHub pipeline before the publish job.
-22. `.gitlab-ci.yml` runs the now-deleted karma path and installs Chrome via the long-broken `apt-key add` + `dl-ssl.google.com` key. If GitLab is dead, delete the file; if not, it needs the same Vitest rewrite.
+19. ✅ `production.yaml` rewritten. The **musl→glibc `node_modules` artifact** was the real defect:
+    a `node:alpine` job tarred `node_modules` for a `node:lts-bullseye` job, and this tree pulls
+    `esbuild`, `lmdb`, `@parcel/watcher` and `msgpackr-extract` — all with platform-specific binaries
+    that do not survive that hop. Fixed by deleting the artifact-passing entirely: every job now runs
+    `ubuntu-latest` + `setup-node` + `cache: npm` + its own `npm ci`. Also dropped `npm link husky` /
+    `npm link @nestjs/cli` and three vestigial `cp` commands that copied root files into `dist/` while
+    the publish ran from `dist/rlb/ng-bootstrap/`.
+20. ✅ All Node declarations replaced by `node-version-file: .nvmrc` in both workflows — one source of
+    truth, added in Phase 1. `pages.yaml` switched to `npm ci`.
+21. ✅ Test job added: `test → build → deploy`, with `versioning` feeding `deploy` in parallel.
+    `test` runs both suites; `build` also runs `lib:test:ng-add`. A red test now blocks publishing.
+22. ✅ `.gitlab-ci.yml` **deleted** (user decision). It published to a GitLab registry under the old
+    `@rlb:` scope, its test stage ran the Karma path Phase 0 deleted, and it installed Chrome via
+    `apt-key add` + `dl-ssl.google.com` — both dead for years. `origin` is GitHub. Still in history.
 
----
+Also fixed: root `package.json` `repository.url` still pointed at GitLab.
+
+**Not verified:** workflows cannot run locally. Both files parse, have no tabs, and the `needs:` graph
+is complete. `npm ci` was run locally against the current lockfile (exit 0) since that is the change
+most likely to break the pipeline. `versioning` was left untouched to contain the risk.
 
 ## Deliberately out of scope (log as follow-ups)
 

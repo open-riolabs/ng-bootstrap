@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+
 jobs:
   versioning:
     runs-on: ubuntu-latest
@@ -28,53 +29,40 @@ jobs:
       - name: Display Version
         run: echo "Version> ${{ env.GitVersion_SemVer }}"
 
-  dependencies:
+  test:
     runs-on: ubuntu-latest
-    container:
-      image: node:alpine
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Cache node_modules
-        uses: actions/cache@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
+          node-version-file: .nvmrc
+          cache: npm
       - name: Install dependencies
-        run: |
-          npm config set "@rlb-core:registry=https://npm.pkg.github.com/rlb-core/"
-          npm config set "//npm.pkg.github.com/rlb-core/:_authToken" "${{ secrets.DEPLOY_PAT }}"
-          npm install
-      - name: Create node_modules TarGz
-        run: tar -czf node_modules.tar.gz node_modules
-      - name: Upload TarGz Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: node_modules-tar # Artifact name
-          path: node_modules.tar.gz # Path to the created `.tar.gz`
+        run: npm ci
+      - name: Test the library
+        run: npm run lib:test-ci
+      - name: Test the demo app
+        run: npm run test-ci
 
   build:
-    needs: dependencies
+    needs: test
     runs-on: ubuntu-latest
-    container:
-      image: node:lts-bullseye
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Download TarGz Artifact
-        uses: actions/download-artifact@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          name: node_modules-tar # The artifact name
-          path: ./ # Where to download the artifact
-      - name: Extract node_modules
-        run: tar -xzf node_modules.tar.gz
-      - name: Build
-        run: |
-          npm link husky
-          npm link @nestjs/cli
-          npm run lib:build
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build the library and its schematics
+        run: npm run lib:build
+      - name: Smoke-test the ng-add schematic
+        run: npm run lib:test:ng-add
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -94,13 +82,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      - name: Download TarGz Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules-tar
-          path: ./
-      - name: Extract node_modules
-        run: tar -xzf node_modules.tar.gz
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
@@ -110,13 +91,10 @@ jobs:
       - name: Set Version and Publish
         uses: actions/setup-node@v4
         with:
-          node-version: "22.x"
+          node-version-file: .nvmrc
           registry-url: "https://registry.npmjs.org/"
           scope: "@open-rlb"
       - run: |
-          cp ./package.json ./dist
-          cp ./package-lock.json ./dist
-          cp ./README.md ./dist
           cd ./dist/rlb/ng-bootstrap
           npm version ${{ needs.versioning.outputs.GitVersion_SemVer }} --git-tag-version false
           npm publish --allow-same-version --access public
