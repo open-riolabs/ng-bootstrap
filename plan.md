@@ -1,6 +1,6 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (uncommitted) · Phase 3 ⏸️ next · Phase 4 not started.
+> **Status:** Phase 0 ✅ (`8c28184`) · Phase 1 ✅ (`1421f58`) · Phase 2 ✅ (`595c4c1`) · Phase 3 ⏸️ next · Phase 4 not started.
 > Branch `chore/angular-22-upgrade`. Live progress log: [`PROGRESS.md`](./PROGRESS.md).
 > Now on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green plus a browser pass.
 
@@ -161,7 +161,7 @@ All items below are complete on **TypeScript 6.0.3**, Angular untouched at 21.2.
 
 ---
 
-## Phase 2 — Angular 22 ✅ DONE (uncommitted)
+## Phase 2 — Angular 22 ✅ DONE (commit `595c4c1`)
 
 **Angular 21.2.19 → 22.1.4**, CLI → 22.1.6, CDK → 22.1.4, ng-packagr → 22.1.1, `@schematics/angular` → 22.1.6.
 Full write-up in [`PROGRESS.md`](./PROGRESS.md). Outcome per original step:

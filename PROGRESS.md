@@ -17,7 +17,8 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 
 ## ▶ Resume here
 
-**Last session ended:** 2026-09-01. Phase 2 complete, **not yet committed**.
+**Last session ended:** 2026-09-01. Phase 2 complete and committed as `595c4c1`.
+Working tree clean apart from the untracked `CLAUDE.md` that predates this work.
 Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**, all six targets green with counts
 unchanged, plus a browser pass over the Bootstrap-JS components (below).
 
