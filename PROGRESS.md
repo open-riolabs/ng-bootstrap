@@ -12,18 +12,18 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | 2 | Angular 22 | ✅ |
 | 3 | Library packaging & published metadata | ✅ |
 | 4 | CI | ✅ |
-| — | Import cycles (separate branch, Tiers 1-2) | ✅ — 0 cycles; Tier 3 open |
+| — | Import cycles (separate branch, Tiers 1-3) | ✅ — 0 cycles, guarded in CI |
 | — | `date-tz` deep import (consumer test blocker) | ✅ |
-| — | `bootstrap` CJS named imports | ⬜ open, Vitest-only exposure |
+| — | `bootstrap` CJS named imports | ⬜ open — Vitest-only exposure |
 
 ---
 
 ## ▶ Resume here
 
 **Last session ended:** 2026-09-01. **All five upgrade phases complete** on `chore/angular-22-upgrade`,
-plus **Tiers 1 and 2 of the import-cycle cleanup** on `refactor/remove-import-cycles`
-(branched off `53032bc`) — the library is now at **zero import cycles**. Tier 3, the guardrail
-that stops them returning, is still open.
+plus the **complete import-cycle workstream (Tiers 1-3)** on `refactor/remove-import-cycles`
+(branched off `53032bc`) — the library is at **zero import cycles**, and `npm run check:imports`
+now guards that in CI.
 Nothing pushed, nothing merged, nothing published.
 
 Running on **Angular 22.1.4 / CLI 22.1.6 / TypeScript 6.0.3**. Six targets green from a clean
@@ -974,3 +974,71 @@ The library-side fix is `import bootstrap from 'bootstrap'; const { Collapse } =
 12 files — a default import always yields `module.exports` for a CJS module. Not done: this is the
 Bootstrap-JS plumbing that no test in this repo covers, so it wants its own branch and a full browser
 pass over every Bootstrap-backed component.
+
+---
+
+## Import cycles — Tier 3 ✅ the guardrail
+
+Cycles were at zero after Tier 2, but nothing kept them there, and all three mistakes this workstream
+fixed are easy to make again by accident.
+
+### Why not ESLint
+
+`import/no-cycle` was the obvious answer and was rejected as disproportionate: **there is no ESLint in
+this repo at all**. The `lib:lint` script (`ng lint @open-rlb/ng-bootstrap`) has never worked — it is
+listed in `plan.md`'s follow-ups for exactly that reason. Adding ESLint means standing up a config,
+picking a plugin set, and triaging every unrelated rule it fires across 184 files. That is a project,
+not a guardrail, and it would have to happen before the guard existed.
+
+### What was added instead
+
+`scripts/check-imports.mjs` — no new dependency, follows the existing `scripts/*.mjs` convention
+(`build-schematics.mjs`, `prepare-pages.mjs`, `verify-pack.cjs`). It enforces the three invariants
+this workstream actually established:
+
+1. **No import cycles**, including a file importing itself (the original `public-api.ts` fault).
+2. **Nothing imports `rlb-bootstrap.module` except `public-api.ts`** — the Tier 2 invariant. It
+   imports and exports the whole library, so any other importer creates a cycle and drags everything in.
+3. **No deep imports past a package root** (`@open-rlb/date-tz/…`) — the defect that broke consumer
+   unit tests while their builds passed.
+
+Exposed as `npm run check:imports`, and wired into the CI `test` job **before** both test suites, so a
+regression blocks the publish instead of reaching consumers.
+
+### The guard was proved to fire
+
+A check that only ever passes is worthless, so each violation was deliberately reintroduced and the
+guard confirmed to catch it and exit 1:
+
+| Violation reintroduced | Result |
+|---|---|
+| `public-api.ts` importing `'./public-api'` | ✓ `1 file(s) import themselves: public-api.ts` |
+| `common-modal.component.ts` importing `rlb-bootstrap.module` | ✓ `only public-api.ts may` |
+| `calendar.component.ts` importing `@open-rlb/date-tz/date-tz` | ✓ `deep import(s) past a package root` |
+| a two-file cycle between a modal and a calendar component | ✓ `1 import cycle(s)` with the full path |
+
+Exit 1 on any violation, exit 0 on a clean tree (`184 files` scanned).
+
+### Deliberately not enforced
+
+A leaf importing a barrel where it does **not** currently form a cycle is left alone. Barrel-composing-
+barrel is the intended composition root — it is how `COMPONENTS`, `INPUTS`, `TABLE`, `PIPES` are built —
+so a blanket rule would produce false positives on legitimate code. The cycle check already catches
+every case that actually causes harm.
+
+### Import-cycle workstream: complete
+
+| Tier | Outcome |
+|---|---|
+| 1 | 13 leaf-to-barrel imports + the `public-api.ts` self-import → concrete paths. 5 cycles → 1. Byte-identical FESM. |
+| 2 | 5 components stopped importing the god-module. 1 cycle → **0**. Bundle prediction corrected (no win; the real retainer is `provideRlbBootstrap()`). |
+| — | `@open-rlb/date-tz` deep import fixed — was breaking consumer unit tests. |
+| 3 | `check:imports` guard, wired into CI, proved to fire on all four violation types. |
+
+**Still open, needing a maintainer decision:**
+
+- **Tier 2b** — drop `RlbBootstrapModule` from `provideRlbBootstrap()`'s providers array. Measured at
+  ~58 kB raw / ~12 kB gzipped for every consumer. Changes the published entry point's behaviour.
+- **`bootstrap` CJS named imports** (12 files) — breaks consumers running the Node-ESM/Vitest runner.
+  `ng-app` is on Karma so it is unaffected today. Wants its own branch and a full browser pass.
+- **ESLint** — still entirely absent, and `lib:lint` still does not work.

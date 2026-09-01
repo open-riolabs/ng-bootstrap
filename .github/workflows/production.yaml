@@ -41,6 +41,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Check import hygiene
+        run: npm run check:imports
       - name: Test the library
         run: npm run lib:test-ci
       - name: Test the demo app

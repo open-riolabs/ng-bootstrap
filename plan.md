@@ -443,10 +443,37 @@ All five changed components were exercised in the running demo, zero console err
 | `CalendarToastComponent` | confirmed the delete — "Event deleted successfully." toast fired |
 | `SearchModalComponent` | no demo button exists, so driven directly via `ModalService.openModal('rlb-search', …)` in the page — the `rlb-input` and its projected `rlb-button` render |
 
-### Tier 3 — not started: the guardrail
+### Tier 3 ✅ DONE — the guardrail
 
-Nothing stops the cycles coming back. There is still no ESLint at all despite a `lib:lint` script
-(logged below). Either add `import/no-cycle`, or add a small cycle-detection script to CI.
+Cycles were at zero but nothing kept them there, and the same three mistakes are easy to make again.
+ESLint with `import/no-cycle` was considered and rejected as disproportionate: there is **no ESLint
+in this repo at all** (the `lib:lint` script has never worked), so adding it would mean standing up a
+config and triaging whatever else it flags — a project in its own right, not a guardrail.
+
+Instead, `scripts/check-imports.mjs` (no new dependency, ~140 lines, matching the existing
+`scripts/*.mjs` convention) enforces the three invariants this workstream established:
+
+1. **No import cycles**, including a file importing itself.
+2. **Nothing imports `rlb-bootstrap.module` except `public-api.ts`** — the Tier 2 invariant.
+3. **No deep imports past a package root** (`@open-rlb/date-tz/…`) — the consumer-test blocker.
+
+Wired in as `npm run check:imports`, and into the CI `test` job ahead of both suites, so a regression
+blocks the publish rather than reaching consumers.
+
+**The guard was proved to fire**, not just to pass. Each violation was reintroduced deliberately and
+the check was confirmed to catch it and exit 1:
+
+| Violation reintroduced | Caught |
+|---|---|
+| `public-api.ts` importing itself | ✓ "1 file(s) import themselves" |
+| a component importing `rlb-bootstrap.module` | ✓ "only public-api.ts may" |
+| `@open-rlb/date-tz/date-tz` deep import | ✓ "deep import(s) past a package root" |
+| a two-file cycle between a modal and a calendar component | ✓ "1 import cycle(s)" with the path |
+
+Exit 1 on violation, exit 0 on a clean tree. Deliberately **not** enforced: leaf-imports-a-barrel where
+it does not currently form a cycle. Barrel-composing-barrel is legitimate (that is how `COMPONENTS`,
+`INPUTS` and friends are built), and a blanket rule would produce false positives; the cycle check
+already catches the cases that actually cause harm.
 
 ---
 
