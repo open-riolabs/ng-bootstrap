@@ -10,7 +10,6 @@ import { ModalRegistryOptions } from './lib/components/modals/options/modal-regi
 import { ToastRegistryOptions } from './lib/components/toast/options/toast-registry.options';
 import { CommonModalComponent } from './lib/modals/common-modal.component';
 import { SearchModalComponent } from './lib/modals/search-modal.component';
-import { RlbBootstrapModule } from './lib/rlb-bootstrap.module';
 
 
 export * from './lib/components';
@@ -31,7 +30,6 @@ export * from './lib/components/calendar/calendar-dialogs/index';
 
 export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
   return [
-    RlbBootstrapModule,
     {
       provide: ModalRegistryOptions, useValue: {
         modals: {

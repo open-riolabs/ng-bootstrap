@@ -104,6 +104,18 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
+`provideRlbBootstrap()` registers the built-in modals and toasts (`rlb-common`, `rlb-search` and the
+calendar dialogs) so `ModalService` / `ToastService` can resolve them by name. It does **not** make the
+components available to your templates — a providers array cannot supply declarables. Standalone
+components import what they use directly:
+
+```typescript
+import { ButtonComponent, CardComponent } from '@open-rlb/ng-bootstrap';
+
+@Component({ imports: [ButtonComponent, CardComponent], /* ... */ })
+export class MyComponent {}
+```
+
 ### 2. Include Bootstrap Styles
 
 Add Bootstrap CSS to your `angular.json` or import in your main styles file:
