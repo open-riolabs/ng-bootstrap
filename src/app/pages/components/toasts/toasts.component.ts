@@ -2,13 +2,12 @@ import { Component } from '@angular/core';
 import { ToastService } from '@open-rlb/ng-bootstrap';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
-import { DOCS_IMPORTS, DocApiRow } from '../../../shared/docs';
-import { ToastSampleComponent } from './toasts-sample.component';
+import { DocApiRow, DOCS_IMPORTS } from '../../../shared/docs';
 
 @Component({
   selector: 'app-toasts',
   templateUrl: './toasts.component.html',
-  imports: [SHARED_IMPORTS, DOCS_IMPORTS, ToastSampleComponent],
+  imports: [SHARED_IMPORTS, DOCS_IMPORTS],
 })
 export class ToastsComponent {
   constructor(private toasts: ToastService) {}
@@ -75,7 +74,8 @@ export class ToastSampleComponent implements IToast<any, any> {
     {
       name: 'id',
       type: 'string',
-      description: 'Unique identifier for this container. Must match the containerId passed to ToastService.openToast().',
+      description:
+        'Unique identifier for this container. Must match the containerId passed to ToastService.openToast().',
       kind: 'Input',
     },
   ];
@@ -94,20 +94,23 @@ export class ToastSampleComponent implements IToast<any, any> {
     {
       name: 'id',
       type: 'string',
-      description: 'Unique identifier for this toast instance (injected automatically by the service).',
+      description:
+        'Unique identifier for this toast instance (injected automatically by the service).',
       kind: 'Input',
     },
     {
       name: 'data-instance',
       type: 'IToast',
-      description: 'Reference to the IToast component instance (injected automatically by the service).',
+      description:
+        'Reference to the IToast component instance (injected automatically by the service).',
       kind: 'Input',
     },
     {
       name: 'data-options',
       type: 'ToastOptions',
       default: '{}',
-      description: 'Optional display options: animation, autohide, delay, color and extra CSS classes.',
+      description:
+        'Optional display options: animation, autohide, delay, color and extra CSS classes.',
       kind: 'Input',
     },
   ];
