@@ -1,17 +1,19 @@
 # Angular 21 → 22 upgrade: `@open-rlb/ng-bootstrap`
 
-> **Status: COMPLETE and unpushed.** Phases 0-4 all done, plus a follow-on import-cycle workstream.
-> **14 commits across two branches. Nothing pushed, merged or published.**
+> **Status: COMPLETE and unpushed.** Phases 0-4 all done, plus a follow-on import-cycle workstream
+> and the two code decisions it left open.
+> **17 commits across two branches. Nothing pushed, merged or published.**
 >
 > ```
 > develop
 >   └── chore/angular-22-upgrade            Phases 0-4  (8c28184 1421f58 595c4c1 d3a1a76 5eacb84)
 >         └── refactor/remove-import-cycles Tiers 1-3   (a198505 5a2d70b 6469c4e 887312d)
+>                                           bootstrap + Tier 2b  (4d5acc1 c898b27)
 > ```
 >
 > Verified on **Angular 22.1.4 · CLI 22.1.6 · TypeScript 6.0.3 · Node v24.16.0**.
 > Live progress log and the resume point: [`PROGRESS.md`](./PROGRESS.md) — **start there.**
-> Three open decisions remain; see *Release readiness* below. Nothing else is pending.
+> One open decision remains (track `CLAUDE.md`); see *Release readiness* below.
 
 ## Context
 
@@ -286,30 +288,30 @@ most likely to break the pipeline. `versioning` was left untouched to contain th
 **Status: the upgrade is complete and unpushed.** All five phases are committed on
 `chore/angular-22-upgrade`; nothing is merged or published.
 
-### Before merging — three open decisions
+### Before merging — one open decision
 
-Everything else is finished. These are the only items that need a person.
+**`CLAUDE.md` is untracked.** Its Phase 3 corrections and the Tier 2b correction to how
+`provideRlbBootstrap()` is described are on disk but in no commit, so a fresh clone loses them.
 
-**1. Tier 2b — drop `RlbBootstrapModule` from `provideRlbBootstrap()`'s providers array.**
-Worth a measured **~58 kB raw / ~12 kB gzipped** to every consumer. The module declares
-`providers: []`, so it contributes nothing while retaining the whole library. Safe for declarables —
-a providers array cannot supply template declarables, and both known consumers already import
-components explicitly. The one unconfirmed point: whether a bare NgModule class in a providers array
-collects providers from its imported module graph. Reasoning says no (a bare class is a `TypeProvider`;
-collection requires `importProvidersFrom`), but that was **not** verified empirically — the probe built
-to settle it was blocked by the two defects it found instead. Changes the published entry point, so it
-needs a decision plus a browser pass.
+The other two are **done**:
 
-**2. `bootstrap` CJS named imports — 12 files.** `import { Collapse } from 'bootstrap'` fails under
-Node ESM, because bootstrap's `main` is CJS and it ships no `exports` map. Bundlers interop it, so it
-is invisible here and in a consumer's `ng build`. **`ng-app` is on Karma and is not affected today** —
-this only bites the Vitest/Node runner, which is a second independent reason `ng-app/task.md`
-recommends against the optional `migrate-karma-to-vitest` migration. Fix is
-`import bootstrap from 'bootstrap'; const { Collapse } = bootstrap;` across all 12; wants its own
-branch and a full browser pass, since this is the Bootstrap-JS plumbing no test covers.
+**1. Tier 2b — `RlbBootstrapModule` dropped from `provideRlbBootstrap()`'s array (`c898b27`).**
+The residual unknown is settled: `R3Injector`'s constructor runs
+`forEachSingleProvider(providers, p => this.processProvider(p))` and never reaches
+`walkProviderTree`, which is the only path that collects providers from an NgModule's import graph
+and is entered via `importProvidersFrom`. So nothing was being collected and nothing could be lost.
+Measured on a real Angular 22 consumer: **812.28 → 753.09 kB raw, 158.61 → 146.07 kB transfer**, i.e.
+**59.19 kB / 12.54 kB** saved. Note the demo app cannot verify this — it never calls
+`provideRlbBootstrap()`.
 
-**3. `CLAUDE.md` is untracked.** Its Phase 3 corrections are on disk but in no commit, so a fresh clone
-loses them.
+**2. `bootstrap` named imports — all 12 files (`4d5acc1`).** The defect was real but this plan's
+prescribed fix was **wrong**: a plain default import fixes Node and breaks every bundler, because
+bootstrap's ESM build has named exports and **no default export**. The accordion spec caught it. The
+form that satisfies both loaders is a namespace import unwrapping `.default`, done once in
+`lib/shared/bootstrap.ts`; the call sites take types via `import type` and the value from the shim.
+Deep per-plugin paths were rejected — they are a *different copy* with a separate instance registry,
+so a consumer's own `import { Modal } from 'bootstrap'` would stop seeing our instances.
+`check:imports` rule 4 now forbids any runtime `bootstrap` import outside the shim.
 
 Also worth knowing before the first `master` run: the Phase 4 workflows are **reviewed, not executed**.
 Highest risk is `npm install` → `npm ci` (verified locally, exit 0) and the removal of the
@@ -452,14 +454,15 @@ reference, plus their transitive dependencies — `InputComponent` alone pulls
 `InputValidationComponent` and `DataTableActionComponent`. That is inherent to the registry design,
 not something an import cleanup can reach.
 
-#### Tier 2b — proposed, not done
+#### Tier 2b ✅ DONE (`c898b27`)
 
-Dropping `RlbBootstrapModule` from `provideRlbBootstrap()`'s return array is worth ~12 kB gzipped for
-every consumer. It looks behaviour-neutral for standalone apps, since the module has no providers of
-its own and standalone components are imported per-component rather than via a module. But it is a
-change to the published entry point's behaviour, and `importProvidersFrom` semantics mean it also
-drops provider collection from `CommonModule`, `FormsModule`, `ReactiveFormsModule`, `TranslateModule`,
-`RouterModule` and the CDK drag-drop directives. **Needs the maintainer's call**, and a browser pass.
+`RlbBootstrapModule` is out of `provideRlbBootstrap()`'s return array. The `importProvidersFrom`
+worry above was **unfounded**: `R3Injector` never calls `walkProviderTree` for entries of a providers
+array, so a bare NgModule class there is a plain `TypeProvider` and no provider collection from
+`CommonModule`, `FormsModule`, `ReactiveFormsModule`, `TranslateModule`, `RouterModule` or the CDK
+directives was ever happening. Measured on a real Angular 22 consumer: **59.19 kB raw / 12.54 kB
+transfer** saved. Verified by consumer specs — the starter still renders and the modal registry still
+resolves `rlb-common` and `rlb-search`.
 
 ### Browser verification
 
@@ -530,6 +533,9 @@ already catches the cases that actually cause harm.
   `exports` map", it already broke **consumer unit tests today**. See the import-cycles workstream above.
 - `highlight.js` is dynamically imported in `src/app/app.config.ts:51-57` but is **not** in root `package.json`; it resolves only transitively through `ngx-highlightjs`.
 - No ESLint at all, despite a `lib:lint` script and an `eslint-disable` comment in `sync-skills/index.ts:153`.
+- ~~Named imports from `bootstrap` (12 files)~~ — **FIXED** (`4d5acc1`). Worse than logged: this plan
+  prescribed a default import, which would have broken every bundler, since bootstrap's ESM build has
+  no default export. All 12 files now go through `lib/shared/bootstrap.ts`.
 - Signal Forms / `resource()` / Angular Aria adoption — explicitly deferred; the forms layer is the library's core.
 
 ---

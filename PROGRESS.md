@@ -14,24 +14,26 @@ Status key: ✅ done · 🚧 in progress · ⏸️ blocked / awaiting review · 
 | 4 | CI | ✅ |
 | — | Import cycles (separate branch, Tiers 1-3) | ✅ — 0 cycles, guarded in CI |
 | — | `date-tz` deep import (consumer test blocker) | ✅ |
-| — | `bootstrap` CJS named imports | ⬜ open — Vitest-only exposure |
+| — | `bootstrap` CJS named imports | ✅ — one interop shim, guarded |
+| — | Tier 2b (`provideRlbBootstrap`) | ✅ — 59 kB raw / 12.5 kB gzip off every consumer |
 
 ---
 
 ## ▶ Resume here
 
-**Last session:** 2026-09-01. Read this section and you have everything; the rest of this file is the
+**Last session:** 2026-09-02. Read this section and you have everything; the rest of this file is the
 detailed record, and [`plan.md`](./plan.md) is the reasoning.
 
 ### State in one line
 
-The Angular 22 upgrade is **complete**, and a follow-on import-cycle cleanup is **complete**.
-**14 commits across two branches, nothing pushed, nothing merged, nothing published.**
+The Angular 22 upgrade is **complete**, the import-cycle cleanup is **complete**, and the two
+remaining code decisions — the `bootstrap` ESM defect and Tier 2b — are **done**.
+**17 commits across two branches, nothing pushed, nothing merged, nothing published.**
 
 ```
 develop
   └── chore/angular-22-upgrade      10 commits — the upgrade (Phases 0-4)
-        └── refactor/remove-import-cycles   4 commits — cycles + guard  ← checked out
+        └── refactor/remove-import-cycles   7 commits — cycles, guard, bootstrap, Tier 2b  ← checked out
 ```
 
 `refactor/remove-import-cycles` is stacked **on top of** the upgrade branch, so merging it brings both.
@@ -53,6 +55,8 @@ Environment as verified: **Angular 22.1.4 · CLI 22.1.6 · TypeScript 6.0.3 · N
 | | `5a2d70b` | Tier 2 — 1 cycle → **0** |
 | | `6469c4e` | fix — `date-tz` deep import (broke consumer tests) |
 | | `887312d` | Tier 3 — `check:imports` guard in CI |
+| | `4d5acc1` | fix — Bootstrap reached through one interop shim |
+| | `c898b27` | perf — Tier 2b: `provideRlbBootstrap()` stops retaining the library |
 
 (Plus four small `docs:` commits recording each phase's hash.)
 
@@ -74,25 +78,21 @@ npm run build:docs
 **Read the counts, not just the exit codes.** Specs that fail to *compile* are omitted from the total
 rather than reported as failures, so a silent drop from 7/8 or 2/2 is a failure even if it looks green.
 
-### Three open decisions — nothing else is pending
+### One open decision — nothing else is pending
 
-1. **Tier 2b — drop `RlbBootstrapModule` from `provideRlbBootstrap()`'s providers array.**
-   Measured worth: **~58 kB raw / ~12 kB gzipped** for every consumer. `RlbBootstrapModule` declares
-   `providers: []`, so it contributes nothing while retaining the whole library. Confirmed safe for
-   declarables — a providers array cannot supply template declarables, and both known consumers already
-   import components explicitly. Residual unknown: whether a bare NgModule class in a providers array
-   collects providers from its imported module graph. Reasoning says no (a bare class is a
-   `TypeProvider`, and collection needs `importProvidersFrom`); this was **not** confirmed empirically.
-   Changes the published entry point, so it wants a maintainer decision and a browser pass.
+**`CLAUDE.md` is untracked.** Its Phase 3 corrections (Angular 22, the i18n claim) and the Tier 2b
+correction to how `provideRlbBootstrap()` is described exist on disk but in **no commit**, so they
+vanish on a fresh clone. Decide whether to `git add` it. Deliberately left alone this session.
 
-2. **`bootstrap` CJS named imports — 12 files.** `import { Collapse } from 'bootstrap'` fails under
-   Node ESM because bootstrap's `main` is CJS with no `exports` map. **`ng-app` is on Karma and is NOT
-   affected today**; this only bites the Vitest/Node runner. Fix is
-   `import bootstrap from 'bootstrap'; const { Collapse } = bootstrap;` across all 12. Wants its own
-   branch and a full browser pass — this is the Bootstrap-JS plumbing no test here covers.
+The other two are now done — see *Bootstrap ESM interop* and *Tier 2b* below:
 
-3. **`CLAUDE.md` is untracked.** Its Phase 3 corrections (Angular 22, and the i18n claim) exist on disk
-   but in **no commit**, so they vanish on a fresh clone. Decide whether to `git add` it.
+- **`bootstrap` named imports** → all 12 files reach Bootstrap through `lib/shared/bootstrap.ts`.
+  The originally planned fix (a plain default import) was **wrong** and the test suite caught it;
+  the two resolvers are mirror images and only a namespace import satisfies both.
+- **Tier 2b** → `RlbBootstrapModule` is out of `provideRlbBootstrap()`'s array. Measured at
+  **59.19 kB raw / 12.54 kB transfer** off a real consumer.
+
+Still logged, unchanged: ESLint is absent and `lib:lint` still does not work.
 
 ### Things that will bite a fresh session
 
@@ -1078,3 +1078,150 @@ every case that actually causes harm.
 - **`bootstrap` CJS named imports** (12 files) — breaks consumers running the Node-ESM/Vitest runner.
   `ng-app` is on Karma so it is unaffected today. Wants its own branch and a full browser pass.
 - **ESLint** — still entirely absent, and `lib:lint` still does not work.
+
+---
+
+## Bootstrap ESM interop ✅ (branch `refactor/remove-import-cycles`, `4d5acc1`)
+
+The last of the three open decisions, and the diagnosis in `plan.md` was **half right**. The defect
+was real; the prescribed fix was wrong and would have shipped a broken library.
+
+### What was actually wrong
+
+`import { Collapse } from 'bootstrap'` is a link-time `SyntaxError` under Node's ESM loader,
+reproduced directly in this repo:
+
+```
+SyntaxError: Named export 'Collapse' not found. The requested module 'bootstrap'
+is a CommonJS module, which may not support all module.exports as named exports.
+```
+
+This is **not** upgrade fallout. The line is unchanged since `c567ca7` (2023-08-16); TypeScript 6 and
+Angular 22 changed nothing about it. What changed is that Phase 0 replaced Karma with Vitest, which
+externalizes `node_modules` and hands the FESM to Node's loader — the first environment in this
+project's history able to notice.
+
+### Why the planned fix was wrong
+
+`plan.md` prescribed a plain default import. Applied, it turned the accordion spec red with
+`TypeError: Cannot read properties of undefined (reading 'Collapse')`.
+
+Bootstrap 5.3.8 ships no `exports` map, and its two builds are mirror images:
+
+| Resolver | Field honoured | File | Named import | Default import |
+|---|---|---|---|---|
+| esbuild / Vite | `module` | `dist/js/bootstrap.esm.js` | yes | **no default export exists** |
+| Node ESM | `main` | `dist/js/bootstrap.js` (UMD) | SyntaxError | yes |
+
+The ESM bundle contains zero `export default` statements. So a default import fixes Node and breaks
+every bundler — that is, everything that works today.
+
+### Why not deep imports
+
+`bootstrap/js/dist/collapse.js` satisfies both loaders, and `@types/bootstrap` even ships matching
+per-plugin declarations with real default exports. Rejected anyway, because it is a **different copy
+of the code**:
+
+- `dist/js/bootstrap.js` requires zero sibling files and inlines its own `elementMap` instance registry
+- `js/dist/*.js` share a separate registry through `js/dist/dom/data.js`
+
+A consumer writing `import { Modal } from 'bootstrap'` would hold a different class whose
+`getInstance()` cannot see instances the library created. Keeping the bare specifier is the only thing
+that guarantees one shared copy — the same class-identity hazard already logged for `@open-rlb/date-tz`.
+
+### The fix
+
+A namespace import is the one form both loaders accept, so `lib/shared/bootstrap.ts` does it once and
+unwraps `.default` when present. Under Node the namespace is `{ default, 'module.exports' }` — the
+lexer sees only `module.exports`, which is exactly why named imports fail — so `.default` unwraps to
+the real object. Under a bundler the namespace *is* the ESM namespace and has no `default`, so the
+`??` falls through.
+
+The 12 call sites take types from `import type { Collapse } from 'bootstrap'` (erased at emit) and the
+runtime value from the shim, e.g. `bootstrap.Collapse.getOrCreateInstance(el, { toggle: false })`.
+Type positions were left untouched, including `Carousel.Event`, which needs the merged namespace type.
+
+### Guarded
+
+`check:imports` gains rule 4: **only `lib/shared/bootstrap.ts` may import `bootstrap` at runtime.**
+Proved to fire on all three runtime forms — named, default and namespace — and to pass `import type`
+plus the shim itself. Rules 1-3 were re-proved after the rewrite.
+
+### Verified
+
+- The built FESM contains exactly **one** bootstrap import, the namespace one; all 11 `import type`
+  lines were erased.
+- Loading that FESM under bare Node no longer raises `SyntaxError`. It now reaches Angular's JIT
+  complaint about `@angular/compiler`, i.e. the whole module graph linked and evaluated.
+- **A/B in a real consumer.** In the scratch Angular 22 app three specs pass — a Bootstrap-backed
+  component imports cleanly, the starter renders, the modal registry resolves. Reverting only that one
+  import line inside `node_modules` reproduces `SyntaxError: Named export 'Carousel' not found` and
+  **zero tests run**.
+- Full sweep green, counts unchanged: 7 files/8 tests and 2 files/2 tests.
+
+### Browser pass — all nine plugin classes, zero console errors
+
+| Plugin | How it was exercised |
+|---|---|
+| `Collapse` | accordion `statusChange` count 0 to 2 (show + shown); sidebar `rlb-collapse` gained `.show`; navbar toggler |
+| `Carousel` | autoplay had already advanced to slide three; next control clicked |
+| `Modal` | opened (`.show`, backdrop, `body.modal-open`) and closed (all three cleared) |
+| `Offcanvas` | **opened** with backdrop — the gap the Phase 2 pass left; also the only file using both `getInstance` and `getOrCreateInstance` |
+| `Toast` | fired and rendered |
+| `Dropdown` | standalone toggle, and the navbar dropdown (`aria-expanded="true"`, menu `.show`) |
+| `Tooltip` | hover rendered "Top tooltip" |
+| `Popover` | click rendered title and body |
+| `ScrollSpy` | scrolling moved the active link from Section 1 to Section 3 |
+
+Two warnings appeared and both are **pre-existing**: the five
+`Found a 'popover' attribute with an invalid value.` from Phase 2's logged selector collision, and
+`Toast builderId is not unique` from `inner-toast.service.ts:46`, which neither commit touched.
+
+---
+
+## Tier 2b ✅ (branch `refactor/remove-import-cycles`, `c898b27`)
+
+`RlbBootstrapModule` is out of `provideRlbBootstrap()`'s returned array, along with its now-unused
+import. It is still `export *`-ed for NgModule consumers.
+
+### The residual unknown, settled by reading Angular's runtime
+
+The open question was whether a bare NgModule class in a providers array collects providers from its
+imported module graph. It does not. `R3Injector`'s constructor
+(`@angular/core/fesm2022/_pending_tasks-chunk.mjs:1102`) is:
+
+```js
+forEachSingleProvider(providers, provider => this.processProvider(provider));
+```
+
+`processProvider` treats a function as a `TypeProvider` and makes one record. `walkProviderTree` — the
+only function that walks `injDef.imports` — is never reached from there; it is reached via
+`importProvidersFrom`. So no providers from `CommonModule`, `FormsModule`, `ReactiveFormsModule`,
+`TranslateModule`, `RouterModule` or the CDK drag-drop directives were **ever** being collected, and
+the removal cannot lose any. Nothing injects `RlbBootstrapModule` anywhere, so the record was never
+instantiated either.
+
+### Measured on a real consumer
+
+A fresh `@angular/cli@22` app that `ng add`-ed the packed tarball and renders the scaffolded starter:
+
+| | Raw | Transfer |
+|---|---|---|
+| before | 812.28 kB | 158.61 kB |
+| after | **753.09 kB** | **146.07 kB** |
+| saved | **59.19 kB** | **12.54 kB** |
+
+Close to the 58 kB / 12 kB the throwaway experiment had predicted.
+
+Consumer specs confirm the entry point still does its job: the starter renders under
+`provideRlbBootstrap()`, and the modal registry still resolves `rlb-common` and `rlb-search`.
+
+### ⚠️ The demo app cannot verify this
+
+`src/app/app.config.ts` never calls `provideRlbBootstrap()` — it registers the built-ins by hand and
+gets declarables from `shared-imports.ts`. Tier 2b is a no-op there, so the browser pass says nothing
+about it. Only a real consumer can, which is why the scratch app was rebuilt.
+
+`README.md` gained the distinction this makes load-bearing: `provideRlbBootstrap()` registers the
+built-in modals and toasts, and never supplied declarables, because a providers array cannot.
+`CLAUDE.md` was corrected the same way — on disk only, since it remains untracked.
