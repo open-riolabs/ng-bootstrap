@@ -14,7 +14,7 @@ export class ToastsComponent {
 
   openToast(): void {
     this.toasts
-      .openToast('toast-c-1', 'sample-toast', {
+      .openToast('toast-docs-1', 'sample-toast', {
         title: 'Demo',
         content: 'This is a demo toast',
         ok: 'OK',
@@ -26,7 +26,7 @@ export class ToastsComponent {
       });
   }
 
-  basicExample = `<rlb-toast-container id="toast-c-1" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" />
+  basicExample = `<rlb-toast-container id="toast-docs-1" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" />
 
 <button rlb-button (click)="openToast()">Open Toast</button>`;
 
