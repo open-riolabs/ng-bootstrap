@@ -2,7 +2,7 @@
 /**
  * Import-hygiene guard for the library source.
  *
- * Enforces three invariants that were established by hand and are easy to lose again:
+ * Enforces four invariants that were established by hand and are easy to lose again:
  *
  *   1. No import cycles (including a file importing itself). `public-api.ts` used to import
  *      from './public-api', which only "worked" because provideRlbBootstrap() is a function and
@@ -11,6 +11,11 @@
  *      whole library, so a component importing it creates a cycle and drags everything in.
  *   3. No deep imports past a package root (e.g. `@open-rlb/date-tz/date-tz`). Those resolve under
  *      a bundler but not under Node ESM, so they break consumers' unit tests while their builds pass.
+ *   4. Only `lib/shared/bootstrap.ts` imports `bootstrap` at runtime; everyone else uses
+ *      `import type`. Same failure class as 3, but in both directions: a bundler resolves
+ *      bootstrap's `module` (named exports, no default) while Node resolves `main` (a UMD bundle
+ *      whose names its lexer cannot see), so no single direct import form works under both. The
+ *      shim does a namespace import and unwraps `.default`, which does.
  *
  * Run: npm run check:imports
  */
@@ -23,6 +28,10 @@ const MODULE_ALLOWED_IMPORTER = 'public-api.ts';
 
 /** Packages we must not reach past the root of. */
 const NO_DEEP_IMPORT = ['@open-rlb/date-tz'];
+
+/** Dual-format package that must be reached only through our interop shim. */
+const CJS_ONLY = 'bootstrap';
+const CJS_INTEROP_FILE = 'lib/shared/bootstrap.ts';
 
 const norm = (p) => p.split(path.sep).join('/');
 
@@ -49,9 +58,12 @@ const resolveRelative = (from, spec) => {
 };
 
 const IMPORT_RE = /(?:from|import)\s*['"]([^'"]+)['"]/g;
+/** Captures the whole import clause, so we can tell `{ Collapse }` from `{ type Collapse }`. */
+const IMPORT_CLAUSE_RE = /import\s+([^'"]+?)\s+from\s*['"]([^'"]+)['"]/g;
 const graph = new Map();
 const deepImports = [];
 const moduleImporters = [];
+const cjsNamedImports = [];
 
 for (const file of files) {
   const src = fs.readFileSync(file, 'utf8');
@@ -74,6 +86,14 @@ for (const file of files) {
     for (const pkg of NO_DEEP_IMPORT) {
       if (spec.startsWith(pkg + '/')) deepImports.push({ file, spec, pkg });
     }
+  }
+
+  for (const [, clause, spec] of src.matchAll(IMPORT_CLAUSE_RE)) {
+    if (spec !== CJS_ONLY) continue;
+    /* `import type` is erased before the emit, so it never reaches a module loader. */
+    if (clause.trim().startsWith('type ')) continue;
+    if (file.endsWith('/' + CJS_INTEROP_FILE)) continue;
+    cjsNamedImports.push({ file, spec, kind: clause.trim() });
   }
 
   graph.set(file, deps);
@@ -143,9 +163,20 @@ if (deepImports.length) {
   console.error('\n  These resolve under a bundler but not under Node ESM, so they break consumers’ unit tests.');
 }
 
+if (cjsNamedImports.length) {
+  failed = true;
+  console.error(`\n✗ ${cjsNamedImports.length} runtime import(s) of '${CJS_ONLY}' outside the interop shim:`);
+  for (const { file, spec, kind } of cjsNamedImports) {
+    console.error(`    ${short(file)}  ->  import ${kind} from '${spec}'`);
+  }
+  console.error('\n  No direct import form works under both a bundler and Node ESM. Import the shim:');
+  console.error("    import type { Collapse } from 'bootstrap';        // types only, erased");
+  console.error("    import bootstrap from '../../shared/bootstrap';   // the runtime value");
+}
+
 if (failed) {
   console.error(`\nChecked ${files.length} files — import hygiene FAILED.\n`);
   process.exit(1);
 }
 
-console.log(`✓ Import hygiene OK — ${files.length} files, no cycles, no god-module imports, no deep package imports.`);
+console.log(`✓ Import hygiene OK — ${files.length} files, no cycles, no god-module imports, no deep package imports, no stray bootstrap imports.`);

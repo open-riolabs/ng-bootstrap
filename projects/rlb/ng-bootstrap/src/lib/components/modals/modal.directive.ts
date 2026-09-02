@@ -1,5 +1,6 @@
 import { AfterViewInit, Directive, effect, ElementRef, input, isSignal, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { Modal } from 'bootstrap';
+import type { Modal } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 import { BreakpointService } from '../../shared/breakpoint.service';
 import { ModalCloseReason } from '../../shared/types';
 import { IModal } from './data/modal';
@@ -146,7 +147,7 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
     this.modalElement.addEventListener(`show.bs.modal`, this._openChange_f);
     this.modalElement.addEventListener(`shown.bs.modal`, this._openChange_f);
     this.initButtons();
-    this.bsModal = Modal.getOrCreateInstance(this.modalElement, {
+    this.bsModal = bootstrap.Modal.getOrCreateInstance(this.modalElement, {
       backdrop: opts?.backdrop || true,
       keyboard: opts?.keyboard || true,
       focus: opts?.focus || true,

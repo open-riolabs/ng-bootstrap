@@ -8,7 +8,8 @@ import {
   output,
   viewChild,
 } from '@angular/core';
-import { Collapse } from 'bootstrap';
+import type { Collapse } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
 import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
@@ -52,7 +53,7 @@ export class CollapseComponent
   }
 
   override getOrCreateInstance(element: HTMLElement): Collapse {
-    return Collapse.getOrCreateInstance(element, { toggle: false });
+    return bootstrap.Collapse.getOrCreateInstance(element, { toggle: false });
   }
 
   override get eventPrefix(): string {
