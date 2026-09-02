@@ -11,7 +11,6 @@ import {
 import { AbstractComponent } from './abstract-field.component';
 import { NgClass } from '@angular/common';
 import { InputValidationComponent } from './input-validation.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-textarea',
@@ -44,7 +43,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     imports: [
         NgClass,
         InputValidationComponent,
-        DataTableActionComponent,
     ],
 })
 export class TextAreaComponent extends AbstractComponent<string> {

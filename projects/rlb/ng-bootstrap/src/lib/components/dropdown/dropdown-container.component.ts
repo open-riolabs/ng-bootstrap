@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, ElementRef, input } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'ul[rlb-dropdown-menu], rlb-dropdown-container',
@@ -29,7 +28,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[style.padding]': 'isList ? null : "0px"',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class DropdownContainerComponent {
   isList: boolean = false;

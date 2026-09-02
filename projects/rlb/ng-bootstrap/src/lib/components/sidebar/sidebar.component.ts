@@ -13,7 +13,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
 import { BreakpointService } from '../../shared/breakpoint.service';
 import { SidebarService } from './sidebar.service';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-sidebar',
@@ -41,7 +40,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[attr.data-bs-theme]': "dark() ? 'dark' : 'light'",
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 
 /**

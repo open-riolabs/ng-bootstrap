@@ -12,7 +12,6 @@ import type { Collapse } from 'bootstrap';
 import bootstrap from '../../shared/bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-collapse',
@@ -26,7 +25,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
   </div>`,
     host: { '[attr.id]': 'undefined' },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class CollapseComponent
   extends ToggleAbstractComponent<Collapse>

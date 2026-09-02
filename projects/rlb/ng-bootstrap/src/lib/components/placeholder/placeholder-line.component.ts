@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-placeholder-line',
@@ -12,7 +11,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[style.margin-bottom]': '"0.5rem"',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class RlbPlaceholderLineComponent {
   size = input<'xs' | 'sm' | 'md' | 'lg'>('md');

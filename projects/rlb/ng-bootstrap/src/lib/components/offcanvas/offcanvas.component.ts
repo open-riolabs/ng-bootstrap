@@ -13,7 +13,6 @@ import type { Offcanvas } from 'bootstrap';
 import bootstrap from '../../shared/bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-offcanvas',
@@ -36,7 +35,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class.offcanvas-bottom]': 'placement() === "bottom"',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class OffcanvasComponent
   extends ToggleAbstractComponent<Offcanvas>

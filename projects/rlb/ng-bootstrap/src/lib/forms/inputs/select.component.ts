@@ -16,7 +16,6 @@ import { AbstractComponent } from './abstract-field.component';
 import { OptionComponent } from './options.component';
 import { FormsModule } from '@angular/forms';
 import { InputValidationComponent } from './input-validation.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-select',
@@ -60,7 +59,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     imports: [
         FormsModule,
         InputValidationComponent,
-        DataTableActionComponent,
     ],
 })
 export class SelectComponent extends AbstractComponent<string | string[]> {

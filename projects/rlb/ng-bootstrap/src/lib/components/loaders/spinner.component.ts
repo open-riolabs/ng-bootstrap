@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Color } from '../../shared/types';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-spinner',
@@ -18,7 +17,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class]': "'text-'+color()",
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class SpinnerComponent {
   style = input<'grow' | 'border'>('border', { alias: 'style' });

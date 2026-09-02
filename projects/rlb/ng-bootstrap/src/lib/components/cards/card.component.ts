@@ -9,7 +9,6 @@ import {
 import { Color, TextAlignment } from '../../shared/types';
 import { CardBodyComponent } from './card-body.component';
 import { CardImageComponent } from './card-image.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-card',
@@ -42,7 +41,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class.border-dark]': 'border() === "dark"',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class CardComponent {
   align = input<TextAlignment | undefined>('left', { alias: 'align' });

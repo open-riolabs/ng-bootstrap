@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { NgClass, JsonPipe } from '@angular/common';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-switch',
@@ -44,7 +43,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         NgClass,
-        DataTableActionComponent,
         JsonPipe,
     ],
 })
