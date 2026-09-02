@@ -4,7 +4,6 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 
 import {
@@ -25,7 +24,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
-    provideHttpClient(withXhr()),
     {
       provide: ModalRegistryOptions,
       useValue: {
