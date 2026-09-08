@@ -1,10 +1,10 @@
 import { Component, computed, input,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
 import { IModal } from '../../../modals/data/modal';
 import { ModalData } from '../../../modals/data/modal-data';
 import { ModalDirective } from '../../../modals/modal.directive';
+import { CalendarEventComponent } from '../../event/calendar-event.component';
 import {
   CalendarEvent,
   CalendarEventWithLayout,
@@ -70,7 +70,7 @@ export interface CalendarOverflowEventsDialogResult {
       inputs: ['id', 'data-instance', 'data-options'],
     },
   ],
-  imports: [RlbBootstrapModule],
+  imports: [CalendarEventComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarOverflowEventsContainerComponent implements IModal<

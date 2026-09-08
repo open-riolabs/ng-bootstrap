@@ -8,10 +8,10 @@ import { filter, map, of, switchMap, take } from 'rxjs';
 import { ModalType } from '../../shared/types';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { ProgressComponent } from '../loaders/progress.component';
-import { ModalResult } from '../modals';
+import { ModalResult } from '../modals/data/modal-resutl';
 import { ModalService } from '../modals/modal.service';
-import { ToastService } from '../toast';
-import { CalendarOverflowEventsDialogResult } from './calendar-dialogs';
+import { ToastService } from '../toast/toast.service';
+import { CalendarOverflowEventsDialogResult } from './calendar-dialogs/calendar-overflow-events-container/calendar-overflow-events-container.component';
 import { CalendarGrid } from './grid/calendar-grid.component';
 import { CalendarHeaderComponent } from './header/calendar-header.component';
 import { CalendarEvent } from './interfaces/calendar-event.interface';
@@ -62,7 +62,7 @@ export class CalendarComponent {
   }));
 
   dateChange = output<CalendarChangeEvent>({ alias: 'date-change' });
-  viewChange = output<CalendarChangeEvent>({ alias: 'view-change' });
+  viewChangeEvent = output<CalendarChangeEvent>({ alias: 'view-change' });
   eventClick = output<CalendarEvent>({ alias: 'event-click' });
   containerEventClick = output<CalendarEvent[]>({ alias: 'container-event-click' });
 
@@ -262,7 +262,7 @@ export class CalendarComponent {
 
   setView(view: CalendarView) {
     this.view.set(view);
-    this.viewChange.emit({ date: this.currentDate(), view });
+    this.viewChangeEvent.emit({ date: this.currentDate(), view });
   }
 
   private openEditEventDialog(eventToEdit?: CalendarEvent) {

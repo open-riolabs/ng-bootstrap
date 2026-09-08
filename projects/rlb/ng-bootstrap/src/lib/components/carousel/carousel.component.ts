@@ -13,10 +13,10 @@ import {
   OnDestroy,
   output,
 } from '@angular/core';
-import { Carousel } from 'bootstrap';
+import type { Carousel } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { CarouselSlideComponent } from './carousel-slide.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-carousel',
@@ -78,7 +78,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[attr.data-bs-pause]': 'pauseProp() === false ? "false" : undefined',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class CarouselComponent implements OnDestroy, AfterViewInit {
   items = contentChildren(CarouselSlideComponent);
@@ -132,7 +131,7 @@ export class CarouselComponent implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.carousel = Carousel.getOrCreateInstance(this.elementRef.nativeElement, {
+    this.carousel = bootstrap.Carousel.getOrCreateInstance(this.elementRef.nativeElement, {
       interval: this.interval(),
       keyboard: this.keyboard(),
       ride: this.adaptRide(this.autoplay()),

@@ -75,7 +75,7 @@
         <rlb-switch formControlName="terms">
           <label class="form-check-label" after>I accept the terms and conditions</label>
         </rlb-switch>
-        @if (termsControl?.touched && termsControl?.invalid) {
+        @if (termsControl?.touched && termsControl.invalid) {
           <div class="text-danger small mt-1">You must accept the terms to continue.</div>
         }
       </div>

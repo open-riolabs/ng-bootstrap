@@ -22,12 +22,12 @@ export class TooltipssComponent {
 
   basicPopoverExample = `<button rlb-button color="primary" [popover]="'This is a popover body.'">Click me</button>`;
 
-  popoverTitleExample = `<button rlb-button color="success" popover="Popover content goes here." popover-title="Popover title">With title</button>`;
+  popoverTitleExample = `<button rlb-button color="success" [popover]="'Popover content goes here.'" popover-title="Popover title">With title</button>`;
 
-  popoverPlacementExample = `<button rlb-button color="secondary" popover="Top popover" popover-placement="top">Top</button>
-<button rlb-button color="secondary" popover="Bottom popover" popover-placement="bottom">Bottom</button>
-<button rlb-button color="secondary" popover="Left popover" popover-placement="left">Left</button>
-<button rlb-button color="secondary" popover="Right popover" popover-placement="right">Right</button>`;
+  popoverPlacementExample = `<button rlb-button color="secondary" [popover]="'Top popover'" popover-placement="top">Top</button>
+<button rlb-button color="secondary" [popover]="'Bottom popover'" popover-placement="bottom">Bottom</button>
+<button rlb-button color="secondary" [popover]="'Left popover'" popover-placement="left">Left</button>
+<button rlb-button color="secondary" [popover]="'Right popover'" popover-placement="right">Right</button>`;
 
   tooltipApi: DocApiRow[] = [
     {
@@ -63,7 +63,8 @@ export class TooltipssComponent {
     {
       name: 'popover',
       type: 'string | undefined',
-      description: 'The body content of the popover.',
+      description:
+        'The body content of the popover. Bind it ([popover]), do not write it as a plain attribute: a static popover=... is also picked up by the browser as the native HTML popover attribute, which rejects the text value and puts the host into the native manual popover state. The user agent then hides it via display:none unless another rule (such as Bootstrap .btn) wins.',
       kind: 'Input',
     },
     {

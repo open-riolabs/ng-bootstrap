@@ -25,47 +25,15 @@ import { Schema } from './schema';
 /**
  * Dependencies the library needs at the consumer side. `@angular/{core,common,forms,router}`
  * and `rxjs` are intentionally omitted: every Angular app already provides them.
- * `@angular/cdk` is missing on purpose too — see {@link cdkVersion}.
  */
 const DEPENDENCIES: ReadonlyArray<{ name: string; version: string; type: DependencyType }> = [
   { name: '@open-rlb/date-tz', version: '^2.1.1', type: DependencyType.Default },
   { name: '@ngx-translate/core', version: '^17.0.0', type: DependencyType.Default },
+  { name: '@angular/cdk', version: '^22.0.0', type: DependencyType.Default },
   { name: 'bootstrap', version: '^5.3.0', type: DependencyType.Default },
-  { name: 'bootstrap-icons', version: '^1.11.0', type: DependencyType.Default },
+  { name: 'bootstrap-icons', version: '^1.13.1', type: DependencyType.Default },
   { name: '@types/bootstrap', version: '^5.2.0', type: DependencyType.Dev },
 ];
-
-/** The lowest Angular major in this package's peerDependencies range. */
-const MIN_ANGULAR_MAJOR = 21;
-
-/**
- * `@angular/cdk` ships a new major alongside every Angular major, so a hardcoded pin here
- * starts conflicting with the app — and with this package's own peerDependencies — the moment
- * either side moves on. Follow the app's `@angular/core` instead.
- */
-function cdkVersion(tree: Tree): string {
-  const major = angularCoreMajor(tree);
-  // A CDK major accepts its own Angular major and the next one, so the lowest Angular this
-  // library supports is the safe pick when the app's version cannot be read.
-  return major === null ? `^${MIN_ANGULAR_MAJOR}.0.0` : `^${major}.0.0`;
-}
-
-/** Reads the major of `@angular/core` from the consumer's package.json (`^21.1.2` → 21). */
-function angularCoreMajor(tree: Tree): number | null {
-  const raw = tree.read('/package.json');
-  if (!raw) {
-    return null;
-  }
-
-  const pkg = JSON.parse(raw.toString('utf-8')) as {
-    dependencies?: Record<string, string>;
-    devDependencies?: Record<string, string>;
-  };
-  const range = pkg.dependencies?.['@angular/core'] ?? pkg.devDependencies?.['@angular/core'];
-  const major = range?.match(/(\d+)/)?.[1];
-
-  return major ? Number(major) : null;
-}
 
 /** Keeps `.claude/skills` in step with the installed library version on every `npm install`. */
 const SYNC_SKILLS_COMMAND = 'ng g @open-rlb/ng-bootstrap:sync-skills';
@@ -83,7 +51,6 @@ export function ngAdd(options: Schema): Rule {
     return chain([
       // 1. Install dependencies (a single npm install is scheduled automatically).
       ...DEPENDENCIES.map(dep => addDependency(dep.name, dep.version, { type: dep.type })),
-      addDependency('@angular/cdk', cdkVersion(tree), { type: DependencyType.Default }),
       // 2. Register Bootstrap + Bootstrap Icons global styles in angular.json.
       addBootstrapStyles(project),
       // 3. Wire up the library providers (modals/toasts registry, etc.).

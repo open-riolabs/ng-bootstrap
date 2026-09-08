@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { RoutingComponentsModule } from './pages/components/routing.module';
 import { GettingStartedComponent } from './pages/getting-started/getting-started.component';
@@ -12,15 +11,5 @@ export const routes: Routes = [
   { path: 'getting-started', component: GettingStartedComponent },
   { path: 'components', loadChildren: () => RoutingComponentsModule },
   { path: 'inputs', loadChildren: () => RoutingInputsModule },
-  { path: '**', component: NotFoundComponent }, 
+  { path: '**', component: NotFoundComponent },
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forRoot(routes, {
-      initialNavigation: 'enabledNonBlocking',
-    }),
-  ],
-  exports: [RouterModule],
-})
-export class RoutingModule {}

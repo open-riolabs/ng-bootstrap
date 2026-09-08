@@ -9,10 +9,10 @@ import {
   OnInit,
   output,
 } from '@angular/core';
-import { Offcanvas } from 'bootstrap';
+import type { Offcanvas } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-offcanvas',
@@ -35,7 +35,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class.offcanvas-bottom]': 'placement() === "bottom"',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class OffcanvasComponent
   extends ToggleAbstractComponent<Offcanvas>
@@ -90,12 +89,12 @@ export class OffcanvasComponent
   }
 
   override getOrCreateInstance(element: HTMLElement): Offcanvas {
-    const existingInstance = Offcanvas.getInstance(element);
+    const existingInstance = bootstrap.Offcanvas.getInstance(element);
     if (existingInstance) {
       existingInstance.dispose();
     }
 
-    return Offcanvas.getOrCreateInstance(element, {
+    return bootstrap.Offcanvas.getOrCreateInstance(element, {
       scroll: this.bodyScroll() ?? false,
       keyboard: !this.closeManual(),
       backdrop: this.closeManual() ? 'static' : true

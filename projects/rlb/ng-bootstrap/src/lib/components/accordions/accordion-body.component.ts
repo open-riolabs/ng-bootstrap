@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'div[rlb-accordion-body]',
@@ -12,7 +11,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[id]': 'itemId()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class AccordionBodyComponent {
   public parentId = signal<string | undefined>(undefined);

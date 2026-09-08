@@ -13,7 +13,6 @@ import {
 import { AbstractComponent } from './abstract-field.component';
 import { OptionComponent } from './options.component';
 import { NgClass, JsonPipe } from '@angular/common';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-radio',
@@ -34,7 +33,7 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
             [value]="option.value()"
             [checked]="value() === option.value()"
             (blur)="touch()"
-            [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+            [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
             (change)="update($event.target)"
           />
           <!-- We use this span as an anchor to insert the Option text -->
@@ -57,7 +56,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         NgClass,
-        DataTableActionComponent,
         JsonPipe,
     ],
 })

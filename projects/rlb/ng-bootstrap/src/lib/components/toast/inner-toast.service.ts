@@ -7,7 +7,7 @@ import { GenericComponent } from '../../shared/component-builder/generic.compone
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { ModalCloseReason } from '../../shared/types';
 import { ToastResult } from './data/toast-resutl';
-import { BuilderComponent } from '../../shared/component-builder';
+import { BuilderComponent } from '../../shared/component-builder/builder.component';
 import { ToastOptions } from './data/toast-options';
 
 @Injectable({

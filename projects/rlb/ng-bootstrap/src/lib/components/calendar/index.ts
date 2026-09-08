@@ -16,6 +16,8 @@ export * from './header/calendar-header.component';
 
 export * from './interfaces/calendar-event.interface';
 export * from './interfaces/calendar-interval.interface';
+export * from './interfaces/calendar-layout.interface';
+export * from './interfaces/calendar-view.type';
 
 
 export const CALENDAR_COMPONENTS = [

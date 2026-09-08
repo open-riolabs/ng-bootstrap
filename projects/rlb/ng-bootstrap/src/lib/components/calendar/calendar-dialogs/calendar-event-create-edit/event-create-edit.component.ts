@@ -9,7 +9,10 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
+import { InputComponent } from '../../../../forms/inputs/input.component';
+import { OptionComponent } from '../../../../forms/inputs/options.component';
+import { SelectComponent } from '../../../../forms/inputs/select.component';
+import { SwitchComponent } from '../../../../forms/inputs/switch.component';
 import { UniqueIdService } from '../../../../shared/unique-id.service';
 import { IModal } from '../../../modals/data/modal';
 import { ModalData } from '../../../modals/data/modal-data';
@@ -18,7 +21,13 @@ import { CalendarEvent } from '../../interfaces/calendar-event.interface';
 
 @Component({
 
-  imports: [RlbBootstrapModule, ReactiveFormsModule],
+  imports: [
+    InputComponent,
+    OptionComponent,
+    SelectComponent,
+    SwitchComponent,
+    ReactiveFormsModule,
+  ],
   template: `
     <div [formGroup]="form">
       <div [class]="'modal-header' + headerColor()">

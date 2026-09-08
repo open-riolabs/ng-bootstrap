@@ -1,5 +1,4 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-list',
@@ -14,7 +13,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class.disabled]': 'disabled()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class ListComponent {
   disabled = input(false, { transform: booleanAttribute });

@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { NgClass, JsonPipe } from '@angular/common';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-range',
@@ -32,7 +31,7 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         [attr.max]="max()"
         [attr.step]="step()"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
         (input)="update($event.target)"
       />
       <div class="invalid-feedback">
@@ -44,7 +43,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         NgClass,
-        DataTableActionComponent,
         JsonPipe,
     ],
 })

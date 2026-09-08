@@ -6,7 +6,6 @@ import {
   input,
 } from '@angular/core';
 import { Color, Size } from '../../shared/types';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'button[rlb-button], a[rlb-button]',
@@ -16,7 +15,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[attr.disabled]': 'disabled() ? true : undefined',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class ButtonComponent {
   color = input<Color | undefined>('primary');
