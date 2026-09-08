@@ -88,7 +88,12 @@ function appTree(packageJson) {
 async function testNgAdd() {
   console.log('\n=== ng-add on a fresh app ===');
   const runner = new SchematicTestRunner('open-rlb', collection);
-  const tree = appTree({ name: 'demo', version: '0.0.0', dependencies: {}, devDependencies: {} });
+  const tree = appTree({
+    name: 'demo',
+    version: '0.0.0',
+    dependencies: { '@angular/core': '^21.1.2' },
+    devDependencies: {},
+  });
   const result = await runner.runSchematic('ng-add', { project: 'demo' }, tree);
 
   console.log('\n--- scheduled tasks (should include node-package install) ---');
@@ -123,6 +128,12 @@ async function testNgAdd() {
     'package.json gained the sync-skills postinstall',
     pkg.scripts && pkg.scripts.postinstall === 'ng g @open-rlb/ng-bootstrap:sync-skills',
     `got: ${JSON.stringify(pkg.scripts)}`,
+  );
+
+  check(
+    '@angular/cdk follows the app’s Angular major',
+    pkg.dependencies && pkg.dependencies['@angular/cdk'] === '^21.0.0',
+    `got: ${pkg.dependencies && pkg.dependencies['@angular/cdk']}`,
   );
 
   check(
@@ -215,9 +226,42 @@ async function testSyncSkillsRespectsSkipEnv() {
   }
 }
 
+/**
+ * A hardcoded `@angular/cdk` pin is what broke `ng add` once the peerDependencies moved to a
+ * new Angular major: npm then had to satisfy a CDK major the library itself rejects.
+ */
+async function testCdkTracksAngularMajor() {
+  console.log('\n=== ng-add pins @angular/cdk to the app’s Angular major ===');
+
+  const cases = [
+    { label: 'Angular 21 app', deps: { '@angular/core': '^21.1.2' }, expected: '^21.0.0' },
+    { label: 'Angular 22 app', deps: { '@angular/core': '^22.1.3' }, expected: '^22.0.0' },
+    { label: 'exact version, no range', deps: { '@angular/core': '22.0.1' }, expected: '^22.0.0' },
+    { label: 'no @angular/core (fallback)', deps: {}, expected: '^22.0.0' },
+  ];
+
+  for (const testCase of cases) {
+    const runner = new SchematicTestRunner('open-rlb', collection);
+    const tree = appTree({
+      name: 'demo',
+      version: '0.0.0',
+      dependencies: testCase.deps,
+      devDependencies: {},
+    });
+    const result = await runner.runSchematic(
+      'ng-add',
+      { project: 'demo', skipSkills: true, skipStarter: true },
+      tree,
+    );
+    const cdk = JSON.parse(result.readContent('/package.json')).dependencies['@angular/cdk'];
+    check(`${testCase.label} → ${testCase.expected}`, cdk === testCase.expected, `got: ${cdk}`);
+  }
+}
+
 (async () => {
   console.log(`Bundled skills: ${bundledSkills.join(', ')}`);
   await testNgAdd();
+  await testCdkTracksAngularMajor();
   await testSyncSkillsPrunes();
   await testSyncSkillsRespectsSkipEnv();
 
