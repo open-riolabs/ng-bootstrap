@@ -29,7 +29,7 @@ import { InputValidationComponent } from './input-validation.component';
         [class.form-select-lg]="size() === 'large'"
         [class.form-select-sm]="size() === 'small'"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
         (input)="update($event.target)"
       ></textarea>
       @if (errors() && showError()) {

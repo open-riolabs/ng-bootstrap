@@ -34,8 +34,8 @@ import { InputValidationComponent } from './input-validation.component';
         [attr.placeholder]="placeholder()"
         [attr.size]="display()"
         (blur)="touch()"
-        [class.is-invalid]="control?.touched && control?.invalid && enableValidation()"
-        [class.is-valid]="control?.touched && control?.valid && enableValidation()"
+        [class.is-invalid]="controlTouched() && invalid() && enableValidation()"
+        [class.is-valid]="controlTouched() && !invalid() && enableValidation()"
         (change)="update($event.target)"
       >
         @if (placeholder()) {

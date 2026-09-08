@@ -31,7 +31,7 @@ import { NgClass, JsonPipe } from '@angular/common';
         [attr.max]="max()"
         [attr.step]="step()"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
         (input)="update($event.target)"
       />
       <div class="invalid-feedback">

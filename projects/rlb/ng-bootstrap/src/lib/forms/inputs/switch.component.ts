@@ -15,7 +15,7 @@ import { NgClass, JsonPipe } from '@angular/common';
     selector: 'rlb-switch',
     template: `
     <div class="d-flex align-items-center gap-2">
-      @if (errors() && showError() && (control?.touched || control?.dirty)) {
+      @if (errors() && showError() && (controlTouched() || controlDirty())) {
         <div class="invalid-feedback d-block">
           {{ errors() | json }}
         </div>
@@ -31,7 +31,7 @@ import { NgClass, JsonPipe } from '@angular/common';
           [attr.disabled]="isDisabled() ? true : undefined"
           [attr.readonly]="readonly() ? true : undefined"
           (blur)="touch()"
-          [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+          [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
           (input)="update($event.target)"
         />
       </div>

@@ -33,7 +33,7 @@ import { NgClass, JsonPipe } from '@angular/common';
             [value]="option.value()"
             [checked]="value() === option.value()"
             (blur)="touch()"
-            [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+            [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
             (change)="update($event.target)"
           />
           <!-- We use this span as an anchor to insert the Option text -->
