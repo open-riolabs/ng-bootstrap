@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
+import { test } from 'vitest';
 import { CalendarView } from '../interfaces/calendar-view.type';
 import { addDays } from '../utils/calendar-date-utils';
 import { CalendarHeaderComponent } from './calendar-header.component';
@@ -73,5 +74,25 @@ describe('CalendarHeaderComponent - prev e next non toccano currentDate', () => 
     header.prev();
 
     expect(emitted.map(d => ymd(d))).toEqual(['2026-09-17', '2026-09-15']);
+  });
+});
+
+describe('CalendarHeaderComponent - navigazione della vista mese', () => {
+  beforeEach(() => TestBed.configureTestingModule({ imports: [CalendarHeaderComponent] }));
+
+  // Atteso verde con la date-tz corretta, oggi rosso: con @open-rlb/date-tz 2.1.4
+  // `add(-1, 'month')` su gennaio porta il mese a -1 e non lo riporta a dicembre
+  // dell'anno prima, quindi l'header emette di nuovo il 1° gennaio (decisione
+  // 14/09 n. 58 del piano di chattoo; la correzione sta in date-tz, non qui).
+  // `test.fails` di vitest (`it` qui ha i tipi di jasmine) esegue davvero la spec
+  // e passa finché fallisce: il giorno che arriva la date-tz corretta diventa
+  // rosso, ed è il segnale per farlo `it`.
+  test.fails('indietro da gennaio porta a dicembre dell\'anno prima', () => {
+    const { header, emitted } = renderHeader('month', at('2026-01-15 10:00'));
+
+    header.prev();
+
+    expect(emitted.length).toBe(1);
+    expect(ymd(emitted[0])).toBe('2025-12-01');
   });
 });
