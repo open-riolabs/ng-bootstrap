@@ -436,7 +436,7 @@ To hide the toolbar and build a custom one:
 ## View-specific Behavior
 
 ### Week View
-- 7 day columns (Monday → Sunday), 24 hour rows
+- 7 day columns (Monday → Sunday), 24 hour rows: the Monday–Sunday week that contains `current-date` in the calendar `timezone` — on a Sunday, the week that **ends** that day (the same rows the month view draws)
 - Events split at day boundaries (cross-day events show continuation indicators)
 - Overlapping events arranged in columns (max 4 visible, overflow shows "+N more")
 - Red "now" line on today's column, updates every minute

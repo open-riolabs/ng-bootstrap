@@ -128,7 +128,7 @@ export class ExampleComponent {
       name: 'current-date',
       type: 'IDateTz',
       default: 'getToday()',
-      description: 'The date the calendar is currently focused on. Supports two-way binding with [(current-date)].',
+      description: 'The date the calendar is currently focused on. Supports two-way binding with [(current-date)]. The week view shows the Monday–Sunday week containing it (on a Sunday, the week that ends that day).',
       kind: 'Two-way',
     },
     {

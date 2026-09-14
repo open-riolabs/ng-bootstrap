@@ -209,8 +209,10 @@ export class CalendarWeekGridComponent implements OnDestroy, AfterViewInit {
   private buildWeekGrid(currentDate: IDateTz) {
     const tz = this.timezone();
     const dayOfWeek = currentDate.cloneToTimezone!(tz).dayOfWeek!; // 0 = Sunday, 1 = Monday ...
-    // Offset (in days) from currentDate back to the week's Monday.
-    const mondayOffset = 1 - dayOfWeek; // Sun(0) -> +1, Mon(1) -> 0, Tue(2) -> -1 ...
+    // Offset (in giorni) da currentDate al lunedì della sua settimana lun-dom:
+    // la domenica chiude la settimana, quindi torna indietro di sei giorni
+    // (come fa la vista mese) invece di saltare al lunedì dopo.
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Sun(0) -> -6, Mon(1) -> 0, Tue(2) -> -1 ...
 
     const newDays: IDateTz[] = [];
     for (let i = 0; i < 7; i++) {
