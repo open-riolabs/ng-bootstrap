@@ -45,8 +45,14 @@ export function isSameDay(a: IDateTz, b: IDateTz, timezone?: string): boolean {
   return startOfDayTs(a, tz) === startOfDayTs(b, tz);
 }
 
+/**
+ * `date` spostata di `days` giorni, in una nuova DateTz: `add()` di date-tz muta
+ * l'istanza su cui è chiamato, quindi si somma su una copia e la data ricevuta
+ * (per esempio il `currentDate` del calendario) resta com'era. Come `add()`, lo
+ * spostamento è timezone-naive: vedi la nota in cima al file.
+ */
 export function addDays(date: IDateTz, days: number): IDateTz {
-  return new DateTz(date.add!(days, 'day'));
+  return new DateTz(date).add(days, 'day');
 }
 
 export function startOfMonth(date: IDateTz): DateTz {

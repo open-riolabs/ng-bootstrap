@@ -124,7 +124,6 @@ describe('CalendarHeaderComponent - navigazione della settimana dalla domenica',
   }
 
   it('avanti e indietro da una domenica portano alla settimana dopo e a quella prima', () => {
-    // Una data nuova per ogni chiamata: addDays sposta anche l'istanza che riceve.
     expect(weekOf(navigate(at('2026-09-13 10:00'), 'next'))).toEqual(giorni('2026-09-14', '2026-09-20'));
     expect(weekOf(navigate(at('2026-09-13 10:00'), 'prev'))).toEqual(giorni('2026-08-31', '2026-09-06'));
   });
