@@ -36,20 +36,23 @@ export interface CalendarOverflowEventsDialogResult {
               view="month"
               [event]="event"
             />
-            <button
-              class="btn btn-sm btn-outline-primary ms-1"
-              data-modal-reason="ok"
-              (click)="result = { action: 'edit', event: event }"
-            >
-              <i class="bi bi-pencil"></i>
-            </button>
-            <button
-              class="btn btn-sm btn-outline-danger ms-1"
-              data-modal-reason="ok"
-              (click)="result = { action: 'delete', event: event }"
-            >
-              <i class="bi bi-trash"></i>
-            </button>
+            <!-- Un evento readonly non si modifica né si elimina da qui. -->
+            @if (!event.readonly) {
+              <button
+                class="btn btn-sm btn-outline-primary ms-1"
+                data-modal-reason="ok"
+                (click)="result = { action: 'edit', event: event }"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-outline-danger ms-1"
+                data-modal-reason="ok"
+                (click)="result = { action: 'delete', event: event }"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            }
           </div>
         }
       </div>

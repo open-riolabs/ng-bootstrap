@@ -8,6 +8,13 @@ export interface CalendarEvent<T = any> {
 	end: IDateTz;
 	color?: Color;
 	allDay?: boolean;
+	/**
+	 * Evento di sola lettura: il click emette comunque `event-click`, ma il
+	 * calendario non apre il modal di modifica (il cui «Cancel» elimina
+	 * l'evento), non lo lascia trascinare e non offre modifica/eliminazione
+	 * nel modal degli eventi in overflow.
+	 */
+	readonly?: boolean;
 	data?: T;
 }
 

@@ -23,6 +23,7 @@ interface CalendarEvent<T = any> {
   end: IDateTz;
   color?: Color;
   allDay?: boolean;
+  readonly?: boolean;     // no edit modal, no drag-and-drop; (event-click) still fires
   data?: T;               // generic payload for custom data
 }
 
@@ -86,7 +87,7 @@ interface CalendarLayout {
 |--------|------|-------------|
 | `date-change` | `CalendarChangeEvent` | Fired when user navigates dates via toolbar |
 | `view-change` | `CalendarChangeEvent` | Fired when view mode changes via toolbar |
-| `event-click` | `CalendarEvent` | Fired when user clicks an existing event (before the edit modal opens) |
+| `event-click` | `CalendarEvent` | Fired when user clicks an existing event (before the edit modal opens; for a `readonly` event it fires and no modal opens) |
 | `container-event-click` | `CalendarEvent[]` | Fired when the "+N more" overflow indicator is clicked, with the list of hidden events. Always fires regardless of `manage-events`. |
 
 ---
@@ -97,11 +98,29 @@ The calendar has **built-in CRUD** — clicking the grid opens a create modal, c
 
 - **Create**: Click empty grid area → modal opens → on OK the new event is pushed to `events`
 - **Edit**: Click an event → `event-click` output fires → edit modal opens → on OK the event is replaced in `events`
-- **Delete**: In the edit modal, clicking Cancel on an existing event deletes it from `events`
+- **Delete**: In the edit modal, clicking Cancel on an existing event deletes it from `events` (a `readonly` event never reaches that modal)
 - **Drag & Drop**: Dragging an event to a new time/day emits `event-change` internally, which updates `events` and shows a success toast
 - **Overflow**: When events overlap beyond visible columns, a "+N more" indicator appears. Clicking it opens a modal listing hidden events with edit/delete actions.
 
 All mutations produce a toast notification (success/warning/info). Since `events` is a model (two-way binding), the parent component is automatically notified of changes via `eventsChange`.
+
+### Read-only events
+
+Set `readonly: true` on a single `CalendarEvent` to protect it from the built-in management while leaving the others editable:
+
+```typescript
+events: CalendarEvent[] = [
+  { id: 'lesson-1', title: 'Yoga class', start, end, readonly: true },   // handled by the host page
+  { id: 'appt-1', title: 'Haircut', start: start2, end: end2 },          // built-in CRUD as usual
+];
+```
+
+For a `readonly` event:
+- Clicking it fires `(event-click)` but does **not** open `rlb-calendar-event-create-edit` — so its "Cancel" (which deletes) can never apply
+- It cannot be dragged in week, day or month view, and an `event-change` carrying it is ignored
+- In the "+N more" overflow modal it is listed without the edit/delete buttons
+
+Use it when the click must lead somewhere else (e.g. navigate to a detail page from `(event-click)`) without a modal opening on top.
 
 > **Important**: Because the calendar manages its own CRUD, you typically only need to provide initial events and reload them on `(date-change)`. You do NOT need to implement create/edit/delete logic yourself unless you want custom behavior.
 
@@ -421,7 +440,7 @@ To hide the toolbar and build a custom one:
 - Events split at day boundaries (cross-day events show continuation indicators)
 - Overlapping events arranged in columns (max 4 visible, overflow shows "+N more")
 - Red "now" line on today's column, updates every minute
-- Drag-and-drop with 15-minute snap intervals
+- Drag-and-drop with 15-minute snap intervals (not for `readonly` events)
 - Horizontal scroll synced between header and body
 
 ### Day View
@@ -433,7 +452,7 @@ To hide the toolbar and build a custom one:
 - 6-week grid (42 cells), events placed using a "Tetris" algorithm for consistent vertical positioning
 - Multi-day events span cells with continuation styling (rounded corners removed on continued sides)
 - Max 3 events visible per cell, overflow shows "+N more" with click-to-expand modal
-- Drag-and-drop preserves original event duration
+- Drag-and-drop preserves original event duration (not for `readonly` events)
 
 ---
 

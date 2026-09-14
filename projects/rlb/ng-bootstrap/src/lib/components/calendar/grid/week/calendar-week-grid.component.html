@@ -75,7 +75,7 @@
             <rlb-calendar-event [view]="view()" [event]="event" [style.top.px]="calculateEventTop(event)"
               [style.height.px]="calculateEventHeight(event)" [style.left.%]="event.left" [style.width.%]="event.width"
               (event-click)="eventClick.emit($event)" (event-container-click)="eventContainerClick.emit($event)" cdkDrag
-              [cdkDragData]="event" [cdkDragDisabled]="event.isOverflowIndicator" class="position-absolute">
+              [cdkDragData]="event" [cdkDragDisabled]="!!event.isOverflowIndicator || !!event.readonly" class="position-absolute">
               <div *cdkDragPlaceholder style="opacity: 0"></div>
             </rlb-calendar-event>
             }

@@ -121,7 +121,7 @@ export class ExampleComponent {
       name: 'events',
       type: 'CalendarEvent[]',
       default: '[]',
-      description: 'List of events to display. Supports two-way binding with [(events)] so the calendar can update the list internally (create, edit, delete via built-in modals and drag-and-drop).',
+      description: 'List of events to display. Supports two-way binding with [(events)] so the calendar can update the list internally (create, edit, delete via built-in modals and drag-and-drop). An event with readonly: true is left out of that management: clicking it opens no modal, it cannot be dragged, and the overflow modal lists it without edit/delete.',
       kind: 'Two-way',
     },
     {
@@ -188,7 +188,7 @@ export class ExampleComponent {
     {
       name: 'event-click',
       type: 'CalendarEvent',
-      description: 'Emitted when the user clicks an event chip. Fires even when manage-events is false.',
+      description: 'Emitted when the user clicks an event chip. Fires even when manage-events is false, and for readonly events (which open no modal).',
       kind: 'Output',
     },
     {

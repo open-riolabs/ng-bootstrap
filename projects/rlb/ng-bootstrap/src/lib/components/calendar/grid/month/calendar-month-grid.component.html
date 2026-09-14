@@ -42,7 +42,7 @@
               }
               <!-- Event -->
               @if (!event.isSpacer) {
-              <rlb-calendar-event [event]="event" class="w-100" cdkDrag [cdkDragData]="event"
+              <rlb-calendar-event [event]="event" class="w-100" cdkDrag [cdkDragData]="event" [cdkDragDisabled]="!!event.readonly"
                 (event-click)="eventClick.emit($event)" [view]="view()">
                 <!-- Drag Preview (Optional but nice) -->
                 <div *cdkDragPlaceholder style="opacity: 0"></div>

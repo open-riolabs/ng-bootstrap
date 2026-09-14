@@ -74,6 +74,8 @@ export class CalendarComponent {
 
   // DnD event
   onEventChange(eventToEdit: CalendarEvent) {
+    // Le griglie non lasciano trascinare un evento readonly: questa è la rete.
+    if (eventToEdit.readonly) return;
     const currentEvents = [...this.events()];
     const idx = currentEvents.findIndex(event => event.id === eventToEdit.id);
     if (idx !== -1) {
@@ -106,7 +108,7 @@ export class CalendarComponent {
         take(1),
         filter(
           (modalResult: ModalResult<CalendarOverflowEventsDialogResult>) =>
-            modalResult.reason === 'ok',
+            modalResult.reason === 'ok' && !modalResult.result?.event?.readonly,
         ),
         switchMap(modalResult => {
           const action = modalResult.result.action;
@@ -189,6 +191,9 @@ export class CalendarComponent {
     }
 
     if (!this.manageEvents()) return;
+
+    // Un evento readonly non apre il modal: il suo «Cancel» vorrebbe dire «elimina».
+    if (eventToEdit?.readonly) return;
 
     this.openEditEventDialog(eventToEdit)
       .pipe(
