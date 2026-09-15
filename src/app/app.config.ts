@@ -1,7 +1,9 @@
-import { ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 
 import {
@@ -12,7 +14,7 @@ import {
   ModalRegistryOptions,
   SearchModalComponent,
   ToastRegistryOptions,
-} from 'projects/rlb/ng-bootstrap/src/public-api';
+} from '@open-rlb/ng-bootstrap';
 
 import { routes } from './routing.module';
 import { ModalSampleComponent } from './pages/components/modals/modal-sample.component';
@@ -22,8 +24,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
-    provideHttpClient(),
-    provideAnimations(),
     {
       provide: ModalRegistryOptions,
       useValue: {

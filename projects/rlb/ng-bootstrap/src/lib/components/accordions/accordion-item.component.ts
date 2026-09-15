@@ -14,7 +14,8 @@ import {
   signal,
   ViewContainerRef,
 } from '@angular/core';
-import { Collapse } from 'bootstrap';
+import type { Collapse } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 import { VisibilityEvent } from '../../shared/types';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { ToggleAbstractComponent } from '../abstract/toggle-abstract.component';
@@ -125,7 +126,7 @@ export class AccordionItemComponent
   }
 
   override getOrCreateInstance(element: HTMLElement): Collapse {
-    return Collapse.getOrCreateInstance(element, { toggle: false });
+    return bootstrap.Collapse.getOrCreateInstance(element, { toggle: false });
   }
 
   override get eventPrefix(): string {

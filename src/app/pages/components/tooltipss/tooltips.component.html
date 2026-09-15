@@ -52,7 +52,7 @@
     heading="Popover with title"
     description="Add the popover-title attribute to display a header above the popover body."
     [code]="popoverTitleExample">
-    <button rlb-button color="success" popover="Popover content goes here." popover-title="Popover title">With title</button>
+    <button rlb-button color="success" [popover]="'Popover content goes here.'" popover-title="Popover title">With title</button>
   </docs-example>
 
   <docs-example
@@ -60,10 +60,10 @@
     description="Use popover-placement to control which side the popover opens on — top (default), bottom, left, or right."
     [code]="popoverPlacementExample">
     <div class="d-flex gap-2 flex-wrap">
-      <button rlb-button color="secondary" popover="Top popover" popover-placement="top">Top</button>
-      <button rlb-button color="secondary" popover="Bottom popover" popover-placement="bottom">Bottom</button>
-      <button rlb-button color="secondary" popover="Left popover" popover-placement="left">Left</button>
-      <button rlb-button color="secondary" popover="Right popover" popover-placement="right">Right</button>
+      <button rlb-button color="secondary" [popover]="'Top popover'" popover-placement="top">Top</button>
+      <button rlb-button color="secondary" [popover]="'Bottom popover'" popover-placement="bottom">Bottom</button>
+      <button rlb-button color="secondary" [popover]="'Left popover'" popover-placement="left">Left</button>
+      <button rlb-button color="secondary" [popover]="'Right popover'" popover-placement="right">Right</button>
     </div>
   </docs-example>
 

@@ -237,7 +237,7 @@ async function testCdkTracksAngularMajor() {
     { label: 'Angular 21 app', deps: { '@angular/core': '^21.1.2' }, expected: '^21.0.0' },
     { label: 'Angular 22 app', deps: { '@angular/core': '^22.1.3' }, expected: '^22.0.0' },
     { label: 'exact version, no range', deps: { '@angular/core': '22.0.1' }, expected: '^22.0.0' },
-    { label: 'no @angular/core (fallback)', deps: {}, expected: '^21.0.0' },
+    { label: 'no @angular/core (fallback)', deps: {}, expected: '^22.0.0' },
   ];
 
   for (const testCase of cases) {

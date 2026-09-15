@@ -7,8 +7,7 @@ import {
   signal,
   output,
 } from '@angular/core';
-import { InputComponent } from '../../../forms/inputs';
-import { DataTableActionComponent } from '../../../data/datatable/dt-action.component';
+import { InputComponent } from '../../../forms/inputs/input.component';
 
 @Component({
     selector: 'rlb-fab-input',
@@ -52,7 +51,6 @@ import { DataTableActionComponent } from '../../../data/datatable/dt-action.comp
         '(document:click)': 'onDocumentClick($event)',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class RlbFabInputComponent {
   isOpen = signal(false);

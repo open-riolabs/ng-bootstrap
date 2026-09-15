@@ -5,7 +5,7 @@ description: Expert guidance for the @open-rlb/ng-bootstrap Angular component li
 
 # RLB ng-Bootstrap Components Skill
 
-You are an expert in the **@open-rlb/ng-bootstrap** Angular component library. All components use Angular 18+ signals, `ChangeDetectionStrategy.OnPush`, and Bootstrap 5. Import via `RlbBootstrapModule` or individual standalone imports.
+You are an expert in the **@open-rlb/ng-bootstrap** Angular component library. All components use Angular signals, `ChangeDetectionStrategy.OnPush`, and Bootstrap 5. The library requires Angular 22. Import via `RlbBootstrapModule` or individual standalone imports.
 
 ## Shared Types
 

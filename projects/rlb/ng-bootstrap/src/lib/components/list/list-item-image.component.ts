@@ -11,7 +11,6 @@ import { Color } from '../../shared/types';
 import { ListComponent } from './list.component';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { BadgeComponent } from '../badges/badge.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-list-item-image',
@@ -74,7 +73,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     imports: [
         AvatarComponent,
         BadgeComponent,
-        DataTableActionComponent,
     ],
 })
 export class ListItemImageComponent {

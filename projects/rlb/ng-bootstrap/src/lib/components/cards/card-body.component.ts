@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-card-body',
@@ -12,7 +11,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class.card-img-overlay]': 'overlay()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class CardBodyComponent {
   overlay = signal(false);

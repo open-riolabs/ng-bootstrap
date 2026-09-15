@@ -14,7 +14,8 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { VisibilityEventBase } from '../../../shared/types';
-import { Dropdown } from 'bootstrap';
+import type { Dropdown } from 'bootstrap';
+import bootstrap from '../../../shared/bootstrap';
 
 @Component({
     selector: 'rlb-navbar-dropdown-item',
@@ -90,7 +91,7 @@ export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
 
     if (anchor && this.dropdown()) {
       anchor.setAttribute('data-bs-auto-close', this._autoClose());
-      this.dropdownInstance = Dropdown.getOrCreateInstance(anchor);
+      this.dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(anchor);
       this.listeners.push(
         this.renderer.listen(anchor, 'show.bs.dropdown', () => this.statusChanged.emit('show')),
         this.renderer.listen(anchor, 'shown.bs.dropdown', () => this.statusChanged.emit('shown')),

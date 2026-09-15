@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
-import { CalendarEvent, CalendarInterval } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar';
-import { CalendarLayout } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar/interfaces/calendar-layout.interface';
 import {
   CalendarChangeEvent,
+  CalendarEvent,
+  CalendarInterval,
+  CalendarLayout,
   CalendarView,
-} from 'projects/rlb/ng-bootstrap/src/lib/components/calendar/interfaces/calendar-view.type';
-import { getToday } from 'projects/rlb/ng-bootstrap/src/lib/components/calendar/utils/calendar-date-utils';
-import { UniqueIdService } from 'projects/rlb/ng-bootstrap/src/lib/shared/unique-id.service';
+  UniqueIdService,
+} from '@open-rlb/ng-bootstrap';
 import { delay, finalize, of, take, tap } from 'rxjs';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
@@ -24,7 +24,7 @@ export class CalendarComponent {
   // IANA timezone the calendar renders in. All events are displayed/positioned
   // in this timezone regardless of the timezone they were created with.
   timezone = 'Europe/Rome';
-  currentDate: IDateTz = getToday(this.timezone);
+  currentDate: IDateTz = DateTz.now(this.timezone);
   events = signal<CalendarEvent[]>([]);
   loading = signal(false);
   layout: Partial<CalendarLayout> = {};
@@ -228,7 +228,7 @@ export class ExampleComponent {
   private generateTestEvents(): CalendarEvent[] {
     const events: any[] = [];
 
-    const now = getToday(this.timezone);
+    const now = DateTz.now(this.timezone);
 
     events.push({
       color: 'primary',

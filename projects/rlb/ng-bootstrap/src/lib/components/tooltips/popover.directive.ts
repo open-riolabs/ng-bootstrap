@@ -6,7 +6,8 @@ import {
   effect,
   input,
 } from '@angular/core';
-import { Popover } from 'bootstrap';
+import type { Popover } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 
 @Directive({ selector: '[popover]' })
 export class PopoverDirective implements AfterViewInit {
@@ -60,6 +61,6 @@ export class PopoverDirective implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this._popover = new Popover(this.elementRef.nativeElement);
+    this._popover = new bootstrap.Popover(this.elementRef.nativeElement);
   }
 }

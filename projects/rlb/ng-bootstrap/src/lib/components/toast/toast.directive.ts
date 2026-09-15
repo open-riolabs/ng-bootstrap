@@ -7,7 +7,8 @@ import {
   OnDestroy,
   Renderer2,
 } from '@angular/core';
-import { Toast } from 'bootstrap';
+import type { Toast } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 import { ToastCloseReason } from '../../shared/types';
 import { IToast } from './data/toast';
 import { ToastOptions } from './data/toast-options';
@@ -61,7 +62,7 @@ export class ToastDirective implements OnDestroy, AfterViewInit {
     this.contentElement.addEventListener(`show.bs.toast`, this._openChange_f);
     this.contentElement.addEventListener(`shown.bs.toast`, this._openChange_f);
     this.initButtons();
-    this.bsToast = Toast.getOrCreateInstance(this.contentElement, {
+    this.bsToast = bootstrap.Toast.getOrCreateInstance(this.contentElement, {
       animation: opts?.animation || true,
       autohide: opts?.autohide || true,
       delay: opts?.delay || 5000,

@@ -9,12 +9,10 @@ import {
 } from '@angular/core';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { DndDirective } from './dnd.directive';
-import {
-  ButtonComponent,
-  CardBodyComponent,
-  CardComponent,
-  ProgressComponent,
-} from '../../components';
+import { ButtonComponent } from '../../components/buttons/buttons.component';
+import { CardBodyComponent } from '../../components/cards/card-body.component';
+import { CardComponent } from '../../components/cards/card.component';
+import { ProgressComponent } from '../../components/loaders/progress.component';
 
 @Component({
   selector: 'rlb-file-dnd',

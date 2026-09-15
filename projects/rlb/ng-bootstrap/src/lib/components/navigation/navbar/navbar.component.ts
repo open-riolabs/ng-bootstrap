@@ -15,7 +15,7 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Collapse } from 'bootstrap';
+import bootstrap from '../../../shared/bootstrap';
 import { Color } from '../../../shared/types';
 import { UniqueIdService } from '../../../shared/unique-id.service';
 import { NavbarItemsComponent } from './navbar-items.component';
@@ -155,7 +155,7 @@ export class NavbarComponent implements OnInit, AfterContentInit, OnDestroy {
   private closeMobileMenu() {
     const collapseEl = this.element?.querySelector('.navbar-collapse');
     if (collapseEl && collapseEl.classList.contains('show')) {
-      const bsCollapse = Collapse.getOrCreateInstance(collapseEl);
+      const bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapseEl);
       bsCollapse.hide();
     }
   }

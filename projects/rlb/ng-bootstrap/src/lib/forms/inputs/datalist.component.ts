@@ -27,7 +27,7 @@ import { InputValidationComponent } from './input-validation.component';
         [class.form-control-sm]="size() === 'small'"
         [value]="value() || ''"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
         (input)="update($event.target)"
       />
       <datalist [id]="'list-' + id">

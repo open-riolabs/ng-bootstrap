@@ -8,7 +8,8 @@ import {
   input,
   output,
 } from '@angular/core';
-import { Dropdown } from 'bootstrap';
+import type { Dropdown } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 import { ComponentOptions } from "bootstrap/js/dist/base-component";
 import { VisibilityEventBase } from '../../shared/types';
 
@@ -58,7 +59,7 @@ export class DropdownDirective implements OnInit, OnDestroy {
       this.renderer.addClass(this.elementRef.nativeElement, 'dropdown-static');
     }
 
-    this._dropdown = Dropdown.getOrCreateInstance(this.elementRef.nativeElement, dropdownOptions);
+    this._dropdown = bootstrap.Dropdown.getOrCreateInstance(this.elementRef.nativeElement, dropdownOptions);
 
     const el = this.elementRef.nativeElement;
     this.listeners.push(

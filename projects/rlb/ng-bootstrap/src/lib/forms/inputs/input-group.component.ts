@@ -10,7 +10,6 @@ import {
 import { ValidationErrors } from '@angular/forms';
 import { InputValidationComponent } from './input-validation.component';
 import { InputComponent } from './input.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-input-group',
@@ -23,7 +22,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     },
     template: `<ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class InputGroupComponent {
 

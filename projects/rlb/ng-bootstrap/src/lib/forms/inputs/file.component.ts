@@ -29,7 +29,7 @@ import { NgClass, JsonPipe } from '@angular/common';
         [class.form-control-lg]="size() === 'large'"
         [class.form-control-sm]="size() === 'small'"
         (blur)="touch()"
-        [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+        [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
         (change)="onFileChange($event)"
       />
       <div class="invalid-feedback">

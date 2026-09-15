@@ -8,7 +8,6 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ToggleDirective } from '../buttons/toggle.directive';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-tab',
@@ -39,7 +38,7 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[attr.id]': 'undefined',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ToggleDirective, DataTableActionComponent],
+    imports: [ToggleDirective],
 })
 export class TabComponent {
   element!: HTMLElement;

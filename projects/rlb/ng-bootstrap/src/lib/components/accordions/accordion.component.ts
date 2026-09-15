@@ -13,7 +13,6 @@ import {
 } from '@angular/core';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { AccordionItemComponent } from './accordion-item.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-accordion',
@@ -27,7 +26,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[id]': 'effectiveId()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class AccordionComponent implements OnDestroy {
   flush = input(false, { alias: 'flush', transform: booleanAttribute });

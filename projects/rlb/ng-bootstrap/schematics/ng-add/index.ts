@@ -31,12 +31,12 @@ const DEPENDENCIES: ReadonlyArray<{ name: string; version: string; type: Depende
   { name: '@open-rlb/date-tz', version: '^2.1.1', type: DependencyType.Default },
   { name: '@ngx-translate/core', version: '^17.0.0', type: DependencyType.Default },
   { name: 'bootstrap', version: '^5.3.0', type: DependencyType.Default },
-  { name: 'bootstrap-icons', version: '^1.11.0', type: DependencyType.Default },
+  { name: 'bootstrap-icons', version: '^1.13.1', type: DependencyType.Default },
   { name: '@types/bootstrap', version: '^5.2.0', type: DependencyType.Dev },
 ];
 
 /** The lowest Angular major in this package's peerDependencies range. */
-const MIN_ANGULAR_MAJOR = 21;
+const MIN_ANGULAR_MAJOR = 22;
 
 /**
  * `@angular/cdk` ships a new major alongside every Angular major, so a hardcoded pin here
@@ -50,7 +50,7 @@ function cdkVersion(tree: Tree): string {
   return major === null ? `^${MIN_ANGULAR_MAJOR}.0.0` : `^${major}.0.0`;
 }
 
-/** Reads the major of `@angular/core` from the consumer's package.json (`^21.1.2` → 21). */
+/** Reads the major of `@angular/core` from the consumer's package.json (`^22.1.2` → 22). */
 function angularCoreMajor(tree: Tree): number | null {
   const raw = tree.read('/package.json');
   if (!raw) {

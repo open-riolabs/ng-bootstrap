@@ -7,7 +7,6 @@ import {
   numberAttribute,
 } from '@angular/core';
 import { Color } from '../../shared/types';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-progress',
@@ -45,7 +44,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[style.height.px]': 'height()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class ProgressComponent {
   max = input(100, { alias: 'max', transform: numberAttribute });

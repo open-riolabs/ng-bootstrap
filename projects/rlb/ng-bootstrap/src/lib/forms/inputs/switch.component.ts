@@ -10,13 +10,12 @@ import {
 } from '@angular/core';
 import { AbstractComponent } from './abstract-field.component';
 import { NgClass, JsonPipe } from '@angular/common';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-switch',
     template: `
     <div class="d-flex align-items-center gap-2">
-      @if (errors() && showError() && (control?.touched || control?.dirty)) {
+      @if (errors() && showError() && (controlTouched() || controlDirty())) {
         <div class="invalid-feedback d-block">
           {{ errors() | json }}
         </div>
@@ -32,7 +31,7 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
           [attr.disabled]="isDisabled() ? true : undefined"
           [attr.readonly]="readonly() ? true : undefined"
           (blur)="touch()"
-          [ngClass]="{ 'is-invalid': control?.touched && control?.invalid }"
+          [ngClass]="{ 'is-invalid': controlTouched() && invalid() }"
           (input)="update($event.target)"
         />
       </div>
@@ -44,7 +43,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         NgClass,
-        DataTableActionComponent,
         JsonPipe,
     ],
 })

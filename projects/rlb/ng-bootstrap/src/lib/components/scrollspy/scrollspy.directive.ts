@@ -8,7 +8,8 @@ import {
   OnDestroy,
   output,
 } from '@angular/core';
-import { ScrollSpy } from 'bootstrap';
+import type { ScrollSpy } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 
 @Directive({
     selector: '[rlb-scrollspy]',
@@ -45,7 +46,7 @@ export class ScrollspyDirective implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.scrollSpy = ScrollSpy.getOrCreateInstance(
+    this.scrollSpy = bootstrap.ScrollSpy.getOrCreateInstance(
       this.elementRef.nativeElement,
       {
         target: this.target(),

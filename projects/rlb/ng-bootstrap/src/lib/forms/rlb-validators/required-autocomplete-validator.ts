@@ -1,5 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { AutocompleteItem } from "../inputs";
+import { AutocompleteItem } from "../inputs/autocomplete-model";
 
 export function requiredAutocompleteValue(): ValidatorFn {
 	return (control: AbstractControl): ValidationErrors | null => {

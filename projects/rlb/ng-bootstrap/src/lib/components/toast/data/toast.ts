@@ -1,5 +1,5 @@
 import { Signal } from '@angular/core';
-import { ComponentData } from '../../../shared/component-builder';
+import { ComponentData } from '../../../shared/component-builder/data/component-data';
 import { ToastData } from './toast-data';
 
 export interface IToast<Input = any, Output = any>

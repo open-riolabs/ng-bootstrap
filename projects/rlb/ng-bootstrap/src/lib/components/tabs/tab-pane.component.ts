@@ -1,5 +1,4 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-tab-pane',
@@ -16,7 +15,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
     <ng-content />
   `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class TabPaneComponent {
   id = input.required<string>({ alias: 'id' });

@@ -2,7 +2,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ComponentRef, Injectable, signal, Type } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { AbstractRegistryService } from '../../shared/abstract.registry.service';
-import { BuilderComponent } from '../../shared/component-builder';
+import { BuilderComponent } from '../../shared/component-builder/builder.component';
 import { GenericComponent } from '../../shared/component-builder/generic.component';
 import { ModalCloseReason } from '../../shared/types';
 import { UniqueIdService } from '../../shared/unique-id.service';

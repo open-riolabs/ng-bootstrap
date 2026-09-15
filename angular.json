@@ -79,7 +79,9 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "tsconfig.spec.json"
+            "tsConfig": "tsconfig.spec.json",
+            "include": ["src/**/*.spec.ts"],
+            "providersFile": "src/test-providers.ts"
           }
         }
       }
@@ -108,7 +110,9 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/rlb/ng-bootstrap/tsconfig.spec.json"
+            "tsConfig": "projects/rlb/ng-bootstrap/tsconfig.spec.json",
+            "include": ["**/*.spec.ts"],
+            "providersFile": "projects/rlb/ng-bootstrap/src/test-providers.ts"
           }
         }
       }

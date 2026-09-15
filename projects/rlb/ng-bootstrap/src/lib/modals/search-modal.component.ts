@@ -8,12 +8,15 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IModal, ModalData, ModalDirective } from '../components';
-import { RlbBootstrapModule } from '../rlb-bootstrap.module';
+import { ButtonComponent } from '../components/buttons/buttons.component';
+import { IModal } from '../components/modals/data/modal';
+import { ModalData } from '../components/modals/data/modal-data';
+import { ModalDirective } from '../components/modals/modal.directive';
+import { InputComponent } from '../forms/inputs/input.component';
 import { SearchModalInput } from './search-modal.data';
 
 @Component({
-  imports: [RlbBootstrapModule, FormsModule],
+  imports: [ButtonComponent, InputComponent, FormsModule],
 
   template: `
     <div class="modal-header">

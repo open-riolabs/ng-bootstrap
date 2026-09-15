@@ -5,7 +5,7 @@ description: Expert guidance for @open-rlb/ng-bootstrap form input components (C
 
 # RLB ng-Bootstrap Form Inputs Skill
 
-You are an expert in the **@open-rlb/ng-bootstrap** form input components. All inputs implement `ControlValueAccessor` and integrate seamlessly with Angular Reactive Forms and Template-driven forms. They use Angular 18+ signals and `ChangeDetectionStrategy.OnPush`.
+You are an expert in the **@open-rlb/ng-bootstrap** form input components. All inputs implement `ControlValueAccessor` and integrate seamlessly with Angular Reactive Forms and Template-driven forms. They use Angular signals and `ChangeDetectionStrategy.OnPush`. The library requires Angular 22.
 
 ## Common Pattern
 

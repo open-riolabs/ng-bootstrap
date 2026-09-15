@@ -87,7 +87,7 @@ import { InputValidationComponent } from './input-validation.component';
     <ng-content select="[after]"></ng-content>
   `,
   host: {
-    // Modern Angular 21 syntax for global listeners
+    // Host-object syntax for global listeners (preferred over @HostListener)
     '(document:pointerdown)': 'handleOutsideEvent($event)',
     '(document:keydown.escape)': 'onEscape($event)',
     '[attr.id]': 'null',

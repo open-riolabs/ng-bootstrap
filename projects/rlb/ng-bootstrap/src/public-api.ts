@@ -3,16 +3,13 @@
  */
 
 import { EnvironmentProviders, Provider } from '@angular/core';
-import {
-  CalendarOverflowEventsContainerComponent,
-  CalendarToastComponent,
-  CommonModalComponent,
-  EventCreateEditComponent,
-  ModalRegistryOptions,
-  RlbBootstrapModule,
-  SearchModalComponent,
-  ToastRegistryOptions
-} from './public-api';
+import { EventCreateEditComponent } from './lib/components/calendar/calendar-dialogs/calendar-event-create-edit/event-create-edit.component';
+import { CalendarOverflowEventsContainerComponent } from './lib/components/calendar/calendar-dialogs/calendar-overflow-events-container/calendar-overflow-events-container.component';
+import { CalendarToastComponent } from './lib/components/calendar/calendar-dialogs/calendar-toast/calendar-toast.component';
+import { ModalRegistryOptions } from './lib/components/modals/options/modal-registry.options';
+import { ToastRegistryOptions } from './lib/components/toast/options/toast-registry.options';
+import { CommonModalComponent } from './lib/modals/common-modal.component';
+import { SearchModalComponent } from './lib/modals/search-modal.component';
 
 
 export * from './lib/components';
@@ -33,7 +30,6 @@ export * from './lib/components/calendar/calendar-dialogs/index';
 
 export function provideRlbBootstrap(): (EnvironmentProviders | Provider)[] {
   return [
-    RlbBootstrapModule,
     {
       provide: ModalRegistryOptions, useValue: {
         modals: {

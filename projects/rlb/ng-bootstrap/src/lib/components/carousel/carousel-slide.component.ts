@@ -1,5 +1,4 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-carousel-slide',
@@ -12,7 +11,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class.active]': 'active()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class CarouselSlideComponent {
   active = input(false, { alias: 'active', transform: booleanAttribute });

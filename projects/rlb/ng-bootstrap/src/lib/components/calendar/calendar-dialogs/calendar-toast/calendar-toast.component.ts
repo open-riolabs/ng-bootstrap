@@ -3,8 +3,6 @@ import { IToast } from '../../../toast/data/toast';
 import { ToastData } from '../../../toast/data/toast-data';
 import { ToastDirective } from '../../../toast/toast.directive';
 
-import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
-
 @Component({
   template: `
     <div class="toast-header">
@@ -28,7 +26,6 @@ import { RlbBootstrapModule } from '../../../../rlb-bootstrap.module';
     },
   ],
 
-  imports: [RlbBootstrapModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarToastComponent implements IToast<string, void> {

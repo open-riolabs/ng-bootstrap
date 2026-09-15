@@ -7,7 +7,8 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Tooltip } from 'bootstrap';
+import type { Tooltip } from 'bootstrap';
+import bootstrap from '../../shared/bootstrap';
 
 @Directive({ selector: '[tooltip]', })
 export class TooltipDirective implements OnInit, OnDestroy {
@@ -35,7 +36,7 @@ export class TooltipDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._tooltip = new Tooltip(this.elementRef.nativeElement, {
+    this._tooltip = new bootstrap.Tooltip(this.elementRef.nativeElement, {
       title: this.tooltip() || '',
       placement: this.placement(),
       customClass: this.customClass(),

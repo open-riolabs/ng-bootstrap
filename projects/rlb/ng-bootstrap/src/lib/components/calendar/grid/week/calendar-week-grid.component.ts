@@ -11,7 +11,7 @@ import {
   viewChild
 } from "@angular/core";
 import { IDateTz } from "@open-rlb/date-tz";
-import { DateTz } from "@open-rlb/date-tz/date-tz";
+import { DateTz } from "@open-rlb/date-tz";
 import { CalendarEvent, CalendarEventWithLayout } from "../../interfaces/calendar-event.interface";
 import { CalendarInterval } from "../../interfaces/calendar-interval.interface";
 import { CalendarLayout } from "../../interfaces/calendar-layout.interface";

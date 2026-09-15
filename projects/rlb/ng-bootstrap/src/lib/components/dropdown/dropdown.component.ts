@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-dropdown',
@@ -16,7 +15,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[class.dropend]': 'direction() === "right"',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class DropdownComponent {
   direction = input<'up' | 'down' | 'left' | 'right' | 'up-center' | 'down-center'>('down', {

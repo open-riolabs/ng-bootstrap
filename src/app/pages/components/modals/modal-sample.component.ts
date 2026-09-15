@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, model, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IModal } from 'projects/rlb/ng-bootstrap/src/lib/components/modals/data/modal';
-import { ModalDirective } from 'projects/rlb/ng-bootstrap/src/public-api';
+import { IModal, ModalDirective } from '@open-rlb/ng-bootstrap';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
 

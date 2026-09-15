@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-button-group',
@@ -12,7 +11,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         'attr.role': 'group',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class ButtonGroupComponent {
   orientation = input<'horizontal' | 'vertical'>('horizontal', { alias: 'orientation' });

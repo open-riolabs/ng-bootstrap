@@ -7,7 +7,6 @@ import {
   input,
 } from '@angular/core';
 import { ListComponent } from './list.component';
-import { DataTableActionComponent } from '../../data/datatable/dt-action.component';
 
 @Component({
     selector: 'rlb-list-item',
@@ -22,7 +21,6 @@ import { DataTableActionComponent } from '../../data/datatable/dt-action.compone
         '[attr.aria-current]': 'active()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DataTableActionComponent],
 })
 export class ListItemComponent {
   private parent = inject(ListComponent, { optional: true });
