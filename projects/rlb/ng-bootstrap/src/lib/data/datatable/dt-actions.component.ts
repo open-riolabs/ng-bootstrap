@@ -18,6 +18,7 @@ import { NgTemplateOutlet } from '@angular/common';
         <button
           class="btn btn-outline py-0 pe-2 float-end"
           [disabled]="_disabled()"
+          [attr.aria-label]="label()"
           type="button"
           data-bs-toggle="dropdown"
           data-bs-popper-config='{"strategy":"fixed"}'
@@ -39,6 +40,15 @@ import { NgTemplateOutlet } from '@angular/common';
 })
 export class DataTableActionsComponent {
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
+
+  /**
+   * What the button that opens the menu is called.
+   *
+   * Its only content is a three-dots glyph, so without this a screen reader announces the button and
+   * nothing else — on every row of the table, identically. A caller that knows what the row is can
+   * say «Actions for Mario Rossi»; one that says nothing keeps the generic English word, as before.
+   */
+  label = input('Actions');
 
   public template = viewChild.required<TemplateRef<any>>('template');
   actions = contentChildren(DataTableActionComponent);

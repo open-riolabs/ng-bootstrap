@@ -44,7 +44,8 @@ rlb-dt-table
 | `show-actions` | `'row'\|'head'` | `'row'` | Actions column position |
 | `creation-strategy` | `'none'\|'modal'\|'page'` | `'none'` | Create button behavior |
 | `creation-url` | `any[]\|string\|null` | — | Router link for 'page' strategy |
-| `load-more-label` | `string` | `'Load more'` | Load more button text |
+| `loadMoreLabel` | `string` | `'Load more'` | Load more button text. ⚠️ camelCase, not kebab: this one has no alias |
+| `actionsLabel` | `string` | `'Actions'` | Header over the column of row actions. Set it, or every table reads English whatever the page speaks |
 
 ## rlb-dt-table Outputs
 
@@ -81,12 +82,13 @@ rlb-dt-table
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
 | `disabled` | `boolean` | `false` | Disable all actions |
+| `label` | `string` | `'Actions'` | `aria-label` of the ⋯ button. Its only content is a glyph, so without this a screen reader announces «button» and nothing else — on every row alike. Say what the row is: «Azioni per Mario Rossi» |
 
 ## rlb-dt-action Inputs
 
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
-| `label` | `string` | — | Action label (required) |
+| `label` | `string` | — | ⚠️ **Not an input.** The label is projected content: `<rlb-dt-action>Elimina</rlb-dt-action>` |
 | `disabled` | `boolean` | `false` | Disable this action |
 
 ---
@@ -114,8 +116,8 @@ rlb-dt-table
       <span rlb-badge [color]="user.role === 'admin' ? 'danger' : 'primary'">{{ user.role }}</span>
     </rlb-dt-cell>
     <rlb-dt-actions>
-      <rlb-dt-action label="Edit" (click)="editUser(user)"></rlb-dt-action>
-      <rlb-dt-action label="Delete" (click)="deleteUser(user)" [disabled]="user.role === 'admin'"></rlb-dt-action>
+      <rlb-dt-action (click)="editUser(user)">Edit</rlb-dt-action>
+      <rlb-dt-action (click)="deleteUser(user)" [disabled]="user.role === 'admin'">Delete</rlb-dt-action>
     </rlb-dt-actions>
   </rlb-dt-row>
 
@@ -155,8 +157,8 @@ rlb-dt-table
       <span rlb-badge [color]="statusColor(order.status)">{{ order.status }}</span>
     </rlb-dt-cell>
     <rlb-dt-actions>
-      <rlb-dt-action label="View" (click)="viewOrder(order)"></rlb-dt-action>
-      <rlb-dt-action label="Cancel" (click)="cancelOrder(order)" [disabled]="order.status !== 'pending'"></rlb-dt-action>
+      <rlb-dt-action (click)="viewOrder(order)">View</rlb-dt-action>
+      <rlb-dt-action (click)="cancelOrder(order)" [disabled]="order.status !== 'pending'">Cancel</rlb-dt-action>
     </rlb-dt-actions>
   </rlb-dt-row>
 </rlb-dt-table>
