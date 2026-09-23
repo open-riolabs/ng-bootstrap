@@ -67,6 +67,15 @@ export class DataTableComponent implements OnInit, OnDestroy {
   pageSize = input(undefined, { alias: 'page-size', transform: numberAttribute });
   showActions = input<'row' | 'head'>('row');
   loadMoreLabel = input('Load more');
+  /**
+   * The header over the column of row actions.
+   *
+   * It was the literal word `Actions` in the template, which put an English heading on every table
+   * of every console built on this library, in whatever language the rest of the page was speaking.
+   * The default is kept English so nothing changes for a caller that says nothing; a caller that
+   * translates now can.
+   */
+  actionsLabel = input('Actions');
   cardStyle = input(true, { alias: 'card-style', transform: booleanAttribute });
 
   createItem = output<void>({ alias: 'create-item' });
