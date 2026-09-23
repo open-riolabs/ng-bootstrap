@@ -7,6 +7,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { RLB_ICONS } from '../../shared/icons';
 import { UniqueIdService } from '../../shared/unique-id.service';
 import { DndDirective } from './dnd.directive';
 import { ButtonComponent } from '../../components/buttons/buttons.component';
@@ -40,7 +41,7 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
           class="mb-1"
           style="font-size: 5rem"
         >
-          <i class="bi bi-cloud-arrow-up"></i>
+          <i [class]="icons.upload"></i>
         </div>
         <h3 class="fs-2 fw-bold m-0">{{ data()?.content?.drag || 'Drag & Drop files here' }}</h3>
         <p class="fs-4 fw-normal mb-4">
@@ -63,7 +64,7 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
           <rlb-card>
             <rlb-card-body class="d-flex align-items-center">
               <div class="fs-3 flex-shrink-0">
-                <i class="bi bi-file-earmark-text"></i>
+                <i [class]="icons.file"></i>
               </div>
 
               <div
@@ -92,7 +93,7 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
                 (click)="deleteFile(file)"
                 aria-label="Remove file"
               >
-                <i class="bi bi-x-lg"></i>
+                <i [class]="icons.close"></i>
               </button>
             </rlb-card-body>
           </rlb-card>
@@ -122,6 +123,8 @@ import { ProgressComponent } from '../../components/loaders/progress.component';
   ],
 })
 export class FileDndComponent {
+  protected icons = inject(RLB_ICONS);
+
   files = signal<File[]>([]);
   multiple = input(false, { transform: booleanAttribute });
   data = input<any>({});

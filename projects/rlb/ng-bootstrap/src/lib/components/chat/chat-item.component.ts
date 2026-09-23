@@ -1,4 +1,5 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { RLB_ICONS } from '../../shared/icons';
 import { VisibilityEventBase } from '../../shared/types';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { ButtonComponent } from '../buttons/buttons.component';
@@ -19,7 +20,7 @@ import { DropdownContainerComponent } from '../dropdown/dropdown-container.compo
           class="reply-button"
           (click)="replyClick($event)"
         >
-          <i class="bi bi-reply-fill"></i>
+          <i [class]="icons.reply"></i>
         </button>
       }
       @if (position() === 'left') {
@@ -40,7 +41,7 @@ import { DropdownContainerComponent } from '../dropdown/dropdown-container.compo
         <div>
           <ng-content />
         </div>
-        <i class="bi bi-check-all float-end"></i>
+        <i [class]="icons.read + ' float-end'"></i>
         <span class="time float-end">{{ dateTime() }}</span>
         <rlb-dropdown
           direction="up"
@@ -56,7 +57,7 @@ import { DropdownContainerComponent } from '../dropdown/dropdown-container.compo
               [class.left]="position() === 'left'"
               (status-changed)="reactionSelector.emit($event)"
             >
-              <i class="bi bi-plus m-0 p-0"></i>
+              <i [class]="icons.add + ' m-0 p-0'"></i>
             </a>
           }
           <rlb-dropdown-container>
@@ -87,7 +88,7 @@ import { DropdownContainerComponent } from '../dropdown/dropdown-container.compo
           class="reply-button"
           (click)="replyClick($event)"
         >
-          <i class="bi bi-reply-fill"></i>
+          <i [class]="icons.reply"></i>
         </button>
       }
     </div>
@@ -97,6 +98,8 @@ import { DropdownContainerComponent } from '../dropdown/dropdown-container.compo
   imports: [DropdownComponent, ButtonComponent, DropdownDirective, DropdownContainerComponent],
 })
 export class ChatItemComponent {
+  protected icons = inject(RLB_ICONS);
+
   id = input('', { alias: 'id' });
   avatar = input('', { alias: 'avatar' });
   text = input('', { alias: 'text' });

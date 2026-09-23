@@ -55,6 +55,29 @@
   </docs-example>
 
   <docs-example
+    heading="Sorting and filtering"
+    description="Add field plus sortable or filtrable to a header. The table never reorders the rows itself — it does not hold them — it emits (data-query) carrying the page, the sorting and the column filters together, and the caller answers it. Clicking a column cycles ascending, descending, unsorted."
+    [code]="sortingExample">
+    <rlb-dt-table
+      [items]="sortableUsers()"
+      (data-query)="onDataQuery($event)">
+      <rlb-dt-header field="id" sortable>ID</rlb-dt-header>
+      <rlb-dt-header field="name" sortable filtrable filterPlaceholder="Filter…">Name</rlb-dt-header>
+      <rlb-dt-header field="email" filtrable filterPlaceholder="Filter…">Email</rlb-dt-header>
+      @for (user of sortableUsers(); track user.id) {
+        <rlb-dt-row>
+          <rlb-dt-cell>{{ user.id }}</rlb-dt-cell>
+          <rlb-dt-cell>{{ user.name }}</rlb-dt-cell>
+          <rlb-dt-cell>{{ user.email }}</rlb-dt-cell>
+        </rlb-dt-row>
+      }
+      <rlb-dt-noitems>
+        <rlb-alert>Nothing matches those filters.</rlb-alert>
+      </rlb-dt-noitems>
+    </rlb-dt-table>
+  </docs-example>
+
+  <docs-example
     heading="Pagination with row actions"
     description="Set pagination-mode to 'pages' and supply items, total-items, page-size and a two-way [(current-page)] binding. Nest rlb-dt-actions inside each row and add rlb-dt-action children for per-row dropdown actions."
     [code]="paginationExample">

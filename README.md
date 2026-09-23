@@ -15,6 +15,8 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 - [Publishing](#-publishing)
 - [Styling](#-styling)
 - [Configuration](#-configuration)
+  - [Icons](#icons)
+  - [Translations](#translations)
 - [Claude Skills](#-claude-skills)
 - [Additional Resources](#-additional-resources)
 - [Author](#-author)
@@ -27,7 +29,7 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 - **Bootstrap 5** based components
 - **Angular 22** compatible
 - **TypeScript** support
-- **i18n** ready with `@ngx-translate/core`
+- **i18n** ready through `RLB_TRANSLATION_SERVICE`, with no translation library of its own
 - **Accessible** components following Bootstrap patterns
 - **Customizable** styling with SCSS
 - **Form validation** built-in
@@ -59,6 +61,10 @@ Make sure you have the following peer dependencies installed:
 npm install bootstrap@>=5.3.0 @types/bootstrap@>5.2.0 @open-rlb/date-tz@>=2.1.1
 ```
 
+`@types/bootstrap` and `@ngx-translate/core` are optional: nothing in the library imports
+`@ngx-translate/core`, and translations go through [`RLB_TRANSLATION_SERVICE`](#translations)
+instead.
+
 ### Required Angular Dependencies
 
 This library requires **Angular 22** (`>=22.0.0 <23.0.0`) and the following packages:
@@ -66,7 +72,6 @@ This library requires **Angular 22** (`>=22.0.0 <23.0.0`) and the following pack
 ```bash
 npm install @angular/core@^22.0.0 @angular/common@^22.0.0 @angular/forms@^22.0.0 @angular/router@^22.0.0
 npm install @angular/cdk@^22.0.0
-npm install @ngx-translate/core@^17.0.0
 npm install bootstrap-icons@^1.13.1
 ```
 
@@ -128,13 +133,18 @@ Add Bootstrap CSS to your `angular.json` or import in your main styles file:
 ### 3. Use Components
 
 ```html
-<rlb-button [variant]="'primary'">Click Me</rlb-button>
-<rlb-alert [variant]="'success'">Success message</rlb-alert>
-<rlb-input
-  [label]="'Username'"
-  [(ngModel)]="username"
-></rlb-input>
+<!-- Buttons are attribute components: they sit on a real <button> or <a>. -->
+<button rlb-button color="primary">Click Me</button>
+<button rlb-button color="secondary" size="sm" outline>Small outline</button>
+
+<rlb-alert color="success">Success message</rlb-alert>
+
+<!-- Inputs are ControlValueAccessors: they work with ngModel and with reactive forms. -->
+<rlb-input placeholder="Username" [(ngModel)]="username"></rlb-input>
 ```
+
+Colors come from the Bootstrap palette (`primary`, `secondary`, `success`, `danger`, `warning`,
+`info`, `light`, `dark`) and sizes are `sm` / `md` / `lg`.
 
 ## 🧩 Components
 
@@ -168,7 +178,9 @@ Add Bootstrap CSS to your `angular.json` or import in your main styles file:
 ### Data Components
 
 - **Calendar** - Full-featured calendar with event management
-- **DataTable** - Advanced data tables with sorting, filtering, and pagination
+- **DataTable** - Tables with pagination, per-column sorting and filtering, row actions, loading
+  and empty-state slots. Sorting and filtering are emitted as a `(data-query)` for the caller to
+  answer — the table projects the rows, it never holds them.
 
 ## 📝 Forms
 
@@ -350,6 +362,48 @@ providers: [
   },
 ];
 ```
+
+### Icons
+
+Every icon the library draws goes through `RLB_ICONS`, named by meaning rather than by glyph. The
+default set is [bootstrap-icons](https://icons.getbootstrap.com/), which is what `ng add` installs.
+To point some or all of them at a different set, provide your own — names you leave out keep the
+default:
+
+```typescript
+import { provideRlbIcons } from '@open-rlb/ng-bootstrap';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRlbBootstrap(),
+    provideRlbIcons({
+      refresh: 'fa-solid fa-arrows-rotate',
+      delete: 'fa-solid fa-trash',
+    }),
+  ],
+});
+```
+
+The full list of names is the `RlbIconSet` interface.
+
+### Translations
+
+The library does not depend on a translation library. Text a caller can pass in is an input with an
+English default — `actionsLabel`, `loadMoreLabel`, `refreshLabel`, `sortLabel` — so translating it
+is the caller's ordinary job. The one place a caller passes *keys* rather than text is
+`rlb-form-fields`, whose field definitions are data; those resolve through `RLB_TRANSLATION_SERVICE`,
+and are returned unchanged when nothing is registered.
+
+Bridging `@ngx-translate/core` to it is one provider:
+
+```typescript
+import { TranslateService } from '@ngx-translate/core';
+import { RLB_TRANSLATION_SERVICE } from '@open-rlb/ng-bootstrap';
+
+providers: [{ provide: RLB_TRANSLATION_SERVICE, useExisting: TranslateService }];
+```
+
+The `rlbTranslate` pipe is exported for your own templates and resolves through the same token.
 
 ## 🤖 Claude Skills
 

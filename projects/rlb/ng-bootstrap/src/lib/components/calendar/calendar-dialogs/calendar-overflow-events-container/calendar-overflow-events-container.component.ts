@@ -1,6 +1,7 @@
-import { Component, computed, input,
+import { Component, computed, inject, input,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { RLB_ICONS } from '../../../../shared/icons';
 import { IModal } from '../../../modals/data/modal';
 import { ModalData } from '../../../modals/data/modal-data';
 import { ModalDirective } from '../../../modals/modal.directive';
@@ -43,14 +44,14 @@ export interface CalendarOverflowEventsDialogResult {
                 data-modal-reason="ok"
                 (click)="result = { action: 'edit', event: event }"
               >
-                <i class="bi bi-pencil"></i>
+                <i [class]="icons.edit"></i>
               </button>
               <button
                 class="btn btn-sm btn-outline-danger ms-1"
                 data-modal-reason="ok"
                 (click)="result = { action: 'delete', event: event }"
               >
-                <i class="bi bi-trash"></i>
+                <i [class]="icons.delete"></i>
               </button>
             }
           </div>
@@ -80,6 +81,8 @@ export class CalendarOverflowEventsContainerComponent implements IModal<
   CalendarEvent[],
   CalendarOverflowEventsDialogResult
 > {
+  protected icons = inject(RLB_ICONS);
+
   data = input<ModalData<CalendarEvent[]>>({} as any);
   result?: CalendarOverflowEventsDialogResult;
 

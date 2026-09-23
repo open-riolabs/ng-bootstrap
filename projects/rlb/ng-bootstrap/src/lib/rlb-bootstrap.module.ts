@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 import { COMPONENTS } from './components';
 import { TABLE } from './data/datatable';
 import { INPUTS } from './forms/inputs';
@@ -16,7 +15,6 @@ import { COMPONENT_BUILDER } from './shared/component-builder';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        TranslateModule,
         RouterModule,
         CdkDrag,
         CdkDropListGroup,

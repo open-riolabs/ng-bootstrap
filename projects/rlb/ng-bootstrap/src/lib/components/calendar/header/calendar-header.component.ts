@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
+import { RLB_ICONS } from '../../../shared/icons';
 import { CalendarView } from '../interfaces/calendar-view.type';
 import { addDays, getToday } from '../utils/calendar-date-utils';
 import { ButtonComponent } from '../../buttons/buttons.component';
@@ -28,6 +29,8 @@ import { MonthFormatterPipe } from '../../../pipes/month-formatter.pipe';
     ],
 })
 export class CalendarHeaderComponent {
+  protected icons = inject(RLB_ICONS);
+
   view = input<CalendarView>('month');
   currentDate = input.required<IDateTz>();
   timezone = input.required<string>();

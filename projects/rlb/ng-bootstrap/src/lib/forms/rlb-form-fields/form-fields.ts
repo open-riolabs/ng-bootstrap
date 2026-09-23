@@ -21,6 +21,10 @@ interface _FormField {
   | 'textarea'
   | string;
   cols?: string;
+  /**
+   * Value the control starts on. Left out, a text field starts empty and a switch starts off.
+   */
+  value?: any;
   validators?: ValidatorFn | ValidatorFn[];
 }
 

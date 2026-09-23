@@ -1,4 +1,5 @@
 export * from './dt-action.component';
+export * from './dt-query';
 export * from './dt-actions.component';
 export * from './dt-cell.component';
 export * from './dt-header.component';

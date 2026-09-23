@@ -6,18 +6,18 @@
     }
     @if (showRefresh()) {
     <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="refreshItem.emit()"
-      [disabled]="loading()">
-      <i class="fa-solid fa-arrows-rotate"></i>
+      [disabled]="loading()" [attr.aria-label]="refreshLabel()">
+      <i [class]="icons.refresh" aria-hidden="true"></i>
     </button>
     }
     @if (creationStrategy() === 'page') {
-    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl()">
-      <i class="fa-solid fa-plus"></i>
+    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl()" [attr.aria-label]="createLabel()">
+      <i [class]="icons.add" aria-hidden="true"></i>
     </button>
     }
     @if (creationStrategy() === 'modal') {
-    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()">
-      <i class="fa-solid fa-plus"></i>
+    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()" [attr.aria-label]="createLabel()">
+      <i [class]="icons.add" aria-hidden="true"></i>
     </button>
     }
   </div>

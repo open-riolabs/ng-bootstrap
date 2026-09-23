@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { TableDataQuery } from '@open-rlb/ng-bootstrap';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
 import { DOCS_IMPORTS, DocApiRow } from '../../../shared/docs';
@@ -52,6 +53,56 @@ export class TablesComponent {
     <rlb-dt-cell>alex&#64;gmail.com</rlb-dt-cell>
   </rlb-dt-row>
 </rlb-dt-table>`;
+
+  // ── Sorting and filtering ─────────────────────────────────────
+  sortingExample = `<rlb-dt-table [items]="rows()" (data-query)="onDataQuery($event)">
+  <rlb-dt-header field="id" sortable>ID</rlb-dt-header>
+  <rlb-dt-header field="name" sortable filtrable>Name</rlb-dt-header>
+  <rlb-dt-header field="email" filtrable>Email</rlb-dt-header>
+  &#64;for (user of rows(); track user.id) {
+    <rlb-dt-row>
+      <rlb-dt-cell>{{ user.id }}</rlb-dt-cell>
+      <rlb-dt-cell>{{ user.name }}</rlb-dt-cell>
+      <rlb-dt-cell>{{ user.email }}</rlb-dt-cell>
+    </rlb-dt-row>
+  }
+</rlb-dt-table>`;
+
+  private readonly allSortableUsers = [
+    { id: 1, name: 'George', email: 'george@gmail.com' },
+    { id: 2, name: 'Paul', email: 'paul@gmail.com' },
+    { id: 3, name: 'Alex', email: 'alex@gmail.com' },
+    { id: 4, name: 'Bianca', email: 'bianca@gmail.com' },
+  ];
+
+  readonly sortableUsers = signal(this.allSortableUsers);
+
+  /**
+   * The table emits the query; answering it is the caller's job. Here that means sorting and
+   * filtering a local array, but the same handler would forward the query to an API unchanged.
+   */
+  onDataQuery(query: TableDataQuery) {
+    const filter = query.filter ?? {};
+    let rows = this.allSortableUsers.filter(user =>
+      Object.entries(filter).every(([field, value]) =>
+        String((user as Record<string, unknown>)[field] ?? '')
+          .toLowerCase()
+          .includes(String(value).toLowerCase()),
+      ),
+    );
+
+    const sorting = query.sorting;
+    if (sorting) {
+      rows = [...rows].sort((a, b) => {
+        const left = (a as Record<string, unknown>)[sorting.column] as string | number;
+        const right = (b as Record<string, unknown>)[sorting.column] as string | number;
+        const comparison = left > right ? 1 : left < right ? -1 : 0;
+        return sorting.direction === 'asc' ? comparison : -comparison;
+      });
+    }
+
+    this.sortableUsers.set(rows);
+  }
 
   // ── Pagination (pages mode) ───────────────────────────────────────────────
   paginationExample = `<rlb-dt-table
@@ -170,14 +221,23 @@ export class TablesComponent {
     { name: 'refresh-item', type: 'void', description: 'Emitted when the user clicks the refresh button.', kind: 'Output' },
     { name: 'load-more', type: 'void', description: "Emitted when the user clicks the load-more button (pagination-mode is 'load-more').", kind: 'Output' },
     { name: 'pagination', type: '{ page: number; size: number }', description: 'Emitted on every page or page-size change with the new page index and size.', kind: 'Output' },
+    { name: 'data-query', type: 'TableDataQuery', description: 'Emitted whenever the page, the sorting or a column filter changes, carrying all three together. Listen to this one as soon as a column can sort or filter.', kind: 'Output' },
+    { name: 'sorting', type: 'TableSort | undefined', default: 'undefined', description: 'Which column is sorting and in which direction. Two-way: bind [(sorting)] to drive it from the URL or restore it.', kind: 'Input' },
+    { name: 'filter', type: 'TableFilter', default: '{}', description: 'Value of each column filter, keyed by the header field. Two-way.', kind: 'Input' },
+    { name: 'filter-debounce', type: 'number', default: '300', description: 'Milliseconds to wait after the last keystroke before emitting a filter query.', kind: 'Input' },
+    { name: 'refreshLabel', type: 'string', default: "'Refresh'", description: 'Accessible name for the icon-only refresh button.', kind: 'Input' },
+    { name: 'createLabel', type: 'string', default: "'Create'", description: 'Accessible name for the icon-only create button.', kind: 'Input' },
   ];
 
   // ── API rows — rlb-dt-header ──────────────────────────────────────────────
   headerApi: DocApiRow[] = [
     { name: 'field', type: 'string | undefined', default: 'undefined', description: 'Data field name this column maps to (used for sorting).', kind: 'Input' },
     { name: 'type', type: "'number' | 'string' | undefined", default: 'undefined', description: 'Data type of the column, used when sorting.', kind: 'Input' },
-    { name: 'sortable', type: 'boolean', default: 'false', description: 'Enables sort toggle on this column header.', kind: 'Input' },
-    { name: 'filtrable', type: 'boolean', default: 'false', description: 'Enables filter input on this column.', kind: 'Input' },
+    { name: 'sortable', type: 'boolean', default: 'false', description: 'Shows a sort control that cycles ascending, descending and unsorted. Requires field, and emits (data-query) on the table.', kind: 'Input' },
+    { name: 'filtrable', type: 'boolean', default: 'false', description: 'Shows a filter box under the column heading. Requires field. Emits (data-query) once typing stops.', kind: 'Input' },
+    { name: 'sortLabel', type: 'string', default: "'Sort'", description: 'Accessible name for the sort control, which is otherwise only an arrow.', kind: 'Input' },
+    { name: 'filterLabel', type: 'string', default: "'Filter'", description: 'Accessible name for the filter box.', kind: 'Input' },
+    { name: 'filterPlaceholder', type: 'string | undefined', default: 'undefined', description: 'Placeholder shown inside the filter box.', kind: 'Input' },
     { name: 'class', type: 'string | undefined', default: 'undefined', description: 'Extra CSS class(es) applied to the <th> element.', kind: 'Input' },
     { name: 'style', type: 'string | undefined', default: 'undefined', description: 'Inline style applied to the <th> element.', kind: 'Input' },
   ];
