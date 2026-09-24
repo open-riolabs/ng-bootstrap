@@ -40,6 +40,30 @@ export class ButtonsComponent {
 <button rlb-button color="secondary" disabled>Button</button>
 <button rlb-button color="primary" outline disabled>Primary button</button>`;
 
+  splitExample = `<rlb-split-button color="primary" (action)="save()">
+  Save
+  <li><a class="dropdown-item" href="#">Save and close</a></li>
+  <li><a class="dropdown-item" href="#">Save as draft</a></li>
+</rlb-split-button>`;
+
+  splitOptionsExample = `<rlb-split-button color="secondary" outline size="sm">…</rlb-split-button>
+<rlb-split-button color="danger" icon="bi bi-trash">…</rlb-split-button>
+<rlb-split-button menu-disabled>…</rlb-split-button>`;
+
+  splitApi: DocApiRow[] = [
+    { name: 'color', type: 'Color', default: "'primary'", description: 'Bootstrap colour for both halves.', kind: 'Input' },
+    { name: 'size', type: "'sm' | 'md' | 'lg' | undefined", default: "'md'", description: 'Size of the whole group.', kind: 'Input' },
+    { name: 'outline', type: 'boolean', default: 'false', description: 'Outlined rather than filled.', kind: 'Input' },
+    { name: 'icon', type: 'string | undefined', default: 'undefined', description: 'Icon classes drawn before the label of the main button.', kind: 'Input' },
+    { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables both halves.', kind: 'Input' },
+    { name: 'menu-disabled', type: 'boolean', default: 'false', description: 'Disables only the arrow, for when there is nothing else to offer yet.', kind: 'Input' },
+    { name: 'menu-align', type: "'start' | 'end'", default: "'start'", description: 'Which edge the menu lines up with. Starts on the left, as Bootstrap’s own split button does; end is for the button at the right-hand edge of a toolbar.', kind: 'Input' },
+    { name: 'menuLabel', type: 'string', default: "'More actions'", description: 'What the arrow is called. It has no text of its own, so without this a screen reader announces «button» and stops — beside another button that does have a name.', kind: 'Input' },
+    { name: 'action', type: 'EventEmitter<MouseEvent>', description: 'The main button was pressed. The menu items emit their own.', kind: 'Output' },
+    { name: '(default slot)', type: 'content', description: 'The label of the main button.', kind: 'Content' },
+    { name: 'li / [rlb-dropdown-item]', type: 'content', description: 'The menu, projected into the dropdown — the same items as anywhere else in the library.', kind: 'Content' },
+  ];
+
   api: DocApiRow[] = [
     { name: 'color', type: 'Color', default: "'primary'", description: 'Bootstrap contextual color of the button (primary, secondary, success, danger, warning, info, light, dark).', kind: 'Input' },
     { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Button size.', kind: 'Input' },

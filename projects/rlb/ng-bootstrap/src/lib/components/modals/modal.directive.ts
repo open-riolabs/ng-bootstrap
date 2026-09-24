@@ -1,7 +1,9 @@
-import { AfterViewInit, Directive, effect, ElementRef, input, isSignal, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, effect, ElementRef, inject, input, isSignal, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import type { Modal } from 'bootstrap';
 import bootstrap from '../../shared/bootstrap';
 import { BreakpointService } from '../../shared/breakpoint.service';
+import { RlbDialogOverlayScope } from '../../shared/dialog-overlay-scope.service';
+import { UniqueIdService } from '../../shared/unique-id.service';
 import { ModalCloseReason } from '../../shared/types';
 import { IModal } from './data/modal';
 import { ModalOptions } from './data/modal-options';
@@ -19,6 +21,9 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
   private _reasonButtons!: NodeListOf<HTMLButtonElement> | null;
   private _modalReason!: ModalCloseReason;
   private triggerElement: HTMLElement | null = null;
+
+  private overlayScope = inject(RlbDialogOverlayScope);
+  private idService = inject(UniqueIdService);
 
   id = input.required<string>({ alias: 'id' });
   instance = input.required<IModal>({ alias: 'data-instance' });
@@ -147,6 +152,7 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
     this.modalElement.addEventListener(`show.bs.modal`, this._openChange_f);
     this.modalElement.addEventListener(`shown.bs.modal`, this._openChange_f);
     this.initButtons();
+    this.nameDialog();
     this.bsModal = bootstrap.Modal.getOrCreateInstance(this.modalElement, {
       backdrop: opts?.backdrop || true,
       keyboard: opts?.keyboard || true,
@@ -157,6 +163,7 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
 
   ngOnDestroy(): void {
     if (this.modalElement) {
+      this.overlayScope.release(this.modalElement);
       this.modalElement.removeEventListener(`hide.bs.modal`, this._openChange_f);
       this.modalElement.removeEventListener(
         `hidden.bs.modal`,
@@ -174,6 +181,18 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
   }
 
   private _openChange_f = (e: Event) => {
+    if (e.type === 'shown.bs.modal') {
+      this.overlayScope.claim(this.modalElement);
+    }
+
+    if (e.type === 'hidden.bs.modal') {
+      this.overlayScope.release(this.modalElement);
+      // Every way out lands here — the buttons, Escape, a click on the backdrop — which is why
+      // the focus goes back from here rather than from each of them. Closing a dialog with the
+      // keyboard used to leave the focus on <body>, at the top of the page.
+      this.triggerElement?.focus();
+    }
+
     this.innerModalService.eventModal(
       e.type.replace('.bs.modal', ''),
       this._modalReason,
@@ -181,6 +200,29 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
       this.instance()?.result,
     );
   };
+
+  /**
+   * Gives the dialog the name a screen reader reads out.
+   *
+   * Bootstrap writes `role="dialog"` and `aria-modal` itself but cannot know what the thing is
+   * called, so without this it announces «dialog» and stops. The title is already on screen; it
+   * only needed an id and a reference to it.
+   */
+  private nameDialog(): void {
+    // Anything the caller said itself wins, including a labelledby pointing at their own heading.
+    if (
+      this.modalElement.hasAttribute('aria-label') ||
+      this.modalElement.hasAttribute('aria-labelledby')
+    ) {
+      return;
+    }
+
+    const title = this.contentElement.querySelector<HTMLElement>('.modal-title');
+    if (!title) return;
+
+    if (!title.id) title.id = `rlb-modal-title${this.idService.id}`;
+    this.renderer.setAttribute(this.modalElement, 'aria-labelledby', title.id);
+  }
 
   show() {
     this.bsModal?.show();
@@ -190,7 +232,6 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
       this._modalReason = reason;
     }
     this.bsModal?.hide();
-    this.triggerElement?.focus();
   }
 
   initButtons(): void {
@@ -205,7 +246,6 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
           ) as ModalCloseReason;
           if (this._modalReason === 'cancel' || this._modalReason === 'close') {
             this.bsModal?.hide();
-            this.triggerElement?.focus();
           }
           if (this._modalReason === 'ok') {
             const inst = this.instance();
@@ -213,7 +253,6 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
 
             if (isValid !== false) { // Default to true if undefined
               this.bsModal?.hide();
-              this.triggerElement?.focus();
             }
           }
         });

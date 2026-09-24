@@ -1,4 +1,7 @@
 export * from './dt-action.component';
+export * from './dt-host';
+export * from './dt-query';
+export * from './dt-bulk-actions.component';
 export * from './dt-actions.component';
 export * from './dt-cell.component';
 export * from './dt-header.component';
@@ -8,6 +11,7 @@ export * from './dt-loading.component';
 export * from './dt-noitems.component';
 
 import { DataTableActionComponent } from './dt-action.component';
+import { DataTableBulkActionsComponent } from './dt-bulk-actions.component';
 import { DataTableActionsComponent } from './dt-actions.component';
 import { DataTableCellComponent } from './dt-cell.component';
 import { DataTableHeaderComponent } from './dt-header.component';
@@ -24,5 +28,6 @@ export const TABLE = [
   DataTableRowComponent,
   DataTableComponent,
   DataTableLoadingComponent,
-  DataTableNoItemsComponent
+  DataTableNoItemsComponent,
+  DataTableBulkActionsComponent
 ];

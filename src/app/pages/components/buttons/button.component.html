@@ -74,4 +74,42 @@
   </docs-example>
 
   <docs-api selector="button[rlb-button], a[rlb-button]" [rows]="api" />
+
+  <docs-example
+    anchor="split-button"
+    heading="Split button"
+    description="The action people take, with the ones they sometimes take behind it. A toolbar that offers «Save», «Save and close» and «Save as draft» as three equal buttons makes the reader choose before they have read them; a split button makes the common one a click and leaves the rest one click further away."
+    [code]="splitExample">
+    <rlb-split-button color="primary" menuLabel="More save options">
+      Save
+      <li><a class="dropdown-item" href="javascript:void(0)">Save and close</a></li>
+      <li><a class="dropdown-item" href="javascript:void(0)">Save as draft</a></li>
+      <li><hr class="dropdown-divider" /></li>
+      <li><a class="dropdown-item text-danger" href="javascript:void(0)">Discard</a></li>
+    </rlb-split-button>
+  </docs-example>
+
+  <docs-example
+    heading="Colour, size and a disabled menu"
+    description="menu-disabled greys out only the arrow, for a screen where the extra actions are not available yet but the main one is."
+    [code]="splitOptionsExample">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <rlb-split-button color="secondary" outline size="sm" menuLabel="More">
+        Export
+        <li><a class="dropdown-item" href="javascript:void(0)">Export as CSV</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0)">Export as PDF</a></li>
+      </rlb-split-button>
+
+      <rlb-split-button color="danger" icon="bi bi-trash" menuLabel="More">
+        Delete
+        <li><a class="dropdown-item" href="javascript:void(0)">Delete and block</a></li>
+      </rlb-split-button>
+
+      <rlb-split-button menu-disabled menuLabel="More">
+        Publish
+      </rlb-split-button>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-split-button" [rows]="splitApi" />
 </docs-page>

@@ -27,8 +27,10 @@ export class HomeComponent {
       title: 'Actions',
       items: [
         { name: 'Button', icon: 'bi-hand-index', desc: 'Clickable button directive with colors, sizes and outline styles.', link: '/components/buttons' },
+        { name: 'Split button', icon: 'bi-segmented-nav', desc: 'The action people take, with the ones they sometimes take behind it.', link: '/components/buttons' },
         { name: 'Badge', icon: 'bi-person-badge', desc: 'Small count and labelling indicators.', link: '/components/badges' },
         { name: 'Dropdowns', icon: 'bi-menu-button-fill', desc: 'Toggleable contextual menus.', link: '/components/dropdowns' },
+        { name: 'Fab', icon: 'bi-plus-circle', desc: 'Round icon button for the one action a screen is about.', link: '/components/fab' },
       ],
     },
     {
@@ -36,9 +38,12 @@ export class HomeComponent {
       items: [
         { name: 'Card', icon: 'bi-card-heading', desc: 'Flexible content container with header, body and footer.', link: '/components/cards' },
         { name: 'List', icon: 'bi-list-ul', desc: 'List groups for series of content.', link: '/components/lists' },
-        { name: 'DataTable', icon: 'bi-table', desc: 'Tables with sorting, filtering, pagination and actions.', link: '/components/tables' },
+        { name: 'DataTable', icon: 'bi-table', desc: 'Sorting, filtering, row selection, hideable columns, sticky header and CSV export.', link: '/components/tables' },
         { name: 'Placeholder', icon: 'bi-bounding-box', desc: 'Loading placeholders for content skeletons.', link: '/components/placeholders' },
         { name: 'Sidebar', icon: 'bi-layout-sidebar-inset', desc: 'Vertical, collapsible navigation menu.', link: '/components/sidebars' },
+        { name: 'Theme', icon: 'bi-circle-half', desc: 'Dark mode on data-bs-theme, driven by signals.', link: '/components/theme' },
+        { name: 'Stat & timeline', icon: 'bi-graph-up', desc: 'The tile that shows one number, and the list of what happened.', link: '/components/dashboard' },
+        { name: 'Virtual list & palette', icon: 'bi-lightning', desc: 'Ten thousand rows without slowing down, and every command one keystroke away.', link: '/components/scale' },
       ],
     },
     {
@@ -61,6 +66,7 @@ export class HomeComponent {
         { name: 'Offcanvas', icon: 'bi-layout-sidebar', desc: 'Hidden sidebars for navigation or content.', link: '/components/offcanvass' },
         { name: 'Tooltips', icon: 'bi-question-circle', desc: 'Contextual hints on hover or focus.', link: '/components/tooltips' },
         { name: 'Loader', icon: 'bi-arrow-clockwise', desc: 'Spinners and progress indicators.', link: '/components/loaders' },
+        { name: 'Empty & confirm', icon: 'bi-patch-question', desc: 'Empty states, and «are you sure?» next to the button that asked.', link: '/components/feedback' },
       ],
     },
     {
@@ -68,14 +74,16 @@ export class HomeComponent {
       items: [
         { name: 'Accordions', icon: 'bi-chevron-bar-expand', desc: 'Vertically stacked, expandable panels.', link: '/components/accordions' },
         { name: 'Collapses', icon: 'bi-arrows-collapse', desc: 'Toggle the visibility of content.', link: '/components/collapses' },
+        { name: 'Tree', icon: 'bi-diagram-3', desc: 'Nested data with expansion, selection and search — categories, permissions, an org chart.', link: '/components/tree' },
       ],
     },
     {
       title: 'Media & content',
       items: [
         { name: 'Avatar', icon: 'bi-person-bounding-box', desc: 'User avatars with sizes and shapes.', link: '/components/avatars' },
+        { name: 'Avatar group', icon: 'bi-people', desc: 'Who is on this: a pile of avatars, overlapping, with the rest counted.', link: '/components/avatars' },
         { name: 'Carousel', icon: 'bi-images', desc: 'Slideshow for cycling through content.', link: '/components/carousels' },
-        { name: 'Wizard', icon: 'bi-ui-checks', desc: 'Multi-step forms built on the carousel.', link: '/components/wizards' },
+        { name: 'Stepper', icon: 'bi-ui-checks', desc: 'A form split into steps, with validation per step.', link: '/components/wizards' },
         { name: 'Chat', icon: 'bi-chat-dots', desc: 'Conversation bubbles with replies and reactions.', link: '/components/chats' },
         { name: 'Calendar', icon: 'bi-calendar4-range', desc: 'Timezone-aware month, week and day calendar.', link: '/components/calendar' },
       ],

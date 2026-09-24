@@ -14,7 +14,7 @@ import { FormField, FormFieldsDefinition, IForm } from './form-fields';
 import { NgTemplateOutlet, NgClass } from '@angular/common';
 import { InputComponent } from '../inputs/input.component';
 import { SwitchComponent } from '../inputs/switch.component';
-import { TranslatePipe } from '@ngx-translate/core';
+import { RlbTranslatePipe } from '../../pipes/rlb-translate.pipe';
 
 @Component({
     selector: 'rlb-form-fields',
@@ -28,7 +28,7 @@ import { TranslatePipe } from '@ngx-translate/core';
         NgClass,
         InputComponent,
         SwitchComponent,
-        TranslatePipe,
+        RlbTranslatePipe,
     ],
 })
 export class FormFieldsComponent implements IForm {
@@ -66,11 +66,24 @@ export class FormFieldsComponent implements IForm {
     const formGroup = {} as { [k: string]: FormControl; };
     for (const field of this._fields()) {
       formGroup[field.property] = new FormControl(
-        field.property,
+        this.initialValue(field),
         field.validators,
       );
     }
     this.filterForm.set(new FormGroup(formGroup));
+  }
+
+  /**
+   * The value a control starts on.
+   *
+   * This used to be `field.property`, which seeded every control with its own key — a form built
+   * from `{ email: … }` opened with the word `email` already typed into the email box. A field can
+   * now say what it starts on; saying nothing leaves a text field empty and a switch off, rather
+   * than null, which `rlb-switch` would read as an indeterminate checkbox.
+   */
+  private initialValue(field: FormField): any {
+    if (field.value !== undefined) return field.value;
+    return this.isSwitch(field.type) ? false : null;
   }
 
   onFilterSubmit() {

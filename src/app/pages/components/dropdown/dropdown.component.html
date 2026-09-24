@@ -1,6 +1,6 @@
 <docs-page
   title="Dropdown"
-  lead="Use rlb-dropdown with the [rlb-dropdown] trigger directive to display contextual overlays. Supports custom content, list-based menus, router links, directional placement, and lifecycle events.">
+  lead="Use rlb-dropdown with the [rlb-dropdown] trigger directive to display contextual overlays. Supports custom content, list-based menus, router links, directional placement, and lifecycle events. Positioned by the CDK Overlay — it opens the other way rather than running off the window, and it is not clipped by whatever it sits inside.">
 
   <docs-example
     heading="Basic dropdown"
@@ -70,7 +70,7 @@
 
   <docs-example
     heading="Offset"
-    description="Pass an [offset] array ([x, y] in pixels) to shift the menu relative to the trigger. A non-empty offset automatically switches Popper.js to dynamic positioning."
+    description="Pass an [offset] array ([x, y] in pixels) to shift the menu relative to the trigger. It used to double as the switch between static and dynamic positioning; there is one mode now, so an offset is only ever an offset."
     [code]="offsetExample">
     <rlb-dropdown>
       <button rlb-button rlb-dropdown [offset]="[10, 25]">Dropdown Button</button>
@@ -82,7 +82,7 @@
 
   <docs-example
     heading="Responsive placement"
-    description="Use placement-{breakpoint} inputs on rlb-dropdown-container to change menu alignment at specific viewport widths. Resize the page to see the switch take effect."
+    description="Use placement-{breakpoint} inputs on rlb-dropdown-container to change menu alignment at specific viewport widths. The breakpoint is read through the CDK BreakpointObserver rather than by a CSS class, because the menu is no longer in the flow where such a class could act. Resize the page to see the switch take effect."
     [code]="placementExample">
     <rlb-dropdown>
       <button rlb-button rlb-dropdown>Dropdown Button responsive placement</button>
@@ -100,6 +100,37 @@
       <button rlb-button rlb-dropdown (status-changed)="onStatus($event)">Dropdown</button>
       <rlb-dropdown-container>Content</rlb-dropdown-container>
     </rlb-dropdown>
+  </docs-example>
+
+  <docs-example
+    heading="Keyboard"
+    description="Down opens the menu with the first item focused; the arrows walk it, skipping anything disabled and wrapping round; Home and End jump to either end; Escape closes and puts focus back on the toggle. The items are real buttons — the action used to be a span with role=&quot;button&quot;, which Tab skipped and Enter did nothing to."
+    [code]="keyboardExample">
+    <rlb-dropdown>
+      <button rlb-button rlb-dropdown>Menu</button>
+      <ul rlb-dropdown-menu>
+        <li rlb-dropdown-item>Rename</li>
+        <li rlb-dropdown-item disabled>Move</li>
+        <li rlb-dropdown-item>Duplicate</li>
+        <li rlb-dropdown-item divider></li>
+        <li rlb-dropdown-item>Delete</li>
+      </ul>
+    </rlb-dropdown>
+  </docs-example>
+
+  <docs-example
+    heading="Not clipped by what it sits in"
+    description="The menu is rendered in an overlay at the end of the body, so a scrolling box, a table cell or anything with overflow: hidden no longer cuts it off. This toggle is inside a 120px box that hides its overflow."
+    [code]="overflowExample">
+    <div style="overflow: hidden; height: 120px; border: 1px dashed var(--bs-border-color); padding: 1rem">
+      <rlb-dropdown>
+        <button rlb-button rlb-dropdown>Inside an overflow: hidden box</button>
+        <ul rlb-dropdown-menu>
+          <li rlb-dropdown-item>You can still read this</li>
+          <li rlb-dropdown-item>And this</li>
+        </ul>
+      </rlb-dropdown>
+    </div>
   </docs-example>
 
   <docs-api selector="rlb-dropdown" heading="rlb-dropdown" [rows]="dropdownApi" />

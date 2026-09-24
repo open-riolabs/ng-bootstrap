@@ -1,6 +1,6 @@
 ---
 name: rlb-inputs
-description: Expert guidance for @open-rlb/ng-bootstrap form input components (ControlValueAccessor-based, integrate with reactive and template-driven forms). Use when building forms or using input components.
+description: Expert guidance for @open-rlb/ng-bootstrap form input components (ControlValueAccessor-based: text, textarea, select, radio, checkbox, switch, chips, autocomplete and the ready-made country/dial-code/timezone ones, datalist, file and drag-and-drop upload, colour, range, formatted numbers and money, rating, one-time code, segmented, tag input, tree select, and the timezone-aware rlb-datepicker, rlb-date-range and rlb-time-picker), plus validation messages, the requiredAutocompleteValue validator and the data-driven rlb-form-fields. Use when building forms or using input components.
 ---
 
 # RLB ng-Bootstrap Form Inputs Skill
@@ -9,14 +9,33 @@ You are an expert in the **@open-rlb/ng-bootstrap** form input components. All i
 
 ## Common Pattern
 
-All inputs share these base inputs:
+All of these implement `ControlValueAccessor`, so they bind with `formControlName`, `[formControl]`
+or `[(ngModel)]`. Most share:
+
 - `disabled: boolean` — disables the control
 - `readonly: boolean` — read-only display
-- `size: 'small' | 'large' | undefined` — field size variant
-- `id: string` — HTML id (auto-generated if omitted)
-- `enable-validation: boolean` — show Bootstrap validation styles (invalid/valid)
+- `size: 'small' | 'large' | undefined` — field size
 
-All inputs bind via `formControlName` or `[(ngModel)]`.
+⚠️ **`size` here is `'small' | 'large'`**, not the `'sm' | 'md' | 'lg'` used by buttons, spinners
+and the rest of the library. `size="sm"` on an input does nothing. The one exception is
+`rlb-segmented`, which is a button group and takes the button `Size`.
+
+⚠️ **The id input is aliased inconsistently.** The older controls take **`id`**; the newer ones take
+**`inputId`**:
+
+| Attribute | Controls |
+|---|---|
+| `id` | `rlb-checkbox`, `rlb-switch`, `rlb-radio`, `rlb-textarea`, `rlb-range`, `rlb-color`, `rlb-file`, `rlb-file-dnd`, `rlb-datalist`, `rlb-select-chips`, `rlb-autocomplete` and the three preset autocompletes |
+| `inputId` | `rlb-input`, `rlb-select`, `rlb-number`, `rlb-otp`, `rlb-rating`, `rlb-segmented`, `rlb-tag-input`, `rlb-datepicker`, `rlb-date-range`, `rlb-time-picker`, `rlb-tree-select` |
+
+Either is optional — one is generated when you say nothing. You need it only to point a `<label
+for="…">` at the control.
+
+⚠️ **`enable-validation` is not universal.** It exists on `rlb-input`, `rlb-select`,
+`rlb-checkbox`, `rlb-number`, `rlb-autocomplete` (and the presets), `rlb-datepicker`,
+`rlb-date-range`, `rlb-time-picker` and `rlb-tree-select`. It does **not** exist on `rlb-textarea`,
+`rlb-switch`, `rlb-radio`, `rlb-range`, `rlb-color`, `rlb-file`, `rlb-datalist`, `rlb-select-chips`,
+`rlb-otp`, `rlb-rating`, `rlb-segmented` or `rlb-tag-input` — for those, style the wrapper yourself.
 
 ---
 
@@ -159,6 +178,104 @@ chosen values are stored as a `string[]`.
 
 ---
 
+## rlb-datepicker — One Day
+
+Picks a day. The value is an `IDateTz` at **local midnight of the chosen day, in this control's
+timezone** — not a native `<input type="date">`, which ignores the zone and looks different in every
+browser.
+
+```html
+<rlb-datepicker
+  formControlName="birthday"
+  timezone="Europe/Rome"
+  format="DD/MM/YYYY"
+  locale="it"
+  [first-day-of-week]="1"
+  [min]="today"
+  [max]="endOfYear"
+  enable-validation
+/>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `timezone` | `string` | from `provideRlbDefaults`, else `'UTC'` | The zone the day belongs to. |
+| `format` | `string` | `'DD/MM/YYYY'` | Writes the box **and** reads back what is typed into it. |
+| `locale` | `string` | `'en'` | Month and weekday names. |
+| `first-day-of-week` | `number` | `1` | `0` is Sunday. |
+| `min` / `max` | `IDateTz` | — | Days outside are greyed out; a typed one is refused. |
+| `clearable` | `boolean` | `true` | Button that empties the value. |
+| `show-today` | `boolean` | `true` | Shortcut at the foot of the panel. |
+| `readonly` | `boolean` | `false` | Stops typing; the calendar button still opens. |
+| `openLabel` / `clearLabel` / `todayLabel` | `string` | English | Accessible names. |
+
+The box is editable. What is typed is parsed with `format`; if it does not parse, or falls outside
+`min`/`max`, the box is **put back the way it was** — a box saying one thing while the form holds
+another is worse than refusing.
+
+⚠️ `DateTz.parse` only understands an uppercase `YYYY`; given `yyyy` it silently reads the year as
+1970. The component normalises the year token before parsing, so either case works here — but
+remember it when calling `DateTz.parse` yourself.
+
+## rlb-date-range — From / To
+
+```html
+<rlb-date-range
+  formControlName="period"
+  timezone="Europe/Rome"
+  separator=" → "
+/>
+```
+
+Value is `RlbDateRange` = `{ start?: IDateTz; end?: IDateTz }`. The first click sets the start and
+clears any end; the second sets the end and closes. A second click **before** the start is not an
+error — it becomes the new start.
+
+Same inputs as `rlb-datepicker` plus `separator` (default `' – '`). Unlike the single picker the box
+is **not typeable**: a range on one line has no format that can be read back without guessing where
+the middle is.
+
+⚠️ Both are built on CDK Overlay — the app must load `@angular/cdk/overlay-prebuilt.css`, or the
+panel lands in the page corner. `ng add` registers it. Same for `rlb-time-picker` and
+`rlb-tree-select`. See the **rlb-overlays** skill.
+
+### rlb-date-panel — the calendar without a box
+
+The month grid the two pickers open, exported on its own for a calendar that lives inline on the
+page rather than in a popup. It is **not** a form control — it reports a click and holds no value.
+
+```html
+<rlb-date-panel
+  timezone="Europe/Rome"
+  [selected]="day()"
+  [min]="today"
+  (daySelected)="day.set($event)"
+/>
+```
+
+Inputs: `timezone` (**required**), `locale` (`'en'`), `first-day-of-week` (`1`), `selected`
+(`IDateTz`), `range` (`RlbDateRange`, to draw a highlighted span), `min`, `max`, `show-today`
+(`true`), `todayLabel`, `previousMonthLabel`, `nextMonthLabel`. Output: `(daySelected)` → `IDateTz`.
+
+`firstOfMonth`, `addMonths` and `monthGrid` are exported alongside it if you are laying out a month
+yourself.
+
+### Working with the value
+
+```typescript
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
+
+// Never `new Date(...)`. Build bounds with DateTz:
+readonly today = DateTz.now('Europe/Rome');
+readonly limit = DateTz.parse('2027-12-31', 'YYYY-MM-DD', 'Europe/Rome');
+
+format(d: IDateTz | undefined) {
+  return d ? new DateTz(d).toString!('WL DD LM YYYY', 'it') : '';
+}
+```
+
+---
+
 ## rlb-textarea — Multi-line Text
 
 ```html
@@ -211,8 +328,47 @@ interface AutocompleteItem {
 | `input-autocomplete` | `string` | `'off'` | HTML autocomplete attr |
 | `enable-validation` | `boolean` | `false` | — |
 
+| `open-on-focus` | `boolean` | `false` | Opens the list on focus, before anything is typed. |
+| `initial-suggestions` | `AutocompleteItem[]` | `[]` | What `open-on-focus` shows before the first search. |
+
 **Outputs:** `selected: AutocompleteItem`
 **Note:** Debounces search by 300ms automatically.
+
+### Ready-made autocompletes
+
+Three come with their own data — no `[autocomplete]` function to write.
+
+```html
+<rlb-autocomplete-country formControlName="country" enable-flag-icons detect-locale />
+<rlb-autocomplete-country-dial-code formControlName="prefix" />
+<rlb-autocomplete-timezones formControlName="timezone" open-on-focus />
+```
+
+| Component | Value | Notes |
+|---|---|---|
+| `rlb-autocomplete-country` | `AutocompleteItem` | `enable-flag-icons` defaults to **`false`** here. |
+| `rlb-autocomplete-country-dial-code` | `AutocompleteItem` | `enable-flag-icons` defaults to **`true`** here. |
+| `rlb-autocomplete-timezones` | `string` | An IANA zone id — feed it straight to `DateTz`. |
+
+Shared inputs: `disabled` (a `model`, so `[(disabled)]` works), `readonly`, `placeholder`, `size`,
+`max-height` (`200`), `menu-max-width`, `id`, `enable-validation`, `open-on-focus`. The two country
+ones also take `detect-locale` (default `false`), which preselects from the browser's locale.
+
+---
+
+## rlb-datalist — Native Suggestions
+
+A plain text box backed by a `<datalist>`: the browser offers the options, and anything else typed
+is still accepted. Lighter than `rlb-autocomplete` when the list is short, static and local.
+
+```html
+<rlb-datalist formControlName="city" placeholder="City" />
+```
+
+**Inputs:** `disabled`, `readonly`, `placeholder`, `size`, `id`. **Value:** `string`.
+
+For a remote or large list use `rlb-autocomplete`; to *restrict* the answer to the list, use
+`rlb-select`.
 
 ---
 
@@ -231,11 +387,45 @@ interface AutocompleteItem {
 
 ---
 
-## rlb-dnd-file — Drag & Drop File
+## rlb-file-dnd — Drag & Drop File
+
+⚠️ The selector is **`rlb-file-dnd`**, not `rlb-dnd-file`, and it is **not a form control** — it has
+no `ControlValueAccessor`, so `formControlName` and `[(ngModel)]` do nothing on it. It reports the
+files through an output. Earlier versions of this document said otherwise; they were wrong. It also
+has no `accept` input — it takes any file that is dropped or browsed.
 
 ```html
-<rlb-dnd-file formControlName="upload" [multiple]="true" accept="image/*"></rlb-dnd-file>
+<rlb-file-dnd [multiple]="true" (files)="onFiles($event)" />
 ```
+
+```typescript
+onFiles(files: File[]) {
+  this.form.controls.upload.setValue(files);   // wire it to a form yourself
+}
+```
+
+| Input / output | Type | Default | Notes |
+|---|---|---|---|
+| `multiple` | `boolean` | `false` | Off, a new drop **replaces** the file instead of appending. |
+| `data` | `any` | `{}` | Wording for the drop zone: `data.content.drag` and `data.content.button` override «Drag & Drop files here» and «Browse Files». |
+| `id` | `string` | auto | Ties the hidden `<input type="file">` to its label. |
+| `(files)` | `File[]` | | The whole current list after every add or remove — not just the new ones. |
+
+It keeps its own list and renders a card per file with a remove button, so the parent only has to
+store what it is handed.
+
+### [rlb-dnd] — the drop target on its own
+
+The directive behind it, for when you want your own drop zone.
+
+```html
+<div rlb-dnd [multiple]="true" (fileDropped)="onFiles($event)" class="p-5 border border-2 rounded">
+  Drop files here
+</div>
+```
+
+Inputs: `multiple` (boolean, default `false`). Output: `(fileDropped)` → `File[]`. It adds the class
+`rlb-dnd-over` while something is dragged over it — style that, not `:hover`.
 
 ---
 
@@ -257,6 +447,205 @@ interface AutocompleteItem {
 
 ---
 
+## rlb-number — Formatted Numbers and Money
+
+Binds a real `number`, shows a formatted one. While the field has focus it holds the plain value
+instead: grouping marks inserted under the caret move it and make typing an amount a fight.
+
+```html
+<rlb-number formControlName="quantity" />
+
+<!-- The locale decides the symbol, its side and how many decimals the currency keeps. -->
+<rlb-number formControlName="price" currency="EUR" locale="it-IT" />
+
+<!-- Units a currency code cannot express. -->
+<rlb-number formControlName="weight" suffix="kg" [decimals]="1" />
+<rlb-number formControlName="code" prefix="#" align="left" />
+
+<!-- Bounds are applied on blur, never mid-keystroke. -->
+<rlb-number formControlName="people" [min]="1" [max]="10" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `locale` | `string` | `'en-GB'` | Decides the grouping separator and the decimal mark. Italian groups from five digits up, so `1234,5` is correct there. |
+| `currency` | `string` | — | ISO code. With one the value is written as money in `locale`. |
+| `decimals` | `number` | — | Left out, a currency uses its own and anything else allows 0–3. |
+| `min` / `max` | `number` | — | Applied when the field is left. Clamping a half-typed number is how `1` becomes `10` under your hands. |
+| `prefix` / `suffix` | `string` | — | Text pinned to either side of the box. |
+| `align` | `'left' \| 'right'` | `'right'` | Digits under digits down a column of fields. |
+
+Value: `number | null`. An empty box is `null`, never `0`.
+
+---
+
+## rlb-rating — Stars With a Keyboard
+
+```html
+<rlb-rating formControlName="score" />
+<rlb-rating [max]="10" color="danger" show-value formControlName="score" />
+<rlb-rating readonly [ngModel]="4.0" ariaLabel="Average score" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `max` | `number` | `5` | How many stars. |
+| `readonly` | `boolean` | `false` | A score being reported, not a control refusing to work: it leaves the tab order and reads as an image, not a disabled slider. |
+| `color` | `string` | `'warning'` | Bootstrap colour for the filled stars. |
+| `show-value` | `boolean` | `false` | Writes «3 / 5» beside them. |
+| `clearable` | `boolean` | `true` | Clicking the star already chosen sets the score to 0. |
+| `ariaLabel` | `string` | `'Rating'` | Stars carry no text; without this it announces as an unnamed slider. |
+
+Arrows move the score, Home and End jump to either end. Hovering previews; the preview is dropped
+as soon as the keyboard takes over, so the stars never disagree with `aria-valuenow`.
+
+---
+
+## rlb-otp — One-Time Code
+
+One box per character. Pasting the whole code into any box fills the rest, and Backspace in an
+empty box steps back into the one before — the two things the hand-written version always misses.
+
+```html
+<rlb-otp formControlName="code" (completed)="verify($event)" />
+<rlb-otp [length]="4" mask formControlName="pin" />
+<rlb-otp alphanumeric [length]="8" formControlName="voucher" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `length` | `number` | `6` | Boxes, and the length of a complete code. |
+| `alphanumeric` | `boolean` | `false` | Letters too, and no numeric keypad hint. |
+| `mask` | `boolean` | `false` | Password boxes, for a PIN. |
+| `ariaLabel` / `slotLabel` | `string` | `'One-time code'` / `'Digit'` | The group and each box («Digit 3»). |
+| `completed` | `EventEmitter<string>` | — | Fires when the last box is filled. |
+
+Value: the whole code as one `string`, not one value per box.
+
+---
+
+## rlb-segmented — One of a Few
+
+A real radio group that looks like a button group: one tab stop, arrows to move, `aria-checked` on
+each option. A `btn-group` with `[class.active]` bindings — the usual hand-written version — puts
+every option in the tab order and says nothing about which one is taken.
+
+```html
+<rlb-segmented formControlName="period" label="Period">
+  <rlb-segmented-option value="day" label="Day" />
+  <rlb-segmented-option value="week" label="Week" />
+  <rlb-segmented-option value="month" label="Month" />
+</rlb-segmented>
+
+<rlb-segmented formControlName="view" label="Layout" color="secondary" block size="lg">
+  <rlb-segmented-option value="list" label="List" icon="bi bi-list-ul" />
+  <rlb-segmented-option value="grid" label="Grid" icon="bi bi-grid-3x3-gap" />
+  <rlb-segmented-option value="map" label="Map" icon="bi bi-geo-alt" disabled />
+</rlb-segmented>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `label` | `string` | — | Names the group. Without it the question the options answer is lost. |
+| `color` | `'primary' \| 'secondary' \| 'dark'` | `'primary'` | Filled for the taken option, outlined for the rest. |
+| `size` | `Size` | — | `sm` / `md` / `lg`. |
+| `block` | `boolean` | `false` | Full width, split evenly. |
+
+`rlb-segmented-option`: `value` (any, compared by identity), `label`, `icon`, `disabled`. A disabled
+option is skipped by the arrow keys as well as unclickable. The options render nothing themselves —
+the group draws the buttons, because only the group can give them one tab stop.
+
+---
+
+## rlb-tag-input — Free-Text Chips
+
+The other half of `rlb-select-chips`: that one can only offer the options it was given, this one
+accepts anything the user invents.
+
+```html
+<rlb-tag-input formControlName="skills" placeholder="Add a skill…" />
+
+<rlb-tag-input
+  formControlName="labels"
+  [suggestions]="known"
+  [separators]="[',', ' ']"
+  [max-tags]="5"
+  (rejected)="say($event)"
+/>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `suggestions` | `string[]` | `[]` | A datalist — a hint, not a constraint. |
+| `separators` | `string[]` | `[',']` | Keys that end a tag, besides Enter. |
+| `max-tags` | `number` | — | Past it, adding is refused. |
+| `allow-duplicates` | `boolean` | `false` | Off, a repeat is refused rather than silently dropped. |
+| `case-sensitive` | `boolean` | `false` | Off, «Angular» and «angular » are the same tag. |
+| `rejected` | `EventEmitter<{ value, reason: 'duplicate' \| 'full' }>` | — | Nothing is shown by default: the wording belongs to the form. |
+
+Backspace in an empty box takes back the last tag. Leaving the field commits what is half-typed
+rather than dropping it — the usual way this control loses data. Value: `string[]`.
+
+---
+
+## rlb-time-picker — The Hour
+
+The other half of `rlb-datepicker`, on the same timezone-aware value.
+
+```html
+<rlb-time-picker formControlName="start" timezone="Europe/Rome" [minute-step]="15" />
+<rlb-time-picker formControlName="start" format="hh:mm AA" locale="en" timezone="America/New_York" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `format` | `string` | `'HH:mm'` | date-tz pattern. Also how a typed value is read back. |
+| `locale` | `string` | `'en'` | For anything in the format that is a word. |
+| `timezone` | `string` | `RLB_DEFAULTS.date.timezone` | Which zone the hour is read and written in. |
+| `minute-step` | `number` | `5` | Minutes between the choices in the second column. |
+| `clearable` | `boolean` | `true` | A button that empties the field. |
+
+Value: `IDateTz | undefined` — the day it already had, with the chosen hour and minute. A time with
+no date is almost never what a form means.
+
+**The trap this component exists to avoid:** the time is built from **local midnight plus minutes**,
+never with `set(9, 'hour')`. date-tz's mutators work on the raw UTC timestamp, so `set` lands on
+09:00 UTC — 11:00 in Rome in summer, and the wrong day either side of midnight.
+
+---
+
+## rlb-tree-select — A Select Whose Options Are a Tree
+
+`rlb-select` flattens the shape, and a hand-indented `<option>` list only pretends to have one: the
+indentation is decoration, the keyboard and the screen reader still see a flat list.
+
+```html
+<rlb-tree-select [nodes]="categories" formControlName="category" placeholder="Category" />
+
+<!-- Several at once: tick boxes in the panel, chips in the box, value becomes a string[]. -->
+<rlb-tree-select [nodes]="categories" multiple formControlName="categories" />
+
+<!-- Branches are headings, not answers: clicking one only opens it. -->
+<rlb-tree-select [nodes]="categories" [branches-selectable]="false" formControlName="leaf" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `nodes` | `RlbTreeNode[]` | `[]` | Same shape as `rlb-tree`. |
+| `multiple` | `boolean` | `false` | Tick boxes, chips, and a `string[]` value. |
+| `branches-selectable` | `boolean` | `false` | Whether a branch is a possible answer. |
+| `searchable` | `boolean` | `true` | A search box that opens the branches leading to a hit. |
+| `clearable` | `boolean` | `true` | A button that empties the field. |
+
+Value: **ids**, not nodes — `string` on its own, `string[]` with `multiple`. A form that round-trips
+through JSON should not carry whole subtrees with it. An id with no node behind it reads as nothing
+chosen rather than being shown as itself.
+
+The panel opens on the branches holding what is already chosen. See `rlb-tree` in the
+**rlb-components** skill for the node shape.
+
+---
+
 ## rlb-input-group — Input with Addons
 
 ```html
@@ -275,22 +664,95 @@ interface AutocompleteItem {
 
 ## rlb-input-validation — Validation Messages
 
+⚠️ It takes an **`errors` object**, not a control, and there is no `*rlbError` directive — earlier
+versions of this document invented both.
+
 ```html
-<rlb-input-validation [control]="form.get('email')">
-  <ng-container *rlbError="'required'">Email is required</ng-container>
-  <ng-container *rlbError="'email'">Invalid email format</ng-container>
-</rlb-input-validation>
+<rlb-input formControlName="email" type="email" enable-validation />
+<rlb-input-validation [errors]="form.controls.email.errors ?? {}" />
 ```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `errors` | `ValidationErrors` | `{}` | Two-way (`[(errors)]`), though one-way is what you normally want. Pass `control.errors ?? {}`. |
+
+It renders one `<span>` per error key and carries Bootstrap's `invalid-feedback` class on its host,
+so it is only visible when a sibling field has `.is-invalid` — which is what `enable-validation` on
+the input puts there.
+
+Each key is looked up as **`common.form.validation.<key>`** through `RLB_TRANSLATION_SERVICE`. With
+no translation service registered it falls back to printing the key and the error value —
+`common.form.validation.required: true` — which is a placeholder, not a message. So: either register
+a translation service (see **rlb-components**) and add those keys, or write the messages yourself:
+
+```html
+@if (form.controls.email.touched && form.controls.email.errors; as errors) {
+  <div class="invalid-feedback d-block">
+    @if (errors['required']) { Email is required } @else if (errors['email']) { Invalid email }
+  </div>
+}
+```
+
+`rlb-input-group` also picks up a projected `rlb-input-validation` via `contentChild`.
+
+---
+
+## [helpText] — A Hint Under a Field
+
+```html
+<div helpText="We never share it.">
+  <rlb-input formControlName="email" type="email" />
+</div>
+```
+
+The directive finds the first `<input>` **inside its host**, appends a `.form-text` div after it and
+points the input's `aria-labelledby` at it. Put it on a wrapper, not on the `rlb-input` itself, and
+give it a non-empty value — an empty string does nothing.
 
 ---
 
 ## Form Field Wrapper (rlb-form-fields)
 
+⚠️ The selector is **`rlb-form-fields`** (plural) and it is **data-driven**: it builds a whole form
+from a definition object. There is no `rlb-form-field` wrapper taking a `label` and a `required`
+flag — earlier versions of this document described one, and it does not exist. For an ordinary
+hand-written form, use a Bootstrap `<label class="form-label">` and the input directly.
+
 ```html
-<rlb-form-field label="Email" [required]="true">
-  <rlb-input formControlName="email" type="email" [enable-validation]="true"></rlb-input>
-</rlb-form-field>
+<rlb-form-fields
+  title="New user"
+  sub-title="All fields are required"
+  [fields]="fields"
+  (submit)="save($event)"
+/>
 ```
+
+```typescript
+import { FormFieldsDefinition } from '@open-rlb/ng-bootstrap';
+import { Validators } from '@angular/forms';
+
+readonly fields: FormFieldsDefinition = {
+  name:   { name: 'name',   label: 'Name',   type: 'text',   validators: Validators.required },
+  email:  { name: 'email',  label: 'E-mail', type: 'email',  validators: [Validators.required, Validators.email] },
+  age:    { name: 'age',    label: 'Age',    type: 'number', value: 18, cols: 'col-6' },
+  active: { name: 'active', label: 'Active', type: 'switch', value: true, cols: 'col-6' },
+};
+```
+
+Each field: `name`, `type` (`'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url' |
+'checkbox' | 'switch' | 'textarea'`, or any other string), and optionally `label`, `cols` (a
+Bootstrap column class), `value` (the starting value) and `validators`.
+
+| Input / output | Type | Default | Notes |
+|---|---|---|---|
+| `title` / `sub-title` | `string` | `''` | |
+| `fields` | `FormFieldsDefinition` | — | The form. |
+| `no-submit` | `boolean` | `false` | Hides the submit button — for a form submitted from elsewhere, e.g. a modal footer. |
+| `no-card` | `boolean` | `false` | Drops the card chrome. |
+| `(submit)` | `any` | | The form value. |
+
+This is the **one** component whose labels are treated as translation keys and resolved through
+`RLB_TRANSLATION_SERVICE`, because its field definitions are data rather than markup.
 
 ---
 
@@ -341,14 +803,23 @@ export class MyFormComponent {
 
 ## Validators
 
-The library provides custom validators:
+⚠️ The exported name is **`requiredAutocompleteValue`** and it is a **factory** — call it. There is
+no `RequiredAutocompleteValidator`; earlier versions of this document used that name and it does not
+resolve.
+
 ```typescript
-import { RequiredAutocompleteValidator } from '@open-rlb/ng-bootstrap';
+import { requiredAutocompleteValue } from '@open-rlb/ng-bootstrap';
 
 form = this.fb.group({
-  city: ['', [Validators.required, RequiredAutocompleteValidator]]
+  city: [null, [requiredAutocompleteValue()]],   // note the ()
 });
 ```
+
+It exists because `Validators.required` passes on `{ label: 'Rome', value: '' }` — a truthy object
+with nothing chosen in it, which is exactly what an autocomplete holds after the user types and then
+clears. This one looks **inside** the value: an `AutocompleteItem` whose `value` is null, undefined
+or blank fails, as does a blank string, as does null. It reports `{ required: true }`, so an
+existing «this field is required» message still matches.
 
 ---
 
@@ -356,6 +827,8 @@ form = this.fb.group({
 
 1. Always set `[enable-validation]="true"` on inputs inside forms with validation.
 2. Use `rlb-autocomplete` for any remote search — pass an `Observable`-returning function.
-3. For date inputs, always specify `timezone` explicitly; default is `'UTC'`.
+3. For a day the user picks, reach for `rlb-datepicker` rather than `rlb-input type="date"`; set `timezone` explicitly on either, or set it once with `provideRlbDefaults({ date: { timezone } })`.
 4. Use `date-type="date-tz"` when the model uses `@open-rlb/date-tz` DateTz objects.
 5. Wrap inputs in a `<div class="mb-3">` with a `<label class="form-label">` for correct Bootstrap spacing.
+6. For an amount, use `rlb-number` rather than `rlb-input type="number"`: it binds a real number while showing a formatted one, and leaves the grouping to the locale.
+7. For one of three or four choices, `rlb-segmented` is a radio group — a `btn-group` with `[class.active]` is not, however much it looks like one.

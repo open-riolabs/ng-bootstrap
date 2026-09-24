@@ -36,6 +36,7 @@ export const appConfig: ApplicationConfig = {
 "styles": [
   "node_modules/bootstrap/dist/css/bootstrap.min.css",
   "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+  "node_modules/@angular/cdk/overlay-prebuilt.css",
   "src/styles.scss"
 ]`;
 
@@ -47,8 +48,39 @@ export const appConfig: ApplicationConfig = {
   </rlb-card-body>
 </rlb-card>`;
 
-  themeCode = `<!-- Toggle the whole app, or any subtree -->
-<html data-bs-theme="dark">
-  ...
-</html>`;
+  themeCode = `// app.config.ts
+import { provideRlbBootstrap, provideRlbTheme } from '@open-rlb/ng-bootstrap';
+
+providers: [
+  provideRlbBootstrap(),
+  provideRlbTheme(),          // defaultTheme 'auto', remembered in localStorage
+]`;
+
+  themeToggleCode = `<rlb-theme-toggle />
+
+<!-- or drive it yourself -->
+private theme = inject(ThemeService);
+this.theme.set('dark');
+this.theme.resolved();        // 'light' | 'dark', with 'auto' already worked out`;
+
+  iconsCode = `import { provideRlbIcons } from '@open-rlb/ng-bootstrap';
+
+// Names you leave out keep their bootstrap-icons default.
+provideRlbIcons({
+  delete: 'fa-solid fa-trash',
+  refresh: 'fa-solid fa-arrows-rotate',
+})`;
+
+  defaultsCode = `import { provideRlbDefaults } from '@open-rlb/ng-bootstrap';
+
+provideRlbDefaults({
+  table: {
+    pageSize: 25,
+    pageSizes: [25, 50, 100],
+    actionsLabel: 'Azioni',
+    sortLabel: 'Ordina',
+    filterLabel: 'Filtra',
+  },
+  date: { timezone: 'Europe/Rome' },
+})`;
 }

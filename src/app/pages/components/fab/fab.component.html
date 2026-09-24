@@ -1,0 +1,62 @@
+<docs-page
+  title="Floating action button"
+  lead="rlb-fab is a round icon button for the one action a screen is really about. rlb-fab-input turns it into a target that swallows a pasted value.">
+
+  <docs-example
+    heading="Basic usage"
+    description="Put a single icon inside. Without a position the button flows inline like any other, which is what these examples do so they stay on the page."
+    [code]="basicExample">
+    <rlb-fab>
+      <i class="bi bi-plus-lg"></i>
+    </rlb-fab>
+  </docs-example>
+
+  <docs-example
+    heading="Colours"
+    description="colour and outline work exactly as they do on rlb-button, because the fab renders one."
+    [code]="colorExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-fab color="primary"><i class="bi bi-plus-lg"></i></rlb-fab>
+      <rlb-fab color="danger"><i class="bi bi-trash"></i></rlb-fab>
+      <rlb-fab color="success" outline><i class="bi bi-check-lg"></i></rlb-fab>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Sizes"
+    description="Four diameters, from xs to lg."
+    [code]="sizeExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-fab size="xs"><i class="bi bi-plus-lg"></i></rlb-fab>
+      <rlb-fab size="sm"><i class="bi bi-plus-lg"></i></rlb-fab>
+      <rlb-fab size="md"><i class="bi bi-plus-lg"></i></rlb-fab>
+      <rlb-fab size="lg"><i class="bi bi-plus-lg"></i></rlb-fab>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Pinned to a corner"
+    description="position adds position-fixed and anchors the button to one corner of the viewport: br (bottom right, the default when position is set), bl, tr, tl. It is not rendered live here, because a fixed button would follow you down the whole page."
+    [code]="positionExample">
+  </docs-example>
+
+  <docs-example
+    heading="Paste target"
+    description="rlb-fab-input reveals an input when the fab is clicked and focuses it. Typing into that input is blocked on purpose: it exists to receive a paste, emits (pasteAccepted) with the trimmed text, then closes and clears itself. Click the button and paste something."
+    [code]="inputExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-fab-input (pasteAccepted)="onPaste($event)">
+        <rlb-fab color="primary">
+          <i class="bi bi-clipboard"></i>
+        </rlb-fab>
+        <rlb-input placeholder="Paste here" />
+      </rlb-fab-input>
+      @if (pasted()) {
+        <span class="text-body-secondary">Received: <code class="fs-6">{{ pasted() }}</code></span>
+      }
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-fab" [rows]="fabApi" />
+  <docs-api selector="rlb-fab-input" [rows]="fabInputApi" />
+</docs-page>

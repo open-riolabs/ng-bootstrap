@@ -15,6 +15,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { DateTz } from '@open-rlb/date-tz';
+import { RLB_DEFAULTS } from '../../shared/defaults';
 import { AbstractComponent } from './abstract-field.component';
 import { NgClass } from '@angular/common';
 import { InputValidationComponent } from './input-validation.component';
@@ -71,7 +72,10 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
   dateType = input<'date' | 'string' | 'number' | 'date-tz' | string | undefined>('date-tz', {
     alias: 'date-type',
   });
-  timezone = input('UTC');
+  /** Left unset, the zone comes from `provideRlbDefaults({ date: { timezone } })`, else UTC. */
+  timezone = input<string | undefined>(undefined);
+  private dateDefaults = inject(RLB_DEFAULTS).date;
+  protected zone = computed(() => this.timezone() ?? this.dateDefaults.timezone);
   userDefinedId = input<string | undefined>(undefined, { alias: 'inputId' });
   extValidation = input(false, { transform: booleanAttribute });
   enableValidation = input(false, {
@@ -146,7 +150,7 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
       } else if (this.dateType() === 'date') {
         this.setValue(new Date(Date.parse(t.value + ':00')));
       } else if (this.dateType() === 'date-tz') {
-        const d = DateTz.parse(t.value, 'YYYY-MM-DDTHH:mm', this.timezone());
+        const d = DateTz.parse(t.value, 'YYYY-MM-DDTHH:mm', this.zone());
         this.setValue(d);
       }
     } else {
@@ -193,7 +197,7 @@ export class InputComponent extends AbstractComponent<any> implements OnInit, Af
       } else if (this.dateType() === 'date-tz') {
         let d: any = data;
         if (!d?.timestamp) return;
-        if (!d?.timezone) d.timezone = this.timezone();
+        if (!d?.timezone) d.timezone = this.zone();
         d = new DateTz(d);
         nativeEl.value = `${d.toString?.('YYYY-MM-DDTHH:mm')}` || '';
       }

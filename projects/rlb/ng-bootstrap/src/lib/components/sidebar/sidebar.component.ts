@@ -4,6 +4,7 @@ import {
   Component,
   effect,
   ElementRef,
+  inject,
   input,
   OnDestroy,
   OnInit,
@@ -38,6 +39,7 @@ import { SidebarService } from './sidebar.service';
   `,
     host: {
         '[attr.data-bs-theme]': "dark() ? 'dark' : 'light'",
+        '[class.collapsed]': 'sidebarService.isCollapsed()',
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,12 +56,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
 
   rounded = input(false, { alias: 'rounded', transform: booleanAttribute });
+
+  /** Read by the host binding above, so it cannot be private. */
+  protected sidebarService = inject(SidebarService);
+  private breakpointService = inject(BreakpointService);
+
   private isMobile = toSignal(this.breakpointService.isMobile$);
 
-  constructor(
-    private sidebarService: SidebarService,
-    private breakpointService: BreakpointService,
-  ) {
+  constructor() {
     effect(() => {
       const mobile = this.isMobile();
       if (mobile !== undefined) {

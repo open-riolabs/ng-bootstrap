@@ -2,12 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  inject,
   input,
   OnInit,
   signal,
   viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RLB_ICONS } from '../shared/icons';
 import { ButtonComponent } from '../components/buttons/buttons.component';
 import { IModal } from '../components/modals/data/modal';
 import { ModalData } from '../components/modals/data/modal-data';
@@ -44,7 +46,7 @@ import { SearchModalInput } from './search-modal.data';
           data-modal-reason="ok"
           (click)="textSel()"
         >
-          <i class="bi bi-search"></i>
+          <i [class]="icons.search"></i>
         </button>
       </rlb-input>
     </div>
@@ -58,6 +60,8 @@ import { SearchModalInput } from './search-modal.data';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchModalComponent implements IModal<SearchModalInput, string>, OnInit {
+  protected icons = inject(RLB_ICONS);
+
   btn = viewChild<ElementRef<HTMLElement>>('btn');
 
   data = input<ModalData<SearchModalInput>>({} as any);

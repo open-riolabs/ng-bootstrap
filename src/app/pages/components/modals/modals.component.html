@@ -44,6 +44,13 @@
     language="typescript">
   </docs-example>
 
+  <docs-example
+    heading="Panels opened from inside a dialog"
+    description="A dropdown, a datepicker or a tree select inside a modal is drawn by the CDK outside it — and Bootstrap traps focus in the dialog by pulling anything outside straight back. The overlay container now follows the open dialog, so these are reachable from the keyboard. Open one and walk it with the arrows."
+    [code]="overlaysExample">
+    <button rlb-button color="primary" (click)="overlaysModal()">Open a dialog with panels</button>
+  </docs-example>
+
   <docs-api
     heading="rlb-modal-container"
     selector="rlb-modal-container"

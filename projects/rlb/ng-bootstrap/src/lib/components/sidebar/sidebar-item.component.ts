@@ -60,6 +60,7 @@ import { BadgeDirective } from '../badges/badge.directive';
           } @else {
             <a
               [routerLink]="link()"
+              [fragment]="fragment()"
               [badge]="badgeCounter() && badgeCounter()! > 0 ? badgeCounter() : undefined"
               class="side-nav-link-ref"
               routerLinkActive="active"
@@ -91,6 +92,15 @@ export class SidebarItemComponent implements OnInit {
   icon = input<string | undefined>(undefined);
   label = input<string | undefined>(undefined);
   link = input<any[] | string | null | undefined>(undefined);
+  /**
+   * The part after the `#`, for an entry that points at a section of a page rather than the page.
+   *
+   * The application has to act on it, and the target needs an id. `withInMemoryScrolling({
+   * anchorScrolling: 'enabled' })` covers the usual case — but it scrolls the *window*, so a
+   * layout where an inner container is what scrolls has to call `scrollIntoView` itself. Either
+   * way the link works; without one of them it just lands at the top of the page.
+   */
+  fragment = input<string | undefined>(undefined);
   badgeCounter = input<number | undefined>(undefined);
 
   click = output<MouseEvent>();

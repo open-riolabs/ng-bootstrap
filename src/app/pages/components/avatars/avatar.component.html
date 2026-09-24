@@ -32,4 +32,51 @@
   </docs-example>
 
   <docs-api selector="rlb-avatar" [rows]="api" />
+
+  <docs-example
+    anchor="avatar-group"
+    heading="Avatar group"
+    description="Who is on this: the avatars overlap, and whoever is left over is counted. The group counts rather than hides — the caller writes the @for and so already decides how many to draw, and a component that silently dropped projected content would be lying about what it was given."
+    [code]="groupExample">
+    <rlb-avatar-group [extra]="4" [size]="40" ariaLabel="On this ticket">
+      <rlb-avatar [src]="photo" [size]="40" />
+      <rlb-avatar [src]="photo" [size]="40" />
+      <rlb-avatar [src]="photo" [size]="40" />
+    </rlb-avatar-group>
+  </docs-example>
+
+  <docs-example
+    heading="Overlap"
+    description="How far each avatar sits over the one before. Tight enough to read as one group, loose enough that each face is still a face."
+    [code]="groupOverlapExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-avatar-group [overlap]="4" [size]="40" [extra]="2" ariaLabel="Loose">
+        <rlb-avatar [src]="photo" [size]="40" />
+        <rlb-avatar [src]="photo" [size]="40" />
+        <rlb-avatar [src]="photo" [size]="40" />
+      </rlb-avatar-group>
+      <rlb-avatar-group [overlap]="24" [size]="40" [extra]="2" ariaLabel="Tight">
+        <rlb-avatar [src]="photo" [size]="40" />
+        <rlb-avatar [src]="photo" [size]="40" />
+        <rlb-avatar [src]="photo" [size]="40" />
+      </rlb-avatar-group>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Naming the count"
+    description="«+12» read on its own tells a screen reader nothing. overflowLabel is a function rather than a string because a number glued to a word is not translatable — Italian here."
+    [code]="groupLabelExample">
+    <rlb-avatar-group
+      [extra]="12"
+      [size]="40"
+      [overflowLabel]="italianCount"
+      ariaLabel="Partecipanti"
+    >
+      <rlb-avatar [src]="photo" [size]="40" />
+      <rlb-avatar [src]="photo" [size]="40" />
+    </rlb-avatar-group>
+  </docs-example>
+
+  <docs-api selector="rlb-avatar-group" [rows]="groupApi" />
 </docs-page>

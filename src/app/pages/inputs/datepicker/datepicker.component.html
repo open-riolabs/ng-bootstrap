@@ -1,0 +1,84 @@
+<docs-page
+  title="Date picker"
+  lead="Picks a day, or two. The value is an IDateTz at local midnight in the control's own timezone — not a native input type=date, which ignores the zone and looks different in every browser.">
+
+  <docs-example
+    heading="Basic usage"
+    description="Click the calendar button, or type into the box. The value that comes back is local midnight of the chosen day, in the timezone the control was given."
+    [code]="basicExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 22rem">
+      <rlb-datepicker
+        [timezone]="zone"
+        [ngModel]="picked()"
+        (ngModelChange)="picked.set($event)"
+      />
+      <span class="text-body-secondary small">{{ format(picked()) }}</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Format and locale"
+    description="format uses date-tz tokens and works in both directions: it writes the box and it reads back what is typed there. A date that does not parse — or that falls outside min and max — puts the box back the way it was, because a box saying one thing while the form holds another is worse than refusing."
+    [code]="formatExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 22rem">
+      <rlb-datepicker
+        format="DD LM YYYY"
+        locale="it"
+        [first-day-of-week]="1"
+        [timezone]="zone"
+        [ngModel]="localised()"
+        (ngModelChange)="localised.set($event)"
+      />
+      <span class="text-body-secondary small">{{ format(localised()) }}</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Bounds"
+    description="Days outside min and max are greyed out in the panel, and refused if typed. Here the range is from today to the end of next year."
+    [code]="boundsExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 22rem">
+      <rlb-datepicker
+        [min]="min"
+        [max]="max"
+        [timezone]="zone"
+        [ngModel]="bounded()"
+        (ngModelChange)="bounded.set($event)"
+      />
+      <span class="text-body-secondary small">{{ format(bounded()) }}</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="A range"
+    description="The first click sets the start and clears any end; the second sets the end and closes. Clicking before the start is not an error — it is someone who meant to start there, so it becomes the new start. Unlike the single picker the box is not typeable: a range in one line has no format that can be read back without guessing where the middle is."
+    [code]="rangeExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 22rem">
+      <rlb-date-range
+        [timezone]="zone"
+        separator=" → "
+        [ngModel]="range()"
+        (ngModelChange)="range.set($event)"
+      />
+      <span class="text-body-secondary small">
+        {{ format(range()?.start) }} → {{ format(range()?.end) }}
+      </span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Reactive forms"
+    description="Nothing special: it is a ControlValueAccessor like every other input in this library."
+    [code]="reactiveExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 22rem">
+      <rlb-datepicker
+        [formControl]="reactive"
+        [timezone]="zone"
+      />
+      <span class="text-body-secondary small">{{ format(reactive.value ?? undefined) }}</span>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-datepicker" [rows]="datepickerApi" />
+  <docs-api selector="rlb-date-range" [rows]="rangeApi" />
+</docs-page>

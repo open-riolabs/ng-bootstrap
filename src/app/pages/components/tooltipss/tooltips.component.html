@@ -1,6 +1,6 @@
 <docs-page
   title="Tooltips &amp; Popovers"
-  lead="Lightweight contextual overlays powered by Bootstrap. Use the [tooltip] directive for brief labels on hover, and [popover] for richer click-triggered overlays with an optional title.">
+  lead="Lightweight contextual overlays in Bootstrap's markup, positioned by the CDK Overlay. Use the [tooltip] directive for brief labels on hover, and [popover] for richer click-triggered overlays with an optional title. Both flip rather than running off the window, and neither is clipped by whatever it sits inside.">
 
   <!-- ===================== TOOLTIP SECTION ===================== -->
 
@@ -13,7 +13,7 @@
 
   <docs-example
     heading="Placement"
-    description="Control which side the tooltip appears on with the tooltip-placement attribute. Accepts top (default), bottom, left, or right."
+    description="Control which side the tooltip appears on with the tooltip-placement attribute. Accepts top (default), bottom, left, or right. It is a preference, not an instruction: with no room on that side the tooltip takes the opposite one and its arrow moves with it."
     [code]="placementExample">
     <div class="d-flex gap-2 flex-wrap">
       <button rlb-button color="secondary" tooltip="Top tooltip" tooltip-placement="top">Top</button>
@@ -35,6 +35,27 @@
     description="Use tooltip-class to attach one or more CSS classes to the generated tooltip element for custom visual styles."
     [code]="customClassExample">
     <button rlb-button color="dark" tooltip="Styled tooltip" tooltip-class="my-custom-tooltip">Custom class</button>
+  </docs-example>
+
+  <docs-example
+    heading="Keyboard and screen readers"
+    description="The tooltip appears on focus as well as on hover, the trigger points at it with aria-describedby while it is up, and Escape dismisses it. Tab to the button below rather than pointing at it."
+    [code]="a11yTooltipExample">
+    <div class="d-flex gap-2 align-items-center">
+      <button rlb-button color="primary" tooltip="Reachable from the keyboard too">Tab to me</button>
+      <span class="text-body-secondary small">then press Escape</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Not clipped by what it sits in"
+    description="Rendered in an overlay at the end of the body, so a scrolling panel or anything with overflow: hidden no longer cuts it off — and with no room above, it takes the side below instead."
+    [code]="overflowTooltipExample">
+    <div style="overflow: hidden; height: 70px; border: 1px dashed var(--bs-border-color); padding: 1rem">
+      <button rlb-button color="secondary" tooltip="Fully readable, outside the box" tooltip-placement="top">
+        Inside an overflow: hidden box
+      </button>
+    </div>
   </docs-example>
 
   <docs-api selector="[tooltip]" [rows]="tooltipApi" />

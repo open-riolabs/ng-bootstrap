@@ -11,7 +11,7 @@ import { HighlightModule } from 'ngx-highlightjs';
   imports: [HighlightModule],
   template: `
     @if (heading()) {
-      <h2 class="h4 mt-5 mb-2">{{ heading() }}</h2>
+      <h2 class="h4 mt-5 mb-2" [attr.id]="anchor() || null">{{ heading() }}</h2>
     }
     @if (description()) {
       <p class="text-body-secondary">{{ description() }}</p>
@@ -44,6 +44,8 @@ import { HighlightModule } from 'ngx-highlightjs';
 })
 export class DocsExampleComponent {
   heading = input('');
+  /** An id on the heading, so a link can point at this example rather than at the page. */
+  anchor = input('');
   description = input('');
   code = input('');
   language = input<'html' | 'typescript' | 'scss' | 'css'>('html');

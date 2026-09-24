@@ -4,10 +4,10 @@
 <div class="card mb-3">
   <div class="card-body">
     @if (title()) {
-    <h5 class="card-title">{{ title() | translate }}</h5>
+    <h5 class="card-title">{{ title() | rlbTranslate }}</h5>
     }
     @if (subTitle()) {
-    <p class="card-text">{{ subTitle() | translate }}</p>
+    <p class="card-text">{{ subTitle() | rlbTranslate }}</p>
     }
     <ng-container [ngTemplateOutlet]="formTemplate"></ng-container>
   </div>
@@ -25,11 +25,11 @@
         <div class="mb-3">
           @if (isText(inputItem.type)) {
           <rlb-input [formControlName]="inputItem.property" [type]="inputItem.type"
-            [placeholder]="inputItem.name | translate">
+            [placeholder]="inputItem.name | rlbTranslate">
             @if (inputItem.label) {
             <ng-container before>
               <span #after>
-                {{ inputItem.label | translate }}
+                {{ inputItem.label | rlbTranslate }}
               </span>
             </ng-container>
             }
@@ -46,7 +46,7 @@
     <div class="row">
       <div class="col">
         <button class="btn btn-primary float-end" [disabled]="!filterForm()!.valid">
-          {{ "common.filter" | translate }}
+          {{ "common.filter" | rlbTranslate }}
         </button>
       </div>
     </div>

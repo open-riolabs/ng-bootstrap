@@ -15,13 +15,17 @@ import { SearchModalComponent } from './lib/modals/search-modal.component';
 export * from './lib/components';
 export * from './lib/data/datatable';
 export * from './lib/forms/inputs';
+export * from './lib/forms/rlb-form-fields/form-fields';
 export * from './lib/forms/rlb-form-fields/rlb-form-fields.component';
 export * from './lib/pipes';
 export * from './lib/rlb-bootstrap.module';
 
 export * from './lib/interfaces';
 export * from './lib/modals';
+export * from './lib/shared/defaults';
 export * from './lib/shared/i18-abstraction';
+export * from './lib/shared/icons';
+export * from './lib/shared/theme.service';
 export * from './lib/shared/types';
 export * from './lib/shared/unique-id.service';
 export * from './lib/utils';

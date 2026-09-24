@@ -16,6 +16,13 @@ import { SwitchesComponent } from './switch/switch.component';
 import { TextareasComponent } from './textarea/textarea.component';
 import { RadiosComponent } from './radio/radio.component';
 import { InputValidationsComponent } from './input-validation/input-validation.component';
+import { DatepickersComponent } from './datepicker/datepicker.component';
+import { FormFieldsDocComponent } from './form-fields/form-fields.component';
+import { SelectChipsDocComponent } from './select-chips/select-chips.component';
+import { NumberDocComponent } from './number/number.component';
+import { SegmentedDocComponent } from './segmented/segmented.component';
+import { TimePickerDocComponent } from './time-picker/time-picker.component';
+import { TreeSelectDocComponent } from './tree-select/tree-select.component';
 
 const routes: Routes = [
   { path: '', component: InputsHomeComponent },
@@ -23,17 +30,24 @@ const routes: Routes = [
   { path: 'checkbox', component: CheckboxsComponent },
   { path: 'color', component: ColorsComponent },
   { path: 'datalist', component: DatalistsComponent },
+  { path: 'datepicker', component: DatepickersComponent },
   { path: 'file', component: FilesComponent },
   { path: 'file-dnd', component: FileDndsComponent },
+  { path: 'form-fields', component: FormFieldsDocComponent },
   { path: 'input', component: InputsComponent },
   { path: 'input-group', component: InputGroupsComponent },
   { path: 'input-validation', component: InputValidationsComponent },
+  { path: 'number', component: NumberDocComponent },
   { path: 'option', component: OptionsComponent },
   { path: 'radio', component: RadiosComponent },
   { path: 'range', component: RangesComponent },
   { path: 'select', component: SelectsComponent },
+  { path: 'segmented', component: SegmentedDocComponent },
+  { path: 'select-chips', component: SelectChipsDocComponent },
 	{ path: 'switch', component: SwitchesComponent },
   { path: 'textarea', component: TextareasComponent },
+  { path: 'time-picker', component: TimePickerDocComponent },
+  { path: 'tree-select', component: TreeSelectDocComponent },
 ];
 
 @NgModule({

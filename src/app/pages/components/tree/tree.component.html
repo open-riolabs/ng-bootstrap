@@ -1,0 +1,75 @@
+<docs-page
+  title="Tree"
+  lead="Nested things that are data rather than navigation: categories, permissions, folders, an org chart. rlb-sidebar-item already nested, but only as a menu — this is the generic one.">
+
+  <docs-example
+    heading="Basic usage"
+    description="Nodes in, expansion and selection out — both two-way, so a page can keep them in the URL and come back to the same open branches. Clicking a branch opens it, as the twisty beside it does: the label is the bigger target."
+    [code]="basicExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 380px">
+      <rlb-tree
+        [nodes]="catalogue"
+        [expanded]="expanded()"
+        (expandedChange)="expanded.set($event)"
+        [selected]="selected()"
+        (selectedChange)="selected.set($event)"
+        (activated)="onActivated($event)"
+      />
+      <span class="text-body-secondary small">
+        Selected: <code>{{ selected() | json }}</code>
+        @if (activated()) {
+          · last clicked: <code>{{ activated() }}</code>
+        }
+      </span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Checkboxes"
+    description="Ticking a branch ticks everything under it. A branch whose children are only partly ticked is drawn indeterminate rather than pretending to be one or the other — a half-ticked branch that renders as unticked is how «apply to all» quietly does the wrong thing."
+    [code]="checkboxExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 380px">
+      <rlb-tree
+        [nodes]="permissions"
+        checkboxes
+        [expanded]="['orders', 'customers']"
+        [selected]="granted()"
+        (selectedChange)="granted.set($event)"
+      />
+      <span class="text-body-secondary small">Granted: <code>{{ granted() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Filtering"
+    description="filter keeps the nodes that match and the branches that lead to them, and opens those branches whether or not the user had. Type «mon» — the hit is three levels down and the tree opens to it."
+    [code]="filterExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 380px">
+      <rlb-input placeholder="Search" [ngModel]="query()" (ngModelChange)="query.set($event)" />
+      <rlb-tree
+        [nodes]="catalogue"
+        [filter]="query()"
+        [expanded]="searchExpanded()"
+        (expandedChange)="searchExpanded.set($event)"
+        [selected]="searchSelected()"
+        (selectedChange)="searchSelected.set($event)"
+        emptyLabel="Nothing matches"
+      />
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="The node shape"
+    description="Plain data, and ids that are unique across the whole tree: expansion and selection are remembered by id, so a duplicate id makes two nodes open and close together."
+    [code]="nodeExample"
+    language="typescript">
+    <p class="mb-0 text-body-secondary">
+      A disabled node is drawn but cannot be clicked or ticked — «Discontinued» in the first example
+      above. To put a tree inside a form control, use
+      <a routerLink="/inputs/tree-select">rlb-tree-select</a>, which is this component in a dropdown
+      with the value bound as ids.
+    </p>
+  </docs-example>
+
+  <docs-api selector="rlb-tree" [rows]="api" />
+</docs-page>

@@ -1,49 +1,159 @@
 <div class="rlb-app">
 
-  <rlb-navbar class="rlb-navbar border-bottom" expand="lg">
+  <rlb-navbar class="rlb-navbar border-bottom" expand="lg" [enable-dropdown-toggler]="true">
     <a rlb-navbar-brand href="#">Navbar</a>
     <rlb-navbar-items>
       <rlb-navbar-item [router-link]="'/'">Home</rlb-navbar-item>
-      <rlb-navbar-item [router-link]="'/getting-started'">Getting
-        started
-      </rlb-navbar-item>
-      <rlb-navbar-item [router-link]="'/components'">Components</rlb-navbar-item>
+      <rlb-navbar-item [router-link]="'/getting-started'">Getting started</rlb-navbar-item>
+
+      <!--
+        The same entries as the sidebar, in the same groups, reachable without it — and the navbar
+        dropdown driving them is the one that now rides the CDK Overlay, so the menu is not clipped
+        by the bar it hangs from and the arrow keys walk it.
+      -->
+      <rlb-navbar-dropdown-item [dropdown]="true">
+        Components
+        <rlb-dropdown-container class="rlb-nav-menu">
+          <li rlb-dropdown-item header>Actions</li>
+          <li rlb-dropdown-item link="/components/buttons"><i class="bi bi-hand-index me-2" aria-hidden="true"></i>Button</li>
+          <li rlb-dropdown-item link="/components/buttons" fragment="split-button"><i class="bi bi-segmented-nav me-2" aria-hidden="true"></i>Split button</li>
+          <li rlb-dropdown-item link="/components/badges"><i class="bi bi-person-badge me-2" aria-hidden="true"></i>Badge</li>
+          <li rlb-dropdown-item link="/components/dropdowns"><i class="bi bi-menu-button-fill me-2" aria-hidden="true"></i>Dropdowns</li>
+          <li rlb-dropdown-item link="/components/fab"><i class="bi bi-plus-circle me-2" aria-hidden="true"></i>Fab</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Data display</li>
+          <li rlb-dropdown-item link="/components/tables"><i class="bi bi-table me-2" aria-hidden="true"></i>DataTable</li>
+          <li rlb-dropdown-item link="/components/tree"><i class="bi bi-diagram-3 me-2" aria-hidden="true"></i>Tree</li>
+          <li rlb-dropdown-item link="/components/lists"><i class="bi bi-list-ul me-2" aria-hidden="true"></i>List</li>
+          <li rlb-dropdown-item link="/components/dashboard"><i class="bi bi-graph-up me-2" aria-hidden="true"></i>Stat &amp; timeline</li>
+          <li rlb-dropdown-item link="/components/scale"><i class="bi bi-lightning me-2" aria-hidden="true"></i>Virtual list &amp; palette</li>
+          <li rlb-dropdown-item link="/components/calendar"><i class="bi bi-calendar4-range me-2" aria-hidden="true"></i>Calendar</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Layout</li>
+          <li rlb-dropdown-item link="/components/cards"><i class="bi bi-card-heading me-2" aria-hidden="true"></i>Card</li>
+          <li rlb-dropdown-item link="/components/placeholders"><i class="bi bi-bounding-box me-2" aria-hidden="true"></i>Placeholder</li>
+          <li rlb-dropdown-item link="/components/theme"><i class="bi bi-circle-half me-2" aria-hidden="true"></i>Theme</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Navigation</li>
+          <li rlb-dropdown-item link="/components/navigation/navbars"><i class="bi bi-window-sidebar me-2" aria-hidden="true"></i>Navbar</li>
+          <li rlb-dropdown-item link="/components/navigation/navs"><i class="bi bi-segmented-nav me-2" aria-hidden="true"></i>Nav</li>
+          <li rlb-dropdown-item link="/components/sidebars"><i class="bi bi-layout-sidebar-inset me-2" aria-hidden="true"></i>Sidebar</li>
+          <li rlb-dropdown-item link="/components/tabs"><i class="bi bi-menu-button-wide me-2" aria-hidden="true"></i>Tab</li>
+          <li rlb-dropdown-item link="/components/breadcrumbs"><i class="bi bi-signpost-split me-2" aria-hidden="true"></i>Breadcrumb</li>
+          <li rlb-dropdown-item link="/components/paginations"><i class="bi bi-three-dots me-2" aria-hidden="true"></i>Pagination</li>
+          <li rlb-dropdown-item link="/components/scrollspys"><i class="bi bi-binoculars me-2" aria-hidden="true"></i>Scrollspy</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Overlays &amp; feedback</li>
+          <li rlb-dropdown-item link="/components/modals"><i class="bi bi-window me-2" aria-hidden="true"></i>Modals</li>
+          <li rlb-dropdown-item link="/components/offcanvass"><i class="bi bi-layout-sidebar me-2" aria-hidden="true"></i>Offcanvas</li>
+          <li rlb-dropdown-item link="/components/toasts"><i class="bi bi-bell me-2" aria-hidden="true"></i>Toasts</li>
+          <li rlb-dropdown-item link="/components/alerts"><i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>Alerts</li>
+          <li rlb-dropdown-item link="/components/tooltips"><i class="bi bi-question-circle me-2" aria-hidden="true"></i>Tooltips &amp; popovers</li>
+          <li rlb-dropdown-item link="/components/feedback"><i class="bi bi-patch-question me-2" aria-hidden="true"></i>Empty &amp; confirm</li>
+          <li rlb-dropdown-item link="/components/loaders"><i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Loader</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Disclosure</li>
+          <li rlb-dropdown-item link="/components/accordions"><i class="bi bi-chevron-bar-expand me-2" aria-hidden="true"></i>Accordions</li>
+          <li rlb-dropdown-item link="/components/collapses"><i class="bi bi-arrows-collapse me-2" aria-hidden="true"></i>Collapses</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Content &amp; flows</li>
+          <li rlb-dropdown-item link="/components/avatars"><i class="bi bi-person-bounding-box me-2" aria-hidden="true"></i>Avatars</li>
+          <li rlb-dropdown-item link="/components/avatars" fragment="avatar-group"><i class="bi bi-people me-2" aria-hidden="true"></i>Avatar group</li>
+          <li rlb-dropdown-item link="/components/carousels"><i class="bi bi-images me-2" aria-hidden="true"></i>Carousel</li>
+          <li rlb-dropdown-item link="/components/chats"><i class="bi bi-chat-dots me-2" aria-hidden="true"></i>Chat</li>
+          <li rlb-dropdown-item link="/components/wizards"><i class="bi bi-ui-checks me-2" aria-hidden="true"></i>Wizard</li>
+        </rlb-dropdown-container>
+      </rlb-navbar-dropdown-item>
+
+      <rlb-navbar-dropdown-item [dropdown]="true">
+        Forms
+        <rlb-dropdown-container class="rlb-nav-menu">
+          <li rlb-dropdown-item header>Text</li>
+          <li rlb-dropdown-item link="/inputs/input"><i class="bi bi-input-cursor me-2" aria-hidden="true"></i>Input</li>
+          <li rlb-dropdown-item link="/inputs/textarea"><i class="bi bi-textarea-resize me-2" aria-hidden="true"></i>Textarea</li>
+          <li rlb-dropdown-item link="/inputs/input-group"><i class="bi bi-box me-2" aria-hidden="true"></i>Input group</li>
+          <li rlb-dropdown-item link="/inputs/input-validation"><i class="bi bi-check2-circle me-2" aria-hidden="true"></i>Validation</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Choice</li>
+          <li rlb-dropdown-item link="/inputs/select"><i class="bi bi-caret-down-square me-2" aria-hidden="true"></i>Select</li>
+          <li rlb-dropdown-item link="/inputs/option"><i class="bi bi-list-check me-2" aria-hidden="true"></i>Option</li>
+          <li rlb-dropdown-item link="/inputs/select-chips"><i class="bi bi-tags me-2" aria-hidden="true"></i>Select chips</li>
+          <li rlb-dropdown-item link="/inputs/segmented"><i class="bi bi-segmented-nav me-2" aria-hidden="true"></i>Segmented &amp; tags</li>
+          <li rlb-dropdown-item link="/inputs/tree-select"><i class="bi bi-diagram-3 me-2" aria-hidden="true"></i>Tree select</li>
+          <li rlb-dropdown-item link="/inputs/checkbox"><i class="bi bi-check2-square me-2" aria-hidden="true"></i>Checkbox</li>
+          <li rlb-dropdown-item link="/inputs/radio"><i class="bi bi-ui-radios me-2" aria-hidden="true"></i>Radio</li>
+          <li rlb-dropdown-item link="/inputs/switch"><i class="bi bi-toggles2 me-2" aria-hidden="true"></i>Switch</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Search</li>
+          <li rlb-dropdown-item link="/inputs/autocomplete"><i class="bi bi-menu-button me-2" aria-hidden="true"></i>Autocomplete</li>
+          <li rlb-dropdown-item link="/inputs/datalist"><i class="bi bi-list me-2" aria-hidden="true"></i>Datalist</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Dates</li>
+          <li rlb-dropdown-item link="/inputs/datepicker"><i class="bi bi-calendar3 me-2" aria-hidden="true"></i>Date picker</li>
+          <li rlb-dropdown-item link="/inputs/time-picker"><i class="bi bi-clock me-2" aria-hidden="true"></i>Time picker</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Values</li>
+          <li rlb-dropdown-item link="/inputs/number"><i class="bi bi-123 me-2" aria-hidden="true"></i>Number, rating &amp; OTP</li>
+          <li rlb-dropdown-item link="/inputs/range"><i class="bi bi-sliders me-2" aria-hidden="true"></i>Range</li>
+          <li rlb-dropdown-item link="/inputs/color"><i class="bi bi-palette me-2" aria-hidden="true"></i>Colour</li>
+          <li rlb-dropdown-item link="/inputs/file"><i class="bi bi-file me-2" aria-hidden="true"></i>File</li>
+          <li rlb-dropdown-item link="/inputs/file-dnd"><i class="bi bi-file-earmark-arrow-up me-2" aria-hidden="true"></i>File drag &amp; drop</li>
+          <li rlb-dropdown-item divider></li>
+          <li rlb-dropdown-item header>Whole forms</li>
+          <li rlb-dropdown-item link="/inputs/form-fields"><i class="bi bi-ui-checks-grid me-2" aria-hidden="true"></i>Form fields</li>
+        </rlb-dropdown-container>
+      </rlb-navbar-dropdown-item>
     </rlb-navbar-items>
   </rlb-navbar>
   <div class="rlb-main-wrapper">
     <rlb-sidebar class="rlb-sidebar" id="sidebar">
       <rlb-sidebar-item title="RLB bootstrap" />
+      <rlb-sidebar-item icon="bi bi-rocket-takeoff" link="/getting-started">Getting started</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-grid-1x2" link="/components">Components</rlb-sidebar-item>
+      <rlb-sidebar-item icon="bi bi-card-checklist" link="/inputs">Forms</rlb-sidebar-item>
+
       <rlb-sidebar-item title="Components" />
 
-      <rlb-sidebar-item label="Actions" [badgeCounter]="3">
+      <rlb-sidebar-item label="Actions" [badgeCounter]="5">
         <rlb-sidebar-item icon="bi bi-hand-index" link="/components/buttons">Button</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/buttons" fragment="split-button">Split button</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-person-badge" link="/components/badges">Badge</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-menu-button-fill" link="/components/dropdowns">Dropdowns</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-plus-circle" link="/components/fab">Fab</rlb-sidebar-item>
       </rlb-sidebar-item>
 
-      <rlb-sidebar-item label="Layout &amp; containers" [badgeCounter]="5">
-        <rlb-sidebar-item icon="bi bi-card-heading" link="/components/cards">Card</rlb-sidebar-item>
+      <rlb-sidebar-item label="Data display" [badgeCounter]="6">
+        <rlb-sidebar-item icon="bi bi-table" link="/components/tables">DataTable</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-diagram-3" link="/components/tree">Tree</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-list-ul" link="/components/lists">List</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-table" link="/components/tables">Tables</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-bounding-box" link="/components/placeholders">Placeholder</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-layout-sidebar-inset" link="/components/sidebars">Sidebar</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-graph-up" link="/components/dashboard">Stat &amp; timeline</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-lightning" link="/components/scale">Virtual list &amp; palette</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
       </rlb-sidebar-item>
 
-      <rlb-sidebar-item label="Navigation" [badgeCounter]="6">
+      <rlb-sidebar-item label="Layout" [badgeCounter]="3">
+        <rlb-sidebar-item icon="bi bi-card-heading" link="/components/cards">Card</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-bounding-box" link="/components/placeholders">Placeholder</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-circle-half" link="/components/theme">Theme</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Navigation" [badgeCounter]="7">
         <rlb-sidebar-item icon="bi bi-window-sidebar" link="/components/navigation/navbars">Navbar</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/navigation/navs">Nav</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-layout-sidebar-inset" link="/components/sidebars">Sidebar</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-menu-button-wide" link="/components/tabs">Tab</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-signpost-split" link="/components/breadcrumbs">Breadcrumb</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-three-dots" link="/components/paginations">Pagination</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-binoculars" link="/components/scrollspys">Scrollspy</rlb-sidebar-item>
       </rlb-sidebar-item>
 
-      <rlb-sidebar-item label="Overlays &amp; feedback" [badgeCounter]="6">
-        <rlb-sidebar-item icon="bi bi-exclamation-triangle" link="/components/alerts">Alerts</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-bell" link="/components/toasts">Toasts</rlb-sidebar-item>
+      <rlb-sidebar-item label="Overlays &amp; feedback" [badgeCounter]="7">
         <rlb-sidebar-item icon="bi bi-window" link="/components/modals">Modals</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-layout-sidebar" link="/components/offcanvass">Offcanvas</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-question-circle" link="/components/tooltips">Tooltips</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-bell" link="/components/toasts">Toasts</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-exclamation-triangle" link="/components/alerts">Alerts</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-question-circle" link="/components/tooltips">Tooltips &amp; popovers</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-patch-question" link="/components/feedback">Empty &amp; confirm</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-arrow-clockwise" link="/components/loaders">Loader</rlb-sidebar-item>
       </rlb-sidebar-item>
 
@@ -52,29 +162,55 @@
         <rlb-sidebar-item icon="bi bi-arrows-collapse" link="/components/collapses">Collapses</rlb-sidebar-item>
       </rlb-sidebar-item>
 
-      <rlb-sidebar-item label="Media &amp; content" [badgeCounter]="5">
+      <rlb-sidebar-item label="Content &amp; flows" [badgeCounter]="5">
         <rlb-sidebar-item icon="bi bi-person-bounding-box" link="/components/avatars">Avatars</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-people" link="/components/avatars" fragment="avatar-group">Avatar group</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-images" link="/components/carousels">Carousel</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-ui-checks" link="/components/wizards">Wizard</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-chat-dots" link="/components/chats">Chat</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-calendar4-range" link="/components/calendar">Calendar</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-ui-checks" link="/components/wizards">Wizard</rlb-sidebar-item>
       </rlb-sidebar-item>
 
+
       <rlb-sidebar-item title="Forms" />
-      <rlb-sidebar-item label="Inputs">
-        <rlb-sidebar-item icon="bi bi-menu-button" link="/inputs/autocomplete">Autocomplete</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-check2-square" link="/inputs/checkbox">Checkbox</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-palette" link="/inputs/color">Color</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-list" link="/inputs/datalist">Datalist</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-file" link="/inputs/file">File</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-file-earmark-arrow-up" link="/inputs/file-dnd">File Dnd</rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Text" [badgeCounter]="4">
         <rlb-sidebar-item icon="bi bi-input-cursor" link="/inputs/input">Input</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-box" link="/inputs/input-group">Input Group</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-textarea-resize" link="/inputs/textarea">Textarea</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-box" link="/inputs/input-group">Input group</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-check2-circle" link="/inputs/input-validation">Validation</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Choice" [badgeCounter]="8">
+        <rlb-sidebar-item icon="bi bi-caret-down-square" link="/inputs/select">Select</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-list-check" link="/inputs/option">Option</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-tags" link="/inputs/select-chips">Select chips</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-segmented-nav" link="/inputs/segmented">Segmented &amp; tags</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-diagram-3" link="/inputs/tree-select">Tree select</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-check2-square" link="/inputs/checkbox">Checkbox</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-ui-radios" link="/inputs/radio">Radio</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-sliders" link="/inputs/range">Range</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-box" link="/inputs/select">Select</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-toggles2" link="/inputs/switch">Switch</rlb-sidebar-item>
-        <rlb-sidebar-item icon="bi bi-input-cursor" link="/inputs/textarea">Textarea</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Search" [badgeCounter]="2">
+        <rlb-sidebar-item icon="bi bi-menu-button" link="/inputs/autocomplete">Autocomplete</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-list" link="/inputs/datalist">Datalist</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Dates" [badgeCounter]="2">
+        <rlb-sidebar-item icon="bi bi-calendar3" link="/inputs/datepicker">Date picker</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-clock" link="/inputs/time-picker">Time picker</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Values" [badgeCounter]="5">
+        <rlb-sidebar-item icon="bi bi-123" link="/inputs/number">Number, rating &amp; OTP</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-sliders" link="/inputs/range">Range</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-palette" link="/inputs/color">Colour</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-file" link="/inputs/file">File</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-file-earmark-arrow-up" link="/inputs/file-dnd">File drag &amp; drop</rlb-sidebar-item>
+      </rlb-sidebar-item>
+
+      <rlb-sidebar-item label="Whole forms" [badgeCounter]="1">
+        <rlb-sidebar-item icon="bi bi-ui-checks-grid" link="/inputs/form-fields">Form fields</rlb-sidebar-item>
       </rlb-sidebar-item>
 
     </rlb-sidebar>

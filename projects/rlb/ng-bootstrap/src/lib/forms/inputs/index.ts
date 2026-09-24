@@ -7,6 +7,10 @@ export * from './autocomplete-country-dial-code.component'
 export * from './autocomplete-country.component';
 export * from './autocomplete-timezones.component';
 export * from './autocomplete.component';
+export * from './date-panel.component';
+export * from './date-picker-positions';
+export * from './date-range.component';
+export * from './datepicker.component';
 export * from './checkbox.component';
 export * from './color.component';
 export * from './datalist.component';
@@ -17,6 +21,15 @@ export * from './help-text.directive';
 export * from './input-group.component';
 export * from './input-validation.component';
 export * from './input.component';
+export * from './number.component';
+export * from './otp.component';
+export * from './rating.component';
+export * from './segmented-host';
+export * from './segmented-option.component';
+export * from './segmented.component';
+export * from './tag-input.component';
+export * from './time-picker.component';
+export * from './tree-select.component';
 export * from './select-chips.component';
 export * from './options.component';
 export * from './radio.component';
@@ -30,6 +43,9 @@ import { AutocompleteCountryComponent } from './autocomplete-country.component';
 import { AutocompleteTimezonesComponent } from './autocomplete-timezones.component';
 import { AutocompleteComponent } from './autocomplete.component';
 import { CheckboxComponent } from './checkbox.component';
+import { DatePanelComponent } from './date-panel.component';
+import { DateRangeComponent } from './date-range.component';
+import { DatepickerComponent } from './datepicker.component';
 import { ColorComponent } from './color.component';
 import { DatalistComponent } from './datalist.component';
 import { FileDndComponent } from './dnd-file.component';
@@ -39,6 +55,14 @@ import { HelpText } from './help-text.directive';
 import { InputGroupComponent } from './input-group.component';
 import { InputValidationComponent } from './input-validation.component';
 import { InputComponent } from './input.component';
+import { NumberComponent } from './number.component';
+import { OtpComponent } from './otp.component';
+import { RatingComponent } from './rating.component';
+import { SegmentedOptionComponent } from './segmented-option.component';
+import { SegmentedComponent } from './segmented.component';
+import { TagInputComponent } from './tag-input.component';
+import { TimePickerComponent } from './time-picker.component';
+import { TreeSelectComponent } from './tree-select.component';
 import { SelectChipsComponent } from './select-chips.component';
 import { OptionComponent } from './options.component';
 import { RadioComponent } from './radio.component';
@@ -50,7 +74,18 @@ import { TextAreaComponent } from './text-area.component';
 export const INPUTS = [
   AutocompleteComponent,
   CheckboxComponent,
+  DatePanelComponent,
+  DatepickerComponent,
+  DateRangeComponent,
   InputComponent,
+  NumberComponent,
+  OtpComponent,
+  RatingComponent,
+  SegmentedComponent,
+  SegmentedOptionComponent,
+  TagInputComponent,
+  TimePickerComponent,
+  TreeSelectComponent,
   SwitchComponent,
   TextAreaComponent,
   ColorComponent,

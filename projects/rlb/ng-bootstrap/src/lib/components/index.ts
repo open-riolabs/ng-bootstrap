@@ -55,6 +55,7 @@ import { NavbarComponent } from './navigation/navbar/navbar.component';
 import { OffcanvasBodyComponent } from './offcanvas/offcanvas-body.component';
 import { OffcanvasHeaderComponent } from './offcanvas/offcanvas-header.component';
 import { OffcanvasTitleComponent } from './offcanvas/offcanvas-title.component';
+import { RlbOffcanvasTitleDirective } from './offcanvas/offcanvas-title.directive';
 import { OffcanvasComponent } from './offcanvas/offcanvas.component';
 import { PaginationItemComponent } from './pagination/pagination-item.component';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -69,10 +70,24 @@ import { TabContentComponent } from './tabs/tab-content.component';
 import { TabPaneComponent } from './tabs/tab-pane.component';
 import { TabComponent } from './tabs/tab.component';
 import { TabsComponent } from './tabs/tabs.component';
+import { CommandPaletteComponent } from './command-palette/command-palette.component';
+import { EmptyStateComponent } from './empty-state/empty-state.component';
+import { StatComponent } from './stat/stat.component';
+import { TimelineComponent } from './timeline/timeline.component';
+import { TimelineItemComponent } from './timeline/timeline-item.component';
+import { VirtualListComponent } from './virtual-list/virtual-list.component';
+import { PopconfirmDirective } from './popconfirm/popconfirm.directive';
+import { PopconfirmPanelComponent } from './popconfirm/popconfirm-panel.component';
+import { StepComponent } from './stepper/step.component';
+import { StepperComponent } from './stepper/stepper.component';
+import { ThemeToggleComponent } from './theme/theme-toggle.component';
 import { TOASTS } from './toast';
 import { PopoverDirective } from './tooltips/popover.directive';
 import { TooltipDirective } from './tooltips/tooltip.directive';
 import { RlbFabInputComponent } from './buttons/fab-group/fab-group.component';
+import { AvatarGroupComponent } from './avatar/avatar-group.component';
+import { SplitButtonComponent } from './buttons/split-button.component';
+import { TreeComponent } from './tree/tree.component';
 
 export * from './accordions/accordion-body.component';
 export * from './accordions/accordion-header.component';
@@ -80,6 +95,7 @@ export * from './accordions/accordion-item.component';
 export * from './accordions/accordion.component';
 export * from './alerts/alert.component';
 export * from './avatar/avatar.component';
+export * from './avatar/avatar-group.component';
 export * from './badges/badge.component';
 export * from './badges/badge.directive';
 export * from './breadcrumb/breadcrumb.component';
@@ -87,6 +103,7 @@ export * from './buttons/boutton-group.component';
 export * from './buttons/boutton-toolbar.component';
 export * from './buttons/buttons-close.component';
 export * from './buttons/buttons.component';
+export * from './buttons/split-button.component';
 export * from './buttons/fab/fab.component';
 export * from './buttons/fab-group/fab-group.component';
 export * from './buttons/toggle.directive';
@@ -111,6 +128,8 @@ export * from './dropdown/dropdown-container.component';
 export * from './dropdown/dropdown-menu-item.component';
 export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown.directive';
+export * from './dropdown/dropdown-host';
+export * from './dropdown/dropdown-overlay.service';
 export * from './list/list-item-image.component';
 export * from './list/list-item.component';
 export * from './list/list.component';
@@ -131,6 +150,7 @@ export * from './navigation/navbar/navbar.component';
 export * from './offcanvas/offcanvas-body.component';
 export * from './offcanvas/offcanvas-header.component';
 export * from './offcanvas/offcanvas-title.component';
+export * from './offcanvas/offcanvas-title.directive';
 export * from './offcanvas/offcanvas.component';
 export * from './pagination/pagination-item.component';
 export * from './pagination/pagination.component';
@@ -145,9 +165,27 @@ export * from './tabs/tab-content.component';
 export * from './tabs/tab-pane.component';
 export * from './tabs/tab.component';
 export * from './tabs/tabs.component';
+export * from './command-palette/command';
+export * from './command-palette/command-palette.component';
+export * from './empty-state/empty-state.component';
+export * from './stat/stat.component';
+export * from './timeline/timeline.component';
+export * from './timeline/timeline-item.component';
+export * from './timeline/timeline-host';
+export * from './virtual-list/virtual-list.component';
+export * from './popconfirm/popconfirm.directive';
+export * from './popconfirm/popconfirm-panel.component';
+export * from './stepper/step.component';
+export * from './stepper/stepper.component';
+export * from './stepper/stepper-host';
+export * from './theme/theme-toggle.component';
 export * from './toast';
 export * from './tooltips/popover.directive';
 export * from './tooltips/tooltip.directive';
+export * from './tooltips/hint-panel.component';
+export * from './tooltips/hint-overlay.service';
+export * from './tree/tree.component';
+export * from './tree/tree-node';
 
 export const COMPONENTS = [
   AlertComponent,
@@ -196,6 +234,7 @@ export const COMPONENTS = [
   OffcanvasComponent,
   OffcanvasHeaderComponent,
   OffcanvasTitleComponent,
+  RlbOffcanvasTitleDirective,
   OffcanvasBodyComponent,
   ToggleDirective,
   SidebarComponent,
@@ -216,11 +255,25 @@ export const COMPONENTS = [
   ListItemComponent,
   ListItemImageComponent,
   AvatarComponent,
+  AvatarGroupComponent,
   ChatContainerComponent,
   ChatItemComponent,
   RlbPlaceholderComponent,
   RlbPlaceholderLineComponent,
   RlbPlaceholderTextComponent,
+  ThemeToggleComponent,
+  EmptyStateComponent,
+  CommandPaletteComponent,
+  StatComponent,
+  TimelineComponent,
+  TimelineItemComponent,
+  VirtualListComponent,
+  PopconfirmDirective,
+  PopconfirmPanelComponent,
+  StepperComponent,
+  StepComponent,
+  SplitButtonComponent,
+  TreeComponent,
   ...[MODALS],
   ...[TOASTS],
   ...[CALENDAR_COMPONENTS],

@@ -37,7 +37,12 @@ export class ToggleDirective {
       const collapsed = this.collapsed();
       const autoClose = this.autoClose();
 
-      this.renderer.setAttribute(element, 'data-bs-toggle', toggle);
+      // Everything but the dropdown is still Bootstrap's to drive. A dropdown is ours now, and an
+      // element left carrying data-bs-toggle="dropdown" without a Bootstrap-managed menu beside it
+      // is what makes its global handler build a Dropdown on nothing and throw. Use [rlb-dropdown].
+      if (toggle !== 'dropdown') {
+        this.renderer.setAttribute(element, 'data-bs-toggle', toggle);
+      }
 
       if (autoClose === 'default') {
         this.renderer.setAttribute(element, 'data-bs-auto-close', 'true');

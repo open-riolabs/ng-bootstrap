@@ -7,6 +7,7 @@ import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/ro
 import { provideHighlightOptions } from 'ngx-highlightjs';
 
 import {
+  provideRlbTheme,
   CalendarOverflowEventsContainerComponent,
   CalendarToastComponent,
   CommonModalComponent,
@@ -17,18 +18,28 @@ import {
 } from '@open-rlb/ng-bootstrap';
 
 import { routes } from './routing.module';
+import { ModalOverlaysComponent } from './pages/components/modals/modal-overlays.component';
 import { ModalSampleComponent } from './pages/components/modals/modal-sample.component';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
+    // The page already ships data-bs-theme="dark" on <body>; this hands that attribute
+    // to ThemeService so the toggle on /components/theme actually drives the site.
+    provideRlbTheme({ target: 'body', defaultTheme: 'dark' }),
+    /*
+      No withInMemoryScrolling: it goes through ViewportScroller, which scrolls the *window*, and
+      in this layout the window never scrolls — .rlb-content does. It would be inert config, which
+      is worse than none. AppComponent does the scrolling instead.
+    */
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     {
       provide: ModalRegistryOptions,
       useValue: {
         modals: {
           'sample-dialog': ModalSampleComponent,
+          'overlays-dialog': ModalOverlaysComponent,
           'rlb-search': SearchModalComponent,
           'rlb-common': CommonModalComponent,
           'rlb-calendar-event-create-edit': EventCreateEditComponent,

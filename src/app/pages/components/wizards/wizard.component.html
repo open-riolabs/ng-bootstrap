@@ -1,127 +1,81 @@
 <docs-page
-  title="Wizard"
-  lead="Build multi-step forms by driving the carousel programmatically. Disable autoplay, controls, indicators and touch, then move between steps with your own Back / Next buttons.">
-
-  <p class="text-body-secondary">
-    There is no dedicated wizard component — a wizard is just a <code>rlb-carousel</code> used as a
-    controlled stepper. Each <code>rlb-carousel-slide</code> is one step; you bind
-    <code>[current-slide]</code> to a signal and update it from the footer buttons, while
-    <code>(slide-count)</code> tells you how many steps there are. Validate one step at a time to gate
-    the <em>Next</em> button. See the full <a routerLink="/components/carousels">Carousel</a> API for all options.
-  </p>
+  title="Stepper"
+  lead="A form split into steps. This page used to hold a recipe — a carousel, some nested FormGroups and forty lines of glue that every project copied and adapted. The recipe was the specification; here it is as a component.">
 
   <docs-example
-    heading="Carousel-driven wizard"
-    description="A three-step sign-up wizard. The carousel runs in manual mode; Next is disabled until the current step is valid, and Finish until the whole form is valid."
-    [code]="htmlSnippet">
+    heading="Linear, with a form per step"
+    description="Each step names the form it is responsible for. A linear stepper will not move past one that is invalid, and marks its control touched on the way out so the fields say why — refusing silently leaves the user pressing a button that does nothing. Steps already passed get a tick; the one you are on is filled; one you left invalid goes red."
+    [code]="basicExample">
+    <div [formGroup]="form">
+      <rlb-stepper linear (finish)="submit()">
+        <rlb-step label="Account" [step-control]="account">
+          <div class="row g-3" formGroupName="account">
+            <div class="col-12 col-md-6">
+              <label class="form-label">Username</label>
+              <rlb-input formControlName="username" placeholder="at least 3 characters" enable-validation />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Email</label>
+              <rlb-input formControlName="email" type="email" placeholder="you@example.com" enable-validation />
+            </div>
+          </div>
+        </rlb-step>
 
-    <div class="border rounded-3 mx-auto" style="max-width: 540px;">
+        <rlb-step label="Profile" [step-control]="profile" hint="Nearly there">
+          <div class="row g-3" formGroupName="profile">
+            <div class="col-12 col-md-6">
+              <label class="form-label">First name</label>
+              <rlb-input formControlName="firstName" enable-validation />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">City</label>
+              <rlb-input formControlName="city" />
+            </div>
+          </div>
+        </rlb-step>
 
-      <!-- Step header + progress -->
-      <div class="p-3 border-bottom">
-        <div class="d-flex justify-content-between mb-2">
-          @for (s of steps; track s; let i = $index) {
-            <span class="badge rounded-pill"
-              [class.text-bg-primary]="i === page()"
-              [class.text-bg-success]="i < page()"
-              [class.text-bg-secondary]="i > page()">
-              {{ i + 1 }}. {{ s }}
-            </span>
-          }
+        <rlb-step label="Confirm" [step-control]="confirm">
+          <div formGroupName="confirm">
+            <rlb-switch formControlName="agree">
+              <label class="form-check-label" after>I accept the terms</label>
+            </rlb-switch>
+          </div>
+        </rlb-step>
+      </rlb-stepper>
+
+      @if (stepper(); as s) {
+        <div class="d-flex gap-2 justify-content-end mt-4">
+          <button rlb-button outline [disabled]="s.isFirst()" (click)="s.previous()">Back</button>
+          <button rlb-button (click)="s.next()">{{ s.isLast() ? 'Finish' : 'Next' }}</button>
         </div>
-        <div class="progress" role="progressbar" style="height: 6px;">
-          <div class="progress-bar" [style.width.%]="count() ? ((page() + 1) / count()) * 100 : 0"></div>
+      }
+
+      @if (submitted()) {
+        <div class="mt-3 d-flex align-items-center gap-3">
+          <span class="text-body-secondary small">Submitted: <code>{{ submitted() | json }}</code></span>
+          <button rlb-button size="sm" outline (click)="reset()">Start again</button>
         </div>
-      </div>
-
-      <!-- Steps -->
-      <div class="p-3" [formGroup]="form">
-        <rlb-carousel
-          autoplay="none"
-          no-touch
-          hide-controls
-          hide-indicators
-          [current-slide]="page()"
-          (current-slideChange)="page.set($event)"
-          (slide-count)="count.set($event)"
-          id="wizard-carousel">
-
-          <rlb-carousel-slide active>
-            <div formGroupName="account">
-              <div class="mb-3">
-                <rlb-select formControlName="type" aria-label="Account type">
-                  <label before>Account type</label>
-                  <rlb-option [value]="''" disabled>—</rlb-option>
-                  <rlb-option value="personal">Personal</rlb-option>
-                  <rlb-option value="business">Business</rlb-option>
-                </rlb-select>
-              </div>
-              <div class="mb-3">
-                <rlb-input formControlName="username" aria-label="Username">
-                  <label before>Username</label>
-                </rlb-input>
-              </div>
-              <div class="mb-3">
-                <rlb-input type="email" formControlName="email" aria-label="Email">
-                  <label before>Email</label>
-                </rlb-input>
-              </div>
-            </div>
-          </rlb-carousel-slide>
-
-          <rlb-carousel-slide>
-            <div formGroupName="profile">
-              <div class="mb-3">
-                <rlb-input formControlName="firstName" aria-label="First name">
-                  <label before>First name</label>
-                </rlb-input>
-              </div>
-              <div class="mb-3">
-                <rlb-input formControlName="lastName" aria-label="Last name">
-                  <label before>Last name</label>
-                </rlb-input>
-              </div>
-              <div class="mb-3">
-                <rlb-input formControlName="city" aria-label="City">
-                  <label before>City</label>
-                </rlb-input>
-              </div>
-            </div>
-          </rlb-carousel-slide>
-
-          <rlb-carousel-slide>
-            <p class="text-body-secondary">Review your details and confirm to finish.</p>
-            <pre class="bg-body-tertiary rounded-3 p-2 small mb-3">{{ form.getRawValue() | json }}</pre>
-            <div formGroupName="confirm">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="wz-agree" formControlName="agree">
-                <label class="form-check-label" for="wz-agree">I confirm the information is correct</label>
-              </div>
-            </div>
-          </rlb-carousel-slide>
-        </rlb-carousel>
-      </div>
-
-      <!-- Footer -->
-      <div class="d-flex justify-content-between p-3 border-top">
-        <button rlb-button outline [disabled]="page() === 0" (click)="prev()">Back</button>
-        @if (!isLast()) {
-          <button rlb-button color="primary" [disabled]="currentStepInvalid()" (click)="next()">Next</button>
-        } @else {
-          <button rlb-button color="success" [disabled]="form.invalid" (click)="finish()">Finish</button>
-        }
-      </div>
+      }
     </div>
   </docs-example>
 
-  <h2 class="h4 mt-5 mb-3">Key carousel options for a wizard</h2>
-  <docs-api selector="rlb-carousel" [rows]="optionsApi" />
+  <docs-example
+    heading="Vertical"
+    description="The same thing with the strip down the side. Useful when the steps have long names, or when the form is narrow."
+    [code]="verticalExample">
+    <rlb-stepper orientation="vertical">
+      <rlb-step label="One" hint="Pick a plan">
+        <p class="mb-0">The first step's content.</p>
+      </rlb-step>
+      <rlb-step label="Two" optional>
+        <p class="mb-0">This one can be skipped.</p>
+      </rlb-step>
+      <rlb-step label="Three">
+        <p class="mb-0">And the last.</p>
+      </rlb-step>
+    </rlb-stepper>
+  </docs-example>
 
-  <h2 class="h4 mt-5 mb-2">Component logic</h2>
-  <p class="text-body-secondary">
-    The active step lives in a signal bound one-way to <code>[current-slide]</code>; Back / Next clamp it
-    between <code>0</code> and <code>count - 1</code>.
-  </p>
-  <pre class="border rounded-3 p-3 bg-body-tertiary"><code [highlight]="tsSnippet" language="typescript"></code></pre>
-
+  <docs-api selector="rlb-stepper" [rows]="stepperApi" />
+  <docs-api selector="rlb-step" [rows]="stepApi" />
 </docs-page>

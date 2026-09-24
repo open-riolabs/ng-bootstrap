@@ -16,6 +16,9 @@
   "peerDependenciesMeta": {
     "@types/bootstrap": {
       "optional": true
+    },
+    "@ngx-translate/core": {
+      "optional": true
     }
   },
   "dependencies": {

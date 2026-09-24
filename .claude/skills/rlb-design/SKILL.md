@@ -7,6 +7,11 @@ description: Bootstrap 5.3 + @open-rlb/ng-bootstrap design guidance for layout, 
 
 You are an expert in designing Angular UIs using **Bootstrap 5.3** with the **@open-rlb/ng-bootstrap** component library. This skill guides layout, spacing, typography, color, and responsive design decisions.
 
+For the components themselves see **rlb-components** (buttons, cards, navigation), **rlb-inputs**
+(forms), **rlb-data-display** (stats, timelines, lists, empty states, skeletons), **rlb-overlays**
+(dropdowns, tooltips, popovers), **rlb-datatable**, **rlb-modals** and **rlb-calendar**. Setup and
+the required stylesheets are in **rlb-schematics**.
+
 ## Bootstrap 5.3 Color Palette
 
 The library uses a typed `Color` union:
@@ -15,6 +20,26 @@ type Color = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
 ```
 
 All components that accept a `color` input use this type.
+
+## Dark Mode
+
+Bootstrap 5.3's dark mode rides on the `data-bs-theme` attribute, and the library drives it for
+you. Register `provideRlbTheme()` and drop in `<rlb-theme-toggle />`, or call `ThemeService`
+from your own settings screen.
+
+```typescript
+providers: [provideRlbBootstrap(), provideRlbTheme()]
+```
+
+Design against the Bootstrap CSS variables rather than fixed colours, so both themes work from
+one stylesheet: `var(--bs-body-bg)`, `var(--bs-body-color)`, `var(--bs-border-color)`,
+`var(--bs-secondary-bg)`. Utility classes do this already — prefer `text-body-secondary` to a
+hard-coded grey, and `bg-body-tertiary` to `bg-light`, which does not flip.
+
+`defaultTheme: 'auto'` follows the operating system; `resolved()` on `ThemeService` tells you
+which one is actually on screen.
+
+---
 
 ## Layout & Grid
 

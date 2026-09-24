@@ -3,37 +3,50 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  forwardRef,
   inject,
   input,
-  OnDestroy,
   OnInit,
   output,
-  Renderer2,
+  Signal,
+  signal,
   TemplateRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import {
+  RlbDropdownAlign,
+  RlbDropdownAutoClose,
+  RlbDropdownHost,
+  RlbDropdownToggle,
+} from '../../dropdown/dropdown-host';
+import { RlbDropdownOverlay } from '../../dropdown/dropdown-overlay.service';
 import { VisibilityEventBase } from '../../../shared/types';
-import type { Dropdown } from 'bootstrap';
-import bootstrap from '../../../shared/bootstrap';
 
+/**
+ * One entry of a navbar, which may itself open a menu.
+ *
+ * It is its own dropdown host — the anchor it builds is the toggle, and whatever
+ * `rlb-dropdown-container` is projected into it is the menu — so it rides the same CDK Overlay as
+ * every other dropdown in the library instead of a second `bootstrap.Dropdown` of its own.
+ */
 @Component({
-    selector: 'rlb-navbar-dropdown-item',
-    template: `
+  selector: 'rlb-navbar-dropdown-item',
+  template: `
     <ng-template #template>
-      <li
-        class="nav-item list-unstyled"
-        [class.dropdown]="dropdown()"
-      >
+      <li class="nav-item list-unstyled" [class.dropdown]="dropdown()">
         <a
           class="nav-link {{ cssClass() }}"
           [class.dropdown-toggle]="dropdown()"
-          [attr.role]="dropdown() || toggle() ? 'button' : undefined"
-          [attr.data-bs-toggle]="dropdown() ? 'dropdown' : undefined"
-          [attr.aria-expanded]="dropdown() || toggle() ? 'false' : undefined"
-          [attr.data-bs-auto-close]="_autoClose()"
-          [href]="dropdown() || toggle() ? '#' : href()"
-          (click)="click.emit($event)"
+          [class.disabled]="disabled()"
+          [attr.role]="isButton() ? 'button' : null"
+          [attr.tabindex]="isButton() ? 0 : null"
+          [attr.aria-haspopup]="dropdown() ? 'true' : null"
+          [attr.aria-expanded]="dropdown() ? isOpen() : null"
+          [attr.aria-disabled]="disabled() ? true : null"
+          [attr.href]="isButton() ? null : href()"
+          (click)="onClick($event)"
+          (keydown)="onKeydown($event)"
         >
           <ng-content select=":not(rlb-dropdown-container)"></ng-content>
         </a>
@@ -41,11 +54,17 @@ import bootstrap from '../../../shared/bootstrap';
       </li>
     </ng-template>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    RlbDropdownOverlay,
+    { provide: RlbDropdownHost, useExisting: forwardRef(() => NavbarDropdownItemComponent) },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
+export class NavbarDropdownItemComponent implements OnInit, RlbDropdownHost {
   element!: HTMLElement;
-  private listeners: (() => void)[] = [];
+
+  private overlay = inject(RlbDropdownOverlay);
+  private viewContainerRef = inject(ViewContainerRef);
 
   disabled = input(false, { alias: 'disabled', transform: booleanAttribute });
   dropdown = input(false, { alias: 'dropdown', transform: booleanAttribute });
@@ -54,33 +73,19 @@ export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
   toggle = input<'offcanvas' | 'collapse' | 'tab' | 'pill' | 'buttons-group' | undefined>(
     undefined,
   );
-  autoClose = input<'default' | 'inside' | 'outside' | 'manual'>('default', {
-    alias: 'auto-close',
-  });
+  autoClose = input<RlbDropdownAutoClose>('default', { alias: 'auto-close' });
 
   click = output<MouseEvent>();
   statusChanged = output<VisibilityEventBase>({ alias: 'status-changed' });
 
-  _autoClose = computed(() => {
-    switch (this.autoClose()) {
-      case 'default':
-        return 'true';
-      case 'inside':
-        return 'inside';
-      case 'outside':
-        return 'outside';
-      case 'manual':
-        return 'false';
-      default:
-        return 'true';
-    }
-  });
+  readonly isOpen = this.overlay.isOpen;
+
+  /** An entry that opens something is a button, not a link — and so has no href to jump to. */
+  protected isButton = computed(() => this.dropdown() || !!this.toggle());
 
   template = viewChild.required<TemplateRef<any>>('template');
 
-  private viewContainerRef = inject(ViewContainerRef);
-  private renderer = inject(Renderer2);
-  private dropdownInstance?: Dropdown;
+  private noOffset = signal<number[]>([]);
 
   ngOnInit() {
     const templateView = this.viewContainerRef.createEmbeddedView(this.template());
@@ -88,33 +93,62 @@ export class NavbarDropdownItemComponent implements OnInit, OnDestroy {
     this.viewContainerRef.element.nativeElement.remove();
 
     const anchor = this.element.querySelector('a');
-
-    if (anchor && this.dropdown()) {
-      anchor.setAttribute('data-bs-auto-close', this._autoClose());
-      this.dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(anchor);
-      this.listeners.push(
-        this.renderer.listen(anchor, 'show.bs.dropdown', () => this.statusChanged.emit('show')),
-        this.renderer.listen(anchor, 'shown.bs.dropdown', () => this.statusChanged.emit('shown')),
-        this.renderer.listen(anchor, 'hide.bs.dropdown', () => this.statusChanged.emit('hide')),
-        this.renderer.listen(anchor, 'hidden.bs.dropdown', () => this.statusChanged.emit('hidden')),
-      );
-    }
+    if (anchor && this.dropdown()) this.registerToggle(this.asToggle(anchor));
   }
 
-  open() {
-    this.dropdownInstance?.show();
+  private asToggle(element: HTMLElement): RlbDropdownToggle {
+    return {
+      element,
+      offset: this.noOffset,
+      autoClose: this.autoClose,
+      emitStatus: (event: VisibilityEventBase) => this.statusChanged.emit(event),
+    };
   }
 
-  close() {
-    this.dropdownInstance?.hide();
+  registerToggle(toggle: RlbDropdownToggle) {
+    this.overlay.setToggle(toggle);
   }
 
+  registerMenu(element: HTMLElement, align: Signal<RlbDropdownAlign>) {
+    this.overlay.setMenu(element, align);
+  }
+
+  open(focusFirst = false) {
+    this.overlay.open(focusFirst);
+  }
+
+  close(returnFocus = false) {
+    this.overlay.close(returnFocus);
+  }
+
+  /** Kept under its old name: `toggle` is already an input here. */
   toggleDropdown() {
-    this.dropdownInstance?.toggle();
+    this.overlay.toggleOpen();
   }
 
-  ngOnDestroy() {
-    this.listeners.forEach(unsub => unsub());
-    this.listeners = [];
+  handleToggleKeydown(event: KeyboardEvent) {
+    this.overlay.handleToggleKeydown(event);
+  }
+
+  protected onClick(event: MouseEvent) {
+    if (this.disabled()) {
+      event.preventDefault();
+      return;
+    }
+    // Without an href there is nothing to follow, but an anchor still wants stopping.
+    if (this.isButton()) event.preventDefault();
+    if (this.dropdown()) this.toggleDropdown();
+    this.click.emit(event);
+  }
+
+  protected onKeydown(event: KeyboardEvent) {
+    if (!this.dropdown() || this.disabled()) return;
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.toggleDropdown();
+      return;
+    }
+    this.handleToggleKeydown(event);
   }
 }

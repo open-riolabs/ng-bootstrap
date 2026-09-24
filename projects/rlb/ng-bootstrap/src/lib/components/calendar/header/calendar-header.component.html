@@ -1,11 +1,11 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
 	<div class="d-flex gap-1">
 		<button rlb-button outline (click)="prev()">
-			<i class="bi bi-chevron-left"></i>
+			<i [class]="icons.chevronLeft"></i>
 		</button>
 		<button rlb-button outline (click)="today()">Today</button>
 		<button rlb-button outline (click)="next()">
-			<i class="bi-chevron-right"></i>
+			<i [class]="icons.chevronRight"></i>
 		</button>
 	</div>
 

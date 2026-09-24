@@ -23,7 +23,13 @@ import { PaginationsComponent } from './pagionations/pagionation.component';
 import { PlaceholdersComponent } from './placeholders/placeholder.component';
 import { ScrollspysComponent } from './scrollspys/scrollspy.component';
 import { SidebarsComponent } from './sidebars/sidebar.component';
+import { FabsComponent } from './fab/fab.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { ScaleComponent } from './scale/scale.component';
+import { TreeDocComponent } from './tree/tree.component';
 import { TablesComponent } from "./tables/tables.component";
+import { ThemeComponent } from './theme/theme.component';
 import { WizardsComponent } from './wizards/wizard.component';
 import { TabssComponent } from './tabs/tab.component';
 import { ToastsComponent } from './toasts/toasts.component';
@@ -57,7 +63,13 @@ const routes: Routes = [
   { path: 'tooltips', component: TooltipssComponent },
   { path: 'navigation/navs', component: NavsComponent },
   { path: 'navigation/navbars', component: NavbarsComponent },
-  { path: 'calendar', component: CalendarComponent }
+  { path: 'calendar', component: CalendarComponent },
+  { path: 'fab', component: FabsComponent },
+  { path: 'feedback', component: FeedbackComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'scale', component: ScaleComponent },
+  { path: 'theme', component: ThemeComponent },
+  { path: 'tree', component: TreeDocComponent }
 ];
 
 @NgModule({

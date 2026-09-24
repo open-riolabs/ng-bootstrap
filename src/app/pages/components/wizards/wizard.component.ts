@@ -1,5 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, signal, viewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { StepperComponent } from '@open-rlb/ng-bootstrap';
 
 import { SHARED_IMPORTS } from '../../../shared-imports';
 import { DOCS_IMPORTS, DocApiRow } from '../../../shared/docs';
@@ -10,126 +11,85 @@ import { DOCS_IMPORTS, DocApiRow } from '../../../shared/docs';
   imports: [SHARED_IMPORTS, DOCS_IMPORTS],
 })
 export class WizardsComponent {
-  /** Active step, bound one-way to the carousel and updated by the Back/Next buttons. */
-  readonly page = signal(0);
-  /** Number of slides, reported by the carousel via (slide-count). */
-  readonly count = signal(0);
+  readonly stepper = viewChild(StepperComponent);
+  readonly submitted = signal<unknown>(undefined);
 
-  readonly steps = ['Account', 'Profile', 'Confirm'];
-  /** FormGroup name behind each step, used to validate one step at a time. */
-  readonly groupNames = ['account', 'profile', 'confirm'];
-
-  readonly form = new FormGroup({
-    account: new FormGroup({
-      type: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      username: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
-      email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+  readonly account = new FormGroup({
+    username: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)],
     }),
-    profile: new FormGroup({
-      firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      lastName: new FormControl(''),
-      city: new FormControl(''),
-    }),
-    confirm: new FormGroup({
-      agree: new FormControl(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
     }),
   });
 
-  readonly isLast = computed(() => this.page() === this.count() - 1);
+  readonly profile = new FormGroup({
+    firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    city: new FormControl(''),
+  });
 
-  /** True while the current step's FormGroup is invalid — used to gate the Next button. */
-  currentStepInvalid(): boolean {
-    const group = this.form.get(this.groupNames[this.page()]);
-    return !!group && group.invalid;
+  readonly confirm = new FormGroup({
+    agree: new FormControl(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
+  });
+
+  readonly form = new FormGroup({
+    account: this.account,
+    profile: this.profile,
+    confirm: this.confirm,
+  });
+
+  basicExample = `<rlb-stepper linear (finish)="submit()">
+  <rlb-step label="Account" [step-control]="account">
+    <!-- the fields of step one -->
+  </rlb-step>
+  <rlb-step label="Profile" [step-control]="profile" hint="Nearly there">
+    <!-- … -->
+  </rlb-step>
+  <rlb-step label="Confirm" [step-control]="confirm">
+    <!-- … -->
+  </rlb-step>
+</rlb-stepper>
+
+<button rlb-button outline [disabled]="stepper.isFirst()" (click)="stepper.previous()">Back</button>
+<button rlb-button (click)="stepper.next()">
+  {{ stepper.isLast() ? 'Finish' : 'Next' }}
+</button>`;
+
+  verticalExample = `<rlb-stepper orientation="vertical">
+  <rlb-step label="One">…</rlb-step>
+  <rlb-step label="Two">…</rlb-step>
+</rlb-stepper>`;
+
+  submit() {
+    this.submitted.set(this.form.getRawValue());
   }
 
-  prev(): void {
-    this.page.update(p => Math.max(0, p - 1));
-  }
-
-  next(): void {
-    this.page.update(p => Math.min(this.count() - 1, p + 1));
-  }
-
-  finish(): void {
-    if (this.form.invalid) return;
-    // Submit this.form.getRawValue() here…
-    this.page.set(0);
+  reset() {
     this.form.reset();
+    this.submitted.set(undefined);
+    this.stepper()?.reset();
   }
 
-  optionsApi: DocApiRow[] = [
-    { name: 'autoplay', type: "'auto' | 'manual' | 'none'", default: "'auto'", description: "Set to 'none' so steps never advance on their own.", kind: 'Input' },
-    { name: 'no-touch', type: 'boolean', default: 'false', description: 'Disable swipe so users move only via your Back / Next buttons.', kind: 'Input' },
-    { name: 'hide-controls', type: 'boolean', default: 'false', description: 'Hide the built-in previous/next arrows.', kind: 'Input' },
-    { name: 'hide-indicators', type: 'boolean', default: 'false', description: 'Hide the slide dots.', kind: 'Input' },
-    { name: 'current-slide', type: 'number', default: '0', description: 'Bind to your active-step signal. Bound one-way here and updated from the footer buttons.', kind: 'Two-way' },
-    { name: 'slide-count', type: 'number', description: 'Emits the number of steps; store it to know when you reach the last one.', kind: 'Output' },
+  stepperApi: DocApiRow[] = [
+    { name: 'selectedIndex', type: 'number', default: '0', description: 'Which step is showing. Two-way, so the page can put it in the URL.', kind: 'Two-way' },
+    { name: 'linear', type: 'boolean', default: 'false', description: 'Refuses to move past a step that is not passable, and refuses to jump ahead over one. Without it the strip is navigation and the user may wander.', kind: 'Input' },
+    { name: 'orientation', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Where the strip of steps goes.', kind: 'Input' },
+    { name: 'optionalLabel', type: 'string', default: "'Optional'", description: 'What an optional step says under its label when it has no hint of its own.', kind: 'Input' },
+    { name: 'finish', type: 'void', description: 'The user asked to finish from the last step.', kind: 'Output' },
+    { name: 'next()', type: 'boolean', description: 'Moves on, or returns false and marks the step control touched — refusing silently leaves the user pressing a button that does nothing.', kind: 'Method' },
+    { name: 'previous() / reset() / select(index)', type: 'void', description: 'The rest of the navigation. select refuses a step the linear rule has not opened yet.', kind: 'Method' },
+    { name: 'isFirst() / isLast() / currentPassable()', type: 'Signal<boolean>', description: 'For wiring the buttons: whether to show Back, whether Next means Finish, and whether the current step would let go.', kind: 'Method' },
   ];
 
-  htmlSnippet = `<rlb-carousel
-  autoplay="none"
-  no-touch
-  hide-controls
-  hide-indicators
-  [current-slide]="page()"
-  (current-slideChange)="page.set($event)"
-  (slide-count)="count.set($event)"
-  id="wizard-carousel"
-  [formGroup]="form">
-
-  <rlb-carousel-slide active>
-    <div formGroupName="account">
-      <rlb-select formControlName="type"><label before>Account type</label>
-        <rlb-option [value]="''" disabled>—</rlb-option>
-        <rlb-option value="personal">Personal</rlb-option>
-        <rlb-option value="business">Business</rlb-option>
-      </rlb-select>
-      <rlb-input formControlName="username"><label before>Username</label></rlb-input>
-      <rlb-input type="email" formControlName="email"><label before>Email</label></rlb-input>
-    </div>
-  </rlb-carousel-slide>
-
-  <rlb-carousel-slide>
-    <div formGroupName="profile">
-      <rlb-input formControlName="firstName"><label before>First name</label></rlb-input>
-      <rlb-input formControlName="lastName"><label before>Last name</label></rlb-input>
-      <rlb-input formControlName="city"><label before>City</label></rlb-input>
-    </div>
-  </rlb-carousel-slide>
-
-  <rlb-carousel-slide>
-    <!-- review &amp; confirm -->
-  </rlb-carousel-slide>
-</rlb-carousel>
-
-<!-- footer -->
-<button rlb-button outline [disabled]="page() === 0" (click)="prev()">Back</button>
-@if (!isLast()) {
-  <button rlb-button color="primary" [disabled]="currentStepInvalid()" (click)="next()">Next</button>
-} @else {
-  <button rlb-button color="success" [disabled]="form.invalid" (click)="finish()">Finish</button>
-}`;
-
-  tsSnippet = `export class WizardComponent {
-  readonly page = signal(0);   // bound to [current-slide]
-  readonly count = signal(0);  // set from (slide-count)
-
-  readonly groupNames = ['account', 'profile', 'confirm'];
-  readonly isLast = computed(() => this.page() === this.count() - 1);
-
-  readonly form = new FormGroup({
-    account: new FormGroup({ /* type, username, email … */ }),
-    profile: new FormGroup({ /* firstName, lastName, city */ }),
-    confirm: new FormGroup({ agree: new FormControl(false, Validators.requiredTrue) }),
-  });
-
-  // Gate "Next" on the validity of the current step only.
-  currentStepInvalid(): boolean {
-    return !!this.form.get(this.groupNames[this.page()])?.invalid;
-  }
-
-  prev() { this.page.update(p => Math.max(0, p - 1)); }
-  next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
-}`;
+  stepApi: DocApiRow[] = [
+    { name: 'label', type: 'string', default: "''", description: 'What this step is called in the strip.', kind: 'Input' },
+    { name: 'hint', type: 'string | undefined', default: 'undefined', description: 'A line under the label.', kind: 'Input' },
+    { name: 'step-control', type: 'AbstractControl | undefined', default: 'undefined', description: 'The form this step is responsible for. A linear stepper refuses to move past it while it is invalid.', kind: 'Input' },
+    { name: 'optional', type: 'boolean', default: 'false', description: 'A step the user may skip even in a linear stepper.', kind: 'Input' },
+    { name: 'completed', type: 'boolean', default: 'false', description: 'Marks the step finished even if it has no control to prove it.', kind: 'Input' },
+    { name: 'state', type: "'todo' | 'done' | 'error' | undefined", default: 'undefined', description: 'Forces the circle. Left alone it is worked out from step-control and from what came before.', kind: 'Input' },
+    { name: '(default)', type: 'ng-content', description: 'The body of the step. It stays in the DOM while another step is showing, merely hidden — tearing down the fields of step one would throw away everything typed into them.', kind: 'Content' },
+  ];
 }

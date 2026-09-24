@@ -17,6 +17,14 @@ export class ModalsComponent {
 
   basicExample = `<button rlb-button (click)="modal()">Open Modal</button>`;
 
+  overlaysExample = `<!-- Nothing special to do: the panels are reachable from inside a dialog. -->
+<rlb-dropdown>
+  <button rlb-button rlb-dropdown>A dropdown</button>
+  <ul rlb-dropdown-menu>…</ul>
+</rlb-dropdown>
+<rlb-datepicker timezone="Europe/Rome" [(ngModel)]="day" />
+<rlb-tree-select [nodes]="nodes" [(ngModel)]="picked" />`;
+
   setupExample = `// 1. Register modal components in your app providers
 providers: [
   {
@@ -113,6 +121,12 @@ this.modals.openConfirmModal(
 });`;
 
   // ── Live example handler ────────────────────────────────────────────────
+
+  async overlaysModal(): Promise<void> {
+    await lastValueFrom(
+      this.modals.openModal('overlays-dialog', { title: 'Panels inside a dialog', content: null }),
+    );
+  }
 
   async modal(): Promise<void> {
     const o = await lastValueFrom(
