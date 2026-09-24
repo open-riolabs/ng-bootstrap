@@ -10,3 +10,10 @@
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
 }
+// The Components menu carries every page the sidebar does, which is taller than most windows.
+// Scrolling it is only possible because the menu is in an overlay rather than inside the bar.
+::ng-deep .rlb-nav-menu {
+  max-height: 70vh;
+  overflow-y: auto;
+  min-width: 15rem;
+}
