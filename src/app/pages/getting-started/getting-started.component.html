@@ -16,7 +16,7 @@
   </div>
   <ul class="text-body-secondary">
     <li>Installs <code>bootstrap</code>, <code>bootstrap-icons</code>, <code>&#64;open-rlb/date-tz</code>, <code>&#64;ngx-translate/core</code> and <code>&#64;angular/cdk</code>.</li>
-    <li>Registers the Bootstrap and Bootstrap Icons stylesheets in <code>angular.json</code>.</li>
+    <li>Registers the Bootstrap, Bootstrap Icons and CDK overlay stylesheets in <code>angular.json</code>.</li>
     <li>Adds <code>provideRlbBootstrap()</code> to your application providers.</li>
     <li>Scaffolds a starter component you can render to verify the setup.</li>
     <li>Copies the bundled Claude skills into <code>.claude/skills/</code> (date-tz and component guides).</li>
@@ -49,6 +49,13 @@
     </button>
     <pre class="m-0 p-3"><code [highlight]="stylesCode" language="json"></code></pre>
   </div>
+
+  <p class="text-body-secondary mt-2 mb-0">
+    The CDK stylesheet is not optional: it is what positions every panel the library opens —
+    dropdowns, the datepicker, the time picker, the tree select, the popconfirm, the command
+    palette. Without it the overlay container has no position of its own and they all open in the
+    corner of the page.
+  </p>
 
   <docs-example
     heading="Your first component"
