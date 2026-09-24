@@ -16,7 +16,7 @@ The schematic will:
 
 - install the required dependencies (`bootstrap`, `bootstrap-icons`, `@open-rlb/date-tz`,
   `@ngx-translate/core`, `@angular/cdk`, and `@types/bootstrap`) at compatible versions;
-- register the Bootstrap and Bootstrap Icons stylesheets in `angular.json`;
+- register the Bootstrap, Bootstrap Icons and CDK overlay stylesheets in `angular.json`;
 - add `provideRlbBootstrap()` to your application providers;
 - scaffold a `RlbStarterComponent` (`src/app/rlb-starter/`) you can render to verify the setup
   (pass `--skip-starter` to opt out);
@@ -46,9 +46,16 @@ export const appConfig: ApplicationConfig = {
 "styles": [
   "node_modules/bootstrap/dist/css/bootstrap.min.css",
   "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+  "node_modules/@angular/cdk/overlay-prebuilt.css",
   "src/styles.scss"
 ]
 ```
+
+> **Upgrading from a version before the CDK overlay move?** Add that third line by hand.
+> `ng add` registers it for a new install, but it does not run again when you bump the version —
+> and it is what positions every panel the library opens: dropdowns, tooltips, popovers, the
+> datepicker, the time picker, the tree select, the popconfirm and the command palette. Without
+> it the overlay container has no position of its own and they all open in the corner of the page.
 
 ## Usage
 
