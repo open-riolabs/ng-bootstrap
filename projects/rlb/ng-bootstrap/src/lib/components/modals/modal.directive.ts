@@ -209,7 +209,13 @@ export class ModalDirective implements OnDestroy, AfterViewInit, OnInit {
    * only needed an id and a reference to it.
    */
   private nameDialog(): void {
-    if (this.modalElement.hasAttribute('aria-label')) return;
+    // Anything the caller said itself wins, including a labelledby pointing at their own heading.
+    if (
+      this.modalElement.hasAttribute('aria-label') ||
+      this.modalElement.hasAttribute('aria-labelledby')
+    ) {
+      return;
+    }
 
     const title = this.contentElement.querySelector<HTMLElement>('.modal-title');
     if (!title) return;

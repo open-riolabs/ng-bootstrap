@@ -92,7 +92,9 @@ export class OffcanvasComponent
    */
   private nameDialog(): void {
     const element = this.elementRef?.nativeElement;
-    if (!element || element.hasAttribute('aria-label')) return;
+    if (!element) return;
+    // Anything the caller said itself wins, including a labelledby pointing at their own heading.
+    if (element.hasAttribute('aria-label') || element.hasAttribute('aria-labelledby')) return;
 
     const title = element.querySelector<HTMLElement>('.offcanvas-title');
     if (!title) return;
