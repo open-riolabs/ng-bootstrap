@@ -1,0 +1,93 @@
+<docs-page
+  title="Empty state & popconfirm"
+  lead="The two smallest things a console asks for constantly: saying there is nothing here, and asking whether you really meant that.">
+
+  <docs-example
+    heading="Empty state"
+    description="rlb-dt-noitems already existed but only works inside the datatable, so every list, card and page outside one was inventing its own. This is the same thing, unhooked: an icon, a line saying what is missing, a sentence saying why, and the action that would fix it."
+    [code]="emptyExample">
+    <rlb-empty-state title="No users yet">
+      Invite someone and they will show up here.
+      <button
+        actions
+        rlb-button
+        color="primary"
+        size="sm"
+      >
+        Invite
+      </button>
+    </rlb-empty-state>
+  </docs-example>
+
+  <docs-example
+    heading="Variants"
+    description="search and error pick a fitting icon so the common cases need no icon at all. Any icon class overrides it."
+    [code]="variantsExample">
+    <div class="row g-3">
+      <div class="col-12 col-md-4">
+        <rlb-empty-state variant="search" title="Nothing matches" size="sm">
+          Try a shorter word.
+        </rlb-empty-state>
+      </div>
+      <div class="col-12 col-md-4">
+        <rlb-empty-state variant="error" title="Could not load" size="sm">
+          The server said no. Try again in a moment.
+        </rlb-empty-state>
+      </div>
+      <div class="col-12 col-md-4">
+        <rlb-empty-state icon="bi bi-inboxes" title="Custom icon" size="sm">
+          Any icon class works.
+        </rlb-empty-state>
+      </div>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Popconfirm"
+    description="ModalService.openConfirmModal already existed, but a modal across the whole screen is the wrong size of interruption for «delete this row» — which is the confirmation a console asks most often. This one is anchored to its trigger, closes on Escape or on a click outside, and emits nothing at all until the user says yes. Focus lands on «No»: the whole point is to be a speed bump, and a confirm button with focus on it is not one."
+    [code]="popconfirmExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 26rem">
+      @for (row of rows(); track row) {
+        <div class="d-flex align-items-center justify-content-between border rounded px-3 py-2">
+          <span>{{ row }}</span>
+          <button
+            rlb-button
+            color="danger"
+            size="sm"
+            rlb-popconfirm="Delete this row?"
+            popconfirm-title="This cannot be undone"
+            confirm-label="Delete"
+            cancel-label="Keep"
+            (confirmed)="remove(row)"
+          >
+            Delete
+          </button>
+        </div>
+      }
+      @if (rows().length === 0) {
+        <rlb-empty-state variant="empty" title="All gone" size="sm">
+          You deleted everything.
+          <button actions rlb-button size="sm" outline (click)="restore()">Put them back</button>
+        </rlb-empty-state>
+      }
+      @if (lastAnswer()) {
+        <span class="text-body-secondary small">last: <code>{{ lastAnswer() }}</code></span>
+      }
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Placement"
+    description="Positioned with CDK Overlay, so it survives a scrolling container and flips to the opposite side when there is no room. That needs @angular/cdk/overlay-prebuilt.css in the application styles — ng add registers it."
+    [code]="placementExample">
+    <div class="d-flex gap-2 flex-wrap">
+      <button rlb-button outline rlb-popconfirm="Sure?" placement="top" (confirmed)="answer('top: yes')" (cancelled)="answer('top: no')">Top</button>
+      <button rlb-button outline rlb-popconfirm="Sure?" placement="right" (confirmed)="answer('right: yes')" (cancelled)="answer('right: no')">Right</button>
+      <button rlb-button outline rlb-popconfirm="Sure?" placement="bottom" (confirmed)="answer('bottom: yes')" (cancelled)="answer('bottom: no')">Bottom</button>
+      <button rlb-button outline rlb-popconfirm="Sure?" placement="left" (confirmed)="answer('left: yes')" (cancelled)="answer('left: no')">Left</button>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-empty-state" [rows]="emptyApi" />
+  <docs-api selector="[rlb-popconfirm]" [rows]="popconfirmApi" />
+</docs-page>

@@ -74,6 +74,9 @@ const SYNC_SKILLS_COMMAND = 'ng g @open-rlb/ng-bootstrap:sync-skills';
 const STYLE_PATHS: ReadonlyArray<string> = [
   'node_modules/bootstrap/dist/css/bootstrap.min.css',
   'node_modules/bootstrap-icons/font/bootstrap-icons.css',
+  // CDK Overlay positions the datepicker and the popconfirm; without its stylesheet the
+  // overlay container has no position of its own and the panels land in the page corner.
+  'node_modules/@angular/cdk/overlay-prebuilt.css',
 ];
 
 export function ngAdd(options: Schema): Rule {

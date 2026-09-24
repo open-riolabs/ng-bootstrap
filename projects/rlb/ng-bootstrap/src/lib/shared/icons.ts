@@ -49,6 +49,14 @@ export interface RlbIconSet {
   download: string;
   /** The menu that shows and hides columns. */
   columns: string;
+  /** Something went wrong, or a step is in error. */
+  warning: string;
+  /** There is nothing here yet. */
+  empty: string;
+  /** Done. */
+  check: string;
+  /** Opens a calendar. */
+  calendar: string;
   /** The light theme. */
   themeLight: string;
   /** The dark theme. */
@@ -79,6 +87,10 @@ export const RLB_DEFAULT_ICONS: RlbIconSet = {
   sortNone: 'bi bi-arrow-down-up',
   download: 'bi bi-download',
   columns: 'bi bi-layout-three-columns',
+  warning: 'bi bi-exclamation-triangle',
+  empty: 'bi bi-inbox',
+  check: 'bi bi-check-lg',
+  calendar: 'bi bi-calendar3',
   themeLight: 'bi bi-sun',
   themeDark: 'bi bi-moon-stars',
   themeAuto: 'bi bi-circle-half',

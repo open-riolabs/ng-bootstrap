@@ -16,6 +16,7 @@ import { SwitchesComponent } from './switch/switch.component';
 import { TextareasComponent } from './textarea/textarea.component';
 import { RadiosComponent } from './radio/radio.component';
 import { InputValidationsComponent } from './input-validation/input-validation.component';
+import { DatepickersComponent } from './datepicker/datepicker.component';
 import { FormFieldsDocComponent } from './form-fields/form-fields.component';
 import { SelectChipsDocComponent } from './select-chips/select-chips.component';
 
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'checkbox', component: CheckboxsComponent },
   { path: 'color', component: ColorsComponent },
   { path: 'datalist', component: DatalistsComponent },
+  { path: 'datepicker', component: DatepickersComponent },
   { path: 'file', component: FilesComponent },
   { path: 'file-dnd', component: FileDndsComponent },
   { path: 'form-fields', component: FormFieldsDocComponent },

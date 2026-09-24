@@ -84,23 +84,9 @@ linked by an older Angular. Applications still on Angular 21 should stay on the 
 
 ## 🚀 Getting Started
 
-### 1. Import the Module
+### 1. Register the providers
 
-In your `app.module.ts` or standalone component:
-
-```typescript
-import { RlbBootstrapModule } from '@open-rlb/ng-bootstrap';
-
-@NgModule({
-  imports: [
-    RlbBootstrapModule,
-    // ... other modules
-  ],
-})
-export class AppModule {}
-```
-
-Or using the standalone provider function:
+Applications are standalone and zoneless. Register the library once, in the root providers:
 
 ```typescript
 import { provideRlbBootstrap } from '@open-rlb/ng-bootstrap';
@@ -108,9 +94,22 @@ import { provideRlbBootstrap } from '@open-rlb/ng-bootstrap';
 bootstrapApplication(AppComponent, {
   providers: [
     provideRlbBootstrap(),
+    provideZonelessChangeDetection(),
     // ... other providers
   ],
 });
+```
+
+> On an application built on [`@open-rlb/ng-app`](https://www.npmjs.com/package/@open-rlb/ng-app),
+> `provideRlbConfig(environment)` already calls `provideRlbBootstrap()`: do **not** call it again.
+
+`RlbBootstrapModule` is still exported for applications that have not moved off `NgModule`:
+
+```typescript
+import { RlbBootstrapModule } from '@open-rlb/ng-bootstrap';
+
+@NgModule({ imports: [RlbBootstrapModule] })
+export class AppModule {}
 ```
 
 `provideRlbBootstrap()` registers the built-in modals and toasts (`rlb-common`, `rlb-search` and the
@@ -132,7 +131,12 @@ Add Bootstrap CSS to your `angular.json` or import in your main styles file:
 ```scss
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+@import '@angular/cdk/overlay-prebuilt.css';
 ```
+
+The CDK stylesheet is what positions the datepicker and the popconfirm. Without it the overlay
+container has no position of its own and those panels open in the corner of the page. `ng add`
+registers all three for you.
 
 ### 3. Use Components
 
@@ -165,6 +169,8 @@ Colors come from the Bootstrap palette (`primary`, `secondary`, `success`, `dang
 - **Chat** - Chat interface components
 - **Collapse** - Toggle content visibility
 - **Dropdown** - Dropdown menus
+- **Empty state** - Icon, line, sentence and the action that would fix it
+- **Popconfirm** - «Are you sure?» anchored to the button that asked, on CDK Overlay
 - **List** - List components
 - **Loader** - Loading indicators
 - **Modal** - Dialog windows with registry system
@@ -174,6 +180,7 @@ Colors come from the Bootstrap palette (`primary`, `secondary`, `success`, `dang
 - **Pagination** - Page navigation
 - **Placeholder** - Loading placeholders
 - **Scrollspy** - Scroll-based navigation
+- **Stepper** - A form split into steps, with per-step validation
 - **Sidebar** - Side navigation panels
 - **Tabs** - Tabbed interfaces
 - **Toast** - Notification toasts with registry
@@ -203,6 +210,7 @@ Colors come from the Bootstrap palette (`primary`, `secondary`, `success`, `dang
 - **File** - File upload inputs
 - **File DnD** - Drag and drop file upload
 - **Datalist** - Autocomplete suggestions
+- **Date picker** - One day or a range, as an `IDateTz` at local midnight in its own timezone
 - **Autocomplete** - Advanced autocomplete with:
   - Country selection
   - Timezone selection
@@ -224,8 +232,8 @@ Colors come from the Bootstrap palette (`primary`, `secondary`, `success`, `dang
 1. Clone the repository:
 
 ```bash
-git clone https://gitlab.com/riolabs/common/libraries/rlb-ng-bootstrap.git
-cd rlb-ng-bootstrap
+git clone https://github.com/open-riolabs/ng-bootstrap.git
+cd ng-bootstrap
 ```
 
 2. Install dependencies:

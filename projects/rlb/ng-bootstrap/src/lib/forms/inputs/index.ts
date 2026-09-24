@@ -7,6 +7,10 @@ export * from './autocomplete-country-dial-code.component'
 export * from './autocomplete-country.component';
 export * from './autocomplete-timezones.component';
 export * from './autocomplete.component';
+export * from './date-panel.component';
+export * from './date-picker-positions';
+export * from './date-range.component';
+export * from './datepicker.component';
 export * from './checkbox.component';
 export * from './color.component';
 export * from './datalist.component';
@@ -30,6 +34,9 @@ import { AutocompleteCountryComponent } from './autocomplete-country.component';
 import { AutocompleteTimezonesComponent } from './autocomplete-timezones.component';
 import { AutocompleteComponent } from './autocomplete.component';
 import { CheckboxComponent } from './checkbox.component';
+import { DatePanelComponent } from './date-panel.component';
+import { DateRangeComponent } from './date-range.component';
+import { DatepickerComponent } from './datepicker.component';
 import { ColorComponent } from './color.component';
 import { DatalistComponent } from './datalist.component';
 import { FileDndComponent } from './dnd-file.component';
@@ -50,6 +57,9 @@ import { TextAreaComponent } from './text-area.component';
 export const INPUTS = [
   AutocompleteComponent,
   CheckboxComponent,
+  DatePanelComponent,
+  DatepickerComponent,
+  DateRangeComponent,
   InputComponent,
   SwitchComponent,
   TextAreaComponent,

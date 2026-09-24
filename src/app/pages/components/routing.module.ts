@@ -24,6 +24,7 @@ import { PlaceholdersComponent } from './placeholders/placeholder.component';
 import { ScrollspysComponent } from './scrollspys/scrollspy.component';
 import { SidebarsComponent } from './sidebars/sidebar.component';
 import { FabsComponent } from './fab/fab.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 import { TablesComponent } from "./tables/tables.component";
 import { ThemeComponent } from './theme/theme.component';
 import { WizardsComponent } from './wizards/wizard.component';
@@ -61,6 +62,7 @@ const routes: Routes = [
   { path: 'navigation/navbars', component: NavbarsComponent },
   { path: 'calendar', component: CalendarComponent },
   { path: 'fab', component: FabsComponent },
+  { path: 'feedback', component: FeedbackComponent },
   { path: 'theme', component: ThemeComponent }
 ];
 

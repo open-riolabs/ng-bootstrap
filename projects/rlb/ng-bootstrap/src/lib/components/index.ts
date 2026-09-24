@@ -69,6 +69,11 @@ import { TabContentComponent } from './tabs/tab-content.component';
 import { TabPaneComponent } from './tabs/tab-pane.component';
 import { TabComponent } from './tabs/tab.component';
 import { TabsComponent } from './tabs/tabs.component';
+import { EmptyStateComponent } from './empty-state/empty-state.component';
+import { PopconfirmDirective } from './popconfirm/popconfirm.directive';
+import { PopconfirmPanelComponent } from './popconfirm/popconfirm-panel.component';
+import { StepComponent } from './stepper/step.component';
+import { StepperComponent } from './stepper/stepper.component';
 import { ThemeToggleComponent } from './theme/theme-toggle.component';
 import { TOASTS } from './toast';
 import { PopoverDirective } from './tooltips/popover.directive';
@@ -146,6 +151,12 @@ export * from './tabs/tab-content.component';
 export * from './tabs/tab-pane.component';
 export * from './tabs/tab.component';
 export * from './tabs/tabs.component';
+export * from './empty-state/empty-state.component';
+export * from './popconfirm/popconfirm.directive';
+export * from './popconfirm/popconfirm-panel.component';
+export * from './stepper/step.component';
+export * from './stepper/stepper.component';
+export * from './stepper/stepper-host';
 export * from './theme/theme-toggle.component';
 export * from './toast';
 export * from './tooltips/popover.directive';
@@ -224,6 +235,11 @@ export const COMPONENTS = [
   RlbPlaceholderLineComponent,
   RlbPlaceholderTextComponent,
   ThemeToggleComponent,
+  EmptyStateComponent,
+  PopconfirmDirective,
+  PopconfirmPanelComponent,
+  StepperComponent,
+  StepComponent,
   ...[MODALS],
   ...[TOASTS],
   ...[CALENDAR_COMPONENTS],
