@@ -30,6 +30,7 @@ import { RouterLink } from '@angular/router';
       <a
         class="dropdown-item"
         [routerLink]="link()"
+        [fragment]="fragment()"
         [class.active]="active()"
         [class.disabled]="disabled()"
         [class.text-wrap]="textWrap()"
@@ -60,5 +61,7 @@ export class DropdownMenuItemComponent {
   header = input(false, { alias: 'header', transform: booleanAttribute });
   divider = input(false, { alias: 'divider', transform: booleanAttribute });
   link = input<string | undefined>(undefined, { alias: 'link' });
+  /** The part after the `#`, for an item that points at a section of a page. */
+  fragment = input<string | undefined>(undefined, { alias: 'fragment' });
   textWrap = input(false, { alias: 'text-wrap', transform: booleanAttribute });
 }

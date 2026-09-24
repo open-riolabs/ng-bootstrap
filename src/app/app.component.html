@@ -16,6 +16,7 @@
         <rlb-dropdown-container class="rlb-nav-menu">
           <li rlb-dropdown-item header>Actions</li>
           <li rlb-dropdown-item link="/components/buttons"><i class="bi bi-hand-index me-2" aria-hidden="true"></i>Button</li>
+          <li rlb-dropdown-item link="/components/buttons" fragment="split-button"><i class="bi bi-segmented-nav me-2" aria-hidden="true"></i>Split button</li>
           <li rlb-dropdown-item link="/components/badges"><i class="bi bi-person-badge me-2" aria-hidden="true"></i>Badge</li>
           <li rlb-dropdown-item link="/components/dropdowns"><i class="bi bi-menu-button-fill me-2" aria-hidden="true"></i>Dropdowns</li>
           <li rlb-dropdown-item link="/components/fab"><i class="bi bi-plus-circle me-2" aria-hidden="true"></i>Fab</li>
@@ -57,6 +58,7 @@
           <li rlb-dropdown-item divider></li>
           <li rlb-dropdown-item header>Content &amp; flows</li>
           <li rlb-dropdown-item link="/components/avatars"><i class="bi bi-person-bounding-box me-2" aria-hidden="true"></i>Avatars</li>
+          <li rlb-dropdown-item link="/components/avatars" fragment="avatar-group"><i class="bi bi-people me-2" aria-hidden="true"></i>Avatar group</li>
           <li rlb-dropdown-item link="/components/carousels"><i class="bi bi-images me-2" aria-hidden="true"></i>Carousel</li>
           <li rlb-dropdown-item link="/components/chats"><i class="bi bi-chat-dots me-2" aria-hidden="true"></i>Chat</li>
           <li rlb-dropdown-item link="/components/wizards"><i class="bi bi-ui-checks me-2" aria-hidden="true"></i>Wizard</li>
@@ -112,8 +114,9 @@
 
       <rlb-sidebar-item title="Components" />
 
-      <rlb-sidebar-item label="Actions" [badgeCounter]="4">
+      <rlb-sidebar-item label="Actions" [badgeCounter]="5">
         <rlb-sidebar-item icon="bi bi-hand-index" link="/components/buttons">Button</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-segmented-nav" link="/components/buttons" fragment="split-button">Split button</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-person-badge" link="/components/badges">Badge</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-menu-button-fill" link="/components/dropdowns">Dropdowns</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-plus-circle" link="/components/fab">Fab</rlb-sidebar-item>
@@ -159,8 +162,9 @@
         <rlb-sidebar-item icon="bi bi-arrows-collapse" link="/components/collapses">Collapses</rlb-sidebar-item>
       </rlb-sidebar-item>
 
-      <rlb-sidebar-item label="Content &amp; flows" [badgeCounter]="4">
+      <rlb-sidebar-item label="Content &amp; flows" [badgeCounter]="5">
         <rlb-sidebar-item icon="bi bi-person-bounding-box" link="/components/avatars">Avatars</rlb-sidebar-item>
+        <rlb-sidebar-item icon="bi bi-people" link="/components/avatars" fragment="avatar-group">Avatar group</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-images" link="/components/carousels">Carousel</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-chat-dots" link="/components/chats">Chat</rlb-sidebar-item>
         <rlb-sidebar-item icon="bi bi-ui-checks" link="/components/wizards">Wizard</rlb-sidebar-item>

@@ -28,6 +28,11 @@ export const appConfig: ApplicationConfig = {
     // The page already ships data-bs-theme="dark" on <body>; this hands that attribute
     // to ThemeService so the toggle on /components/theme actually drives the site.
     provideRlbTheme({ target: 'body', defaultTheme: 'dark' }),
+    /*
+      No withInMemoryScrolling: it goes through ViewportScroller, which scrolls the *window*, and
+      in this layout the window never scrolls — .rlb-content does. It would be inert config, which
+      is worse than none. AppComponent does the scrolling instead.
+    */
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     {
       provide: ModalRegistryOptions,
