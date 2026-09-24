@@ -1,5 +1,14 @@
 # Migrating from 4.0.3 to 5.0.0
 
+> **5.0.1** — the published package dropped from 13.1 MB to 602 kB. What left it was the
+> leftovers of the admin template this project grew out of: its brand and client logos, its
+> Material Design Icons webfonts, its i18n files and its demo dashboard data. Not one line of the
+> library referenced any of it. The Sass under `assets/scss` still ships, and so do the schematics
+> and the bundled skills. If you were importing something from `@open-rlb/ng-bootstrap/assets/`
+> other than the Sass — a font or an image — it is gone; install the real package instead
+> (`@mdi/font` for the icons).
+
+
 This release moves every floating panel in the library off Bootstrap's JavaScript and onto the
 Angular CDK, finishes several APIs that were declared but did nothing, and fixes three selectors
 that had never matched anything.
