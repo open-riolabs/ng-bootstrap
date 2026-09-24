@@ -69,6 +69,7 @@ import { TabContentComponent } from './tabs/tab-content.component';
 import { TabPaneComponent } from './tabs/tab-pane.component';
 import { TabComponent } from './tabs/tab.component';
 import { TabsComponent } from './tabs/tabs.component';
+import { ThemeToggleComponent } from './theme/theme-toggle.component';
 import { TOASTS } from './toast';
 import { PopoverDirective } from './tooltips/popover.directive';
 import { TooltipDirective } from './tooltips/tooltip.directive';
@@ -145,6 +146,7 @@ export * from './tabs/tab-content.component';
 export * from './tabs/tab-pane.component';
 export * from './tabs/tab.component';
 export * from './tabs/tabs.component';
+export * from './theme/theme-toggle.component';
 export * from './toast';
 export * from './tooltips/popover.directive';
 export * from './tooltips/tooltip.directive';
@@ -221,6 +223,7 @@ export const COMPONENTS = [
   RlbPlaceholderComponent,
   RlbPlaceholderLineComponent,
   RlbPlaceholderTextComponent,
+  ThemeToggleComponent,
   ...[MODALS],
   ...[TOASTS],
   ...[CALENDAR_COMPONENTS],

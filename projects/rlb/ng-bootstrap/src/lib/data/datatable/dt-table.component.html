@@ -6,17 +6,17 @@
     }
     @if (showRefresh()) {
     <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="refreshItem.emit()"
-      [disabled]="loading()" [attr.aria-label]="refreshLabel()">
+      [disabled]="loading()" [attr.aria-label]="refreshText()">
       <i [class]="icons.refresh" aria-hidden="true"></i>
     </button>
     }
     @if (creationStrategy() === 'page') {
-    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl()" [attr.aria-label]="createLabel()">
+    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl()" [attr.aria-label]="createText()">
       <i [class]="icons.add" aria-hidden="true"></i>
     </button>
     }
     @if (creationStrategy() === 'modal') {
-    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()" [attr.aria-label]="createLabel()">
+    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()" [attr.aria-label]="createText()">
       <i [class]="icons.add" aria-hidden="true"></i>
     </button>
     }
@@ -31,7 +31,7 @@
         @if (hasActions()) {
         <th>
           <span class="float-end pe-2">
-            {{ actionsLabel() }}
+            {{ actionsText() }}
           </span>
         </th>
         }
@@ -67,7 +67,7 @@
             @if (paginationMode() === 'load-more') {
             <button type="button" class="btn btn-primary float-end btn-sm mt-2" [disabled]="loading()"
               (click)="loadMore.emit()">
-              {{ loadMoreLabel() }}
+              {{ loadMoreText() }}
             </button>
             }
             @if (paginationMode() === 'pages') {
@@ -96,10 +96,9 @@
               <ul class="ps-0 float-end me-3">
                 <rlb-select size="small" [ngModel]="pageSize()" (ngModelChange)="onPageSizeChange($event)"
                   [disabled]="items().length === 0">
-                  <rlb-option [value]="10">10</rlb-option>
-                  <rlb-option [value]="20">20</rlb-option>
-                  <rlb-option [value]="50">50</rlb-option>
-                  <rlb-option [value]="100">100</rlb-option>
+                  @for (choice of pageSizeChoices(); track choice) {
+                  <rlb-option [value]="choice">{{ choice }}</rlb-option>
+                  }
                 </rlb-select>
               </ul>
             </nav>

@@ -45,6 +45,12 @@ export interface RlbIconSet {
   sortDescending: string;
   /** A sortable column that is not currently sorting. */
   sortNone: string;
+  /** The light theme. */
+  themeLight: string;
+  /** The dark theme. */
+  themeDark: string;
+  /** The theme that follows the operating system. */
+  themeAuto: string;
 }
 
 /**
@@ -67,6 +73,9 @@ export const RLB_DEFAULT_ICONS: RlbIconSet = {
   sortAscending: 'bi bi-sort-up',
   sortDescending: 'bi bi-sort-down',
   sortNone: 'bi bi-arrow-down-up',
+  themeLight: 'bi bi-sun',
+  themeDark: 'bi bi-moon-stars',
+  themeAuto: 'bi bi-circle-half',
 };
 
 export const RLB_ICONS = new InjectionToken<RlbIconSet>('RLB_ICONS', {

@@ -7,6 +7,7 @@ import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/ro
 import { provideHighlightOptions } from 'ngx-highlightjs';
 
 import {
+  provideRlbTheme,
   CalendarOverflowEventsContainerComponent,
   CalendarToastComponent,
   CommonModalComponent,
@@ -23,6 +24,9 @@ import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.co
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
+    // The page already ships data-bs-theme="dark" on <body>; this hands that attribute
+    // to ThemeService so the toggle on /components/theme actually drives the site.
+    provideRlbTheme({ target: 'body', defaultTheme: 'dark' }),
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     {
       provide: ModalRegistryOptions,

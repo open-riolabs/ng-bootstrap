@@ -16,6 +16,8 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 - [Styling](#-styling)
 - [Configuration](#-configuration)
   - [Icons](#icons)
+  - [Theme](#theme)
+  - [Defaults](#defaults)
   - [Translations](#translations)
 - [Claude Skills](#-claude-skills)
 - [Additional Resources](#-additional-resources)
@@ -30,6 +32,8 @@ A comprehensive Angular component library built on Bootstrap 5, providing a rich
 - **Angular 22** compatible
 - **TypeScript** support
 - **i18n** ready through `RLB_TRANSLATION_SERVICE`, with no translation library of its own
+- **Dark mode** on Bootstrap 5.3's `data-bs-theme`, as signals
+- **Configurable** icon set and global defaults, through injection tokens
 - **Accessible** components following Bootstrap patterns
 - **Customizable** styling with SCSS
 - **Form validation** built-in
@@ -385,6 +389,45 @@ bootstrapApplication(AppComponent, {
 ```
 
 The full list of names is the `RlbIconSet` interface.
+
+### Theme
+
+Bootstrap 5.3 ships a full dark mode behind `data-bs-theme`. `provideRlbTheme()` drives it, keeps
+the choice between visits and follows the operating system when asked to. It is deliberately **not**
+part of `provideRlbBootstrap()`: an application that never asked for a theme should not suddenly
+find `data-bs-theme` written on its `<html>`.
+
+```typescript
+import { provideRlbTheme } from '@open-rlb/ng-bootstrap';
+
+bootstrapApplication(AppComponent, {
+  providers: [provideRlbBootstrap(), provideRlbTheme()],
+});
+```
+
+```html
+<rlb-theme-toggle />
+```
+
+`ThemeService` exposes it as signals — `theme()` is what was asked for and may be `auto`,
+`resolved()` is what Bootstrap was actually told. `storageKey: null` turns persistence off, and
+`storage` takes anything with `getItem` / `setItem` for an application that keeps the preference on
+the user's account.
+
+### Defaults
+
+Labels, page sizes and the date zone can be set once instead of on every element:
+
+```typescript
+import { provideRlbDefaults } from '@open-rlb/ng-bootstrap';
+
+provideRlbDefaults({
+  table: { pageSize: 25, pageSizes: [25, 50], actionsLabel: 'Azioni', sortLabel: 'Ordina' },
+  date: { timezone: 'Europe/Rome' },
+});
+```
+
+An element that says something still wins; anything left out keeps the built-in English word.
 
 ### Translations
 

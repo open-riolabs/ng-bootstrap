@@ -1,0 +1,50 @@
+<docs-page
+  title="Form fields"
+  lead="rlb-form-fields builds a form from a plain object: one key per control, with its type, its grid width and its validators. Useful when the shape of the form is data — a filter panel, a settings screen, something the server describes.">
+
+  <docs-example
+    heading="Basic usage"
+    description="Each key of the definition becomes a FormControl of that name, and (submit) fires with the form value once it is valid."
+    [code]="basicExample">
+    <div class="d-flex flex-column gap-2">
+      <rlb-form-fields
+        title="Sign in"
+        [fields]="basicFields"
+        (submit)="onSubmit($event)"
+      />
+      @if (submitted()) {
+        <span class="text-body-secondary small">Submitted: <code>{{ submitted() | json }}</code></span>
+      }
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Starting values"
+    description="A field says what it starts on with value. Until recently there was no way to say this at all, and every control opened with its own key already typed into it — a form built from { email: … } started with the word email in the email box, and a required form opened valid on data nobody had entered."
+    [code]="valueExample">
+    <rlb-form-fields
+      [fields]="seededFields"
+      no-submit
+    />
+  </docs-example>
+
+  <docs-example
+    heading="Without the chrome"
+    description="no-card drops the surrounding card and no-submit drops the button, for a form driven from somewhere else. Call submitForm() on the component to submit it from outside."
+    [code]="chromeExample">
+    <rlb-form-fields
+      [fields]="plainFields"
+      no-card
+      no-submit
+    />
+  </docs-example>
+
+  <docs-example
+    heading="Translations"
+    description="Unlike the rest of the library, this component takes keys rather than text — its field definitions are data, and data is where keys belong. name, label, title and sub-title all go through the rlbTranslate pipe, which resolves them against RLB_TRANSLATION_SERVICE when the application registered one and returns them unchanged when it did not. The library itself does not depend on any translation package."
+    [code]="i18nExample">
+  </docs-example>
+
+  <docs-api selector="rlb-form-fields" [rows]="api" />
+  <docs-api heading="FormField" [rows]="fieldApi" />
+</docs-page>

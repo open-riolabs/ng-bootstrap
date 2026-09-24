@@ -9,6 +9,7 @@ import {
   TemplateRef,
   viewChild,
 } from '@angular/core';
+import { RLB_DEFAULTS } from '../../shared/defaults';
 import { RLB_ICONS } from '../../shared/icons';
 import { DataTableQueryHost } from './dt-query';
 
@@ -28,7 +29,7 @@ import { DataTableQueryHost } from './dt-query';
             <button
               type="button"
               class="btn btn-link btn-sm p-0 text-reset lh-1"
-              [attr.aria-label]="sortLabel()"
+              [attr.aria-label]="sortText()"
               (click)="toggleSort()"
             >
               <i [class]="sortIcon()" aria-hidden="true"></i>
@@ -41,7 +42,7 @@ import { DataTableQueryHost } from './dt-query';
             class="form-control form-control-sm mt-1 fw-normal"
             [value]="filterValue()"
             [attr.placeholder]="filterPlaceholder()"
-            [attr.aria-label]="filterLabel()"
+            [attr.aria-label]="filterText()"
             (input)="onFilter($event)"
           />
         }
@@ -53,6 +54,7 @@ import { DataTableQueryHost } from './dt-query';
 export class DataTableHeaderComponent {
   private host = inject(DataTableQueryHost, { optional: true });
   protected icons = inject(RLB_ICONS);
+  private defaults = inject(RLB_DEFAULTS).table;
 
   field = input<string | undefined>(undefined);
   type = input<'number' | 'string' | undefined>(undefined);
@@ -67,10 +69,13 @@ export class DataTableHeaderComponent {
    * Its only content is an arrow, so without this a screen reader announces «button» and stops.
    * English by default, like the table's other labels; a caller that translates passes its own.
    */
-  sortLabel = input('Sort');
+  sortLabel = input<string | undefined>(undefined);
   /** What the box that filters this column is called, for the same reason. */
-  filterLabel = input('Filter');
+  filterLabel = input<string | undefined>(undefined);
   filterPlaceholder = input<string | undefined>(undefined);
+
+  protected sortText = computed(() => this.sortLabel() ?? this.defaults.sortLabel);
+  protected filterText = computed(() => this.filterLabel() ?? this.defaults.filterLabel);
 
   element!: HTMLElement;
   template = viewChild.required<TemplateRef<any>>('template');

@@ -16,6 +16,8 @@ import { SwitchesComponent } from './switch/switch.component';
 import { TextareasComponent } from './textarea/textarea.component';
 import { RadiosComponent } from './radio/radio.component';
 import { InputValidationsComponent } from './input-validation/input-validation.component';
+import { FormFieldsDocComponent } from './form-fields/form-fields.component';
+import { SelectChipsDocComponent } from './select-chips/select-chips.component';
 
 const routes: Routes = [
   { path: '', component: InputsHomeComponent },
@@ -25,6 +27,7 @@ const routes: Routes = [
   { path: 'datalist', component: DatalistsComponent },
   { path: 'file', component: FilesComponent },
   { path: 'file-dnd', component: FileDndsComponent },
+  { path: 'form-fields', component: FormFieldsDocComponent },
   { path: 'input', component: InputsComponent },
   { path: 'input-group', component: InputGroupsComponent },
   { path: 'input-validation', component: InputValidationsComponent },
@@ -32,6 +35,7 @@ const routes: Routes = [
   { path: 'radio', component: RadiosComponent },
   { path: 'range', component: RangesComponent },
   { path: 'select', component: SelectsComponent },
+  { path: 'select-chips', component: SelectChipsDocComponent },
 	{ path: 'switch', component: SwitchesComponent },
   { path: 'textarea', component: TextareasComponent },
 ];

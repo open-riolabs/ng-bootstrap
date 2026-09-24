@@ -1,0 +1,74 @@
+<docs-page
+  title="Select chips"
+  lead="A multi-select that shows what is chosen as pills rather than a list. It stays one line tall however much is selected, which is what makes it usable inside a dense form.">
+
+  <docs-example
+    heading="Basic usage"
+    description="Give it the values it may offer and bind the selection. It is a ControlValueAccessor like every other input here, so ngModel and reactive forms both work."
+    [code]="basicExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 420px">
+      <rlb-select-chips
+        [options]="languages"
+        [ngModel]="picked()"
+        (ngModelChange)="picked.set($event)"
+      />
+      <span class="text-body-secondary small">Selected: <code>{{ picked() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Overflow"
+    description="maxVisible caps how many chips are drawn inline; the rest are counted. Five languages are selected here with maxVisible set to 2."
+    [code]="overflowExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 420px">
+      <rlb-select-chips
+        [options]="languages"
+        [maxVisible]="2"
+        [ngModel]="manyPicked()"
+        (ngModelChange)="manyPicked.set($event)"
+      />
+      <span class="text-body-secondary small">Selected: <code>{{ manyPicked() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Placeholder"
+    description="Shown while nothing is selected."
+    [code]="placeholderExample">
+    <div style="max-width: 420px">
+      <rlb-select-chips
+        [options]="languages"
+        placeholder="Pick your languages"
+        [ngModel]="[]"
+      />
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Disabled"
+    description="The control stops responding to clicks and keys, and takes the Bootstrap disabled background."
+    [code]="disabledExample">
+    <div style="max-width: 420px">
+      <rlb-select-chips
+        [options]="languages"
+        disabled
+        [ngModel]="disabledPicked()"
+      />
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Reactive forms"
+    description="Nothing special: bind a FormControl of string[]."
+    [code]="reactiveExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 420px">
+      <rlb-select-chips
+        [options]="languages"
+        [formControl]="reactive"
+      />
+      <span class="text-body-secondary small">Value: <code>{{ reactive.value | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-select-chips" [rows]="api" />
+</docs-page>

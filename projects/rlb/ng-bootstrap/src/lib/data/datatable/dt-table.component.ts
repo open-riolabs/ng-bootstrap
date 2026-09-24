@@ -28,14 +28,13 @@ import { NgClass } from '@angular/common';
 import { SelectComponent } from '../../forms/inputs/select.component';
 import { FormsModule } from '@angular/forms';
 import { OptionComponent } from '../../forms/inputs/options.component';
+import { RLB_DEFAULTS } from '../../shared/defaults';
 import { RLB_ICONS } from '../../shared/icons';
 
 export interface PaginationEvent {
   page: number;
   size: number;
 }
-
-const DEFAULT_PAGE_SIZE = 20;
 
 @Component({
   selector: 'rlb-dt-table',
@@ -53,6 +52,7 @@ const DEFAULT_PAGE_SIZE = 20;
 })
 export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost {
   protected icons = inject(RLB_ICONS);
+  private defaults = inject(RLB_DEFAULTS).table;
 
   title = input<string | undefined>(undefined);
   creationStrategy = input<'none' | 'modal' | 'page'>('none', { alias: 'creation-strategy' });
@@ -74,7 +74,7 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
   currentPage = input(undefined, { alias: 'current-page', transform: numberAttribute });
   pageSize = input(undefined, { alias: 'page-size', transform: numberAttribute });
   showActions = input<'row' | 'head'>('row');
-  loadMoreLabel = input('Load more');
+  loadMoreLabel = input<string | undefined>(undefined);
   /**
    * The header over the column of row actions.
    *
@@ -83,15 +83,25 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
    * The default is kept English so nothing changes for a caller that says nothing; a caller that
    * translates now can.
    */
-  actionsLabel = input('Actions');
+  actionsLabel = input<string | undefined>(undefined);
   /**
    * What the two icon-only buttons in the header are called.
    *
    * Both were an `<i>` and nothing else, so a screen reader announced «button» twice and left the
    * user to guess which was which. English defaults, as above.
    */
-  refreshLabel = input('Refresh');
-  createLabel = input('Create');
+  refreshLabel = input<string | undefined>(undefined);
+  createLabel = input<string | undefined>(undefined);
+
+  /** The choices in the page-size menu. */
+  pageSizes = input<number[] | undefined>(undefined, { alias: 'page-sizes' });
+
+  // What the template actually prints: this element's word, else the application's, else English.
+  protected actionsText = computed(() => this.actionsLabel() ?? this.defaults.actionsLabel);
+  protected loadMoreText = computed(() => this.loadMoreLabel() ?? this.defaults.loadMoreLabel);
+  protected refreshText = computed(() => this.refreshLabel() ?? this.defaults.refreshLabel);
+  protected createText = computed(() => this.createLabel() ?? this.defaults.createLabel);
+  protected pageSizeChoices = computed(() => this.pageSizes() ?? this.defaults.pageSizes);
   cardStyle = input(true, { alias: 'card-style', transform: booleanAttribute });
 
   /**
@@ -325,7 +335,7 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
 
   private resolvedPageSize(): number {
     const size = this.pageSize();
-    return size ? Number(size) : DEFAULT_PAGE_SIZE;
+    return size ? Number(size) : this.defaults.pageSize;
   }
 
   private emitDataQuery(page: number) {

@@ -1,0 +1,121 @@
+<docs-page
+  title="Theme"
+  lead="Bootstrap 5.3 ships a full dark mode behind the data-bs-theme attribute. ThemeService drives it from signals, remembers the choice, and follows the operating system when asked to.">
+
+  <docs-example
+    heading="Turning it on"
+    description="provideRlbTheme() registers the options and starts the service at boot — without that last part, a visitor who chose dark last time would see light until something on the page happened to inject the service. It is deliberately not part of provideRlbBootstrap(): an application that never asked for a theme should not suddenly find data-bs-theme written on its html element."
+    [code]="setupExample">
+  </docs-example>
+
+  <docs-example
+    heading="The toggle"
+    description="rlb-theme-toggle walks through light, dark and system, showing the icon of whichever is currently asked for. The state lives in the service, so several toggles on one page agree with each other — and with this page, which is using one right now."
+    [code]="toggleExample">
+    <rlb-theme-toggle />
+  </docs-example>
+
+  <docs-example
+    heading="Two states instead of three"
+    description="Pass modes to limit which themes the button offers. Add show-label to put the name beside the icon."
+    [code]="twoStateExample">
+    <rlb-theme-toggle
+      [modes]="['light', 'dark']"
+      show-label
+    />
+  </docs-example>
+
+  <docs-example
+    heading="Styling"
+    description="The toggle renders a real rlb-button, so colour, size and outline work exactly as they do there."
+    [code]="styledExample">
+    <div class="d-flex gap-3 align-items-center">
+      <rlb-theme-toggle
+        color="primary"
+        size="sm"
+      />
+      <rlb-theme-toggle
+        color="dark"
+        [outline]="false"
+      />
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Reading and driving it yourself"
+    description="An application with its own settings screen does not need the toggle at all. Note the difference between theme() and resolved(): the first is what was asked for and may be 'auto', the second is what Bootstrap was actually told."
+    [code]="serviceExample">
+    <div class="d-flex gap-4 align-items-center flex-wrap">
+      <div>
+        <div class="text-body-secondary small">theme()</div>
+        <code class="fs-6">{{ themeService.theme() }}</code>
+      </div>
+      <div>
+        <div class="text-body-secondary small">resolved()</div>
+        <code class="fs-6">{{ themeService.resolved() }}</code>
+      </div>
+      <div>
+        <div class="text-body-secondary small">isDark()</div>
+        <code class="fs-6">{{ themeService.isDark() }}</code>
+      </div>
+      <div class="d-flex gap-2">
+        <button
+          rlb-button
+          outline
+          size="sm"
+          (click)="themeService.set('light')"
+        >
+          set('light')
+        </button>
+        <button
+          rlb-button
+          outline
+          size="sm"
+          (click)="themeService.set('dark')"
+        >
+          set('dark')
+        </button>
+        <button
+          rlb-button
+          outline
+          size="sm"
+          (click)="themeService.set('auto')"
+        >
+          set('auto')
+        </button>
+        <button
+          rlb-button
+          size="sm"
+          (click)="themeService.toggle()"
+        >
+          toggle()
+        </button>
+      </div>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Options"
+    description="Everything is optional; these are the defaults."
+    [code]="optionsExample">
+  </docs-example>
+
+  <docs-example
+    heading="Keeping the preference somewhere else"
+    description="storage takes anything with getItem and setItem, so the choice can travel with the user's account rather than with the browser. A storage that throws — which is what a private window with site data blocked does — is caught: the theme is never important enough to take the page down with it."
+    [code]="storageExample">
+  </docs-example>
+
+  <docs-api
+    selector="rlb-theme-toggle"
+    [rows]="toggleApi"
+  />
+  <docs-api
+    heading="ThemeService"
+    [rows]="serviceApi"
+  />
+  <docs-api
+    heading="RlbThemeOptions"
+    [rows]="optionsApi"
+  />
+</docs-page>
