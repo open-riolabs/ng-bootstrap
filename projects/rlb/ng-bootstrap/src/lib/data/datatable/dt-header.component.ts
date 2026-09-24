@@ -11,15 +11,16 @@ import {
 } from '@angular/core';
 import { RLB_DEFAULTS } from '../../shared/defaults';
 import { RLB_ICONS } from '../../shared/icons';
-import { DataTableQueryHost } from './dt-query';
+import { DataTableHost } from './dt-host';
 
 @Component({
     selector: 'rlb-dt-header',
     template: `
     <ng-template #template>
+      @if (!hidden()) {
       <th
         [class]="cssClass()"
-        [style]="cssStyle()"
+        [style]="thStyle()"
         [attr.aria-sort]="ariaSort()"
         [class.align-top]="hasFilterRow()"
       >
@@ -47,14 +48,15 @@ import { DataTableQueryHost } from './dt-query';
           />
         }
       </th>
+      }
     </ng-template>
   `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableHeaderComponent {
-  private host = inject(DataTableQueryHost, { optional: true });
-  protected icons = inject(RLB_ICONS);
+  private host = inject(DataTableHost, { optional: true });
   private defaults = inject(RLB_DEFAULTS).table;
+  protected icons = inject(RLB_ICONS);
 
   field = input<string | undefined>(undefined);
   type = input<'number' | 'string' | undefined>(undefined);
@@ -62,6 +64,15 @@ export class DataTableHeaderComponent {
   filtrable = input(false, { transform: booleanAttribute });
   cssClass = input<string | undefined>(undefined, { alias: 'class' });
   cssStyle = input<string | undefined>(undefined, { alias: 'style' });
+
+  /**
+   * Lets the user hide this column from the table's column menu. Needs a `field`, which is how the
+   * table remembers the choice, and a `label`, because the heading itself is projected content the
+   * table cannot read.
+   */
+  hideable = input(false, { transform: booleanAttribute });
+  /** Name for this column in the column menu. Falls back to `field`. */
+  label = input<string | undefined>(undefined);
 
   /**
    * What the control that sorts this column is called.
@@ -76,6 +87,9 @@ export class DataTableHeaderComponent {
 
   protected sortText = computed(() => this.sortLabel() ?? this.defaults.sortLabel);
   protected filterText = computed(() => this.filterLabel() ?? this.defaults.filterLabel);
+
+  /** The name this column goes by in the column menu. */
+  menuLabel = computed(() => this.label() ?? this.field() ?? '');
 
   element!: HTMLElement;
   template = viewChild.required<TemplateRef<any>>('template');
@@ -93,9 +107,26 @@ export class DataTableHeaderComponent {
    */
   canSort = computed(() => this.sortable() && !!this.field() && !!this.host);
   canFilter = computed(() => this.filtrable() && !!this.field() && !!this.host);
+  canHide = computed(() => this.hideable() && !!this.field() && !!this.host);
+
+  hidden = computed(() => this.host?.isColumnHidden(this.field()) ?? false);
 
   /** True when some column in this table filters, so this one lines up with it. */
   hasFilterRow = computed(() => this.host?.hasFilterRow() ?? false);
+
+  /**
+   * A sticky header stays put while the body scrolls, and needs an opaque background of its own or
+   * the rows show through it.
+   */
+  protected thStyle = computed(() => {
+    const parts: string[] = [];
+    const own = this.cssStyle();
+    if (own) parts.push(own);
+    if (this.host?.stickyHeader()) {
+      parts.push('position: sticky', 'top: 0', 'z-index: 2', 'background: var(--bs-body-bg)');
+    }
+    return parts.join('; ');
+  });
 
   /** The direction this column is sorting in, or undefined when another column is. */
   direction = computed(() => {

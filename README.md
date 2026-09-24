@@ -182,9 +182,11 @@ Colors come from the Bootstrap palette (`primary`, `secondary`, `success`, `dang
 ### Data Components
 
 - **Calendar** - Full-featured calendar with event management
-- **DataTable** - Tables with pagination, per-column sorting and filtering, row actions, loading
-  and empty-state slots. Sorting and filtering are emitted as a `(data-query)` for the caller to
-  answer — the table projects the rows, it never holds them.
+- **DataTable** - Tables with pagination, per-column sorting and filtering, row selection with
+  bulk actions, hideable columns, a sticky header and CSV export, plus row actions, loading and
+  empty-state slots. Sorting and filtering leave as a `(data-query)` for the caller to answer,
+  and the export reads back the table that is on screen — because the table projects the rows,
+  it never holds them.
 
 ## 📝 Forms
 

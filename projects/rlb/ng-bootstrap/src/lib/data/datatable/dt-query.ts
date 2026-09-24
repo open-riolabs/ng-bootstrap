@@ -1,5 +1,3 @@
-import { Signal } from '@angular/core';
-
 export type SortDirection = 'asc' | 'desc';
 
 export interface TableSort {
@@ -24,25 +22,4 @@ export interface TableDataQuery {
   pagination?: { page?: number; size: number };
   sorting?: TableSort;
   filter?: TableFilter;
-}
-
-/**
- * The slice of `rlb-dt-table` that its headers talk to.
- *
- * `rlb-dt-header` is content the caller writes inside `rlb-dt-table`, so it reaches the table
- * through its element injector. It injects this rather than `DataTableComponent` so the two files
- * do not import each other — the import check in this repo rejects cycles, and rightly.
- */
-export abstract class DataTableQueryHost {
-  abstract readonly sorting: Signal<TableSort | undefined>;
-  abstract readonly filter: Signal<TableFilter>;
-  /**
-   * Whether any column in this table shows a filter box, which makes the header row two lines tall.
-   * Columns without one align to the top so every heading still sits on the same line.
-   */
-  abstract readonly hasFilterRow: Signal<boolean>;
-  /** Advance one column through ascending → descending → unsorted. */
-  abstract toggleSort(column: string): void;
-  /** An empty string clears that column's filter rather than matching on emptiness. */
-  abstract setFilter(column: string, value: string): void;
 }

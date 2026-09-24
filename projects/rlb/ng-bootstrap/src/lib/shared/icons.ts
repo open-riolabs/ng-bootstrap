@@ -45,6 +45,10 @@ export interface RlbIconSet {
   sortDescending: string;
   /** A sortable column that is not currently sorting. */
   sortNone: string;
+  /** Download what is on screen. */
+  download: string;
+  /** The menu that shows and hides columns. */
+  columns: string;
   /** The light theme. */
   themeLight: string;
   /** The dark theme. */
@@ -73,6 +77,8 @@ export const RLB_DEFAULT_ICONS: RlbIconSet = {
   sortAscending: 'bi bi-sort-up',
   sortDescending: 'bi bi-sort-down',
   sortNone: 'bi bi-arrow-down-up',
+  download: 'bi bi-download',
+  columns: 'bi bi-layout-three-columns',
   themeLight: 'bi bi-sun',
   themeDark: 'bi bi-moon-stars',
   themeAuto: 'bi bi-circle-half',

@@ -78,6 +78,48 @@
   </docs-example>
 
   <docs-example
+    heading="Selection, columns, sticky header and export"
+    description="Four things that only make sense together. Ticking rows swaps the toolbar for whatever is in rlb-dt-bulk-actions. A row says what it is through row-key, and that is exactly what comes back out of [(selection)] — an id here, but it could be the object itself. Columns marked hideable appear in the column menu; hiding one removes it from the head and from every row, not merely from sight. The export button reads back the table that is on screen, so hidden columns, tick boxes and the actions menu are all left out of the file."
+    [code]="advancedExample">
+    <div class="d-flex flex-column gap-2">
+      <rlb-dt-table
+        selectable
+        show-columns
+        show-export
+        sticky-header
+        max-height="18rem"
+        export-filename="users.csv"
+        table-hover
+        [items]="manyUsers"
+        [selection]="selected()"
+        (selectionChange)="selected.set($event)"
+        [hiddenColumns]="hiddenColumns()"
+        (hiddenColumnsChange)="hiddenColumns.set($event)">
+
+        <rlb-dt-header field="id" hideable label="ID">ID</rlb-dt-header>
+        <rlb-dt-header field="name" hideable label="Name">Name</rlb-dt-header>
+        <rlb-dt-header field="email" hideable label="Email">Email</rlb-dt-header>
+
+        <rlb-dt-bulk-actions>
+          <button rlb-button color="danger" size="sm" (click)="deleteSelected()">Delete</button>
+        </rlb-dt-bulk-actions>
+
+        @for (user of manyUsers; track user.id) {
+          <rlb-dt-row [row-key]="user.id">
+            <rlb-dt-cell>{{ user.id }}</rlb-dt-cell>
+            <rlb-dt-cell>{{ user.name }}</rlb-dt-cell>
+            <rlb-dt-cell>{{ user.email }}</rlb-dt-cell>
+          </rlb-dt-row>
+        }
+      </rlb-dt-table>
+      <span class="text-body-secondary small">
+        selection: <code>{{ selected() | json }}</code>
+        @if (removed() > 0) { — last bulk delete took {{ removed() }} rows }
+      </span>
+    </div>
+  </docs-example>
+
+  <docs-example
     heading="Pagination with row actions"
     description="Set pagination-mode to 'pages' and supply items, total-items, page-size and a two-way [(current-page)] binding. Nest rlb-dt-actions inside each row and add rlb-dt-action children for per-row dropdown actions."
     [code]="paginationExample">

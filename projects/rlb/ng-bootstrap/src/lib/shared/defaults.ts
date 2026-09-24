@@ -17,6 +17,23 @@ export interface RlbTableDefaults {
   sortLabel: string;
   /** The box that filters a column. */
   filterLabel: string;
+  /** The tick box on a single row. */
+  selectRowLabel: string;
+  /** The tick box in the header that takes every row on the page. */
+  selectAllLabel: string;
+  /** The menu that shows and hides columns. */
+  columnsLabel: string;
+  /** The button that downloads the table as CSV. */
+  exportLabel: string;
+  /** The button that unticks everything. */
+  clearSelectionLabel: string;
+  /**
+   * How many rows are selected, as a sentence.
+   *
+   * A function rather than a word, because «3 selected» does not survive translation as a number
+   * glued to a noun: languages disagree about order, and about which plural a 3 takes.
+   */
+  selectedCountLabel: (count: number) => string;
 }
 
 export interface RlbDateDefaults {
@@ -43,6 +60,12 @@ export const RLB_BUILT_IN_DEFAULTS: RlbDefaults = {
     createLabel: 'Create',
     sortLabel: 'Sort',
     filterLabel: 'Filter',
+    selectRowLabel: 'Select row',
+    selectAllLabel: 'Select all rows',
+    columnsLabel: 'Columns',
+    exportLabel: 'Export CSV',
+    clearSelectionLabel: 'Clear',
+    selectedCountLabel: (count: number) => `${count} selected`,
   },
   date: {
     timezone: 'UTC',

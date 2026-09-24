@@ -1,3 +1,4 @@
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -13,6 +14,8 @@ import {
   OnDestroy,
   OnInit,
   output,
+  PLATFORM_ID,
+  ElementRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -22,7 +25,9 @@ import { DataTableHeaderComponent } from './dt-header.component';
 import { DataTableRowComponent } from './dt-row.component';
 import { DataTableNoItemsComponent } from './dt-noitems.component';
 import { DataTableLoadingComponent } from './dt-loading.component';
-import { DataTableQueryHost, TableDataQuery, TableFilter, TableSort } from './dt-query';
+import { DataTableBulkActionsComponent } from './dt-bulk-actions.component';
+import { DataTableHost } from './dt-host';
+import { TableDataQuery, TableFilter, TableSort } from './dt-query';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { SelectComponent } from '../../forms/inputs/select.component';
@@ -45,14 +50,17 @@ export interface PaginationEvent {
     '[class.dt-card-style]': 'cardStyle()',
   },
   providers: [
-    { provide: DataTableQueryHost, useExisting: forwardRef(() => DataTableComponent) },
+    { provide: DataTableHost, useExisting: forwardRef(() => DataTableComponent) },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, NgClass, SelectComponent, FormsModule, OptionComponent],
 })
-export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost {
+export class DataTableComponent implements OnInit, OnDestroy, DataTableHost {
   protected icons = inject(RLB_ICONS);
   private defaults = inject(RLB_DEFAULTS).table;
+  private elementRef = inject(ElementRef);
+  private document = inject(DOCUMENT);
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   title = input<string | undefined>(undefined);
   creationStrategy = input<'none' | 'modal' | 'page'>('none', { alias: 'creation-strategy' });
@@ -102,6 +110,50 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
   protected refreshText = computed(() => this.refreshLabel() ?? this.defaults.refreshLabel);
   protected createText = computed(() => this.createLabel() ?? this.defaults.createLabel);
   protected pageSizeChoices = computed(() => this.pageSizes() ?? this.defaults.pageSizes);
+
+  /**
+   * Lets the user tick rows. Each `rlb-dt-row` must say what it is through `row-key`; a row that
+   * says nothing gets the column but no tick box, because a table cannot name a row it was never
+   * told the name of.
+   */
+  selectable = input(false, { transform: booleanAttribute });
+  /** The ticked rows, as whatever each `row-key` was. Two-way. */
+  selection = model<unknown[]>([]);
+
+  /** Columns currently hidden, by `field`. Two-way, so it can be kept in the URL. */
+  hiddenColumns = model<string[]>([]);
+  /** Shows the menu that hides and shows the columns marked `hideable`. */
+  showColumns = input(false, { alias: 'show-columns', transform: booleanAttribute });
+
+  /** Keeps the header in place while the body scrolls. Needs `max-height` to scroll within. */
+  stickyHeader = input(false, { alias: 'sticky-header', transform: booleanAttribute });
+  /** A CSS length. Sets the height the table body scrolls inside, e.g. `60vh` or `400px`. */
+  maxHeight = input<string | undefined>(undefined, { alias: 'max-height' });
+
+  /** Shows the button that downloads the table. */
+  showExport = input(false, { alias: 'show-export', transform: booleanAttribute });
+  /**
+   * `client` builds the file in the browser and downloads it; `emit` only fires `(export-csv)`,
+   * for a caller that would rather ask its server for the whole set than export the page.
+   */
+  exportMode = input<'client' | 'emit'>('client', { alias: 'export-mode' });
+  exportFilename = input('export.csv', { alias: 'export-filename' });
+
+  selectRowLabel = input<string | undefined>(undefined);
+  selectAllLabel = input<string | undefined>(undefined);
+  columnsLabel = input<string | undefined>(undefined);
+  exportLabel = input<string | undefined>(undefined);
+  clearSelectionLabel = input<string | undefined>(undefined);
+
+  protected selectAllText = computed(() => this.selectAllLabel() ?? this.defaults.selectAllLabel);
+  protected columnsText = computed(() => this.columnsLabel() ?? this.defaults.columnsLabel);
+  protected exportText = computed(() => this.exportLabel() ?? this.defaults.exportLabel);
+  protected clearSelectionText = computed(
+    () => this.clearSelectionLabel() ?? this.defaults.clearSelectionLabel,
+  );
+  protected selectedCountText = computed(() =>
+    this.defaults.selectedCountLabel(this.selection().length),
+  );
   cardStyle = input(true, { alias: 'card-style', transform: booleanAttribute });
 
   /**
@@ -133,6 +185,12 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
    */
   dataQuery = output<TableDataQuery>({ alias: 'data-query' });
 
+  /**
+   * The table as rows of text, exactly as it is on screen — hidden columns left out, tick boxes
+   * and the actions menu left out. Fired whether or not the browser also downloads it.
+   */
+  exportCsvEvent = output<string[][]>({ alias: 'export-csv' });
+
   _projectedDisplayColumns = viewChild('projectedDisplayColumns', {
     read: ViewContainerRef,
   });
@@ -146,6 +204,9 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
 
   noItemsBlock = contentChildren(DataTableNoItemsComponent);
   loadingBlock = contentChildren(DataTableLoadingComponent);
+  bulkActionsBlock = contentChildren(DataTableBulkActionsComponent);
+
+  _projectedBulkActions = viewChild('projectedBulkActions', { read: ViewContainerRef });
 
   readonly MAX_VISIBLE_PAGES = 7;
 
@@ -163,6 +224,7 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
     effect(() => this._renderNoItems());
     effect(() => this._renderLoading());
     effect(() => this._renderRows());
+    effect(() => this._renderBulkActions());
 
     // Typing in a filter box must not put one request per keystroke on the wire.
     this.filterTyped$
@@ -221,6 +283,15 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
     }
   }
 
+  private _renderBulkActions() {
+    const container = this._projectedBulkActions();
+    const block = this.bulkActionsBlock()[0];
+    if (container && block) {
+      container.clear();
+      container.createEmbeddedView(block.template());
+    }
+  }
+
   private _renderNoItems() {
     const container = this._projectedNoItems();
     const block = this.noItemsBlock()[0];
@@ -250,9 +321,172 @@ export class DataTableComponent implements OnInit, OnDestroy, DataTableQueryHost
     }
   }
 
-  cols = computed(() => this.columns().length + (this.hasActions() ? 1 : 0));
+  /** Columns actually rendered: hidden ones are gone from the DOM, not merely invisible. */
+  visibleColumns = computed(() => this.columns().filter(column => !column.hidden()));
+
+  cols = computed(
+    () =>
+      this.visibleColumns().length + (this.hasActions() ? 1 : 0) + (this.selectable() ? 1 : 0),
+  );
 
   hasFilterRow = computed(() => this.columns().some(column => column.canFilter()));
+
+  protected showToolbar = computed(
+    () =>
+      this.bulkMode() ||
+      this.creationStrategy() !== 'none' ||
+      !!this.title() ||
+      this.showRefresh() ||
+      this.showExport() ||
+      (this.showColumns() && this.hideableColumns().length > 0),
+  );
+
+  protected bulkMode = computed(
+    () => this.selectable() && this.selection().length > 0 && this.bulkActionsBlock().length > 0,
+  );
+
+  // ---------------------------------------------------------------------------------------------
+  // Columns — DataTableHost
+  // ---------------------------------------------------------------------------------------------
+
+  hideableColumns = computed(() => this.columns().filter(column => column.canHide()));
+
+  isColumnHidden(field: string | undefined): boolean {
+    return !!field && this.hiddenColumns().includes(field);
+  }
+
+  /**
+   * Asked by a row for each of its cells. Cells carry no field of their own, so they are matched
+   * to columns by position — which is how this table has always paired headers with cells. A row
+   * with more cells than there are headers keeps the extras.
+   */
+  isColumnVisibleAt(index: number): boolean {
+    const column = this.columns()[index];
+    return !column || !this.isColumnHidden(column.field());
+  }
+
+  setColumnHidden(field: string | undefined, hidden: boolean) {
+    if (!field) return;
+    const current = this.hiddenColumns();
+    if (hidden) {
+      if (!current.includes(field)) this.hiddenColumns.set([...current, field]);
+    } else {
+      this.hiddenColumns.set(current.filter(name => name !== field));
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Selection — DataTableHost
+  // ---------------------------------------------------------------------------------------------
+
+  /**
+   * The keys of the rows on screen. Selecting «all» means all of these: with pagination the table
+   * has never seen the other pages, and pretending otherwise would tick rows nobody looked at.
+   */
+  selectableKeys = computed<unknown[]>(() =>
+    this.rows()
+      .map(row => row.rowKey())
+      .filter(key => key !== undefined),
+  );
+
+  allSelected = computed(() => {
+    const keys = this.selectableKeys();
+    const selected = this.selection();
+    return keys.length > 0 && keys.every(key => selected.includes(key));
+  });
+
+  someSelected = computed(() => {
+    const keys = this.selectableKeys();
+    const selected = this.selection();
+    return keys.some(key => selected.includes(key)) && !this.allSelected();
+  });
+
+  isRowSelected(key: unknown): boolean {
+    return this.selection().includes(key);
+  }
+
+  setRowSelected(key: unknown, selected: boolean) {
+    if (key === undefined) return;
+    const current = this.selection();
+    if (selected) {
+      if (!current.includes(key)) this.selection.set([...current, key]);
+    } else {
+      this.selection.set(current.filter(existing => existing !== key));
+    }
+  }
+
+  toggleAll(selected: boolean) {
+    const keys = this.selectableKeys();
+    const current = this.selection();
+    if (selected) {
+      const missing = keys.filter(key => !current.includes(key));
+      if (missing.length) this.selection.set([...current, ...missing]);
+    } else {
+      this.selection.set(current.filter(key => !keys.includes(key)));
+    }
+  }
+
+  clearSelection() {
+    this.selection.set([]);
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Export
+  // ---------------------------------------------------------------------------------------------
+
+  /**
+   * Exports what is on screen, read back out of the rendered table.
+   *
+   * That is the only honest thing this component can export: it does not hold the rows, so it has
+   * no other set to offer. Hidden columns are already absent from the DOM; the tick boxes and the
+   * actions menu are marked to be skipped. A caller that wants the whole dataset rather than the
+   * page listens to `(export-csv)` with `export-mode="emit"` and asks its server.
+   */
+  exportCsv() {
+    const rows = this.collectRows();
+    this.exportCsvEvent.emit(rows);
+    if (this.exportMode() !== 'client' || !this.isBrowser || rows.length === 0) return;
+    this.download(this.toCsv(rows));
+  }
+
+  private collectRows(): string[][] {
+    const table = (this.elementRef.nativeElement as HTMLElement).querySelector('table');
+    if (!table) return [];
+    const wanted = (row: Element) =>
+      Array.from(row.children).filter(cell => cell.getAttribute('data-export') !== 'skip');
+    const text = (cell: Element) => ((cell as HTMLElement).innerText ?? cell.textContent ?? '').trim();
+
+    const out: string[][] = [];
+    const head = table.querySelector('thead tr');
+    if (head) out.push(wanted(head).map(text));
+    table.querySelectorAll('tbody tr').forEach(row => out.push(wanted(row).map(text)));
+    return out;
+  }
+
+  /** RFC 4180: a field holding a quote, a comma or a newline is quoted, and quotes are doubled. */
+  private toCsv(rows: string[][]): string {
+    return rows
+      .map(row =>
+        row
+          .map(field => (/[",\r\n]/.test(field) ? `"${field.replace(/"/g, '""')}"` : field))
+          .join(','),
+      )
+      .join('\r\n');
+  }
+
+  private download(csv: string) {
+    // The byte-order mark is what stops Excel reading UTF-8 as its own local code page.
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = this.document.createElement('a');
+    link.href = url;
+    link.download = this.exportFilename();
+    link.style.display = 'none';
+    this.document.body.appendChild(link);
+    link.click();
+    this.document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
 
   getTableClasses(): string[] {
     const classes = ['table'];

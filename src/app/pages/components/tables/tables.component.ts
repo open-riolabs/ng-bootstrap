@@ -104,6 +104,50 @@ export class TablesComponent {
     this.sortableUsers.set(rows);
   }
 
+  // ── Selection, columns, sticky header and export ───────────────────
+  advancedExample = `<rlb-dt-table
+  selectable
+  show-columns
+  show-export
+  sticky-header
+  max-height="18rem"
+  [(selection)]="selected"
+  [(hiddenColumns)]="hiddenColumns">
+
+  <rlb-dt-header field="id" hideable label="ID">ID</rlb-dt-header>
+  <rlb-dt-header field="name" hideable label="Name" sortable>Name</rlb-dt-header>
+  <rlb-dt-header field="email" hideable label="Email">Email</rlb-dt-header>
+
+  <rlb-dt-bulk-actions>
+    <button rlb-button color="danger" size="sm" (click)="deleteSelected()">Delete</button>
+  </rlb-dt-bulk-actions>
+
+  &#64;for (user of users; track user.id) {
+    <rlb-dt-row [row-key]="user.id">
+      <rlb-dt-cell>{{ user.id }}</rlb-dt-cell>
+      <rlb-dt-cell>{{ user.name }}</rlb-dt-cell>
+      <rlb-dt-cell>{{ user.email }}</rlb-dt-cell>
+    </rlb-dt-row>
+  }
+</rlb-dt-table>`;
+
+  readonly manyUsers = Array.from({ length: 12 }, (_, i) => ({
+    id: i + 1,
+    name: ['George', 'Paul', 'Alex', 'Bianca'][i % 4] + ' ' + (i + 1),
+    email: 'user' + (i + 1) + '@gmail.com',
+  }));
+
+  readonly selected = signal<unknown[]>([]);
+  readonly hiddenColumns = signal<string[]>([]);
+
+  deleteSelected() {
+    const ids = this.selected();
+    this.removed.set(ids.length);
+    this.selected.set([]);
+  }
+
+  readonly removed = signal(0);
+
   // ── Pagination (pages mode) ───────────────────────────────────────────────
   paginationExample = `<rlb-dt-table
   [items]="users"
@@ -221,6 +265,16 @@ export class TablesComponent {
     { name: 'refresh-item', type: 'void', description: 'Emitted when the user clicks the refresh button.', kind: 'Output' },
     { name: 'load-more', type: 'void', description: "Emitted when the user clicks the load-more button (pagination-mode is 'load-more').", kind: 'Output' },
     { name: 'pagination', type: '{ page: number; size: number }', description: 'Emitted on every page or page-size change with the new page index and size.', kind: 'Output' },
+    { name: 'selectable', type: 'boolean', default: 'false', description: 'Adds a tick-box column. Each rlb-dt-row must say what it is through row-key; a row that says nothing gets the column but no tick box.', kind: 'Input' },
+    { name: 'selection', type: 'unknown[]', default: '[]', description: 'The ticked rows, as whatever each row-key was. Two-way.', kind: 'Two-way' },
+    { name: 'hiddenColumns', type: 'string[]', default: '[]', description: 'Columns currently hidden, by field. Two-way, so it can be kept in the URL.', kind: 'Two-way' },
+    { name: 'show-columns', type: 'boolean', default: 'false', description: 'Shows the menu that hides and shows the columns marked hideable.', kind: 'Input' },
+    { name: 'sticky-header', type: 'boolean', default: 'false', description: 'Keeps the header in place while the body scrolls. Needs max-height to scroll within.', kind: 'Input' },
+    { name: 'max-height', type: 'string | undefined', default: 'undefined', description: 'A CSS length. Sets the height the table body scrolls inside, e.g. 60vh.', kind: 'Input' },
+    { name: 'show-export', type: 'boolean', default: 'false', description: 'Shows the button that downloads the table as CSV.', kind: 'Input' },
+    { name: 'export-mode', type: "'client' | 'emit'", default: "'client'", description: 'client builds the file in the browser and downloads it; emit only fires (export-csv), for a caller that would rather ask its server for the whole set.', kind: 'Input' },
+    { name: 'export-filename', type: 'string', default: "'export.csv'", description: 'Name of the downloaded file.', kind: 'Input' },
+    { name: 'export-csv', type: 'string[][]', description: 'The table as rows of text, exactly as it is on screen. Fired whether or not the browser also downloads it.', kind: 'Output' },
     { name: 'data-query', type: 'TableDataQuery', description: 'Emitted whenever the page, the sorting or a column filter changes, carrying all three together. Listen to this one as soon as a column can sort or filter.', kind: 'Output' },
     { name: 'sorting', type: 'TableSort | undefined', default: 'undefined', description: 'Which column is sorting and in which direction. Two-way: bind [(sorting)] to drive it from the URL or restore it.', kind: 'Input' },
     { name: 'filter', type: 'TableFilter', default: '{}', description: 'Value of each column filter, keyed by the header field. Two-way.', kind: 'Input' },
@@ -234,6 +288,8 @@ export class TablesComponent {
     { name: 'field', type: 'string | undefined', default: 'undefined', description: 'Data field name this column maps to (used for sorting).', kind: 'Input' },
     { name: 'type', type: "'number' | 'string' | undefined", default: 'undefined', description: 'Data type of the column, used when sorting.', kind: 'Input' },
     { name: 'sortable', type: 'boolean', default: 'false', description: 'Shows a sort control that cycles ascending, descending and unsorted. Requires field, and emits (data-query) on the table.', kind: 'Input' },
+    { name: 'hideable', type: 'boolean', default: 'false', description: 'Lets the user hide this column from the table column menu. Needs field and label.', kind: 'Input' },
+    { name: 'label', type: 'string | undefined', default: 'undefined', description: 'Name for this column in the column menu. The heading itself is projected content the table cannot read. Falls back to field.', kind: 'Input' },
     { name: 'filtrable', type: 'boolean', default: 'false', description: 'Shows a filter box under the column heading. Requires field. Emits (data-query) once typing stops.', kind: 'Input' },
     { name: 'sortLabel', type: 'string', default: "'Sort'", description: 'Accessible name for the sort control, which is otherwise only an arrow.', kind: 'Input' },
     { name: 'filterLabel', type: 'string', default: "'Filter'", description: 'Accessible name for the filter box.', kind: 'Input' },

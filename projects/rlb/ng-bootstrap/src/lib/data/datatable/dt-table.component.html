@@ -1,35 +1,84 @@
-@if (creationStrategy() !== 'none' || title() || showRefresh()) {
+@if (showToolbar()) {
 <div class="row mb-3">
   <div class="col">
-    @if (title()) {
-    <h3 class="float-start">{{ title() }}</h3>
-    }
-    @if (showRefresh()) {
-    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="refreshItem.emit()"
-      [disabled]="loading()" [attr.aria-label]="refreshText()">
-      <i [class]="icons.refresh" aria-hidden="true"></i>
-    </button>
-    }
-    @if (creationStrategy() === 'page') {
-    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl()" [attr.aria-label]="createText()">
-      <i [class]="icons.add" aria-hidden="true"></i>
-    </button>
-    }
-    @if (creationStrategy() === 'modal') {
-    <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()" [attr.aria-label]="createText()">
-      <i [class]="icons.add" aria-hidden="true"></i>
-    </button>
+    @if (bulkMode()) {
+      <!-- While rows are ticked the toolbar steps aside: «delete the 3 selected» and «create a new
+           one» are not choices anyone makes at the same moment. -->
+      <div class="d-flex align-items-center gap-3">
+        <span class="fw-semibold">{{ selectedCountText() }}</span>
+        <ng-container #projectedBulkActions></ng-container>
+        <button type="button" class="btn btn-link btn-sm text-reset ms-auto" (click)="clearSelection()">
+          {{ clearSelectionText() }}
+        </button>
+      </div>
+    } @else {
+      @if (title()) {
+      <h3 class="float-start">{{ title() }}</h3>
+      }
+      @if (showRefresh()) {
+      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="refreshItem.emit()"
+        [disabled]="loading()" [attr.aria-label]="refreshText()">
+        <i [class]="icons.refresh" aria-hidden="true"></i>
+      </button>
+      }
+      @if (creationStrategy() === 'page') {
+      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" [routerLink]="creationUrl()" [attr.aria-label]="createText()">
+        <i [class]="icons.add" aria-hidden="true"></i>
+      </button>
+      }
+      @if (creationStrategy() === 'modal') {
+      <button type="button" class="btn btn-outline-primary float-end mb-2 me-3" (click)="createItem.emit()" [attr.aria-label]="createText()">
+        <i [class]="icons.add" aria-hidden="true"></i>
+      </button>
+      }
+      @if (showExport()) {
+      <button type="button" class="btn btn-outline-secondary float-end mb-2 me-3" (click)="exportCsv()"
+        [disabled]="loading()" [attr.aria-label]="exportText()">
+        <i [class]="icons.download" aria-hidden="true"></i>
+      </button>
+      }
+      @if (showColumns() && hideableColumns().length > 0) {
+      <div class="dropdown float-end mb-2 me-3">
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown"
+          aria-expanded="false" [attr.aria-label]="columnsText()">
+          <i [class]="icons.columns" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          @for (column of hideableColumns(); track column.field()) {
+          <li>
+            <label class="dropdown-item d-flex align-items-center gap-2 mb-0">
+              <input type="checkbox" class="form-check-input m-0 flex-shrink-0"
+                [checked]="!column.hidden()"
+                (change)="setColumnHidden(column.field(), !$any($event.target).checked)" />
+              <span class="text-truncate">{{ column.menuLabel() }}</span>
+            </label>
+          </li>
+          }
+        </ul>
+      </div>
+      }
     }
   </div>
 </div>
 }
-<div class="table-responsive">
+<div class="table-responsive" [style.max-height]="maxHeight()" [style.overflow-y]="maxHeight() ? 'auto' : null">
   <table [ngClass]="getTableClasses()">
     <thead>
       <tr>
+        @if (selectable()) {
+        <th data-export="skip" style="width: 1%" [style.position]="stickyHeader() ? 'sticky' : null"
+          [style.top]="stickyHeader() ? '0' : null" [style.z-index]="stickyHeader() ? 2 : null"
+          [style.background]="stickyHeader() ? 'var(--bs-body-bg)' : null" class="align-top">
+          <input type="checkbox" class="form-check-input m-0" [checked]="allSelected()"
+            [indeterminate]="someSelected()" [disabled]="selectableKeys().length === 0"
+            [attr.aria-label]="selectAllText()" (change)="toggleAll($any($event.target).checked)" />
+        </th>
+        }
         <ng-container #projectedDisplayColumns></ng-container>
         @if (hasActions()) {
-        <th>
+        <th data-export="skip" [style.position]="stickyHeader() ? 'sticky' : null"
+          [style.top]="stickyHeader() ? '0' : null" [style.z-index]="stickyHeader() ? 2 : null"
+          [style.background]="stickyHeader() ? 'var(--bs-body-bg)' : null">
           <span class="float-end pe-2">
             {{ actionsText() }}
           </span>
