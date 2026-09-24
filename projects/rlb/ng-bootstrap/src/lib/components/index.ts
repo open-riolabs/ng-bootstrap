@@ -69,7 +69,12 @@ import { TabContentComponent } from './tabs/tab-content.component';
 import { TabPaneComponent } from './tabs/tab-pane.component';
 import { TabComponent } from './tabs/tab.component';
 import { TabsComponent } from './tabs/tabs.component';
+import { CommandPaletteComponent } from './command-palette/command-palette.component';
 import { EmptyStateComponent } from './empty-state/empty-state.component';
+import { StatComponent } from './stat/stat.component';
+import { TimelineComponent } from './timeline/timeline.component';
+import { TimelineItemComponent } from './timeline/timeline-item.component';
+import { VirtualListComponent } from './virtual-list/virtual-list.component';
 import { PopconfirmDirective } from './popconfirm/popconfirm.directive';
 import { PopconfirmPanelComponent } from './popconfirm/popconfirm-panel.component';
 import { StepComponent } from './stepper/step.component';
@@ -151,7 +156,14 @@ export * from './tabs/tab-content.component';
 export * from './tabs/tab-pane.component';
 export * from './tabs/tab.component';
 export * from './tabs/tabs.component';
+export * from './command-palette/command';
+export * from './command-palette/command-palette.component';
 export * from './empty-state/empty-state.component';
+export * from './stat/stat.component';
+export * from './timeline/timeline.component';
+export * from './timeline/timeline-item.component';
+export * from './timeline/timeline-host';
+export * from './virtual-list/virtual-list.component';
 export * from './popconfirm/popconfirm.directive';
 export * from './popconfirm/popconfirm-panel.component';
 export * from './stepper/step.component';
@@ -236,6 +248,11 @@ export const COMPONENTS = [
   RlbPlaceholderTextComponent,
   ThemeToggleComponent,
   EmptyStateComponent,
+  CommandPaletteComponent,
+  StatComponent,
+  TimelineComponent,
+  TimelineItemComponent,
+  VirtualListComponent,
   PopconfirmDirective,
   PopconfirmPanelComponent,
   StepperComponent,

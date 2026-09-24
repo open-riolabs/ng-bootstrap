@@ -41,6 +41,8 @@ export class HomeComponent {
         { name: 'Placeholder', icon: 'bi-bounding-box', desc: 'Loading placeholders for content skeletons.', link: '/components/placeholders' },
         { name: 'Sidebar', icon: 'bi-layout-sidebar-inset', desc: 'Vertical, collapsible navigation menu.', link: '/components/sidebars' },
         { name: 'Theme', icon: 'bi-circle-half', desc: 'Dark mode on data-bs-theme, driven by signals.', link: '/components/theme' },
+        { name: 'Stat & timeline', icon: 'bi-graph-up', desc: 'The tile that shows one number, and the list of what happened.', link: '/components/dashboard' },
+        { name: 'Virtual list & palette', icon: 'bi-lightning', desc: 'Ten thousand rows without slowing down, and every command one keystroke away.', link: '/components/scale' },
       ],
     },
     {

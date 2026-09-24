@@ -1,0 +1,104 @@
+<docs-page
+  title="Stat & timeline"
+  lead="The two pieces every console builds by hand: the tile that shows one number, and the list of what happened.">
+
+  <docs-example
+    heading="Stat tiles"
+    description="The value is taken as written — a component cannot know whether 1234.5 is money, a count or a percentage, nor in which locale, so formatting stays with the caller who does know. The change is never left to colour alone: there is an arrow beside it and a sign in the text."
+    [code]="statExample">
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-xl-3">
+        <rlb-stat
+          label="Revenue"
+          value="12.480 €"
+          [delta]="12"
+          delta-label="vs last month"
+          icon="bi bi-cash-coin"
+          [sparkline]="revenueSpark"
+        />
+      </div>
+      <div class="col-12 col-md-6 col-xl-3">
+        <rlb-stat
+          label="Active users"
+          value="1.284"
+          [delta]="0"
+          delta-label="unchanged this week"
+          icon="bi bi-people"
+          color="success"
+        />
+      </div>
+      <div class="col-12 col-md-6 col-xl-3">
+        <rlb-stat
+          label="Failed jobs"
+          value="7"
+          [delta]="40"
+          delta-label="vs yesterday"
+          icon="bi bi-exclamation-triangle"
+          color="danger"
+          invert-delta
+        />
+      </div>
+      <div class="col-12 col-md-6 col-xl-3">
+        <rlb-stat
+          label="Storage"
+          value="—"
+          loading
+          icon="bi bi-hdd"
+          color="secondary"
+        />
+      </div>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="When down is the good news"
+    description="Churn, latency, cost. invert-delta swaps which direction is green without touching which arrow is drawn: the arrow says what happened, the colour says whether that is good."
+    [code]="invertExample">
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-xl-4">
+        <rlb-stat
+          label="p95 latency"
+          value="141 ms"
+          [delta]="-22"
+          delta-label="vs last week"
+          invert-delta
+          color="info"
+          icon="bi bi-speedometer2"
+          [sparkline]="latencySpark"
+        />
+      </div>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Timeline"
+    description="An activity feed, an audit log, the history of a record. Grouping by day is the part worth having in a component: it is where the timezone gets decided, and getting it wrong moves entries into the wrong day for everyone east or west of the server. The third entry below is 00:30 in Rome — still the previous day in UTC, and it correctly starts a new one."
+    [code]="timelineExample">
+    <rlb-timeline
+      group-by-day
+      [timezone]="zone"
+      day-format="WL DD LM yyyy"
+      locale="it"
+    >
+      <rlb-timeline-item [time]="morning" heading="Created" icon="bi bi-plus-lg">
+        Mario opened the ticket.
+      </rlb-timeline-item>
+      <rlb-timeline-item [time]="afternoon" heading="Assigned" color="info" icon="bi bi-person-check">
+        Given to the billing team.
+      </rlb-timeline-item>
+      <rlb-timeline-item [time]="night" heading="Escalated" color="warning" icon="bi bi-exclamation-lg">
+        No answer within the SLA.
+      </rlb-timeline-item>
+      <rlb-timeline-item [time]="later" heading="Replied" color="success" icon="bi bi-check-lg">
+        Lucia answered and asked for the invoice number.
+      </rlb-timeline-item>
+      <rlb-timeline-item heading="Waiting on the customer" pending color="secondary">
+        Nothing has happened yet.
+      </rlb-timeline-item>
+    </rlb-timeline>
+  </docs-example>
+
+  <docs-api selector="rlb-stat" [rows]="statApi" />
+  <docs-api selector="rlb-timeline" [rows]="timelineApi" />
+  <docs-api selector="rlb-timeline-item" [rows]="timelineItemApi" />
+</docs-page>

@@ -180,6 +180,10 @@ Colors come from the Bootstrap palette (`primary`, `secondary`, `success`, `dang
 - **Pagination** - Page navigation
 - **Placeholder** - Loading placeholders
 - **Scrollspy** - Scroll-based navigation
+- **Stat** - One number with its change, an arrow and an optional sparkline
+- **Timeline** - Activity feeds and audit logs, grouped by local day
+- **Virtual list** - Thousands of rows over the CDK scroller, with incremental loading
+- **Command palette** - Every action one keystroke away, with fuzzy matching and recents
 - **Stepper** - A form split into steps, with per-step validation
 - **Sidebar** - Side navigation panels
 - **Tabs** - Tabbed interfaces

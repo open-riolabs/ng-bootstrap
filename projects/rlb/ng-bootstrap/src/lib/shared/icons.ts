@@ -57,6 +57,12 @@ export interface RlbIconSet {
   check: string;
   /** Opens a calendar. */
   calendar: string;
+  /** A measure that went up. */
+  trendUp: string;
+  /** A measure that went down. */
+  trendDown: string;
+  /** A measure that did neither. */
+  trendFlat: string;
   /** The light theme. */
   themeLight: string;
   /** The dark theme. */
@@ -91,6 +97,9 @@ export const RLB_DEFAULT_ICONS: RlbIconSet = {
   empty: 'bi bi-inbox',
   check: 'bi bi-check-lg',
   calendar: 'bi bi-calendar3',
+  trendUp: 'bi bi-arrow-up-right',
+  trendDown: 'bi bi-arrow-down-right',
+  trendFlat: 'bi bi-dash',
   themeLight: 'bi bi-sun',
   themeDark: 'bi bi-moon-stars',
   themeAuto: 'bi bi-circle-half',

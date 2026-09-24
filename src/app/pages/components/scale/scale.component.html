@@ -1,0 +1,66 @@
+<docs-page
+  title="Virtual list & command palette"
+  lead="Two things a console needs once it stops being small: a list that does not slow down at ten thousand rows, and a way to reach any part of the app without hunting for it.">
+
+  <docs-example
+    heading="Virtual list"
+    description="@angular/cdk has been a peer dependency of this library from the start, and the only thing it was used for was BreakpointObserver — its virtual scroller was already paid for and never reached. Scroll to the bottom and (near-end) asks for the next fifty; the caller ignores it while a page is already in flight, because the list cannot know that."
+    [code]="virtualExample">
+    <div class="d-flex flex-column gap-2">
+      <rlb-virtual-list
+        [items]="rows()"
+        [item-size]="52"
+        height="22rem"
+        (near-end)="loadMore()"
+      >
+        <ng-template let-row let-i="index">
+          <div class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center" style="height: 52px">
+            <span>{{ i + 1 }} — {{ row.name }}</span>
+            <span class="text-body-secondary small">{{ row.email }}</span>
+          </div>
+        </ng-template>
+      </rlb-virtual-list>
+
+      <div class="d-flex align-items-center gap-2 text-body-secondary small">
+        <span>{{ rows().length }} rows, {{ loaded() }} page(s) loaded</span>
+        @if (loading()) {
+          <rlb-spinner color="primary" size="sm" />
+        }
+      </div>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Command palette"
+    description="rlb-search has been in the library for a while — a box and a list in a modal. This is that idea grown up: a shortcut, matching on letters in order so «dbs» finds «Dashboard settings», groups, the commands you used last, and the whole thing driven from the keyboard. Mount it once near the root, like rlb-modal-container; it renders nothing until it opens."
+    [code]="paletteExample">
+    <div class="d-flex flex-column gap-3">
+      <div class="d-flex gap-3 align-items-center flex-wrap">
+        <button rlb-button color="primary" (click)="palette.open()">Open the palette</button>
+        <span class="text-body-secondary small">
+          or press <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>K</kbd> anywhere on this page
+        </span>
+      </div>
+
+      <rlb-command-palette
+        #palette
+        [commands]="commands"
+        shortcut="mod+k"
+        placeholder="Try «dbs», or «esci»…"
+      />
+
+      @if (lastCommand()) {
+        <span class="text-body-secondary small">last command: <code>{{ lastCommand() }}</code></span>
+      } @else {
+        <span class="text-body-secondary small">
+          Arrows move, Enter runs, Escape closes. «Delete the workspace» is disabled: it stays out of
+          the list until you search for it.
+        </span>
+      }
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-virtual-list" [rows]="virtualApi" />
+  <docs-api selector="rlb-command-palette" [rows]="paletteApi" />
+  <docs-api heading="RlbCommand" [rows]="commandApi" />
+</docs-page>

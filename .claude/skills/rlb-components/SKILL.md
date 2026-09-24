@@ -1,6 +1,6 @@
 ---
 name: rlb-components
-description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, cards, dropdowns, toasts, loaders, badges, progress, stepper/wizard, empty states, popconfirm, theme toggle), and its configuration tokens for icons, dark mode, global defaults and translations. Built on Angular signals, OnPush and Bootstrap 5. Use when using or composing these UI components, or when configuring the library.
+description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, cards, dropdowns, toasts, loaders, badges, stepper/wizard, empty states, popconfirm, theme toggle, stat tiles, timelines, virtual lists, command palette), and its configuration tokens for icons, dark mode, global defaults and translations. Built on Angular signals, OnPush and Bootstrap 5. Use when using or composing these UI components, or when configuring the library.
 ---
 
 # RLB ng-Bootstrap Components Skill
@@ -785,6 +785,134 @@ in the page corner. `ng add` registers it.
 Walks through the themes in `modes` (`['light','dark','auto']` by default) and shows the icon of the
 current one. State lives in `ThemeService`, so several toggles on one page agree. See
 **Configuration** below.
+
+---
+
+## Stat tile (rlb-stat)
+
+One number, with what it means and which way it is going.
+
+```html
+<rlb-stat
+  label="Revenue"
+  value="12.480 €"
+  [delta]="12"
+  delta-label="vs last month"
+  icon="bi bi-cash-coin"
+  [sparkline]="[12, 15, 14, 19, 18, 24, 27]"
+/>
+
+<!-- Down is the good news: the colour flips, the arrow does not. -->
+<rlb-stat label="p95 latency" value="141 ms" [delta]="-22" invert-delta color="info" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `label` | `string` | `''` | What the number is. |
+| `value` | `string \| number` | `''` | **Already formatted.** A component cannot know whether 1234.5 is money, a count or a percentage, nor in which locale — formatting stays with the caller. |
+| `delta` | `number` | — | The change; its sign picks the arrow and the colour. Left out, nothing is drawn. |
+| `delta-text` | `string` | — | How the change is written. Default is the delta with a sign and a `%`. |
+| `delta-label` | `string` | — | The line underneath: «vs last month». |
+| `invert-delta` | `boolean` | `false` | For churn, latency, cost. |
+| `sparkline` | `number[]` | `[]` | Drawn once there are two points. Decoration, `aria-hidden`. |
+| `icon` / `color` / `loading` / `flat` | | | |
+
+The direction is never colour alone: an arrow and a sign carry it too.
+
+---
+
+## Timeline (rlb-timeline + rlb-timeline-item)
+
+An activity feed, an audit log, the history of a record.
+
+```html
+<rlb-timeline group-by-day timezone="Europe/Rome" day-format="WL DD LM yyyy" locale="it">
+  <rlb-timeline-item [time]="created" heading="Created" icon="bi bi-plus-lg">
+    Mario opened the ticket.
+  </rlb-timeline-item>
+  <rlb-timeline-item [time]="escalated" heading="Escalated" color="warning">…</rlb-timeline-item>
+  <rlb-timeline-item heading="Waiting" pending color="secondary">Not yet.</rlb-timeline-item>
+</rlb-timeline>
+```
+
+**rlb-timeline**: `group-by-day`, `timezone`, `locale`, `time-format` (`'HH:mm'`),
+`day-format` (`'WL DD LM yyyy'`), `compact`.
+
+**rlb-timeline-item**: `heading`, `time` (`IDateTz | string`), `icon`, `color`, `pending`.
+
+Grouping is the reason this is a component rather than a `@for`: the day is worked out from local
+midnight in the timeline's timezone. An entry at 00:30 in Rome is still the previous day in UTC, and
+tz-naive day maths puts it under the wrong heading. An `IDateTz` is formatted by the timeline and
+groups; a plain string is printed as given and takes no part in grouping.
+
+---
+
+## Virtual list (rlb-virtual-list)
+
+A long list that renders only what is on screen, over the CDK's virtual scroller.
+
+```html
+<rlb-virtual-list [items]="rows()" [item-size]="52" height="22rem" (near-end)="loadMore()">
+  <ng-template let-row let-i="index">
+    <div class="px-3 py-2 border-bottom" style="height: 52px">{{ i + 1 }} — {{ row.name }}</div>
+  </ng-template>
+</rlb-virtual-list>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `items` | `readonly T[]` | `[]` | |
+| `item-size` | `number` | `48` | Fixed row height in px. **It must match what the template renders**, or the scrollbar lies about the length of the list. |
+| `height` | `string` | `'20rem'` | Without a height there is nothing to scroll inside. |
+| `threshold` | `number` | `10` | How far from the end `(near-end)` fires. |
+| `track-by` | `(i, item) => unknown` | the index | |
+| `(near-end)` | `void` | | Fires once per arrival — **the caller must still ignore it while a page is in flight.** |
+| `(scrolled-index)` | `number` | | First rendered row. |
+
+The row template is projected as the only content, with `let-item` and `let-i="index"`.
+
+---
+
+## Command palette (rlb-command-palette)
+
+Everything the application can do, one keystroke away. Mount it **once**, near the root, the way
+`rlb-modal-container` is mounted; it renders nothing until it opens.
+
+```html
+<rlb-command-palette [commands]="commands" shortcut="mod+k" />
+```
+
+```typescript
+import { RlbCommand } from '@open-rlb/ng-bootstrap';
+
+readonly commands: RlbCommand[] = [
+  {
+    id: 'new-user',                 // stable: it is how «recent» remembers this command
+    label: 'New user',
+    group: 'Users',
+    icon: 'bi bi-person-plus',
+    keywords: ['create', 'add'],    // also searched: synonyms, the old name, an abbreviation
+    shortcut: 'N',                  // shown only; the palette does not bind it
+    run: () => this.router.navigate(['/users/new']),
+  },
+];
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `commands` | `readonly RlbCommand[]` | `[]` | |
+| `shortcut` | `string` | `'mod+k'` | `mod` is Cmd on a Mac and Ctrl elsewhere, so one string covers both. Empty turns it off. |
+| `recent-count` | `number` | `3` | Recently used at the top when the box is empty. `0` turns it off. |
+| `title` / `placeholder` / `emptyLabel` / `recentLabel` | `string` | English | |
+| `(executed)` | `RlbCommand` | | Already run. |
+| `open()` / `close()` | | | Drive it from a button as well. |
+
+Matching is by subsequence — every letter of the query in order — so `dbs` finds «Dashboard
+settings». Matches at a word boundary and consecutive matches score higher, and a shorter label wins
+a tie. Arrows move and wrap, Enter runs, Escape closes. A `disabled` command stays out of the list
+until it is searched for.
+
+⚠️ CDK Overlay again: the application must load `@angular/cdk/overlay-prebuilt.css`.
 
 ---
 
