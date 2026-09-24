@@ -439,31 +439,53 @@ next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
 
 ```html
 <rlb-dropdown direction="down">
-  <button
-    rlb-button
-    color="primary"
-    rlb-dropdown
-  >
-    Actions
-  </button>
-  <div rlb-dropdown-menu>
-    <a
-      class="dropdown-item"
-      href="#"
-    >
-      Option 1
-    </a>
-    <a
-      class="dropdown-item"
-      href="#"
-    >
-      Option 2
-    </a>
-  </div>
+  <button rlb-button color="primary" rlb-dropdown>Actions</button>
+  <ul rlb-dropdown-menu placement="right">
+    <li rlb-dropdown-item header>Section</li>
+    <li rlb-dropdown-item (click)="rename()">Rename</li>
+    <li rlb-dropdown-item disabled>Move</li>
+    <li rlb-dropdown-item divider></li>
+    <li rlb-dropdown-item link="/settings">Settings</li>
+  </ul>
+</rlb-dropdown>
+
+<!-- Arbitrary content instead of a list. -->
+<rlb-dropdown>
+  <button rlb-button rlb-dropdown [offset]="[0, 8]" auto-close="outside">Filters</button>
+  <rlb-dropdown-container>
+    <div class="p-3">…anything…</div>
+  </rlb-dropdown-container>
 </rlb-dropdown>
 ```
 
-**Inputs:** `direction` ('up'|'down'|'left'|'right'|'up-center'|'down-center')
+| Element | Input | Notes |
+|---|---|---|
+| `rlb-dropdown` | `direction` | `'up' \| 'down' \| 'left' \| 'right' \| 'up-center' \| 'down-center'`. |
+| `[rlb-dropdown]` | `offset` | `[x, y]` px. |
+| | `auto-close` | `'default' \| 'inside' \| 'outside' \| 'manual'`. Use `outside` for a menu of checkboxes: `default` closes on the first tick. |
+| | `anchor` | `'self' \| 'parent'`. `parent` lines the menu up with the box around the toggle — what a split button needs. |
+| | `(status-changed)` | `'show' \| 'shown' \| 'hide' \| 'hidden'`. |
+| `rlb-dropdown-container`, `ul[rlb-dropdown-menu]` | `placement`, `placement-sm…xxl` | `'left' \| 'right'`, per breakpoint. |
+| `li[rlb-dropdown-item]` | `active`, `disabled`, `header`, `divider`, `link`, `text-wrap` | `link` renders an anchor with `routerLink`. |
+
+**It runs on the CDK Overlay, not on Bootstrap's dropdown plugin.** What that changes:
+
+- The menu is rendered at the end of the body, so an ancestor with `overflow: hidden` — a scrolling
+  panel, a table cell — no longer clips it. The old fix was `data-bs-popper-config`, per call site.
+- It flips instead of overflowing: a menu with no room below opens upwards.
+- The keyboard works. Down opens with the first item focused, the arrows walk the enabled items and
+  wrap, Home and End jump, Escape closes and hands focus back. An action item is a real `<button>`.
+- `rlb-navbar-dropdown-item`, `rlb-split-button`, `rlb-dt-actions` and the datatable's column menu
+  all ride the same overlay; nothing in the library sets `data-bs-toggle="dropdown"` any more.
+
+⚠️ Because of that, `@angular/cdk/overlay-prebuilt.css` is now needed by **any** app that opens a
+dropdown, not only by the datepicker and the popconfirm. `ng add` registers it; without it the
+menu opens in the corner of the page.
+
+Bootstrap's plugin is still loaded for modals, collapse and the rest, and it still binds a
+**capture-phase** handler on the document for anything matching `.dropdown-menu`. Keys the menu
+handles are stopped before they reach it — without that it looks for a `[data-bs-toggle]` that no
+longer exists and throws. Worth knowing if you add keys of your own to a menu.
 
 ---
 

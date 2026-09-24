@@ -127,6 +127,8 @@ export * from './dropdown/dropdown-container.component';
 export * from './dropdown/dropdown-menu-item.component';
 export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown.directive';
+export * from './dropdown/dropdown-host';
+export * from './dropdown/dropdown-overlay.service';
 export * from './list/list-item-image.component';
 export * from './list/list-item.component';
 export * from './list/list.component';

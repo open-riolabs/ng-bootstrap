@@ -35,6 +35,9 @@ import { FormsModule } from '@angular/forms';
 import { OptionComponent } from '../../forms/inputs/options.component';
 import { RLB_DEFAULTS } from '../../shared/defaults';
 import { RLB_ICONS } from '../../shared/icons';
+import { DropdownComponent } from '../../components/dropdown/dropdown.component';
+import { DropdownContainerComponent } from '../../components/dropdown/dropdown-container.component';
+import { DropdownDirective } from '../../components/dropdown/dropdown.directive';
 
 export interface PaginationEvent {
   page: number;
@@ -53,7 +56,16 @@ export interface PaginationEvent {
     { provide: DataTableHost, useExisting: forwardRef(() => DataTableComponent) },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, NgClass, SelectComponent, FormsModule, OptionComponent],
+  imports: [
+    RouterLink,
+    NgClass,
+    SelectComponent,
+    FormsModule,
+    OptionComponent,
+    DropdownComponent,
+    DropdownDirective,
+    DropdownContainerComponent,
+  ],
 })
 export class DataTableComponent implements OnInit, OnDestroy, DataTableHost {
   protected icons = inject(RLB_ICONS);

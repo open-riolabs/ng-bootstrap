@@ -6,6 +6,9 @@ import {
   input,
   output,
 } from '@angular/core';
+import { DropdownContainerComponent } from '../dropdown/dropdown-container.component';
+import { DropdownComponent } from '../dropdown/dropdown.component';
+import { DropdownDirective } from '../dropdown/dropdown.directive';
 import { Color, Size } from '../../shared/types';
 import { ButtonComponent } from './buttons.component';
 
@@ -21,7 +24,7 @@ import { ButtonComponent } from './buttons.component';
 @Component({
   selector: 'rlb-split-button',
   template: `
-    <div
+    <rlb-dropdown
       class="btn-group"
       [class.btn-group-sm]="size() === 'sm'"
       [class.btn-group-lg]="size() === 'lg'"
@@ -43,22 +46,32 @@ import { ButtonComponent } from './buttons.component';
 
       <button
         type="button"
-        class="btn dropdown-toggle dropdown-toggle-split"
+        rlb-dropdown
+        anchor="parent"
+        class="btn dropdown-toggle-split"
         [class]="toggleClass()"
         [disabled]="disabled() || menuDisabled()"
-        data-bs-toggle="dropdown"
-        data-bs-reference="parent"
-        aria-expanded="false"
         [attr.aria-label]="menuLabel()"
       ></button>
 
-      <ul class="dropdown-menu" [class.dropdown-menu-end]="menuAlign() === 'end'">
+      <ul rlb-dropdown-menu [placement]="menuAlign() === 'end' ? 'right' : 'left'">
         <ng-content select="[rlb-dropdown-item], li"></ng-content>
       </ul>
-    </div>
+    </rlb-dropdown>
+  `,
+  styles: `
+    /* The .btn-group is now the dropdown's element; this one only has to stop being a text box. */
+    :host {
+      display: inline-flex;
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ButtonComponent],
+  imports: [
+    ButtonComponent,
+    DropdownComponent,
+    DropdownDirective,
+    DropdownContainerComponent,
+  ],
 })
 export class SplitButtonComponent {
   color = input<Color>('primary');

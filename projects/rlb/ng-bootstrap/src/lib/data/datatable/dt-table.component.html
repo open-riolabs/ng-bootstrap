@@ -38,12 +38,12 @@
       </button>
       }
       @if (showColumns() && hideableColumns().length > 0) {
-      <div class="dropdown float-end mb-2 me-3">
-        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown"
-          aria-expanded="false" [attr.aria-label]="columnsText()">
+      <rlb-dropdown class="float-end mb-2 me-3">
+        <button type="button" rlb-dropdown auto-close="outside" class="btn btn-outline-secondary"
+          [attr.aria-label]="columnsText()">
           <i [class]="icons.columns" aria-hidden="true"></i>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul rlb-dropdown-menu placement="right">
           @for (column of hideableColumns(); track column.field()) {
           <li>
             <label class="dropdown-item d-flex align-items-center gap-2 mb-0">
@@ -55,7 +55,7 @@
           </li>
           }
         </ul>
-      </div>
+      </rlb-dropdown>
       }
     }
   </div>

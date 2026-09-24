@@ -134,9 +134,10 @@ Add Bootstrap CSS to your `angular.json` or import in your main styles file:
 @import '@angular/cdk/overlay-prebuilt.css';
 ```
 
-The CDK stylesheet is what positions the datepicker and the popconfirm. Without it the overlay
-container has no position of its own and those panels open in the corner of the page. `ng add`
-registers all three for you.
+The CDK stylesheet is what positions every panel the library opens — dropdowns, the datepicker,
+the popconfirm, the command palette. Without it the overlay container has no position of its own
+and they all open in the corner of the page. It is not optional: `ng add` registers all three
+for you.
 
 ### 3. Use Components
 

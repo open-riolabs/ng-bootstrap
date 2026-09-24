@@ -80,6 +80,30 @@ export class DropdownsComponent {
   <rlb-dropdown-container>Content</rlb-dropdown-container>
 </rlb-dropdown>`;
 
+  keyboardExample = `<!-- Nothing to turn on: every dropdown has this. -->
+<rlb-dropdown>
+  <button rlb-button rlb-dropdown>Menu</button>
+  <ul rlb-dropdown-menu>
+    <li rlb-dropdown-item>Rename</li>
+    <li rlb-dropdown-item disabled>Move</li>
+    <li rlb-dropdown-item>Duplicate</li>
+    <li rlb-dropdown-item divider></li>
+    <li rlb-dropdown-item>Delete</li>
+  </ul>
+</rlb-dropdown>`;
+
+  overflowExample = `<!-- The menu is rendered in an overlay at the end of the body, so a scrolling
+     box or a cell with overflow: hidden no longer clips it. -->
+<div style="overflow: hidden; height: 120px">
+  <rlb-dropdown>
+    <button rlb-button rlb-dropdown>Inside an overflow: hidden box</button>
+    <ul rlb-dropdown-menu>
+      <li rlb-dropdown-item>You can still read this</li>
+      <li rlb-dropdown-item>And this</li>
+    </ul>
+  </rlb-dropdown>
+</div>`;
+
   dropdownApi: DocApiRow[] = [
     {
       name: 'direction',
@@ -95,7 +119,7 @@ export class DropdownsComponent {
       name: 'offset',
       type: 'number[]',
       default: '[]',
-      description: 'Sets the pixel offset [x, y] of the dropdown menu relative to the trigger. When non-empty, Popper.js dynamic positioning is used.',
+      description: 'Shifts the menu by [x, y] pixels from where it would sit. It used to double as the switch between static and dynamic positioning; there is only one mode now, so an offset is only ever an offset.',
       kind: 'Input',
     },
     {
@@ -108,8 +132,15 @@ export class DropdownsComponent {
     {
       name: 'status-changed',
       type: "'show' | 'shown' | 'hide' | 'hidden'",
-      description: 'Emitted when the dropdown visibility changes, mapped from the corresponding Bootstrap dropdown events.',
+      description: 'Emitted when the dropdown visibility changes. The same four moments as before, now raised by the overlay rather than by Bootstrap.',
       kind: 'Output',
+    },
+    {
+      name: 'anchor',
+      type: "'self' | 'parent'",
+      default: "'self'",
+      description: "What the menu lines up with. 'parent' is Bootstrap's data-bs-reference=\"parent\", and it is what a split button needs: its arrow is a sliver at the end of a button group, and a menu aligned to the sliver hangs off the side.",
+      kind: 'Input',
     },
   ];
 
@@ -117,7 +148,7 @@ export class DropdownsComponent {
     {
       name: 'placement',
       type: "'left' | 'right'",
-      description: 'Menu alignment relative to the trigger at all breakpoints.',
+      description: 'Menu alignment relative to the trigger at all breakpoints. The class is still written on the element, but the alignment itself is handed to the overlay — a menu the CDK has lifted out of the flow cannot be aligned by a class on its own box.',
       kind: 'Input',
     },
     {
@@ -135,7 +166,7 @@ export class DropdownsComponent {
     {
       name: 'placement-lg',
       type: "'left' | 'right'",
-      description: 'Responsive menu alignment for large (lg) screens and up.',
+      description: 'Responsive menu alignment for large (lg) screens and up. The breakpoint is read through the CDK BreakpointObserver, so it keeps meaning what it meant.',
       kind: 'Input',
     },
     {
