@@ -124,6 +124,10 @@ import { ButtonComponent, CardComponent } from '@open-rlb/ng-bootstrap';
 export class MyComponent {}
 ```
 
+> **Upgrading from 4.x?** Read [MIGRATION.md](MIGRATION.md) first. 5.0.0 moves every floating
+> panel onto the Angular CDK, and almost nothing about it breaks at compile time — start with the
+> stylesheet below, which every application has to add by hand.
+
 ### 2. Include Bootstrap Styles
 
 Add Bootstrap CSS to your `angular.json` or import in your main styles file:
