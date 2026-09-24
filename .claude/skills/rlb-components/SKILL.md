@@ -1,6 +1,6 @@
 ---
 name: rlb-components
-description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, cards, dropdowns, toasts, loaders, badges, stepper/wizard, empty states, popconfirm, theme toggle, stat tiles, timelines, virtual lists, command palette), and its configuration tokens for icons, dark mode, global defaults and translations. Built on Angular signals, OnPush and Bootstrap 5. Use when using or composing these UI components, or when configuring the library.
+description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, split buttons, cards, dropdowns, toasts, loaders, badges, avatars and avatar groups, trees, stepper/wizard, empty states, popconfirm, theme toggle, stat tiles, timelines, virtual lists, command palette), and its configuration tokens for icons, dark mode, global defaults and translations. Built on Angular signals, OnPush and Bootstrap 5. Use when using or composing these UI components, or when configuring the library.
 ---
 
 # RLB ng-Bootstrap Components Skill
@@ -81,6 +81,30 @@ type TextAlignment = 'left' | 'center' | 'right';
 
 **Button inputs:** `color`, `size`, `disabled`, `outline`, `isLink`
 **FAB inputs:** `color`, `size`, `disabled`, `outline`, `position` ('br'|'bl'|'tr'|'tl')
+
+---
+
+### Split button (rlb-split-button)
+
+The action people take, with the ones they sometimes take behind it. Three equal buttons make the
+reader choose before they have read them.
+
+```html
+<rlb-split-button color="primary" (action)="save()" menuLabel="More save options">
+  Save
+  <li><a class="dropdown-item" (click)="saveAndClose()">Save and close</a></li>
+  <li><a class="dropdown-item" (click)="saveDraft()">Save as draft</a></li>
+</rlb-split-button>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `color` / `size` / `outline` / `disabled` | | | As `rlb-button`. |
+| `icon` | `string` | — | Drawn before the label of the main button. |
+| `menu-disabled` | `boolean` | `false` | Disables only the arrow. |
+| `menu-align` | `'start' \| 'end'` | `'start'` | `end` for a button at the right-hand edge of a toolbar. |
+| `menuLabel` | `string` | `'More actions'` | The arrow has no text of its own: without this it announces as «button» beside another button that does have a name. |
+| `action` | `EventEmitter<MouseEvent>` | — | The main button. Menu items emit their own. |
 
 ---
 
@@ -165,6 +189,26 @@ solid variants whose fixed text colour fails on several colours. Also on the `[b
 ```
 
 **Inputs:** `size` (px number), `shape` ('circle'|'round'|'square'), `src`, `class`
+
+### Avatar group (rlb-avatar-group)
+
+Who is on this: the avatars overlap, and whoever is left over is counted.
+
+```html
+<rlb-avatar-group [extra]="team().length - 3" [size]="40" ariaLabel="On this ticket">
+  @for (member of team().slice(0, 3); track member.id) {
+    <rlb-avatar [src]="member.photo" [size]="40" />
+  }
+</rlb-avatar-group>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `extra` | `number` | `0` | How many more there are beyond the avatars projected here. The group **counts, it does not hide**: the caller writes the `@for` and so already decides how many to draw. |
+| `size` | `number` | `50` | Diameter of the «+N» badge; match it to the avatars. |
+| `overlap` | `number` | `12` | How far each sits over the one before, in px. |
+| `ariaLabel` | `string` | — | Names the pile. |
+| `overflowLabel` | `(count: number) => string` | `` count => `${count} more` `` | A function, because a count glued to a word does not translate. |
 
 ---
 
@@ -916,6 +960,62 @@ until it is searched for.
 
 ---
 
+## Tree (rlb-tree)
+
+Nested things that are data rather than navigation: categories, permissions, folders, an org chart.
+`rlb-sidebar-item` also nests, but only as a menu.
+
+```html
+<rlb-tree
+  [nodes]="catalogue"
+  [(expanded)]="openIds"
+  [(selected)]="chosenIds"
+  [filter]="query()"
+  (activated)="open($event)"
+/>
+
+<!-- Permissions: ticking a branch ticks everything under it. -->
+<rlb-tree [nodes]="permissions" checkboxes [(selected)]="granted" />
+```
+
+```typescript
+export interface RlbTreeNode {
+  id: string;          // unique across the whole tree: state is remembered by it
+  label: string;
+  icon?: string;
+  children?: RlbTreeNode[];
+  disabled?: boolean;
+}
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `nodes` | `RlbTreeNode[]` | `[]` | Plain data. The tree keeps no copy and no state beyond what is bound. |
+| `expanded` | `string[]` | `[]` | Open branches, by id. Two-way — put it in the URL if the page should come back the same. |
+| `selected` | `string[]` | `[]` | Taken nodes, by id. One without `checkboxes`, any number with. |
+| `checkboxes` | `boolean` | `false` | A box on every node; a branch takes everything under it. |
+| `branch-selectable` | `boolean` | `true` | Off, clicking a branch only opens it — for a tree whose branches are headings. |
+| `filter` | `string` | `''` | Keeps the matches and the branches above them, and opens those branches: a hit inside a closed branch is a hit nobody finds. |
+| `activated` | `EventEmitter<RlbTreeNode>` | — | A label was clicked. Branches too. |
+
+Methods: `toggle(id)`, `expandAll()`, `collapseAll()`, `check(node, checked)`, and
+`checkedState(node)` → `'true' | 'false' | 'mixed'`.
+
+Two things it does that the hand-written version usually does not:
+
+- A branch only some of whose children are ticked is **indeterminate**, not unticked. A half-ticked
+  branch drawn as unticked is how «apply to all» quietly does the wrong thing.
+- Ticking the last child by hand promotes the branch to fully ticked. A branch is in the selection
+  exactly when all of it is, so the drawing and the value never disagree.
+
+Helpers are exported for the data itself: `flattenTree(nodes)`, `subtreeIds(node)` and
+`idsMatching(nodes, predicate)` — the last returns `{ hits, open }`, the ids to show and the
+branches to open for them.
+
+For a tree inside a form control, use `rlb-tree-select` (**rlb-inputs** skill).
+
+---
+
 ## Configuration tokens
 
 Three injection tokens set library-wide behaviour. All optional; all have working defaults.
@@ -931,9 +1031,10 @@ import { provideRlbIcons } from '@open-rlb/ng-bootstrap';
 provideRlbIcons({ delete: 'fa-solid fa-trash', refresh: 'fa-solid fa-arrows-rotate' });
 ```
 
-Names: `refresh, add, close, search, more, edit, delete, chevronLeft, chevronRight, upload, file,
-reply, read, sortAscending, sortDescending, sortNone, download, columns, warning, empty, check,
-calendar` (the `RlbIconSet` interface).
+Names: `refresh, add, close, search, more, edit, delete, chevronLeft, chevronRight, chevronDown,
+upload, file, reply, read, sortAscending, sortDescending, sortNone, download, columns, warning,
+empty, check, calendar, clock, star, starFilled, trendUp, trendDown, trendFlat, themeLight,
+themeDark, themeAuto` (the `RlbIconSet` interface).
 
 ### provideRlbTheme — dark mode
 

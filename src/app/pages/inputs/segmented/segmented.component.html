@@ -1,0 +1,105 @@
+<docs-page
+  title="Segmented & tag input"
+  lead="Two ways of choosing that Bootstrap has no component for: one of a few, and as many as you like made up on the spot.">
+
+  <docs-example
+    heading="Segmented"
+    description="It looks like a button group and behaves like a radio group: one tab stop for the whole thing, arrows to move between the options, and aria-checked on each. A btn-group with [class.active] bindings — which is how this gets written by hand — puts every option in the tab order and tells a screen reader nothing about which one is taken."
+    [code]="segmentedExample">
+    <div class="d-flex flex-column gap-2 align-items-start">
+      <rlb-segmented [ngModel]="period()" (ngModelChange)="period.set($event)" label="Period">
+        <rlb-segmented-option value="day" label="Day" />
+        <rlb-segmented-option value="week" label="Week" />
+        <rlb-segmented-option value="month" label="Month" />
+      </rlb-segmented>
+      <span class="text-body-secondary small">Value: <code>{{ period() }}</code> — try the arrow keys.</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Icons and disabled options"
+    description="An option with an icon keeps its label as the accessible name even when only the icon is drawn. A disabled option is skipped by the arrow keys as well as unclickable."
+    [code]="segmentedIconExample">
+    <div class="d-flex flex-column gap-2 align-items-start">
+      <rlb-segmented [ngModel]="view()" (ngModelChange)="view.set($event)" label="Layout" color="secondary">
+        <rlb-segmented-option value="list" label="List" icon="bi bi-list-ul" />
+        <rlb-segmented-option value="grid" label="Grid" icon="bi bi-grid-3x3-gap" />
+        <rlb-segmented-option value="map" label="Map" icon="bi bi-geo-alt" disabled />
+      </rlb-segmented>
+      <span class="text-body-secondary small">Value: <code>{{ view() }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Full width"
+    description="block splits the available width evenly between the options, which is what a plan chooser or a mobile filter usually wants."
+    [code]="segmentedBlockExample">
+    <rlb-segmented [ngModel]="plan()" (ngModelChange)="plan.set($event)" label="Plan" block size="lg">
+      <rlb-segmented-option value="free" label="Free" />
+      <rlb-segmented-option value="pro" label="Pro" />
+      <rlb-segmented-option value="team" label="Team" />
+    </rlb-segmented>
+  </docs-example>
+
+  <docs-example
+    heading="Reactive forms"
+    description="The value is whatever the option carries, compared by identity — a string here, but an object works just as well."
+    [code]="segmentedReactiveExample">
+    <div class="d-flex flex-column gap-2 align-items-start">
+      <rlb-segmented [formControl]="reactivePeriod" label="Period">
+        <rlb-segmented-option value="day" label="Day" />
+        <rlb-segmented-option value="week" label="Week" />
+        <rlb-segmented-option value="month" label="Month" />
+      </rlb-segmented>
+      <span class="text-body-secondary small">Value: <code>{{ reactivePeriod.value | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-segmented" [rows]="segmentedApi" />
+  <docs-api selector="rlb-segmented-option" [rows]="segmentedOptionApi" />
+
+  <docs-example
+    heading="Tag input"
+    description="Enter or a separator makes a tag. Backspace on an empty box takes back the last one. Leaving the field commits what is half-typed rather than dropping it, which is the way this usually loses data. rlb-select-chips is the other half of this: it can only offer the options it was given, while this accepts anything."
+    [code]="tagExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 480px">
+      <rlb-tag-input [ngModel]="skills()" (ngModelChange)="skills.set($event)" placeholder="Add a skill…" />
+      <span class="text-body-secondary small">Value: <code>{{ skills() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Suggestions and separators"
+    description="suggestions fills a datalist, so the browser offers them without forbidding anything else. Adding a space to separators makes entry as fast as typing prose."
+    [code]="tagSuggestionsExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 480px">
+      <rlb-tag-input
+        [suggestions]="frameworks"
+        [separators]="[',', ' ']"
+        placeholder="Type or pick"
+        [ngModel]="recipients()"
+        (ngModelChange)="recipients.set($event)"
+      />
+      <span class="text-body-secondary small">Value: <code>{{ recipients() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Limits and refusals"
+    description="A refused tag is an event, not a message: the control will not invent wording for something only the surrounding form knows how to say. Try adding a fourth tag, or one that is already there."
+    [code]="tagLimitExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 480px">
+      <rlb-tag-input
+        [max-tags]="3"
+        [ngModel]="limited()"
+        (ngModelChange)="limited.set($event)"
+        (rejected)="onRejected($event)"
+      />
+      @if (refused()) {
+        <span class="text-danger small">{{ refused() }}</span>
+      }
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-tag-input" [rows]="tagApi" />
+</docs-page>

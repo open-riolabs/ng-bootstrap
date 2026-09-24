@@ -329,7 +329,10 @@ export class CommandPaletteComponent {
   private scrollActiveIntoView() {
     const id = this.activeId();
     if (!id) return;
-    document.getElementById(id)?.scrollIntoView({ block: 'nearest' });
+    // Called from a microtask, so it outlives the element it was queued for — and not every
+    // document that runs this code has scrollIntoView on it (test environments do not).
+    const element = document.getElementById(id);
+    element?.scrollIntoView?.({ block: 'nearest' });
   }
 
   run(command: RlbCommand) {

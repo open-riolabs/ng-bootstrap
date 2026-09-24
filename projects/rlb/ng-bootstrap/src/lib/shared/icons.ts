@@ -31,6 +31,8 @@ export interface RlbIconSet {
   chevronLeft: string;
   /** Step forward — next page, next month. */
   chevronRight: string;
+  /** Opens something that drops below it — a tree branch, a select. */
+  chevronDown: string;
   /** Upload, or a drop target waiting for a file. */
   upload: string;
   /** A file that has been attached. */
@@ -63,6 +65,12 @@ export interface RlbIconSet {
   trendDown: string;
   /** A measure that did neither. */
   trendFlat: string;
+  /** Opens a clock. */
+  clock: string;
+  /** A rating point not given. */
+  star: string;
+  /** A rating point given. */
+  starFilled: string;
   /** The light theme. */
   themeLight: string;
   /** The dark theme. */
@@ -84,6 +92,7 @@ export const RLB_DEFAULT_ICONS: RlbIconSet = {
   delete: 'bi bi-trash',
   chevronLeft: 'bi bi-chevron-left',
   chevronRight: 'bi bi-chevron-right',
+  chevronDown: 'bi bi-chevron-down',
   upload: 'bi bi-cloud-arrow-up',
   file: 'bi bi-file-earmark-text',
   reply: 'bi bi-reply-fill',
@@ -100,6 +109,9 @@ export const RLB_DEFAULT_ICONS: RlbIconSet = {
   trendUp: 'bi bi-arrow-up-right',
   trendDown: 'bi bi-arrow-down-right',
   trendFlat: 'bi bi-dash',
+  clock: 'bi bi-clock',
+  star: 'bi bi-star',
+  starFilled: 'bi bi-star-fill',
   themeLight: 'bi bi-sun',
   themeDark: 'bi bi-moon-stars',
   themeAuto: 'bi bi-circle-half',

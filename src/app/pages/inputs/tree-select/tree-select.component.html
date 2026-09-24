@@ -1,0 +1,68 @@
+<docs-page
+  title="Tree select"
+  lead="A select whose options are a tree. rlb-select flattens the shape, and a hand-indented option list only pretends to have one — the indentation is decoration, the keyboard and the screen reader still see a flat list.">
+
+  <docs-example
+    heading="Basic usage"
+    description="The box holds the chosen label; the panel holds the real structure. It opens on the branches that lead to what is already chosen, so the first few clicks are already made for you."
+    [code]="basicExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 360px">
+      <rlb-tree-select
+        [nodes]="catalogue"
+        placeholder="Category"
+        [ngModel]="category()"
+        (ngModelChange)="category.set($event)"
+      />
+      <span class="text-body-secondary small">Value: <code>{{ category() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Several at once"
+    description="multiple turns the panel into tick boxes — a branch takes everything under it — and the box into chips, each removable without opening the panel."
+    [code]="multipleExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 360px">
+      <rlb-tree-select
+        [nodes]="catalogue"
+        multiple
+        placeholder="Categories"
+        [ngModel]="categories()"
+        (ngModelChange)="categories.set($event)"
+      />
+      <span class="text-body-secondary small">Value: <code>{{ categories() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Leaves only"
+    description="Branches are often headings rather than answers. With branches-selectable off, clicking «Hardware» opens it and nothing else happens — and the panel stays open, because closing it there would undo the click the user just made."
+    [code]="leafExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 360px">
+      <rlb-tree-select
+        [nodes]="catalogue"
+        [branches-selectable]="false"
+        placeholder="Pick a leaf"
+        [ngModel]="leafOnly()"
+        (ngModelChange)="leafOnly.set($event)"
+      />
+      <span class="text-body-secondary small">Value: <code>{{ leafOnly() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Reactive forms"
+    description="The value is ids. A ControlValueAccessor like the rest, so validators and formControlName work unchanged."
+    [code]="reactiveExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 360px">
+      <rlb-tree-select [nodes]="catalogue" [formControl]="reactive" />
+      <span class="text-body-secondary small">Value: <code>{{ reactive.value | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-tree-select" [rows]="api" />
+
+  <p class="text-body-secondary">
+    The panel is an <a routerLink="/components/tree">rlb-tree</a>, which can also be used on its own
+    when the tree is the page rather than a field in a form.
+  </p>
+</docs-page>

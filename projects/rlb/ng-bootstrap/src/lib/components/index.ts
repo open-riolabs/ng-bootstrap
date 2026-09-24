@@ -84,6 +84,9 @@ import { TOASTS } from './toast';
 import { PopoverDirective } from './tooltips/popover.directive';
 import { TooltipDirective } from './tooltips/tooltip.directive';
 import { RlbFabInputComponent } from './buttons/fab-group/fab-group.component';
+import { AvatarGroupComponent } from './avatar/avatar-group.component';
+import { SplitButtonComponent } from './buttons/split-button.component';
+import { TreeComponent } from './tree/tree.component';
 
 export * from './accordions/accordion-body.component';
 export * from './accordions/accordion-header.component';
@@ -91,6 +94,7 @@ export * from './accordions/accordion-item.component';
 export * from './accordions/accordion.component';
 export * from './alerts/alert.component';
 export * from './avatar/avatar.component';
+export * from './avatar/avatar-group.component';
 export * from './badges/badge.component';
 export * from './badges/badge.directive';
 export * from './breadcrumb/breadcrumb.component';
@@ -98,6 +102,7 @@ export * from './buttons/boutton-group.component';
 export * from './buttons/boutton-toolbar.component';
 export * from './buttons/buttons-close.component';
 export * from './buttons/buttons.component';
+export * from './buttons/split-button.component';
 export * from './buttons/fab/fab.component';
 export * from './buttons/fab-group/fab-group.component';
 export * from './buttons/toggle.directive';
@@ -173,6 +178,8 @@ export * from './theme/theme-toggle.component';
 export * from './toast';
 export * from './tooltips/popover.directive';
 export * from './tooltips/tooltip.directive';
+export * from './tree/tree.component';
+export * from './tree/tree-node';
 
 export const COMPONENTS = [
   AlertComponent,
@@ -241,6 +248,7 @@ export const COMPONENTS = [
   ListItemComponent,
   ListItemImageComponent,
   AvatarComponent,
+  AvatarGroupComponent,
   ChatContainerComponent,
   ChatItemComponent,
   RlbPlaceholderComponent,
@@ -257,6 +265,8 @@ export const COMPONENTS = [
   PopconfirmPanelComponent,
   StepperComponent,
   StepComponent,
+  SplitButtonComponent,
+  TreeComponent,
   ...[MODALS],
   ...[TOASTS],
   ...[CALENDAR_COMPONENTS],

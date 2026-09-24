@@ -27,6 +27,7 @@ import { FabsComponent } from './fab/fab.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { ScaleComponent } from './scale/scale.component';
+import { TreeDocComponent } from './tree/tree.component';
 import { TablesComponent } from "./tables/tables.component";
 import { ThemeComponent } from './theme/theme.component';
 import { WizardsComponent } from './wizards/wizard.component';
@@ -67,7 +68,8 @@ const routes: Routes = [
   { path: 'feedback', component: FeedbackComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'scale', component: ScaleComponent },
-  { path: 'theme', component: ThemeComponent }
+  { path: 'theme', component: ThemeComponent },
+  { path: 'tree', component: TreeDocComponent }
 ];
 
 @NgModule({

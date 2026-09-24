@@ -27,6 +27,7 @@ export class HomeComponent {
       title: 'Actions',
       items: [
         { name: 'Button', icon: 'bi-hand-index', desc: 'Clickable button directive with colors, sizes and outline styles.', link: '/components/buttons' },
+        { name: 'Split button', icon: 'bi-segmented-nav', desc: 'The action people take, with the ones they sometimes take behind it.', link: '/components/buttons' },
         { name: 'Badge', icon: 'bi-person-badge', desc: 'Small count and labelling indicators.', link: '/components/badges' },
         { name: 'Dropdowns', icon: 'bi-menu-button-fill', desc: 'Toggleable contextual menus.', link: '/components/dropdowns' },
         { name: 'Fab', icon: 'bi-plus-circle', desc: 'Round icon button for the one action a screen is about.', link: '/components/fab' },
@@ -73,12 +74,14 @@ export class HomeComponent {
       items: [
         { name: 'Accordions', icon: 'bi-chevron-bar-expand', desc: 'Vertically stacked, expandable panels.', link: '/components/accordions' },
         { name: 'Collapses', icon: 'bi-arrows-collapse', desc: 'Toggle the visibility of content.', link: '/components/collapses' },
+        { name: 'Tree', icon: 'bi-diagram-3', desc: 'Nested data with expansion, selection and search — categories, permissions, an org chart.', link: '/components/tree' },
       ],
     },
     {
       title: 'Media & content',
       items: [
         { name: 'Avatar', icon: 'bi-person-bounding-box', desc: 'User avatars with sizes and shapes.', link: '/components/avatars' },
+        { name: 'Avatar group', icon: 'bi-people', desc: 'Who is on this: a pile of avatars, overlapping, with the rest counted.', link: '/components/avatars' },
         { name: 'Carousel', icon: 'bi-images', desc: 'Slideshow for cycling through content.', link: '/components/carousels' },
         { name: 'Stepper', icon: 'bi-ui-checks', desc: 'A form split into steps, with validation per step.', link: '/components/wizards' },
         { name: 'Chat', icon: 'bi-chat-dots', desc: 'Conversation bubbles with replies and reactions.', link: '/components/chats' },

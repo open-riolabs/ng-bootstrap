@@ -21,6 +21,15 @@ export * from './help-text.directive';
 export * from './input-group.component';
 export * from './input-validation.component';
 export * from './input.component';
+export * from './number.component';
+export * from './otp.component';
+export * from './rating.component';
+export * from './segmented-host';
+export * from './segmented-option.component';
+export * from './segmented.component';
+export * from './tag-input.component';
+export * from './time-picker.component';
+export * from './tree-select.component';
 export * from './select-chips.component';
 export * from './options.component';
 export * from './radio.component';
@@ -46,6 +55,14 @@ import { HelpText } from './help-text.directive';
 import { InputGroupComponent } from './input-group.component';
 import { InputValidationComponent } from './input-validation.component';
 import { InputComponent } from './input.component';
+import { NumberComponent } from './number.component';
+import { OtpComponent } from './otp.component';
+import { RatingComponent } from './rating.component';
+import { SegmentedOptionComponent } from './segmented-option.component';
+import { SegmentedComponent } from './segmented.component';
+import { TagInputComponent } from './tag-input.component';
+import { TimePickerComponent } from './time-picker.component';
+import { TreeSelectComponent } from './tree-select.component';
 import { SelectChipsComponent } from './select-chips.component';
 import { OptionComponent } from './options.component';
 import { RadioComponent } from './radio.component';
@@ -61,6 +78,14 @@ export const INPUTS = [
   DatepickerComponent,
   DateRangeComponent,
   InputComponent,
+  NumberComponent,
+  OtpComponent,
+  RatingComponent,
+  SegmentedComponent,
+  SegmentedOptionComponent,
+  TagInputComponent,
+  TimePickerComponent,
+  TreeSelectComponent,
   SwitchComponent,
   TextAreaComponent,
   ColorComponent,

@@ -1,6 +1,6 @@
 ---
 name: rlb-inputs
-description: Expert guidance for @open-rlb/ng-bootstrap form input components (ControlValueAccessor-based: text, select, chips, autocomplete, file, colour, range, and the timezone-aware rlb-datepicker and rlb-date-range). Use when building forms or using input components.
+description: Expert guidance for @open-rlb/ng-bootstrap form input components (ControlValueAccessor-based: text, select, chips, autocomplete, file, colour, range, formatted numbers and money, rating, one-time code, segmented, tag input, tree select, and the timezone-aware rlb-datepicker, rlb-date-range and rlb-time-picker). Use when building forms or using input components.
 ---
 
 # RLB ng-Bootstrap Form Inputs Skill
@@ -333,6 +333,205 @@ interface AutocompleteItem {
 
 ---
 
+## rlb-number — Formatted Numbers and Money
+
+Binds a real `number`, shows a formatted one. While the field has focus it holds the plain value
+instead: grouping marks inserted under the caret move it and make typing an amount a fight.
+
+```html
+<rlb-number formControlName="quantity" />
+
+<!-- The locale decides the symbol, its side and how many decimals the currency keeps. -->
+<rlb-number formControlName="price" currency="EUR" locale="it-IT" />
+
+<!-- Units a currency code cannot express. -->
+<rlb-number formControlName="weight" suffix="kg" [decimals]="1" />
+<rlb-number formControlName="code" prefix="#" align="left" />
+
+<!-- Bounds are applied on blur, never mid-keystroke. -->
+<rlb-number formControlName="people" [min]="1" [max]="10" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `locale` | `string` | `'en-GB'` | Decides the grouping separator and the decimal mark. Italian groups from five digits up, so `1234,5` is correct there. |
+| `currency` | `string` | — | ISO code. With one the value is written as money in `locale`. |
+| `decimals` | `number` | — | Left out, a currency uses its own and anything else allows 0–3. |
+| `min` / `max` | `number` | — | Applied when the field is left. Clamping a half-typed number is how `1` becomes `10` under your hands. |
+| `prefix` / `suffix` | `string` | — | Text pinned to either side of the box. |
+| `align` | `'left' \| 'right'` | `'right'` | Digits under digits down a column of fields. |
+
+Value: `number | null`. An empty box is `null`, never `0`.
+
+---
+
+## rlb-rating — Stars With a Keyboard
+
+```html
+<rlb-rating formControlName="score" />
+<rlb-rating [max]="10" color="danger" show-value formControlName="score" />
+<rlb-rating readonly [ngModel]="4.0" ariaLabel="Average score" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `max` | `number` | `5` | How many stars. |
+| `readonly` | `boolean` | `false` | A score being reported, not a control refusing to work: it leaves the tab order and reads as an image, not a disabled slider. |
+| `color` | `string` | `'warning'` | Bootstrap colour for the filled stars. |
+| `show-value` | `boolean` | `false` | Writes «3 / 5» beside them. |
+| `clearable` | `boolean` | `true` | Clicking the star already chosen sets the score to 0. |
+| `ariaLabel` | `string` | `'Rating'` | Stars carry no text; without this it announces as an unnamed slider. |
+
+Arrows move the score, Home and End jump to either end. Hovering previews; the preview is dropped
+as soon as the keyboard takes over, so the stars never disagree with `aria-valuenow`.
+
+---
+
+## rlb-otp — One-Time Code
+
+One box per character. Pasting the whole code into any box fills the rest, and Backspace in an
+empty box steps back into the one before — the two things the hand-written version always misses.
+
+```html
+<rlb-otp formControlName="code" (completed)="verify($event)" />
+<rlb-otp [length]="4" mask formControlName="pin" />
+<rlb-otp alphanumeric [length]="8" formControlName="voucher" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `length` | `number` | `6` | Boxes, and the length of a complete code. |
+| `alphanumeric` | `boolean` | `false` | Letters too, and no numeric keypad hint. |
+| `mask` | `boolean` | `false` | Password boxes, for a PIN. |
+| `ariaLabel` / `slotLabel` | `string` | `'One-time code'` / `'Digit'` | The group and each box («Digit 3»). |
+| `completed` | `EventEmitter<string>` | — | Fires when the last box is filled. |
+
+Value: the whole code as one `string`, not one value per box.
+
+---
+
+## rlb-segmented — One of a Few
+
+A real radio group that looks like a button group: one tab stop, arrows to move, `aria-checked` on
+each option. A `btn-group` with `[class.active]` bindings — the usual hand-written version — puts
+every option in the tab order and says nothing about which one is taken.
+
+```html
+<rlb-segmented formControlName="period" label="Period">
+  <rlb-segmented-option value="day" label="Day" />
+  <rlb-segmented-option value="week" label="Week" />
+  <rlb-segmented-option value="month" label="Month" />
+</rlb-segmented>
+
+<rlb-segmented formControlName="view" label="Layout" color="secondary" block size="lg">
+  <rlb-segmented-option value="list" label="List" icon="bi bi-list-ul" />
+  <rlb-segmented-option value="grid" label="Grid" icon="bi bi-grid-3x3-gap" />
+  <rlb-segmented-option value="map" label="Map" icon="bi bi-geo-alt" disabled />
+</rlb-segmented>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `label` | `string` | — | Names the group. Without it the question the options answer is lost. |
+| `color` | `'primary' \| 'secondary' \| 'dark'` | `'primary'` | Filled for the taken option, outlined for the rest. |
+| `size` | `Size` | — | `sm` / `md` / `lg`. |
+| `block` | `boolean` | `false` | Full width, split evenly. |
+
+`rlb-segmented-option`: `value` (any, compared by identity), `label`, `icon`, `disabled`. A disabled
+option is skipped by the arrow keys as well as unclickable. The options render nothing themselves —
+the group draws the buttons, because only the group can give them one tab stop.
+
+---
+
+## rlb-tag-input — Free-Text Chips
+
+The other half of `rlb-select-chips`: that one can only offer the options it was given, this one
+accepts anything the user invents.
+
+```html
+<rlb-tag-input formControlName="skills" placeholder="Add a skill…" />
+
+<rlb-tag-input
+  formControlName="labels"
+  [suggestions]="known"
+  [separators]="[',', ' ']"
+  [max-tags]="5"
+  (rejected)="say($event)"
+/>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `suggestions` | `string[]` | `[]` | A datalist — a hint, not a constraint. |
+| `separators` | `string[]` | `[',']` | Keys that end a tag, besides Enter. |
+| `max-tags` | `number` | — | Past it, adding is refused. |
+| `allow-duplicates` | `boolean` | `false` | Off, a repeat is refused rather than silently dropped. |
+| `case-sensitive` | `boolean` | `false` | Off, «Angular» and «angular » are the same tag. |
+| `rejected` | `EventEmitter<{ value, reason: 'duplicate' \| 'full' }>` | — | Nothing is shown by default: the wording belongs to the form. |
+
+Backspace in an empty box takes back the last tag. Leaving the field commits what is half-typed
+rather than dropping it — the usual way this control loses data. Value: `string[]`.
+
+---
+
+## rlb-time-picker — The Hour
+
+The other half of `rlb-datepicker`, on the same timezone-aware value.
+
+```html
+<rlb-time-picker formControlName="start" timezone="Europe/Rome" [minute-step]="15" />
+<rlb-time-picker formControlName="start" format="hh:mm AA" locale="en" timezone="America/New_York" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `format` | `string` | `'HH:mm'` | date-tz pattern. Also how a typed value is read back. |
+| `locale` | `string` | `'en'` | For anything in the format that is a word. |
+| `timezone` | `string` | `RLB_DEFAULTS.date.timezone` | Which zone the hour is read and written in. |
+| `minute-step` | `number` | `5` | Minutes between the choices in the second column. |
+| `clearable` | `boolean` | `true` | A button that empties the field. |
+
+Value: `IDateTz | undefined` — the day it already had, with the chosen hour and minute. A time with
+no date is almost never what a form means.
+
+**The trap this component exists to avoid:** the time is built from **local midnight plus minutes**,
+never with `set(9, 'hour')`. date-tz's mutators work on the raw UTC timestamp, so `set` lands on
+09:00 UTC — 11:00 in Rome in summer, and the wrong day either side of midnight.
+
+---
+
+## rlb-tree-select — A Select Whose Options Are a Tree
+
+`rlb-select` flattens the shape, and a hand-indented `<option>` list only pretends to have one: the
+indentation is decoration, the keyboard and the screen reader still see a flat list.
+
+```html
+<rlb-tree-select [nodes]="categories" formControlName="category" placeholder="Category" />
+
+<!-- Several at once: tick boxes in the panel, chips in the box, value becomes a string[]. -->
+<rlb-tree-select [nodes]="categories" multiple formControlName="categories" />
+
+<!-- Branches are headings, not answers: clicking one only opens it. -->
+<rlb-tree-select [nodes]="categories" [branches-selectable]="false" formControlName="leaf" />
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `nodes` | `RlbTreeNode[]` | `[]` | Same shape as `rlb-tree`. |
+| `multiple` | `boolean` | `false` | Tick boxes, chips, and a `string[]` value. |
+| `branches-selectable` | `boolean` | `false` | Whether a branch is a possible answer. |
+| `searchable` | `boolean` | `true` | A search box that opens the branches leading to a hit. |
+| `clearable` | `boolean` | `true` | A button that empties the field. |
+
+Value: **ids**, not nodes — `string` on its own, `string[]` with `multiple`. A form that round-trips
+through JSON should not carry whole subtrees with it. An id with no node behind it reads as nothing
+chosen rather than being shown as itself.
+
+The panel opens on the branches holding what is already chosen. See `rlb-tree` in the
+**rlb-components** skill for the node shape.
+
+---
+
 ## rlb-input-group — Input with Addons
 
 ```html
@@ -435,3 +634,5 @@ form = this.fb.group({
 3. For a day the user picks, reach for `rlb-datepicker` rather than `rlb-input type="date"`; set `timezone` explicitly on either, or set it once with `provideRlbDefaults({ date: { timezone } })`.
 4. Use `date-type="date-tz"` when the model uses `@open-rlb/date-tz` DateTz objects.
 5. Wrap inputs in a `<div class="mb-3">` with a `<label class="form-label">` for correct Bootstrap spacing.
+6. For an amount, use `rlb-number` rather than `rlb-input type="number"`: it binds a real number while showing a formatted one, and leaves the grouping to the locale.
+7. For one of three or four choices, `rlb-segmented` is a radio group — a `btn-group` with `[class.active]` is not, however much it looks like one.

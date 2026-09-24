@@ -1,0 +1,111 @@
+<docs-page
+  title="Number, rating & OTP"
+  lead="Three values that are not free text: an amount, a score, a code. Each was being rebuilt in every project out of a plain input and a handful of regexes.">
+
+  <docs-example
+    heading="Number"
+    description="A text box that shows a formatted number and binds a real one. While the field has focus it holds the plain value instead, because grouping marks inserted under the caret move it and make typing an amount a fight."
+    [code]="numberExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 320px">
+      <rlb-number [ngModel]="amount()" (ngModelChange)="amount.set($event)" />
+      <span class="text-body-secondary small">Value: <code>{{ amount() | json }}</code> — a number, not a string.</span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Money"
+    description="Give it a currency code and the locale does the rest: which symbol, which side of the number it goes on, and how many decimals that currency keeps. The same value written three ways."
+    [code]="currencyExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 320px">
+      <rlb-number currency="EUR" locale="it-IT" [ngModel]="price()" (ngModelChange)="price.set($event)" />
+      <rlb-number currency="EUR" locale="en-GB" [ngModel]="price()" (ngModelChange)="price.set($event)" />
+      <rlb-number currency="USD" locale="en-US" [ngModel]="price()" (ngModelChange)="price.set($event)" />
+      <span class="text-body-secondary small">Value: <code>{{ price() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Units and alignment"
+    description="prefix and suffix are for the units a currency code cannot express. Numbers align right by default so that digits sit under digits down a column of fields; align=&quot;left&quot; is there for the ones that are really identifiers."
+    [code]="affixExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 320px">
+      <rlb-number suffix="kg" [decimals]="1" [ngModel]="weight()" (ngModelChange)="weight.set($event)" />
+      <rlb-number prefix="#" align="left" [ngModel]="quantity()" (ngModelChange)="quantity.set($event)" />
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Bounds"
+    description="min and max are applied when the field is left, never while it is being typed in: clamping mid-keystroke is how typing 10 into a field with a minimum of 5 turns into 5 under your hands. Type 99 here and tab away."
+    [code]="boundsExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 320px">
+      <rlb-number [min]="1" [max]="10" [ngModel]="quantity()" (ngModelChange)="quantity.set($event)" />
+      <span class="text-body-secondary small">Value: <code>{{ quantity() | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Reactive forms"
+    description="A ControlValueAccessor like the rest, so nothing about the forms API changes."
+    [code]="reactiveNumberExample">
+    <div class="d-flex flex-column gap-2" style="max-width: 320px">
+      <rlb-number currency="EUR" locale="it-IT" [formControl]="reactiveAmount" />
+      <span class="text-body-secondary small">Value: <code>{{ reactiveAmount.value | json }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-number" [rows]="numberApi" />
+
+  <docs-example
+    heading="Rating"
+    description="Stars, and a real control under them: arrows move the score, Home and End jump to either end, and the whole thing announces as a slider with a value rather than as a row of icons. Clicking the star already chosen clears it."
+    [code]="ratingExample">
+    <div class="d-flex flex-column gap-2">
+      <rlb-rating [ngModel]="score()" (ngModelChange)="score.set($event)" />
+      <span class="text-body-secondary small">Score: <code>{{ score() }}</code></span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Scale, colour, read-only"
+    description="A read-only rating is not a disabled one: it is a score being reported rather than asked for, so it drops out of the tab order instead of sitting in it greyed out."
+    [code]="ratingOptionsExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-rating [max]="10" color="danger" show-value [ngModel]="score()" (ngModelChange)="score.set($event)" />
+      <div class="d-flex align-items-center gap-2">
+        <rlb-rating readonly [ngModel]="published()" />
+        <span class="text-body-secondary small">read-only, 214 reviews</span>
+      </div>
+      <rlb-rating [clearable]="false" [ngModel]="score()" (ngModelChange)="score.set($event)" />
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-rating" [rows]="ratingApi" />
+
+  <docs-example
+    heading="One-time code"
+    description="One box per character, with the two things that are always missing from the hand-written version: pasting the whole code into any box fills the rest, and Backspace in an empty box steps back into the one before instead of doing nothing. (completed) fires when the last box is filled."
+    [code]="otpExample">
+    <div class="d-flex flex-column gap-2">
+      <rlb-otp [ngModel]="code()" (ngModelChange)="code.set($event)" (completed)="onCompleted($event)" />
+      <span class="text-body-secondary small">
+        Value: <code>{{ code() || '—' }}</code>
+        @if (lastCode()) {
+          · completed with <code>{{ lastCode() }}</code>
+        }
+      </span>
+    </div>
+  </docs-example>
+
+  <docs-example
+    heading="Length, masking, letters"
+    description="mask turns the boxes into password fields, for a PIN rather than a code read off a screen. alphanumeric accepts letters and stops asking phones for the numeric keypad."
+    [code]="otpOptionsExample">
+    <div class="d-flex flex-column gap-3">
+      <rlb-otp [length]="4" mask [ngModel]="''" />
+      <rlb-otp alphanumeric [length]="8" [ngModel]="''" />
+    </div>
+  </docs-example>
+
+  <docs-api selector="rlb-otp" [rows]="otpApi" />
+</docs-page>
