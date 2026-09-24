@@ -16,6 +16,26 @@ type Color = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
 
 All components that accept a `color` input use this type.
 
+## Dark Mode
+
+Bootstrap 5.3's dark mode rides on the `data-bs-theme` attribute, and the library drives it for
+you. Register `provideRlbTheme()` and drop in `<rlb-theme-toggle />`, or call `ThemeService`
+from your own settings screen.
+
+```typescript
+providers: [provideRlbBootstrap(), provideRlbTheme()]
+```
+
+Design against the Bootstrap CSS variables rather than fixed colours, so both themes work from
+one stylesheet: `var(--bs-body-bg)`, `var(--bs-body-color)`, `var(--bs-border-color)`,
+`var(--bs-secondary-bg)`. Utility classes do this already — prefer `text-body-secondary` to a
+hard-coded grey, and `bg-body-tertiary` to `bg-light`, which does not flip.
+
+`defaultTheme: 'auto'` follows the operating system; `resolved()` on `ThemeService` tells you
+which one is actually on screen.
+
+---
+
 ## Layout & Grid
 
 Use Bootstrap's 12-column grid system:

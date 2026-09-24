@@ -1,6 +1,6 @@
 ---
 name: rlb-inputs
-description: Expert guidance for @open-rlb/ng-bootstrap form input components (ControlValueAccessor-based, integrate with reactive and template-driven forms). Use when building forms or using input components.
+description: Expert guidance for @open-rlb/ng-bootstrap form input components (ControlValueAccessor-based: text, select, chips, autocomplete, file, colour, range, and the timezone-aware rlb-datepicker and rlb-date-range). Use when building forms or using input components.
 ---
 
 # RLB ng-Bootstrap Form Inputs Skill
@@ -156,6 +156,82 @@ chosen values are stored as a `string[]`.
 
 **Returns:** `string[]` (selected values, in pick order)
 **Note:** The dropdown only lists options not already chosen; it disappears once all are selected.
+
+---
+
+## rlb-datepicker — One Day
+
+Picks a day. The value is an `IDateTz` at **local midnight of the chosen day, in this control's
+timezone** — not a native `<input type="date">`, which ignores the zone and looks different in every
+browser.
+
+```html
+<rlb-datepicker
+  formControlName="birthday"
+  timezone="Europe/Rome"
+  format="DD/MM/YYYY"
+  locale="it"
+  [first-day-of-week]="1"
+  [min]="today"
+  [max]="endOfYear"
+  enable-validation
+/>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `timezone` | `string` | from `provideRlbDefaults`, else `'UTC'` | The zone the day belongs to. |
+| `format` | `string` | `'DD/MM/YYYY'` | Writes the box **and** reads back what is typed into it. |
+| `locale` | `string` | `'en'` | Month and weekday names. |
+| `first-day-of-week` | `number` | `1` | `0` is Sunday. |
+| `min` / `max` | `IDateTz` | — | Days outside are greyed out; a typed one is refused. |
+| `clearable` | `boolean` | `true` | Button that empties the value. |
+| `show-today` | `boolean` | `true` | Shortcut at the foot of the panel. |
+| `readonly` | `boolean` | `false` | Stops typing; the calendar button still opens. |
+| `openLabel` / `clearLabel` / `todayLabel` | `string` | English | Accessible names. |
+
+The box is editable. What is typed is parsed with `format`; if it does not parse, or falls outside
+`min`/`max`, the box is **put back the way it was** — a box saying one thing while the form holds
+another is worse than refusing.
+
+⚠️ `DateTz.parse` only understands an uppercase `YYYY`; given `yyyy` it silently reads the year as
+1970. The component normalises the year token before parsing, so either case works here — but
+remember it when calling `DateTz.parse` yourself.
+
+## rlb-date-range — From / To
+
+```html
+<rlb-date-range
+  formControlName="period"
+  timezone="Europe/Rome"
+  separator=" → "
+/>
+```
+
+Value is `RlbDateRange` = `{ start?: IDateTz; end?: IDateTz }`. The first click sets the start and
+clears any end; the second sets the end and closes. A second click **before** the start is not an
+error — it becomes the new start.
+
+Same inputs as `rlb-datepicker` plus `separator` (default `' – '`). Unlike the single picker the box
+is **not typeable**: a range on one line has no format that can be read back without guessing where
+the middle is.
+
+⚠️ Both are built on CDK Overlay — the app must load `@angular/cdk/overlay-prebuilt.css`, or the
+panel lands in the page corner. `ng add` registers it.
+
+### Working with the value
+
+```typescript
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
+
+// Never `new Date(...)`. Build bounds with DateTz:
+readonly today = DateTz.now('Europe/Rome');
+readonly limit = DateTz.parse('2027-12-31', 'YYYY-MM-DD', 'Europe/Rome');
+
+format(d: IDateTz | undefined) {
+  return d ? new DateTz(d).toString!('WL DD LM YYYY', 'it') : '';
+}
+```
 
 ---
 
@@ -356,6 +432,6 @@ form = this.fb.group({
 
 1. Always set `[enable-validation]="true"` on inputs inside forms with validation.
 2. Use `rlb-autocomplete` for any remote search — pass an `Observable`-returning function.
-3. For date inputs, always specify `timezone` explicitly; default is `'UTC'`.
+3. For a day the user picks, reach for `rlb-datepicker` rather than `rlb-input type="date"`; set `timezone` explicitly on either, or set it once with `provideRlbDefaults({ date: { timezone } })`.
 4. Use `date-type="date-tz"` when the model uses `@open-rlb/date-tz` DateTz objects.
 5. Wrap inputs in a `<div class="mb-3">` with a `<label class="form-label">` for correct Bootstrap spacing.

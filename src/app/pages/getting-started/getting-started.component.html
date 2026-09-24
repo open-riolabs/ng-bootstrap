@@ -65,9 +65,11 @@
 
   <h2 class="h4 mt-5 mb-2">Theming &amp; dark mode</h2>
   <p class="text-body-secondary">
-    Components follow Bootstrap 5.3 theming. Switch between light and dark by setting the
-    <code>data-bs-theme</code> attribute on <code>&lt;html&gt;</code> (or any subtree) — no extra
-    configuration needed.
+    Bootstrap 5.3 ships a full dark mode behind the <code>data-bs-theme</code> attribute, and
+    <code>provideRlbTheme()</code> drives it from signals: it follows the operating system when
+    asked to, remembers the choice, and never touches the DOM on the server. It is deliberately
+    <strong>not</strong> part of <code>provideRlbBootstrap()</code> — an app that never asked for a
+    theme should not suddenly find <code>data-bs-theme</code> written on its <code>&lt;html&gt;</code>.
   </p>
   <div class="gs-code position-relative border rounded-3 mb-3">
     <button rlb-button size="sm" outline color="secondary" class="gs-copy"
@@ -77,11 +79,61 @@
     <pre class="m-0 p-3"><code [highlight]="themeCode" language="html"></code></pre>
   </div>
 
+  <p class="text-body-secondary mb-2">Then put a toggle on the page, or drive it from code:</p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'toggle' ? 'Copied' : 'Copy'" (click)="copy(themeToggleCode, 'toggle')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'toggle'" [class.bi-check2]="copiedKey() === 'toggle'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="themeToggleCode" language="typescript"></code></pre>
+  </div>
+  <p class="text-body-secondary">
+    The toggle at the top of this page is the same component, and it drives this whole site.
+    <a routerLink="/components/theme">See the theme page</a>.
+  </p>
+
+  <h2 class="h4 mt-5 mb-2">Icons</h2>
+  <p class="text-body-secondary">
+    Every icon the library draws is named by what it means rather than by which glyph it is, and
+    resolved through <code>RLB_ICONS</code>. The default set is bootstrap-icons; point some or all
+    of them somewhere else and the whole library follows.
+  </p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'icons' ? 'Copied' : 'Copy'" (click)="copy(iconsCode, 'icons')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'icons'" [class.bi-check2]="copiedKey() === 'icons'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="iconsCode" language="typescript"></code></pre>
+  </div>
+
+  <h2 class="h4 mt-5 mb-2">Defaults</h2>
+  <p class="text-body-secondary">
+    Labels, page sizes and the date zone can be set once instead of on every element. An element
+    that says something still wins; anything left out keeps the built-in English.
+  </p>
+  <div class="gs-code position-relative border rounded-3 mb-3">
+    <button rlb-button size="sm" outline color="secondary" class="gs-copy"
+      [attr.aria-label]="copiedKey() === 'defaults' ? 'Copied' : 'Copy'" (click)="copy(defaultsCode, 'defaults')">
+      <i class="bi" [class.bi-clipboard]="copiedKey() !== 'defaults'" [class.bi-check2]="copiedKey() === 'defaults'"></i>
+    </button>
+    <pre class="m-0 p-3"><code [highlight]="defaultsCode" language="typescript"></code></pre>
+  </div>
+
+  <h2 class="h4 mt-5 mb-2">Translations</h2>
+  <p class="text-body-secondary">
+    The library depends on no translation package. Text you can pass in is an input with an English
+    default; the one component that takes <em>keys</em> rather than text
+    (<a routerLink="/inputs/form-fields"><code>rlb-form-fields</code></a>, whose field definitions
+    are data) resolves them through <code>RLB_TRANSLATION_SERVICE</code>, returning the key unchanged
+    when nothing is registered. Bridging <code>&#64;ngx-translate/core</code> to it is one provider.
+  </p>
+
   <h2 class="h4 mt-5 mb-3">Next steps</h2>
   <div class="d-flex gap-2 flex-wrap">
     <a rlb-button color="primary" routerLink="/components">Browse components</a>
     <a rlb-button outline color="primary" routerLink="/inputs/input">Form inputs</a>
     <a rlb-button outline color="primary" routerLink="/components/calendar">Calendar</a>
+    <a rlb-button outline color="primary" routerLink="/inputs/datepicker">Date picker</a>
   </div>
 
 </docs-page>

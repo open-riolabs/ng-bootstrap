@@ -1,6 +1,6 @@
 ---
 name: rlb-components
-description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, cards, dropdowns, toasts, loaders, badges, progress, etc.), built on Angular signals, OnPush, and Bootstrap 5. Use when using or composing these UI components.
+description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, cards, dropdowns, toasts, loaders, badges, progress, stepper/wizard, empty states, popconfirm, theme toggle), and its configuration tokens for icons, dark mode, global defaults and translations. Built on Angular signals, OnPush and Bootstrap 5. Use when using or composing these UI components, or when configuring the library.
 ---
 
 # RLB ng-Bootstrap Components Skill
@@ -650,6 +650,223 @@ showSuccess() {
   Panel content
 </rlb-offcanvas>
 ```
+
+---
+
+## Stepper (rlb-stepper + rlb-step)
+
+A form split into steps. A step's content stays in the DOM while another step is showing, merely
+hidden — a wizard is usually one form in three parts, and tearing down step 1 to show step 2 would
+throw away everything typed into it.
+
+```html
+<rlb-stepper
+  linear
+  [(selectedIndex)]="step"
+  (finish)="submit()"
+  #stepper
+>
+  <rlb-step label="Account" [step-control]="form.controls.account">
+    <!-- the fields of step one -->
+  </rlb-step>
+  <rlb-step label="Profile" [step-control]="form.controls.profile" hint="Nearly there">
+    ...
+  </rlb-step>
+  <rlb-step label="Confirm" optional>
+    ...
+  </rlb-step>
+</rlb-stepper>
+
+<button rlb-button outline [disabled]="stepper.isFirst()" (click)="stepper.previous()">Back</button>
+<button rlb-button (click)="stepper.next()">{{ stepper.isLast() ? 'Finish' : 'Next' }}</button>
+```
+
+**rlb-stepper**
+
+| Input / member | Type | Default | Notes |
+|---|---|---|---|
+| `selectedIndex` | `number` | `0` | Two-way. |
+| `linear` | `boolean` | `false` | Refuses to move past a step that is not passable, and to jump ahead over one. |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | |
+| `optionalLabel` | `string` | `'Optional'` | Shown under an optional step that has no `hint`. |
+| `(finish)` | `void` | | The user asked to finish from the last step. |
+| `next()` | `boolean` | | Moves on, or returns `false` **and marks the step's control touched** — refusing silently leaves the user pressing a button that does nothing. |
+| `previous()` / `reset()` / `select(i)` | | | `select` refuses a step the linear rule has not opened yet. |
+| `isFirst()` / `isLast()` / `currentPassable()` | `Signal<boolean>` | | For wiring the buttons. |
+
+**rlb-step**
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `label` | `string` | `''` | Name in the strip. |
+| `hint` | `string` | — | A line under the label. |
+| `step-control` | `AbstractControl` | — | The form this step owns. A linear stepper will not pass it while invalid. |
+| `optional` | `boolean` | `false` | May be skipped even when linear. |
+| `completed` | `boolean` | `false` | Marks it done when it has no control to prove it. |
+| `state` | `'todo' \| 'done' \| 'error'` | — | Forces the circle; otherwise worked out from `step-control`. |
+
+The circle goes grey → blue (current) → green (passed) → red (invalid and touched).
+
+---
+
+## Empty state (rlb-empty-state)
+
+There is nothing here, said properly. `rlb-dt-noitems` only works inside the datatable; this is the
+same idea everywhere else.
+
+```html
+<rlb-empty-state title="No users yet">
+  Invite someone and they will show up here.
+  <button actions rlb-button color="primary" size="sm">Invite</button>
+</rlb-empty-state>
+
+<rlb-empty-state variant="search" title="Nothing matches" size="sm">Try a shorter word.</rlb-empty-state>
+<rlb-empty-state variant="error" title="Could not load" size="sm">Try again in a moment.</rlb-empty-state>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `title` | `string` | — | The line in bold. |
+| `variant` | `'empty' \| 'search' \| 'error' \| 'custom'` | `'empty'` | Picks a fitting icon, so the common cases need no `icon`. |
+| `icon` | `string` | — | An icon class, overriding the variant's. |
+| `size` | `'sm' \| 'md'` | `'md'` | |
+
+Default content is the sentence; project buttons with the `actions` attribute.
+
+---
+
+## Popconfirm ([rlb-popconfirm])
+
+«Are you sure?» anchored to the button that asked it. Use this rather than
+`ModalService.openConfirmModal` for row-level destructive actions — a full-screen modal is the wrong
+size of interruption for «delete this row».
+
+```html
+<button
+  rlb-button
+  color="danger"
+  size="sm"
+  rlb-popconfirm="Delete this row?"
+  popconfirm-title="This cannot be undone"
+  confirm-label="Delete"
+  cancel-label="Keep"
+  placement="top"
+  (confirmed)="remove(row)"
+>
+  Delete
+</button>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `rlb-popconfirm` | `string` | `''` | What is being asked. Also the panel's accessible name when there is no title. |
+| `popconfirm-title` | `string` | — | Bold line above the question. |
+| `confirm-label` / `cancel-label` | `string` | `'Yes'` / `'No'` | |
+| `confirm-color` | `Color` | `'danger'` | |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` | Flips when there is no room. |
+| `disabled` | `boolean` | `false` | |
+| `(confirmed)` / `(cancelled)` | `void` | | Nothing happens until `confirmed`. Escape, backdrop and «No» all emit `cancelled`. |
+
+Focus starts on the **cancel** button: the point of a popconfirm is to be a speed bump, and a
+confirm button with focus on it is not one.
+
+⚠️ Built on CDK Overlay — the app must load `@angular/cdk/overlay-prebuilt.css`, or the panel lands
+in the page corner. `ng add` registers it.
+
+---
+
+## Theme toggle (rlb-theme-toggle)
+
+```html
+<rlb-theme-toggle />
+<rlb-theme-toggle [modes]="['light', 'dark']" show-label color="primary" size="sm" />
+```
+
+Walks through the themes in `modes` (`['light','dark','auto']` by default) and shows the icon of the
+current one. State lives in `ThemeService`, so several toggles on one page agree. See
+**Configuration** below.
+
+---
+
+## Configuration tokens
+
+Three injection tokens set library-wide behaviour. All optional; all have working defaults.
+
+### provideRlbIcons — the icon set
+
+Every icon the library draws is named by meaning, not by glyph, and resolved through `RLB_ICONS`.
+Default is bootstrap-icons. Names left out keep their default.
+
+```typescript
+import { provideRlbIcons } from '@open-rlb/ng-bootstrap';
+
+provideRlbIcons({ delete: 'fa-solid fa-trash', refresh: 'fa-solid fa-arrows-rotate' });
+```
+
+Names: `refresh, add, close, search, more, edit, delete, chevronLeft, chevronRight, upload, file,
+reply, read, sortAscending, sortDescending, sortNone, download, columns, warning, empty, check,
+calendar` (the `RlbIconSet` interface).
+
+### provideRlbTheme — dark mode
+
+Drives Bootstrap 5.3's `data-bs-theme` from signals. **Not** part of `provideRlbBootstrap()`: an app
+that never asked for a theme should not find `data-bs-theme` written on its `<html>`.
+
+```typescript
+import { provideRlbTheme, ThemeService } from '@open-rlb/ng-bootstrap';
+
+providers: [provideRlbBootstrap(), provideRlbTheme()]
+
+// options, all optional:
+provideRlbTheme({
+  defaultTheme: 'auto',      // 'light' | 'dark' | 'auto' — auto follows prefers-color-scheme
+  storageKey: 'rlb-theme',   // null turns persistence off
+  target: 'root',            // 'root' (<html>) | 'body'
+  storage: myAccountStorage, // anything with getItem/setItem, e.g. the user's account
+});
+```
+
+`ThemeService`: `theme()` is what was asked for (may be `'auto'`), `resolved()` is what Bootstrap was
+actually told, `isDark()`, `set(theme)`, `toggle()`. `toggle()` from `'auto'` leaves `'auto'` —
+asking for the opposite of the system is a choice, not a preference to keep following.
+
+### provideRlbDefaults — labels, page sizes, timezone
+
+Sets once what would otherwise be said on every element. An element that says something still wins.
+
+```typescript
+provideRlbDefaults({
+  table: {
+    pageSize: 25,
+    pageSizes: [25, 50, 100],
+    actionsLabel: 'Azioni', loadMoreLabel: 'Carica altri',
+    refreshLabel: 'Aggiorna', createLabel: 'Nuovo',
+    sortLabel: 'Ordina', filterLabel: 'Filtra',
+    selectRowLabel: 'Seleziona riga', selectAllLabel: 'Seleziona tutto',
+    columnsLabel: 'Colonne', exportLabel: 'Esporta CSV', clearSelectionLabel: 'Pulisci',
+    selectedCountLabel: n => `${n} selezionate`,
+  },
+  date: { timezone: 'Europe/Rome' },
+});
+```
+
+---
+
+## Translations
+
+The library depends on **no** translation package. Text a caller can pass in is an input with an
+English default; the one component that takes *keys* (`rlb-form-fields`, whose field definitions are
+data) resolves them through `RLB_TRANSLATION_SERVICE`, returning the key unchanged when nothing is
+registered.
+
+```typescript
+import { TranslateService } from '@ngx-translate/core';
+import { RLB_TRANSLATION_SERVICE } from '@open-rlb/ng-bootstrap';
+
+providers: [{ provide: RLB_TRANSLATION_SERVICE, useExisting: TranslateService }];
+```
+
+The `rlbTranslate` pipe is exported for your own templates and goes through the same token.
 
 ---
 
