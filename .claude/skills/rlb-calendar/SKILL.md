@@ -56,6 +56,7 @@ interface CalendarLayout {
   [(view)]="calendarView"
   [(events)]="calendarEvents"
   [(current-date)]="currentDate"
+  timezone="Europe/Rome"
   [intervals]="businessHours"
   [loading]="isLoading"
   [show-toolbar]="true"
@@ -75,6 +76,7 @@ interface CalendarLayout {
 | `view` | `CalendarView` (model) | `'week'` | Active view — two-way bindable |
 | `events` | `CalendarEvent[]` (model) | `[]` | Events array — two-way bindable. The calendar mutates this via built-in CRUD modals. |
 | `current-date` | `IDateTz` (model) | today | Displayed date — two-way bindable |
+| `timezone` | `string` | the browser's zone | The zone every day boundary, column and «now» line is computed in. Set it explicitly whenever the data is not in the viewer's own zone — a week that starts at the wrong midnight puts events in the wrong column. |
 | `intervals` | `CalendarInterval[]` | `[]` | Background time intervals rendered behind events (e.g. business hours). Non-interactive, purely visual. |
 | `loading` | `boolean` | `false` | Show loading progress bar |
 | `show-toolbar` | `boolean` | `true` | Show navigation toolbar with prev/today/next and view switcher |
@@ -206,6 +208,7 @@ import {
       [(view)]="view"
       [(events)]="events"
       [(current-date)]="currentDate"
+      [timezone]="zone"
       [intervals]="intervals"
       [loading]="loading()"
       (date-change)="onDateChange($event)"
@@ -215,15 +218,16 @@ import {
 })
 export class MyCalendarComponent {
   view: CalendarView = 'week';
-  currentDate: IDateTz = new DateTz();
+  readonly zone = 'Europe/Rome';
+  currentDate: IDateTz = DateTz.now(this.zone);
   loading = signal(false);
 
   events: CalendarEvent[] = [
     {
       id: '1',
       title: 'Team Meeting',
-      start: new DateTz('2026-05-14T09:00:00', 'Europe/Rome'),
-      end:   new DateTz('2026-05-14T10:00:00', 'Europe/Rome'),
+      start: DateTz.parse('2026-05-14 09:00', 'YYYY-MM-DD HH:mm', 'Europe/Rome'),
+      end:   DateTz.parse('2026-05-14 10:00', 'YYYY-MM-DD HH:mm', 'Europe/Rome'),
       color: 'primary'
     }
   ];
@@ -255,55 +259,88 @@ export class MyCalendarComponent {
 
 ## Working with DateTz
 
-The calendar uses `@open-rlb/date-tz` for timezone-aware dates:
+⚠️ **Earlier versions of this document listed methods that do not exist.** There is no
+`toISO()`, no `toDate()`, no `format()`, no `startOf()`, no `endOf()` and no `isBefore()`, and
+`new DateTz('2026-05-14T09:00:00', 'Europe/Rome')` does not work — the constructor takes a
+**millisecond timestamp** or another `IDateTz`, never a string. Use `DateTz.parse` for strings.
 
 ```typescript
 import { DateTz, IDateTz } from '@open-rlb/date-tz';
 
-// Create dates
-const now = new DateTz();                                    // current time in UTC
-const rome = new DateTz('2026-05-14T09:00:00', 'Europe/Rome');
-const utc  = new DateTz('2026-05-14T09:00:00Z');
+// Create
+const now: IDateTz  = DateTz.now('Europe/Rome');                       // not new DateTz()
+const rome: IDateTz = DateTz.parse('2026-05-14 09:00', 'YYYY-MM-DD HH:mm', 'Europe/Rome');
+const fromTs: IDateTz = new DateTz(1778835600000, 'Europe/Rome');      // timestamp + zone
+const copy: IDateTz = new DateTz(rome);                                // materialise an IDateTz
 
-// Key methods
-rome.toISO();           // ISO string
-rome.toDate();          // native Date
-rome.format('HH:mm');   // formatted string
-rome.startOf('month');  // start of month
-rome.endOf('week');     // end of week
-rome.add(1, 'day');     // date arithmetic
-rome.isBefore(utc);     // comparison
+// Read (timezone-aware getters)
+rome.hour;  rome.minute;  rome.day;  rome.month /* 0-based! */;  rome.year;  rome.dayOfWeek;
+
+// Format — toString, with a date-tz pattern
+new DateTz(rome).toString!('HH:mm');                 // '09:00'
+new DateTz(rome).toString!('WL DD LM YYYY', 'it');   // 'giovedì 14 maggio 2026'
+
+// Arithmetic and comparison
+const later: IDateTz = new DateTz(rome).add!(90, 'minute');
+new DateTz(a).compare!(b);            // negative / zero / positive — throws across timezones
+new DateTz(a).isComparable!(b);       // check first
 ```
+
+⚠️ `add('day')`, `set(...)` and `stripSecMillis()` operate on the **raw UTC timestamp** and ignore
+the zone, while the getters and `toString` respect it. Never derive a local day boundary with them.
+The calendar's own helpers already do this correctly — `startOfDayTs`, `minutesSinceMidnight`,
+`dayAt`, `isSameDay`, `addDays`, `startOfMonth`, `isToday`, `getToday` and `getBrowserTimezone` in
+`components/calendar/utils/calendar-date-utils.ts`. Read the **date-tz** skill before doing day
+maths by hand.
 
 ---
 
 ## Loading Events on Navigation
 
+`CalendarChangeEvent` gives you the date and the view; work out the range with day maths that
+respects the zone, not with `startOf`/`endOf` (they do not exist).
+
 ```typescript
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
+
+private readonly MS_PER_DAY = 86_400_000;
+
+/** Epoch ms of local midnight of the day containing `d`, in `d`'s own zone. */
+private startOfDayTs(d: IDateTz): number {
+  const offset = new DateTz(d).timezoneOffset;
+  return Math.floor((d.timestamp + offset) / this.MS_PER_DAY) * this.MS_PER_DAY - offset;
+}
+
 onDateChange(event: CalendarChangeEvent) {
   const { date, view } = event;
-  let rangeStart: IDateTz;
-  let rangeEnd: IDateTz;
+  const zone = new DateTz(date).timezone;
+  const dayStart = this.startOfDayTs(date);
 
-  switch (view) {
-    case 'month':
-      rangeStart = date.startOf('month');
-      rangeEnd   = date.endOf('month');
-      break;
-    case 'week':
-      rangeStart = date.startOf('week');
-      rangeEnd   = date.endOf('week');
-      break;
-    case 'day':
-      rangeStart = date.startOf('day');
-      rangeEnd   = date.endOf('day');
-      break;
+  let from: IDateTz;
+  let to: IDateTz;
+
+  if (view === 'day') {
+    from = new DateTz(dayStart, zone);
+    to = new DateTz(dayStart + this.MS_PER_DAY, zone);
+  } else if (view === 'week') {
+    // Monday-first, matching the grid.
+    const back = (new DateTz(date).dayOfWeek + 6) % 7;
+    from = new DateTz(dayStart - back * this.MS_PER_DAY, zone);
+    to = new DateTz(from.timestamp + 7 * this.MS_PER_DAY, zone);
+  } else {
+    const d = new DateTz(date);
+    from = DateTz.parse(`${d.year}-${String(d.month + 1).padStart(2, '0')}-01`, 'YYYY-MM-DD', zone);
+    to = new DateTz(from).add!(1, 'month');
   }
 
-  this.eventService.getRange(rangeStart.toISO(), rangeEnd.toISO())
-    .subscribe(events => this.events = events);
+  this.eventService
+    .getRange(new DateTz(from).toString!('YYYY-MM-DD'), new DateTz(to).toString!('YYYY-MM-DD'))
+    .subscribe(events => (this.events = events));
 }
 ```
+
+If you only need to send timestamps to the backend, `from.timestamp` / `to.timestamp` are simpler
+than formatting them.
 
 ---
 
@@ -370,8 +407,11 @@ function mapEvent(raw: ApiEvent): CalendarEvent {
   return {
     id:    raw.id.toString(),
     title: raw.subject,
-    start: new DateTz(raw.startAt, raw.timezone),
-    end:   new DateTz(raw.endAt, raw.timezone),
+    // raw.startAt is an ISO string from the API — parse it, never pass it to the constructor.
+    start: DateTz.parse(raw.startAt, 'YYYY-MM-DDTHH:mm:ss', raw.timezone),
+    end:   DateTz.parse(raw.endAt, 'YYYY-MM-DDTHH:mm:ss', raw.timezone),
+    // If the API sends epoch milliseconds instead, the constructor is right:
+    // start: new DateTz(raw.startTs, raw.timezone),
     color: colorMap[raw.category] ?? 'secondary',
     data:  raw   // store original payload in the generic data field
   };
@@ -408,7 +448,7 @@ The built-in toolbar shows prev/next navigation, a "Today" button, and a view dr
 this.calendarView = 'week';
 
 // Navigate to specific date
-this.currentDate = new DateTz('2026-06-01', 'Europe/Rome');
+this.currentDate = DateTz.parse('2026-06-01', 'YYYY-MM-DD', 'Europe/Rome');
 ```
 
 To hide the toolbar and build a custom one:
@@ -463,7 +503,11 @@ To hide the toolbar and build a custom one:
 3. Keep `events` as a new array reference when mutating externally (`this.events = [...this.events, newEvent]`) to trigger change detection with OnPush.
 4. `CalendarEvent.id` can be `string | number`; use `crypto.randomUUID()` for new events.
 5. `CalendarEvent.end` is **required** — always provide both `start` and `end`.
-6. Always specify timezone when creating `DateTz` objects; never assume local timezone.
+6. Always specify a timezone — on `[timezone]` and on every `DateTz.parse` / `DateTz.now` /
+   `new DateTz(ts, tz)`. Omitted, `DateTz` falls back to `Etc/UTC`, and an event at 00:30 Rome
+   lands in the previous day's column. Build dates with `DateTz.parse` (strings) or
+   `new DateTz(timestamp, tz)` (numbers) — the constructor does not take a string, and there is no
+   zero-argument form.
 7. Use `color` to encode event categories visually — align with the app's semantic color scheme.
 8. Use `intervals` for static recurring visual blocks (business hours, shifts). They are non-interactive and render behind events.
 9. Express interval times in **seconds from midnight** for maximum precision (multiply hours by 3600).

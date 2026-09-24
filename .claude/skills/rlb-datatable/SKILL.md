@@ -31,6 +31,14 @@ rlb-dt-table
 Import: every datatable component is standalone; `TABLE` (exported) is the array of all of
 them — `imports: [...TABLE]` — or import the single ones (`DataTableComponent`, …).
 
+⚠️ The row-actions menu (⋯) and the column menu are **CDK overlays**, so the app must load
+`@angular/cdk/overlay-prebuilt.css` or they open in the page corner. `ng add` registers it — see the
+**rlb-overlays** and **rlb-schematics** skills. This also means the actions menu is no longer
+clipped by the table's own scroll container, and it works from the keyboard.
+
+For a row-level «are you sure?», put `[rlb-popconfirm]` on the action's button rather than opening a
+modal (**rlb-overlays**).
+
 ---
 
 ## rlb-dt-table Inputs

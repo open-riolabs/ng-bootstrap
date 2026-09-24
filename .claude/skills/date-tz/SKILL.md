@@ -35,7 +35,7 @@ The `Date` object is **banned** for creating or manipulating dates in applicatio
 **Rule:** use `IDateTz` everywhere you declare a type. Use `new DateTz(param)` at the top of any function that receives an `IDateTz` and needs to call methods on it.
 
 ```typescript
-import { DateTz, IDateTz } from 'date-tz';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
 
 // CORRECT – interface in signature, concrete at the start of the body
 function formatAppointment(date: IDateTz, tz: string): string {
@@ -52,8 +52,34 @@ function formatAppointment(date: DateTz, tz: string): string { ... }
 ## Imports
 
 ```typescript
-import { DateTz, IDateTz } from 'date-tz';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
 ```
+
+⚠️ The package is **`@open-rlb/date-tz`**, not `date-tz`. Earlier versions of this document used the
+bare name; nothing resolves under it.
+
+---
+
+## `IDateTz` is narrower than `DateTz`
+
+Every method on `IDateTz` is **optional** — hence the `!` on every call — and two of them accept
+fewer units than the class does:
+
+| | `IDateTz` | `DateTz` (the class) |
+|---|---|---|
+| `add(value, unit)` | `'minute' \| 'hour' \| 'day' \| 'month' \| 'year'` | also `'second'`, `'millisecond'` |
+| `set(value, unit)` | `'year' \| 'month' \| 'day' \| 'hour' \| 'minute'` | also `'second'`, `'millisecond'` |
+
+So `d.add!(500, 'millisecond')` on a variable **typed** `IDateTz` does not compile, even though the
+object behind it is a `DateTz` that supports it. When you need seconds or milliseconds, keep the
+concrete type for that expression:
+
+```typescript
+const d = new DateTz(ts, 'Europe/Rome');   // inferred DateTz, not IDateTz
+const later: IDateTz = d.add(500, 'millisecond');
+```
+
+`setTimezone` is the one method that is **not** optional on the interface — no `!` needed.
 
 ---
 
@@ -208,8 +234,11 @@ d = d.add!(30, 'minute');
 d = d.add!(1, 'day');
 d = d.add!(2, 'month');
 d = d.add!(1, 'year');
-d = d.add!(500, 'millisecond');
-d = d.add!(10, 'second');
+
+// 'second' and 'millisecond' are NOT on the IDateTz signature — keep the concrete type:
+const concrete = new DateTz(ts, 'Europe/Rome');
+d = concrete.add(500, 'millisecond');
+d = concrete.add(10, 'second');
 ```
 
 ---
@@ -226,8 +255,9 @@ d = d.set!(6,    'month');    // 1-based: 1 = January … 12 = December
 d = d.set!(15,   'day');      // 1–31
 d = d.set!(9,    'hour');     // 0–23
 d = d.set!(0,    'minute');   // 0–59
-d = d.set!(0,    'second');   // 0–59
-d = d.set!(0,    'millisecond'); // 0–999
+
+// 'second' and 'millisecond' exist on DateTz but not on the IDateTz signature.
+// To zero them, prefer stripSecMillis!() — it is on the interface.
 ```
 
 > **Note:** `set('month', …)` is **1-based** (pass `6` for June), unlike the `month` getter which is 0-based.
@@ -288,7 +318,7 @@ function sortDates(a: IDateTz, b: IDateTz): number {
 ## Full worked example
 
 ```typescript
-import { DateTz, IDateTz } from 'date-tz';
+import { DateTz, IDateTz } from '@open-rlb/date-tz';
 
 interface Meeting {
   title: string;

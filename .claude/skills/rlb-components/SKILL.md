@@ -1,11 +1,23 @@
 ---
 name: rlb-components
-description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library (buttons, split buttons, cards, dropdowns, toasts, loaders, badges, avatars and avatar groups, trees, stepper/wizard, empty states, popconfirm, theme toggle, stat tiles, timelines, virtual lists, command palette), and its configuration tokens for icons, dark mode, global defaults and translations. Built on Angular signals, OnPush and Bootstrap 5. Use when using or composing these UI components, or when configuring the library.
+description: Expert guidance for the @open-rlb/ng-bootstrap Angular component library — buttons, split buttons, FABs, cards, alerts, badges, avatars and avatar groups, accordion, tabs, carousel, breadcrumb, pagination, navbar, nav, sidebar, collapse, offcanvas, scrollspy, spinners and progress, toasts, stepper/wizard and the theme toggle — plus its configuration tokens for icons, dark mode, global defaults and translations. Built on Angular signals, OnPush and Bootstrap 5. Use when using or composing these UI components, or when configuring the library.
 ---
 
 # RLB ng-Bootstrap Components Skill
 
 You are an expert in the **@open-rlb/ng-bootstrap** Angular component library. All components use Angular signals, `ChangeDetectionStrategy.OnPush`, and Bootstrap 5. The library requires Angular 22. Import via `RlbBootstrapModule` or individual standalone imports.
+
+**Sibling skills — do not duplicate their subjects here:**
+
+| Subject | Skill |
+|---|---|
+| Dropdowns, tooltips, popovers, popconfirm, any floating panel | **rlb-overlays** |
+| Stat tiles, timelines, virtual lists, trees, command palette, empty states, lists, chat, skeletons | **rlb-data-display** |
+| Form controls, validation, `rlb-form-fields` | **rlb-inputs** |
+| `rlb-dt-table` | **rlb-datatable** |
+| `rlb-calendar` | **rlb-calendar** |
+| Modals and dialog accessibility | **rlb-modals** |
+| `ng add`, `sync-skills`, required stylesheets | **rlb-schematics** |
 
 ## Shared Types
 
@@ -79,8 +91,21 @@ type TextAlignment = 'left' | 'center' | 'right';
 </rlb-fab>
 ```
 
-**Button inputs:** `color`, `size`, `disabled`, `outline`, `isLink`
-**FAB inputs:** `color`, `size`, `disabled`, `outline`, `position` ('br'|'bl'|'tr'|'tl')
+**`button[rlb-button]` / `a[rlb-button]` inputs:** `color` (`Color`, default `'primary'`), `size`
+(`Size`, default `'md'`), `disabled`, `outline`, `isLink` — all booleans default `false`. None are
+aliased, so `isLink` is written exactly like that.
+
+**`rlb-fab` inputs:** `color`, `size` (`'xs' | 'sm' | 'md' | 'lg'` — note the extra `xs`),
+`disabled`, `outline`, `position` (`'br' | 'bl' | 'tr' | 'tl'`; unset, it is not pinned).
+
+**`rlb-button-group`** and **`rlb-button-toolbar`**: `orientation` (`'horizontal' | 'vertical'`,
+default `'horizontal'`) and `size` (`'sm' | 'md' | 'lg'`, default `'md'`).
+
+**`button[rlb-button-close]` / `a[rlb-button-close]`**: Bootstrap's `.btn-close` ✕, no inputs. Give
+it an `aria-label`.
+
+**`rlb-fab-input`**: a FAB that expands into a text field. Project an `rlb-input` into it; it emits
+`(pasteAccepted)` → `string` when the user pastes.
 
 ---
 
@@ -214,29 +239,52 @@ Who is on this: the avatars overlap, and whoever is left over is counted.
 
 ## Cards
 
+⚠️ **Only four of the card parts are elements.** The title, subtitle, text, link and image are
+**attribute selectors** on real HTML tags — a heading stays a heading, a paragraph a paragraph.
+Earlier versions of this document wrote them all as `<rlb-card-*>` elements; those match nothing and
+render as unknown tags.
+
 ```html
 <rlb-card
   align="left"
   background="light"
 >
-  <rlb-card-header>Card Title</rlb-card-header>
-  <rlb-card-image src="/img.png"></rlb-card-image>
+  <rlb-card-header>Featured</rlb-card-header>
+  <img rlb-card-image position="top" src="/img.png" alt="" />
   <rlb-card-body>
-    <rlb-card-title>Title</rlb-card-title>
-    <rlb-card-subtitle>Subtitle</rlb-card-subtitle>
-    <rlb-card-text>Body text here.</rlb-card-text>
-    <rlb-card-link href="/more">Read more</rlb-card-link>
+    <h5 rlb-card-title>Title</h5>
+    <h6 rlb-card-subtitle>Subtitle</h6>
+    <p rlb-card-text>Body text here.</p>
+    <a rlb-card-link href="/more">Read more</a>
   </rlb-card-body>
   <rlb-card-footer>Footer</rlb-card-footer>
 </rlb-card>
+
+<!-- Several cards as one unit -->
+<rlb-card-group>
+  <rlb-card>…</rlb-card>
+  <rlb-card>…</rlb-card>
+</rlb-card-group>
 ```
 
-**Card inputs:** `align`, `overlay`, `background` (Color), `border` (Color)
-**Sub-components:** `rlb-card-body`, `rlb-card-header`, `rlb-card-footer`, `rlb-card-image`, `rlb-card-title`, `rlb-card-subtitle`, `rlb-card-text`, `rlb-card-link`
+**`rlb-card` inputs:** `align` (`TextAlignment`, default `'left'`), `overlay` (boolean — draws the
+body over the image), `background` (`Color`), `border` (`Color`).
+
+| Part | Selector | Notes |
+|---|---|---|
+| Body, header, footer, group | `rlb-card-body`, `rlb-card-header`, `rlb-card-footer`, `rlb-card-group` | Elements. |
+| Title | `h*[rlb-card-title]` | Any heading level — pick the right one for the page outline. |
+| Subtitle | `h*[rlb-card-subtitle]` | |
+| Text | `p[rlb-card-text]` | A `<p>`, nothing else. |
+| Link | `a[rlb-card-link]` | |
+| Image | `img[rlb-card-image]` | Input `position`: `'top'` (default) or `'bottom'`. |
 
 ---
 
 ## Accordion
+
+⚠️ The item and the body are **attributes on a `div`**; only the header is an element. Earlier
+versions of this document wrapped both in `<ng-template>`, which renders nothing.
 
 ```html
 <rlb-accordion
@@ -244,18 +292,23 @@ Who is on this: the avatars overlap, and whoever is left over is counted.
   [always-open]="false"
   [card-style]="true"
 >
-  <rlb-accordion-item>
-    <ng-template rlb-accordion-header>Section 1</ng-template>
-    <ng-template rlb-accordion-body>Content 1</ng-template>
-  </rlb-accordion-item>
-  <rlb-accordion-item>
-    <ng-template rlb-accordion-header>Section 2</ng-template>
-    <ng-template rlb-accordion-body>Content 2</ng-template>
-  </rlb-accordion-item>
+  <div rlb-accordion-item expanded>
+    <rlb-accordion-header>Section 1</rlb-accordion-header>
+    <div rlb-accordion-body>Content 1</div>
+  </div>
+  <div rlb-accordion-item (statusChange)="onToggle($event)">
+    <rlb-accordion-header>Section 2</rlb-accordion-header>
+    <div rlb-accordion-body>Content 2</div>
+  </div>
 </rlb-accordion>
 ```
 
-**Inputs:** `flush`, `always-open`, `card-style`, `id`
+**`rlb-accordion` inputs:** `flush` (boolean, default `false`), `always-open` (boolean, default
+`false` — leave several open at once), `card-style` (boolean, default **`true`**), `id`.
+
+**`div[rlb-accordion-item]` inputs:** `name`, `expanded` (boolean, default `false` — seeds the open
+one), `class`, `style`. Output `(statusChange)` → `VisibilityEvent`
+(`'show' | 'shown' | 'hide' | 'hidden' | 'hidePrevented'`).
 
 ---
 
@@ -437,57 +490,27 @@ next() { this.page.update(p => Math.min(this.count() - 1, p + 1)); }
 
 ## Dropdown
 
+Moved to the **rlb-overlays** skill, with the tooltip, the popover and the popconfirm — they all run
+on the same CDK Overlay and share the same requirements.
+
 ```html
 <rlb-dropdown direction="down">
   <button rlb-button color="primary" rlb-dropdown>Actions</button>
   <ul rlb-dropdown-menu placement="right">
-    <li rlb-dropdown-item header>Section</li>
     <li rlb-dropdown-item (click)="rename()">Rename</li>
-    <li rlb-dropdown-item disabled>Move</li>
     <li rlb-dropdown-item divider></li>
-    <li rlb-dropdown-item link="/settings">Settings</li>
+    <li rlb-dropdown-item link="/settings" fragment="profile">Settings</li>
   </ul>
-</rlb-dropdown>
-
-<!-- Arbitrary content instead of a list. -->
-<rlb-dropdown>
-  <button rlb-button rlb-dropdown [offset]="[0, 8]" auto-close="outside">Filters</button>
-  <rlb-dropdown-container>
-    <div class="p-3">…anything…</div>
-  </rlb-dropdown-container>
 </rlb-dropdown>
 ```
 
-| Element | Input | Notes |
-|---|---|---|
-| `rlb-dropdown` | `direction` | `'up' \| 'down' \| 'left' \| 'right' \| 'up-center' \| 'down-center'`. |
-| `[rlb-dropdown]` | `offset` | `[x, y]` px. |
-| | `auto-close` | `'default' \| 'inside' \| 'outside' \| 'manual'`. Use `outside` for a menu of checkboxes: `default` closes on the first tick. |
-| | `anchor` | `'self' \| 'parent'`. `parent` lines the menu up with the box around the toggle — what a split button needs. |
-| | `(status-changed)` | `'show' \| 'shown' \| 'hide' \| 'hidden'`. |
-| `rlb-dropdown-container`, `ul[rlb-dropdown-menu]` | `placement`, `placement-sm…xxl` | `'left' \| 'right'`, per breakpoint. |
-| `li[rlb-dropdown-item]` | `active`, `disabled`, `header`, `divider`, `link`, `text-wrap` | `link` renders an anchor with `routerLink`. |
+The three things to remember here:
 
-**It runs on the CDK Overlay, not on Bootstrap's dropdown plugin.** What that changes:
+- **`@angular/cdk/overlay-prebuilt.css` is required** by any app that opens a dropdown. Without it
+  the menu opens in the page corner. `ng add` registers it.
+- `auto-close="outside"` for a menu of checkboxes; the default closes on the first tick.
+- `anchor="parent"` when the toggle is a sliver at the end of a button group.
 
-- The menu is rendered at the end of the body, so an ancestor with `overflow: hidden` — a scrolling
-  panel, a table cell — no longer clips it. The old fix was `data-bs-popper-config`, per call site.
-- It flips instead of overflowing: a menu with no room below opens upwards.
-- The keyboard works. Down opens with the first item focused, the arrows walk the enabled items and
-  wrap, Home and End jump, Escape closes and hands focus back. An action item is a real `<button>`.
-- `rlb-navbar-dropdown-item`, `rlb-split-button`, `rlb-dt-actions` and the datatable's column menu
-  all ride the same overlay; nothing in the library sets `data-bs-toggle="dropdown"` any more.
-
-⚠️ Because of that, `@angular/cdk/overlay-prebuilt.css` is now needed by **any** app that opens a
-dropdown, not only by the datepicker and the popconfirm. `ng add` registers it; without it the
-menu opens in the corner of the page.
-
-Bootstrap's plugin is still loaded for modals, collapse and the rest, and it still binds a
-**capture-phase** handler on the document for anything matching `.dropdown-menu`. Keys the menu
-handles are stopped before they reach it — without that it looks for a `[data-bs-toggle]` that no
-longer exists and throws. Worth knowing if you add keys of your own to a menu.
-
----
 
 ## Pagination
 
@@ -521,40 +544,117 @@ longer exists and throws. Worth knowing if you add keys of your own to a menu.
     MyApp
   </a>
   <rlb-navbar-items>
-    <a
-      class="nav-link"
-      routerLink="/home"
-    >
-      Home
-    </a>
+    <rlb-navbar-item router-link="/home">Home</rlb-navbar-item>
+    <rlb-navbar-dropdown-item dropdown auto-close="outside">More</rlb-navbar-dropdown-item>
+    <rlb-navbar-separator />
+    <rlb-navbar-text>v2.1</rlb-navbar-text>
   </rlb-navbar-items>
+  <rlb-navbar-form>
+    <rlb-input placeholder="Search" />
+  </rlb-navbar-form>
 </rlb-navbar>
 
 <rlb-sidebar
   [dark]="true"
   [rounded]="false"
 >
-  <rlb-sidebar-item routerLink="/dashboard">Dashboard</rlb-sidebar-item>
-  <rlb-sidebar-item routerLink="/settings">Settings</rlb-sidebar-item>
+  <rlb-sidebar-item title="Dashboard" icon="bi bi-speedometer2" [link]="['/dashboard']" />
+  <rlb-sidebar-item title="Settings" [link]="['/settings']" fragment="profile" [badgeCounter]="3">
+    <rlb-sidebar-item title="Profile" [link]="['/settings/profile']" />
+  </rlb-sidebar-item>
 </rlb-sidebar>
 ```
 
-**Navbar inputs:** `dark`, `color`, `placement`, `expand`, `show-sidebar-toggler`, `enable-dropdown-toggler`, `class`
-**Sidebar inputs:** `dark`, `rounded`
+**`rlb-navbar` inputs:** `dark` (default `true`), `color`, `placement`
+(`'fixed-top' | 'fixed-bottom' | 'sticky-top' | 'sticky-bottom'`), `expand`
+(`'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always'`), `showSideBarToggler` (default `true`),
+`enable-dropdown-toggler` (default `false`), `class`.
+
+⚠️ `showSideBarToggler` has **no alias** — write it exactly like that, with the capital B in
+«SideBar». Earlier versions of this document said `show-sidebar-toggler`, which binds nothing.
+
+**Navbar children:** `rlb-navbar-items` (groups the links), `rlb-navbar-item`
+(`disabled`, `router-link`, `class`, `(click)`), `rlb-navbar-dropdown-item`
+(`disabled`, `dropdown`, `href`, `toggle`, `auto-close`, `(click)`, `(status-changed)` — it rides
+the same overlay as `rlb-dropdown`, see **rlb-overlays**), `rlb-navbar-separator`,
+`rlb-navbar-text`, `rlb-navbar-form`, and the directives `[rlb-navbar-brand]` and
+`[rlb-custom-navbar-items]` (content placed outside the collapsible area).
+
+**`rlb-sidebar` inputs:** `dark` (default `true`), `rounded` (default `false`). Open and close it
+from `SidebarService`.
+
+**`rlb-sidebar-item` inputs:** `title`, `icon`, `label`, `link` (`any[] | string`), `fragment`,
+`badgeCounter` (`number`), `(click)`. Nest `rlb-sidebar-item` inside one another for a submenu —
+a nested item is a menu entry, not a data tree (for that, see `rlb-tree` in **rlb-data-display**).
+
+`fragment` is the `#fragment` of `link`, for a menu that points into a long page. The same input
+exists on `li[rlb-dropdown-item]`.
+
+---
+
+## Nav (rlb-nav + rlb-nav-item)
+
+The tab strip's simpler cousin: a list of links with no panes behind them. `rlb-tabs` switches
+content; `rlb-nav` just navigates.
+
+```html
+<rlb-nav view="pills" horizontal-alignment="center">
+  <rlb-nav-item active href="/overview">Overview</rlb-nav-item>
+  <rlb-nav-item href="/activity">Activity</rlb-nav-item>
+  <rlb-nav-item [disabled]="true">Archive</rlb-nav-item>
+</rlb-nav>
+```
+
+**`rlb-nav` inputs:** `view` (`'tab' | 'tabs' | 'pills' | 'underline' | 'none'`, default `'tab'`),
+`vertical`, `pills`, `tabs`, `underline` (booleans, alternatives to `view`),
+`fill` (`'fill' | 'justified'` or a boolean), `horizontal-alignment` (`'center' | 'end'`), `class`.
+
+**`rlb-nav-item` inputs:** `active`, `disabled`, `href`, `class`.
+
+---
+
+## Scrollspy ([rlb-scrollspy])
+
+Highlights the entry in a nav that matches the section currently on screen.
+
+```html
+<rlb-nav view="pills" vertical id="toc">
+  <rlb-nav-item href="#intro">Intro</rlb-nav-item>
+  <rlb-nav-item href="#usage">Usage</rlb-nav-item>
+</rlb-nav>
+
+<div rlb-scrollspy rlb-scrollspy-target="toc" height="70vh" (scroll-change)="onScroll($event)">
+  <section id="intro">…</section>
+  <section id="usage">…</section>
+</div>
+```
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `rlb-scrollspy-target` | `string` | — | **Required.** The id of the nav to highlight. |
+| `height` | `string` | `'200px'` | The scrolling box's height. |
+| `scroll-smooth` | `boolean` | `true` | Smooth-scrolls when an entry is clicked. |
+| `scroll-root-margin` | `string` | `''` | `IntersectionObserver` root margin. |
+| `scroll-threshold` | `number[]` | `[]` | `IntersectionObserver` thresholds. |
+| `(scroll-change)` | `Event` | | |
 
 ---
 
 ## Loaders
 
+⚠️ The spinner's variant input is aliased **`style`**, which collides with the native `style`
+attribute. **Always bind it** — `[style]="'border'"` — never `style="border"`, which Angular reads
+as an inline CSS string. (Same class of trap as `[popover]`.)
+
 ```html
 <!-- Spinner -->
 <rlb-spinner
-  style="border"
+  [style]="'border'"
   color="primary"
   size="md"
 ></rlb-spinner>
 <rlb-spinner
-  style="grow"
+  [style]="'grow'"
   color="success"
   size="sm"
 ></rlb-spinner>
@@ -576,139 +676,90 @@ longer exists and throws. Worth knowing if you add keys of your own to a menu.
 ></rlb-progress>
 ```
 
-**Spinner inputs:** `style` ('border'|'grow'), `color`, `size`
-**Progress inputs:** `value`, `max`, `min`, `height`, `animated`, `striped`, `infinite`, `showValue`, `color`, `text-color`, `aria-label`
+**`rlb-spinner` inputs:** `style` (`'border' | 'grow'`, default `'border'` — **bind it**), `color`
+(`Color`, default `'primary'`, rendered as a `text-*` class), `size` (`'sm' | 'md' | 'lg'`, default
+`'md'`; only `sm` and `lg` change anything). It carries `role="status"` and a visually-hidden
+«Loading…».
+
+**`rlb-progress` inputs:** `value` (default `0`), `max` (default `100`), `min` (default `0`),
+`height` (number, px), `animated`, `striped`, `infinite`, `showValue` (*camelCase, no alias*),
+`color` (default `'primary'`), `text-color`, `aria-label`.
+
+`infinite` is the indeterminate bar — use it when you cannot know the proportion. Give a progress
+bar an `aria-label` whenever there is no visible label beside it.
 
 ---
 
 ## Placeholders (skeletons)
 
-Skeleton loading state for content that hasn't loaded yet. Use `rlb-placeholder-text` for
-quick multi-line text blocks, or `rlb-placeholder` + `rlb-placeholder-line` for custom layouts
-(cards, stat rows). Toggle with an `@if (loading())` block — render the skeleton while loading,
-the real content otherwise.
+Moved to the **rlb-data-display** skill: `rlb-placeholder`, `rlb-placeholder-line`,
+`rlb-placeholder-text` and the `[rlb-placeholder]` directive.
 
-```html
-<!-- Quick multi-line text skeleton -->
-<rlb-placeholder-text
-  [lines]="3"
-  animation="glow"
-/>
-
-<!-- Per-line widths: pass a string[] (falls back to 100% past the end) -->
-<rlb-placeholder-text
-  [lines]="3"
-  [width]="['80%', '100%', '60%']"
-  animation="glow"
-/>
-
-<!-- Custom layout: container + individual lines for full control -->
-<rlb-placeholder animation="glow">
-  <rlb-placeholder-line
-    width="40%"
-    height="28px"
-  />
-  <rlb-placeholder-line width="100%" />
-  <rlb-placeholder-line
-    width="80%"
-    color="primary"
-    size="sm"
-  />
-  <rlb-placeholder-line
-    width="60%"
-    [rounded]="false"
-  />
-</rlb-placeholder>
-
-<!-- Skeleton-style any element via the directive -->
-<span
-  rlb-placeholder
-  placeholder-animation="glow"
-  style="width: 6rem"
->
-  &nbsp;
-</span>
-```
-
-Common pattern — a fixed number of skeleton rows (e.g. matching a table page size):
-
-```html
-<rlb-placeholder animation="glow">
-  @for (line of [].constructor(pageSize()); track $index) {
-  <rlb-placeholder-line width="100%" />
-  }
-</rlb-placeholder>
-```
-
-**`rlb-placeholder`** (container, applies the animation to children)
-Inputs: `animation` ('glow' | 'wave' | 'none', default 'none')
-
-**`rlb-placeholder-line`** (one skeleton bar; renders as a block with bottom margin)
-Inputs: `width` (CSS string, default '100%'), `height` (CSS string, default '1.5rem'),
-`size` ('xs' | 'sm' | 'md' | 'lg', default 'md'), `color` (Bootstrap bg name, default 'secondary'),
-`rounded` (boolean, default `true`)
-
-**`rlb-placeholder-text`** (convenience: N lines in a `rlb-placeholder` for you)
-Inputs: `lines` (default 1), `width` (string **or** string[] for per-line widths, default '100%'),
-`animation`, `size`, `color`, `height`, `rounded` — same meaning/defaults as above
-
-**`[rlb-placeholder]`** (directive to skeletonize any element)
-Inputs (aliased): `placeholder-color` (Color), `placeholder-size` ('xs'|'sm'|'md'|'lg'),
-`placeholder-animation` ('glow' | 'fade' | 'none')
-
-> Boolean inputs like `rounded` need a binding: `[rounded]="false"`, not a bare `rounded` attribute.
-
----
 
 ## Toast
 
-```typescript
-// In component
-constructor(private toast: ToastService) {}
+⚠️ `openToast` takes **four** arguments: the container id, the registered toast name, the **data**
+(required, and `title` + `content` are required within it) and optional options. Earlier versions of
+this document showed a two-argument call; it does not compile.
 
-showSuccess() {
-  this.toast.openToast('my-toast', 'success-toast').subscribe();
+Toasts work like modals: register the component by name, put a container in the layout, open by
+name. See **rlb-modals** for the same pattern in full.
+
+```typescript
+// app.config.ts
+providers: [
+  provideRlbBootstrap(),
+  { provide: ToastRegistryOptions, useValue: { toasts: { 'sample-toast': ToastSampleComponent } }, multi: true },
+];
+```
+
+```html
+<!-- Somewhere in the root layout, usually pinned to a corner -->
+<rlb-toast-container id="toast-c-1" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" />
+```
+
+```typescript
+private readonly toasts = inject(ToastService);
+
+saved() {
+  this.toasts
+    .openToast('toast-c-1', 'sample-toast', {
+      title: 'Saved',
+      content: 'Your changes are in.',
+      subtitle: 'just now',
+      type: 'success',          // ModalType: 'success' | 'info' | 'warning' | 'error'
+      ok: 'OK',
+    }, { autohide: true, delay: 4000, color: 'success' })
+    .subscribe(result => console.log(result)); // ToastResult | null
 }
 ```
+
+```typescript
+interface ToastData<T = any> { title: string; content: T; subtitle?: string; type?: ModalType; ok?: string }
+interface ToastResult<T = void> { reason: ToastCloseReason; result: T | null }  // 'ok' | 'cancel' | 'close'
+interface ToastOptions { animation?: boolean; autohide?: boolean; delay?: number; color?: Color; classes?: string[] }
+```
+
+A toast component implements `IToast<Input, Output>` — the same shape as `IModal`
+(`data: Signal<ToastData<Input>>`, optional `valid`, optional `result`) — and applies the
+`[rlb-toast]` directive as a host directive with the inputs `id`, `data-instance`, `data-options`.
+
+You can have several containers with different ids (one per corner); the first argument picks which.
 
 ---
 
 ## Tooltip & popover
 
+Moved to the **rlb-overlays** skill.
+
 ⚠️ The selectors are `[tooltip]` and `[popover]`, not `rlb-tooltip`. Earlier versions of this
-document said otherwise; they were wrong.
+document said otherwise; they were wrong. And always **bind** `[popover]` — a static
+`popover="…"` is also the native HTML popover attribute, which hides the host.
 
 ```html
 <button rlb-button tooltip="Helpful tip" tooltip-placement="top">Hover me</button>
-
-<!-- Markup instead of text, sanitised by Angular. -->
-<button rlb-button tooltip="<strong>Bold</strong> tip" tooltip-html>HTML</button>
-
-<!-- ALWAYS bind [popover]: a static popover="..." is also the NATIVE HTML popover attribute,
-     which puts the host into the browser's own manual popover state and hides it. -->
-<button rlb-button [popover]="'The body'" popover-title="A title" popover-placement="bottom">
-  Click me
-</button>
+<button rlb-button [popover]="'The body'" popover-title="A title">Click me</button>
 ```
-
-| Attribute | Input | Notes |
-|---|---|---|
-| `[tooltip]` | `tooltip` | The text. `null` turns it off, and takes an open one away with it. Changing it while it is up rewrites it in place. |
-| | `tooltip-placement` | `'top' \| 'bottom' \| 'left' \| 'right'`. A preference: with no room there it takes the opposite side. |
-| | `tooltip-class`, `tooltip-html` | Extra classes on the panel; `tooltip-html` renders the value as markup. |
-| `[popover]` | `popover` | The body, always written as text. |
-| | `popover-title` | Header. |
-| | `popover-placement`, `popover-class` | As above. |
-
-**Both run on the CDK Overlay, not on Bootstrap's tooltip/popover plugins.** What that changes:
-
-- Neither is clipped by an ancestor with `overflow: hidden`, and both flip rather than running off
-  the window. The arrow follows: `data-popper-placement` on the panel reports the *resolved* side,
-  and the arrow is re-centred on the trigger even after the overlay has been pushed sideways.
-- The tooltip opens on **focus** as well as hover, ties itself to the trigger with
-  `aria-describedby` so a screen reader reads it, and closes on Escape.
-- The popover writes `aria-expanded` on its trigger, and closes on an outside click or Escape.
-- `@angular/cdk/overlay-prebuilt.css` is required, as for every other panel here.
 
 ---
 
@@ -732,8 +783,30 @@ document said otherwise; they were wrong.
 </rlb-offcanvas>
 ```
 
-`toggle` takes `'offcanvas' | 'collapse' | 'tab' | 'pill' | 'buttons-group'`. It also accepts
-`'dropdown'`, which does nothing: a dropdown is `[rlb-dropdown]` inside `rlb-dropdown`.
+**`[toggle]` directive** — on `button`, `a`, `rlb-navbar-item`, `rlb-button-toolbar` or `rlb-fab`:
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `toggle` | `'offcanvas' \| 'collapse' \| 'tab' \| 'pill' \| 'dropdown' \| 'buttons-group'` | — | **Required.** |
+| `toggle-target` | `string` | — | **Required.** The target's `id`. |
+| `collapsed` | `boolean` | `false` | Starts collapsed. |
+| `auto-close` | `'default' \| 'inside' \| 'outside' \| 'manual'` | `'default'` | |
+
+`toggle` accepts `'dropdown'`, but it does nothing: a dropdown is `[rlb-dropdown]` inside
+`rlb-dropdown` (see **rlb-overlays**).
+
+**`rlb-collapse` inputs:** `id` (**required**), `orientation` (`'horizontal' | 'vertical'`, default
+`'vertical'`). Output `(statusChange)` → `VisibilityEvent`.
+
+**`rlb-offcanvas` inputs:** `id` (**required**), `placement` (`'start' | 'end' | 'top' | 'bottom'`,
+default `'start'`), `responsive` (`'sm' … 'xxl'` — a panel below that width, ordinary content above),
+`body-scroll` (lets the page behind keep scrolling), `scroll-backup`, `close-manual` (no backdrop
+dismiss). Output `(statusChange)` → `VisibilityEvent`.
+
+Children: `rlb-offcanvas-header`, `rlb-offcanvas-body`, and the title as an attribute on a heading —
+`h*[rlb-offcanvas-title]` (there is also a bare `[rlb-offcanvas-title]` directive for a non-heading
+element). ⚠️ There is **no exported offcanvas footer** component; put footer content at the end of
+the body.
 
 ---
 
@@ -742,9 +815,10 @@ document said otherwise; they were wrong.
 Both get `role="dialog"` and `aria-modal` from Bootstrap, and Bootstrap traps focus inside them.
 Three things the library now adds on top:
 
-- **A name.** The heading — `.modal-title`, or `[rlb-offcanvas-title]` — is given an id and
-  referenced with `aria-labelledby`. Without it a screen reader announces «dialog» and stops. Give
-  the dialog a heading, or write your own `aria-label`.
+- **A name.** The heading — `.modal-title`, or `.offcanvas-title` from `[rlb-offcanvas-title]` — is
+  given an id and referenced with `aria-labelledby`. Without it a screen reader announces «dialog»
+  and stops. Give the dialog a heading, or write your own `aria-label` / `aria-labelledby` on the
+  host — anything the caller says itself is left alone.
 - **Focus back where it came from.** A modal returns focus to whatever opened it on *every* way
   out — the buttons, Escape, a click on the backdrop. It used to do it on three paths out of five,
   so closing with the keyboard left you at the top of the page.
@@ -811,71 +885,12 @@ The circle goes grey → blue (current) → green (passed) → red (invalid and 
 
 ---
 
-## Empty state (rlb-empty-state)
+## Empty state, popconfirm
 
-There is nothing here, said properly. `rlb-dt-noitems` only works inside the datatable; this is the
-same idea everywhere else.
+`rlb-empty-state` is in the **rlb-data-display** skill.
+`[rlb-popconfirm]` is in the **rlb-overlays** skill — reach for it rather than
+`ModalService.openConfirmModal` for a row-level destructive action.
 
-```html
-<rlb-empty-state title="No users yet">
-  Invite someone and they will show up here.
-  <button actions rlb-button color="primary" size="sm">Invite</button>
-</rlb-empty-state>
-
-<rlb-empty-state variant="search" title="Nothing matches" size="sm">Try a shorter word.</rlb-empty-state>
-<rlb-empty-state variant="error" title="Could not load" size="sm">Try again in a moment.</rlb-empty-state>
-```
-
-| Input | Type | Default | Notes |
-|---|---|---|---|
-| `title` | `string` | — | The line in bold. |
-| `variant` | `'empty' \| 'search' \| 'error' \| 'custom'` | `'empty'` | Picks a fitting icon, so the common cases need no `icon`. |
-| `icon` | `string` | — | An icon class, overriding the variant's. |
-| `size` | `'sm' \| 'md'` | `'md'` | |
-
-Default content is the sentence; project buttons with the `actions` attribute.
-
----
-
-## Popconfirm ([rlb-popconfirm])
-
-«Are you sure?» anchored to the button that asked it. Use this rather than
-`ModalService.openConfirmModal` for row-level destructive actions — a full-screen modal is the wrong
-size of interruption for «delete this row».
-
-```html
-<button
-  rlb-button
-  color="danger"
-  size="sm"
-  rlb-popconfirm="Delete this row?"
-  popconfirm-title="This cannot be undone"
-  confirm-label="Delete"
-  cancel-label="Keep"
-  placement="top"
-  (confirmed)="remove(row)"
->
-  Delete
-</button>
-```
-
-| Input | Type | Default | Notes |
-|---|---|---|---|
-| `rlb-popconfirm` | `string` | `''` | What is being asked. Also the panel's accessible name when there is no title. |
-| `popconfirm-title` | `string` | — | Bold line above the question. |
-| `confirm-label` / `cancel-label` | `string` | `'Yes'` / `'No'` | |
-| `confirm-color` | `Color` | `'danger'` | |
-| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` | Flips when there is no room. |
-| `disabled` | `boolean` | `false` | |
-| `(confirmed)` / `(cancelled)` | `void` | | Nothing happens until `confirmed`. Escape, backdrop and «No» all emit `cancelled`. |
-
-Focus starts on the **cancel** button: the point of a popconfirm is to be a speed bump, and a
-confirm button with focus on it is not one.
-
-⚠️ Built on CDK Overlay — the app must load `@angular/cdk/overlay-prebuilt.css`, or the panel lands
-in the page corner. `ng add` registers it.
-
----
 
 ## Theme toggle (rlb-theme-toggle)
 
@@ -890,189 +905,22 @@ current one. State lives in `ThemeService`, so several toggles on one page agree
 
 ---
 
-## Stat tile (rlb-stat)
+## Data and display components
 
-One number, with what it means and which way it is going.
+These moved to the **rlb-data-display** skill:
 
-```html
-<rlb-stat
-  label="Revenue"
-  value="12.480 €"
-  [delta]="12"
-  delta-label="vs last month"
-  icon="bi bi-cash-coin"
-  [sparkline]="[12, 15, 14, 19, 18, 24, 27]"
-/>
+| Component | What it is for |
+|---|---|
+| `rlb-stat` | One number, with what it means and which way it is going. |
+| `rlb-timeline` + `rlb-timeline-item` | An activity feed or audit log, grouped by local day. |
+| `rlb-virtual-list` | A long list that renders only what is on screen. |
+| `rlb-tree` | Nested data the user opens and ticks. |
+| `rlb-command-palette` | Everything the app can do, one keystroke away. |
+| `rlb-empty-state` | There is nothing here, said properly. |
+| `rlb-list`, `rlb-list-item`, `rlb-list-item-image` | Bootstrap list groups. |
+| `rlb-chat-container` + `rlb-chat-item` | Message bubbles. |
+| `rlb-placeholder*` | Loading skeletons. |
 
-<!-- Down is the good news: the colour flips, the arrow does not. -->
-<rlb-stat label="p95 latency" value="141 ms" [delta]="-22" invert-delta color="info" />
-```
-
-| Input | Type | Default | Notes |
-|---|---|---|---|
-| `label` | `string` | `''` | What the number is. |
-| `value` | `string \| number` | `''` | **Already formatted.** A component cannot know whether 1234.5 is money, a count or a percentage, nor in which locale — formatting stays with the caller. |
-| `delta` | `number` | — | The change; its sign picks the arrow and the colour. Left out, nothing is drawn. |
-| `delta-text` | `string` | — | How the change is written. Default is the delta with a sign and a `%`. |
-| `delta-label` | `string` | — | The line underneath: «vs last month». |
-| `invert-delta` | `boolean` | `false` | For churn, latency, cost. |
-| `sparkline` | `number[]` | `[]` | Drawn once there are two points. Decoration, `aria-hidden`. |
-| `icon` / `color` / `loading` / `flat` | | | |
-
-The direction is never colour alone: an arrow and a sign carry it too.
-
----
-
-## Timeline (rlb-timeline + rlb-timeline-item)
-
-An activity feed, an audit log, the history of a record.
-
-```html
-<rlb-timeline group-by-day timezone="Europe/Rome" day-format="WL DD LM yyyy" locale="it">
-  <rlb-timeline-item [time]="created" heading="Created" icon="bi bi-plus-lg">
-    Mario opened the ticket.
-  </rlb-timeline-item>
-  <rlb-timeline-item [time]="escalated" heading="Escalated" color="warning">…</rlb-timeline-item>
-  <rlb-timeline-item heading="Waiting" pending color="secondary">Not yet.</rlb-timeline-item>
-</rlb-timeline>
-```
-
-**rlb-timeline**: `group-by-day`, `timezone`, `locale`, `time-format` (`'HH:mm'`),
-`day-format` (`'WL DD LM yyyy'`), `compact`.
-
-**rlb-timeline-item**: `heading`, `time` (`IDateTz | string`), `icon`, `color`, `pending`.
-
-Grouping is the reason this is a component rather than a `@for`: the day is worked out from local
-midnight in the timeline's timezone. An entry at 00:30 in Rome is still the previous day in UTC, and
-tz-naive day maths puts it under the wrong heading. An `IDateTz` is formatted by the timeline and
-groups; a plain string is printed as given and takes no part in grouping.
-
----
-
-## Virtual list (rlb-virtual-list)
-
-A long list that renders only what is on screen, over the CDK's virtual scroller.
-
-```html
-<rlb-virtual-list [items]="rows()" [item-size]="52" height="22rem" (near-end)="loadMore()">
-  <ng-template let-row let-i="index">
-    <div class="px-3 py-2 border-bottom" style="height: 52px">{{ i + 1 }} — {{ row.name }}</div>
-  </ng-template>
-</rlb-virtual-list>
-```
-
-| Input | Type | Default | Notes |
-|---|---|---|---|
-| `items` | `readonly T[]` | `[]` | |
-| `item-size` | `number` | `48` | Fixed row height in px. **It must match what the template renders**, or the scrollbar lies about the length of the list. |
-| `height` | `string` | `'20rem'` | Without a height there is nothing to scroll inside. |
-| `threshold` | `number` | `10` | How far from the end `(near-end)` fires. |
-| `track-by` | `(i, item) => unknown` | the index | |
-| `(near-end)` | `void` | | Fires once per arrival — **the caller must still ignore it while a page is in flight.** |
-| `(scrolled-index)` | `number` | | First rendered row. |
-
-The row template is projected as the only content, with `let-item` and `let-i="index"`.
-
----
-
-## Command palette (rlb-command-palette)
-
-Everything the application can do, one keystroke away. Mount it **once**, near the root, the way
-`rlb-modal-container` is mounted; it renders nothing until it opens.
-
-```html
-<rlb-command-palette [commands]="commands" shortcut="mod+k" />
-```
-
-```typescript
-import { RlbCommand } from '@open-rlb/ng-bootstrap';
-
-readonly commands: RlbCommand[] = [
-  {
-    id: 'new-user',                 // stable: it is how «recent» remembers this command
-    label: 'New user',
-    group: 'Users',
-    icon: 'bi bi-person-plus',
-    keywords: ['create', 'add'],    // also searched: synonyms, the old name, an abbreviation
-    shortcut: 'N',                  // shown only; the palette does not bind it
-    run: () => this.router.navigate(['/users/new']),
-  },
-];
-```
-
-| Input | Type | Default | Notes |
-|---|---|---|---|
-| `commands` | `readonly RlbCommand[]` | `[]` | |
-| `shortcut` | `string` | `'mod+k'` | `mod` is Cmd on a Mac and Ctrl elsewhere, so one string covers both. Empty turns it off. |
-| `recent-count` | `number` | `3` | Recently used at the top when the box is empty. `0` turns it off. |
-| `title` / `placeholder` / `emptyLabel` / `recentLabel` | `string` | English | |
-| `(executed)` | `RlbCommand` | | Already run. |
-| `open()` / `close()` | | | Drive it from a button as well. |
-
-Matching is by subsequence — every letter of the query in order — so `dbs` finds «Dashboard
-settings». Matches at a word boundary and consecutive matches score higher, and a shorter label wins
-a tie. Arrows move and wrap, Enter runs, Escape closes. A `disabled` command stays out of the list
-until it is searched for.
-
-⚠️ CDK Overlay again: the application must load `@angular/cdk/overlay-prebuilt.css`.
-
----
-
-## Tree (rlb-tree)
-
-Nested things that are data rather than navigation: categories, permissions, folders, an org chart.
-`rlb-sidebar-item` also nests, but only as a menu.
-
-```html
-<rlb-tree
-  [nodes]="catalogue"
-  [(expanded)]="openIds"
-  [(selected)]="chosenIds"
-  [filter]="query()"
-  (activated)="open($event)"
-/>
-
-<!-- Permissions: ticking a branch ticks everything under it. -->
-<rlb-tree [nodes]="permissions" checkboxes [(selected)]="granted" />
-```
-
-```typescript
-export interface RlbTreeNode {
-  id: string;          // unique across the whole tree: state is remembered by it
-  label: string;
-  icon?: string;
-  children?: RlbTreeNode[];
-  disabled?: boolean;
-}
-```
-
-| Input | Type | Default | Notes |
-|---|---|---|---|
-| `nodes` | `RlbTreeNode[]` | `[]` | Plain data. The tree keeps no copy and no state beyond what is bound. |
-| `expanded` | `string[]` | `[]` | Open branches, by id. Two-way — put it in the URL if the page should come back the same. |
-| `selected` | `string[]` | `[]` | Taken nodes, by id. One without `checkboxes`, any number with. |
-| `checkboxes` | `boolean` | `false` | A box on every node; a branch takes everything under it. |
-| `branch-selectable` | `boolean` | `true` | Off, clicking a branch only opens it — for a tree whose branches are headings. |
-| `filter` | `string` | `''` | Keeps the matches and the branches above them, and opens those branches: a hit inside a closed branch is a hit nobody finds. |
-| `activated` | `EventEmitter<RlbTreeNode>` | — | A label was clicked. Branches too. |
-
-Methods: `toggle(id)`, `expandAll()`, `collapseAll()`, `check(node, checked)`, and
-`checkedState(node)` → `'true' | 'false' | 'mixed'`.
-
-Two things it does that the hand-written version usually does not:
-
-- A branch only some of whose children are ticked is **indeterminate**, not unticked. A half-ticked
-  branch drawn as unticked is how «apply to all» quietly does the wrong thing.
-- Ticking the last child by hand promotes the branch to fully ticked. A branch is in the selection
-  exactly when all of it is, so the drawing and the value never disagree.
-
-Helpers are exported for the data itself: `flattenTree(nodes)`, `subtreeIds(node)` and
-`idsMatching(nodes, predicate)` — the last returns `{ hits, open }`, the ids to show and the
-branches to open for them.
-
-For a tree inside a form control, use `rlb-tree-select` (**rlb-inputs** skill).
-
----
 
 ## Configuration tokens
 

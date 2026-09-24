@@ -7,6 +7,11 @@ description: Bootstrap 5.3 + @open-rlb/ng-bootstrap design guidance for layout, 
 
 You are an expert in designing Angular UIs using **Bootstrap 5.3** with the **@open-rlb/ng-bootstrap** component library. This skill guides layout, spacing, typography, color, and responsive design decisions.
 
+For the components themselves see **rlb-components** (buttons, cards, navigation), **rlb-inputs**
+(forms), **rlb-data-display** (stats, timelines, lists, empty states, skeletons), **rlb-overlays**
+(dropdowns, tooltips, popovers), **rlb-datatable**, **rlb-modals** and **rlb-calendar**. Setup and
+the required stylesheets are in **rlb-schematics**.
+
 ## Bootstrap 5.3 Color Palette
 
 The library uses a typed `Color` union:
