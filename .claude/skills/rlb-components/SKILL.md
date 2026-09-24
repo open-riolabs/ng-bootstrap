@@ -673,18 +673,42 @@ showSuccess() {
 
 ---
 
-## Tooltip
+## Tooltip & popover
+
+⚠️ The selectors are `[tooltip]` and `[popover]`, not `rlb-tooltip`. Earlier versions of this
+document said otherwise; they were wrong.
 
 ```html
-<button
-  rlb-button
-  rlb-tooltip
-  title="Helpful tip"
-  placement="top"
->
-  Hover me
+<button rlb-button tooltip="Helpful tip" tooltip-placement="top">Hover me</button>
+
+<!-- Markup instead of text, sanitised by Angular. -->
+<button rlb-button tooltip="<strong>Bold</strong> tip" tooltip-html>HTML</button>
+
+<!-- ALWAYS bind [popover]: a static popover="..." is also the NATIVE HTML popover attribute,
+     which puts the host into the browser's own manual popover state and hides it. -->
+<button rlb-button [popover]="'The body'" popover-title="A title" popover-placement="bottom">
+  Click me
 </button>
 ```
+
+| Attribute | Input | Notes |
+|---|---|---|
+| `[tooltip]` | `tooltip` | The text. `null` turns it off, and takes an open one away with it. Changing it while it is up rewrites it in place. |
+| | `tooltip-placement` | `'top' \| 'bottom' \| 'left' \| 'right'`. A preference: with no room there it takes the opposite side. |
+| | `tooltip-class`, `tooltip-html` | Extra classes on the panel; `tooltip-html` renders the value as markup. |
+| `[popover]` | `popover` | The body, always written as text. |
+| | `popover-title` | Header. |
+| | `popover-placement`, `popover-class` | As above. |
+
+**Both run on the CDK Overlay, not on Bootstrap's tooltip/popover plugins.** What that changes:
+
+- Neither is clipped by an ancestor with `overflow: hidden`, and both flip rather than running off
+  the window. The arrow follows: `data-popper-placement` on the panel reports the *resolved* side,
+  and the arrow is re-centred on the trigger even after the overlay has been pushed sideways.
+- The tooltip opens on **focus** as well as hover, ties itself to the trigger with
+  `aria-describedby` so a screen reader reads it, and closes on Escape.
+- The popover writes `aria-expanded` on its trigger, and closes on an outside click or Escape.
+- `@angular/cdk/overlay-prebuilt.css` is required, as for every other panel here.
 
 ---
 

@@ -1,66 +1,59 @@
-import {
-  AfterViewInit,
-  Directive,
-  ElementRef,
-  Renderer2,
-  effect,
-  input,
-} from '@angular/core';
-import type { Popover } from 'bootstrap';
-import bootstrap from '../../shared/bootstrap';
+import { Directive, effect, ElementRef, inject, input, OnInit, signal } from '@angular/core';
+import { RlbHintOverlay } from './hint-overlay.service';
+import { RlbHintPlacement } from './hint-panel.component';
 
-@Directive({ selector: '[popover]' })
-export class PopoverDirective implements AfterViewInit {
-  static bsInit = false;
-  private _popover: Popover | undefined;
+/** A popover's body is text. Markup in it is the tooltip's business, and its risk. */
+const NO_HTML = signal(false);
+
+/**
+ * A small card on click: a title, a body, and an arrow pointing at what it is about.
+ *
+ * It was a `bootstrap.Popover`, configured by writing `data-bs-*` attributes onto the host and
+ * calling `update()` after each one — five effects to keep five attributes in step with five
+ * inputs. The panel is built from those inputs directly now, so there is nothing to keep in step.
+ *
+ * On the CDK Overlay it is no longer clipped by a scrolling ancestor, it flips rather than running
+ * off the window, and it says whether it is open: the trigger carries `aria-expanded`, a click
+ * anywhere else dismisses it, and so does Escape.
+ */
+@Directive({
+  selector: '[popover]',
+  providers: [RlbHintOverlay],
+  host: {
+    '[attr.aria-expanded]': 'hint.isOpen()',
+    '(click)': 'hint.toggle()',
+    '(keydown.escape)': 'hint.close()',
+  },
+})
+export class PopoverDirective implements OnInit {
+  protected hint = inject(RlbHintOverlay);
+  private elementRef = inject(ElementRef<HTMLElement>);
 
   popover = input<string | undefined>(undefined, { alias: 'popover' });
-  placement = input<'top' | 'bottom' | 'left' | 'right'>('top', { alias: 'popover-placement' });
+  placement = input<RlbHintPlacement>('top', { alias: 'popover-placement' });
   customClass = input('', { alias: 'popover-class' });
   title = input('', { alias: 'popover-title' });
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-  ) {
+  constructor() {
+    // A title or a body that changes while the card is up is written into it.
     effect(() => {
-      this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-toggle', 'popover');
-    });
-
-    effect(() => {
-      const p = this.placement();
-      if (p) {
-        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-placement', p);
-        this._popover?.update();
-      }
-    });
-
-    effect(() => {
-      const c = this.customClass();
-      if (c) {
-        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-custom-class', c);
-        this._popover?.update();
-      }
-    });
-
-    effect(() => {
-      const t = this.title();
-      if (t) {
-        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-title', t);
-        this._popover?.update();
-      }
-    });
-
-    effect(() => {
-      const content = this.popover();
-      if (content) {
-        this.renderer.setAttribute(this.elementRef.nativeElement, 'data-bs-content', content);
-        this._popover?.update();
-      }
+      const content = (this.popover() ?? '').trim();
+      const title = this.title().trim();
+      if (!this.hint.isOpen()) return;
+      if (content === '' && title === '') this.hint.close();
+      else this.hint.write();
     });
   }
 
-  ngAfterViewInit() {
-    this._popover = new bootstrap.Popover(this.elementRef.nativeElement);
+  ngOnInit(): void {
+    this.hint.attachTo(this.elementRef.nativeElement, {
+      kind: 'popover',
+      content: this.popover,
+      title: this.title,
+      html: NO_HTML,
+      panelClass: this.customClass,
+      placement: this.placement,
+      dismissOnOutsideClick: true,
+    });
   }
 }

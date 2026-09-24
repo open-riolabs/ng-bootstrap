@@ -29,18 +29,27 @@ export class TooltipssComponent {
 <button rlb-button color="secondary" [popover]="'Left popover'" popover-placement="left">Left</button>
 <button rlb-button color="secondary" [popover]="'Right popover'" popover-placement="right">Right</button>`;
 
+  a11yTooltipExample = `<!-- Nothing to turn on. -->
+<button rlb-button color="primary" tooltip="Reachable from the keyboard too">Tab to me</button>`;
+
+  overflowTooltipExample = `<div style="overflow: hidden; height: 70px">
+  <button rlb-button tooltip="Fully readable, outside the box" tooltip-placement="top">
+    Inside an overflow: hidden box
+  </button>
+</div>`;
+
   tooltipApi: DocApiRow[] = [
     {
       name: 'tooltip',
       type: 'string | null | undefined',
-      description: 'The text content of the tooltip. Pass null or undefined to disable the tooltip.',
+      description: 'The text of the tooltip. Null or undefined turns it off — it refuses to open with nothing to say, and closes if the text is taken away while it is up. Changing it while it is up rewrites it in place.',
       kind: 'Input',
     },
     {
       name: 'tooltip-placement',
       type: "'top' | 'bottom' | 'left' | 'right'",
       default: "'top'",
-      description: 'Preferred placement of the tooltip relative to its host element.',
+      description: 'Preferred side, not a fixed one: with no room there the tooltip takes the opposite side, and data-popper-placement on the panel reports where it actually went, so the arrow follows.',
       kind: 'Input',
     },
     {
@@ -71,7 +80,7 @@ export class TooltipssComponent {
       name: 'popover-placement',
       type: "'top' | 'bottom' | 'left' | 'right'",
       default: "'top'",
-      description: 'Preferred placement of the popover relative to its host element.',
+      description: 'Preferred side, not a fixed one: with no room there the popover takes another, and its arrow follows.',
       kind: 'Input',
     },
     {
@@ -87,6 +96,18 @@ export class TooltipssComponent {
       default: "''",
       description: 'Optional title rendered in the popover header.',
       kind: 'Input',
+    },
+    {
+      name: 'aria-expanded',
+      type: "'true' | 'false'",
+      description: 'Written on the trigger while the card is up, so the button says what it does. A click anywhere else dismisses it, and so does Escape.',
+      kind: 'Output',
+    },
+    {
+      name: 'body content',
+      type: 'text',
+      description: 'The body is always written as text, never as markup: a card that opens on click is a bigger target than a label on hover. Use [tooltip] with tooltip-html if you really need markup.',
+      kind: 'Content',
     },
   ];
 }

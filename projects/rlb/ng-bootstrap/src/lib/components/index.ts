@@ -180,6 +180,8 @@ export * from './theme/theme-toggle.component';
 export * from './toast';
 export * from './tooltips/popover.directive';
 export * from './tooltips/tooltip.directive';
+export * from './tooltips/hint-panel.component';
+export * from './tooltips/hint-overlay.service';
 export * from './tree/tree.component';
 export * from './tree/tree-node';
 
