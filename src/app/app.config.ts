@@ -18,6 +18,7 @@ import {
 } from '@open-rlb/ng-bootstrap';
 
 import { routes } from './routing.module';
+import { ModalOverlaysComponent } from './pages/components/modals/modal-overlays.component';
 import { ModalSampleComponent } from './pages/components/modals/modal-sample.component';
 import { ToastSampleComponent } from './pages/components/toasts/toasts-sample.component';
 
@@ -33,6 +34,7 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         modals: {
           'sample-dialog': ModalSampleComponent,
+          'overlays-dialog': ModalOverlaysComponent,
           'rlb-search': SearchModalComponent,
           'rlb-common': CommonModalComponent,
           'rlb-calendar-event-create-edit': EventCreateEditComponent,

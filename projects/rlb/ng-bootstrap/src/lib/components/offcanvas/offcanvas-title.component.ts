@@ -1,7 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-// TODO
-// Ask if we need this component, RlbOffcanvasTitleDirective should be more flexible and useful
+/**
+ * Superseded by `RlbOffcanvasTitleDirective`, which is what `[rlb-offcanvas-title]` actually uses.
+ *
+ * Its selector `h*[rlb-offcanvas-title]` is not valid CSS — `h*` matches no element — so this
+ * component has never matched anything, and the `offcanvas-title` class it means to apply never
+ * landed. Kept exported so nothing breaks; write the attribute on a heading and the directive
+ * handles it.
+ */
 
 @Component({
     selector: 'h*[rlb-offcanvas-title]',

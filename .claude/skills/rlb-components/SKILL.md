@@ -714,32 +714,44 @@ document said otherwise; they were wrong.
 
 ## Collapse & Offcanvas
 
+⚠️ The trigger is `toggle` + `toggle-target` on a `button` or an `a`. There is no
+`rlb-collapse-toggle` or `rlb-offcanvas-toggle`; earlier versions of this document invented them.
+
 ```html
 <!-- Collapse -->
-<button
-  rlb-button
-  rlb-collapse-toggle
-  target="myCollapse"
->
-  Toggle
-</button>
+<button rlb-button toggle="collapse" toggle-target="myCollapse">Toggle</button>
 <rlb-collapse id="myCollapse">Hidden content</rlb-collapse>
 
-<!-- Offcanvas -->
-<button
-  rlb-button
-  rlb-offcanvas-toggle
-  target="myPanel"
->
-  Open Panel
-</button>
-<rlb-offcanvas
-  id="myPanel"
-  placement="start"
->
-  Panel content
+<!-- Offcanvas: give it a heading with [rlb-offcanvas-title] — that is what names it. -->
+<button rlb-button toggle="offcanvas" toggle-target="myPanel">Open Panel</button>
+<rlb-offcanvas id="myPanel" placement="start">
+  <rlb-offcanvas-header>
+    <h5 rlb-offcanvas-title>Filters</h5>
+  </rlb-offcanvas-header>
+  <rlb-offcanvas-body>Panel content</rlb-offcanvas-body>
 </rlb-offcanvas>
 ```
+
+`toggle` takes `'offcanvas' | 'collapse' | 'tab' | 'pill' | 'buttons-group'`. It also accepts
+`'dropdown'`, which does nothing: a dropdown is `[rlb-dropdown]` inside `rlb-dropdown`.
+
+---
+
+## Dialog accessibility (modal and offcanvas)
+
+Both get `role="dialog"` and `aria-modal` from Bootstrap, and Bootstrap traps focus inside them.
+Three things the library now adds on top:
+
+- **A name.** The heading — `.modal-title`, or `[rlb-offcanvas-title]` — is given an id and
+  referenced with `aria-labelledby`. Without it a screen reader announces «dialog» and stops. Give
+  the dialog a heading, or write your own `aria-label`.
+- **Focus back where it came from.** A modal returns focus to whatever opened it on *every* way
+  out — the buttons, Escape, a click on the backdrop. It used to do it on three paths out of five,
+  so closing with the keyboard left you at the top of the page.
+- **Panels opened inside them work.** Bootstrap's trap pulls anything outside the dialog straight
+  back in, and every panel here — dropdown, datepicker, time picker, tree select, popconfirm — is
+  drawn by the CDK at the end of the body. The overlay container is moved inside the open dialog
+  for as long as it is open, so those panels are reachable from the keyboard. Nothing to configure.
 
 ---
 

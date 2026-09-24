@@ -234,3 +234,9 @@ on finish. See the **Wizard pattern** in the `rlb-components` skill for the full
 3. Subscribe to the modal result observable and handle all three reasons: `'ok'`, `'cancel'`, `'close'`.
 4. For complex modals with forms, use the declarative `[rlb-modal]` approach and control close programmatically after validation.
 5. Use `size: 'lg'` or `size: 'xl'` for forms with many fields; `size: 'sm'` for simple confirmations.
+6. Give every dialog a `<h5 class="modal-title">`. It is what the dialog is named by: the directive
+   gives it an id and points `aria-labelledby` at it, and without one a screen reader announces
+   «dialog» and nothing else.
+7. Panels opened from inside a modal — a dropdown, a datepicker, a tree select — work without any
+   configuration. Bootstrap traps focus in the dialog and those panels are drawn outside it, so the
+   library moves the CDK overlay container into the open dialog for as long as it is open.

@@ -55,6 +55,7 @@ import { NavbarComponent } from './navigation/navbar/navbar.component';
 import { OffcanvasBodyComponent } from './offcanvas/offcanvas-body.component';
 import { OffcanvasHeaderComponent } from './offcanvas/offcanvas-header.component';
 import { OffcanvasTitleComponent } from './offcanvas/offcanvas-title.component';
+import { RlbOffcanvasTitleDirective } from './offcanvas/offcanvas-title.directive';
 import { OffcanvasComponent } from './offcanvas/offcanvas.component';
 import { PaginationItemComponent } from './pagination/pagination-item.component';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -149,6 +150,7 @@ export * from './navigation/navbar/navbar.component';
 export * from './offcanvas/offcanvas-body.component';
 export * from './offcanvas/offcanvas-header.component';
 export * from './offcanvas/offcanvas-title.component';
+export * from './offcanvas/offcanvas-title.directive';
 export * from './offcanvas/offcanvas.component';
 export * from './pagination/pagination-item.component';
 export * from './pagination/pagination.component';
@@ -232,6 +234,7 @@ export const COMPONENTS = [
   OffcanvasComponent,
   OffcanvasHeaderComponent,
   OffcanvasTitleComponent,
+  RlbOffcanvasTitleDirective,
   OffcanvasBodyComponent,
   ToggleDirective,
   SidebarComponent,
