@@ -3,15 +3,11 @@ import { DateTz, IDateTz } from '@open-rlb/date-tz';
 const MS_PER_DAY = 86_400_000;
 
 /**
- * NOTE on date-tz: the getters (`.hour`, `.minute`, `.day`, `.dayOfWeek`, ...)
- * and `toString()` are timezone-aware (they add `timezoneOffset` to the raw
- * timestamp), but the mutators `set()`, `add()` and `stripSecMillis()` are
- * timezone-NAIVE — they decompose/recompose the raw timestamp as if it were
- * UTC. So `set(0, 'hour')` zeroes the UTC hour, not the local one.
- *
- * For calendar layout we need timezone-aware day math, so the helpers below
- * derive day boundaries and intra-day offsets from the tz-aware side of the
- * library instead of from `set()/add()`.
+ * NOTE on date-tz: these helpers derive day boundaries and intra-day offsets from raw timestamps
+ * plus `timezoneOffset`. They were written for date-tz 2.x, whose mutators `set()` and `add()`
+ * worked on the UTC clock and could not be trusted for local day math. Since date-tz 3 the
+ * mutators work on the local wall clock too; the raw-timestamp math below stays correct under
+ * both, so it is kept rather than rewritten.
  */
 
 /** Returns the IANA timezone resolved from the browser/runtime. */
@@ -48,8 +44,8 @@ export function isSameDay(a: IDateTz, b: IDateTz, timezone?: string): boolean {
 /**
  * `date` spostata di `days` giorni, in una nuova DateTz: `add()` di date-tz muta
  * l'istanza su cui è chiamato, quindi si somma su una copia e la data ricevuta
- * (per esempio il `currentDate` del calendario) resta com'era. Come `add()`, lo
- * spostamento è timezone-naive: vedi la nota in cima al file.
+ * (per esempio il `currentDate` del calendario) resta com'era. Da date-tz 3 lo
+ * spostamento segue l'orologio locale: domani alla stessa ora, anche a cavallo dell'ora legale.
  */
 export function addDays(date: IDateTz, days: number): IDateTz {
   return new DateTz(date).add(days, 'day');

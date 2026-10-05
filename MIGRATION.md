@@ -1,5 +1,25 @@
 # Migrating from 4.0.3 to 5.0.0
 
+> **The release after 5.1.0 — `@open-rlb/date-tz` 3.** The peer range moved from `>=2.1.1` to
+> `^3.0.2`, and `ng add` installs 3.x. Upgrade date-tz with the library: npm refuses to install this
+> release next to a date-tz 2.
+>
+> Nothing in this library's API changed, but **your own date-tz code may behave differently**,
+> because date-tz 3 moved `set()` and `add()` from the UTC clock to the instance's local wall clock:
+>
+> - `set(9, 'hour')` is now 09:00 *local*. In 2.x it was 09:00 UTC (for Asia/Tokyo, 18:00 the day
+>   before).
+> - `add(1, 'day')` keeps the clock time across a DST change; `add(24, 'hour')` still adds exactly
+>   24 hours.
+> - `add(n, 'month')` crosses year boundaries and clamps month ends: January minus one month is
+>   December of the year before (2.x left it in January), and 31 January plus one month is
+>   28 February (2.x gave 3 March).
+> - `JSON.stringify` writes `timezoneOffset` and `isDst` instead of `_timezoneOffset` and `_isDst`.
+>
+> Search your code for `.set(`, `.add(` with `'day'`, `'month'` or `'year'`, and any hand-made
+> `timezoneOffset` correction around them: a workaround for the old behaviour now shifts the result a
+> second time. The calendar here needed no change; its month navigation is simply correct now.
+>
 > **5.1.0** — fixes the 5.0.1 build failure described below, and makes sure it cannot come back.
 > The Sass under `assets/scss` is now self-contained: every `url()` it ships resolves inside the
 > package, and `npm run lib:pack` fails the release if one ever does not.

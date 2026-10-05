@@ -1,6 +1,6 @@
 ---
 name: date-tz
-description: Rules and API reference for the @open-rlb/date-tz library used for ALL date/time handling in this project. Use whenever writing or reviewing TypeScript/JavaScript that creates or manipulates dates or times: any new Date(...), DateTz/IDateTz usage, timezone handling, parsing or formatting dates, or date arithmetic. Bans native Date, enforces IDateTz typing, and covers the timezone-aware-getters vs UTC-naive-mutators gotcha.
+description: Rules and API reference for the @open-rlb/date-tz library used for ALL date/time handling in this project. Use whenever writing or reviewing TypeScript/JavaScript that creates or manipulates dates or times: any new Date(...), DateTz/IDateTz usage, timezone handling, parsing or formatting dates, or date arithmetic. Bans native Date, enforces IDateTz typing, and covers how set()/add() work on the local wall clock since date-tz 3, and what that changed for code written against 2.x.
 ---
 
 # date-tz skill
@@ -60,26 +60,20 @@ bare name; nothing resolves under it.
 
 ---
 
-## `IDateTz` is narrower than `DateTz`
+## Every method on `IDateTz` is optional
 
-Every method on `IDateTz` is **optional** — hence the `!` on every call — and two of them accept
-fewer units than the class does:
-
-| | `IDateTz` | `DateTz` (the class) |
-|---|---|---|
-| `add(value, unit)` | `'minute' \| 'hour' \| 'day' \| 'month' \| 'year'` | also `'second'`, `'millisecond'` |
-| `set(value, unit)` | `'year' \| 'month' \| 'day' \| 'hour' \| 'minute'` | also `'second'`, `'millisecond'` |
-
-So `d.add!(500, 'millisecond')` on a variable **typed** `IDateTz` does not compile, even though the
-object behind it is a `DateTz` that supports it. When you need seconds or milliseconds, keep the
-concrete type for that expression:
+Every method on `IDateTz` is **optional** — hence the `!` on every call, `setTimezone` included.
+Since date-tz 3, `add` and `set` accept the same units on the interface as on the class:
+`millisecond`, `second`, `minute`, `hour`, `day`, `month`, `year`.
 
 ```typescript
-const d = new DateTz(ts, 'Europe/Rome');   // inferred DateTz, not IDateTz
-const later: IDateTz = d.add(500, 'millisecond');
+const d: IDateTz = new DateTz(ts, 'Europe/Rome');
+const later: IDateTz = d.add!(500, 'millisecond');
 ```
 
-`setTimezone` is the one method that is **not** optional on the interface — no `!` needed.
+> In date-tz 2.x the interface accepted fewer units than the class (no `second`/`millisecond`) and
+> `setTimezone` was not optional. Code that kept a concrete `DateTz` only to reach those units can
+> use `IDateTz` now.
 
 ---
 
@@ -186,45 +180,63 @@ d.toString!('hh:mm AA')               // '09:30 AM'
 
 ---
 
-## ⚠️ Critical: getters are timezone-aware, mutators are NOT
+## ⚠️ Critical: mutators work on the local wall clock (date-tz ≥ 3)
 
-This is the single most important gotcha in this library. In the current `@open-rlb/date-tz` implementation:
+The getters (`.year`, `.month`, `.day`, `.hour`, `.minute`, `.dayOfWeek`), `toString()` **and** the
+mutators `set()`, `add()` and `stripSecMillis()` all work in the instance's **own timezone** — the
+clock a reader in that timezone sees. `set(0, 'hour')` on 09:00 Europe/Rome is 00:00 **Rome**.
 
-- **Timezone-aware** (compute on `timestamp + timezoneOffset`): the getters `.year`, `.month`, `.day`, `.hour`, `.minute`, `.dayOfWeek`, and `toString()`.
-- **Timezone-NAIVE** (operate on the raw UTC `timestamp`, ignoring the offset): the mutators `set()`, `add()`, `stripSecMillis()`.
+`add` treats its two kinds of unit differently, and the difference is the point:
 
-So `d.set(0, 'hour')` zeroes the **UTC** hour, **not** the local one. For an event at 09:00 Europe/Rome (07:00 UTC), `d.toString('HH:mm')` correctly returns `'09:00'`, but `d.set(0,'hour')` lands on UTC midnight, so:
-
-```typescript
-// WRONG – yields the UTC time-of-day (off by the tz offset), NOT the local one
-const minutesFromMidnight =
-  (d.timestamp - new DateTz(d).set(0,'hour').set(0,'minute').timestamp) / 60000;
-// for 09:00 Rome this returns 420 (07:00), while the label shows 09:00 → mismatch
-```
-
-**Consequence:** never use `set('hour'/'minute'/'day')` or `add('day')` to derive a **local** day boundary or time-of-day. Use the timezone-aware getters instead:
+- **Time units** — `millisecond`, `second`, `minute`, `hour` — move the **instant**. An hour is
+  always 3600 seconds.
+- **Calendar units** — `day`, `month`, `year` — move the **wall clock**. Adding a day lands on the
+  same clock time tomorrow, even when a DST change makes that day 23 or 25 hours long.
 
 ```typescript
-// CORRECT – tz-aware, matches what toString() shows
-const minutesFromMidnight = d.hour! * 60 + d.minute!;
-
-// CORRECT – epoch ms of LOCAL midnight (the day containing d, in its own tz)
-const MS_PER_DAY = 86_400_000;
-const localMidnightTs =
-  Math.floor((d.timestamp + d.timezoneOffset!) / MS_PER_DAY) * MS_PER_DAY - d.timezoneOffset!;
+const d = DateTz.parse('2026-03-28 12:00', 'YYYY-MM-DD HH:mm', 'Europe/Rome'); // DST starts overnight
+new DateTz(d).add(1, 'day').toString('YYYY-MM-DD HH:mm');   // '2026-03-29 12:00' — "tomorrow"
+new DateTz(d).add(24, 'hour').toString('YYYY-MM-DD HH:mm'); // '2026-03-29 13:00' — 24 real hours
 ```
 
-`add('hour'/'minute'/'second'/'millisecond')` is fine (a fixed ms delta is timezone-independent). The trap is specifically: `set` of any calendar field, `add('day'/'month'/'year')`, and `stripSecMillis` when you expect them to respect the local wall clock — they don't, they act in UTC.
+Months and years **clamp** to the end of the target month instead of spilling into the next one,
+and `set` pulls a day the month does not have back to its last day:
 
-> In this repo the calendar already wraps this correctly: see
-> `projects/rlb/ng-bootstrap/src/lib/components/calendar/utils/calendar-date-utils.ts`
-> (`startOfDayTs`, `minutesSinceMidnight`, `dayAt`). Reuse those instead of re-deriving the math.
+```typescript
+DateTz.parse('2026-01-31', 'YYYY-MM-DD').add(1, 'month');  // 2026-02-28, not 2026-03-03
+DateTz.parse('2026-01-15', 'YYYY-MM-DD').add(-1, 'month'); // 2025-12-15 — crosses the year
+DateTz.parse('2026-09-16', 'YYYY-MM-DD').set(31, 'day');   // 2026-09-30
+```
+
+So "tomorrow", "next month", "local midnight" and "09:00 local" are what they read like:
+
+```typescript
+const tomorrow = new DateTz(d).add!(1, 'day');
+const localMidnight = new DateTz(d).set!(0, 'hour').set!(0, 'minute').stripSecMillis!();
+const minutesFromMidnight = d.hour! * 60 + d.minute!; // also fine: getters are tz-aware
+```
+
+> **Upgrading from date-tz 2.x — read this before trusting old code.** In 2.x the mutators worked on
+> the **UTC** clock: `set(9, 'hour')` assigned 09:00 UTC (for Asia/Tokyo that was 18:00 local, on
+> the *previous* day), `add(-1, 'month')` on a January date did nothing at all, and
+> `add(1, 'month')` on 31 January spilled into March. Code written around that — adding
+> `timezoneOffset` back by hand, re-deriving local midnight from raw timestamps because `set` could
+> not be trusted, special-casing January — now **over-corrects**. Delete the workaround instead of
+> keeping both. Raw-timestamp day math is still correct; it is just no longer necessary.
+>
+> Serialised instances changed too: `JSON.stringify` now writes `timezoneOffset` and `isDst`
+> (2.x wrote `_timezoneOffset` and `_isDst`). `new DateTz(parsedJson)` rebuilds either.
+
+In this repo the calendar's helpers predate date-tz 3 and do day math on raw timestamps, which is
+correct under both versions: see
+`projects/rlb/ng-bootstrap/src/lib/components/calendar/utils/calendar-date-utils.ts`
+(`startOfDayTs`, `minutesSinceMidnight`, `dayAt`). Reuse those inside the calendar.
 
 ---
 
 ## `add` – arithmetic
 
-Returns `IDateTz` (mutates the instance in place). **`add('day'/'month'/'year')` is timezone-naive** — it shifts the raw UTC timestamp, so it does not respect local-midnight/DST. See the critical section above.
+Returns `IDateTz` (mutates the instance in place — copy first with `new DateTz(d)` if the original must survive). Time units move the instant; `day`/`month`/`year` move the local wall clock and clamp month ends. See the critical section above.
 
 ```typescript
 let d: IDateTz = new DateTz(ts, 'Europe/Rome');
@@ -234,18 +246,15 @@ d = d.add!(30, 'minute');
 d = d.add!(1, 'day');
 d = d.add!(2, 'month');
 d = d.add!(1, 'year');
-
-// 'second' and 'millisecond' are NOT on the IDateTz signature — keep the concrete type:
-const concrete = new DateTz(ts, 'Europe/Rome');
-d = concrete.add(500, 'millisecond');
-d = concrete.add(10, 'second');
+d = d.add!(10, 'second');
+d = d.add!(500, 'millisecond');
 ```
 
 ---
 
 ## `set` – override a component
 
-Returns `IDateTz` (mutates the instance in place). **`set` is timezone-naive** — it sets the component in **UTC**, not in the instance's local timezone. `set(0,'hour')` is UTC midnight, not local midnight. See the critical section above before using it for day/time boundaries.
+Returns `IDateTz` (mutates the instance in place). Sets a component of the **local wall clock**: `set(0, 'hour')` is the local midnight hour. A day the month does not have is pulled back to its last day.
 
 ```typescript
 let d: IDateTz = new DateTz(ts, 'Europe/Rome');
@@ -255,9 +264,7 @@ d = d.set!(6,    'month');    // 1-based: 1 = January … 12 = December
 d = d.set!(15,   'day');      // 1–31
 d = d.set!(9,    'hour');     // 0–23
 d = d.set!(0,    'minute');   // 0–59
-
-// 'second' and 'millisecond' exist on DateTz but not on the IDateTz signature.
-// To zero them, prefer stripSecMillis!() — it is on the interface.
+d = d.set!(0,    'second');   // 0–59 — or stripSecMillis!() to zero seconds and milliseconds
 ```
 
 > **Note:** `set('month', …)` is **1-based** (pass `6` for June), unlike the `month` getter which is 0-based.
@@ -271,7 +278,7 @@ let d: IDateTz = new DateTz(ts, 'Europe/Rome');
 d = d.stripSecMillis!(); // seconds and milliseconds become 0
 ```
 
-> Like `set`/`add`, this truncates on the raw UTC timestamp. Seconds/millis are the same in every timezone, so the result is fine — but don't assume any *hour/day* alignment from it.
+> Truncates the local clock. It does not align to any hour or day — combine it with `set` for that.
 
 ---
 
@@ -293,7 +300,7 @@ Changes the timezone of an existing instance. The UTC timestamp is **preserved**
 
 ```typescript
 let d: IDateTz = new DateTz(ts, 'Europe/Rome');
-d = d.setTimezone('Asia/Tokyo');
+d = d.setTimezone!('Asia/Tokyo');
 ```
 
 ---
@@ -391,11 +398,17 @@ d.set!(5, 'month'); // would set to May (set expects 1-based)
 // CORRECT – set('month') is 1-based
 d.set!(6, 'month'); // June
 
-// WRONG – set/add are UTC-naive: this is the UTC hour, not the local one
-const minutes = (d.timestamp - new DateTz(d).set!(0,'hour').set!(0,'minute').timestamp) / 60000;
+// WRONG – "tomorrow" as 24 hours: on a DST-change day it lands an hour off
+const tomorrowWrong = new DateTz(d).add!(24, 'hour');
 
-// CORRECT – tz-aware getters match toString()
-const minutesLocal = d.hour! * 60 + d.minute!;
+// CORRECT – calendar units keep the wall clock
+const tomorrow = new DateTz(d).add!(1, 'day');
+
+// WRONG – a 2.x-era workaround: set() is already local, so subtracting the offset shifts it twice
+const nineLocalWrong = new DateTz(new DateTz(d).set!(9, 'hour').timestamp - d.timezoneOffset!, d.timezone);
+
+// CORRECT
+const nineLocal = new DateTz(d).set!(9, 'hour');
 
 // WRONG – building from a raw timestamp without a tz silently defaults to Etc/UTC
 const end = new DateTz(someTimestampNumber); // label/getters will be UTC!
