@@ -28,7 +28,7 @@ import { Schema } from './schema';
  * `@angular/cdk` is missing on purpose too — see {@link cdkVersion}.
  */
 const DEPENDENCIES: ReadonlyArray<{ name: string; version: string; type: DependencyType }> = [
-  { name: '@open-rlb/date-tz', version: '^2.1.1', type: DependencyType.Default },
+  { name: '@open-rlb/date-tz', version: '^3.0.2', type: DependencyType.Default },
   { name: '@ngx-translate/core', version: '^17.0.0', type: DependencyType.Default },
   { name: 'bootstrap', version: '^5.3.0', type: DependencyType.Default },
   { name: 'bootstrap-icons', version: '^1.13.1', type: DependencyType.Default },

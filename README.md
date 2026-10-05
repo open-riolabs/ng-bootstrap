@@ -62,7 +62,7 @@ npm install @open-rlb/ng-bootstrap
 Make sure you have the following peer dependencies installed:
 
 ```bash
-npm install bootstrap@>=5.3.0 @types/bootstrap@>5.2.0 @open-rlb/date-tz@>=2.1.1
+npm install bootstrap@>=5.3.0 @types/bootstrap@>5.2.0 @open-rlb/date-tz@^3.0.2
 ```
 
 `@types/bootstrap` and `@ngx-translate/core` are optional: nothing in the library imports

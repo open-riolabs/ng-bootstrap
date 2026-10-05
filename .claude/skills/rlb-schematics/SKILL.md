@@ -36,7 +36,7 @@ Options (all optional):
 
 | Package | Version installed | Where |
 |---|---|---|
-| `@open-rlb/date-tz` | `^2.1.1` | dependencies |
+| `@open-rlb/date-tz` | `^3.0.2` | dependencies |
 | `@ngx-translate/core` | `^17.0.0` | dependencies |
 | `bootstrap` | `^5.3.0` | dependencies |
 | `bootstrap-icons` | `^1.13.1` | dependencies |
@@ -128,7 +128,7 @@ See **rlb-components**.
 | `@angular/core`, `@angular/common`, `@angular/forms`, `@angular/router`, `@angular/cdk` | `>=22.0.0 <23.0.0` | |
 | `rxjs` | `^7.8.0` | |
 | `bootstrap` | `>=5.3.0` | |
-| `@open-rlb/date-tz` | `>=2.1.1` | |
+| `@open-rlb/date-tz` | `^3.0.2` | |
 | `@ngx-translate/core` | `>=16.0.0 <18.0.0` | optional |
 | `@types/bootstrap` | `>=5.2.0` | optional |
 
