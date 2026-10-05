@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   contentChildren,
+  inject,
   input,
   OnInit,
   output,
@@ -17,6 +18,7 @@ import { CollapseComponent } from '../collapse/collapse.component';
 import { SidebarService } from './sidebar.service';
 import { ToggleDirective } from '../buttons/toggle.directive';
 import { BadgeDirective } from '../badges/badge.directive';
+import { RLB_ICONS } from '../../shared/icons';
 
 @Component({
     selector: 'rlb-sidebar-item',
@@ -47,6 +49,7 @@ import { BadgeDirective } from '../badges/badge.directive';
                 <i [class]="icon()"></i>
               }
               <span class="menu-text">{{ label() }}</span>
+              <i [class]="icons.chevronDown + ' rlb-sidebar-arrow'" aria-hidden="true"></i>
             </a>
 
             <rlb-collapse [id]="'side-item' + _id">
@@ -86,6 +89,8 @@ import { BadgeDirective } from '../badges/badge.directive';
     ],
 })
 export class SidebarItemComponent implements OnInit {
+  protected icons = inject(RLB_ICONS);
+
   element!: HTMLElement;
 
   title = input<string | undefined>(undefined);

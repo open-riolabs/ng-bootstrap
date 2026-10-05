@@ -31,7 +31,7 @@ export interface RlbIconSet {
   chevronLeft: string;
   /** Step forward — next page, next month. */
   chevronRight: string;
-  /** Opens something that drops below it — a tree branch, a select. */
+  /** Opens something that drops below it — a tree branch, a select, a sidebar group. */
   chevronDown: string;
   /** Upload, or a drop target waiting for a file. */
   upload: string;

@@ -40,8 +40,9 @@
 
 #sidebar-menu {
   .has-arrow {
-    &:after {
-      float: left;
+    .rlb-sidebar-arrow {
+      right: auto;
+      left: 1rem;
     }
   }
 
