@@ -1,12 +1,31 @@
 # Migrating from 4.0.3 to 5.0.0
 
-> **5.0.1** — the published package dropped from 13.1 MB to 602 kB. What left it was the
-> leftovers of the admin template this project grew out of: its brand and client logos, its
-> Material Design Icons webfonts, its i18n files and its demo dashboard data. Not one line of the
-> library referenced any of it. The Sass under `assets/scss` still ships, and so do the schematics
-> and the bundled skills. If you were importing something from `@open-rlb/ng-bootstrap/assets/`
-> other than the Sass — a font or an image — it is gone; install the real package instead
-> (`@mdi/font` for the icons).
+> **5.1.0** — fixes the 5.0.1 build failure described below, and makes sure it cannot come back.
+> The Sass under `assets/scss` is now self-contained: every `url()` it ships resolves inside the
+> package, and `npm run lib:pack` fails the release if one ever does not.
+>
+> - **`app.scss` no longer includes the admin template's authentication and crypto page styles**
+>   (`.auth-full-bg`, `.hero-section`, `.bg-ico-hero`, `.landing-footer` and the rest of those two
+>   pages). They were the only rules pointing at images, and nothing in the library uses them.
+> - **`icons.scss` no longer declares the Material Design Icons font.** It still compiles, empty,
+>   with a build warning, and will be removed in a future release. If your templates use `mdi-*`
+>   classes, depend on the font yourself — `npm install @mdi/font`, then import
+>   `@mdi/font/css/materialdesignicons.css` in place of `icons.scss`. `@mdi/font` declares the same
+>   font family, so the handful of admin-template rules still in `app.scss` that name it (outline
+>   checkbox, chat and email page styles) keep working as well. Otherwise, delete the import.
+> - **The sidebar's submenu chevron is now `RLB_ICONS.chevronDown`**, like every other icon the
+>   library draws, so it follows `provideRlbIcons()`. It used to be a Material Design Icons glyph
+>   hard-coded in the Sass, and was blank in any application that did not load that font.
+> - **Datatable:** the row-actions button is end-aligned under its "Actions" header again. Since
+>   5.0.0 it had sat at the start of its cell, away from its header.
+>
+> **5.0.1** — the published package dropped from 13.1 MB to 602 kB by no longer shipping the
+> admin template's images, its Material Design Icons webfonts, its i18n files and its demo
+> dashboard data. **It also broke the build of every application that imports
+> `assets/scss/app.scss` or `assets/scss/icons.scss`**, which is how the library's Sass is meant
+> to be used. Three of the Sass files that still shipped pointed at those images and fonts, and Angular
+> resolves every `url()` when the application builds:
+> `Could not resolve "../../../images/bg-auth-overlay.png"`. Skip 5.0.1 and go to 5.1.0.
 
 
 This release moves every floating panel in the library off Bootstrap's JavaScript and onto the

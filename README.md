@@ -342,7 +342,12 @@ The library includes custom SCSS files that can be customized:
 - `_variables-dark.scss` - Dark theme variables
 - `_custom.scss` - Custom styles
 - `app.scss` - Main application styles
-- `icons.scss` - Icon styles
+- `icons.scss` - Deprecated since 5.1.0: it no longer declares any font, and only warns. If you
+  use `mdi-*` classes, install [`@mdi/font`](https://www.npmjs.com/package/@mdi/font) and import
+  it instead (see `MIGRATION.md`)
+
+These files are self-contained: every `url()` in them resolves inside the package, which the
+release script checks.
 
 ## 🔧 Configuration
 
