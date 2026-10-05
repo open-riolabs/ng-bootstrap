@@ -1,11 +1,15 @@
-/*
-Template Name: Skote - Admin & Dashboard Template
-Author: Themesbrand
-Version: 4.3.0.
-Website: https://themesbrand.com/
-Contact: themesbrand@gmail.com
-File: Icons Css File
-*/
+// Deprecated since 5.1.0, and kept only so that existing `@import`s of it still compile.
+//
+// This file used to declare the Material Design Icons webfont. The library draws none of its own
+// icons with it (they all go through RLB_ICONS, bootstrap-icons by default), so the font was
+// an application dependency carried by the library: 2.7 MB of fonts in every install, and since
+// 5.0.1 a build error, because the package no longer contained them.
+//
+// An application that uses `mdi-*` classes should depend on the font itself:
+//
+//   npm install @mdi/font
+//   @import '@mdi/font/css/materialdesignicons.css';
+//
+// Any other application can simply delete its import of this file.
 
-// Plugins
-@use "custom/plugins/icons" as *;
+@warn "@open-rlb/ng-bootstrap: assets/scss/icons.scss is deprecated and no longer declares the Material Design Icons font. If you use mdi-* classes, install @mdi/font and import '@mdi/font/css/materialdesignicons.css' instead; otherwise delete this import.";
