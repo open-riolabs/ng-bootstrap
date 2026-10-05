@@ -24,7 +24,7 @@ import { DropdownDirective } from '../../components/dropdown/dropdown.directive'
       <rlb-dropdown>
         <button
           rlb-dropdown
-          class="btn btn-outline py-0 pe-2 float-end"
+          class="btn btn-outline py-0 pe-2"
           [disabled]="_disabled()"
           [attr.aria-label]="labelText()"
           type="button"

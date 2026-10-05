@@ -52,7 +52,8 @@ import { NgTemplateOutlet } from '@angular/common';
         }
 
         @if (hasActions()) {
-          <td data-export="skip">
+          <!-- End-aligned like its header cell; the dropdown inside is inline-block, so this places it. -->
+          <td data-export="skip" class="text-end">
             <!-- Loop and render actions natively -->
             @for (actionBlock of actionsBlock(); track $index) {
               <ng-container *ngTemplateOutlet="actionBlock.template()"></ng-container>

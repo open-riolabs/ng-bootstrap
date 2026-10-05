@@ -78,10 +78,9 @@
         @if (hasActions()) {
         <th data-export="skip" [style.position]="stickyHeader() ? 'sticky' : null"
           [style.top]="stickyHeader() ? '0' : null" [style.z-index]="stickyHeader() ? 2 : null"
-          [style.background]="stickyHeader() ? 'var(--bs-body-bg)' : null">
-          <span class="float-end pe-2">
-            {{ actionsText() }}
-          </span>
+          [style.background]="stickyHeader() ? 'var(--bs-body-bg)' : null" class="text-end">
+          <!-- pe-2 matches the button's own end padding, so the text ends where the row's glyph does. -->
+          <span class="pe-2">{{ actionsText() }}</span>
         </th>
         }
       </tr>
